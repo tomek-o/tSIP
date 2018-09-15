@@ -62,6 +62,7 @@ void Settings::SetDefault(void)
 	Logging.bLogToFile = false;
 	Logging.bFlush = false;
 	Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
+	Logging.iLogRotate = Settings::_Logging::DEF_LOGROTATE;
 	Logging.iMaxUiLogLines = 5000;
 
     Calls.extraHeaderLines = "";
@@ -454,6 +455,11 @@ int Settings::Read(AnsiString asFileName)
 	{
 		Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
 	}
+	Logging.iLogRotate = LoggingJson.get("LogRotate", Logging.iLogRotate).asUInt();
+	if (Logging.iLogRotate > Settings::_Logging::MAX_LOGROTATE)
+	{
+        Logging.iLogRotate = Settings::_Logging::DEF_LOGROTATE;
+    }
 	Logging.iMaxUiLogLines = LoggingJson.get("MaxUiLogLines", 5000).asInt();
 
 	const Json::Value &CallsJson = root["Calls"];
@@ -577,6 +583,7 @@ int Settings::Write(AnsiString asFileName)
 	root["Logging"]["LogToFile"] = Logging.bLogToFile;
 	root["Logging"]["Flush"] = Logging.bFlush;
 	root["Logging"]["MaxFileSize"] = Logging.iMaxFileSize;
+	root["Logging"]["LogRotate"] = Logging.iLogRotate;
 	root["Logging"]["MaxUiLogLines"] = Logging.iMaxUiLogLines;
 
 	root["Calls"]["ExtraHeaderLines"] = Calls.extraHeaderLines.c_str();

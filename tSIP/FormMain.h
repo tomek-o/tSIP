@@ -161,6 +161,7 @@ private:	// User declarations
 			state(0)
 		{}
 	} registration;
+	void UpdateLogConfig(void);
 	void SetSpeedDial(bool visible);
 	void UpdateDialpadBackgroundImage(void);
 	void UpdateCallHistory(void);

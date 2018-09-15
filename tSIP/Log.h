@@ -30,6 +30,12 @@ public:
 	void SetLogToFile(bool);
 	void SetFlush(bool state);
 	void SetMaxFileSize(unsigned int size);
+	/** Set total maximum number of files used for "logrotate" scheme (apart from main file).
+		Equivalent of "rotate" parameter for logrotate - number of old files to keep.
+		Old files are named like main file but with with ".x" added after file extension 
+		\note If limit is decreased, old files exceeding it are not deleted
+	*/
+	void SetLogRotateCnt(unsigned int cnt);
 	/** \brief Set log detail level / disable logging */
 	void SetLevel(int);
 	/** \brief Close log file */
@@ -54,6 +60,7 @@ private:
 	bool bFlush;
 	int iLogLevel;
 	unsigned int maxFileSize;
+	unsigned int maxLogrotateCnt;
 };
 
 /** \brief Macro to avoid unnecessary typing

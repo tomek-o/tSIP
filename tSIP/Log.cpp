@@ -2,6 +2,9 @@
  *  \brief Global logging unit
  */
 
+#include <vcl.h>
+#pragma hdrstop 
+
 #include <stdio.h>
 #include <iostream>
 #include <fstream>
@@ -12,6 +15,7 @@
 #include "Log.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <SysUtils.hpp>
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 
@@ -74,6 +78,11 @@ void CLog::SetMaxFileSize(unsigned int size)
     maxFileSize = size;
 }
 
+void CLog::SetLogRotateCnt(unsigned int cnt)
+{
+    maxLogrotateCnt = cnt;
+}
+
 void CLog::SetLevel(int level)
 {
 	iLogLevel = level;
@@ -124,8 +133,30 @@ void CLog::log(char *lpData, ...)
 			int size = ftell(fout);
 			if (size > maxFileSize)
 			{
-				// truncate
 				fclose(fout);
+				if (maxLogrotateCnt > 0)
+				{
+					/*
+					Renaming (in reverse order, base log file -> file.log.1 as last):
+						file.log   -> file.log.1
+						file.log.1 -> file.log.2
+						file.log.2 -> file.log.3
+						etc.
+					*/
+					for (unsigned int i=maxLogrotateCnt; i>=2; i--)
+					{
+						AnsiString fileN, fileNminus1;
+						fileN.sprintf("%s.%u", sFile.c_str(), i);
+						fileNminus1.sprintf("%s.%u", sFile.c_str(), i-1);
+						DeleteFile(fileN);
+						RenameFile(fileNminus1, fileN);
+					}
+					AnsiString file1;
+					file1.sprintf("%s.1", sFile.c_str());
+					DeleteFile(file1);
+					RenameFile(sFile.c_str(), file1);
+				}
+				// truncate				
 				fout = fopen(sFile.c_str(),"wt+");								
             }
         }

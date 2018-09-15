@@ -270,6 +270,8 @@ __published:	// IDE-managed Components
 	TTabSheet *tsGeneral2;
 	TCheckBox *chbFrmMainShowWhenAnsweringCall;
 	TCheckBox *chbTrayNotifierHideWhenAnsweringCall;
+	TLabel *lblLogRotate;
+	TComboBox *cbLogRotate;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

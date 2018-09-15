@@ -262,6 +262,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		cmbMaxUiLogLines->ItemHeight = cmbMaxUiLogLines->Items->Count - 1;
 	}
 	cbLogMaxFileSize->Text = tmpSettings.Logging.iMaxFileSize;
+	cbLogRotate->ItemIndex = tmpSettings.Logging.iLogRotate;
 
 	chbUserOnlyClip->Checked = tmpSettings.Display.bUserOnlyClip;
 	chbDecodeUtfDisplayToAnsi->Checked = tmpSettings.Display.bDecodeUtfDisplayToAnsi;
@@ -427,6 +428,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	{
 		tmpSettings.Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
 	}
+	tmpSettings.Logging.iLogRotate = cbLogRotate->ItemIndex;
 	tmpSettings.Logging.iMaxUiLogLines = StrToInt(cmbMaxUiLogLines->Text);	
 	tmpSettings.uaConf.logMessages = chbLogMessages->Checked;
 

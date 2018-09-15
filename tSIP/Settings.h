@@ -116,7 +116,14 @@ public:
             DEF_MAX_FILE_SIZE = 10*1024*1024
         };
 		int iMaxFileSize;
-		unsigned int iMaxUiLogLines;
+		enum {
+			MAX_LOGROTATE = 5
+		};
+		enum {
+			DEF_LOGROTATE = 1
+		};
+		unsigned int iLogRotate;
+		unsigned int iMaxUiLogLines;		
 	} Logging;
 	struct _Calls
 	{

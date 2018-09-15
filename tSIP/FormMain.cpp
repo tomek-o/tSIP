@@ -219,12 +219,8 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 		this->FormStyle = fsNormal;
 	if (appSettings.frmMain.bWindowMaximized)
 		this->WindowState = wsMaximized;
-	if (appSettings.Logging.bLogToFile)
-		CLog::Instance()->SetFile(ChangeFileExt(Application->ExeName, ".log").c_str());
-	else
-		CLog::Instance()->SetFile("");
-	CLog::Instance()->SetFlush(appSettings.Logging.bFlush);
-	CLog::Instance()->SetMaxFileSize(appSettings.Logging.iMaxFileSize);
+	UpdateLogConfig();
+
 	//btnAutoAnswer->Down = appSettings.uaConf.autoAnswer;
 	SetSpeedDial(false);
 	if (appSettings.frmMain.bSpeedDialOnly)
@@ -355,12 +351,7 @@ void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 		this->FormStyle = fsStayOnTop;
 	else
 		this->FormStyle = fsNormal;
-	if (appSettings.Logging.bLogToFile)
-		CLog::Instance()->SetFile(ChangeFileExt(Application->ExeName, ".log").c_str());
-	else
-		CLog::Instance()->SetFile("");
-	CLog::Instance()->SetFlush(appSettings.Logging.bFlush);
-	CLog::Instance()->SetMaxFileSize(appSettings.Logging.iMaxFileSize);
+	UpdateLogConfig();
 	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
 	if (frmLog->Visible)
 	{
@@ -412,6 +403,8 @@ void __fastcall TfrmMain::actShowLogExecute(TObject *Sender)
 void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 {
 	tmrStartup->Enabled = false;
+
+	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
 
 	if (appSettings.frmMain.bKioskMode)
 	{
@@ -1888,6 +1881,18 @@ void __fastcall TfrmMain::btnSpeedDialPanelClick(TObject *Sender)
 	ToggleSpeedDial();
 }
 //---------------------------------------------------------------------------
+
+void TfrmMain::UpdateLogConfig(void)
+{
+	CLog *log = CLog::Instance();
+	if (appSettings.Logging.bLogToFile)
+		log->SetFile(ChangeFileExt(Application->ExeName, ".log").c_str());
+	else
+		log->SetFile("");
+	log->SetFlush(appSettings.Logging.bFlush);
+	log->SetMaxFileSize(appSettings.Logging.iMaxFileSize);
+	log->SetLogRotateCnt(appSettings.Logging.iLogRotate);
+}
 
 void TfrmMain::SetSpeedDial(bool visible)
 {
