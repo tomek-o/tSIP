@@ -1,0 +1,26 @@
+# libg722
+
+Written by Steve Underwood <steveu@coppice.org>
+
+ Copyright (C) 2005 Steve Underwood
+
+  Despite my general liking of the GPL, I place my own contributions
+  to this code in the public domain for the benefit of all mankind -
+  even the slimy ones who might try to proprietize my work and use it
+  to my detriment.
+
+Based on a single channel G.722 codec which is:
+
+ *****    Copyright (c) CMU    1993      *****
+ * Computer Science, Speech Group
+ * Chengxiang Lu and Alex Hauptmann
+
+
+The G.722 module is a bit exact implementation of the ITU G.722 specification
+for all three specified bit rates - 64000bps, 56000bps and 48000bps. It passes
+the ITU tests.
+
+To allow fast and flexible interworking with narrow band telephony, the encoder
+and decoder support an option for the linear audio to be an 8k samples/second
+stream. In this mode the codec is considerably faster, and still fully
+compatible with wideband terminals using G.722.

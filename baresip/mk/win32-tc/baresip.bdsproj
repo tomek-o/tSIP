@@ -1,0 +1,427 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+			<Option Name="ProjectType">CppStaticLibrary</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{EE04A80D-3549-4554-880A-FDA45DFA6797}</Option>
+		</Option>
+	</PersonalityInfo>
+	<CPlusPlusBuilder.Personality>
+		<Source>
+			<Source Name="MainSource">baresip.cpp</Source>
+		</Source>
+		<BCBPROJECT>
+      <project version="10.0">
+        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="count" value="1"/>
+        <property category="build.config" name="excludedefaultforzero" value="0"/>
+        <property category="build.config.0" name="builddir" value="Debug"/>
+        <property category="build.config.0" name="key" value="Debug_Build"/>
+        <property category="build.config.0" name="name" value="Debug Build"/>
+        <property category="build.config.0" name="settings.win32b" value="default"/>
+        <property category="build.config.0" name="type" value="Toolset"/>
+        <property category="build.config.0" name="win32.win32b.builddir" value="Debug_Build"/>
+        <property category="build.config.1" name="key" value="Release_Build"/>
+        <property category="build.config.1" name="name" value="Release Build"/>
+        <property category="build.config.1" name="settings.win32b" value="default"/>
+        <property category="build.config.1" name="type" value="Toolset"/>
+        <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
+        <property category="build.node" name="name" value="baresip.lib"/>
+        <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;adortl;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;soaprtl;dsnap;bdertl;vcldbx"/>
+        <property category="build.node" name="sparelibs" value="rtl.lib vcl.lib"/>
+        <property category="build.node" name="use_packages" value="0"/>
+        <property category="build.platform" name="active" value="win32"/>
+        <property category="build.platform" name="win32.Debug_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.Release_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.default" value="win32b"/>
+        <property category="build.platform" name="win32.enabled" value="1"/>
+        <property category="build.platform" name="win32.win32b.enabled" value="1"/>
+        <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.listfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.objfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.xreffile.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="container.SelectedWarnings.containerenabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.6.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.1" value="_DEBUG"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.Q.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vG.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$O.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.1" value="DEBUG"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.V.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.Gn.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\debug"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="container.SelectedOptimizations.containerenabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="container.SelectedWarnings.containerenabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.1" value="NDEBUG"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.k.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.r.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.vi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$D.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$O.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.V.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\release"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.z.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zn.enabled" value="1"/>
+        <optionset name="all_configurations">
+          <property category="node" name="displayname" value="All Configurations"/>
+          <property category="win32.*.win32b.bcc32" name="container.SelectedOptimizations.containerenabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="container.SelectedWarnings.containerenabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.3.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.4.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.5.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.6.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.1" value="STATIC"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.2" value="WIN32"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.20" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.21" value="..\..\src"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.22" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.23" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.24" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.25" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.26" value="..\..\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.27" value="..\..\..\re\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.28" value="..\..\..\rem\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.29" value="..\..\..\g722"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.30" value="..\..\..\gsm\inc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.31" value="..\..\..\portaudio\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.32" value="..\..\..\speex\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.33" value="..\..\..\webrtc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\modules\g722"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.O1.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.O2.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.Od.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.disablewarns.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.2" value="NO_STRICT"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tW.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWC.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWD.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWM.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.w.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.wcsu.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.wpch.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.11" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.12" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.13" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.14" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.15" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.16" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.17" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.18" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.19" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.20" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.21" value="..\..\src"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.22" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\..\modules\g722"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.11" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.12" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.13" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.14" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.15" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.16" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.17" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.18" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.19" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.20" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.21" value="..\..\src"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.22" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\..\modules\g722"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.11" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.12" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.13" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.14" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.15" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.16" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.17" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.18" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.19" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.20" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.21" value="..\..\src"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.22" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\..\modules\g722"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.14" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.15" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.16" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.17" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.18" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.19" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.20" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.21" value="..\..\src"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.22" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.23" value="..\..\..\..\..\..\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.24" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.25" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\..\modules\g722"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.12" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.13" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.14" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.15" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.16" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.17" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.18" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.19" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.20" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.21" value="..\..\src"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.22" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\..\modules\g722"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpe.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpp.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg" value="64"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg.merge" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.dynamicrtl.enabled" value="0"/>
+        </optionset>
+      </project>
+      <FILELIST>
+        <FILE FILENAME="baresip.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="baresip" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ua.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ua" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\account.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="account" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\aucodec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aucodec" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\audio.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="audio" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\aufilt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aufilt" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\auplay.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="auplay" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ausrc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ausrc" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\bfcp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bfcp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\call.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="call" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\cmd.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="cmd" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\conf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="conf" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\config.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="config" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\contact.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="contact" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\core.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\magic.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\mctrl.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mctrl" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\menc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="menc" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\message.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="message" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\mnat.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mnat" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\module.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="module" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\net.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="net" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\play.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="play" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\reg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="reg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtpkeep.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rtpkeep" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sdp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sdp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipreq.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sipreq" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\static.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="static" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stream.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stream" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\baresip.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\g711\g711.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="g711" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\g722\g722.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="g722" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\g726_32\g726_32.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="g726_32" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\g726_32\g726.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="g726" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\g726_32\g726.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gsm\gsm.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\portaudio\portaudio.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="portaudio" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\speex\speex.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="speex" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\speex_aec\speex_aec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="speex_aec" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\speex_pp\speex_pp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="speex_pp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\stun\stun.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\winwave\winwave_play.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="winwave_play" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\winwave\src.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="src" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\winwave\winwave.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="winwave" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\winwave\winwave.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\presence\subscriber.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="subscriber" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\presence\notifier.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="notifier" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\presence\presence.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="presence" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\presence\presence.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\dialog_info\dialog_info_subscriber.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dialog_info_subscriber" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\dialog_info\dialog_info.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dialog_info" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\dialog_info\dialog_info.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\webrtc_aec\webrtc_aec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="webrtc_aec" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\mwi\mwi.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mwi" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\recorder\recorder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="recorder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\recorder\wavfile.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wavfile" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\recorder\wavfile.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\aufile\aufile.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aufile" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\paging_tx.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="paging_tx" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\module.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\l16\l16.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="l16" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\softvol\softvol.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="softvol" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\nullaudio\nullaudio.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="nullaudio" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\nullaudio\nullaudio.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\nullaudio\nullaudio_play.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="nullaudio_play" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\nullaudio\nullaudio_src.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="nullaudio_src" FORMNAME="" DESIGNCLASS=""/>
+      </FILELIST>
+      <IDEOPTIONS>
+        <VersionInfo>
+          <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+          <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+          <VersionInfo Name="MajorVer">1</VersionInfo>
+          <VersionInfo Name="MinorVer">0</VersionInfo>
+          <VersionInfo Name="Release">0</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Debug">False</VersionInfo>
+          <VersionInfo Name="PreRelease">False</VersionInfo>
+          <VersionInfo Name="Special">False</VersionInfo>
+          <VersionInfo Name="Private">False</VersionInfo>
+          <VersionInfo Name="DLL">False</VersionInfo>
+          <VersionInfo Name="Locale">1045</VersionInfo>
+          <VersionInfo Name="CodePage">1250</VersionInfo>
+        </VersionInfo>
+        <VersionInfoKeys>
+          <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+          <VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="Comments"></VersionInfoKeys>
+        </VersionInfoKeys>
+        <Debugging>
+          <Debugging Name="DebugSourceDirs"></Debugging>
+        </Debugging>
+        <Parameters>
+          <Parameters Name="RunParams"></Parameters>
+          <Parameters Name="Launcher"></Parameters>
+          <Parameters Name="UseLauncher">False</Parameters>
+          <Parameters Name="DebugCWD"></Parameters>
+          <Parameters Name="HostApplication"></Parameters>
+          <Parameters Name="RemoteHost"></Parameters>
+          <Parameters Name="RemotePath"></Parameters>
+          <Parameters Name="RemoteParams"></Parameters>
+          <Parameters Name="RemoteLauncher"></Parameters>
+          <Parameters Name="UseRemoteLauncher">False</Parameters>
+          <Parameters Name="RemoteCWD"></Parameters>
+          <Parameters Name="RemoteDebug">False</Parameters>
+          <Parameters Name="Debug Symbols Search Path"></Parameters>
+          <Parameters Name="LoadAllSymbols">True</Parameters>
+          <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+        </Parameters>
+        <Linker>
+          <Linker Name="LibPrefix"></Linker>
+          <Linker Name="LibSuffix"></Linker>
+          <Linker Name="LibVersion"></Linker>
+        </Linker>
+      </IDEOPTIONS>
+    </BCBPROJECT>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
+</BorlandProject>

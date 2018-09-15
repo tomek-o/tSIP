@@ -1,0 +1,419 @@
+# depslib dependency file v1.0
+1463724041 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\log.cpp
+	<stdio.h>
+	<iostream>
+	<fstream>
+	<windows.h>
+	<stdio.h>
+	<time.h>
+	<stdarg.h>
+	<sys\timeb.h>
+	"Log.h"
+
+1427571794 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\log.h
+	<string>
+	"singleton.h"
+
+1427569490 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\singleton.h
+
+1463724671 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\main.cpp
+	"main.h"
+	<re.h>
+	<baresip.h>
+	<module.h>
+	<assert.h>
+
+1198440542 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\main.h
+	<windows.h>
+
+1428759596 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\resource.rc
+	<windows.h>
+
+1355664572 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\utils.cpp
+	"Utils.h"
+	<windows.h>
+	<assert.h>
+
+1355664366 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\utils.h
+	<string>
+	<windows.h>
+	<algorithm>
+
+1463723836 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729.c
+	<stdlib.h>
+	<string.h>
+	<re.h>
+	<baresip.h>
+	<module.h>
+	<assert.h>
+	"g729a_v11/typedef.h"
+	"g729a_v11/basic_op.h"
+	"g729a_v11/ld8a.h"
+	"g729a_v11/tab_ld8a.h"
+	"g729a_v11/util.h"
+	"g729a_v11/pre_proc.h"
+
+1420316434 d:\dokumenty\_projekty\libre\tsip\re\include\re.h
+	<winsock2.h>
+	<ws2tcpip.h>
+	"re_types.h"
+	"re_fmt.h"
+	"re_mbuf.h"
+	"re_list.h"
+	"re_sa.h"
+	"re_base64.h"
+	"re_bfcp.h"
+	"re_conf.h"
+	"re_crc32.h"
+	"re_dns.h"
+	"re_hash.h"
+	"re_http.h"
+	"re_httpauth.h"
+	"re_ice.h"
+	"re_jbuf.h"
+	"re_lock.h"
+	"re_main.h"
+	"re_md5.h"
+	"re_mem.h"
+	"re_mod.h"
+	"re_mqueue.h"
+	"re_net.h"
+	"re_rtp.h"
+	"re_sdp.h"
+	"re_uri.h"
+	"re_sip.h"
+	"re_sipevent.h"
+	"re_sipreg.h"
+	"re_sipsess.h"
+	"re_stun.h"
+	"re_natbd.h"
+	"re_sys.h"
+	"re_tcp.h"
+	"re_telev.h"
+	"re_tmr.h"
+	"re_tls.h"
+	"re_turn.h"
+	"re_udp.h"
+
+1381876588 d:\dokumenty\_projekty\libre\tsip\re\include\re_types.h
+	<sys/types.h>
+	<stddef.h>
+	<stdlib.h>
+	<inttypes.h>
+	<stdbool.h>
+	<errno.h>
+
+1401187538 d:\dokumenty\_projekty\libre\tsip\re\include\re_fmt.h
+	<stdarg.h>
+	<stdio.h>
+
+1401118252 d:\dokumenty\_projekty\libre\tsip\re\include\re_mbuf.h
+	<stdarg.h>
+
+1341659054 d:\dokumenty\_projekty\libre\tsip\re\include\re_list.h
+
+1344002116 d:\dokumenty\_projekty\libre\tsip\re\include\re_sa.h
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+
+1381876050 d:\dokumenty\_projekty\libre\tsip\re\include\re_base64.h
+
+1364979520 d:\dokumenty\_projekty\libre\tsip\re\include\re_bfcp.h
+
+1339395548 d:\dokumenty\_projekty\libre\tsip\re\include\re_conf.h
+
+1288787654 d:\dokumenty\_projekty\libre\tsip\re\include\re_crc32.h
+	<zlib.h>
+
+1345110230 d:\dokumenty\_projekty\libre\tsip\re\include\re_dns.h
+
+1341659054 d:\dokumenty\_projekty\libre\tsip\re\include\re_hash.h
+
+1370701472 d:\dokumenty\_projekty\libre\tsip\re\include\re_http.h
+
+1326668626 d:\dokumenty\_projekty\libre\tsip\re\include\re_httpauth.h
+
+1369664584 d:\dokumenty\_projekty\libre\tsip\re\include\re_ice.h
+
+1288787654 d:\dokumenty\_projekty\libre\tsip\re\include\re_jbuf.h
+
+1288787654 d:\dokumenty\_projekty\libre\tsip\re\include\re_lock.h
+
+1381876262 d:\dokumenty\_projekty\libre\tsip\re\include\re_main.h
+
+1288787654 d:\dokumenty\_projekty\libre\tsip\re\include\re_md5.h
+
+1319034962 d:\dokumenty\_projekty\libre\tsip\re\include\re_mem.h
+
+1463916944 d:\dokumenty\_projekty\libre\tsip\re\include\re_mod.h
+
+1362834038 d:\dokumenty\_projekty\libre\tsip\re\include\re_mqueue.h
+
+1344000392 d:\dokumenty\_projekty\libre\tsip\re\include\re_net.h
+	<ws2tcpip.h>
+	<winsock2.h>
+	<winsock2.h>
+	<ws2tcpip.h>
+	<sys/types.h>
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+
+1338465090 d:\dokumenty\_projekty\libre\tsip\re\include\re_rtp.h
+
+1452027334 d:\dokumenty\_projekty\libre\tsip\re\include\re_sdp.h
+
+1288787654 d:\dokumenty\_projekty\libre\tsip\re\include\re_uri.h
+
+1420320076 d:\dokumenty\_projekty\libre\tsip\re\include\re_sip.h
+
+1454428402 d:\dokumenty\_projekty\libre\tsip\re\include\re_sipevent.h
+
+1298629042 d:\dokumenty\_projekty\libre\tsip\re\include\re_sipreg.h
+
+1337584778 d:\dokumenty\_projekty\libre\tsip\re\include\re_sipsess.h
+
+1372153066 d:\dokumenty\_projekty\libre\tsip\re\include\re_stun.h
+
+1322944202 d:\dokumenty\_projekty\libre\tsip\re\include\re_natbd.h
+
+1422464330 d:\dokumenty\_projekty\libre\tsip\re\include\re_sys.h
+
+1381876492 d:\dokumenty\_projekty\libre\tsip\re\include\re_tcp.h
+
+1288787654 d:\dokumenty\_projekty\libre\tsip\re\include\re_telev.h
+
+1338374924 d:\dokumenty\_projekty\libre\tsip\re\include\re_tmr.h
+
+1365415210 d:\dokumenty\_projekty\libre\tsip\re\include\re_tls.h
+
+1317669292 d:\dokumenty\_projekty\libre\tsip\re\include\re_turn.h
+
+1379239516 d:\dokumenty\_projekty\libre\tsip\re\include\re_udp.h
+
+1463906816 d:\dokumenty\_projekty\libre\tsip\baresip\include\baresip.h
+	"baresip_dialog_info_status.h"
+	"baresip_presence_status.h"
+
+1401106722 d:\dokumenty\_projekty\libre\tsip\baresip\include\baresip_dialog_info_status.h
+
+1438175598 d:\dokumenty\_projekty\libre\tsip\baresip\include\baresip_presence_status.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\typedef.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\basic_op.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\ld8a.h
+	<stdlib.h>
+	<stdio.h>
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\tab_ld8a.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\util.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\pre_proc.h
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\acelp_ca.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\basic_op.c
+	<stdio.h>
+	<stdlib.h>
+	"typedef.h"
+	"basic_op.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\cod_ld8a.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+	"util.h"
+	"qua_lsp.h"
+	"taming.h"
+	"qua_gain.h"
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\qua_lsp.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\taming.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\qua_gain.h
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\cor_func.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\de_acelp.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\dec_gain.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\dec_lag3.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\dec_ld8a.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+	"lspdec.h"
+	"util.h"
+	"dec_gain.h"
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\lspdec.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\dec_gain.h
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\dspfunc.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\filter.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\gainpred.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+	"oper_32b.h"
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\oper_32b.h
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\lpc.c
+	"typedef.h"
+	"basic_op.h"
+	"oper_32b.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\lpcfunc.c
+	"typedef.h"
+	"basic_op.h"
+	"oper_32b.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\lspdec.c
+	"typedef.h"
+	"ld8a.h"
+	"basic_op.h"
+	"tab_ld8a.h"
+	"util.h"
+	"lspgetq.h"
+	"lpcfunc.h"
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\lspgetq.h
+
+1240301745 d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\lpcfunc.h
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\lspgetq.c
+	<stdio.h>
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"util.h"
+	"lspgetq.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\oper_32b.c
+	"typedef.h"
+	"basic_op.h"
+	"oper_32b.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\p_parity.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\pitch_a.c
+	"typedef.h"
+	"basic_op.h"
+	"oper_32b.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+	"util.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\post_pro.c
+	"typedef.h"
+	"basic_op.h"
+	"oper_32b.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\postfilt.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"oper_32b.h"
+	"util.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\pre_proc.c
+	"typedef.h"
+	"basic_op.h"
+	"oper_32b.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\pred_lt3.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\qua_gain.c
+	"typedef.h"
+	"basic_op.h"
+	"oper_32b.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+	"taming.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\qua_lsp.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+	"util.h"
+	"qua_lsp.h"
+	"lspgetq.h"
+	"lpcfunc.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\tab_ld8a.c
+	"typedef.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\taming.c
+	"typedef.h"
+	"basic_op.h"
+	"oper_32b.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+	"taming.h"
+
+1240301745 source:d:\dokumenty\_projekty\libre\tsip\baresip\modules\g729\g729a_v11\util.c
+	"typedef.h"
+	"basic_op.h"
+	"ld8a.h"
+	"tab_ld8a.h"
+
+1463916664 d:\dokumenty\_projekty\libre\tsip\baresip\include\module.h
+	<windows.h>
+

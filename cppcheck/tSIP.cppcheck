@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="1">
+    <includedir>
+        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP/portaudio/include"/>
+        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP/re/include"/>
+        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP/rem/include"/>
+        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP/speex/include"/>
+    </includedir>
+    <defines>
+        <define name="WIN32"/>
+    </defines>
+    <paths>
+        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP"/>
+    </paths>
+</project>

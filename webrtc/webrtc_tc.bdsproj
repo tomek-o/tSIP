@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+			<Option Name="ProjectType">CppStaticLibrary</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{64FF34CD-EFA7-429C-BD55-D07FFB325ECA}</Option>
+		</Option>
+	</PersonalityInfo>
+	<CPlusPlusBuilder.Personality>
+		<Source>
+			<Source Name="MainSource">webrtc_tc.cpp</Source>
+		</Source>
+		<BCBPROJECT>
+      <project version="10.0">
+        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="count" value="1"/>
+        <property category="build.config" name="excludedefaultforzero" value="0"/>
+        <property category="build.config.0" name="builddir" value="Debug"/>
+        <property category="build.config.0" name="key" value="Debug_Build"/>
+        <property category="build.config.0" name="name" value="Debug Build"/>
+        <property category="build.config.0" name="settings.win32b" value="default"/>
+        <property category="build.config.0" name="type" value="Toolset"/>
+        <property category="build.config.0" name="win32.win32b.builddir" value="Debug_Build"/>
+        <property category="build.config.1" name="key" value="Release_Build"/>
+        <property category="build.config.1" name="name" value="Release Build"/>
+        <property category="build.config.1" name="settings.win32b" value="default"/>
+        <property category="build.config.1" name="type" value="Toolset"/>
+        <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
+        <property category="build.node" name="name" value="webrtc_tc.lib"/>
+        <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;adortl;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;soaprtl;dsnap;bdertl;vcldbx"/>
+        <property category="build.node" name="sparelibs" value="rtl.lib vcl.lib"/>
+        <property category="build.node" name="use_packages" value="0"/>
+        <property category="build.platform" name="active" value="win32"/>
+        <property category="build.platform" name="win32.Debug_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.Release_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.default" value="win32b"/>
+        <property category="build.platform" name="win32.enabled" value="1"/>
+        <property category="build.platform" name="win32.win32b.enabled" value="1"/>
+        <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.listfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.objfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.xreffile.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.1" value="_DEBUG"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$O.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.1" value="DEBUG"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.V.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.Gn.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\debug"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="container.SelectedOptimizations.containerenabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.A.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.AK.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.AU.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.1" value="NDEBUG"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Jgi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Jgx.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.V0.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.V1.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Vmd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Vmm.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Vms.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.align-1.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.align-2.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.align-3.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.align-5.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.k.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.noregistervars.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.p.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.pm.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.pr.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.ps.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.r.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.rd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.vi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$D.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$O.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.V.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\release"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.z.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zn.enabled" value="1"/>
+        <optionset name="all_configurations">
+          <property category="node" name="displayname" value="All Configurations"/>
+          <property category="win32.*.win32b.bcc32" name="container.SelectedOptimizations.containerenabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="container.SelectedWarnings.containerenabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.3.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.4.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.5.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.6.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="webrtc\modules\audio_processing\ns"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="webrtc\common_audio\signal_processing"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="webrtc\modules\audio_processing\utility"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="webrtc\modules\audio_processing\aec"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\_PROJEKTY\libre\tSIP"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="webrtc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.O1.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.O2.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.Od.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.Q.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.disablewarns.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.2" value="NO_STRICT"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tW.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWC.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWD.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWM.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.w.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.wpch.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="webrtc\modules\audio_processing\ns"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="webrtc\common_audio\signal_processing"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="webrtc\modules\audio_processing\utility"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="webrtc\modules\audio_processing\aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\_PROJEKTY\libre\tSIP"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="webrtc\modules\audio_processing\ns"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="webrtc\common_audio\signal_processing"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="webrtc\modules\audio_processing\utility"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="webrtc\modules\audio_processing\aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\_PROJEKTY\libre\tSIP"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="webrtc\modules\audio_processing\ns"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="webrtc\common_audio\signal_processing"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="webrtc\modules\audio_processing\utility"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="webrtc\modules\audio_processing\aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\_PROJEKTY\libre\tSIP"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="webrtc\modules\audio_processing\ns"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="webrtc\common_audio\signal_processing"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="webrtc\modules\audio_processing\utility"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="webrtc\modules\audio_processing\aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\_PROJEKTY\libre\tSIP"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\..\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="webrtc\modules\audio_processing\ns"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="webrtc\common_audio\signal_processing"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="webrtc\modules\audio_processing\utility"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="webrtc\modules\audio_processing\aec"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\_PROJEKTY\libre\tSIP"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpe.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpp.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.dynamicrtl.enabled" value="0"/>
+        </optionset>
+      </project>
+      <FILELIST>
+        <FILE FILENAME="webrtc_tc.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="webrtc_tc" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\echo_cancellation.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="echo_cancellation" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\aec_core.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aec_core" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\aec_rdft.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aec_rdft" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\aec_resampler.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aec_resampler" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\utility\ring_buffer.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ring_buffer" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\utility\delay_estimator_wrapper.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="delay_estimator_wrapper" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\utility\delay_estimator.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="delay_estimator" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\randomization_functions.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="randomization_functions" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\ns\nsx_core.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="nsx_core" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\ns\noise_suppression.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="noise_suppression" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\ns\noise_suppression_x.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="noise_suppression_x" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\ns\ns_core.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ns_core" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\spl_init.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="spl_init" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\min_max_operations.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="min_max_operations" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\cross_correlation.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="cross_correlation" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\downsample_fast.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="downsample_fast" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\energy.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="energy" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\vector_scaling_operations.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="vector_scaling_operations" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\real_fft.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="real_fft" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\complex_fft.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="complex_fft" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\complex_bit_reverse.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="complex_bit_reverse" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\copy_set_operations.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="copy_set_operations" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\spl_sqrt_floor.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="spl_sqrt_floor" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\get_scaling_square.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="get_scaling_square" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\include\echo_cancellation.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\aec_core.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\aec_core_internal.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\aec_rdft.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\aec_resampler.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\aec\echo_cancellation_internal.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\include\audio_processing.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\include\mock_audio_processing.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\audio_buffer.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\audio_processing_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\echo_cancellation_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\echo_control_mobile_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\gain_control_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\high_pass_filter_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\level_estimator_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\noise_suppression_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\processing_component.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\splitting_filter.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\modules\audio_processing\voice_detection_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+      </FILELIST>
+      <IDEOPTIONS>
+        <VersionInfo>
+          <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+          <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+          <VersionInfo Name="MajorVer">1</VersionInfo>
+          <VersionInfo Name="MinorVer">0</VersionInfo>
+          <VersionInfo Name="Release">0</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Debug">False</VersionInfo>
+          <VersionInfo Name="PreRelease">False</VersionInfo>
+          <VersionInfo Name="Special">False</VersionInfo>
+          <VersionInfo Name="Private">False</VersionInfo>
+          <VersionInfo Name="DLL">False</VersionInfo>
+          <VersionInfo Name="Locale">1045</VersionInfo>
+          <VersionInfo Name="CodePage">1250</VersionInfo>
+        </VersionInfo>
+        <VersionInfoKeys>
+          <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+          <VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="Comments"></VersionInfoKeys>
+        </VersionInfoKeys>
+        <Debugging>
+          <Debugging Name="DebugSourceDirs"></Debugging>
+        </Debugging>
+        <Parameters>
+          <Parameters Name="RunParams"></Parameters>
+          <Parameters Name="Launcher"></Parameters>
+          <Parameters Name="UseLauncher">False</Parameters>
+          <Parameters Name="DebugCWD"></Parameters>
+          <Parameters Name="HostApplication"></Parameters>
+          <Parameters Name="RemoteHost"></Parameters>
+          <Parameters Name="RemotePath"></Parameters>
+          <Parameters Name="RemoteParams"></Parameters>
+          <Parameters Name="RemoteLauncher"></Parameters>
+          <Parameters Name="UseRemoteLauncher">False</Parameters>
+          <Parameters Name="RemoteCWD"></Parameters>
+          <Parameters Name="RemoteDebug">False</Parameters>
+          <Parameters Name="Debug Symbols Search Path"></Parameters>
+          <Parameters Name="LoadAllSymbols">True</Parameters>
+          <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+        </Parameters>
+        <Linker>
+          <Linker Name="LibPrefix"></Linker>
+          <Linker Name="LibSuffix"></Linker>
+          <Linker Name="LibVersion"></Linker>
+        </Linker>
+      </IDEOPTIONS>
+    </BCBPROJECT>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
+</BorlandProject>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{F0C559FB-00A4-4848-B2B0-DA5D99B5E4BE}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  <Projects>
+      <Projects Name="re.lib">re\mk\win32-tc\re.bdsproj</Projects>
+      <Projects Name="rem.lib">rem\mk\win32-tc\rem.bdsproj</Projects>
+      <Projects Name="baresip.lib">baresip\mk\win32-tc\baresip.bdsproj</Projects>
+      <Projects Name="portaudio.lib">portaudio\build\bc\portaudio.bdsproj</Projects>
+      <Projects Name="libspeex.lib">speex\build\libspeex.bdsproj</Projects>
+      <Projects Name="g722.lib">g722\g722.bdsproj</Projects>
+      <Projects Name="gsm.lib">gsm\build\gsm.bdsproj</Projects>
+      <Projects Name="jsoncpp.lib">jsoncpp\jsoncpp.bdsproj</Projects>
+      <Projects Name="lua_static.lib">lua\turbo_cpp\lua_static.bdsproj</Projects>
+      <Projects Name="webrtc_tc.lib">webrtc\webrtc_tc.bdsproj</Projects>
+      <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
+      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib jsoncpp.lib lua_static.lib webrtc_tc.lib tSIP.exe</Projects>
+    </Projects>
+    <Dependencies>
+      <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">
+        <Dependency GUID="{B21E9321-F647-47E1-9D72-0B26697B924C}"/>
+        <Dependency GUID="{2D189B4A-4FE9-49A2-9586-2D657EE0EA61}"/>
+        <Dependency GUID="{2F20C27F-EE96-4AC2-83B0-B3997AEB97ED}"/>
+        <Dependency GUID="{EE04A80D-3549-4554-880A-FDA45DFA6797}"/>
+        <Dependency GUID="{17B4AC9E-F1FB-4B10-9716-62BECFCFC6D4}"/>
+        <Dependency GUID="{3555BA4B-67B2-4597-93B7-C4F2B4B2813D}"/>
+        <Dependency GUID="{4CEC9F30-B5D0-4F44-81C6-661FF0C3D88C}"/>
+        <Dependency GUID="{4CEC9F30-B5D0-4F44-81C6-661FF0C3D88C}"/>
+        <Dependency GUID="{B2993EC5-7934-47AB-AEEE-40DED652D62C}"/>
+        <Dependency GUID="{64FF34CD-EFA7-429C-BD55-D07FFB325ECA}"/>
+      </Dependency>
+    </Dependencies>
+  </Default.Personality>
+</BorlandProject>

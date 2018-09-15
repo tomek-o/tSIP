@@ -1,0 +1,9 @@
+#include "resource.h"
+
+STRINGTABLE
+{
+    ID_STR_RECORDING_FEATURE    "RECORDING_ENABLED"
+    ID_STR_APP_NAME             "tSIP"
+    ID_STR_APP_PROTO            "tsip"
+}
+

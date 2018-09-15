@@ -1,0 +1,107 @@
+2011-12-25 Alfred E. Heggestad <aeh@db.org>
+
+	* Version 0.4.0
+
+	* updated doxygen comments
+
+	* build: add support for CMake (thanks to Stefan Radomski)
+		 clean up OS and ARCH detection
+
+	* dns: fix potential infinite loop in dname decode
+
+	* sip: change struct sip_via transp to enum sip_transp (breaks API)
+	       added sip_transp_isladdr() and sip_transp_port()
+	       added sip_dialog_fork(), sip_dialog_lseq(),
+	       sip_dialog_established(), sip_dialog_cmp_half()
+
+	* sipevent: new module for SIP Event framework (RFC 3265, RFC 3515)
+
+	* sys: add portable sys_usleep() and sys_msleep()
+	
+	* tcp: add tcp_send_helper()
+
+	* tls: add support for DTLSv1 (Datagram TLS)
+	       tls_alloc: add tls_method and layer (breaks API)
+	       tls_tcp: use custom BIO to send data
+
+	* tmr: optimize tmr_start() where delay == 0
+
+	* turn: add stun_msg to turnc handler (breaks API)
+
+	* udp: add udp_send_helper()
+
+
+2011-09-07 Alfred E. Heggestad <aeh@db.org>
+
+	* Version 0.3.0
+
+	* build support for native mingw32 (thanks to Michael Erskine)
+
+	* bfcp: new module for The Binary Floor Control Protocol (RFC 4582)
+
+	* g711: module moved to librem
+
+	* sipreg: fix a bug in failwait() calculation
+
+	* stun: add support for STUNS (secure STUN)
+
+	* tcp: added tcp_set_handlers()
+
+	* turn: added send/recv functions
+
+
+2011-05-20 Alfred E. Heggestad <aeh@db.org>
+
+	* Version 0.2.0
+
+	* updated doxygen comments
+
+	* conf: added conf_get_bool()
+
+	* dns: fixed a bug in get_resolv_dns()
+
+	* fmt: added pl_x64() pl_float() fmt_gmtime()
+	
+	* hash: added hash_valid_size()
+
+	* httpauth: clean up API
+
+	* ice: many improvements and bugfixes
+
+	* main: fix a bug if re_main() fails
+
+	* mbuf: added mbuf_debug()
+
+	* natbd: fixed some race conditions and memory leaks
+
+	* rtp: added rtcp_enable_mux() (RFC 5761; RTP and RTCP multiplexing)
+
+	* sdp: fixed setting RTCP port if RTP port is zero
+
+	* sip: added support for SIP Outbound (RFC 5626)
+	       added sip_msg_hdr_count() sip_msg_xhdr_count()
+	       added sip_msg_hdr_has_value() sip_msg_xhdr_has_value()
+	       added sip_auth_reset()
+	       handle multiple authenticate headers with equal realm value
+	       fixed a bug with loose-routing in Route header
+	       fixed decoding of Via header
+	
+	* sipreg: added support for SIP Outbound (breaks API compatibility)
+
+	* sipsess: fix a bug in sipsess_reject() if fmt is NULL
+	
+	* tcp: update tcp_register_helper() (breaks API)
+
+	* tmr: removed tmrl from 'struct tmr' (breaks ABI)
+	       added tmr_isrunning()
+
+	* udp: update udp_register_helper() (breaks API)
+
+	* uri: fix optional username in uri_decode()
+
+
+2010-11-05 Alfred E. Heggestad <aeh@db.org>
+
+	* Version 0.1.0
+	
+	* Initial Release

@@ -1,0 +1,692 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+			<Option Name="ProjectType">CppStaticLibrary</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{2D189B4A-4FE9-49A2-9586-2D657EE0EA61}</Option>
+		</Option>
+	</PersonalityInfo>
+	<CPlusPlusBuilder.Personality>
+		<Source>
+			<Source Name="MainSource">re.cpp</Source>
+		</Source>
+		<BCBPROJECT>
+      <project version="10.0">
+        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="count" value="1"/>
+        <property category="build.config" name="excludedefaultforzero" value="0"/>
+        <property category="build.config.0" name="builddir" value="Debug"/>
+        <property category="build.config.0" name="key" value="Debug_Build"/>
+        <property category="build.config.0" name="name" value="Debug Build"/>
+        <property category="build.config.0" name="settings.win32b" value="default"/>
+        <property category="build.config.0" name="type" value="Toolset"/>
+        <property category="build.config.0" name="win32.win32b.builddir" value="Debug_Build"/>
+        <property category="build.config.1" name="key" value="Release_Build"/>
+        <property category="build.config.1" name="name" value="Release Build"/>
+        <property category="build.config.1" name="settings.win32b" value="default"/>
+        <property category="build.config.1" name="type" value="Toolset"/>
+        <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="lastconfig" value="Release_Build"/>
+        <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
+        <property category="build.node" name="name" value="re.lib"/>
+        <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;adortl;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;soaprtl;dsnap;bdertl;vcldbx"/>
+        <property category="build.node" name="sparelibs" value="rtl.lib vcl.lib"/>
+        <property category="build.node" name="use_packages" value="0"/>
+        <property category="build.platform" name="active" value="win32"/>
+        <property category="build.platform" name="win32.Debug_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.Release_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.default" value="win32b"/>
+        <property category="build.platform" name="win32.enabled" value="1"/>
+        <property category="build.platform" name="win32.win32b.enabled" value="1"/>
+        <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.listfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.objfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.xreffile.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.1" value="_DEBUG"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vG.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$O.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.1" value="DEBUG"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.V.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.Gn.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\debug"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="container.SelectedOptimizations.containerenabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="container.SelectedWarnings.containerenabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.A.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.AK.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.AU.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.1" value="NDEBUG"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Jgi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Jgx.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.O1.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Od.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.V0.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.V1.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Vmd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Vmm.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.Vms.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.align-1.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.align-2.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.align-3.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.align-5.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.k.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.p.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.pm.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.pr.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.ps.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.r.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.vi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$D.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$O.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.V.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\release"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.z.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zn.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.tlib" name="option.outputdir.arg.1" value="out"/>
+        <property category="win32.Release_Build.win32b.tlib" name="option.outputdir.arg.merge" value="0"/>
+        <property category="win32.Release_Build.win32b.tlib" name="option.outputdir.enabled" value="0"/>
+        <optionset name="all_configurations">
+          <property category="node" name="displayname" value="All Configurations"/>
+          <property category="win32.*.win32b.bcc32" name="container.SelectedWarnings.containerenabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.3.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.4.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.5.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.6.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.1" value="HAVE_SELECT"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="..\..\src\sipevent"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\..\src\sipsess"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\..\src\sipreg"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\..\src\sip"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="..\..\src\sha"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="..\..\src\sdp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="..\..\src\sa"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="..\..\src\rtp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\..\src\net\win32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\..\src\net"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value="..\..\src\natbd"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="..\..\src\mod"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.20" value="..\..\src\mqueue\win32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.21" value="..\..\src\mod\win32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.22" value="..\..\src\mem"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.23" value="..\..\src\md5"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.24" value="..\..\src\mbuf"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.25" value="..\..\src\main"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.26" value="..\..\src\lock\win32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.27" value="..\..\src\lock"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.28" value="..\..\src\list"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.29" value="..\..\src\jbuf"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\..\src\uri"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.30" value="..\..\src\ice"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.31" value="..\..\src\httpauth"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.32" value="..\..\src\hmac"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.33" value="..\..\src\hash"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.34" value="..\..\src\fmt"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.35" value="..\..\src\dns\win32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.36" value="..\..\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.37" value="..\..\src\dns"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.38" value="..\..\src\dbg"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.39" value="..\..\src\crc32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\src\udp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.40" value="..\..\src\conf"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.41" value="..\..\src\bfcp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.42" value="..\..\src\base64"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.43" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.44" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.45" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.46" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\..\src\tmr"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\src\telev"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\src\tcp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="..\..\src\sys"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="..\..\src\stun"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Q.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.disablewarns.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.n.arg.1" value="out"/>
+          <property category="win32.*.win32b.bcc32" name="option.n.arg.merge" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.n.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.noregistervars.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.rd.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.2" value="NO_STRICT"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tW.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWC.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWD.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWM.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.w.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.waus.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.wcsu.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.wpch.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="..\..\src\sipevent"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="..\..\src\sipsess"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.11" value="..\..\src\sipreg"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.12" value="..\..\src\sip"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.13" value="..\..\src\sha"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.14" value="..\..\src\sdp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.15" value="..\..\src\sa"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.16" value="..\..\src\rtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.17" value="..\..\src\net\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.18" value="..\..\src\net"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.19" value="..\..\src\natbd"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="..\..\src\mod"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.20" value="..\..\src\mqueue\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.21" value="..\..\src\mod\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.22" value="..\..\src\mem"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.23" value="..\..\src\md5"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.24" value="..\..\src\mbuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.25" value="..\..\src\main"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.26" value="..\..\src\lock\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.27" value="..\..\src\lock"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.28" value="..\..\src\list"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.29" value="..\..\src\jbuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="..\..\src\uri"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.30" value="..\..\src\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.31" value="..\..\src\httpauth"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.32" value="..\..\src\hmac"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.33" value="..\..\src\hash"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.34" value="..\..\src\fmt"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.35" value="..\..\src\dns\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.36" value="..\..\src\dns"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.37" value="..\..\src\dbg"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.38" value="..\..\src\crc32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.39" value="..\..\src\conf"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="..\..\src\udp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.40" value="..\..\src\bfcp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.41" value="..\..\src\base64"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.42" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\..\src\tmr"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\..\src\telev"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\..\src\tcp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="..\..\src\sys"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="..\..\src\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="..\..\src\sipevent"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="..\..\src\sipsess"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.11" value="..\..\src\sipreg"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.12" value="..\..\src\sip"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.13" value="..\..\src\sha"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.14" value="..\..\src\sdp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.15" value="..\..\src\sa"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.16" value="..\..\src\rtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.17" value="..\..\src\net\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.18" value="..\..\src\net"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.19" value="..\..\src\natbd"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="..\..\src\mod"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.20" value="..\..\src\mqueue\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.21" value="..\..\src\mod\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.22" value="..\..\src\mem"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.23" value="..\..\src\md5"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.24" value="..\..\src\mbuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.25" value="..\..\src\main"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.26" value="..\..\src\lock\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.27" value="..\..\src\lock"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.28" value="..\..\src\list"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.29" value="..\..\src\jbuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="..\..\src\uri"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.30" value="..\..\src\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.31" value="..\..\src\httpauth"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.32" value="..\..\src\hmac"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.33" value="..\..\src\hash"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.34" value="..\..\src\fmt"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.35" value="..\..\src\dns\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.36" value="..\..\src\dns"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.37" value="..\..\src\dbg"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.38" value="..\..\src\crc32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.39" value="..\..\src\conf"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="..\..\src\udp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.40" value="..\..\src\bfcp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.41" value="..\..\src\base64"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.42" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\..\src\tmr"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\..\src\telev"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\..\src\tcp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="..\..\src\sys"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="..\..\src\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="..\..\src\sipevent"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="..\..\src\sipsess"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.11" value="..\..\src\sipreg"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.12" value="..\..\src\sip"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.13" value="..\..\src\sha"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.14" value="..\..\src\sdp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.15" value="..\..\src\sa"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.16" value="..\..\src\rtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.17" value="..\..\src\net\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.18" value="..\..\src\net"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.19" value="..\..\src\natbd"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="..\..\src\mod"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.20" value="..\..\src\mqueue\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.21" value="..\..\src\mod\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.22" value="..\..\src\mem"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.23" value="..\..\src\md5"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.24" value="..\..\src\mbuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.25" value="..\..\src\main"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.26" value="..\..\src\lock\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.27" value="..\..\src\lock"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.28" value="..\..\src\list"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.29" value="..\..\src\jbuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="..\..\src\uri"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.30" value="..\..\src\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.31" value="..\..\src\httpauth"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.32" value="..\..\src\hmac"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.33" value="..\..\src\hash"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.34" value="..\..\src\fmt"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.35" value="..\..\src\dns\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.36" value="..\..\src\dns"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.37" value="..\..\src\dbg"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.38" value="..\..\src\crc32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.39" value="..\..\src\conf"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="..\..\src\udp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.40" value="..\..\src\bfcp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.41" value="..\..\src\base64"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.42" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\..\src\tmr"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\..\src\telev"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\..\src\tcp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="..\..\src\sys"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="..\..\src\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="..\..\src\sipevent"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="..\..\src\sipsess"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="..\..\src\sipreg"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="..\..\src\sip"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="..\..\src\sha"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.14" value="..\..\src\sdp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.15" value="..\..\src\sa"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.16" value="..\..\src\rtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.17" value="..\..\src\net\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.18" value="..\..\src\net"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.19" value="..\..\src\natbd"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="..\..\src\mod"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.20" value="..\..\src\mqueue\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.21" value="..\..\src\mod\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.22" value="..\..\src\mem"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.23" value="..\..\src\md5"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.24" value="..\..\src\mbuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.25" value="..\..\src\main"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.26" value="..\..\src\lock\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.27" value="..\..\src\lock"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.28" value="..\..\src\list"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.29" value="..\..\src\jbuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="..\..\src\uri"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.30" value="..\..\src\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.31" value="..\..\src\httpauth"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.32" value="..\..\src\hmac"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.33" value="..\..\src\hash"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.34" value="..\..\src\fmt"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.35" value="..\..\src\dns\win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.36" value="..\..\src\dns"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.37" value="..\..\src\dbg"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.38" value="..\..\src\crc32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.39" value="..\..\src\conf"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="..\..\src\udp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.40" value="..\..\src\bfcp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.41" value="..\..\src\base64"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.42" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.43" value="..\..\..\..\..\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.44" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.45" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\..\src\tmr"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\src\telev"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="..\..\src\tcp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="..\..\src\sys"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="..\..\src\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="..\..\src\sipevent"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="..\..\src\sipsess"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="..\..\src\sipreg"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.12" value="..\..\src\sip"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.13" value="..\..\src\sha"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.14" value="..\..\src\sdp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.15" value="..\..\src\sa"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.16" value="..\..\src\rtp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.17" value="..\..\src\net\win32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.18" value="..\..\src\net"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.19" value="..\..\src\natbd"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="..\..\src\mod"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.20" value="..\..\src\mqueue\win32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.21" value="..\..\src\mod\win32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.22" value="..\..\src\mem"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.23" value="..\..\src\md5"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.24" value="..\..\src\mbuf"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.25" value="..\..\src\main"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.26" value="..\..\src\lock\win32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.27" value="..\..\src\lock"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.28" value="..\..\src\list"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.29" value="..\..\src\jbuf"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="..\..\src\uri"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.30" value="..\..\src\ice"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.31" value="..\..\src\httpauth"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.32" value="..\..\src\hmac"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.33" value="..\..\src\hash"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.34" value="..\..\src\fmt"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.35" value="..\..\src\dns\win32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.36" value="..\..\src\dns"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.37" value="..\..\src\dbg"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.38" value="..\..\src\crc32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.39" value="..\..\src\conf"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="..\..\src\udp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.40" value="..\..\src\bfcp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.41" value="..\..\src\base64"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.42" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\..\src\tmr"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\..\src\telev"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\..\src\tcp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="..\..\src\sys"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="..\..\src\stun"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpe.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpp.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg" value="128"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg.merge" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.dynamicrtl.enabled" value="0"/>
+        </optionset>
+      </project>
+      <FILELIST>
+        <FILE FILENAME="re.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="re" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\base64\b64.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="b64" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\bfcp\attr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="attr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\bfcp\msg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="msg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\conf\conf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="conf" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\crc32\crc32.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="crc32" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dbg\dbg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dbg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dns\client.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="client" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dns\cstr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="cstr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dns\dname.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dname" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dns\win32\srv.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="srv" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dns\rrlist.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rrlist" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dns\ns.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ns" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dns\rr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dns\dns_hdr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dns_hdr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\time.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="time" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\ch.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ch" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\hexdump.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hexdump" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\pl.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pl" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\print.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="print" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\prm.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="prm" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\regex.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="regex" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\str.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="str" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\hash\hash.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hash" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\hash\func.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="func" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\hmac\hmac_sha1.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hmac_sha1" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\httpauth\digest.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="digest" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\httpauth\basic.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="basic" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\util.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="util" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\cand.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="cand" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\candpair.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="candpair" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\chklist.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="chklist" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\comp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="comp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\connchk.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="connchk" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\gather.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gather" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\ice.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ice" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\icem.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="icem" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\icesdp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="icesdp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\icestr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="icestr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\ice\stunsrv.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stunsrv" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\jbuf\jbuf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="jbuf" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\list\list.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="list" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\lock\win32\win32_lock.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="win32_lock" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\main\method.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="method" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\main\init.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="init" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\main\main.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="main" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\mbuf\mbuf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mbuf" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\md5\wrap.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wrap" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\md5\md5.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="md5" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\mem\mem.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mem" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\mod\win32\dll.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dll" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\mqueue\win32\pipe.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pipe" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\natbd\natstr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="natstr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\natbd\filtering.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="filtering" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\natbd\genalg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="genalg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\natbd\hairpinning.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hairpinning" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\natbd\lifetime.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="lifetime" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\natbd\mapping.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mapping" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\net\sockopt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sockopt" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\net\if.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="if" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\net\net.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="net" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\net\netstr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="netstr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\net\rt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rt" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\net\win32\wif.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wif" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\source.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="source" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\fb.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="fb" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\member.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="member" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\ntp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ntp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\pkt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pkt" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\rtcp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rtcp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\rtp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rtp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\rtp_rr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rtp_rr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\sdes.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sdes" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\rtp\sess.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sess" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sa\sa.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sa" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sa\ntop.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ntop" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sa\pton.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pton" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sdp\session.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="session" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sdp\format.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="format" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sdp\media.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="media" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sdp\sdp_attr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sdp_attr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sdp\sdp_msg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sdp_msg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sdp\sdp_str.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sdp_str" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sha\sha1.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sha1" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\via.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="via" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\addr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="addr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\auth.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="auth" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\cseq.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="cseq" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\ctrans.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ctrans" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\dialog.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dialog" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\keepalive.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="keepalive" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\keepalive_udp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="keepalive_udp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\param.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="param" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\reply.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="reply" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\request.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="request" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\sip.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\sip_msg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip_msg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\sip_transp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip_transp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\strans.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="strans" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipreg\reg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="reg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\sipsess_request.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sipsess_request" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\accept.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="accept" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\ack.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ack" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\close.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="close" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\connect.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="connect" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\info.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="info" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\listen.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="listen" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\modify.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="modify" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\sip_sess.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip_sess" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\sipsess_reply.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sipsess_reply" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_addr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_addr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_attr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_attr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_hdr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_hdr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_ind.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_ind" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_msg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_msg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_rep.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_rep" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_req.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_req" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sys\sys.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sys" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sys\daemon.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="daemon" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sys\endian.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="endian" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sys\rand.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rand" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\tcp\tcp_high.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tcp_high" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\tcp\tcp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tcp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\telev\telev.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="telev" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\tmr\tmr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tmr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\udp\udp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="udp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\uri\uric.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="uric" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\uri\ucmp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ucmp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\uri\uri.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="uri" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\mod\mod.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mod" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\net\net_sock.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="net_sock" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sys\sleep.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sleep" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_uri.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_base64.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_bfcp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_bitv.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_conf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_crc32.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_dbg.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_dns.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_fmt.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_hash.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_hmac.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_httpauth.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_ice.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_jbuf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_list.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_lock.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_main.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_mbuf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_md5.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_mem.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_mod.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_mqueue.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_natbd.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_net.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_rtp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_sa.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_sdp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_sha.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_sip.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_sipevent.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_sipreg.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_sipsess.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_stun.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_sys.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_tcp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_telev.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_tls.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_tmr.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_turn.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_types.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\re_udp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\sip.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipevent\subscribe.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="subscribe" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipevent\notify.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="notify" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipevent\sipevent_listen.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sipevent_listen" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipevent\sipevent_msg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sipevent_msg" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\bfcp\conn.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="conn" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\bfcp\bfcp_request.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bfcp_request" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\bfcp\bfcp_reply.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bfcp_reply" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\fmt\str_error.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="str_error" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sa\printaddr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="printaddr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stunstr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stunstr" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_keepalive.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_keepalive" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\stun_ctrans.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_ctrans" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\stun\dnsdisc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dnsdisc" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\sip_call_info.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip_call_info" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\sip_alert_info.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip_alert_info" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sys\sys_time.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sys_time" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sdp\sdp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\sip_access_url.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip_access_url" FORMNAME="" DESIGNCLASS=""/>
+      </FILELIST>
+      <IDEOPTIONS>
+        <VersionInfo>
+          <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+          <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+          <VersionInfo Name="MajorVer">1</VersionInfo>
+          <VersionInfo Name="MinorVer">0</VersionInfo>
+          <VersionInfo Name="Release">0</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Debug">False</VersionInfo>
+          <VersionInfo Name="PreRelease">False</VersionInfo>
+          <VersionInfo Name="Special">False</VersionInfo>
+          <VersionInfo Name="Private">False</VersionInfo>
+          <VersionInfo Name="DLL">False</VersionInfo>
+          <VersionInfo Name="Locale">1045</VersionInfo>
+          <VersionInfo Name="CodePage">1250</VersionInfo>
+        </VersionInfo>
+        <VersionInfoKeys>
+          <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+          <VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="Comments"></VersionInfoKeys>
+        </VersionInfoKeys>
+        <Debugging>
+          <Debugging Name="DebugSourceDirs"></Debugging>
+        </Debugging>
+        <Parameters>
+          <Parameters Name="RunParams"></Parameters>
+          <Parameters Name="Launcher"></Parameters>
+          <Parameters Name="UseLauncher">False</Parameters>
+          <Parameters Name="DebugCWD"></Parameters>
+          <Parameters Name="HostApplication"></Parameters>
+          <Parameters Name="RemoteHost"></Parameters>
+          <Parameters Name="RemotePath"></Parameters>
+          <Parameters Name="RemoteParams"></Parameters>
+          <Parameters Name="RemoteLauncher"></Parameters>
+          <Parameters Name="UseRemoteLauncher">False</Parameters>
+          <Parameters Name="RemoteCWD"></Parameters>
+          <Parameters Name="RemoteDebug">False</Parameters>
+          <Parameters Name="Debug Symbols Search Path"></Parameters>
+          <Parameters Name="LoadAllSymbols">True</Parameters>
+          <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+        </Parameters>
+        <Linker>
+          <Linker Name="LibPrefix"></Linker>
+          <Linker Name="LibSuffix"></Linker>
+          <Linker Name="LibVersion"></Linker>
+        </Linker>
+      </IDEOPTIONS>
+    </BCBPROJECT>
+		<Folders/>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
+</BorlandProject>

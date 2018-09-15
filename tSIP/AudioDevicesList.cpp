@@ -1,0 +1,75 @@
+//---------------------------------------------------------------------------
+#pragma hdrstop
+
+#include "AudioDevicesList.h"
+#include <portaudio.h>
+#include <mmsystem.h>
+
+//---------------------------------------------------------------------------
+
+#pragma package(smart_init)
+
+AudioDevicesList::AudioDevicesList(void)
+{
+
+}
+
+void AudioDevicesList::Refresh(void)
+{
+	portaudioDevsIn.clear();
+	portaudioDevsOut.clear();
+
+	PaError error;
+	error = Pa_Initialize();
+	if (paNoError == error)
+	{
+
+		int n = Pa_GetDeviceCount();
+
+		for (int i=0; i<n; i++)
+		{
+			const PaDeviceInfo *info = Pa_GetDeviceInfo(i);
+			if (info->maxInputChannels > 0)
+			{
+				portaudioDevsIn.push_back(info->name);
+			}
+			if (info->maxOutputChannels > 0)
+			{
+				portaudioDevsOut.push_back(info->name);
+			}
+		}
+
+		Pa_Terminate();	// paired with Pa_Initialize()		
+	}
+	else
+	{
+		//DEBUG_WARNING("PortAudio init: %s\n", Pa_GetErrorText(error));
+	}
+
+	winwaveDevsIn.clear();
+	winwaveDevsOut.clear();
+
+	WAVEOUTCAPS woc;
+	int nOutDevices = waveOutGetNumDevs();
+	//if (nOutDevices > 0)
+	//	winwaveDevsOut.push_back("WAVE mapper");
+	for (int i=0; i<nOutDevices; i++)
+	{
+		if (waveOutGetDevCaps(i, &woc, sizeof(WAVEOUTCAPS))==MMSYSERR_NOERROR)
+		{
+			winwaveDevsOut.push_back(woc.szPname);
+		}
+	}
+
+	WAVEINCAPS wic;
+	int nInDevices = waveInGetNumDevs();
+	//if (nInDevices > 0)
+	//	winwaveDevsIn.push_back("WAVE mapper");
+	for (int i=0; i<nInDevices; i++)
+	{
+		if (waveInGetDevCaps(i, &wic, sizeof(WAVEINCAPS))==MMSYSERR_NOERROR)
+		{
+			winwaveDevsIn.push_back(wic.szPname);
+		}
+	}
+}

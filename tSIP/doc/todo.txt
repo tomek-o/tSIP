@@ -1,0 +1,53 @@
+DEBUG_INFO: w³¹cznik
+
+aufile: required S16LE, 1ch, 8kSps
+
+	
+latency tracker
+
+tSIP: help on button types (+ images)
+tSIP: directory import from vcard
+tSIP: call destination display	
+tSIP: verify wave file format when selecting for wave source audio device
+tSIP: "zawieszenie" przy po³¹czeniu przychodz¹cym gdy brak urz¹dzenia audio (?)
+tSIP: RecordViewer: play multiple files one by one (multiple selection list)
+multiple accounts; disable / set as default for outgoing
+lepsze informowanie o problemach: brak kompatybilnego kodeka, brak urz¹dzenia audio
+RecordViewer: keep sorting column/dir after restart
+
+tSIP scripting: help for commands (factory pattern)
+tSIP scripting: let Sleep return specific value if Break was used?
+tSIP scripting: example for rand()
+tSIP scripting: Unregister, Reregister
+tSIP scripting: Error registering Scintilla on 2nd plugin run
+luaopen_io(lua);
+
+
+plugin interface: showsettings
+
+
+tSIP plugin: logout from group in inactivity (mouse, keyboard)
+tSIP plugin: scripted audio source (create wave file, call with it)
+
+
+
+tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(), 
+tSIP scripting: file I/O example (report call quality after each call
+
+TODO: warn user if wave file source is selected but source file does not exist
+
+
+BUG? halt if audio device (mic with autosensing) is detached during call
+
+
+FIXME: btn reregister not always working correctly, depending on current registration state
+
+www: scripting with javascript
+
+font selection for console (ugly looking font under Wine)
+
+accessibility & GUI scaling: remember column width in call history, scale column width in phonebook
+
+script: ability to read Ctrl, Alt, Shift state
+
+log window: no desktopcenter!

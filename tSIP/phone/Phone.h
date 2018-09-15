@@ -1,0 +1,191 @@
+/** \file
+	\brief Interface description for phone device
+
+	This file should be shared by main application and device dll.
+	You MUST declare _EXPORTING macro before including this file in dll sources.
+*/
+
+#ifndef PhoneH
+#define PhoneH
+//---------------------------------------------------------------------------
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <windows.h>
+
+#ifdef _MSC_VER
+#	define CALL_CONV
+#else
+#	define CALL_CONV __stdcall
+#endif
+
+/** \def DECLARE_FN
+    \brief Declare function or consistent function + function pointer set depending on _EXPORTING
+*/
+#ifdef _EXPORTING
+#define DECLARE_FN(type, fn, ...) __declspec(dllexport) type CALL_CONV fn(__VA_ARGS__)
+#else
+#define DECLARE_FN(type, fn, ...) __declspec(dllimport) type __stdcall fn(__VA_ARGS__); \
+	typedef type (__stdcall *pf##fn)(__VA_ARGS__)
+#endif
+
+/** \brief Dll interface version, used to dismiss outdated libraries
+*/
+enum { DLL_INTERFACE_MAJOR_VERSION = 1 };
+/** \brief Dll interface version, used to dismiss outdated libraries
+*/
+enum { DLL_INTERFACE_MINOR_VERSION = 0 };
+
+/** \brief Holds Dll interface version
+*/
+struct S_PHONE_DLL_INTERFACE
+{
+	int majorVersion;   ///< major part of interface version
+	int minorVersion;   ///< minor part of interface version
+};
+
+/** \brief State of connection between PC and data acquisition device
+*/
+enum E_CONNECTION_STATE
+{
+	DEVICE_DISCONNECTED = 0,
+	DEVICE_CONNECTING,
+	DEVICE_CONNECTED,
+	DEVICE_DISCONNECTING
+};
+
+enum E_KEY
+{
+	KEY_0 = 0,
+	KEY_1,
+	KEY_2,
+	KEY_3,
+	KEY_4,
+	KEY_5,
+	KEY_6,
+	KEY_7,
+	KEY_8,
+	KEY_9,
+	KEY_STAR,
+	KEY_HASH,
+	KEY_HOOK,
+	KEY_OK,
+	KEY_C,
+	KEY_UP,
+	KEY_DOWN
+};
+
+struct S_PHONE_CAPABILITIES;
+struct S_PHONE_SETTINGS;
+
+///////////////////////////////////////////////////////////////////////////////
+// CALLBACKS
+///////////////////////////////////////////////////////////////////////////////
+
+/** \brief Called to generate log in parent application
+    \param cookie Holds internal data of callee (upper layer)
+    \param szText Text to add to log
+*/
+typedef void (__stdcall *CALLBACK_LOG)(void *cookie, const char *szText);
+/** \brief Called on connection/disconnection of device
+	\param cookie Holds internal data of callee (upper layer)
+	\param state Current state of device (\sa E_CONNECTION_STATE)
+	\param szMsgText Additional text (if applicable)
+*/
+typedef void (__stdcall *CALLBACK_CONNECT)(void *cookie, int state, const char *szMsgText);
+/** \brief Update key state
+	\param keyCode key type
+	\param state key up (=0) / down (=1) state
+*/
+typedef void (__stdcall *CALLBACK_KEY)(void *cookie, int keyCode, int state);
+/** \brief Start RTP streaming (paging), optional callback
+	\param target IP address + port (e.g. 192.168.1.10:4000) for streaming
+	\param filename name of the file to stream; if string is empty default audio source is used
+	\param codecname name of the codec to be used in transmission (not implemented yet)
+	\note uses cookie from "standard" callbacks
+	\return 0 on success
+*/
+typedef int (__stdcall *CALLBACK_PAGING_TX)(void *cookie, const char* target, const char* filename, const char* codecname);
+/** \brief Clear dial edit
+	\note uses cookie from "standard" callbacks
+*/
+typedef void (__stdcall *CALLBACK_CLEAR_DIAL)(void *cookie);
+/** \brief Get description for the number (phonebook, etc.)
+	\param description buffer to store description (NULL-terminated, truncated if necessary)
+	\param descriptionSize size of descripton buffer in bytes
+	\return 0 on success
+*/
+typedef int (__stdcall *CALLBACK_GET_NUMBER_DESCRIPTION)(void *cookie, const char* number, char* description, int descriptionSize);
+
+typedef int (__stdcall *CALLBACK_SET_VARIABLE)(void *cookie, const char* name, const char* value);
+
+typedef int (__stdcall *CALLBACK_CLEAR_VARIABLE)(void *cookie, const char* name);
+
+///////////////////////////////////////////////////////////////////////////////
+// EXPORTED/IMPORTED FUNCTION SET
+///////////////////////////////////////////////////////////////////////////////
+
+/** \brief Get dll interface version to check for compatibility
+*/
+DECLARE_FN(void, GetPhoneInterfaceDescription, struct S_PHONE_DLL_INTERFACE*);
+
+/** \brief Get initial settings, either default or from config file/registry/etc.
+*/
+DECLARE_FN(int, GetPhoneSettings, struct S_PHONE_SETTINGS*);
+
+/** \brief Save settings to config file/registry/etc.
+*/
+DECLARE_FN(int, SavePhoneSettings, struct S_PHONE_SETTINGS*);
+
+/** \brief Set dll callbacks (to i.e. send new data from dll to main application)
+*/
+DECLARE_FN(void, SetCallbacks, void *cookie, CALLBACK_LOG lpLog, CALLBACK_CONNECT lpConnect, CALLBACK_KEY lpKey);
+
+/** \brief Get detailed info about device capabilities
+*/
+DECLARE_FN(void, GetPhoneCapabilities, struct S_PHONE_CAPABILITIES **caps);
+
+/** \brief Show dll specific settings window (if available)
+*/
+DECLARE_FN(void, ShowSettings, HANDLE parent);
+
+/** \brief Connect to device
+*/
+DECLARE_FN(int, Connect, void);
+
+/** \brief Disconnect from device
+*/
+DECLARE_FN(int, Disconnect, void);
+
+DECLARE_FN(int, SetRegistrationState, int state);
+
+DECLARE_FN(int, SetCallState, int state, const char* display);
+
+DECLARE_FN(int, Ring, int state);
+
+/*
+ * PAGING (transmitter) - added 2016.01
+ */
+DECLARE_FN(void, SetPagingTxCallback, CALLBACK_PAGING_TX lpPagingTx);
+DECLARE_FN(int, SetPagingTxState, int state);
+
+DECLARE_FN(void, SetClearDialCallback, CALLBACK_CLEAR_DIAL lpClearDial);
+
+DECLARE_FN(void, SetGetNumberDescriptionCallback, CALLBACK_GET_NUMBER_DESCRIPTION lpGetNumberDescription);
+
+/** \brief Send message (text) to DLL
+*/
+DECLARE_FN(int, SendMessageText, const char* text);
+
+DECLARE_FN(void, SetSetVariableCallback, CALLBACK_SET_VARIABLE lpFn);
+
+DECLARE_FN(void, SetClearVariableCallback, CALLBACK_CLEAR_VARIABLE lpFn);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
