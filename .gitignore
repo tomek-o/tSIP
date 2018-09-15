@@ -1,0 +1,7 @@
+**/Debug_Build
+**/Release_Build
+**/Release
+**/__history
+*.local
+*.bak
+*.obj
