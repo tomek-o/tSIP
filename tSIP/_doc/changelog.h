@@ -634,6 +634,7 @@ Version 0.1.63
 	- subscription client: removed RESUB_FAILC_MAX limit, added "failwait" similar to registration with 900s limit
 
 Version
-	- added "logrotate" mechanism; configuration: number of old files to keep (0...5) 
+	- added "logrotate" mechanism; configuration: number of old files to keep (0...5)
+    - added queues as new mechanism for connecting scripts and plugins (similar to variables)
 */
 

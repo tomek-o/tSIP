@@ -434,6 +434,9 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackGetNumberDescription = OnGetNumberDescription;
 	PhoneInterface::callbackSetVariable = OnSetVariable;
 	PhoneInterface::callbackClearVariable = OnClearVariable;
+	PhoneInterface::callbackQueuePush = OnQueuePush;
+	PhoneInterface::callbackQueuePop = OnQueuePop;
+	PhoneInterface::callbackQueueClear = OnQueueClear;
 	PhoneInterface::EnumerateDlls(dir + "\\phone");
 	PhoneInterface::SetCfg(appSettings.phoneConf);
 	PhoneInterface::UpdateRegistrationState(0);
@@ -2452,6 +2455,21 @@ int TfrmMain::OnSetVariable(const char* name, const char* value)
 int TfrmMain::OnClearVariable(const char* name)
 {
 	return ScriptExec::ClearVariable(name);
+}
+
+void TfrmMain::OnQueuePush(const char* name, const char* value)
+{
+	return ScriptExec::QueuePush(name, value);
+}
+
+int TfrmMain::OnQueuePop(const char* name, AnsiString &value)
+{
+	return ScriptExec::QueuePop(name, value);
+}
+
+int TfrmMain::OnQueueClear(const char* name)
+{
+	return ScriptExec::QueueClear(name);
 }
 
 void TfrmMain::OnAddOutputText(const char* text)

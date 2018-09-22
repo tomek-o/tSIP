@@ -78,6 +78,10 @@ private:
 	pfSetSetVariableCallback dllSetSetVariableCallback;
 	pfSetClearVariableCallback dllSetClearVariableCallback;
 
+	pfSetQueuePushCallback dllSetQueuePushCallback;
+	pfSetQueuePopCallback dllSetQueuePopCallback;
+	pfSetQueueClearCallback dllSetQueueClearCallback;
+
 	struct ConnectionInfo connInfo;
 
 	S_PHONE_SETTINGS settings;	
@@ -90,6 +94,9 @@ private:
 	typedef int (__closure *CallbackGetNumberDescription)(const char* number, char* description, int descriptionSize);
 	typedef int (__closure *CallbackSetVariable)(const char* name, const char* value);
 	typedef int (__closure *CallbackClearVariable)(const char* name);
+	typedef void (__closure *CallbackQueuePush)(const char* name, const char* value);
+	typedef int (__closure *CallbackQueuePop)(const char* name, AnsiString &value);
+	typedef int (__closure *CallbackQueueClear)(const char* name);
 
 	static std::list<PhoneConf> cfg;
 	static PhoneConf& FindCfg(AnsiString dllName);
@@ -136,6 +143,9 @@ public:
 	static CallbackGetNumberDescription callbackGetNumberDescription;
 	static CallbackSetVariable callbackSetVariable;
 	static CallbackClearVariable callbackClearVariable;
+	static CallbackQueuePush callbackQueuePush;
+	static CallbackQueuePop callbackQueuePop;
+	static CallbackQueueClear callbackQueueClear;
 
 	// dll callbacks
 	static void __stdcall OnLog(void *cookie, const char *szText);                   ///< called to generate log in parent application
@@ -146,6 +156,9 @@ public:
 	static int __stdcall OnGetNumberDescription(void *cookie, const char* number, char* description, int descriptionSize);
 	static int __stdcall OnSetVariable(void *cookie, const char* name, const char* value);
 	static int __stdcall OnClearVariable(void *cookie, const char* name);
+	static int __stdcall OnQueuePush(void *cookie, const char* name, const char* value);
+	static int __stdcall OnQueuePop(void *cookie, const char* name, char* value, unsigned int valueSize);
+	static int __stdcall OnQueueClear(void *cookie, const char* name);
 
     /** \brief Show device settings window.
      *

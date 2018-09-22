@@ -115,6 +115,9 @@ private:
 	static int l_GetStreamingState(lua_State* L);
 	static int l_SetVariable(lua_State* L);
 	static int l_GetVariable(lua_State* L);
+	static int l_QueuePush(lua_State* L);
+	static int l_QueuePop(lua_State* L);
+	static int l_QueueClear(lua_State* L);
 	static int l_ClearVariable(lua_State* L);
 	static int l_ClearAllVariables(lua_State* L);
 	static int l_GetInitialCallTarget(lua_State* L);
@@ -195,8 +198,25 @@ public:
 	bool isRunning(void) {
 		return running;
 	}
+
 	static int SetVariable(const char* name, const char* value);
 	static int ClearVariable(const char* name);
+
+	/** \brief Add value to the end of the queue; queue is created if does not exist
+		\param name queue name
+	*/
+	static void QueuePush(const char* name, const char* value);
+	/**	\brief Try to take value from the front of the queue
+		\param name queue name
+		\param value returned value, valid if queue exists and was not empty
+		\return 0 if value was successfully taken from queue
+	*/
+	static int QueuePop(const char* name, AnsiString &value);
+	/** \brief Delete queue
+		\param name queue name
+		\return 0 on success (queue existed)
+	*/
+	static int QueueClear(const char* name);
 
 private:
 	enum SrcType srcType;

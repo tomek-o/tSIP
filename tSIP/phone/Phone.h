@@ -119,9 +119,34 @@ typedef void (__stdcall *CALLBACK_CLEAR_DIAL)(void *cookie);
 */
 typedef int (__stdcall *CALLBACK_GET_NUMBER_DESCRIPTION)(void *cookie, const char* number, char* description, int descriptionSize);
 
+/** \brief Set value for variable with specified name; variables are shared by scripts and plugins
+	\param name variable name
+	\param value value to set (string)
+*/
 typedef int (__stdcall *CALLBACK_SET_VARIABLE)(void *cookie, const char* name, const char* value);
-
+/** \brief Clear variable
+	\param name variable name
+*/
 typedef int (__stdcall *CALLBACK_CLEAR_VARIABLE)(void *cookie, const char* name);
+
+/** \brief Push value to queue
+	\param name queue name
+	\param value string value
+	\return 0 on success
+*/
+typedef int (__stdcall *CALLBACK_QUEUE_PUSH)(void *cookie, const char* name, const char* value);
+/** \brief Get and remove value from queue
+	\param name queue name
+	\param value pointer to buffer to receive value
+	\param valueSize buffer size
+	\return 0 on success (queue existed and queue not empty)
+*/
+typedef int (__stdcall *CALLBACK_QUEUE_POP)(void *cookie, const char* name, char* value, unsigned int valueSize);
+/** \brief Clear queue completely (delete queue)
+	\param name queue name
+	\return 0 on success (queue existed)
+*/
+typedef int (__stdcall *CALLBACK_QUEUE_CLEAR)(void *cookie, const char* name);
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXPORTED/IMPORTED FUNCTION SET
@@ -183,6 +208,11 @@ DECLARE_FN(void, SetSetVariableCallback, CALLBACK_SET_VARIABLE lpFn);
 
 DECLARE_FN(void, SetClearVariableCallback, CALLBACK_CLEAR_VARIABLE lpFn);
 
+DECLARE_FN(void, SetQueuePushCallback, CALLBACK_QUEUE_PUSH lpFn);
+
+DECLARE_FN(void, SetQueuePopCallback, CALLBACK_QUEUE_POP lpFn);
+
+DECLARE_FN(void, SetQueueClearCallback, CALLBACK_QUEUE_CLEAR lpFn);
 
 #ifdef __cplusplus
 }

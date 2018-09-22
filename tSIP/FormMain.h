@@ -223,6 +223,9 @@ private:	// User declarations
 	int OnGetNumberDescription(const char* number, char* description, int descriptionSize);
 	int OnSetVariable(const char* name, const char* value);
 	int OnClearVariable(const char* name);
+	void OnQueuePush(const char* name, const char* value);
+	int OnQueuePop(const char* name, AnsiString &value);
+	int OnQueueClear(const char* name);
 	void OnAddOutputText(const char* text);
 
 	void SetStatus(AnsiString text);

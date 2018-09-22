@@ -22,6 +22,9 @@ PhoneInterface::CallbackClearDial PhoneInterface::callbackClearDial = NULL;
 PhoneInterface::CallbackGetNumberDescription PhoneInterface::callbackGetNumberDescription = NULL;
 PhoneInterface::CallbackSetVariable PhoneInterface::callbackSetVariable = NULL;
 PhoneInterface::CallbackClearVariable PhoneInterface::callbackClearVariable = NULL;
+PhoneInterface::CallbackQueuePush PhoneInterface::callbackQueuePush = NULL;
+PhoneInterface::CallbackQueuePop PhoneInterface::callbackQueuePop = NULL;
+PhoneInterface::CallbackQueueClear PhoneInterface::callbackQueueClear = NULL;
 
 void PhoneInterface::EnumerateDlls(AnsiString dir)
 {
@@ -375,6 +378,53 @@ int __stdcall PhoneInterface::OnClearVariable(void *cookie, const char* name)
 	return -2;
 }
 
+int __stdcall PhoneInterface::OnQueuePush(void *cookie, const char* name, const char* value)
+{
+	class PhoneInterface *dev;
+	dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	{
+		return -1;
+	}
+	if (dev->callbackQueuePush)
+	{
+		dev->callbackQueuePush(name, value);
+		return 0;
+	}
+	return -2;
+}
+
+int __stdcall PhoneInterface::OnQueuePop(void *cookie, const char* name, char* value, unsigned int valueSize)
+{
+	class PhoneInterface *dev;
+	dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	{
+		return -1;
+	}
+	if (dev->callbackQueuePop == NULL)
+		return -2;
+	AnsiString asValue;
+	int ret = dev->callbackQueuePop(name, asValue);
+	strncpy(value, asValue.c_str(), valueSize-1);
+	value[valueSize-1] = '\0';
+	return ret;
+}
+
+int __stdcall PhoneInterface::OnQueueClear(void *cookie, const char* name)
+{
+	class PhoneInterface *dev;
+	dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	{
+		return -1;
+	}
+	if (dev->callbackQueueClear)
+		return dev->callbackQueueClear(name);
+	return -2;
+}
+
+
 PhoneInterface::PhoneInterface(AnsiString asDllName):
 	hInstance(NULL),
 	filename(asDllName),
@@ -396,7 +446,10 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetClearDialCallback(NULL),
 	dllSetGetNumberDescriptionCallback(NULL),
 	dllSetSetVariableCallback(NULL),
-	dllSetClearVariableCallback(NULL)
+	dllSetClearVariableCallback(NULL),
+	dllSetQueuePushCallback(NULL),
+	dllSetQueuePopCallback(NULL),
+	dllSetQueueClearCallback(NULL)
 {
 	LOG("Creating object using %s\n", asDllName.c_str());
 	connInfo.state = DEVICE_DISCONNECTED;
@@ -441,6 +494,10 @@ int PhoneInterface::Load(void)
 	dllSetSetVariableCallback = (pfSetSetVariableCallback)GetProcAddress(hInstance, "SetSetVariableCallback");
 	dllSetClearVariableCallback = (pfSetClearVariableCallback)GetProcAddress(hInstance, "SetClearVariableCallback");
 
+	dllSetQueuePushCallback = (pfSetQueuePushCallback)GetProcAddress(hInstance, "SetQueuePushCallback");
+	dllSetQueuePopCallback = (pfSetQueuePopCallback)GetProcAddress(hInstance, "SetQueuePopCallback");
+	dllSetQueueClearCallback = (pfSetQueueClearCallback)GetProcAddress(hInstance, "SetQueueClearCallback");
+
 	if ((dllSetCallbacks && dllShowSettings &&
 		dllGetPhoneCapabilities && dllConnect &&
 		dllDisconnect) == 0)
@@ -475,6 +532,21 @@ int PhoneInterface::Load(void)
 	if (dllSetClearVariableCallback)
 	{
 		dllSetClearVariableCallback(&OnClearVariable);
+	}
+
+	if (dllSetQueuePushCallback)
+	{
+		dllSetQueuePushCallback(&OnQueuePush);
+	}
+
+	if (dllSetQueuePopCallback)
+	{
+		dllSetQueuePopCallback(&OnQueuePop);
+	}
+
+	if (dllSetQueueClearCallback)
+	{
+		dllSetQueueClearCallback(&OnQueueClear);
 	}
 
 	GetSettings(&settings);

@@ -14,6 +14,7 @@
 #include <assert.h>
 #include <time.h>
 #include <map>
+#include <deque>
 
 
 namespace {
@@ -31,8 +32,15 @@ namespace {
 		return it->second;
 	}
 
+	/** \brief Mutex protecting access to variables */
 	Mutex mutexVariables;
+	/** \brief Named variables - shared by scripts and plugins */
 	std::map<AnsiString, AnsiString> variables;
+
+	/** \brief Mutex protecting access to queues */
+	Mutex mutexQueues;
+	/** \brief Named queues - shared by scripts and plugins */
+	std::map<AnsiString, std::deque<AnsiString> > queues;
 
 	long timediff(clock_t t1, clock_t t2) {
 		long elapsed;
@@ -55,11 +63,47 @@ int ScriptExec::ClearVariable(const char* name)
 	it = variables.find(name);
 	if (it != variables.end())
 	{
-        variables.erase(it);
+		variables.erase(it);
 	}
 	return 0;
 }
 
+void ScriptExec::QueuePush(const char* name, const char* value)
+{
+	ScopedLock<Mutex> lock(mutexQueues);
+	std::deque<AnsiString> &que = queues[name];
+	que.push_back(value);
+}
+
+int ScriptExec::QueuePop(const char* name, AnsiString &value)
+{
+	std::map<AnsiString, std::deque<AnsiString> >::iterator it;
+	it = queues.find(name);
+	if (it != queues.end())
+	{
+		std::deque<AnsiString> &que = it->second;
+		if (que.empty())
+		{
+            return -2;
+        }
+		value = que[0];
+		que.pop_front();
+		return 0;
+	}
+	return -1;
+}
+
+int ScriptExec::QueueClear(const char* name)
+{
+	std::map<AnsiString, std::deque<AnsiString> >::iterator it;
+	it = queues.find(name);
+	if (it != queues.end())
+	{
+		queues.erase(it);
+		return 0;
+	}
+	return -1;
+}
 
 int ScriptExec::LuaPrint(lua_State *L)
 {
@@ -521,6 +565,66 @@ int ScriptExec::l_ClearAllVariables(lua_State* L)
 	return 0;
 }
 
+int ScriptExec::l_QueuePush(lua_State* L)
+{
+	int argCnt = lua_gettop(L);
+	if (argCnt < 2)
+	{
+		LOG("Lua error: missing argument(s) for QueuePush() - 2 arguments required, %d received\n", argCnt);
+		return 0;
+	}
+	const char* queue_name = lua_tostring( L, 1 );
+	if (queue_name == NULL)
+	{
+		LOG("Lua error: queue_name == NULL\n");
+		return 0;
+	}
+	const char* value = lua_tostring( L, 2 );
+	if (value == NULL)
+	{
+		LOG("Lua error: value == NULL\n");
+		return 0;
+	}
+	QueuePush(queue_name, value);
+	return 0;
+}
+
+int ScriptExec::l_QueuePop(lua_State* L)
+{
+	const char* queue_name = lua_tostring( L, 1 );
+	if (queue_name == NULL)
+	{
+		LOG("Lua error: queue_name == NULL\n");
+		return 0;
+	}
+	AnsiString value;
+	int ret = QueuePop(queue_name, value);
+	lua_pushstring(L, value.c_str());
+	if (ret != 0)
+	{
+		lua_pushinteger(L, 0);
+	}
+	else
+	{
+		lua_pushinteger(L, 1);	// "valid"
+	}
+	return 2;
+}
+
+int ScriptExec::l_QueueClear(lua_State* L)
+{
+	const char* queue_name = lua_tostring( L, 1 );
+	if (queue_name == NULL)
+	{
+		LOG("Lua error: queue_name == NULL\n");
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	int ret = QueueClear(queue_name);
+	lua_pushinteger(L, ret);
+	return 1;
+}
+
 int ScriptExec::l_ShellExecute(lua_State* L)
 {
 	const char* verb = lua_tostring( L, 1 );
@@ -529,7 +633,7 @@ int ScriptExec::l_ShellExecute(lua_State* L)
 	const char* directory = lua_tostring( L, 4 );
 	int showCmd = lua_tointeger( L, 5 );
 	int ret = reinterpret_cast<int>(ShellExecute(NULL, verb, file, parameters, directory, showCmd));
-    lua_pushinteger(L, ret);
+	lua_pushinteger(L, ret);
 	return 1;
 }
 
@@ -758,10 +862,18 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetCallInitialRxInvite", l_GetCallInitialRxInvite);
 	lua_register(L, "GetContactName", l_GetContactName);
 	lua_register(L, "GetStreamingState", l_GetStreamingState);
+
 	lua_register(L, "SetVariable", l_SetVariable);
 	lua_register(L, "GetVariable", l_GetVariable);
 	lua_register(L, "ClearVariable", l_ClearVariable);
 	lua_register(L, "ClearAllVariables", l_ClearAllVariables);
+
+	// QueuePush(queueName, stringValue)
+	lua_register(L, "QueuePush", l_QueuePush);
+	// local value, isValid = QueuePop(queueName)
+	lua_register(L, "QueuePop", l_QueuePop);
+	lua_register(L, "QueueClear", l_QueueClear);
+
 	lua_register(L, "GetInitialCallTarget", l_GetInitialCallTarget);
 	lua_register(L, "SetInitialCallTarget", l_SetInitialCallTarget);
     lua_register(L, "ShellExecute", l_ShellExecute);
