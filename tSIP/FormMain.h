@@ -226,6 +226,7 @@ private:	// User declarations
 	void OnQueuePush(const char* name, const char* value);
 	int OnQueuePop(const char* name, AnsiString &value);
 	int OnQueueClear(const char* name);
+	int OnQueueGetSize(const char* name);
 	void OnAddOutputText(const char* text);
 
 	void SetStatus(AnsiString text);

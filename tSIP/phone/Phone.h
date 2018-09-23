@@ -147,6 +147,11 @@ typedef int (__stdcall *CALLBACK_QUEUE_POP)(void *cookie, const char* name, char
 	\return 0 on success (queue existed)
 */
 typedef int (__stdcall *CALLBACK_QUEUE_CLEAR)(void *cookie, const char* name);
+/**	\brief Get number of elements in the queue
+	\param name queue name
+	\return number of elements in queue; 0 if queue does not exist
+*/
+typedef int (__stdcall *CALLBACK_QUEUE_GET_SIZE)(void *cookie, const char* name);
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXPORTED/IMPORTED FUNCTION SET
@@ -213,6 +218,8 @@ DECLARE_FN(void, SetQueuePushCallback, CALLBACK_QUEUE_PUSH lpFn);
 DECLARE_FN(void, SetQueuePopCallback, CALLBACK_QUEUE_POP lpFn);
 
 DECLARE_FN(void, SetQueueClearCallback, CALLBACK_QUEUE_CLEAR lpFn);
+
+DECLARE_FN(void, SetQueueGetSizeCallback, CALLBACK_QUEUE_GET_SIZE lpFn);
 
 #ifdef __cplusplus
 }

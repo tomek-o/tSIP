@@ -105,6 +105,18 @@ int ScriptExec::QueueClear(const char* name)
 	return -1;
 }
 
+int ScriptExec::QueueGetSize(const char* name)
+{
+	std::map<AnsiString, std::deque<AnsiString> >::iterator it;
+	it = queues.find(name);
+	if (it != queues.end())
+	{
+		return it->second.size();
+	}
+	return 0;
+}
+
+
 int ScriptExec::LuaPrint(lua_State *L)
 {
 	int nArgs = lua_gettop(L);
@@ -625,6 +637,20 @@ int ScriptExec::l_QueueClear(lua_State* L)
 	return 1;
 }
 
+int ScriptExec::l_QueueGetSize(lua_State* L)
+{
+	const char* queue_name = lua_tostring( L, 1 );
+	if (queue_name == NULL)
+	{
+		LOG("Lua error: queue_name == NULL\n");
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	int ret = QueueGetSize(queue_name);
+	lua_pushinteger(L, ret);
+	return 1;
+}
+
 int ScriptExec::l_ShellExecute(lua_State* L)
 {
 	const char* verb = lua_tostring( L, 1 );
@@ -873,6 +899,8 @@ void ScriptExec::Run(const char* script)
 	// local value, isValid = QueuePop(queueName)
 	lua_register(L, "QueuePop", l_QueuePop);
 	lua_register(L, "QueueClear", l_QueueClear);
+	// local queue_size = QueueGetSize(queueName)
+	lua_register(L, "QueueGetSize", l_QueueGetSize);
 
 	lua_register(L, "GetInitialCallTarget", l_GetInitialCallTarget);
 	lua_register(L, "SetInitialCallTarget", l_SetInitialCallTarget);

@@ -25,6 +25,7 @@ PhoneInterface::CallbackClearVariable PhoneInterface::callbackClearVariable = NU
 PhoneInterface::CallbackQueuePush PhoneInterface::callbackQueuePush = NULL;
 PhoneInterface::CallbackQueuePop PhoneInterface::callbackQueuePop = NULL;
 PhoneInterface::CallbackQueueClear PhoneInterface::callbackQueueClear = NULL;
+PhoneInterface::CallbackQueueGetSize PhoneInterface::callbackQueueGetSize = NULL;
 
 void PhoneInterface::EnumerateDlls(AnsiString dir)
 {
@@ -424,6 +425,18 @@ int __stdcall PhoneInterface::OnQueueClear(void *cookie, const char* name)
 	return -2;
 }
 
+int __stdcall PhoneInterface::OnQueueGetSize(void *cookie, const char* name)
+{
+	class PhoneInterface *dev;
+	dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	{
+		return -1;
+	}
+	if (dev->callbackQueueGetSize)
+		return dev->callbackQueueGetSize(name);
+	return -2;
+}
 
 PhoneInterface::PhoneInterface(AnsiString asDllName):
 	hInstance(NULL),
@@ -449,7 +462,8 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetClearVariableCallback(NULL),
 	dllSetQueuePushCallback(NULL),
 	dllSetQueuePopCallback(NULL),
-	dllSetQueueClearCallback(NULL)
+	dllSetQueueClearCallback(NULL),
+	dllSetQueueGetSizeCallback(NULL)
 {
 	LOG("Creating object using %s\n", asDllName.c_str());
 	connInfo.state = DEVICE_DISCONNECTED;
@@ -497,6 +511,7 @@ int PhoneInterface::Load(void)
 	dllSetQueuePushCallback = (pfSetQueuePushCallback)GetProcAddress(hInstance, "SetQueuePushCallback");
 	dllSetQueuePopCallback = (pfSetQueuePopCallback)GetProcAddress(hInstance, "SetQueuePopCallback");
 	dllSetQueueClearCallback = (pfSetQueueClearCallback)GetProcAddress(hInstance, "SetQueueClearCallback");
+	dllSetQueueGetSizeCallback = (pfSetQueueGetSizeCallback)GetProcAddress(hInstance, "SetQueueGetSizeCallback");
 
 	if ((dllSetCallbacks && dllShowSettings &&
 		dllGetPhoneCapabilities && dllConnect &&
@@ -548,6 +563,11 @@ int PhoneInterface::Load(void)
 	{
 		dllSetQueueClearCallback(&OnQueueClear);
 	}
+
+	if (dllSetQueueGetSizeCallback)
+	{
+        dllSetQueueGetSizeCallback(&OnQueueGetSize);
+    }
 
 	GetSettings(&settings);
 

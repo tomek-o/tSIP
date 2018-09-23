@@ -81,6 +81,7 @@ private:
 	pfSetQueuePushCallback dllSetQueuePushCallback;
 	pfSetQueuePopCallback dllSetQueuePopCallback;
 	pfSetQueueClearCallback dllSetQueueClearCallback;
+    pfSetQueueGetSizeCallback dllSetQueueGetSizeCallback;
 
 	struct ConnectionInfo connInfo;
 
@@ -97,6 +98,7 @@ private:
 	typedef void (__closure *CallbackQueuePush)(const char* name, const char* value);
 	typedef int (__closure *CallbackQueuePop)(const char* name, AnsiString &value);
 	typedef int (__closure *CallbackQueueClear)(const char* name);
+	typedef int (__closure *CallbackQueueGetSize)(const char* name);
 
 	static std::list<PhoneConf> cfg;
 	static PhoneConf& FindCfg(AnsiString dllName);
@@ -146,6 +148,7 @@ public:
 	static CallbackQueuePush callbackQueuePush;
 	static CallbackQueuePop callbackQueuePop;
 	static CallbackQueueClear callbackQueueClear;
+	static CallbackQueueGetSize callbackQueueGetSize;
 
 	// dll callbacks
 	static void __stdcall OnLog(void *cookie, const char *szText);                   ///< called to generate log in parent application
@@ -159,6 +162,7 @@ public:
 	static int __stdcall OnQueuePush(void *cookie, const char* name, const char* value);
 	static int __stdcall OnQueuePop(void *cookie, const char* name, char* value, unsigned int valueSize);
 	static int __stdcall OnQueueClear(void *cookie, const char* name);
+	static int __stdcall OnQueueGetSize(void *cookie, const char* name);
 
     /** \brief Show device settings window.
      *

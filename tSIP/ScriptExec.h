@@ -118,6 +118,7 @@ private:
 	static int l_QueuePush(lua_State* L);
 	static int l_QueuePop(lua_State* L);
 	static int l_QueueClear(lua_State* L);
+	static int l_QueueGetSize(lua_State* L);
 	static int l_ClearVariable(lua_State* L);
 	static int l_ClearAllVariables(lua_State* L);
 	static int l_GetInitialCallTarget(lua_State* L);
@@ -217,6 +218,11 @@ public:
 		\return 0 on success (queue existed)
 	*/
 	static int QueueClear(const char* name);
+	/** \brief Get number of elements in queue
+		\param name queue name
+		\return number of elements in queue; 0 if queue does not exist
+	*/
+	static int QueueGetSize(const char* name);
 
 private:
 	enum SrcType srcType;
