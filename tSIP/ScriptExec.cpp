@@ -10,12 +10,14 @@
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
+#include <psapi.h>
 #include <string>
 #include <assert.h>
 #include <time.h>
 #include <map>
 #include <deque>
 
+#pragma link "psapi.lib"
 
 namespace {
 	std::map<lua_State*, ScriptExec*> contexts;
@@ -47,7 +49,56 @@ namespace {
 		elapsed = static_cast<long>(((double)t2 - t1) / CLOCKS_PER_SEC * 1000);
 		return elapsed;
 	}
-}
+
+	struct {
+		HWND hWndFound;
+		const char* windowName;
+		const char* exeName;
+	} findWindowData =
+		{ NULL, NULL, NULL };
+
+	static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
+	{
+		DWORD dwThreadId, dwProcessId;
+		HINSTANCE hInstance;
+		char String[255];
+		HANDLE hProcess;
+		if (!hWnd)
+			return TRUE;		// Not a window
+		if (findWindowData.windowName)
+		{
+			if (!SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String))
+			{
+				return TRUE;		// No window title (length = 0)
+            }
+			if (strcmp(String, findWindowData.windowName))
+			{
+				return TRUE;
+            }
+		}
+		if (findWindowData.exeName)
+		{
+			hInstance = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);
+			dwThreadId = GetWindowThreadProcessId(hWnd, &dwProcessId);
+			hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwProcessId);
+			// GetModuleFileNameEx uses psapi, which works for NT only!
+			BOOL result = TRUE;
+			if (GetModuleFileNameEx(hProcess, hInstance, String, sizeof(String)))
+			{
+				String[sizeof(String)-1] = '\0';
+				if (stricmp(String, findWindowData.exeName) == 0)
+				{
+					findWindowData.hWndFound = hWnd;
+					result = FALSE;
+				}
+			}
+			CloseHandle(hProcess);
+			return result;
+		}
+		return TRUE;
+	}
+
+}	// namespace
 
 int ScriptExec::SetVariable(const char* name, const char* value)
 {
@@ -267,6 +318,28 @@ int ScriptExec::l_ForceDirectories(lua_State* L)
 		ret = 0;
 	}
 	lua_pushnumber(L, ret);
+	return 1;
+}
+
+int ScriptExec::l_FindWindowByCaptionAndExeName(lua_State* L)
+{
+	static Mutex mutex;
+	
+	ScopedLock<Mutex> lock(mutex);
+	findWindowData.hWndFound = NULL;
+
+	findWindowData.windowName = lua_tostring(L, 1);
+	findWindowData.exeName = lua_tostring(L, 2);
+	if (findWindowData.windowName == NULL && findWindowData.exeName == NULL)
+	{
+		LOG("Lua: either window name or exe name is required");
+		lua_pushnumber(L, 0);
+		return 1;
+	}
+
+	::EnumWindows((WNDENUMPROC)EnumWindowsProc, NULL);
+
+	lua_pushnumber(L, reinterpret_cast<unsigned int>(findWindowData.hWndFound));
 	return 1;
 }
 
@@ -874,6 +947,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetClipboardText", l_GetClipboardText);
 	lua_register(L, "SetClipboardText", l_SetClipboardText);
 	lua_register(L, "ForceDirectories", l_ForceDirectories);
+	lua_register(L, "FindWindowByCaptionAndExeName", l_FindWindowByCaptionAndExeName);
 	lua_register(L, "Call", l_Call);
 	lua_register(L, "Hangup", l_Hangup);
 	lua_register(L, "Answer", l_Answer);

@@ -93,6 +93,7 @@ private:
 	static int l_GetClipboardText(lua_State* L);	
 	static int l_SetClipboardText(lua_State* L);
 	static int l_ForceDirectories(lua_State* L);
+	static int l_FindWindowByCaptionAndExeName(lua_State* L);
 
 	// let's put some winapi equivalents into library
 	friend int luaopen_tsip_winapi (lua_State *L);
