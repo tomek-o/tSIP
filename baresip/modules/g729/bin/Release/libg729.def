@@ -1,9 +1,0 @@
-EXPORTS
-    SomeFunction @1
-    exports @2 DATA
-    get_interface_description @3
-    set_aucodec_register_cb @4
-    set_aucodec_unregister_cb @5
-    set_mem_alloc_cb @6
-    set_mem_deref_cb @7
-    validate_dll @8
