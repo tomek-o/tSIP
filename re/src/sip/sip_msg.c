@@ -256,6 +256,10 @@ static inline int hdr_add(struct sip_msg *msg, const struct pl *name,
 
 	mem_deref(hdr);
 
+	if (err == ENOENT) {
+		/* this would look better than ENOENT returned by regexp search */
+		err = EBADMSG;
+    }
 	return err;
 }
 

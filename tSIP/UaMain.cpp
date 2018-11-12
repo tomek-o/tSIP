@@ -594,7 +594,7 @@ static void app_close(void)
 	libre_close();
 
 	/* Check for memory leaks */
-    LOG("Checking for memory leaks...");
+    LOG("Checking for memory leaks...\n");
 	tmr_debug();
 	mem_debug();
 }
@@ -665,7 +665,7 @@ extern "C" void control_handler(void)
 			cmd.target.c_str(), NULL, VIDMODE_OFF, cmd.extraHeaderLines.c_str());
 		if (err)
 		{
-			DEBUG_WARNING("connect failed: %s\n", strerror(err));
+			DEBUG_WARNING("connect failed: %m\n", err);
 		}
 		break;
 	case Command::ANSWER:
@@ -779,13 +779,13 @@ extern "C" void control_handler(void)
 		err = paging_tx_alloc(&tx, conf_config(), &addr, forced_src_mod, forced_src_dev, cmd.pagingTxCodec.c_str(), cmd.pagingTxPtime);
 		if (err)
 		{
-			DEBUG_WARNING("paging_tx_alloc failed (%s)\n", strerror(err));
+			DEBUG_WARNING("paging_tx_alloc failed (%m)\n", err);
 			break;
 		}
 		err = paging_tx_start(tx);
 		if (err)
 		{
-			DEBUG_WARNING("paging_tx_start failed (%s)\n", strerror(err));
+			DEBUG_WARNING("paging_tx_start failed (%m)\n", err);
 			mem_deref(tx);
 		}
 		else
@@ -859,7 +859,7 @@ void __fastcall Worker::Execute()
 		appRestart = false;
 		err = app_init();
 		if (err) {
-			DEBUG_WARNING("app_init failed (%s)\n", strerror(err));
+			DEBUG_WARNING("app_init failed (%m)\n", err);
    			UA_CB->ChangeAppState(Callback::APP_INIT_FAILED);
 			goto out;
 		}
@@ -867,7 +867,7 @@ void __fastcall Worker::Execute()
 
 		err = app_start();
 		if (err) {
-			DEBUG_WARNING("app_start failed (%s)\n", strerror(err));
+			DEBUG_WARNING("app_start failed (%m)\n", err);
 			UA_CB->ChangeAppState(Callback::APP_START_FAILED);
 			goto out;
 		}
@@ -882,7 +882,7 @@ void __fastcall Worker::Execute()
 		list_flush(contact_list());		
 
 		if (err) {
-			DEBUG_WARNING("main exit with error (%s)\n", strerror(err));
+			DEBUG_WARNING("main exit with error (%m)\n", err);
 			ua_stop_all(true);			
 		} else {
 			LOG("main exit w/o error, waiting for restart or termination\n");
