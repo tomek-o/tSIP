@@ -272,6 +272,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chbTrayNotifierHideWhenAnsweringCall;
 	TLabel *lblLogRotate;
 	TComboBox *cbLogRotate;
+	TCheckBox *chbSpeedDialIgnoreDialogInfoRemoteIdentity;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

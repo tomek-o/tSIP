@@ -35,6 +35,7 @@ void Settings::SetDefault(void)
 	frmMain.bSpeedDialOnly = false;
 	frmMain.bSpeedDialPopupMenu = true;
 	frmMain.bSpeedDialIgnorePresenceNote = false;
+	frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = false;
 	frmMain.bXBtnMinimize = false;
 	frmMain.bRestoreOnIncomingCall = false;
 	frmMain.bSingleInstance = false;
@@ -393,6 +394,7 @@ int Settings::Read(AnsiString asFileName)
 	frmMain.bSpeedDialOnly = frmMainJson.get("SpeedDialOnly", frmMain.bSpeedDialOnly).asBool();
 	frmMain.bSpeedDialPopupMenu = frmMainJson.get("SpeedDialPopupMenu", frmMain.bSpeedDialPopupMenu).asBool();
 	frmMain.bSpeedDialIgnorePresenceNote = frmMainJson.get("SpeedDialIgnorePresenceNote", frmMain.bSpeedDialIgnorePresenceNote).asBool();
+	frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();	
 	frmMain.iSpeedDialSize = frmMainJson.get("SpeedDialSize", 1).asUInt();
 	if (frmMain.iSpeedDialSize > ProgrammableButtons::EXT_CONSOLE_COLUMNS)
 		frmMain.iSpeedDialSize = 0;
@@ -543,6 +545,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialOnly"] = frmMain.bSpeedDialOnly;
 		jv["SpeedDialPopupMenu"] = frmMain.bSpeedDialPopupMenu;
 		jv["SpeedDialIgnorePresenceNote"] = frmMain.bSpeedDialIgnorePresenceNote;
+		jv["SpeedDialIgnoreDialogInfoRemoteIdentity"] = frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
 		jv["SpeedDialSize"] = frmMain.iSpeedDialSize;
 		jv["SpeedDialWidth"] = frmMain.iSpeedDialWidth;
 		jv["StartMinimizedToTray"] = frmMain.bStartMinimizedToTray;

@@ -95,9 +95,9 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
+		Application->CreateForm(__classid(TfrmLog), &frmLog);
 		Application->CreateForm(__classid(TfrmSettings), &frmSettings);
 		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
-		Application->CreateForm(__classid(TfrmLog), &frmLog);
 		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
 		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
 		Application->CreateForm(__classid(TfrmTrayNotifier), &frmTrayNotifier);

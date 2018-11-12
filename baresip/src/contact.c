@@ -17,6 +17,9 @@ struct contact {
 	contact_dlginfo_h *dlginfo_h;
 	contact_presence_h *presence_h;
 	enum dialog_info_status dlg_info_status;
+	enum dialog_info_direction dlg_info_direction;
+	char dialog_info_remote_identity[64];
+	char dialog_info_remote_identity_display[64];
 };
 
 static struct list cl;
@@ -67,6 +70,7 @@ int contact_add(struct contact **contactp, const struct pl *addr, int id, contac
 
 	c->status = PRESENCE_UNKNOWN;
 	c->dlg_info_status = DIALOG_INFO_UNKNOWN;
+	c->dlg_info_direction = DIALOG_INFO_DIR_UNKNOWN;
 
 	list_append(&cl, &c->le, c);
 
@@ -157,8 +161,9 @@ const char *contact_presence_str(enum presence_status status)
 }
 
 
-void contact_set_dialog_info(struct contact *c, enum dialog_info_status status)
+void contact_set_dialog_info(struct contact *c, enum dialog_info_status status, enum dialog_info_direction direction, const struct pl *remote_identity, const struct pl *remote_identity_display)
 {
+	int len;
 	if (!c)
 		return;
 
@@ -171,8 +176,22 @@ void contact_set_dialog_info(struct contact *c, enum dialog_info_status status)
 	}
 
 	c->dlg_info_status = status;
+	c->dlg_info_direction = direction;
+
+	len = remote_identity->l < (sizeof(c->dialog_info_remote_identity)-1) ? remote_identity->l : (sizeof(c->dialog_info_remote_identity)-1);
+	if (len) {
+		strncpy(c->dialog_info_remote_identity, remote_identity->p, len);
+	}
+	c->dialog_info_remote_identity[len] = '\0';
+
+	len = remote_identity_display->l < (sizeof(c->dialog_info_remote_identity_display)-1) ? remote_identity_display->l : (sizeof(c->dialog_info_remote_identity_display)-1);
+	if (len) {
+		strncpy(c->dialog_info_remote_identity_display, remote_identity_display->p, len);
+	}
+	c->dialog_info_remote_identity_display[len] = '\0';
+
 	if (c->dlginfo_h) {
-		c->dlginfo_h(c->id, c->dlg_info_status);
+		c->dlginfo_h(c->id, c->dlg_info_status, c->dlg_info_direction, c->dialog_info_remote_identity, c->dialog_info_remote_identity_display);
 	}
 }
 

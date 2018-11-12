@@ -75,6 +75,10 @@ public:
 	AnsiString initialRxInvite;
 
 	int dlgInfoState;
+	int dlgInfoDirection;
+	AnsiString dlgInfoRemoteIdentity;
+	AnsiString dlgInfoRemoteIdentityDisplay;
+
 	int presenceState;
 	AnsiString presenceNote;
 

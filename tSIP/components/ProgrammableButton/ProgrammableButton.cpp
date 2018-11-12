@@ -42,7 +42,10 @@ static inline void ValidCtrCheck(TProgrammableButton *)
 
 __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageList* imgList, int scalingPercentage)
 	: TPanel(Owner), imgList(imgList), state(DIALOG_INFO_UNKNOWN),
-	down(false), scalingPercentage(scalingPercentage), once(false), raised(true),
+	down(false), scalingPercentage(scalingPercentage),
+	once(false),
+	configuredLines(1),
+	raised(true),
 	bmpIdle(NULL), bmpTerminated(NULL), bmpEarly(NULL), bmpConfirmed(NULL)
 {
 	assert(imgList);
@@ -196,13 +199,14 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	LoadBitmap(bmpEarly, cfg.imgEarly.c_str());
 	LoadBitmap(bmpConfirmed, cfg.imgConfirmed.c_str());
 
-	SetState(DIALOG_INFO_UNKNOWN);
+	SetState(DIALOG_INFO_UNKNOWN, DIALOG_INFO_DIR_UNKNOWN, "", "");
 	//SetPresenceState(PRESENCE_UNKNOWN, "");
 	presence_state = PRESENCE_UNKNOWN;
 
     // set inside SetState
 	//image->Top = ((Height  * scalingPercentage/100) - image->Height)/2;
-
+	configuredLines = cfg.captionLines;
+	caption2 = cfg.caption2.c_str();
 	SetLines(cfg.captionLines);
 
 	once = true;	
@@ -222,7 +226,7 @@ void TProgrammableButton::SetCaption(AnsiString text)
 	label->Caption = text;
 
 }
-void TProgrammableButton::SetState(enum dialog_info_status state)
+void TProgrammableButton::SetState(enum dialog_info_status state, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay)
 {
 	this->state = state;
 	switch (state)
@@ -238,6 +242,36 @@ void TProgrammableButton::SetState(enum dialog_info_status state)
 		break;
 	default: // DIALOG_INFO_UNKNOWN included
 		SetImage(bmpIdle);
+	}
+	if (remoteIdentityDisplay.Length() || remoteIdentity.Length())
+	{
+		AnsiString ridCaption;
+		if (direction == DIALOG_INFO_DIR_INITIATOR)
+		{
+			ridCaption = "-> ";
+		}
+		else if (direction == DIALOG_INFO_DIR_RECIPIENT)
+		{
+			ridCaption = "<- ";
+		}
+		if (remoteIdentityDisplay.Length())
+		{
+			ridCaption += remoteIdentityDisplay;
+		}
+		else
+		{
+            ridCaption += remoteIdentity;
+        }
+		label2->Caption = ridCaption;
+		SetLines(2);
+	}
+	else
+	{
+		SetLines(configuredLines);
+		if (configuredLines == 2)
+		{
+			label2->Caption = caption2;
+        }
 	}
 }
 

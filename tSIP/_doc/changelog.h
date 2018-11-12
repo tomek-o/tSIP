@@ -635,6 +635,9 @@ Version 0.1.63
 
 Version
 	- added "logrotate" mechanism; configuration: number of old files to keep (0...5)
-    - added queues as new mechanism for connecting scripts and plugins (similar to variables)
+	- added queues as new mechanism for connecting scripts and plugins (similar to variables)
+	- added Lua FindWindowByCaptionAndExeName(caption, exeName) function
+	- added sxmlc library source to re
+    - BLF buttons can now show remote identity and call direction (number calling / number called) as 2nd line (opt-out)
 */
 

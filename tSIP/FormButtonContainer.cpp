@@ -121,7 +121,7 @@ void TfrmButtonContainer::EditContact(int id)
 			panel->SetConfig(cfg);
 			if (cfg.type != Button::BLF)
 			{
-				panel->SetState(DIALOG_INFO_UNKNOWN);	// make sure BLF icon is cleared
+				panel->SetState(DIALOG_INFO_UNKNOWN, DIALOG_INFO_DIR_UNKNOWN, "", "");	// make sure BLF icon is cleared
 			}
 			if (cfg.type != Button::PRESENCE)
 			{
@@ -144,12 +144,12 @@ void TfrmButtonContainer::EditContact(int id)
 	}
 }
 
-void TfrmButtonContainer::UpdateDlgInfoState(int id, int state)
+void TfrmButtonContainer::UpdateDlgInfoState(int id, int state, int direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay)
 {
 	id -= startBtnId;
 	if (id < 0 || id >= vpanels.size())
 		return;	
-	vpanels[id]->SetState((enum dialog_info_status)state);
+	vpanels[id]->SetState((enum dialog_info_status)state, (enum dialog_info_direction)direction, remoteIdentity, remoteIdentityDisplay);
 }
 
 void TfrmButtonContainer::UpdatePresenceState(int id, int state, AnsiString note)

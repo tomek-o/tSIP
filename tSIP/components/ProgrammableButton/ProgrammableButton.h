@@ -10,6 +10,7 @@
 //---------------------------------------------------------------------------
 
 #include "baresip_dialog_info_status.h"
+#include "baresip_dialog_info_direction.h"
 #include "baresip_presence_status.h"
 
 class ButtonConf;
@@ -28,6 +29,9 @@ private:
 	bool down;
 	int scalingPercentage;
 	bool once;
+
+	int configuredLines;
+	AnsiString caption2;
 
 	bool raised;	// helps with flickering
 	void Lower(void);
@@ -50,7 +54,7 @@ public:
 	__fastcall ~TProgrammableButton();
 	void SetConfig(const ButtonConf &cfg);
 	void SetCaption(AnsiString text);
-	void SetState(enum dialog_info_status state);
+	void SetState(enum dialog_info_status state, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
 	enum dialog_info_status GetState(void) {
 		return state;
 	}

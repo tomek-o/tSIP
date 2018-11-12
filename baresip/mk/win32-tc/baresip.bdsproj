@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -366,6 +366,9 @@
         <FILE FILENAME="..\..\modules\nullaudio\nullaudio.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\nullaudio\nullaudio_play.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="nullaudio_play" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\nullaudio\nullaudio_src.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="nullaudio_src" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\baresip_dialog_info_direction.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\baresip_dialog_info_status.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\baresip_presence_status.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

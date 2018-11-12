@@ -205,9 +205,9 @@ extern "C" void on_log(int level, const char *p)
 	LOG("%s", p);
 }
 
-extern "C" int dialog_info_handler(int id, enum dialog_info_status status)
+extern "C" int dialog_info_handler(int id, enum dialog_info_status status, enum dialog_info_direction direction, const char *remote_identity, const char *remote_identity_display)
 {
-	UA_CB->ChangeDlgInfoState(id, status);
+	UA_CB->ChangeDlgInfoState(id, status, direction, remote_identity, remote_identity_display);
 	return 0;
 }
 

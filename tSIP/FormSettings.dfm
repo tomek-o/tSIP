@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsLogging
+    ActivePage = tsSpeedDial
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -521,6 +521,14 @@ object frmSettings: TfrmSettings
           'Ignore presence note (do not show second line for presence butto' +
           'n)'
         TabOrder = 4
+      end
+      object chbSpeedDialIgnoreDialogInfoRemoteIdentity: TCheckBox
+        Left = 3
+        Top = 120
+        Width = 366
+        Height = 17
+        Caption = 'Ignore remote identity info for dialog-info / BLF button'
+        TabOrder = 5
       end
     end
     object tsCalls: TTabSheet

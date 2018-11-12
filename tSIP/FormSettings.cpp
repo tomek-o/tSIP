@@ -233,7 +233,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	chbShowSpeedDialOnly->Checked = tmpSettings.frmMain.bSpeedDialOnly;
 	chbSpeedDialPopupMenu->Checked = tmpSettings.frmMain.bSpeedDialPopupMenu;
-	chbSpeedDialIgnorePresenceNote->Checked = tmpSettings.frmMain.bSpeedDialIgnorePresenceNote;	
+	chbSpeedDialIgnorePresenceNote->Checked = tmpSettings.frmMain.bSpeedDialIgnorePresenceNote;
+	chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked = tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;	
 	chbKioskMode->Checked = tmpSettings.frmMain.bKioskMode;
 	chbHideMouseCursor->Checked = tmpSettings.frmMain.bHideMouseCursor;
 
@@ -410,6 +411,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bSpeedDialOnly = chbShowSpeedDialOnly->Checked;
 	tmpSettings.frmMain.bSpeedDialPopupMenu = chbSpeedDialPopupMenu->Checked;
 	tmpSettings.frmMain.bSpeedDialIgnorePresenceNote = chbSpeedDialIgnorePresenceNote->Checked;
+	tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked;
 	tmpSettings.frmMain.bKioskMode = chbKioskMode->Checked;
 	tmpSettings.frmMain.bHideMouseCursor = chbHideMouseCursor->Checked;
 
