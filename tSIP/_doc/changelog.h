@@ -638,6 +638,7 @@ Version
 	- added queues as new mechanism for connecting scripts and plugins (similar to variables)
 	- added Lua FindWindowByCaptionAndExeName(caption, exeName) function
 	- added sxmlc library source to re
-    - BLF buttons can now show remote identity and call direction (number calling / number called) as 2nd line (opt-out)
+	- BLF buttons can now show remote identity and call direction (number calling / number called) as 2nd line (opt-out)
+	- fixed few error log lines
 */
 
