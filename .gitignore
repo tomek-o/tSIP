@@ -6,5 +6,4 @@
 *.local
 *.bak
 *.obj
-*.res
 *.depend
