@@ -5,7 +5,7 @@
 			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
 			<Option Name="ProjectType">CppStaticLibrary</Option>
 			<Option Name="Version">1.0</Option>
-			<Option Name="GUID">{4CEC9F30-B5D0-4F44-81C6-661FF0C3D88C}</Option>
+			<Option Name="GUID">{B98CB0F0-C61F-429B-A937-8FB85E592044}</Option>
 		</Option>
 	</PersonalityInfo>
 	<CPlusPlusBuilder.Personality>
