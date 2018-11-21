@@ -123,11 +123,11 @@ void CommandLine::Execute(char* buf, int paramcnt)
 		{
 			AnsiString asCallTo =
 				asParam.SubString(strlen(szCallParam)+1, asParam.Length() - strlen(szCallParam)).Trim();
-
+		#if 0
 			int i = asCallTo.Pos(":");
 			if (i)
 				asCallTo = asCallTo.SubString(i+1, asCallTo.Length()-i);
-
+		#endif
 			asCallTo = UrlDecode(asCallTo.c_str()).c_str();
 
 			if (asCallTo == "HANGUP")
@@ -157,7 +157,14 @@ void CommandLine::Execute(char* buf, int paramcnt)
             }
 			else
 			{
-				asTarget = CleanNumber(asCallTo);
+				if (asCallTo.Pos("sip:") == 1)
+				{
+					asTarget = asCallTo;
+				}
+				else
+				{
+					asTarget = CleanNumber(asCallTo);
+				}
 				if (asTarget.Length())
 				{
 					action = ACTION_CALL;
