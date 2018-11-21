@@ -87,7 +87,7 @@ int nullaudio_play_alloc(struct auplay_st **stp, struct auplay *ap,
 {
 	struct auplay_st *st;
 	DWORD dwtid;	
-	int i, err;
+	int err = 0;
 	(void)device;
 
 	if (!stp || !ap || !prm)
