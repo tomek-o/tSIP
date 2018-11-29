@@ -2124,6 +2124,7 @@ void TfrmMain::AutoAnswer(void)
 
 void __fastcall TfrmMain::tmrAutoAnswerTimer(TObject *Sender)
 {
+	tmrAutoAnswer->Enabled = false;
 	AutoAnswer();
 }
 //---------------------------------------------------------------------------
