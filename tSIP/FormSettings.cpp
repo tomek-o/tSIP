@@ -230,6 +230,10 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edTrayNotifierBackgroundImage->Text = tmpSettings.frmTrayNotifier.backgroundImage;
 	edTrayNotifierGuiScaling->Text = tmpSettings.frmTrayNotifier.scalingPct;
 	chbTrayNotifierHideWhenAnsweringCall->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCall;
+	chbFrmMainUseCustomApplicationTitle->Checked = tmpSettings.frmMain.bUseCustomApplicationTitle;
+	edFrmMainCustomApplicationTitle->Text = tmpSettings.frmMain.customApplicationTitle;
+	chbFrmMainUseCustomCaption->Checked = tmpSettings.frmMain.bUseCustomCaption;
+	edFrmMainCustomCaption->Text = tmpSettings.frmMain.customCaption;
 
 	chbShowSpeedDialOnly->Checked = tmpSettings.frmMain.bSpeedDialOnly;
 	chbSpeedDialPopupMenu->Checked = tmpSettings.frmMain.bSpeedDialPopupMenu;
@@ -407,6 +411,10 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		tmpSettings.frmTrayNotifier.scalingPct = Settings::_frmTrayNotifier::SCALING_DEF;
 	}
 	tmpSettings.frmTrayNotifier.hideWhenAnsweringCall = chbTrayNotifierHideWhenAnsweringCall->Checked;
+	tmpSettings.frmMain.bUseCustomApplicationTitle = chbFrmMainUseCustomApplicationTitle->Checked;
+	tmpSettings.frmMain.customApplicationTitle = edFrmMainCustomApplicationTitle->Text;
+	tmpSettings.frmMain.bUseCustomCaption = chbFrmMainUseCustomCaption->Checked;
+	tmpSettings.frmMain.customCaption = edFrmMainCustomCaption->Text;
 
 	tmpSettings.frmMain.bSpeedDialOnly = chbShowSpeedDialOnly->Checked;
 	tmpSettings.frmMain.bSpeedDialPopupMenu = chbSpeedDialPopupMenu->Checked;

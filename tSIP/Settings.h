@@ -83,6 +83,10 @@ public:
 		bool bKioskMode;
 		bool bHideMouseCursor;
 		bool bShowWhenAnsweringCall;
+		bool bUseCustomCaption;				///< use customCaption
+		AnsiString customCaption;			///< custom caption for main window
+		bool bUseCustomApplicationTitle;       ///< use customApplicationTitle
+		AnsiString customApplicationTitle;	///< custom title for application (taskbar text)
 	} frmMain;
 	struct _frmTrayNotifier
 	{

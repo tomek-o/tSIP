@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsSpeedDial
+    ActivePage = tsGeneral2
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -285,6 +285,36 @@ object frmSettings: TfrmSettings
           'Show main form when answering call (using tray notifier, shortcu' +
           't, script, ...)'
         TabOrder = 0
+      end
+      object chbFrmMainUseCustomApplicationTitle: TCheckBox
+        Left = 3
+        Top = 26
+        Width = 223
+        Height = 17
+        Caption = 'Custom application title (text in taskbar)'
+        TabOrder = 1
+      end
+      object edFrmMainCustomApplicationTitle: TEdit
+        Left = 232
+        Top = 24
+        Width = 193
+        Height = 21
+        TabOrder = 2
+      end
+      object chbFrmMainUseCustomCaption: TCheckBox
+        Left = 3
+        Top = 51
+        Width = 191
+        Height = 17
+        Caption = 'Custom caption for main window'
+        TabOrder = 3
+      end
+      object edFrmMainCustomCaption: TEdit
+        Left = 232
+        Top = 49
+        Width = 193
+        Height = 21
+        TabOrder = 4
       end
     end
     object tsNetwork: TTabSheet

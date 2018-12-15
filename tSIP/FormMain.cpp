@@ -172,7 +172,15 @@ __fastcall TfrmMain::~TfrmMain()
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
-	this->Caption = Branding::appName;
+	if (appSettings.frmMain.bUseCustomCaption)
+	{
+		this->Caption = appSettings.frmMain.customCaption;
+	}
+	else
+	{
+		this->Caption = Branding::appName;
+    }
+
 #if 0 // this MIGHT work for scaling scrollbar width - not working
 	TNonClientMetrics NCMet;
 	memset(&NCMet, 0, sizeof(NCMet));
@@ -306,24 +314,48 @@ void __fastcall TfrmMain::actShowAboutExecute(TObject *Sender)
 
 void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 {
-	UaConf tmp = appSettings.uaConf;
-	int iSpeedDialSize = appSettings.frmMain.iSpeedDialSize;
-	bool bSpeedDialOnly = appSettings.frmMain.bSpeedDialOnly;
-	bool bKioskMode = appSettings.frmMain.bKioskMode;
-	int prevTrayNotifierScaling = appSettings.frmTrayNotifier.scalingPct;
-	std::list<HotKeyConf> hkConf = appSettings.hotKeyConf;	
+	Settings prev = appSettings;	// keep track what is changed
+
 	frmSettings->ShowModal();
-	if (appSettings.uaConf != tmp)
+
+	// modify application title and main window caption only if config changes,
+	// allowing to keep text set by Lua API or other methods
+	if ((prev.frmMain.bUseCustomApplicationTitle != appSettings.frmMain.bUseCustomApplicationTitle) ||
+		(appSettings.frmMain.bUseCustomApplicationTitle && (prev.frmMain.customApplicationTitle != appSettings.frmMain.customApplicationTitle)))
+	{
+		if (appSettings.frmMain.bUseCustomApplicationTitle)
+		{
+			Application->Title = appSettings.frmMain.customApplicationTitle;
+		}
+		else
+		{
+			Application->Title = Branding::appName;
+		}
+	}
+	if ((prev.frmMain.bUseCustomCaption != appSettings.frmMain.bUseCustomCaption) ||
+		(appSettings.frmMain.bUseCustomCaption && (prev.frmMain.customCaption != appSettings.frmMain.customCaption)))
+	{
+		if (appSettings.frmMain.bUseCustomCaption)
+		{
+			this->Caption = appSettings.frmMain.customCaption;
+		}
+		else
+		{
+			this->Caption = Branding::appName;
+		}
+	}
+
+	if (appSettings.uaConf != prev.uaConf)
 	{
 		SetStatus("Restarting UA...");
 		miSettings->Enabled = false;		
 		Ua::Instance().Restart();
 	}
-	if (appSettings.uaConf.logMessages != tmp.logMessages)
+	if (appSettings.uaConf.logMessages != prev.uaConf.logMessages)
 	{
 		UA->SetMsgLogging(appSettings.uaConf.logMessages);
 	}
-	if (appSettings.frmMain.bKioskMode != bKioskMode)
+	if (appSettings.frmMain.bKioskMode != prev.frmMain.bKioskMode)
 	{
 		SetKioskMode(appSettings.frmMain.bKioskMode);
 	}
@@ -335,8 +367,8 @@ void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 	{
     	Screen->Cursor = crDefault;
     }
-	if ((appSettings.frmMain.iSpeedDialSize != iSpeedDialSize && (appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly)) ||
-		bSpeedDialOnly != appSettings.frmMain.bSpeedDialOnly
+	if ((appSettings.frmMain.iSpeedDialSize != prev.frmMain.iSpeedDialSize && (appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly)) ||
+		prev.frmMain.bSpeedDialOnly != appSettings.frmMain.bSpeedDialOnly
 		)
 	{
 		// apply speed dial changes
@@ -357,14 +389,14 @@ void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 	{
     	frmLog->UpdateUi();
 	}
-	if (hkConf != appSettings.hotKeyConf)
+	if (prev.hotKeyConf != appSettings.hotKeyConf)
 	{
 		RegisterGlobalHotKeys();
 	}
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
 	UpdateDialpadBackgroundImage();
 	frmTrayNotifier->UpdateBackgroundImage();
-	frmTrayNotifier->ScaleBy(100, prevTrayNotifierScaling);
+	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
 	miSettings->Visible = !appSettings.frmMain.bHideSettings;
 	miView->Visible = !appSettings.frmMain.bHideView;

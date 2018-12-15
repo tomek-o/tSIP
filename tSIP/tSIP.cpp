@@ -57,16 +57,24 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->Initialize();
 		Branding::init();
 		Application -> ShowMainForm = false;
-		Application->Title = Branding::appName;
 
 		AnsiString dir = ExtractFileDir(Application->ExeName);
 		if (chdir(dir.c_str()) != 0)
 		{
-        	ShowMessage("Failed to set path for current directory");
+			ShowMessage("Failed to set path for current directory");
 		}
 
 		AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 		appSettings.Read(asConfigFile);
+
+		if (appSettings.frmMain.bUseCustomApplicationTitle)
+		{
+			Application->Title = appSettings.frmMain.customApplicationTitle;
+		}
+		else
+		{
+			Application->Title = Branding::appName;
+        }
 
 		if (appSettings.frmMain.mainIcon != "")
 		{

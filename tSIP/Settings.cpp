@@ -46,6 +46,10 @@ void Settings::SetDefault(void)
 	frmMain.bKioskMode = false;
 	frmMain.bHideMouseCursor = false;
 	frmMain.bShowWhenAnsweringCall = false;
+	frmMain.bUseCustomCaption = false;
+	frmMain.customCaption = Branding::appName;
+	frmMain.bUseCustomApplicationTitle = false;
+	frmMain.customApplicationTitle = Branding::appName;
 
     frmTrayNotifier.hideWhenAnsweringCall = false;
 
@@ -416,7 +420,10 @@ int Settings::Read(AnsiString asFileName)
 	frmMain.bKioskMode = frmMainJson.get("KioskMode", frmMain.bKioskMode).asBool();
 	frmMain.bHideMouseCursor = frmMainJson.get("HideMouseCursor", frmMain.bHideMouseCursor).asBool();
 	frmMain.bShowWhenAnsweringCall = frmMainJson.get("ShowWhenAnsweringCall", frmMain.bShowWhenAnsweringCall).asBool();
-
+	frmMain.bUseCustomApplicationTitle = frmMainJson.get("UseCustomApplicationTitle", frmMain.bUseCustomApplicationTitle).asBool();
+	frmMain.customApplicationTitle = frmMainJson.get("CustomApplicationTitle", frmMain.customApplicationTitle.c_str()).asString().c_str();
+	frmMain.bUseCustomCaption = frmMainJson.get("UseCustomCaption", frmMain.bUseCustomCaption).asBool();
+	frmMain.customCaption = frmMainJson.get("CustomCaption", frmMain.customCaption.c_str()).asString().c_str();
 
 	const Json::Value &frmTrayNotifierJson = root["frmTrayNotifier"];
 	frmTrayNotifier.iHeight = 105;
@@ -562,6 +569,10 @@ int Settings::Write(AnsiString asFileName)
 		jv["KioskMode"] = frmMain.bKioskMode;
 		jv["HideMouseCursor"] = frmMain.bHideMouseCursor;
 		jv["ShowWhenAnsweringCall"] = frmMain.bShowWhenAnsweringCall;
+		jv["UseCustomApplicationTitle"] = frmMain.bUseCustomApplicationTitle;
+		jv["CustomApplicationTitle"] = frmMain.customApplicationTitle.c_str();
+		jv["UseCustomCaption"] = frmMain.bUseCustomCaption;
+		jv["CustomCaption"] = frmMain.customCaption.c_str();
 	}
 
     {

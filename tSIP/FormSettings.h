@@ -273,6 +273,10 @@ __published:	// IDE-managed Components
 	TLabel *lblLogRotate;
 	TComboBox *cbLogRotate;
 	TCheckBox *chbSpeedDialIgnoreDialogInfoRemoteIdentity;
+	TCheckBox *chbFrmMainUseCustomApplicationTitle;
+	TEdit *edFrmMainCustomApplicationTitle;
+	TCheckBox *chbFrmMainUseCustomCaption;
+	TEdit *edFrmMainCustomCaption;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
