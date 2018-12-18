@@ -11,6 +11,8 @@
 #include <re.h>
 #include <rem.h>
 #include <baresip.h>
+#include <speex/speex_resampler.h>
+#include <assert.h>
 
 #define DEBUG_MODULE "aufile"
 #define DEBUG_LEVEL 6
@@ -22,6 +24,7 @@
  * Audio module for using a WAV-file as audio input
  */
 
+static const int SPEEX_RESAMP_QUALITY = 1;	// 0...10
 
 struct ausrc_st {
 	struct ausrc *as;  /* base class */
@@ -37,6 +40,10 @@ struct ausrc_st {
 	ausrc_read_h *rh;
 	ausrc_error_h *errh;
 	void *arg;
+
+	SpeexResamplerState *speex_state;
+	unsigned		 in_samples_per_frame;
+	unsigned		 out_samples_per_frame;
 };
 
 
@@ -59,6 +66,11 @@ static void destructor(void *arg)
 
 	tmr_cancel(&st->tmr);
 
+	if (st->speex_state) {
+		speex_resampler_destroy(st->speex_state);
+		st->speex_state = NULL;
+	}
+
 	mem_deref(st->aufile);
 	mem_deref(st->aubuf);
 	mem_deref(st->as);	
@@ -69,14 +81,25 @@ DWORD WINAPI play_thread(LPVOID arg)
 {
 	uint64_t now, ts = tmr_jiffies();
 	struct ausrc_st *st = arg;
+	int16_t *source_samples = NULL;
 	int16_t *sampv;
 
+	if (st->speex_state) {
+		source_samples = mem_alloc(st->in_samples_per_frame * 2, NULL);
+		if (!source_samples) {
+			return NULL;
+		}
+	}
 	sampv = mem_alloc(st->sampc * 2, NULL);
-	if (!sampv)
+	if (!sampv) {
+		mem_deref(source_samples);
 		return NULL;
+	}
 
 	while (st->run) {
-
+		unsigned int in_length;
+		unsigned int out_length;
+		
 		Sleep(4);
 
 		now = tmr_jiffies();
@@ -84,13 +107,40 @@ DWORD WINAPI play_thread(LPVOID arg)
 		if (ts > now)
 			continue;
 
-		aubuf_read(st->aubuf, (uint8_t*)sampv, st->sampc*sizeof(int16_t));
+		in_length = st->in_samples_per_frame;
+		out_length = st->out_samples_per_frame;
+
+		if (st->speex_state) {
+			aubuf_read(st->aubuf, (uint8_t*)source_samples, st->in_samples_per_frame*sizeof(int16_t));
+
+			speex_resampler_process_interleaved_int(st->speex_state,
+							source_samples, &in_length,
+							sampv, &out_length);
+		#if 0
+			if (in_length != st->in_samples_per_frame) {
+				DEBUG_INFO("aufile: in_length = %u, in_samples_per_frame = %d\n", in_length, st->in_samples_per_frame);
+			}
+		#endif
+			assert(in_length == st->in_samples_per_frame);
+		#if 0
+			if (out_length != st->out_samples_per_frame) {
+				DEBUG_INFO("aufile: in_length = %d, in_samples_per_frame = %d, out_length = %d, out_samples_per_frame = %d",
+					in_length, st->in_samples_per_frame, out_length, st->out_samples_per_frame);
+			}
+		#endif
+			assert(out_length == st->out_samples_per_frame);
+		} else {
+			aubuf_read(st->aubuf, (uint8_t*)sampv, st->sampc*sizeof(int16_t));
+		}
 
 		st->rh((uint8_t *)sampv, st->sampc*sizeof(int16_t), st->arg);
 
 		ts += st->ptime;
 	}
 
+	if (source_samples) {
+		mem_deref(source_samples);
+	}
 	mem_deref(sampv);
 
 	DEBUG_INFO("aufile: player thread exited\n");
@@ -125,7 +175,6 @@ static int read_file(struct ausrc_st *st)
 	int err;
 
 	for (;;) {
-
 		mb = mbuf_alloc(4096);
 		if (!mb)
 			return ENOMEM;
@@ -183,18 +232,10 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 		goto out;
 	}
 
-	DEBUG_INFO("aufile: %s: %u Hz, %d channels\n",
-	     dev, fprm.srate, fprm.channels);
+	DEBUG_INFO("aufile: %s: %u Hz, %d channels\n", dev, fprm.srate, fprm.channels);
 
-	if (fprm.srate != prm->srate) {
-		DEBUG_WARNING("aufile: input file (%s) must have sample-rate"
-			" %u Hz\n", dev, prm->srate);
-		err = ENODEV;
-		goto out;
-	}
 	if (fprm.channels != prm->ch) {
-		DEBUG_WARNING("aufile: input file (%s) must have channels = %d\n",
-			dev, prm->ch);
+		DEBUG_WARNING("aufile: input file (%s) must have channels = %d\n", dev, prm->ch);
 		err = ENODEV;
 		goto out;
 	}
@@ -202,6 +243,18 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 		DEBUG_WARNING("aufile: input file must have format S16LE\n");
 		err = ENODEV;
 		goto out;
+	}
+
+	st->in_samples_per_frame = prm->frame_size * fprm.srate / prm->srate; //prm->frame_size;
+	st->out_samples_per_frame = prm->frame_size; //prm->srate / (fprm.srate / prm->frame_size);
+
+	if (fprm.srate != prm->srate) {
+		DEBUG_WARNING("aufile: using speex resampler\n");
+		st->speex_state = speex_resampler_init(prm->ch, fprm.srate, prm->srate, SPEEX_RESAMP_QUALITY, &err);
+		if (st->speex_state == NULL || err != RESAMPLER_ERR_SUCCESS) {
+			err = ENOMEM;
+			goto out;
+		}
 	}
 
 	st->sampc = prm->frame_size; //prm->srate * prm->ch * prm->ptime / 1000;
@@ -214,9 +267,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	     prm->srate * prm->ch * 40);
 
 	/* 1 - inf seconds of audio */
-	err = aubuf_alloc(&st->aubuf,
-			  prm->srate * prm->ch * 2,
-			  0);
+	err = aubuf_alloc(&st->aubuf, prm->srate * prm->ch * 2, 0);
 	if (err)
 		goto out;
 
