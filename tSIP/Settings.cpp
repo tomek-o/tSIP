@@ -97,6 +97,8 @@ void Settings::SetDefault(void)
 
 	struct UaConf::Account new_acc;
 	uaConf.accounts.push_back(new_acc);
+
+	ScriptWindow.ClearMruItems();
 }
 
 int Settings::Read(AnsiString asFileName)
@@ -511,18 +513,33 @@ int Settings::Read(AnsiString asFileName)
 	const Json::Value &HistoryJson = root["History"];
 	History.bNoStoreToFile = HistoryJson.get("NoStoreToFile", History.bNoStoreToFile).asBool();
 
-	const Json::Value &ScriptsJson = root["Scripts"];
-	Scripts.onMakeCall = ScriptsJson.get("OnMakeCall", Scripts.onMakeCall.c_str()).asString().c_str();
-	Scripts.onCallState = ScriptsJson.get("OnCallState", Scripts.onCallState.c_str()).asString().c_str();
-	Scripts.onStreamingState = ScriptsJson.get("OnStreamingState", Scripts.onStreamingState.c_str()).asString().c_str();
-	Scripts.onRegistrationState = ScriptsJson.get("OnRegistrationState", Scripts.onRegistrationState.c_str()).asString().c_str();
-	Scripts.onStartup = ScriptsJson.get("OnStartup", Scripts.onStartup.c_str()).asString().c_str();
-	Scripts.onTimer = ScriptsJson.get("OnTimer", Scripts.onTimer.c_str()).asString().c_str();
-	Scripts.timer = ScriptsJson.get("Timer", Scripts.timer).asInt();
-	if (Scripts.timer <= 0)
-		Scripts.timer = 1000;
-	Scripts.onDialogInfo = ScriptsJson.get("OnDialogInfo", Scripts.onDialogInfo.c_str()).asString().c_str();
-	Scripts.onDial = ScriptsJson.get("OnDial", Scripts.onDial.c_str()).asString().c_str();
+	{
+		const Json::Value &ScriptsJson = root["Scripts"];
+		Scripts.onMakeCall = ScriptsJson.get("OnMakeCall", Scripts.onMakeCall.c_str()).asString().c_str();
+		Scripts.onCallState = ScriptsJson.get("OnCallState", Scripts.onCallState.c_str()).asString().c_str();
+		Scripts.onStreamingState = ScriptsJson.get("OnStreamingState", Scripts.onStreamingState.c_str()).asString().c_str();
+		Scripts.onRegistrationState = ScriptsJson.get("OnRegistrationState", Scripts.onRegistrationState.c_str()).asString().c_str();
+		Scripts.onStartup = ScriptsJson.get("OnStartup", Scripts.onStartup.c_str()).asString().c_str();
+		Scripts.onTimer = ScriptsJson.get("OnTimer", Scripts.onTimer.c_str()).asString().c_str();
+		Scripts.timer = ScriptsJson.get("Timer", Scripts.timer).asInt();
+		if (Scripts.timer <= 0)
+			Scripts.timer = 1000;
+		Scripts.onDialogInfo = ScriptsJson.get("OnDialogInfo", Scripts.onDialogInfo.c_str()).asString().c_str();
+		Scripts.onDial = ScriptsJson.get("OnDial", Scripts.onDial.c_str()).asString().c_str();
+	}
+
+	{
+		const Json::Value &jScriptWindow = root["ScriptWindow"];
+		{
+            ScriptWindow.lastDir = jScriptWindow.get("LastDir", ScriptWindow.lastDir.c_str()).asCString();
+			const Json::Value &jMRU = jScriptWindow["MRU"];
+			ScriptWindow.MRU.clear();
+			for (unsigned int i=0; i<std::min<unsigned>(jMRU.size(), _ScriptWindow::MRU_LIMIT); i++)
+			{
+				ScriptWindow.MRU.push_back(jMRU[i].asString().c_str());
+			}
+		}
+	}
 
 	return 0;
 }
@@ -756,6 +773,20 @@ int Settings::Write(AnsiString asFileName)
 		}
 	}
 
+	{
+		Json::Value &jScriptWindow = root["ScriptWindow"];
+		{
+			jScriptWindow["LastDir"] = ScriptWindow.lastDir.c_str();
+			Json::Value &jMRU = jScriptWindow["MRU"];
+			jMRU.resize(0);
+			for (unsigned int i=0; i < ScriptWindow.MRU.size(); i++)
+			{
+				jMRU.append(Json::Value(ScriptWindow.MRU[i].c_str()));
+			}
+		}
+	}
+
+
 	std::string outputConfig = writer.write( root );
 
 	try
@@ -772,4 +803,30 @@ int Settings::Write(AnsiString asFileName)
 	return 0;
 }
 
+void Settings::_ScriptWindow::AddMru(AnsiString item)
+{
+	// check if item is already in MRU Lua list
+	std::deque<AnsiString>::iterator iter;
+	for (iter=MRU.begin(); iter != MRU.end(); )
+	{
+		if (*iter == item)
+		{
+			iter = MRU.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+	// push item on top
+	MRU.push_back(item);
+	while (MRU.size() > MRU_LIMIT)
+	{
+		MRU.pop_front();
+    }
+}
 
+void Settings::_ScriptWindow::ClearMruItems(void)
+{
+	MRU.clear();
+}

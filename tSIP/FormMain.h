@@ -102,6 +102,8 @@ __published:	// IDE-managed Components
 	TSpeedButton *btnResetSpeakerVolume;
 	TMenuItem *miClearCallsHistory;
 	TTimer *tmrClearCallState;
+	TMenuItem *miTools;
+	TMenuItem *miScripting;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -143,6 +145,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnResetSpeakerVolumeClick(TObject *Sender);
 	void __fastcall miClearCallsHistoryClick(TObject *Sender);
 	void __fastcall tmrClearCallStateTimer(TObject *Sender);
+	void __fastcall miScriptingClick(TObject *Sender);
 private:	// User declarations
 	TrayIcon *trIcon;
 	TfrmButtonContainer* frmButtonContainers[1 + ProgrammableButtons::EXT_CONSOLE_COLUMNS];
@@ -234,7 +237,8 @@ private:	// User declarations
 	void ToggleSpeedDial(void);
 	void RegisterGlobalHotKeys(void);
 	void ExecAction(const struct Action& action);
-	void RunScript(int srcType, int srcId, AnsiString filename, bool showLog = true);
+	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool showLog = true);
+	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest);
 	bool notificationIconState;
 	void SetNotificationIcon(bool state);
 	void SetKioskMode(bool state);

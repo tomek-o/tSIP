@@ -874,7 +874,43 @@ object frmAbout: TfrmAbout
           'OF THE USE OF '
         
           'THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE' +
-          '.')
+          '.'
+        ''
+        ''
+        '============================================='
+        'scintilla license:'
+        '============================================='
+        ''
+        'Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>'
+        ''
+        'All Rights Reserved '
+        ''
+        
+          'Permission to use, copy, modify, and distribute this software an' +
+          'd its documentation for any purpose and '
+        
+          'without fee is hereby granted, provided that the above copyright' +
+          ' notice appear in all copies and that both '
+        
+          'that copyright notice and this permission notice appear in suppo' +
+          'rting documentation. '
+        ''
+        
+          'NEIL HODGSON DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWA' +
+          'RE, INCLUDING '
+        
+          'ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVE' +
+          'NT SHALL NEIL '
+        
+          'HODGSON BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAM' +
+          'AGES OR ANY '
+        
+          'DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, ' +
+          'WHETHER IN '
+        
+          'AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARIS' +
+          'ING OUT OF OR '
+        'IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. ')
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0

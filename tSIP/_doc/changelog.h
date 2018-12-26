@@ -633,12 +633,15 @@ Version 0.1.63
 	- registration client: reduced "failwait" saturation time, i.e. maximum time to retry registration from 1800s to 300s (time is randomized and increases exponentially up to this limit)
 	- subscription client: removed RESUB_FAILC_MAX limit, added "failwait" similar to registration with 900s limit
 
-Version
+Version 0.1.64
 	- added "logrotate" mechanism; configuration: number of old files to keep (0...5)
 	- added queues as new mechanism for connecting scripts and plugins (similar to variables)
 	- added Lua FindWindowByCaptionAndExeName(caption, exeName) function
 	- added sxmlc library source to re
 	- BLF buttons can now show remote identity and call direction (number calling / number called) as 2nd line (opt-out)
 	- fixed few error log lines
+
+Version
+	- added speex resampler to aufile (wave file) audio input module
 */
 

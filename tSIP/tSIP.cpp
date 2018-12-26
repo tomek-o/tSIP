@@ -18,6 +18,8 @@ USEFORM("FormTrayNotifier.cpp", frmTrayNotifier);
 USEFORM("FormHotkeys.cpp", frmHotkeys);
 USEFORM("FormPhones.cpp", frmPhones);
 USEFORM("FormContactsCsvImport.cpp", frmContactsCsvImport);
+USEFORM("FormLuaScript.cpp", frmLuaScript);
+USEFORM("FormTextEditor.cpp", frmTextEditor);
 //---------------------------------------------------------------------------
 #pragma link "re.lib"
 #pragma link "rem.lib"
@@ -30,6 +32,7 @@ USEFORM("FormContactsCsvImport.cpp", frmContactsCsvImport);
 #pragma link "jsoncpp.lib"
 #pragma link "lua_static.lib"
 //#pragma link "libopus.lib"
+#pragma link "scintilla.lib"
 
 #include "Settings.h"
 #include "FormMain.h"

@@ -1,0 +1,332 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+			<Option Name="ProjectType">CppStaticLibrary</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{4258E16B-9C27-41A8-B67D-851E9C968BC4}</Option>
+		</Option>
+	</PersonalityInfo>
+	<CPlusPlusBuilder.Personality>
+		<Source>
+			<Source Name="MainSource">scintilla.cpp</Source>
+		</Source>
+		<BCBPROJECT>
+      <project version="10.0">
+        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="count" value="1"/>
+        <property category="build.config" name="excludedefaultforzero" value="0"/>
+        <property category="build.config.0" name="builddir" value="Debug"/>
+        <property category="build.config.0" name="key" value="Debug_Build"/>
+        <property category="build.config.0" name="name" value="Debug Build"/>
+        <property category="build.config.0" name="settings.win32b" value="default"/>
+        <property category="build.config.0" name="type" value="Toolset"/>
+        <property category="build.config.0" name="win32.win32b.builddir" value="Debug_Build"/>
+        <property category="build.config.1" name="key" value="Release_Build"/>
+        <property category="build.config.1" name="name" value="Release Build"/>
+        <property category="build.config.1" name="settings.win32b" value="default"/>
+        <property category="build.config.1" name="type" value="Toolset"/>
+        <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
+        <property category="build.node" name="name" value="scintilla.lib"/>
+        <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;adortl;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;soaprtl;dsnap;bdertl;vcldbx"/>
+        <property category="build.node" name="sparelibs" value="rtl.lib vcl.lib"/>
+        <property category="build.node" name="use_packages" value="0"/>
+        <property category="build.platform" name="active" value="win32"/>
+        <property category="build.platform" name="win32.Debug_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.Release_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.default" value="win32b"/>
+        <property category="build.platform" name="win32.enabled" value="1"/>
+        <property category="build.platform" name="win32.win32b.enabled" value="1"/>
+        <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.listfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.objfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.xreffile.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.1" value="_DEBUG"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$O.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.1" value="DEBUG"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.V.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.Gn.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\debug"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="container.SelectedOptimizations.containerenabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="container.SelectedWarnings.containerenabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.3.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.4.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.5.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.6.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.1" value="NDEBUG"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.disablewarns.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.k.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.r.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.vi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.w.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$D.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$O.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.V.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\release"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.z.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zn.enabled" value="1"/>
+        <optionset name="all_configurations">
+          <property category="node" name="displayname" value="All Configurations"/>
+          <property category="win32.*.win32b.bcc32" name="container.SelectedOptimizations.containerenabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.1" value="STATIC_BUILD"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.2" value="SCI_LEXER"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.3" value="SCI_NAMESPACE"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.4" value="STRICT"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="lexers"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="lexlib"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="src"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="win32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\_PROJEKTY\json_editor\scintilla"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.O1.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.O2.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.Od.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.Q.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.infomsgs.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.2" value="NO_STRICT"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tW.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWC.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWD.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWM.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="lexers"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="lexlib"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="src"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\_PROJEKTY\json_editor\scintilla"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="lexers"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="lexlib"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="src"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\_PROJEKTY\json_editor\scintilla"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="lexers"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="lexlib"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="src"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\_PROJEKTY\json_editor\scintilla"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="lexers"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="lexlib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="src"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="win32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\_PROJEKTY\json_editor\scintilla"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\..\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="lexers"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="lexlib"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="src"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="win32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\_PROJEKTY\json_editor\scintilla"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpe.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpp.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg" value="128"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg.merge" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.dynamicrtl.enabled" value="0"/>
+        </optionset>
+      </project>
+      <FILELIST>
+        <FILE FILENAME="scintilla.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="scintilla" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\ScintillaWidget.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\ILexer.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\Platform.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\SciLexer.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\Scintilla.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\Accessor.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\CharacterSet.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexAccessor.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexerBase.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexerModule.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexerNoExceptions.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexerSimple.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\OptionSet.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\PropSetSimple.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\SparseState.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\StyleContext.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\WordList.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\AutoComplete.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\CallTip.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Catalogue.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\CellBuffer.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\CharClassify.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\ContractionState.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Decoration.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Document.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Editor.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\ExternalLexer.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\FontQuality.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Indicator.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\KeyMap.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\LineMarker.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Partitioning.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\PerLine.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\PositionCache.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\RESearch.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\RunStyles.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\ScintillaBase.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Selection.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\SplitVector.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Style.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\SVector.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\UniConversion.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\ViewStyle.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\XPM.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="win32\PlatWin.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexers\LexCPP.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LexCPP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\WordList.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="WordList" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\Accessor.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Accessor" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\CharacterSet.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CharacterSet" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexerBase.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LexerBase" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexerModule.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LexerModule" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexerNoExceptions.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LexerNoExceptions" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\LexerSimple.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LexerSimple" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\PropSetSimple.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PropSetSimple" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexlib\StyleContext.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="StyleContext" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\XPM.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="XPM" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\AutoComplete.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AutoComplete" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\CallTip.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CallTip" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Catalogue.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Catalogue" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\CellBuffer.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CellBuffer" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\CharClassify.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CharClassify" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\ContractionState.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ContractionState" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Decoration.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Decoration" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Document.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Document" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Editor.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Editor" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\ExternalLexer.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ExternalLexer" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Indicator.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Indicator" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\KeyMap.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="KeyMap" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\LineMarker.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LineMarker" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\PerLine.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PerLine" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\PositionCache.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PositionCache" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\RESearch.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="RESearch" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\RunStyles.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="RunStyles" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\ScintillaBase.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScintillaBase" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Selection.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Selection" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\Style.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Style" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\UniConversion.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="UniConversion" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\ViewStyle.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ViewStyle" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="win32\ScintillaWin.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScintillaWin" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="win32\PlatWin.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PlatWin" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexers\LexLua.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LexLua" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="lexers\LexJSON.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LexJSON" FORMNAME="" DESIGNCLASS=""/>
+      </FILELIST>
+      <IDEOPTIONS>
+        <VersionInfo>
+          <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+          <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+          <VersionInfo Name="MajorVer">1</VersionInfo>
+          <VersionInfo Name="MinorVer">0</VersionInfo>
+          <VersionInfo Name="Release">0</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Debug">False</VersionInfo>
+          <VersionInfo Name="PreRelease">False</VersionInfo>
+          <VersionInfo Name="Special">False</VersionInfo>
+          <VersionInfo Name="Private">False</VersionInfo>
+          <VersionInfo Name="DLL">False</VersionInfo>
+          <VersionInfo Name="Locale">1045</VersionInfo>
+          <VersionInfo Name="CodePage">1250</VersionInfo>
+        </VersionInfo>
+        <VersionInfoKeys>
+          <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+          <VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="Comments"></VersionInfoKeys>
+        </VersionInfoKeys>
+        <Debugging>
+          <Debugging Name="DebugSourceDirs"></Debugging>
+        </Debugging>
+        <Parameters>
+          <Parameters Name="RunParams"></Parameters>
+          <Parameters Name="Launcher"></Parameters>
+          <Parameters Name="UseLauncher">False</Parameters>
+          <Parameters Name="DebugCWD"></Parameters>
+          <Parameters Name="HostApplication"></Parameters>
+          <Parameters Name="RemoteHost"></Parameters>
+          <Parameters Name="RemotePath"></Parameters>
+          <Parameters Name="RemoteParams"></Parameters>
+          <Parameters Name="RemoteLauncher"></Parameters>
+          <Parameters Name="UseRemoteLauncher">False</Parameters>
+          <Parameters Name="RemoteCWD"></Parameters>
+          <Parameters Name="RemoteDebug">False</Parameters>
+          <Parameters Name="Debug Symbols Search Path"></Parameters>
+          <Parameters Name="LoadAllSymbols">True</Parameters>
+          <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+        </Parameters>
+        <Linker>
+          <Linker Name="LibPrefix"></Linker>
+          <Linker Name="LibSuffix"></Linker>
+          <Linker Name="LibVersion"></Linker>
+        </Linker>
+      </IDEOPTIONS>
+    </BCBPROJECT>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
+</BorlandProject>

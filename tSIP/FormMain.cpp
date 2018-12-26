@@ -37,6 +37,7 @@
 #include "base64.h"
 #include "PhoneInterface.h"
 #include "FormContactsCsvImport.h"
+#include "FormLuaScript.h"
 #include "Utilities.h"
 #include <Clipbrd.hpp>
 
@@ -480,7 +481,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	{
 		AnsiString asScriptFile;
 		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onStartup.c_str());
-		RunScript(ScriptExec::SRC_TYPE_ON_STARTUP, -1, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_ON_STARTUP, -1, asScriptFile.c_str());
 	}
 
 	tmrScript->Interval = appSettings.Scripts.timer;
@@ -567,8 +568,8 @@ void TfrmMain::MakeCall(AnsiString target)
 	{
 		AnsiString asScriptFile;
 		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onMakeCall.c_str());
-        // this script may change initial target implementing SIP originate function
-		RunScript(ScriptExec::SRC_TYPE_ON_MAKING_CALL, -1, asScriptFile.c_str());
+		// this script may change initial target implementing SIP originate function
+		RunScriptFile(SCRIPT_SRC_ON_MAKING_CALL, -1, asScriptFile.c_str());
 	}
 
 	UA->Call(0, call.initialTarget, appSettings.Calls.extraHeaderLines);
@@ -1117,7 +1118,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				AnsiString asScriptFile;
 				asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onCallState.c_str());
-				RunScript(ScriptExec::SRC_TYPE_ON_CALL_STATE, -1, asScriptFile.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, -1, asScriptFile.c_str());
 			}
 
 			break;
@@ -1205,7 +1206,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				AnsiString asScriptFile;
 				asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onRegistrationState.c_str());
-				RunScript(ScriptExec::SRC_TYPE_ON_REGISTRATION_STATE, -1, asScriptFile.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_REGISTRATION_STATE, -1, asScriptFile.c_str());
 			}
 
 			break;
@@ -1293,7 +1294,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				AnsiString asScriptFile;
 				asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onDialogInfo.c_str());
-				RunScript(ScriptExec::SRC_TYPE_ON_DIALOG_INFO, cb.contactId, asScriptFile.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_DIALOG_INFO, cb.contactId, asScriptFile.c_str());
 			}
 			break;
 		}
@@ -1349,7 +1350,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				AnsiString asScriptFile;
 				asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onStreamingState.c_str());
-				RunScript(ScriptExec::SRC_TYPE_ON_STREAMING_STATE, -1, asScriptFile.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_STREAMING_STATE, -1, asScriptFile.c_str());
 			}
 
 			break;
@@ -1435,7 +1436,7 @@ void __fastcall TfrmMain::btnDialClick(TObject *Sender)
 	{
 		AnsiString asScriptFile;
 		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onDial.c_str());
-		RunScript(ScriptExec::SRC_TYPE_ON_DIAL, digit, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_ON_DIAL, digit, asScriptFile.c_str());
 	}	
 }
 //---------------------------------------------------------------------------
@@ -1822,7 +1823,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::SCRIPT: {
 		AnsiString asScriptFile;
 		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), cfg.script.c_str());
-		RunScript(ScriptExec::SRC_TYPE_BUTTON, id, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_BUTTON, id, asScriptFile.c_str());
 		break;
 	}
 	case Button::SIP_ACCESS_URL:
@@ -1858,11 +1859,11 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	}
 }
 
-void TfrmMain::RunScript(int srcType, int srcId, AnsiString filename, bool showLog)
+void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool showLog)
 {
 	if (showLog)
-{
-    LOG("Running Lua script: %s\n", ExtractFileName(filename).c_str());
+	{
+    	LOG("Running Lua script: %s\n", ExtractFileName(filename).c_str());
 	}
 	std::auto_ptr<TStrings> strings(new TStringList());
 	if (FileExists(filename))
@@ -1880,35 +1881,42 @@ void TfrmMain::RunScript(int srcType, int srcId, AnsiString filename, bool showL
 			MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
 			return;
 		}
-		ScriptExec scriptExec(
-			static_cast<enum ScriptExec::SrcType>(srcType), srcId,
-			&OnAddOutputText, &OnCall2, &Hangup, &Answer, &OnGetDial, &OnSetDial,
-			&OnSwitchAudioSource, &DialString, &OnBlindTransfer, &OnGetCallState,
-			&OnIsCallIncoming, &OnGetCallPeer, &OnGetCallInitialRxInvite,
-			&OnGetContactName,
-			&OnGetStreamingState,
-			&OnGetInitialCallTarget, &OnSetInitialCallTarget,
-			&OnSetTrayIcon,
-			&OnGetRegistrationState,
-			&OnSetButtonCaption, &OnSetButtonDown, &OnSetButtonImage,
-			&OnPluginSendMessageText,
-			&OnGetRecordFile,
-			&OnGetBlfState,
-			&OnRecordStart,
-			&OnGetRecordingState,
-			&OnGetRxDtmf,
-			&ShowTrayNotifier,
-			&OnGetUserName,
-			&ProgrammableButtonClick
-			);
-		scriptExec.Run(scriptText.c_str());
+		bool breakReq = false;
+		RunScript(srcType, srcId, scriptText, breakReq);
 	}
 	else
 	{
 		AnsiString msg;
 		msg.sprintf("Script file not found (%s).", filename.c_str());
 		MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
-    }	
+	}
+}
+
+int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest)
+{
+	ScriptExec scriptExec(
+		static_cast<enum ScriptSource>(srcType), srcId, breakRequest,
+		&OnAddOutputText, &OnCall2, &Hangup, &Answer, &OnGetDial, &OnSetDial,
+		&OnSwitchAudioSource, &DialString, &OnBlindTransfer, &OnGetCallState,
+		&OnIsCallIncoming, &OnGetCallPeer, &OnGetCallInitialRxInvite,
+		&OnGetContactName,
+		&OnGetStreamingState,
+		&OnGetInitialCallTarget, &OnSetInitialCallTarget,
+		&OnSetTrayIcon,
+		&OnGetRegistrationState,
+		&OnSetButtonCaption, &OnSetButtonDown, &OnSetButtonImage,
+		&OnPluginSendMessageText,
+		&OnGetRecordFile,
+		&OnGetBlfState,
+		&OnRecordStart,
+		&OnGetRecordingState,
+		&OnGetRxDtmf,
+		&ShowTrayNotifier,
+		&OnGetUserName,
+		&ProgrammableButtonClick
+		);
+	scriptExec.Run(script.c_str());
+	return 0;
 }
 
 void __fastcall TfrmMain::edTransferEnter(TObject *Sender)
@@ -2031,7 +2039,7 @@ void __fastcall TfrmMain::cbCallURIKeyPress(TObject *Sender, char &Key)
 	{
 		AnsiString asScriptFile;
 		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onDial.c_str());
-		RunScript(ScriptExec::SRC_TYPE_ON_DIAL, Key, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_ON_DIAL, Key, asScriptFile.c_str());
 	}
 }
 //---------------------------------------------------------------------------
@@ -2622,7 +2630,7 @@ void __fastcall TfrmMain::tmrScriptTimer(TObject *Sender)
 	{
 		AnsiString asScriptFile;
 		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onTimer.c_str());
-		RunScript(ScriptExec::SRC_TYPE_ON_TIMER, -1, asScriptFile.c_str(), false);
+		RunScriptFile(SCRIPT_SRC_ON_TIMER, -1, asScriptFile.c_str(), false);
 		tmrScript->Enabled = true;
 	}
 	// timer disables itself if onTimer script is not configured
@@ -2697,6 +2705,24 @@ void __fastcall TfrmMain::tmrClearCallStateTimer(TObject *Sender)
 {
 	tmrClearCallState->Enabled = false;
 	lblCallState->Caption = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miScriptingClick(TObject *Sender)
+{
+	TfrmLuaScript *frmLuaScript = new TfrmLuaScript(this, &RunScript);
+	//frmLuaScript->SetScript(asScript);
+	bool modal = false;
+	if (modal)
+	{
+		frmLuaScript->ShowModal();
+	}
+	else
+	{
+		frmLuaScript->Show();
+	}
+	// self-deleting with caFree
+	//delete frmLuaScript;
 }
 //---------------------------------------------------------------------------
 

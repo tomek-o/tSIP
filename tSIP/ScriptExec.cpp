@@ -284,6 +284,15 @@ int ScriptExec::l_Beep(lua_State *L)
 	return 0;
 }
 
+/** \brief Check if user interrupted script for clean, controlled exit
+*/
+int ScriptExec::l_CheckBreak(lua_State *L)
+{
+	int ret = GetContext(L)->breakReq?1:0;
+	lua_pushnumber(L, ret);
+	return 1;					// number of return values
+}
+
 int ScriptExec::l_GetClipboardText( lua_State* L )
 {
 	AnsiString text = Clipboard()->AsText;
@@ -833,8 +842,9 @@ int ScriptExec::l_GetExeName(lua_State* L)
 }
 
 ScriptExec::ScriptExec(
-	enum SrcType srcType,
+	enum ScriptSource srcType,
 	int srcId,
+	bool &breakReq,	
 	CallbackAddOutputText onAddOutputText,
 	CallbackCall onCall,
 	CallbackHangup onHangup,
@@ -869,6 +879,7 @@ ScriptExec::ScriptExec(
 	):
 	srcType(srcType),
 	srcId(srcId),
+	breakReq(breakReq),
 	onAddOutputText(onAddOutputText),
 	onCall(onCall),
 	onHangup(onHangup),
@@ -901,7 +912,6 @@ ScriptExec::ScriptExec(
 	onGetUserName(onGetUserName),
 	onProgrammableButtonClick(onProgrammableButtonClick),
 
-	breakReq(false),
 	running(false)
 {
 	assert(onAddOutputText && onCall && onHangup && onAnswer && onGetDial && onSetDial &&
@@ -944,6 +954,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "InputQuery", l_InputQuery);
 	lua_register(L, "Sleep", l_Sleep);
 	lua_register(L, "Beep", l_Beep);
+	lua_register(L, "CheckBreak",l_CheckBreak);
 	lua_register(L, "GetClipboardText", l_GetClipboardText);
 	lua_register(L, "SetClipboardText", l_SetClipboardText);
 	lua_register(L, "ForceDirectories", l_ForceDirectories);

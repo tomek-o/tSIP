@@ -19,8 +19,9 @@
       <Projects Name="jsoncpp.lib">jsoncpp\jsoncpp.bdsproj</Projects>
       <Projects Name="lua_static.lib">lua\turbo_cpp\lua_static.bdsproj</Projects>
       <Projects Name="webrtc_tc.lib">webrtc\webrtc_tc.bdsproj</Projects>
+      <Projects Name="scintilla.lib">scintilla\scintilla.bdsproj</Projects>
       <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
-      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib jsoncpp.lib lua_static.lib webrtc_tc.lib tSIP.exe</Projects>
+      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib jsoncpp.lib lua_static.lib webrtc_tc.lib scintilla.lib tSIP.exe</Projects>
     </Projects>
     <Dependencies>
       <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">

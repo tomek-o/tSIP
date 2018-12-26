@@ -70,6 +70,7 @@
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.10" value="..\jsoncpp\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.11" value="..\lua\turbo_cpp\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.12" value="..\opus\debug_build"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.13" value="..\scintilla\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.2" value="..\re\mk\win32-tc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.3" value="..\rem\mk\win32-tc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.4" value="..\baresip\mk\win32-tc\debug_build"/>
@@ -89,6 +90,8 @@
         <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.1" value="NDEBUG"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.H=.enabled" value="1"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.Hc.enabled" value="0"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.He.enabled" value="0"/>
         <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
@@ -102,6 +105,7 @@
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.10" value="..\jsoncpp\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.11" value="..\lua\turbo_cpp\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.12" value="..\opus\release_build"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.13" value="..\scintilla\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.2" value="..\re\mk\win32-tc\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.3" value="..\baresip\mk\win32-tc\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.4" value="..\rem\mk\win32-tc\release_build"/>
@@ -148,6 +152,7 @@
           <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="..\speex\include"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="..\gsm\inc"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\lua\src"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\scintilla\include"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="components\HotkeyCfgPanel"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="components\ProgrammableButton"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
@@ -438,6 +443,12 @@
         <FILE FILENAME="phone\Phone.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="phone\PhoneCapabilities.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="phone\PhoneSettings.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="FormLuaScript.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLuaScript" FORMNAME="frmLuaScript" DESIGNCLASS="" ADDITIONAL="FormLuaScript.h"/>
+        <FILE FILENAME="FormTextEditor.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTextEditor" FORMNAME="frmTextEditor" DESIGNCLASS="" ADDITIONAL="FormTextEditor.h"/>
+        <FILE FILENAME="ScEdit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScEdit" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ScEdit.h"/>
+        <FILE FILENAME="common\BtnController.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="LuaExamples.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="ScriptSource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -446,7 +457,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">64</VersionInfo>
-          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Build">2</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -458,7 +469,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.64.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.64.2</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -504,10 +515,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

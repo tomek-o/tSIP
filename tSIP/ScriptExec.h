@@ -4,6 +4,8 @@
 #define ScriptExecH
 //---------------------------------------------------------------------------
 
+#include "ScriptSource.h"
+
 #include <string>
 #include <System.hpp>
 
@@ -90,6 +92,7 @@ private:
 	static int l_InputQuery(lua_State* L);
 	static int l_Sleep(lua_State *L);
 	static int l_Beep(lua_State *L);
+	static int l_CheckBreak(lua_State *L);
 	static int l_GetClipboardText(lua_State* L);	
 	static int l_SetClipboardText(lua_State* L);
 	static int l_ForceDirectories(lua_State* L);
@@ -143,25 +146,13 @@ private:
 	static int l_GetUserName(lua_State* L);	
 	static int l_ProgrammableButtonClick(lua_State* L);
 
-	bool breakReq;
+	bool &breakReq;
 	bool running;
 public:
-	enum SrcType {
-		SRC_TYPE_BUTTON = 0,
-		SRC_TYPE_ON_MAKING_CALL,
-		SRC_TYPE_ON_CALL_STATE,
-		SRC_TYPE_ON_STREAMING_STATE,
-		SRC_TYPE_ON_REGISTRATION_STATE,
-		SRC_TYPE_ON_STARTUP,
-		SRC_TYPE_ON_TIMER,
-		SRC_TYPE_ON_DIALOG_INFO,
-		SRC_TYPE_ON_DIAL,
-
-		SRC_TYPE_LIMITER
-	};
 	ScriptExec(
-		enum SrcType srcType,
+		enum ScriptSource srcType,
 		int srcId,
+		bool &breakReq,
 		CallbackAddOutputText onAddOutputText,
 		CallbackCall onCall,
 		CallbackHangup onHangup,
@@ -226,7 +217,7 @@ public:
 	static int QueueGetSize(const char* name);
 
 private:
-	enum SrcType srcType;
+	enum ScriptSource srcType;
 	int srcId;
 };
 
