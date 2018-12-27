@@ -35,6 +35,7 @@
         <Dependency GUID="{B2993EC5-7934-47AB-AEEE-40DED652D62C}"/>
         <Dependency GUID="{B21E9321-F647-47E1-9D72-0B26697B924C}"/>
         <Dependency GUID="{64FF34CD-EFA7-429C-BD55-D07FFB325ECA}"/>
+        <Dependency GUID="{4258E16B-9C27-41A8-B67D-851E9C968BC4}"/>
       </Dependency>
     </Dependencies>
   </Default.Personality>
