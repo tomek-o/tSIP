@@ -145,6 +145,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	trIcon->SetIcon(Application->Icon);
 	trIcon->ShowInTray(true);
 
+	TfrmLuaScript::SetCallbackRunScript(&RunScript);
+
 	if (appSettings.frmMain.trayNotificationImage != "")
 	{
 		Graphics::TBitmap *bmp = new Graphics::TBitmap();
@@ -2710,7 +2712,7 @@ void __fastcall TfrmMain::tmrClearCallStateTimer(TObject *Sender)
 
 void __fastcall TfrmMain::miScriptingClick(TObject *Sender)
 {
-	TfrmLuaScript *frmLuaScript = new TfrmLuaScript(this, &RunScript);
+	TfrmLuaScript *frmLuaScript = new TfrmLuaScript(this);
 	//frmLuaScript->SetScript(asScript);
 	bool modal = false;
 	if (modal)

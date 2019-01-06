@@ -13,6 +13,7 @@
 #include <ExtCtrls.hpp>
 #include <Dialogs.hpp>
 #include <CheckLst.hpp>
+#include <Buttons.hpp>
 
 #include <vector>
 
@@ -277,6 +278,14 @@ __published:	// IDE-managed Components
 	TEdit *edFrmMainCustomApplicationTitle;
 	TCheckBox *chbFrmMainUseCustomCaption;
 	TEdit *edFrmMainCustomCaption;
+	TBitBtn *btnSelectedScriptOnMakeCallEdit;
+	TBitBtn *btnSelectedScriptOnCallStateEdit;
+	TBitBtn *btnSelectedScriptOnStreamingStateEdit;
+	TBitBtn *btnSelectedScriptOnRegistrationStateEdit;
+	TBitBtn *btnSelectedScriptOnStartupEdit;
+	TBitBtn *btnSelectedScriptOnTimerEdit;
+	TBitBtn *btnSelectedScriptOnDialogInfoEdit;
+	TBitBtn *btnSelectedScriptOnDialEdit;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -307,6 +316,7 @@ __published:	// IDE-managed Components
 	void __fastcall chbAudioPreprocessingTxEnabledClick(TObject *Sender);
 	void __fastcall btnSelectedScriptClick(TObject *Sender);
 	void __fastcall cbSoundRingOutputModChange(TObject *Sender);
+	void __fastcall btnSelectedScriptEditClick(TObject *Sender);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
 	void FillDevList(TComboBox *target, int module, bool out, AnsiString selected);

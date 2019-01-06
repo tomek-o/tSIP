@@ -32,7 +32,6 @@ object frmMain: TfrmMain
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitTop = 381
   end
   object pnlMain: TPanel
     Left = 0
@@ -42,7 +41,6 @@ object frmMain: TfrmMain
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 381
     object lblCallState: TLabel
       Left = 8
       Top = 71
@@ -514,7 +512,6 @@ object frmMain: TfrmMain
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitHeight = 377
   end
   object MainMenu: TMainMenu
     Left = 419

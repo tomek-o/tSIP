@@ -9,11 +9,13 @@
 #include "FormPhones.h"
 #include "AudioDevicesList.h"
 #include "ProgrammableButtons.h"
+#include "FormLuaScript.h"
 #include "UaMain.h"
 #include "Registry.hpp"
 #include "Branding.h"
 #include <FileCtrl.hpp>
 #include <assert.h>
+#include <stdio.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -1104,4 +1106,86 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 //---------------------------------------------------------------------------
 
 
+void __fastcall TfrmSettings::btnSelectedScriptEditClick(
+      TObject *Sender)
+{
+	TEdit *edit = NULL;
+	AnsiString eventName;
+	if (Sender == btnSelectedScriptOnMakeCallEdit)
+	{
+		edit = edScriptOnMakeCallFile;
+		eventName = "on_make_call";
+	}
+	else if (Sender == btnSelectedScriptOnCallStateEdit)
+	{
+		edit = edScriptOnCallStateChangeFile;
+		eventName = "on_call_state";
+	}
+	else if (Sender == btnSelectedScriptOnStreamingStateEdit)
+	{
+		edit = edScriptOnStreamingStateChangeFile;
+		eventName = "on_streaming_state";
+	}
+	else if (Sender == btnSelectedScriptOnRegistrationStateEdit)
+	{
+		edit = edScriptOnRegistrationStateChangeFile;
+		eventName = "on_registration_state";
+	}
+	else if (Sender == btnSelectedScriptOnTimerEdit)
+	{
+		edit = edScriptOnTimerFile;
+		eventName = "on_timer";
+	}
+	else if (Sender == btnSelectedScriptOnStartupEdit)
+	{
+		edit = edScriptOnStartupFile;
+		eventName = "on_startup";
+	}
+	else if (Sender == btnSelectedScriptOnDialogInfoEdit)
+	{
+		edit = edScriptOnDialogInfoFile;
+		eventName = "on_dialog_info";
+	}
+	else if (Sender == btnSelectedScriptOnDialEdit)
+	{
+		edit = edScriptOnDialFile;
+		eventName = "on_dial";
+    }
+	else
+	{
+		assert(0);
+		return;
+	}
+	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\scripts";
+	ForceDirectories(dir);
+	AnsiString file = dir + "\\";
+	if (edit->Text != "")
+	{
+		file += edit->Text;
+	}
+	else
+	{
+		AnsiString name = eventName + "_" + FormatDateTime("yyyymmdd_hhnnss_zzz", Now()) + ".lua";
+		file += name;
+		edit->Text = name;
+	}
+	if (!FileExists(file))
+	{
+		FILE *fp = fopen(file.c_str(), "wb");
+		if (fp)
+		{
+			fclose(fp);
+		}
+		else
+		{
+			MessageBox(this->Handle, "Could not create file in \"script\" subdirectory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+			return;
+		}
+	}
+
+	TfrmLuaScript *frmLuaScript = new TfrmLuaScript(NULL);
+	frmLuaScript->Show();
+	frmLuaScript->OpenFile(file);
+}
+//---------------------------------------------------------------------------
 

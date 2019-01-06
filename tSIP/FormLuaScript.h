@@ -10,7 +10,6 @@
 #include <ExtCtrls.hpp>
 //---------------------------------------------------------------------------
 
-#include "ScriptExec.h"
 #include <ComCtrls.hpp>
 #include <Menus.hpp>
 #include <Dialogs.hpp>
@@ -50,14 +49,11 @@ __published:	// IDE-managed Components
 	void __fastcall miFileClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 private:	// User declarations
-	typedef int (__closure *CallbackRunScript)(int srcType, int srcId, AnsiString script, bool &breakRequest);
-	CallbackRunScript callbackRunScript;
 	bool breakRequest;
 	volatile bool running;
 	TfrmTextEditor *frmEditor;
 	void UpdateExamplesMenu(void);
 	void __fastcall LoadExample(TObject *Sender);
-	void OpenFile(AnsiString filename);
 	AnsiString asCurrentFile;
 	bool modified;
 	void SetTitle(AnsiString filename, bool modified);
@@ -71,10 +67,11 @@ private:	// User declarations
 	void SetText(AnsiString text);
 	int OnGetCurrentFileName(AnsiString &filename);
 public:		// User declarations
-	__fastcall TfrmLuaScript(TComponent* Owner,
-		CallbackRunScript callbackRunScript
-		);
+	__fastcall TfrmLuaScript(TComponent* Owner);
+	typedef int (__closure *CallbackRunScript)(int srcType, int srcId, AnsiString script, bool &breakRequest);
+	static void SetCallbackRunScript(CallbackRunScript cb);
 	void SetScript(AnsiString asString);
+	void OpenFile(AnsiString filename);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmLuaScript *frmLuaScript;

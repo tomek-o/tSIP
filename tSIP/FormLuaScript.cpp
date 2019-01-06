@@ -5,23 +5,35 @@
 
 #include "FormLuaScript.h"
 #include "FormTextEditor.h"
+#include "ScriptExec.h"
 #include "common/BtnController.h"
 #include "LuaExamples.h"
 #include "Settings.h"
 #include "ScriptSource.h"
 #include <memory>
+#include <assert.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TfrmLuaScript *frmLuaScript = NULL;
 //---------------------------------------------------------------------------
 
-__fastcall TfrmLuaScript::TfrmLuaScript(TComponent* Owner,
-	CallbackRunScript callbackRunScript
-	)
+namespace
+{
+
+TfrmLuaScript::CallbackRunScript callbackRunScript = NULL;
+
+}
+
+void TfrmLuaScript::SetCallbackRunScript(CallbackRunScript cb)
+{
+	assert(cb);
+	callbackRunScript = cb;	
+}
+
+__fastcall TfrmLuaScript::TfrmLuaScript(TComponent* Owner)
 	:
 	TForm(Owner),
-	callbackRunScript(callbackRunScript),
 	breakRequest(false),
 	running(false),
 	modified(false)
