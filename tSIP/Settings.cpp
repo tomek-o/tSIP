@@ -22,60 +22,86 @@ inline void strncpyz(char* dst, const char* src, int dstsize) {
 	dst[dstsize-1] = '\0';
 }
 
-void Settings::SetDefault(void)
+Settings::_frmMain::_frmMain(void):
+	iPosX(30),
+	iPosY(30),
+	iWidth(350),
+	iHeight(300),
+	bWindowMaximized(false),
+	bAlwaysOnTop(false),
+	bStartMinimizedToTray(false),	
+    bSpeedDialVisible(false),
+	iSpeedDialSize(2),
+	iSpeedDialWidth(105),
+	bSpeedDialOnly(false),
+	bSpeedDialPopupMenu(true),
+	bSpeedDialIgnorePresenceNote(false),
+	bSpeedDialIgnoreDialogInfoRemoteIdentity(false),
+	bXBtnMinimize(false),
+	bRestoreOnIncomingCall(false),
+	bSingleInstance(false),
+	bNoBeepOnEnterKey(false),
+	bHideSettings(false),
+	bHideView(false),
+	bHideHelp(false),
+	bKioskMode(false),
+	bHideMouseCursor(false),
+	bShowWhenAnsweringCall(false),
+	bUseCustomCaption(false),
+	customCaption(Branding::appName),
+	bUseCustomApplicationTitle(false),
+	customApplicationTitle(Branding::appName)
 {
-    info.appVersion.SetDefault();
+}
 
-	frmMain.iWidth = 350;
-	frmMain.iHeight = 300;
-	frmMain.iPosX = 30;
-	frmMain.iPosY = 30;
-	frmMain.bWindowMaximized = false;
-	frmMain.bAlwaysOnTop = false;
-	frmMain.bSpeedDialOnly = false;
-	frmMain.bSpeedDialPopupMenu = true;
-	frmMain.bSpeedDialIgnorePresenceNote = false;
-	frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = false;
-	frmMain.bXBtnMinimize = false;
-	frmMain.bRestoreOnIncomingCall = false;
-	frmMain.bSingleInstance = false;
-	frmMain.bNoBeepOnEnterKey = false;
-	frmMain.bHideSettings = false;
-	frmMain.bHideView = false;
-	frmMain.bHideHelp = false;
-	frmMain.bKioskMode = false;
-	frmMain.bHideMouseCursor = false;
-	frmMain.bShowWhenAnsweringCall = false;
-	frmMain.bUseCustomCaption = false;
-	frmMain.customCaption = Branding::appName;
-	frmMain.bUseCustomApplicationTitle = false;
-	frmMain.customApplicationTitle = Branding::appName;
+Settings::_frmTrayNotifier::_frmTrayNotifier(void):
+	iHeight(105),
+	iWidth(213),
+	iPosX(30),	// overriden later, depending on screen size
+	iPosY(30),	// overriden later, depending on screen size
+	showOnIncoming(false),
+	skipIfMainWindowVisible(false),
+	showOnOutgoing(false),
+	hideWhenAnsweringCall(false),
+	scalingPct(SCALING_DEF)
+{
+	int maxX = GetSystemMetrics(SM_CXSCREEN);
+	/** \todo Ugly fixed taskbar margin */
+	int maxY = GetSystemMetrics(SM_CYSCREEN) - 32;
+	iPosX = maxX - iWidth;
+	iPosY = maxY - iHeight;
+}
 
-    frmTrayNotifier.hideWhenAnsweringCall = false;
+Settings::_frmContactPopup::_frmContactPopup(void):
+	showOnIncoming(false),
+	showOnOutgoing(false),
+	iPosX(100),
+	iPosY(100),
+	iWidth(400),
+	iHeight(140)
+{
+}
 
-	frmContactPopup.showOnIncoming = false;
-	frmContactPopup.showOnOutgoing = false;
-	frmContactPopup.iPosX = 100;
-	frmContactPopup.iPosY = 100;
-	frmContactPopup.iWidth = 400;
-	frmContactPopup.iHeight = 140;
-
-	gui.scalingPct = 100;
-
-	frmTrayNotifier.scalingPct = _frmTrayNotifier::SCALING_DEF;
-
-	Logging.bLogToFile = false;
-	Logging.bFlush = false;
-	Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
-	Logging.iLogRotate = Settings::_Logging::DEF_LOGROTATE;
-	Logging.iMaxUiLogLines = 5000;
-
-    Calls.extraHeaderLines = "";
+Settings::Settings(void)
+{
+	int maxX = GetSystemMetrics(SM_CXSCREEN);
+	/** \todo Ugly fixed taskbar margin */
+	int maxY = GetSystemMetrics(SM_CYSCREEN) - 32;
+	
+	frmTrayNotifier.iPosX = maxX - frmTrayNotifier.iWidth;
+	frmTrayNotifier.iPosY = maxY - frmTrayNotifier.iHeight;
 
 	Display.bUserOnlyClip = false;
 	Display.bDecodeUtfDisplayToAnsi = false;
 
+	Integration.bAddFilterWMCopyData = false;
 	Integration.asProtocol = Branding::appProto;
+
+	Ring.defaultRing = "ring.wav";
+	for (int i=0; i<sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]); i++)
+	{
+		Ring.bellcore[i] = "ring.wav";
+	}
 
 	HttpQuery.url = "https://www.google.com/search?q=[number]";
 	HttpQuery.openMode = _HttpQuery::openManualOnly;
@@ -85,12 +111,6 @@ void Settings::SetDefault(void)
 
 	History.bNoStoreToFile = false;
 
-	Ring.defaultRing = "ring.wav";
-	for (int i=0; i<sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]); i++)
-	{
-		Ring.bellcore[i] = "ring.wav";
-	}
-
 	Scripts.timer = 1000;
 
 	uaConf.accounts.clear();
@@ -98,15 +118,13 @@ void Settings::SetDefault(void)
 	struct UaConf::Account new_acc;
 	uaConf.accounts.push_back(new_acc);
 
-	ScriptWindow.ClearMruItems();
+	ScriptWindow.ClearMruItems();	
 }
 
 int Settings::Read(AnsiString asFileName)
 {
 	Json::Value root;   // will contains the root value after parsing.
 	Json::Reader reader;
-
-    SetDefault();
 
 	try
 	{
@@ -130,388 +148,466 @@ int Settings::Read(AnsiString asFileName)
 		info.appVersion.FileVersionLS = jv.get("FileVersionLS", info.appVersion.FileVersionLS).asUInt();
 	}
 
-	const Json::Value &uaConfJson = root["uaConf"];
-	const Json::Value &uaConfAudioCfgSrcJson = uaConfJson["audioCfgSrc"];
-	strncpyz(uaConf.audioCfgSrc.mod, uaConfAudioCfgSrcJson.get("mod", UaConf::modWinwave).asString().c_str(), sizeof(uaConf.audioCfgSrc.mod));
-	strncpyz(uaConf.audioCfgSrc.dev, uaConfAudioCfgSrcJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgSrc.dev));
-	strncpyz(uaConf.audioCfgSrc.wavefile, uaConfAudioCfgSrcJson["wavefile"].asString().c_str(), sizeof(uaConf.audioCfgSrc.wavefile));
-	if (strcmp(uaConf.audioCfgSrc.mod, UaConf::modPortaudio) &&
-		strcmp(uaConf.audioCfgSrc.mod, UaConf::modWinwave) &&
-		strcmp(uaConf.audioCfgSrc.mod, UaConf::modAufile) &&
-		strcmp(uaConf.audioCfgSrc.mod, UaConf::modNullaudio)
-		) {
-		strncpyz(uaConf.audioCfgSrc.mod, UaConf::modWinwave, sizeof(uaConf.audioCfgSrc.mod));
-	}
-
-	const Json::Value &uaConfAudioCfgPlayJson = uaConfJson["audioCfgPlay"];
-	strncpyz(uaConf.audioCfgPlay.mod, uaConfAudioCfgPlayJson.get("mod", UaConf::modWinwave).asString().c_str(), sizeof(uaConf.audioCfgPlay.mod));
-	strncpyz(uaConf.audioCfgPlay.dev, uaConfAudioCfgPlayJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgPlay.dev));
-	if (strcmp(uaConf.audioCfgPlay.mod, UaConf::modPortaudio) &&
-		strcmp(uaConf.audioCfgPlay.mod, UaConf::modWinwave) &&
-		strcmp(uaConf.audioCfgPlay.mod, UaConf::modNullaudio)
-		) {
-		strncpyz(uaConf.audioCfgPlay.mod, UaConf::modWinwave, sizeof(uaConf.audioCfgPlay.mod));
-	}
-	const Json::Value &uaConfAudioCfgAlertJson = uaConfJson["audioCfgAlert"];
-	strncpyz(uaConf.audioCfgAlert.mod, uaConfAudioCfgAlertJson.get("mod", UaConf::modWinwave).asString().c_str(), sizeof(uaConf.audioCfgAlert.mod));
-	strncpyz(uaConf.audioCfgAlert.dev, uaConfAudioCfgAlertJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgAlert.dev));
-	if (strcmp(uaConf.audioCfgAlert.mod, UaConf::modPortaudio) &&
-		strcmp(uaConf.audioCfgAlert.mod, UaConf::modWinwave) &&
-		strcmp(uaConf.audioCfgAlert.mod, UaConf::modNullaudio)
-		) {
-		strncpyz(uaConf.audioCfgAlert.mod, UaConf::modWinwave, sizeof(uaConf.audioCfgAlert.mod));
-	}
 	{
-		Settings::_info::_appVersion verCfgRingAdded;
-		verCfgRingAdded.FileVersionMS = 1;
-		verCfgRingAdded.FileVersionLS = 3866629;
-		if (info.appVersion < verCfgRingAdded)
+		const Json::Value &uaConfJson = root["uaConf"];
+
 		{
-			// new setting added, separated from "alert" - copy alert if found settings from older version
-			strncpyz(uaConf.audioCfgRing.mod, uaConf.audioCfgAlert.mod, sizeof(uaConf.audioCfgRing.mod));
-			strncpyz(uaConf.audioCfgRing.dev, uaConf.audioCfgAlert.dev, sizeof(uaConf.audioCfgRing.dev));
-		}
-		else
-		{
-			const Json::Value &uaConfAudioCfgRingJson = uaConfJson["audioCfgRing"];
-			strncpyz(uaConf.audioCfgRing.mod, uaConfAudioCfgRingJson.get("mod", UaConf::modWinwave).asString().c_str(), sizeof(uaConf.audioCfgRing.mod));
-			strncpyz(uaConf.audioCfgRing.dev, uaConfAudioCfgRingJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgRing.dev));
-			if (strcmp(uaConf.audioCfgRing.mod, UaConf::modPortaudio) &&
-				strcmp(uaConf.audioCfgRing.mod, UaConf::modWinwave) &&
-				strcmp(uaConf.audioCfgRing.mod, UaConf::modNullaudio)
+			const Json::Value &uaConfAudioCfgSrcJson = uaConfJson["audioCfgSrc"];
+			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
+			strncpyz(str, uaConfAudioCfgSrcJson.get("mod", uaConf.audioCfgSrc.mod).asString().c_str(), sizeof(str));
+			if (!strcmp(str, UaConf::modPortaudio) ||
+				!strcmp(str, UaConf::modWinwave) ||
+				!strcmp(str, UaConf::modAufile) ||
+				!strcmp(str, UaConf::modNullaudio)
 				) {
-				strncpyz(uaConf.audioCfgRing.mod, UaConf::modWinwave, sizeof(uaConf.audioCfgRing.mod));
+				strncpyz(uaConf.audioCfgSrc.mod, str, sizeof(uaConf.audioCfgSrc.mod));
 			}
+			strncpyz(uaConf.audioCfgSrc.dev, uaConfAudioCfgSrcJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgSrc.dev));
+			strncpyz(uaConf.audioCfgSrc.wavefile, uaConfAudioCfgSrcJson["wavefile"].asString().c_str(), sizeof(uaConf.audioCfgSrc.wavefile));
 		}
-	}
-	const Json::Value &uaConfAudioCfgPlayIntercomJson = uaConfJson["audioCfgPlayIntercom"];
-	strncpyz(uaConf.audioCfgPlayIntercom.mod, uaConfAudioCfgPlayIntercomJson.get("mod", UaConf::modWinwave).asString().c_str(), sizeof(uaConf.audioCfgPlayIntercom.mod));
-	strncpyz(uaConf.audioCfgPlayIntercom.dev, uaConfAudioCfgPlayIntercomJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgPlayIntercom.dev));
-	if (strcmp(uaConf.audioCfgPlayIntercom.mod, UaConf::modPortaudio) &&
-		strcmp(uaConf.audioCfgPlayIntercom.mod, UaConf::modWinwave) &&
-		strcmp(uaConf.audioCfgPlayIntercom.mod, UaConf::modNullaudio)
-		) {
-		strncpyz(uaConf.audioCfgPlayIntercom.mod, UaConf::modWinwave, sizeof(uaConf.audioCfgPlayIntercom.mod));
-	}
 
-	const Json::Value &uaConfAudioSoftVol = uaConfJson["audioSoftVol"];
-	uaConf.audioSoftVol.tx = uaConfAudioSoftVol.get("tx", uaConf.audioSoftVol.tx).asUInt();
-	uaConf.audioSoftVol.rx = uaConfAudioSoftVol.get("rx", uaConf.audioSoftVol.rx).asUInt();
-
-	if (Branding::recording)
-	{
-		const Json::Value &uaConfRecordingJson = uaConfJson["recording"];
-		uaConf.recording.enabled = uaConfRecordingJson.get("enabled", false).asBool();
-		uaConf.recording.recDir = static_cast<UaConf::RecordingCfg::RecDir>(uaConfRecordingJson.get("recDir", UaConf::RecordingCfg::RecDirRelative).asInt());
-		if (uaConf.recording.recDir < 0 || uaConf.recording.recDir >= UaConf::RecordingCfg::RecDirLimiter) {
-			uaConf.recording.recDir = UaConf::RecordingCfg::RecDirRelative;
-		}
-		uaConf.recording.customRecDir = uaConfRecordingJson.get("customRecDir", "").asString();
-		uaConf.recording.channels = uaConfRecordingJson.get("channels", uaConf.recording.channels).asUInt();
-		if (uaConf.recording.channels < UaConf::RecordingCfg::CHANNELS_MIN || uaConf.recording.channels > UaConf::RecordingCfg::CHANNELS_MAX) {
-			uaConf.recording.channels = UaConf::RecordingCfg::CHANNELS_MIN;
-		}
-		enum UaConf::RecStart recStart = uaConfRecordingJson.get("recStart", uaConf.recording.recStart).asInt();
-		if (recStart >= 0 && recStart < UaConf::RecordingCfg::RecStartLimiter) {
-			uaConf.recording.recStart = static_cast<UaConf::RecordingCfg::RecStart>(recStart);
-        }
-	}
-	else
-	{
-		uaConf.recording.enabled = false;
-	}
-
-	const Json::Value &uaConfAudioPreprocTxJson = uaConfJson["audioPreprocTx"];
-	uaConf.audioPreprocTx.enabled = uaConfAudioPreprocTxJson.get("enabled", uaConf.audioPreprocTx.enabled).asBool();
-	uaConf.audioPreprocTx.denoiseEnabled = uaConfAudioPreprocTxJson.get("denoiseEnabled", uaConf.audioPreprocTx.denoiseEnabled).asBool();
-	uaConf.audioPreprocTx.agcEnabled = uaConfAudioPreprocTxJson.get("agcEnabled", uaConf.audioPreprocTx.agcEnabled).asBool();
-	uaConf.audioPreprocTx.vadEnabled = uaConfAudioPreprocTxJson.get("vadEnabled", uaConf.audioPreprocTx.vadEnabled).asBool();
-	uaConf.audioPreprocTx.dereverbEnabled = uaConfAudioPreprocTxJson.get("dereverbEnabled", uaConf.audioPreprocTx.dereverbEnabled).asBool();
-	uaConf.audioPreprocTx.agcLevel = uaConfAudioPreprocTxJson.get("agcLevel", uaConf.audioPreprocTx.agcLevel).asInt();
-
-	uaConf.aec = (enum UaConf::Aec)uaConfJson.get("aec", UaConf::AEC_WEBRTC).asInt();
-	if (uaConf.aec < 0 || uaConf.aec >= UaConf::AEC_LIMIT)
-	{
-    	uaConf.aec = UaConf::AEC_WEBRTC;
-	}
-
-	const Json::Value &webrtcAec = uaConfJson["webrtcAec"];
-	uaConf.webrtcAec.msInSndCardBuf = webrtcAec.get("msInSndCardBuf", 120).asInt();
-	uaConf.webrtcAec.skew = webrtcAec.get("skew", 0).asInt();
-
-	uaConf.logMessages = uaConfJson.get("logMessages", false).asBool();
-	uaConf.local = uaConfJson.get("localAddress", "").asString();
-	uaConf.ifname = uaConfJson.get("ifName", "").asString();
-
-	const Json::Value &uaAvtJson = uaConfJson["avt"];
-	uaConf.avt.portMin = uaAvtJson.get("portMin", uaConf.avt.portMin).asUInt();
-	uaConf.avt.portMax = uaAvtJson.get("portMax", uaConf.avt.portMax).asUInt();
-	uaConf.avt.jbufDelayMin = uaAvtJson.get("jbufDelayMin", uaConf.avt.jbufDelayMin).asUInt();
-	uaConf.avt.jbufDelayMax = uaAvtJson.get("jbufDelayMax", uaConf.avt.jbufDelayMax).asUInt();
-	uaConf.avt.rtpTimeout = uaAvtJson.get("rtpTimeout", uaConf.avt.rtpTimeout).asUInt();
-	uaConf.avt.Validate();	
-
-	uaConf.autoAnswer = uaConfJson.get("autoAnswer", false).asBool();
-	uaConf.autoAnswerCode = uaConfJson.get("autoAnswerCode", 200).asInt();
-	uaConf.autoAnswerDelayMin = uaConfJson.get("autoAnswerDelayMin", 0). asUInt();
-	uaConf.autoAnswerDelayMax = uaConfJson.get("autoAnswerDelayMax", 0). asUInt();
-	if (uaConf.autoAnswerDelayMin > uaConf.autoAnswerDelayMax)
-	{
-		uaConf.autoAnswerDelayMin = 0;
-		uaConf.autoAnswerDelayMax = 0;
-	}
-	uaConf.autoAnswerCallInfo = uaConfJson.get("autoAnswerCallInfo", false).asBool();
-	uaConf.autoAnswerCallInfoDelayMin = uaConfJson.get("autoAnswerCallInfoDelayMin", 0).asUInt();
-
-	uaConf.answerOnEventTalk = uaConfJson.get("answerOnEventTalk", false).asBool();
-
-	uaConf.handleOodRefer = uaConfJson.get("handleOodRefer", uaConf.handleOodRefer).asBool();
-
-	uaConf.customUserAgent = uaConfJson.get("customUserAgent", false).asBool();
-	uaConf.userAgent = uaConfJson.get("userAgent", "").asString();
-
-	const Json::Value &accounts = root["Accounts"];
-	//uaConf.accounts.clear();
-	for (int i=0; i<std::min(1u, accounts.size()); i++)
-	{
-		const Json::Value &acc = accounts[i];
-		struct UaConf::Account new_acc;
-
-		new_acc.reg_server = acc.get("reg_server", "").asString();
-		new_acc.user = acc.get("user", "").asString();
-		new_acc.auth_user = acc.get("auth_user", "").asString();
-		new_acc.pwd = acc.get("pwd", "").asString();
-		new_acc.cuser = acc.get("cuser", "").asString();
-		new_acc.transport =
-			(UaConf::Account::TRANSPORT_TYPE)acc.get("transport", UaConf::Account::TRANSPORT_UDP).asInt();
-		if (new_acc.transport < 0 || new_acc.transport >= UaConf::Account::TRANSPORT_LIMITER)
 		{
-			new_acc.transport = UaConf::Account::TRANSPORT_UDP;
+			const Json::Value &uaConfAudioCfgPlayJson = uaConfJson["audioCfgPlay"];
+			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
+			strncpyz(str, uaConfAudioCfgPlayJson.get("mod", uaConf.audioCfgPlay.mod).asString().c_str(), sizeof(str));
+			if (!strcmp(str, UaConf::modPortaudio) ||
+				!strcmp(str, UaConf::modWinwave) ||
+				!strcmp(str, UaConf::modNullaudio)
+				) {
+				strncpyz(uaConf.audioCfgPlay.mod, str, sizeof(uaConf.audioCfgPlay.mod));
+			}
+			strncpyz(uaConf.audioCfgPlay.dev, uaConfAudioCfgPlayJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgPlay.dev));
 		}
-		// do not register by default
-		// (long timeout when unregistering from non-existing server, when application is closing
-		// or when account settings are changed to valid)
-		new_acc.reg_expires = acc.get("reg_expires", 0).asInt();
-		if (new_acc.reg_expires < 0 || new_acc.reg_expires > 7200)
+
 		{
-			new_acc.reg_expires = 60;
+			const Json::Value &uaConfAudioCfgAlertJson = uaConfJson["audioCfgAlert"];
+			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
+			strncpyz(str, uaConfAudioCfgAlertJson.get("mod", uaConf.audioCfgAlert.mod).asString().c_str(), sizeof(str));
+			if (!strcmp(str, UaConf::modPortaudio) ||
+				!strcmp(str, UaConf::modWinwave) ||
+				!strcmp(str, UaConf::modNullaudio)
+				) {
+				strncpyz(uaConf.audioCfgAlert.mod, str, sizeof(uaConf.audioCfgAlert.mod));
+			}
+			strncpyz(uaConf.audioCfgAlert.dev, uaConfAudioCfgAlertJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgAlert.dev));
 		}
-		new_acc.answer_any = acc.get("answer_any", false).asBool();
-		new_acc.ptime = acc.get("ptime", new_acc.ptime).asInt();
-		if (new_acc.ptime < UaConf::Account::MIN_PTIME || new_acc.ptime > UaConf::Account::MAX_PTIME)
+		
 		{
-			new_acc.ptime = UaConf::Account::DEF_PTIME;
-        }
-
-		new_acc.stun_server = acc.get("stun_server", "").asString();
-		new_acc.outbound1 = acc.get("outbound1", "").asString();
-		new_acc.outbound2 = acc.get("outbound2", "").asString();
-
-		const Json::Value &audio_codecs = acc["audio_codecs"];
-		if (audio_codecs.type() == Json::arrayValue)
-		{
-            new_acc.audio_codecs.clear();
-			for (int i=0; i<audio_codecs.size(); i++)
+			Settings::_info::_appVersion verCfgRingAdded;
+			verCfgRingAdded.FileVersionMS = 1;
+			verCfgRingAdded.FileVersionLS = 3866629;
+			if (info.appVersion < verCfgRingAdded)
 			{
-				const Json::Value &codec = audio_codecs[i];
-				new_acc.audio_codecs.push_back(codec.asString());
+				// new setting added, separated from "alert" - copy alert if found settings from older version
+				strncpyz(uaConf.audioCfgRing.mod, uaConf.audioCfgAlert.mod, sizeof(uaConf.audioCfgRing.mod));
+				strncpyz(uaConf.audioCfgRing.dev, uaConf.audioCfgAlert.dev, sizeof(uaConf.audioCfgRing.dev));
+			}
+			else
+			{
+				const Json::Value &uaConfAudioCfgRingJson = uaConfJson["audioCfgRing"];
+				char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
+				strncpyz(str, uaConfAudioCfgRingJson.get("mod", uaConf.audioCfgRing.mod).asString().c_str(), sizeof(str));
+				if (!strcmp(str, UaConf::modPortaudio) ||
+					!strcmp(str, UaConf::modWinwave) ||
+					!strcmp(str, UaConf::modNullaudio)
+					) {
+					strncpyz(uaConf.audioCfgRing.mod, str, sizeof(uaConf.audioCfgRing.mod));
+				}
+				strncpyz(uaConf.audioCfgRing.dev, uaConfAudioCfgRingJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgRing.dev));
+			}
+		}
+
+		{
+			const Json::Value &uaConfAudioCfgPlayIntercomJson = uaConfJson["audioCfgPlayIntercom"];
+			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
+			strncpyz(str, uaConfAudioCfgPlayIntercomJson.get("mod", uaConf.audioCfgPlayIntercom.mod).asString().c_str(), sizeof(str));
+			if (!strcmp(str, UaConf::modPortaudio) ||
+				!strcmp(str, UaConf::modWinwave) ||
+				!strcmp(str, UaConf::modNullaudio)
+				) {
+				strncpyz(uaConf.audioCfgPlayIntercom.mod, str, sizeof(uaConf.audioCfgPlayIntercom.mod));
+			}
+			strncpyz(uaConf.audioCfgPlayIntercom.dev, uaConfAudioCfgPlayIntercomJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgPlayIntercom.dev));
+		}
+
+		{
+			const Json::Value &uaConfAudioSoftVol = uaConfJson["audioSoftVol"];
+			uaConf.audioSoftVol.tx = uaConfAudioSoftVol.get("tx", uaConf.audioSoftVol.tx).asUInt();
+			uaConf.audioSoftVol.rx = uaConfAudioSoftVol.get("rx", uaConf.audioSoftVol.rx).asUInt();
+        }
+
+		if (Branding::recording)
+		{
+			const Json::Value &uaConfRecordingJson = uaConfJson["recording"];
+			uaConf.recording.enabled = uaConfRecordingJson.get("enabled", uaConf.recording.enabled).asBool();
+			UaConf::RecordingCfg::RecDir recDir = static_cast<UaConf::RecordingCfg::RecDir>(uaConfRecordingJson.get("recDir", uaConf.recording.recDir).asInt());
+			if (recDir >= 0 && uaConf.recording.recDir < UaConf::RecordingCfg::RecDirLimiter) {
+				uaConf.recording.recDir = recDir;
+			}
+			uaConf.recording.customRecDir = uaConfRecordingJson.get("customRecDir", uaConf.recording.customRecDir).asString();
+			unsigned int channels = uaConfRecordingJson.get("channels", uaConf.recording.channels).asUInt();
+			if (channels >= UaConf::RecordingCfg::CHANNELS_MIN && channels <= UaConf::RecordingCfg::CHANNELS_MAX) {
+				uaConf.recording.channels = channels;
+			}
+			UaConf::RecordingCfg::RecStart recStart = static_cast<UaConf::RecordingCfg::RecStart>(uaConfRecordingJson.get("recStart", uaConf.recording.recStart).asInt());
+			if (recStart >= 0 && recStart < UaConf::RecordingCfg::RecStartLimiter) {
+				uaConf.recording.recStart = recStart;
 			}
 		}
 		else
 		{
-			// default
-			new_acc.audio_codecs.push_back("PCMU/8000/1");
-			new_acc.audio_codecs.push_back("PCMA/8000/1");
+			uaConf.recording.enabled = false;
 		}
 
-		uaConf.accounts[0] = new_acc;
+		{
+			const Json::Value &uaConfAudioPreprocTxJson = uaConfJson["audioPreprocTx"];
+			uaConf.audioPreprocTx.enabled = uaConfAudioPreprocTxJson.get("enabled", uaConf.audioPreprocTx.enabled).asBool();
+			uaConf.audioPreprocTx.denoiseEnabled = uaConfAudioPreprocTxJson.get("denoiseEnabled", uaConf.audioPreprocTx.denoiseEnabled).asBool();
+			uaConf.audioPreprocTx.agcEnabled = uaConfAudioPreprocTxJson.get("agcEnabled", uaConf.audioPreprocTx.agcEnabled).asBool();
+			uaConf.audioPreprocTx.vadEnabled = uaConfAudioPreprocTxJson.get("vadEnabled", uaConf.audioPreprocTx.vadEnabled).asBool();
+			uaConf.audioPreprocTx.dereverbEnabled = uaConfAudioPreprocTxJson.get("dereverbEnabled", uaConf.audioPreprocTx.dereverbEnabled).asBool();
+			uaConf.audioPreprocTx.agcLevel = uaConfAudioPreprocTxJson.get("agcLevel", uaConf.audioPreprocTx.agcLevel).asInt();
+		}
+
+		{
+			UaConf::Aec aec = static_cast<UaConf::Aec>(uaConfJson.get("aec", uaConf.aec).asInt());
+			if (aec >= 0 && uaConf.aec < UaConf::AEC_LIMIT)
+			{
+				uaConf.aec = aec;
+			}
+		}
+
+		{
+			const Json::Value &webrtcAec = uaConfJson["webrtcAec"];
+			uaConf.webrtcAec.msInSndCardBuf = webrtcAec.get("msInSndCardBuf", uaConf.webrtcAec.msInSndCardBuf).asInt();
+			uaConf.webrtcAec.skew = webrtcAec.get("skew", uaConf.webrtcAec.skew).asInt();
+		}
+
+		uaConf.logMessages = uaConfJson.get("logMessages", uaConf.logMessages).asBool();
+		uaConf.local = uaConfJson.get("localAddress", uaConf.local).asString();
+		uaConf.ifname = uaConfJson.get("ifName", uaConf.ifname).asString();
+
+		{
+			const Json::Value &uaAvtJson = uaConfJson["avt"];
+			UaConf::Avt prev = uaConf.avt;
+			uaConf.avt.portMin = uaAvtJson.get("portMin", uaConf.avt.portMin).asUInt();
+			uaConf.avt.portMax = uaAvtJson.get("portMax", uaConf.avt.portMax).asUInt();
+			uaConf.avt.jbufDelayMin = uaAvtJson.get("jbufDelayMin", uaConf.avt.jbufDelayMin).asUInt();
+			uaConf.avt.jbufDelayMax = uaAvtJson.get("jbufDelayMax", uaConf.avt.jbufDelayMax).asUInt();
+			uaConf.avt.rtpTimeout = uaAvtJson.get("rtpTimeout", uaConf.avt.rtpTimeout).asUInt();
+			if (uaConf.avt.Validate())
+			{
+				uaConf.avt = prev;
+			}
+		}
+
+		uaConf.autoAnswer = uaConfJson.get("autoAnswer", uaConf.autoAnswer).asBool();
+		uaConf.autoAnswerCode = uaConfJson.get("autoAnswerCode", uaConf.autoAnswerCode).asInt();
+		unsigned int prevAutoAnswerDelayMin = uaConf.autoAnswerDelayMin;
+		unsigned int prevAutoAnswerDelayMax = uaConf.autoAnswerDelayMax;
+		uaConf.autoAnswerDelayMin = uaConfJson.get("autoAnswerDelayMin", uaConf.autoAnswerDelayMin). asUInt();
+		uaConf.autoAnswerDelayMax = uaConfJson.get("autoAnswerDelayMax", uaConf.autoAnswerDelayMax). asUInt();
+		if (uaConf.autoAnswerDelayMin > uaConf.autoAnswerDelayMax)
+		{
+			uaConf.autoAnswerDelayMin = prevAutoAnswerDelayMin;
+			uaConf.autoAnswerDelayMax = prevAutoAnswerDelayMax;
+		}
+		uaConf.autoAnswerCallInfo = uaConfJson.get("autoAnswerCallInfo", uaConf.autoAnswerCallInfo).asBool();
+		uaConf.autoAnswerCallInfoDelayMin = uaConfJson.get("autoAnswerCallInfoDelayMin", uaConf.autoAnswerCallInfoDelayMin).asUInt();
+
+		uaConf.answerOnEventTalk = uaConfJson.get("answerOnEventTalk", uaConf.answerOnEventTalk).asBool();
+
+		uaConf.handleOodRefer = uaConfJson.get("handleOodRefer", uaConf.handleOodRefer).asBool();
+
+		uaConf.customUserAgent = uaConfJson.get("customUserAgent", uaConf.customUserAgent).asBool();
+		uaConf.userAgent = uaConfJson.get("userAgent", uaConf.userAgent).asString();
 	}
 
-	const Json::Value &hotkeyConfJson = root["hotkeyConf"];
-	for (int i=0; i<hotkeyConfJson.size(); i++)
 	{
-		const Json::Value &hotkeyJson = hotkeyConfJson[i];
-		class HotKeyConf cfg;
-		cfg.keyCode = hotkeyJson.get("keyCode", "").asString().c_str();
-		int id = vkey_find(cfg.keyCode.c_str());
-		if (id >= 0)
+		const Json::Value &accounts = root["Accounts"];
+		uaConf.accounts.resize(1);
+		for (int i=0; i<std::min(1u, accounts.size()); i++)
 		{
-        	cfg.vkCode = vkey_list[id].vkey;
-		}
-		else
-		{
-        	cfg.vkCode = -1;
-		}
-		cfg.modifiers = hotkeyJson.get("modifiers", 0).asInt();
-		cfg.global = hotkeyJson.get("global", false).asBool();
-		const Json::Value &action = hotkeyJson["action"];
-		cfg.action.type = static_cast<Action::Type>(action.get("type", 0).asInt());
-		cfg.action.id = action.get("id", 0).asInt();
+			const Json::Value &acc = accounts[i];
+			struct UaConf::Account new_acc = uaConf.accounts[i];
 
-		hotKeyConf.push_back(cfg); 
+			new_acc.reg_server = acc.get("reg_server", new_acc.reg_server).asString();
+			new_acc.user = acc.get("user", new_acc.user).asString();
+			new_acc.auth_user = acc.get("auth_user", new_acc.auth_user).asString();
+			new_acc.pwd = acc.get("pwd", new_acc.pwd).asString();
+			new_acc.cuser = acc.get("cuser", new_acc.cuser).asString();
+			UaConf::Account::TRANSPORT_TYPE transport =
+				(UaConf::Account::TRANSPORT_TYPE)acc.get("transport", new_acc.transport).asInt();
+			if (transport >= 0 && transport < UaConf::Account::TRANSPORT_LIMITER)
+			{
+				new_acc.transport = transport;
+			}
+			// do not register by default
+			// (long timeout when unregistering from non-existing server, when application is closing
+			// or when account settings are changed to valid)
+			int reg_expires = acc.get("reg_expires", new_acc.reg_expires).asInt();
+			if (reg_expires >= 0 && reg_expires < 14400)
+			{
+				new_acc.reg_expires = reg_expires;
+			}
+			new_acc.answer_any = acc.get("answer_any", new_acc.answer_any).asBool();
+			int ptime = acc.get("ptime", new_acc.ptime).asInt();
+			if (ptime >= UaConf::Account::MIN_PTIME && new_acc.ptime < UaConf::Account::MAX_PTIME)
+			{
+				new_acc.ptime = ptime;
+			}
+
+			new_acc.stun_server = acc.get("stun_server", new_acc.stun_server).asString();
+			new_acc.outbound1 = acc.get("outbound1", new_acc.outbound1).asString();
+			new_acc.outbound2 = acc.get("outbound2", new_acc.outbound2).asString();
+
+			const Json::Value &audio_codecs = acc["audio_codecs"];
+			if (audio_codecs.type() == Json::arrayValue)
+			{
+				new_acc.audio_codecs.resize(audio_codecs.size());
+				for (int i=0; i<audio_codecs.size(); i++)
+				{
+					const Json::Value &codec = audio_codecs[i];
+					if (codec.type() == Json::stringValue)
+					{
+						new_acc.audio_codecs[i] = codec.asString();
+					}
+				}
+			}
+
+			uaConf.accounts[0] = new_acc;
+		}
 	}
 
-	const Json::Value &phoneConfJson = root["phoneConf"];
-	for (int i=0; i<phoneConfJson.size(); i++)
 	{
-		const Json::Value &phoneJson = phoneConfJson[i];
-		PhoneConf cfg;
-		cfg.dllName = phoneJson.get("dllName", "").asString().c_str();
-		if (cfg.dllName != "")
+		const Json::Value &hotkeyConfJson = root["hotkeyConf"];
+		if (hotkeyConfJson.type() == Json::arrayValue)
 		{
-        	phoneConf.push_back(cfg);
+            hotKeyConf.resize(hotkeyConfJson.size());
+			std::list<HotKeyConf>::iterator iter = hotKeyConf.begin();
+
+			for (int i=0; i<hotkeyConfJson.size(); i++)
+			{
+				const Json::Value &hotkeyJson = hotkeyConfJson[i];
+				class HotKeyConf &cfg = *iter++;
+				if (hotkeyJson.type() == Json::objectValue)
+				{
+					cfg.keyCode = hotkeyJson.get("keyCode", cfg.keyCode.c_str()).asString().c_str();
+					int id = vkey_find(cfg.keyCode.c_str());
+					if (id >= 0)
+					{
+						cfg.vkCode = vkey_list[id].vkey;
+					}
+					else
+					{
+						cfg.vkCode = -1;
+					}
+					cfg.modifiers = hotkeyJson.get("modifiers", cfg.modifiers).asInt();
+					cfg.global = hotkeyJson.get("global", cfg.global).asBool();
+					const Json::Value &action = hotkeyJson["action"];
+					cfg.action.type = static_cast<Action::Type>(action.get("type", cfg.action.type).asInt());
+					cfg.action.id = action.get("id", cfg.action.id).asInt();
+				}
+			}
 		}
 	}
 
-	const Json::Value &guiJson = root["gui"];
-	gui.scalingPct = guiJson.get("scalingPct", 100).asInt();
-	if (gui.scalingPct < gui.SCALING_MIN || gui.scalingPct > gui.SCALING_MAX) {
-    	gui.scalingPct = 100;    
+	{
+		const Json::Value &phoneConfJson = root["phoneConf"];
+		std::list<PhoneConf>::iterator iter = phoneConf.begin();
+		if (phoneConfJson.type() == Json::arrayValue)
+		{
+            phoneConf.resize(phoneConfJson.size());
+			for (int i=0; i<phoneConfJson.size(); i++)
+			{
+				const Json::Value &phoneJson = phoneConfJson[i];
+				PhoneConf &cfg = *iter++;
+				cfg.dllName = phoneJson.get("dllName", cfg.dllName.c_str()).asString().c_str();
+			}
+		}
+	}
+
+	{
+		const Json::Value &guiJson = root["gui"];
+		int scalingPct = guiJson.get("scalingPct", gui.scalingPct).asInt();
+		if (gui.scalingPct >= gui.SCALING_MIN && gui.scalingPct < gui.SCALING_MAX) {
+			gui.scalingPct = scalingPct;
+		}
 	}
 
 	int maxX = GetSystemMetrics(SM_CXSCREEN);
 	/** \todo Ugly fixed taskbar margin */
 	int maxY = GetSystemMetrics(SM_CYSCREEN) - 32;
 
-	const Json::Value &frmMainJson = root["frmMain"];
-	frmMain.iWidth = frmMainJson.get("AppWidth", 350).asInt();
-	frmMain.iHeight = frmMainJson.get("AppHeight", 300).asInt();
-	if (frmMain.iWidth < 250 || frmMain.iWidth > maxX + 20)
 	{
-		frmMain.iWidth = 250;
-	}
-	if (frmMain.iHeight < 200 || frmMain.iHeight > maxY + 20)
-	{
-		frmMain.iHeight = 200;
-	}
-	frmMain.iPosX = frmMainJson.get("AppPositionX", 30).asInt();
-	frmMain.iPosY = frmMainJson.get("AppPositionY", 30).asInt();
-	if (frmMain.iPosX < 0)
-		frmMain.iPosX = 0;
-	if (frmMain.iPosY < 0)
-		frmMain.iPosY = 0;
-	if (frmMain.iPosX + frmMain.iWidth > maxX)
-		frmMain.iPosX = maxX - frmMain.iWidth;
-	if (frmMain.iPosY + frmMain.iHeight > maxY)
-		frmMain.iPosY = maxY - frmMain.iHeight;
-	frmMain.bWindowMaximized = frmMainJson.get("Maximized", false).asBool();
-	frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", false).asBool();
-	frmMain.bSpeedDialVisible = frmMainJson.get("SpeedDialVisible", false).asBool();
-	frmMain.bSpeedDialOnly = frmMainJson.get("SpeedDialOnly", frmMain.bSpeedDialOnly).asBool();
-	frmMain.bSpeedDialPopupMenu = frmMainJson.get("SpeedDialPopupMenu", frmMain.bSpeedDialPopupMenu).asBool();
-	frmMain.bSpeedDialIgnorePresenceNote = frmMainJson.get("SpeedDialIgnorePresenceNote", frmMain.bSpeedDialIgnorePresenceNote).asBool();
-	frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();	
-	frmMain.iSpeedDialSize = frmMainJson.get("SpeedDialSize", 1).asUInt();
-	if (frmMain.iSpeedDialSize > ProgrammableButtons::EXT_CONSOLE_COLUMNS)
-		frmMain.iSpeedDialSize = 0;
-	frmMain.iSpeedDialWidth = frmMainJson.get("SpeedDialWidth", 105).asUInt();
-	if (frmMain.iSpeedDialWidth < 50 || frmMain.iSpeedDialWidth > 300)
-        frmMain.iSpeedDialWidth = 105;
-	frmMain.bStartMinimizedToTray = frmMainJson.get("StartMinimizedToTray", false).asBool();
-	frmMain.bXBtnMinimize = frmMainJson.get("XBtnMinimize", false).asBool();
-	frmMain.bRestoreOnIncomingCall = frmMainJson.get("RestoreOnIncomingCall", false).asBool();
-	frmMain.bSingleInstance = frmMainJson.get("SingleInstance", frmMain.bSingleInstance).asBool();
-	frmMain.dialpadBackgroundImage = frmMainJson.get("DialpadBackgroundImage", frmMain.dialpadBackgroundImage.c_str()).asString().c_str();
-	frmMain.mainIcon = frmMainJson.get("MainIcon", frmMain.mainIcon.c_str()).asString().c_str();
-	frmMain.trayNotificationImage = frmMainJson.get("TrayNotificationImage", frmMain.trayNotificationImage.c_str()).asString().c_str();
+		const Json::Value &frmMainJson = root["frmMain"];
+		int iWidth = frmMainJson.get("AppWidth", frmMain.iWidth).asInt();
+		if (iWidth >= 250 && iWidth <= maxX + 20)
+		{
+			frmMain.iWidth = iWidth;
+		}
+		int iHeight = frmMainJson.get("AppHeight", frmMain.iHeight).asInt();
+		if (iHeight >= 200 && iHeight <= maxY + 20)
+		{
+			frmMain.iHeight = iHeight;
+		}
+		int iPosX = frmMainJson.get("AppPositionX", frmMain.iPosX).asInt();
+		if (iPosX >= 0 && iPosX + frmMain.iWidth <= maxX)
+		{
+			frmMain.iPosX = iPosX;
+		}
+		int iPosY = frmMainJson.get("AppPositionY", frmMain.iPosY).asInt();
+		if (iPosY >= 0 && frmMain.iPosY + frmMain.iHeight <= maxY)
+		{
+			frmMain.iPosY = iPosY;
+		}
+		frmMain.bWindowMaximized = frmMainJson.get("Maximized", frmMain.bWindowMaximized).asBool();
+		frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", frmMain.bAlwaysOnTop).asBool();
+		frmMain.bSpeedDialVisible = frmMainJson.get("SpeedDialVisible", frmMain.bSpeedDialVisible).asBool();
+		frmMain.bSpeedDialOnly = frmMainJson.get("SpeedDialOnly", frmMain.bSpeedDialOnly).asBool();
+		frmMain.bSpeedDialPopupMenu = frmMainJson.get("SpeedDialPopupMenu", frmMain.bSpeedDialPopupMenu).asBool();
+		frmMain.bSpeedDialIgnorePresenceNote = frmMainJson.get("SpeedDialIgnorePresenceNote", frmMain.bSpeedDialIgnorePresenceNote).asBool();
+		frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();
+		int iSpeedDialSize = frmMainJson.get("SpeedDialSize", frmMain.iSpeedDialSize).asUInt();
+		if (iSpeedDialSize >= 1 && iSpeedDialSize <= ProgrammableButtons::EXT_CONSOLE_COLUMNS)
+		{
+			frmMain.iSpeedDialSize = iSpeedDialSize;
+		}
+		int iSpeedDialWidth = frmMainJson.get("SpeedDialWidth", frmMain.iSpeedDialWidth).asUInt();
+		if (iSpeedDialWidth >= 50 && frmMain.iSpeedDialWidth <= 300)
+		{
+			frmMain.iSpeedDialWidth = iSpeedDialWidth;
+		}
+		frmMain.bStartMinimizedToTray = frmMainJson.get("StartMinimizedToTray", frmMain.bStartMinimizedToTray).asBool();
+		frmMain.bXBtnMinimize = frmMainJson.get("XBtnMinimize", frmMain.bXBtnMinimize).asBool();
+		frmMain.bRestoreOnIncomingCall = frmMainJson.get("RestoreOnIncomingCall", frmMain.bRestoreOnIncomingCall).asBool();
+		frmMain.bSingleInstance = frmMainJson.get("SingleInstance", frmMain.bSingleInstance).asBool();
+		frmMain.dialpadBackgroundImage = frmMainJson.get("DialpadBackgroundImage", frmMain.dialpadBackgroundImage.c_str()).asString().c_str();
+		frmMain.mainIcon = frmMainJson.get("MainIcon", frmMain.mainIcon.c_str()).asString().c_str();
+		frmMain.trayNotificationImage = frmMainJson.get("TrayNotificationImage", frmMain.trayNotificationImage.c_str()).asString().c_str();
 
-	frmMain.bNoBeepOnEnterKey = frmMainJson.get("NoBeepOnEnterKey", frmMain.bNoBeepOnEnterKey).asBool();
-	frmMain.bHideSettings = frmMainJson.get("HideSettings", frmMain.bHideSettings).asBool();
-	frmMain.bHideView = frmMainJson.get("HideView", frmMain.bHideView).asBool();
-	frmMain.bHideHelp = frmMainJson.get("HideHelp", frmMain.bHideHelp).asBool();
-	frmMain.bKioskMode = frmMainJson.get("KioskMode", frmMain.bKioskMode).asBool();
-	frmMain.bHideMouseCursor = frmMainJson.get("HideMouseCursor", frmMain.bHideMouseCursor).asBool();
-	frmMain.bShowWhenAnsweringCall = frmMainJson.get("ShowWhenAnsweringCall", frmMain.bShowWhenAnsweringCall).asBool();
-	frmMain.bUseCustomApplicationTitle = frmMainJson.get("UseCustomApplicationTitle", frmMain.bUseCustomApplicationTitle).asBool();
-	frmMain.customApplicationTitle = frmMainJson.get("CustomApplicationTitle", frmMain.customApplicationTitle.c_str()).asString().c_str();
-	frmMain.bUseCustomCaption = frmMainJson.get("UseCustomCaption", frmMain.bUseCustomCaption).asBool();
-	frmMain.customCaption = frmMainJson.get("CustomCaption", frmMain.customCaption.c_str()).asString().c_str();
-
-	const Json::Value &frmTrayNotifierJson = root["frmTrayNotifier"];
-	frmTrayNotifier.iHeight = 105;
-	frmTrayNotifier.iWidth = 213;
-	frmTrayNotifier.iPosX = frmTrayNotifierJson.get("PosX", maxX - frmTrayNotifier.iWidth).asInt();
-	frmTrayNotifier.iPosY = frmTrayNotifierJson.get("PosY", maxY - frmTrayNotifier.iHeight).asInt();
-	if (frmTrayNotifier.iPosX < 0)
-		frmTrayNotifier.iPosX = 0;
-	if (frmTrayNotifier.iPosY < 0)
-		frmTrayNotifier.iPosY = 0;
-	if (frmTrayNotifier.iPosX + frmTrayNotifier.iWidth > maxX)
-		frmTrayNotifier.iPosX = maxX - frmTrayNotifier.iWidth;
-	if (frmTrayNotifier.iPosY + frmTrayNotifier.iHeight > maxY)
-		frmTrayNotifier.iPosY = maxY - frmTrayNotifier.iHeight;
-	frmTrayNotifier.showOnIncoming = frmTrayNotifierJson.get("ShowOnIncoming", false).asBool();
-	frmTrayNotifier.skipIfMainWindowVisible = frmTrayNotifierJson.get("SkipIfMainWindowVisible", false).asBool();
-	frmTrayNotifier.showOnOutgoing = frmTrayNotifierJson.get("ShowOnOutgoing", false).asBool();
-	frmTrayNotifier.hideWhenAnsweringCall = frmTrayNotifierJson.get("HideWhenAnsweringCall", frmTrayNotifier.hideWhenAnsweringCall).asBool();
-	frmTrayNotifier.backgroundImage = frmTrayNotifierJson.get("BackgroundImage", frmTrayNotifier.backgroundImage.c_str()).asString().c_str();
-	frmTrayNotifier.scalingPct = frmTrayNotifierJson.get("ScalingPct", frmTrayNotifier.scalingPct).asInt();
-	if (frmTrayNotifier.scalingPct < _frmTrayNotifier::SCALING_MIN || frmTrayNotifier.scalingPct > _frmTrayNotifier::SCALING_MAX) {
-		frmTrayNotifier.scalingPct = _frmTrayNotifier::SCALING_DEF;
+		frmMain.bNoBeepOnEnterKey = frmMainJson.get("NoBeepOnEnterKey", frmMain.bNoBeepOnEnterKey).asBool();
+		frmMain.bHideSettings = frmMainJson.get("HideSettings", frmMain.bHideSettings).asBool();
+		frmMain.bHideView = frmMainJson.get("HideView", frmMain.bHideView).asBool();
+		frmMain.bHideHelp = frmMainJson.get("HideHelp", frmMain.bHideHelp).asBool();
+		frmMain.bKioskMode = frmMainJson.get("KioskMode", frmMain.bKioskMode).asBool();
+		frmMain.bHideMouseCursor = frmMainJson.get("HideMouseCursor", frmMain.bHideMouseCursor).asBool();
+		frmMain.bShowWhenAnsweringCall = frmMainJson.get("ShowWhenAnsweringCall", frmMain.bShowWhenAnsweringCall).asBool();
+		frmMain.bUseCustomApplicationTitle = frmMainJson.get("UseCustomApplicationTitle", frmMain.bUseCustomApplicationTitle).asBool();
+		frmMain.customApplicationTitle = frmMainJson.get("CustomApplicationTitle", frmMain.customApplicationTitle.c_str()).asString().c_str();
+		frmMain.bUseCustomCaption = frmMainJson.get("UseCustomCaption", frmMain.bUseCustomCaption).asBool();
+		frmMain.customCaption = frmMainJson.get("CustomCaption", frmMain.customCaption.c_str()).asString().c_str();
 	}
 
-	const Json::Value &frmContactPopupJson = root["frmContactPopup"];
-	frmContactPopup.showOnIncoming = frmContactPopupJson.get("ShowOnIncoming", false).asBool();
-	frmContactPopup.showOnOutgoing = frmContactPopupJson.get("ShowOnOutgoing", false).asBool();
-	frmContactPopup.iPosX = frmContactPopupJson.get("PosX", 100).asInt();
-	frmContactPopup.iPosY = frmContactPopupJson.get("PosY", 100).asInt();
-	frmContactPopup.iWidth = frmContactPopupJson.get("Width", 400).asInt();
-	frmContactPopup.iHeight = frmContactPopupJson.get("Height", 140).asInt();
-
-	const Json::Value &LoggingJson = root["Logging"];
-	Logging.bLogToFile = LoggingJson.get("LogToFile", false).asBool();
-	Logging.bFlush = LoggingJson.get("Flush", Logging.bFlush).asBool();
-	Logging.iMaxFileSize = LoggingJson.get("MaxFileSize", Logging.iMaxFileSize).asInt();
-	if (Logging.iMaxFileSize < Settings::_Logging::MIN_MAX_FILE_SIZE || Logging.iMaxFileSize > Settings::_Logging::MIN_MAX_FILE_SIZE)
 	{
-		Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
-	}
-	Logging.iLogRotate = LoggingJson.get("LogRotate", Logging.iLogRotate).asUInt();
-	if (Logging.iLogRotate > Settings::_Logging::MAX_LOGROTATE)
-	{
-        Logging.iLogRotate = Settings::_Logging::DEF_LOGROTATE;
-    }
-	Logging.iMaxUiLogLines = LoggingJson.get("MaxUiLogLines", 5000).asInt();
+		const Json::Value &frmTrayNotifierJson = root["frmTrayNotifier"];
+		int iPosX = frmTrayNotifierJson.get("PosX", frmTrayNotifier.iPosX).asInt();
+		if (iPosX >= 0 && iPosX + frmTrayNotifier.iWidth <= maxX)
+		{
+			frmTrayNotifier.iPosX = iPosX;
+		}
 
-	const Json::Value &CallsJson = root["Calls"];
-	Calls.extraHeaderLines = CallsJson.get("ExtraHeaderLines", Calls.extraHeaderLines.c_str()).asString().c_str();
-
-	const Json::Value &DisplayJson = root["Display"];
-	Display.bUserOnlyClip = DisplayJson.get("UserOnlyClip", Display.bUserOnlyClip).asBool();
-	Display.bDecodeUtfDisplayToAnsi = DisplayJson.get("DecodeUtfDisplayToAnsi", Display.bDecodeUtfDisplayToAnsi).asBool();
-
-	const Json::Value &IntegrationJson = root["Integration"];
-	Integration.bAddFilterWMCopyData = IntegrationJson.get("AddFilterWMCopyData", false).asBool();
-	Integration.asProtocol = IntegrationJson.get("Protocol", Branding::appProto.c_str()).asString().c_str();
-
-	const Json::Value &RingJson = root["Ring"];
-	Ring.defaultRing = RingJson.get("DefaultRing", "ring.wav").asString().c_str();
-	const Json::Value &bellcore = RingJson["Bellcore"];
-	for (int i=0; i<std::min(sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]), bellcore.size()); i++)
-	{
-		Ring.bellcore[i] = bellcore[i].asString().c_str();
+		int iPosY = frmTrayNotifierJson.get("PosY", frmTrayNotifier.iPosY).asInt();
+		if (iPosY >= 0 && iPosY + frmTrayNotifier.iHeight <= maxY)
+		{
+			frmTrayNotifier.iPosY = iPosY;
+		}
+		frmTrayNotifier.showOnIncoming = frmTrayNotifierJson.get("ShowOnIncoming", frmTrayNotifier.showOnIncoming).asBool();
+		frmTrayNotifier.skipIfMainWindowVisible = frmTrayNotifierJson.get("SkipIfMainWindowVisible", frmTrayNotifier.skipIfMainWindowVisible).asBool();
+		frmTrayNotifier.showOnOutgoing = frmTrayNotifierJson.get("ShowOnOutgoing", frmTrayNotifier.showOnOutgoing).asBool();
+		frmTrayNotifier.hideWhenAnsweringCall = frmTrayNotifierJson.get("HideWhenAnsweringCall", frmTrayNotifier.hideWhenAnsweringCall).asBool();
+		frmTrayNotifier.backgroundImage = frmTrayNotifierJson.get("BackgroundImage", frmTrayNotifier.backgroundImage.c_str()).asString().c_str();
+		int scalingPct = frmTrayNotifierJson.get("ScalingPct", frmTrayNotifier.scalingPct).asInt();
+		if (scalingPct >= _frmTrayNotifier::SCALING_MIN && frmTrayNotifier.scalingPct <= _frmTrayNotifier::SCALING_MAX) {
+			frmTrayNotifier.scalingPct = scalingPct;
+		}
 	}
 
-	const Json::Value &HttpQueryJson = root["HttpQuery"];
-	HttpQuery.url = HttpQueryJson.get("Url", HttpQuery.url.c_str()).asString().c_str();
-	HttpQuery.openMode = static_cast<_HttpQuery::OpenMode>(HttpQueryJson.get("OpenMode", HttpQuery.openMode).asInt());
-	if (HttpQuery.openMode < 0 || HttpQuery.openMode >= _HttpQuery::openModeLimiter)
 	{
-        HttpQuery.openMode = _HttpQuery::openManualOnly;
+		const Json::Value &frmContactPopupJson = root["frmContactPopup"];
+		frmContactPopup.showOnIncoming = frmContactPopupJson.get("ShowOnIncoming", frmContactPopup.showOnIncoming).asBool();
+		frmContactPopup.showOnOutgoing = frmContactPopupJson.get("ShowOnOutgoing", frmContactPopup.showOnOutgoing).asBool();
+		frmContactPopup.iPosX = frmContactPopupJson.get("PosX", frmContactPopup.iPosX).asInt();
+		frmContactPopup.iPosY = frmContactPopupJson.get("PosY", frmContactPopup.iPosY).asInt();
+		frmContactPopup.iWidth = frmContactPopupJson.get("Width", frmContactPopup.iWidth).asInt();
+		frmContactPopup.iHeight = frmContactPopupJson.get("Height", frmContactPopup.iHeight).asInt();
 	}
 
-	const Json::Value &SipAccessUrlJson = root["SipAccessUrl"];
-	SipAccessUrl.accessMode = static_cast<_SipAccessUrl::AccessMode>(SipAccessUrlJson.get("AccessMode", SipAccessUrl.accessMode).asInt());
-	if (SipAccessUrl.accessMode < 0 || SipAccessUrl.accessMode >= _SipAccessUrl::accessModeLimiter)
 	{
-        SipAccessUrl.accessMode = _SipAccessUrl::accessModeAlwaysPassive;
+		const Json::Value &LoggingJson = root["Logging"];
+		Logging.bLogToFile = LoggingJson.get("LogToFile", Logging.bLogToFile).asBool();
+		Logging.bFlush = LoggingJson.get("Flush", Logging.bFlush).asBool();
+		int iMaxFileSize = LoggingJson.get("MaxFileSize", Logging.iMaxFileSize).asInt();
+		if (iMaxFileSize >= Settings::_Logging::MIN_MAX_FILE_SIZE && Logging.iMaxFileSize <= Settings::_Logging::MIN_MAX_FILE_SIZE)
+		{
+			Logging.iMaxFileSize = iMaxFileSize;
+		}
+		unsigned int iLogRotate = LoggingJson.get("LogRotate", Logging.iLogRotate).asUInt();
+		if (iLogRotate <= Settings::_Logging::MAX_LOGROTATE)
+		{
+			Logging.iLogRotate = iLogRotate;
+		}
+		Logging.iMaxUiLogLines = LoggingJson.get("MaxUiLogLines", Logging.iMaxUiLogLines).asInt();
+	}
+
+	{
+		const Json::Value &CallsJson = root["Calls"];
+		Calls.extraHeaderLines = CallsJson.get("ExtraHeaderLines", Calls.extraHeaderLines.c_str()).asString().c_str();
     }
 
-	const Json::Value &ContactsJson = root["Contacts"];
-	Contacts.filterUsingNote = ContactsJson.get("FilterUsingNote", Contacts.filterUsingNote).asBool();
+	{
+		const Json::Value &DisplayJson = root["Display"];
+		Display.bUserOnlyClip = DisplayJson.get("UserOnlyClip", Display.bUserOnlyClip).asBool();
+		Display.bDecodeUtfDisplayToAnsi = DisplayJson.get("DecodeUtfDisplayToAnsi", Display.bDecodeUtfDisplayToAnsi).asBool();
+    }
 
-	const Json::Value &HistoryJson = root["History"];
-	History.bNoStoreToFile = HistoryJson.get("NoStoreToFile", History.bNoStoreToFile).asBool();
+	{
+		const Json::Value &IntegrationJson = root["Integration"];
+		Integration.bAddFilterWMCopyData = IntegrationJson.get("AddFilterWMCopyData", Integration.bAddFilterWMCopyData).asBool();
+		Integration.asProtocol = IntegrationJson.get("Protocol", Integration.asProtocol.c_str()).asString().c_str();
+    }
+
+	{
+		const Json::Value &RingJson = root["Ring"];
+		Ring.defaultRing = RingJson.get("DefaultRing", Ring.defaultRing.c_str()).asString().c_str();
+		const Json::Value &bellcore = RingJson["Bellcore"];
+		for (int i=0; i<std::min(sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]), bellcore.size()); i++)
+		{
+			if (!bellcore[i].asString().empty())
+			{
+				Ring.bellcore[i] = bellcore[i].asString().c_str();
+			}
+		}
+	}
+
+	{
+		const Json::Value &HttpQueryJson = root["HttpQuery"];
+		HttpQuery.url = HttpQueryJson.get("Url", HttpQuery.url.c_str()).asString().c_str();
+		_HttpQuery::OpenMode openMode = static_cast<_HttpQuery::OpenMode>(HttpQueryJson.get("OpenMode", HttpQuery.openMode).asInt());
+		if (openMode >= 0 && openMode < _HttpQuery::openModeLimiter)
+		{
+			HttpQuery.openMode = openMode;
+		}
+	}
+
+	{
+		const Json::Value &SipAccessUrlJson = root["SipAccessUrl"];
+		_SipAccessUrl::AccessMode accessMode = static_cast<_SipAccessUrl::AccessMode>(SipAccessUrlJson.get("AccessMode", SipAccessUrl.accessMode).asInt());
+		if (accessMode >= 0 && accessMode < _SipAccessUrl::accessModeLimiter)
+		{
+			SipAccessUrl.accessMode = accessMode;
+		}
+	}
+
+	{
+		const Json::Value &ContactsJson = root["Contacts"];
+		Contacts.filterUsingNote = ContactsJson.get("FilterUsingNote", Contacts.filterUsingNote).asBool();
+	}
+
+	{
+		const Json::Value &HistoryJson = root["History"];
+		History.bNoStoreToFile = HistoryJson.get("NoStoreToFile", History.bNoStoreToFile).asBool();
+    }
 
 	{
 		const Json::Value &ScriptsJson = root["Scripts"];
@@ -521,9 +617,9 @@ int Settings::Read(AnsiString asFileName)
 		Scripts.onRegistrationState = ScriptsJson.get("OnRegistrationState", Scripts.onRegistrationState.c_str()).asString().c_str();
 		Scripts.onStartup = ScriptsJson.get("OnStartup", Scripts.onStartup.c_str()).asString().c_str();
 		Scripts.onTimer = ScriptsJson.get("OnTimer", Scripts.onTimer.c_str()).asString().c_str();
-		Scripts.timer = ScriptsJson.get("Timer", Scripts.timer).asInt();
-		if (Scripts.timer <= 0)
-			Scripts.timer = 1000;
+		int timer = ScriptsJson.get("Timer", Scripts.timer).asInt();
+		if (timer > 0)
+			Scripts.timer = timer;
 		Scripts.onDialogInfo = ScriptsJson.get("OnDialogInfo", Scripts.onDialogInfo.c_str()).asString().c_str();
 		Scripts.onDial = ScriptsJson.get("OnDial", Scripts.onDial.c_str()).asString().c_str();
 	}
@@ -533,10 +629,19 @@ int Settings::Read(AnsiString asFileName)
 		{
             ScriptWindow.lastDir = jScriptWindow.get("LastDir", ScriptWindow.lastDir.c_str()).asCString();
 			const Json::Value &jMRU = jScriptWindow["MRU"];
-			ScriptWindow.MRU.clear();
-			for (unsigned int i=0; i<std::min<unsigned>(jMRU.size(), _ScriptWindow::MRU_LIMIT); i++)
+			if (jMRU.type() == Json::arrayValue)
 			{
-				ScriptWindow.MRU.push_back(jMRU[i].asString().c_str());
+				// it's highly unlikely that MRU would need merging old configuration with new one,
+				// but old values are still used for consistency
+				unsigned int count = std::min<unsigned>(jMRU.size(), _ScriptWindow::MRU_LIMIT);
+				ScriptWindow.MRU.resize(count);
+				for (unsigned int i=0; i<count; i++)
+				{
+					if (jMRU[i].type() == Json::stringValue)
+					{
+						ScriptWindow.MRU.push_back(jMRU.get(i, ScriptWindow.MRU[i].c_str()).asString().c_str());
+					}
+				}
 			}
 		}
 	}
@@ -735,17 +840,6 @@ int Settings::Write(AnsiString asFileName)
 			cfgAcc["audio_codecs"][j] = acc.audio_codecs[j];
 		}
 	}
-#if 0	// obsolete, replaced with "btnConf"
-	// write contacts
-	for (unsigned int i=0; i<uaConf.contacts.size(); i++)
-	{
-		UaConf::Contact &contact = uaConf.contacts[i];
-		root["Contacts"][i]["description"] = contact.description;
-		root["Contacts"][i]["user"] = contact.user;
-		root["Contacts"][i]["sub_dialog_info"] = contact.sub_dialog_info;
-		root["Contacts"][i]["sub_presence"] = contact.sub_presence;
-	}
-#endif
 
 	{
 		int i = 0;

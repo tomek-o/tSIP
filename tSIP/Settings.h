@@ -23,8 +23,13 @@ public:
 	struct _gui
 	{
 		enum { SCALING_MIN = 50 };
+        enum { SCALING_DEF = 100 };
 		enum { SCALING_MAX = 500 };
 		int scalingPct;					///< scaling (percentage)
+        _gui(void):
+            scalingPct(SCALING_DEF)
+        {
+        }
 	} gui;
 	struct _info
 	{
@@ -32,11 +37,6 @@ public:
 		{
 			unsigned int FileVersionMS;
 			unsigned int FileVersionLS;
-			void SetDefault(void)
-			{
-				FileVersionMS = 0;
-				FileVersionLS = 0;
-			}
 			bool operator<(const _appVersion &other) const
 			{
 			   if (FileVersionMS < other.FileVersionMS)
@@ -54,14 +54,15 @@ public:
 			}
 			_appVersion()
 			{
-				SetDefault();
+				FileVersionMS = 0;
+				FileVersionLS = 0;
 			}
 		} appVersion;					///< main executable version (from resources)
 	} info;
 	struct _frmMain
 	{
 		int iPosX, iPosY;				///< main window coordinates
-		int iHeight, iWidth;			///< main window size
+		int iWidth, iHeight;			///< main window size
 		bool bWindowMaximized;			///< is main window maximize?
 		bool bAlwaysOnTop;
 		bool bStartMinimizedToTray;
@@ -89,6 +90,8 @@ public:
 		AnsiString customCaption;			///< custom caption for main window
 		bool bUseCustomApplicationTitle;       ///< use customApplicationTitle
 		AnsiString customApplicationTitle;	///< custom title for application (taskbar text)
+
+		_frmMain(void);
 	} frmMain;
 	struct _frmTrayNotifier
 	{
@@ -102,14 +105,18 @@ public:
 		enum { SCALING_MIN = 50 };
 		enum { SCALING_DEF = 100 };
 		enum { SCALING_MAX = 500 };
-		int scalingPct;					///< scaling (percentage)		
+		int scalingPct;					///< scaling (percentage)
+
+		_frmTrayNotifier(void);		
 	} frmTrayNotifier;
 	struct _frmContactPopup
 	{
 		bool showOnIncoming;
 		bool showOnOutgoing;
 		int iPosX, iPosY;				///< coordinates
-		int iHeight, iWidth;		
+		int iWidth, iHeight;
+
+		_frmContactPopup(void);		
 	} frmContactPopup;
 	struct _Logging
 	{
@@ -131,6 +138,15 @@ public:
 		};
 		unsigned int iLogRotate;
 		unsigned int iMaxUiLogLines;		
+
+        _Logging(void):
+            bLogToFile(false),
+            bFlush(false),
+            iMaxFileSize(Settings::_Logging::DEF_MAX_FILE_SIZE),
+            iLogRotate(Settings::_Logging::DEF_LOGROTATE),
+            iMaxUiLogLines(5000)
+        {
+        }
 	} Logging;
 	struct _Calls
 	{
@@ -212,6 +228,8 @@ public:
 	} ScriptWindow;
 
 	std::list<HotKeyConf> hotKeyConf;
+
+	Settings(void);
 };
 
 extern Settings appSettings;
