@@ -159,11 +159,10 @@ int ProgrammableButtons::Read(void)
 		// earlier versions stored btn config in main file - try to read it
 		AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 		int rc = ReadFile(asConfigFile);
-		if (rc == 0)
-		{
-			// and write it back to new, separate file file
-			Write();
-		}
+		(void)rc;
+		// and write new, separate file file (either default buttons or buttons from old "main" config,
+		// if reading was successful)
+		Write();
 		return 0;
 	}
 	//notifyObservers();
