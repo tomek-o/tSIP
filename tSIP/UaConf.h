@@ -124,7 +124,8 @@ public:
 	static const char* modNullaudio;
 
 	struct AudioCfg {
-		char mod[32];       /**< Audio source module            */
+		enum { MAX_MOD_LENGTH = 32 };
+		char mod[MAX_MOD_LENGTH];       /**< Audio source module            */
 		char dev[128];      /**< Audio source device            */
 		char wavefile[512];
 		AudioCfg(void) {
@@ -242,6 +243,11 @@ public:
 		bool operator!=(const UaConf::WebrtcAec& right) const {
 			return !(*this == right);
 		}
+		WebrtcAec(void):
+			msInSndCardBuf(120),
+			skew(0)
+		{
+		}
 	} webrtcAec;
 
 	std::string local;
@@ -291,10 +297,12 @@ public:
 			}
 			return 0;
         }
-		void Validate(void) {
-			ValidatePorts();
-			ValidateJbufDelay();
-			ValidateRtpTimeout();
+		int Validate(void) {
+			int ret = 0;
+			ret += ValidatePorts();
+			ret += ValidateJbufDelay();
+			ret += ValidateRtpTimeout();
+			return ret;
 		}
 		bool operator==(const UaConf::Avt& right) const {
 			if (portMin == right.portMin &&
