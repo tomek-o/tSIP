@@ -15,6 +15,7 @@ private:
 	AnsiString filename;
 	int ReadFile(AnsiString name);
 public:
+	ProgrammableButtons(void);
 	void SetFilename(AnsiString name)
 	{
 		filename = name;
@@ -26,7 +27,6 @@ public:
 	enum { CONSOLE_BTNS_PER_COLUMN = 15 };
 	std::vector<ButtonConf> btnConf;
 
-	void SetDefault(void);
 	void UpdateContacts(std::vector<UaConf::Contact> &contacts);	
 };
 

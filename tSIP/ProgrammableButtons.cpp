@@ -16,7 +16,7 @@
 
 #pragma package(smart_init)
 
-void ProgrammableButtons::SetDefault(void)
+ProgrammableButtons::ProgrammableButtons(void)
 {
 	btnConf.resize((1 /*basic column*/ + EXT_CONSOLE_COLUMNS) * CONSOLE_BTNS_PER_COLUMN);
 
@@ -51,8 +51,6 @@ int ProgrammableButtons::ReadFile(AnsiString name)
 	Json::Value root;   // will contains the root value after parsing.
 	Json::Reader reader;
 
-    SetDefault();
-
 	try
 	{
 		std::ifstream ifs(name.c_str());
@@ -70,78 +68,104 @@ int ProgrammableButtons::ReadFile(AnsiString name)
 	}
 
 	const Json::Value &btnConfJson = root["btnConf"];
-	for (int i=0; i<btnConfJson.size(); i++)
+	if (btnConfJson.type() == Json::arrayValue)
 	{
-		const Json::Value &btnJson = btnConfJson[i];
-		class ButtonConf cfg;
-		cfg.type = (Button::Type)btnJson.get("type", 0).asInt();
-		if (cfg.type >= Button::TYPE_LIMITER)
+		for (int i=0; i<btnConfJson.size(); i++)
 		{
-			cfg.type = Button::DISABLED;
+			if (i >= btnConf.size())
+			{
+				break;
+			}
+			const Json::Value &btnJson = btnConfJson[i];
+			if (btnJson.type() != Json::objectValue)
+			{
+				continue;
+			}
+
+			ButtonConf &cfg = btnConf[i];
+
+			Button::Type type = (Button::Type)btnJson.get("type", cfg.type).asInt();
+			if (type >= 0 && type < Button::TYPE_LIMITER)
+			{
+				cfg.type = type;
+			}
+			cfg.caption = btnJson.get("caption", cfg.caption).asString();
+			cfg.caption2 = btnJson.get("caption2", cfg.caption2).asString();
+			int captionLines = btnJson.get("captionLines", cfg.captionLines).asInt();
+			if (captionLines >= ButtonConf::CAPTION_LINES_MIN && cfg.captionLines <= ButtonConf::CAPTION_LINES_MAX)
+			{
+				cfg.captionLines = captionLines;
+			}
+			cfg.number = btnJson.get("number", cfg.number).asString();
+			cfg.noIcon = btnJson.get("noIcon", cfg.noIcon).asBool();
+			int height = btnJson.get("height", cfg.height).asInt();
+			if (height >= 0 && height <= 1000)
+			{
+				cfg.height = height;
+			}
+			int marginTop = btnJson.get("marginTop", cfg.marginTop).asInt();
+			if (marginTop >= 0 && marginTop <= 2000)
+			{
+				cfg.marginTop = marginTop;
+			}
+			int marginBottom = btnJson.get("marginBottom", cfg.marginBottom).asUInt();
+			if (marginBottom >= 0 && marginBottom <= 2000)
+			{
+				cfg.marginBottom = marginBottom;
+			}
+			cfg.backgroundColor = btnJson.get("backgroundColor", cfg.backgroundColor).asInt();
+
+			cfg.imgIdle = btnJson.get("imgIdle", cfg.imgIdle).asString();
+			cfg.imgTerminated = btnJson.get("imgTerminated", cfg.imgTerminated).asString();
+			cfg.imgEarly = btnJson.get("imgEarly", cfg.imgEarly).asString();
+			cfg.imgConfirmed = btnJson.get("imgConfirmed", cfg.imgConfirmed).asString();
+
+			ButtonConf::BlfActionDuringCall blfActionDuringCall =
+				static_cast<ButtonConf::BlfActionDuringCall>(btnJson.get("blfActionDuringCall", cfg.blfActionDuringCall).asInt());
+			if (blfActionDuringCall >= ButtonConf::BLF_IN_CALL_NONE && cfg.blfActionDuringCall < ButtonConf::BLF_IN_CALL_LIMITER)
+			{
+				cfg.blfActionDuringCall = blfActionDuringCall;
+			}
+
+			cfg.blfDtmfPrefixDuringCall = btnJson.get("blfDtmfPrefixDuringCall", cfg.blfDtmfPrefixDuringCall).asString();
+
+			{
+				const Json::Value &blfOverrideIdle = btnJson["blfOverrideIdle"];
+				cfg.blfOverrideIdle.active = blfOverrideIdle.get("active", cfg.blfOverrideIdle.active).asBool();
+				cfg.blfOverrideIdle.number = blfOverrideIdle.get("number", cfg.blfOverrideIdle.number).asString();
+			}
+
+			{
+				const Json::Value &blfOverrideTerminated = btnJson["blfOverrideTerminated"];
+				cfg.blfOverrideTerminated.active = blfOverrideTerminated.get("active", cfg.blfOverrideTerminated.active).asBool();
+				cfg.blfOverrideTerminated.number = blfOverrideTerminated.get("number", cfg.blfOverrideTerminated.number).asString();
+			}
+
+			{
+				const Json::Value &blfOverrideEarly = btnJson["blfOverrideEarly"];
+				cfg.blfOverrideEarly.active = blfOverrideEarly.get("active", cfg.blfOverrideEarly.active).asBool();
+				cfg.blfOverrideEarly.number = blfOverrideEarly.get("number", cfg.blfOverrideEarly.number).asString();
+			}
+
+			{
+				const Json::Value &blfOverrideConfirmed = btnJson["blfOverrideConfirmed"];
+				cfg.blfOverrideConfirmed.active = blfOverrideConfirmed.get("active", cfg.blfOverrideConfirmed.active).asBool();
+				cfg.blfOverrideConfirmed.number = blfOverrideConfirmed.get("number", cfg.blfOverrideConfirmed.number).asString();
+			}
+
+			cfg.arg1 = btnJson.get("arg1", cfg.arg1).asString();
+
+			cfg.pagingTxWaveFile = btnJson.get("pagingTxWaveFile", cfg.pagingTxWaveFile).asString();
+			cfg.pagingTxCodec = btnJson.get("pagingTxCodec", cfg.pagingTxCodec).asString();
+			cfg.pagingTxPtime = btnJson.get("pagingTxPtime", cfg.pagingTxPtime).asUInt();
+
+			cfg.script = btnJson.get("script", cfg.script).asString();
+
+			cfg.audioRxMod = btnJson.get("audioRxMod", cfg.audioRxMod).asString();
+			cfg.audioRxDev = btnJson.get("audioRxDev", cfg.audioRxDev).asString();
+			cfg.audioTxMod = btnJson.get("audioTxMod", cfg.audioTxMod).asString();
+			cfg.audioTxDev = btnJson.get("audioTxDev", cfg.audioTxDev).asString();
 		}
-		cfg.caption = btnJson.get("caption", "").asString();
-		cfg.caption2 = btnJson.get("caption2", "").asString();
-		cfg.captionLines = btnJson.get("captionLines", 1).asInt();
-		if (cfg.captionLines < ButtonConf::CAPTION_LINES_MIN || cfg.captionLines > ButtonConf::CAPTION_LINES_MAX)
-		{
-            cfg.captionLines = 1;
-        }
-		cfg.number = btnJson.get("number", "").asString();
-		cfg.noIcon = btnJson.get("noIcon", false).asBool();
-		cfg.height = btnJson.get("height", 32).asUInt();
-		cfg.marginTop = btnJson.get("marginTop", 0).asUInt();
-		if (cfg.marginTop > 200)
-			cfg.marginTop = 0;
-		cfg.marginBottom = btnJson.get("marginBottom", 0).asUInt();
-		if (cfg.marginBottom > 200)
-			cfg.marginBottom = 200;
-		cfg.backgroundColor = btnJson.get("backgroundColor", clBtnFace).asInt();
-		if (i >= btnConf.size())
-			break;
-		cfg.imgIdle = btnJson.get("imgIdle", "idle.bmp").asString();
-		cfg.imgTerminated = btnJson.get("imgTerminated", "terminated.bmp").asString();
-		cfg.imgEarly = btnJson.get("imgEarly", "early.bmp").asString();
-		cfg.imgConfirmed = btnJson.get("imgConfirmed", "confirmed.bmp").asString();
-
-		cfg.blfActionDuringCall =
-			static_cast<ButtonConf::BlfActionDuringCall>(btnJson.get("blfActionDuringCall", ButtonConf::BLF_IN_CALL_TRANSFER).asInt());
-		if (cfg.blfActionDuringCall < ButtonConf::BLF_IN_CALL_NONE || cfg.blfActionDuringCall >= ButtonConf::BLF_IN_CALL_TRANSFER)
-		{
-			cfg.blfActionDuringCall = ButtonConf::BLF_IN_CALL_TRANSFER;
-		}
-
-		cfg.blfDtmfPrefixDuringCall = btnJson.get("blfDtmfPrefixDuringCall", "").asString();
-
-		const Json::Value &blfOverrideIdle = btnJson["blfOverrideIdle"];
-		cfg.blfOverrideIdle.active = blfOverrideIdle.get("active", false).asBool();
-		cfg.blfOverrideIdle.number = blfOverrideIdle.get("number", "").asString();
-
-		const Json::Value &blfOverrideTerminated = btnJson["blfOverrideTerminated"];
-		cfg.blfOverrideTerminated.active = blfOverrideTerminated.get("active", false).asBool();
-		cfg.blfOverrideTerminated.number = blfOverrideTerminated.get("number", "").asString();
-
-		const Json::Value &blfOverrideEarly = btnJson["blfOverrideEarly"];
-		cfg.blfOverrideEarly.active = blfOverrideEarly.get("active", false).asBool();
-		cfg.blfOverrideEarly.number = blfOverrideEarly.get("number", "").asString();
-
-		const Json::Value &blfOverrideConfirmed = btnJson["blfOverrideConfirmed"];
-		cfg.blfOverrideConfirmed.active = blfOverrideConfirmed.get("active", false).asBool();
-		cfg.blfOverrideConfirmed.number = blfOverrideConfirmed.get("number", "").asString();
-
-		cfg.arg1 = btnJson.get("arg1", "").asString();
-
-		cfg.pagingTxWaveFile = btnJson.get("pagingTxWaveFile", "").asString();
-		cfg.pagingTxCodec = btnJson.get("pagingTxCodec", cfg.pagingTxCodec.c_str()).asString();
-		cfg.pagingTxPtime = btnJson.get("pagingTxPtime", cfg.pagingTxPtime).asUInt();
-
-		cfg.script = btnJson.get("script", "").asString();
-
-		cfg.audioRxMod = btnJson.get("audioRxMod", cfg.audioRxMod.c_str()).asString();
-		cfg.audioRxDev = btnJson.get("audioRxDev", cfg.audioRxDev.c_str()).asString();
-		cfg.audioTxMod = btnJson.get("audioTxMod", cfg.audioTxMod.c_str()).asString();
-		cfg.audioTxDev = btnJson.get("audioTxDev", cfg.audioTxDev.c_str()).asString();
-
-		btnConf[i] = cfg;
 	}
 	return 0;
 }
