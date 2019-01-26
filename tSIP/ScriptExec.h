@@ -143,8 +143,10 @@ private:
 	static int l_GetRecordingState(lua_State* L);
 	static int l_GetRxDtmf(lua_State* L);
 	static int l_ShowTrayNotifier(lua_State* L);
-	static int l_GetUserName(lua_State* L);	
+	static int l_GetUserName(lua_State* L);
 	static int l_ProgrammableButtonClick(lua_State* L);
+    static int l_RefreshAudioDevicesList(lua_State* L);
+	static int l_GetAudioDevice(lua_State* L);
 
 	bool &breakReq;
 	bool running;

@@ -7,6 +7,7 @@
 #include "Log.h"
 #include "LuaState.h"
 #include "lua.hpp"
+#include "AudioDevicesList.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -70,7 +71,7 @@ namespace {
 			if (!SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String))
 			{
 				return TRUE;		// No window title (length = 0)
-            }
+			}
 			if (strcmp(String, findWindowData.windowName))
 			{
 				return TRUE;
@@ -381,6 +382,7 @@ int luaopen_tsip_winapi (lua_State *L) {
 		{NULL, NULL}
 	};
 	luaL_newlib(L, tsip_winapi);
+	int TODO__GetKeyState;
 	return 1;
 }
 
@@ -841,10 +843,88 @@ int ScriptExec::l_GetExeName(lua_State* L)
 	return 1;
 }
 
+int ScriptExec::l_RefreshAudioDevicesList(lua_State* L)
+{
+	AudioDevicesList::Instance().Refresh();
+	return 0;
+}
+
+int ScriptExec::l_GetAudioDevice(lua_State* L)
+{
+	const char* module = lua_tostring(L, 1);
+	if (module == NULL)
+	{
+		LOG("Lua error: audio module name == NULL\n");
+		lua_pushstring(L, "");
+		lua_pushinteger(L, 0);	// "valid"
+		return 2;
+	}
+	const char* dir = lua_tostring(L, 2);
+	bool out = false;
+	if (dir == NULL)
+	{
+		LOG("Lua error: direction for audio module == NULL (expecting \"in\" or \"out\"\n");
+		lua_pushstring(L, "");
+		lua_pushinteger(L, 0);	// "valid"
+		return 2;
+	}
+	else
+	{
+		if (strcmp(dir, "in") == 0)
+		{
+			out = false;
+		}
+		else if (strcmp(dir, "out") == 0)
+		{
+			out = true;
+		}
+		else
+		{
+			LOG("Lua error: unexpected direction for audio module (expecting \"in\" or \"out\"\n");
+			lua_pushstring(L, "");
+			lua_pushinteger(L, 0);	// "valid"
+			return 2;
+		}
+	}
+
+	std::vector<AnsiString> *v = NULL;
+	if (strcmp(module, "portaudio") == 0)
+	{
+		if (out)
+			v = &AudioDevicesList::Instance().portaudioDevsOut;
+		else
+			v = &AudioDevicesList::Instance().portaudioDevsIn;
+	}
+	else if (strcmp(module, "winwave") == 0)
+	{
+		if (out)
+			v = &AudioDevicesList::Instance().winwaveDevsOut;
+		else
+			v = &AudioDevicesList::Instance().winwaveDevsIn;
+	}
+	else
+	{
+		LOG("Lua error: unhandled audio module name\n");
+		lua_pushstring(L, "");
+		lua_pushinteger(L, 0);	// "valid"
+		return 2;
+	}
+	int devId = lua_tointeger(L, 3);
+	if (devId < 0 || devId >= v->size())
+	{
+		lua_pushstring(L, "");
+		lua_pushinteger(L, 0);	// "valid"
+		return 2;
+	}
+	lua_pushstring(L, (*v)[devId].c_str());
+	lua_pushinteger(L, 1);	// "valid"
+	return 2;
+}
+
 ScriptExec::ScriptExec(
 	enum ScriptSource srcType,
 	int srcId,
-	bool &breakReq,	
+	bool &breakReq,
 	CallbackAddOutputText onAddOutputText,
 	CallbackCall onCall,
 	CallbackHangup onHangup,
@@ -1006,7 +1086,9 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetRxDtmf", l_GetRxDtmf);
 	lua_register(L, "ShowTrayNotifier", l_ShowTrayNotifier);
 	lua_register(L, "GetUserName", l_GetUserName);	
-    lua_register(L, "ProgrammableButtonClick", l_ProgrammableButtonClick);
+	lua_register(L, "ProgrammableButtonClick", l_ProgrammableButtonClick);
+	lua_register(L, "RefreshAudioDevicesList", l_RefreshAudioDevicesList);
+    lua_register(L, "GetAudioDevice", l_GetAudioDevice);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);
