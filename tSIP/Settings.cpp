@@ -639,7 +639,7 @@ int Settings::Read(AnsiString asFileName)
 				{
 					if (jMRU[i].type() == Json::stringValue)
 					{
-						ScriptWindow.MRU.push_back(jMRU.get(i, ScriptWindow.MRU[i].c_str()).asString().c_str());
+						ScriptWindow.MRU[i] = jMRU.get(i, ScriptWindow.MRU[i].c_str()).asString().c_str();
 					}
 				}
 			}
