@@ -28,7 +28,6 @@ object frmLuaScript: TfrmLuaScript
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 280
     object pnlBottom2: TPanel
       Left = 0
       Top = 0

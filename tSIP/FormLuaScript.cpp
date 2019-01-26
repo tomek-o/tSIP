@@ -183,8 +183,8 @@ void TfrmLuaScript::OpenFile(AnsiString filename)
 	}
 	else
 	{
-		strings->Text = "-- Check Help/Examples";
-		//frmJsonEditor->OnTextModified();
+		MessageBox(this->Handle, "File doesn't exist.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+		return;
 	}
 	
 	SetText(strings->Text);
