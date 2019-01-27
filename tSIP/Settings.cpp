@@ -121,6 +121,27 @@ Settings::Settings(void)
 	ScriptWindow.ClearMruItems();	
 }
 
+int Settings::UpdateFromText(AnsiString text)
+{
+	Json::Value root;   // will contains the root value after parsing.
+	Json::Reader reader;
+
+	try
+	{
+		bool parsingSuccessful = reader.parse( text.c_str(), root );
+		if ( !parsingSuccessful )
+		{
+			return 2;
+		}
+	}
+	catch(...)
+	{
+		return 1;
+	}
+
+	return UpdateFromJsonValue(root);
+}
+
 int Settings::Read(AnsiString asFileName)
 {
 	Json::Value root;   // will contains the root value after parsing.
@@ -141,7 +162,12 @@ int Settings::Read(AnsiString asFileName)
 	{
 		return 1;
 	}
+	
+	return UpdateFromJsonValue(root);
+}
 
+int Settings::UpdateFromJsonValue(const Json::Value &root)
+{
 	{
 		const Json::Value &jv = root["info"];
 		info.appVersion.FileVersionMS = jv.get("FileVersionMS", info.appVersion.FileVersionMS).asUInt();

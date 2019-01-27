@@ -921,6 +921,20 @@ int ScriptExec::l_GetAudioDevice(lua_State* L)
 	return 2;
 }
 
+int ScriptExec::l_UpdateSettings(lua_State* L)
+{
+	const char* json = lua_tostring(L, 1);
+	if (json == NULL)
+	{
+		LOG("Lua error: missing parameter (json)\n");
+		return 0;
+	}
+	int status = GetContext(L)->onUpdateSettings(json);
+	lua_pushinteger(L, status);
+	return 1;
+}
+
+
 ScriptExec::ScriptExec(
 	enum ScriptSource srcType,
 	int srcId,
@@ -955,7 +969,8 @@ ScriptExec::ScriptExec(
 	CallbackGetRxDtmf onGetRxDtmf,
 	CallbackShowTrayNotifier onShowTrayNotifier,
 	CallbackGetUserName onGetUserName,
-	CallbackProgrammableButtonClick onProgrammableButtonClick
+	CallbackProgrammableButtonClick onProgrammableButtonClick,
+	CallbackUpdateSettings onUpdateSettings
 	):
 	srcType(srcType),
 	srcId(srcId),
@@ -991,6 +1006,7 @@ ScriptExec::ScriptExec(
 	onShowTrayNotifier(onShowTrayNotifier),
 	onGetUserName(onGetUserName),
 	onProgrammableButtonClick(onProgrammableButtonClick),
+    onUpdateSettings(onUpdateSettings),
 
 	running(false)
 {
@@ -1011,7 +1027,8 @@ ScriptExec::ScriptExec(
 		onGetRxDtmf &&
 		onShowTrayNotifier &&
 		onGetUserName &&
-		onProgrammableButtonClick
+		onProgrammableButtonClick &&
+		onUpdateSettings
 		);
 }
 
@@ -1088,7 +1105,8 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetUserName", l_GetUserName);	
 	lua_register(L, "ProgrammableButtonClick", l_ProgrammableButtonClick);
 	lua_register(L, "RefreshAudioDevicesList", l_RefreshAudioDevicesList);
-    lua_register(L, "GetAudioDevice", l_GetAudioDevice);
+	lua_register(L, "GetAudioDevice", l_GetAudioDevice);
+	lua_register(L, "UpdateSettings", l_UpdateSettings);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);

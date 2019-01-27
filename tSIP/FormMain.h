@@ -242,6 +242,8 @@ private:	// User declarations
 	bool notificationIconState;
 	void SetNotificationIcon(bool state);
 	void SetKioskMode(bool state);
+	int UpdateSettingsFromJson(AnsiString json);
+	void UpdateSettings(const Settings &prev);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall OnTrayIconRightBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);

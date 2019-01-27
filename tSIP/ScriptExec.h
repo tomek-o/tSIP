@@ -52,6 +52,7 @@ private:
 	typedef void (__closure *CallbackShowTrayNotifier)(AnsiString description, AnsiString uri, bool incoming);
 	typedef std::string (__closure *CallbackGetUserName)(void);
 	typedef void (__closure *CallbackProgrammableButtonClick)(int id);
+	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
 
 	CallbackAddOutputText onAddOutputText;
 	CallbackCall onCall;
@@ -84,6 +85,7 @@ private:
 	CallbackShowTrayNotifier onShowTrayNotifier;
 	CallbackGetUserName onGetUserName;
 	CallbackProgrammableButtonClick onProgrammableButtonClick;
+	CallbackUpdateSettings onUpdateSettings;
 
 	static int LuaPrint(lua_State *L);
 	static int LuaError( lua_State *L );
@@ -147,6 +149,7 @@ private:
 	static int l_ProgrammableButtonClick(lua_State* L);
     static int l_RefreshAudioDevicesList(lua_State* L);
 	static int l_GetAudioDevice(lua_State* L);
+	static int l_UpdateSettings(lua_State* L);
 
 	bool &breakReq;
 	bool running;
@@ -185,7 +188,8 @@ public:
 		CallbackGetRxDtmf onGetRxDtmf,
 		CallbackShowTrayNotifier onShowTrayNotifier,
 		CallbackGetUserName onGetUserName,
-		CallbackProgrammableButtonClick onProgrammableButtonClick
+		CallbackProgrammableButtonClick onProgrammableButtonClick,
+		CallbackUpdateSettings onUpdateSettings
 		);
 	~ScriptExec();
 	void Run(const char* script);

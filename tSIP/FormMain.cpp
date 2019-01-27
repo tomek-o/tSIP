@@ -311,16 +311,28 @@ void TfrmMain::Finalize(void)
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::actShowAboutExecute(TObject *Sender)
 {
-	frmAbout->ShowModal();	
+	frmAbout->ShowModal();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 {
 	Settings prev = appSettings;	// keep track what is changed
-
 	frmSettings->ShowModal();
+	UpdateSettings(prev);
+}
+//---------------------------------------------------------------------------
 
+int TfrmMain::UpdateSettingsFromJson(AnsiString json)
+{
+	Settings prev = appSettings;	// keep track what is changed
+	int status = appSettings.UpdateFromText(json);
+	UpdateSettings(prev);
+	return status;
+}
+
+void TfrmMain::UpdateSettings(const Settings &prev)
+{
 	// modify application title and main window caption only if config changes,
 	// allowing to keep text set by Lua API or other methods
 	if ((prev.frmMain.bUseCustomApplicationTitle != appSettings.frmMain.bUseCustomApplicationTitle) ||
@@ -369,7 +381,7 @@ void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 	else
 	{
     	Screen->Cursor = crDefault;
-    }
+	}
 	if ((appSettings.frmMain.iSpeedDialSize != prev.frmMain.iSpeedDialSize && (appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly)) ||
 		prev.frmMain.bSpeedDialOnly != appSettings.frmMain.bSpeedDialOnly
 		)
@@ -415,8 +427,6 @@ void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 	GetFileVer(Application->ExeName, appSettings.info.appVersion.FileVersionMS, appSettings.info.appVersion.FileVersionLS);
 	appSettings.Write(asConfigFile);
 }
-//---------------------------------------------------------------------------
-
 
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
@@ -1915,7 +1925,8 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetRxDtmf,
 		&ShowTrayNotifier,
 		&OnGetUserName,
-		&ProgrammableButtonClick
+		&ProgrammableButtonClick,
+		&UpdateSettingsFromJson
 		);
 	scriptExec.Run(script.c_str());
 	return 0;

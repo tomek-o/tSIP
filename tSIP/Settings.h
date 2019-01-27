@@ -14,12 +14,18 @@
 #include <list>
 
 
+namespace Json
+{
+	struct Value;
+}
+
+
 class Settings
 {
 public:
 	int Read(AnsiString asFileName);
 	int Write(AnsiString asFileName);
-	void SetDefault(void);
+	int UpdateFromText(AnsiString text);
 	struct _gui
 	{
 		enum { SCALING_MIN = 50 };
@@ -230,6 +236,9 @@ public:
 	std::list<HotKeyConf> hotKeyConf;
 
 	Settings(void);
+
+private:
+	int UpdateFromJsonValue(const Json::Value &root);
 };
 
 extern Settings appSettings;
