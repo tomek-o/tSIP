@@ -641,7 +641,17 @@ Version 0.1.64
 	- BLF buttons can now show remote identity and call direction (number calling / number called) as 2nd line (opt-out)
 	- fixed few error log lines
 
-Version
+Version 0.1.65
+	- FIXED: nullaudio audio output module not working in release build due to unitialized variable
+	- FIXED: project dependency on gsm.lib not showing in IDE
+	- command line: target starting with "sip:" is treated as direct IP call
+	- FIXED: (repeated) delayed auto-answer on answer error
+	- added options to set custom application title and main form caption
 	- added speex resampler to aufile (wave file) audio input module
+	- added window ("Tools" menu) for script editing / ad hoc scripting based on Scintilla (this is making script plugin obsolete)
+	- script editor can be used directly from settings window (script assignment) editing existing script or creating new one
+	- rewritten reading main config and button config file - using previous values as defaults when reading JSON
+	- added RefreshAudioDevicesList() and GetAudioDevice() Lua functions
+	- added UpdateSettings(jsonText) Lua function
 */
 
