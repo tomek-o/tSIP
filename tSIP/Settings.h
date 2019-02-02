@@ -88,6 +88,7 @@ public:
 		AnsiString trayNotificationImage;	///< .bmp file to be shown in tray on missing call (replacing regular image)
 		bool bHideSettings;				///< hide settings menu from user
 		bool bHideView;					///< hide "View" menu from user
+		bool bHideTools;				///< hide "Tools" menu from user
 		bool bHideHelp;					///< hide "Help" menu from user
 		bool bKioskMode;
 		bool bHideMouseCursor;

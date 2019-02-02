@@ -245,6 +245,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	UpdateDialpadBackgroundImage();
 	miSettings->Visible = !appSettings.frmMain.bHideSettings;
 	miView->Visible = !appSettings.frmMain.bHideView;
+	miTools->Visible = !appSettings.frmMain.bHideTools;
 	miHelp->Visible = !appSettings.frmMain.bHideHelp;
 
 	trbarSoftvolMic->Position = trbarSoftvolMic->Max + trbarSoftvolMic->Min - appSettings.uaConf.audioSoftVol.tx;
@@ -415,6 +416,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
 	miSettings->Visible = !appSettings.frmMain.bHideSettings;
 	miView->Visible = !appSettings.frmMain.bHideView;
+	miTools->Visible = !appSettings.frmMain.bHideTools;
 	miHelp->Visible = !appSettings.frmMain.bHideHelp;
 
 	PhoneInterface::SetCfg(appSettings.phoneConf);

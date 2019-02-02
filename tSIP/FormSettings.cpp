@@ -67,12 +67,12 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	: TForm(Owner), lastTab(NULL)
 {
 	tabs.push_back(tsGeneral);
-	tabs.push_back(tsGeneral2);
 	tabs.push_back(tsNetwork);
 	tabs.push_back(tsAccount);
 	tabs.push_back(tsSpeedDial);
 	tabs.push_back(tsCalls);
 	tabs.push_back(tsDisplay);
+	tabs.push_back(tsLocking);
 	tabs.push_back(tsRing);
 	tabs.push_back(tsAudioIO);
 	tabs.push_back(tsAudioProcessing);
@@ -120,7 +120,7 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 		pcGeneral->Pages[i]->TabVisible = false;
 	}
 	// make "Accounts" selected and visible
-	tvSelector->Items->Item[3]->Selected = true;
+	tvSelector->Items->Item[tsAccount->PageIndex]->Selected = true;
 }
 //---------------------------------------------------------------------------
 
@@ -279,6 +279,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbNoBeepOnEnterKey->Checked = tmpSettings.frmMain.bNoBeepOnEnterKey;
 	chbHideSettings->Checked = tmpSettings.frmMain.bHideSettings;
 	chbHideViewMenu->Checked = tmpSettings.frmMain.bHideView;
+	chbHideToolsMenu->Checked = tmpSettings.frmMain.bHideTools;
 	chbHideHelpMenu->Checked = tmpSettings.frmMain.bHideHelp;
 
 	chbCustomUserAgent->Checked = tmpSettings.uaConf.customUserAgent;
@@ -452,6 +453,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bNoBeepOnEnterKey = chbNoBeepOnEnterKey->Checked;
 	tmpSettings.frmMain.bHideSettings = chbHideSettings->Checked;
 	tmpSettings.frmMain.bHideView = chbHideViewMenu->Checked;
+	tmpSettings.frmMain.bHideTools = chbHideToolsMenu->Checked;
 	tmpSettings.frmMain.bHideHelp = chbHideHelpMenu->Checked;
 
 	tmpSettings.uaConf.customUserAgent = chbCustomUserAgent->Checked;

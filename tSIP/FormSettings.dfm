@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsGeneral
+    ActivePage = tsLocking
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -61,49 +61,49 @@ object frmSettings: TfrmSettings
       Caption = 'General'
       object lblGuiScaling: TLabel
         Left = 3
-        Top = 94
+        Top = 118
         Width = 140
         Height = 13
         Caption = 'GUI scaling (restart required)'
       end
       object lblGuiScalingPct: TLabel
-        Left = 275
-        Top = 94
+        Left = 226
+        Top = 118
         Width = 11
         Height = 13
         Caption = '%'
       end
       object lblDialpadBackgroundImage: TLabel
         Left = 3
-        Top = 217
+        Top = 181
         Width = 125
         Height = 13
         Caption = 'Dialpad background image'
       end
       object lblMainIconFile: TLabel
         Left = 3
-        Top = 241
+        Top = 205
         Width = 128
         Height = 13
         Caption = 'Custom main icon file (.ico)'
       end
       object lblTrayNotificationIcon: TLabel
         Left = 3
-        Top = 265
+        Top = 229
         Width = 168
         Height = 13
         Caption = 'Custom tray icon notification image'
       end
       object lblRestartRequired1: TLabel
         Left = 340
-        Top = 241
+        Top = 205
         Width = 84
         Height = 13
         Caption = '(restart required)'
       end
       object lblRestartRequired2: TLabel
         Left = 340
-        Top = 265
+        Top = 229
         Width = 84
         Height = 13
         Caption = '(restart required)'
@@ -125,8 +125,8 @@ object frmSettings: TfrmSettings
         TabOrder = 1
       end
       object edGuiScaling: TEdit
-        Left = 227
-        Top = 91
+        Left = 178
+        Top = 115
         Width = 42
         Height = 21
         TabOrder = 2
@@ -149,7 +149,7 @@ object frmSettings: TfrmSettings
       end
       object chbSingleInstance: TCheckBox
         Left = 3
-        Top = 113
+        Top = 137
         Width = 382
         Height = 17
         Caption = 
@@ -159,14 +159,14 @@ object frmSettings: TfrmSettings
       end
       object edDialpadBackgroundImage: TEdit
         Left = 178
-        Top = 214
+        Top = 178
         Width = 121
         Height = 21
         TabOrder = 6
       end
       object btnSelectDialpadBackgroundImage: TButton
         Left = 305
-        Top = 214
+        Top = 178
         Width = 22
         Height = 21
         Caption = '...'
@@ -175,7 +175,7 @@ object frmSettings: TfrmSettings
       end
       object chbNoBeepOnEnterKey: TCheckBox
         Left = 3
-        Top = 134
+        Top = 158
         Width = 382
         Height = 17
         Caption = 
@@ -185,14 +185,14 @@ object frmSettings: TfrmSettings
       end
       object edMainIconFile: TEdit
         Left = 178
-        Top = 238
+        Top = 202
         Width = 121
         Height = 21
         TabOrder = 9
       end
       object btnSelectMainIconFile: TButton
         Left = 305
-        Top = 238
+        Top = 202
         Width = 22
         Height = 21
         Caption = '...'
@@ -201,120 +201,74 @@ object frmSettings: TfrmSettings
       end
       object edTrayNotificationImage: TEdit
         Left = 178
-        Top = 262
+        Top = 226
         Width = 121
         Height = 21
         TabOrder = 11
       end
       object btnSelectTrayNotificationImage: TButton
         Left = 305
-        Top = 262
+        Top = 226
         Width = 22
         Height = 21
         Caption = '...'
         TabOrder = 12
         OnClick = btnSelectImageClick
       end
-      object chbHideSettings: TCheckBox
-        Left = 3
-        Top = 155
-        Width = 518
-        Height = 17
-        Caption = 
-          'Hide settings menu; WARNING: to restore edit root["frmMain"]["Hi' +
-          'deSettings"] in JSON config file'
-        TabOrder = 13
-      end
       object chbCustomUserAgent: TCheckBox
         Left = 3
-        Top = 289
+        Top = 253
         Width = 157
         Height = 17
         Caption = 'Custom User-Agent value'
-        TabOrder = 14
+        TabOrder = 13
       end
       object edUserAgent: TEdit
         Left = 178
-        Top = 287
+        Top = 251
         Width = 121
         Height = 21
-        TabOrder = 15
+        TabOrder = 14
       end
-      object chbKioskMode: TCheckBox
-        Left = 3
-        Top = 310
-        Width = 398
-        Height = 17
-        Caption = 'Kiosk mode (fullscreen, no main menu, status bar, border)'
-        TabOrder = 16
-      end
-      object chbHideMouseCursor: TCheckBox
-        Left = 3
-        Top = 331
-        Width = 398
-        Height = 17
-        Caption = 'Hide mouse cursor'
-        TabOrder = 17
-      end
-      object chbHideViewMenu: TCheckBox
-        Left = 3
-        Top = 176
-        Width = 518
-        Height = 17
-        Caption = 'Hide "View" menu'
-        TabOrder = 18
-      end
-      object chbHideHelpMenu: TCheckBox
-        Left = 3
-        Top = 196
-        Width = 518
-        Height = 17
-        Caption = 'Hide "Help" menu'
-        TabOrder = 19
-      end
-    end
-    object tsGeneral2: TTabSheet
-      Caption = 'General (2)'
-      ImageIndex = 19
       object chbFrmMainShowWhenAnsweringCall: TCheckBox
         Left = 3
-        Top = 3
+        Top = 94
         Width = 446
         Height = 17
         Caption = 
           'Show main form when answering call (using tray notifier, shortcu' +
           't, script, ...)'
-        TabOrder = 0
+        TabOrder = 15
       end
       object chbFrmMainUseCustomApplicationTitle: TCheckBox
         Left = 3
-        Top = 26
+        Top = 276
         Width = 223
         Height = 17
         Caption = 'Custom application title (text in taskbar)'
-        TabOrder = 1
-      end
-      object edFrmMainCustomApplicationTitle: TEdit
-        Left = 232
-        Top = 24
-        Width = 193
-        Height = 21
-        TabOrder = 2
+        TabOrder = 16
       end
       object chbFrmMainUseCustomCaption: TCheckBox
         Left = 3
-        Top = 51
+        Top = 300
         Width = 191
         Height = 17
         Caption = 'Custom caption for main window'
-        TabOrder = 3
+        TabOrder = 17
+      end
+      object edFrmMainCustomApplicationTitle: TEdit
+        Left = 232
+        Top = 274
+        Width = 193
+        Height = 21
+        TabOrder = 18
       end
       object edFrmMainCustomCaption: TEdit
         Left = 232
-        Top = 49
+        Top = 298
         Width = 193
         Height = 21
-        TabOrder = 4
+        TabOrder = 19
       end
     end
     object tsNetwork: TTabSheet
@@ -701,6 +655,60 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Decode Display Name (UTF8) to local (ANSI) code page'
         TabOrder = 1
+      end
+    end
+    object tsLocking: TTabSheet
+      Caption = 'Locking'
+      ImageIndex = 19
+      object chbHideSettings: TCheckBox
+        Left = 3
+        Top = 3
+        Width = 518
+        Height = 17
+        Caption = 
+          'Hide settings menu; WARNING: to restore edit root["frmMain"]["Hi' +
+          'deSettings"] in JSON config file'
+        TabOrder = 0
+      end
+      object chbHideViewMenu: TCheckBox
+        Left = 3
+        Top = 24
+        Width = 518
+        Height = 17
+        Caption = 'Hide "View" menu'
+        TabOrder = 1
+      end
+      object chbHideHelpMenu: TCheckBox
+        Left = 3
+        Top = 64
+        Width = 518
+        Height = 17
+        Caption = 'Hide "Help" menu'
+        TabOrder = 2
+      end
+      object chbKioskMode: TCheckBox
+        Left = 3
+        Top = 84
+        Width = 398
+        Height = 17
+        Caption = 'Kiosk mode (fullscreen, no main menu, status bar, border)'
+        TabOrder = 3
+      end
+      object chbHideMouseCursor: TCheckBox
+        Left = 3
+        Top = 105
+        Width = 398
+        Height = 17
+        Caption = 'Hide mouse cursor'
+        TabOrder = 4
+      end
+      object chbHideToolsMenu: TCheckBox
+        Left = 3
+        Top = 44
+        Width = 518
+        Height = 17
+        Caption = 'Hide "Tools" menu'
+        TabOrder = 5
       end
     end
     object tsRing: TTabSheet
@@ -2322,35 +2330,35 @@ object frmSettings: TfrmSettings
     OnChange = tvSelectorChange
     Items.NodeData = {
       0114000000270000000000000000000000FFFFFFFFFFFFFFFF00000000000000
-      0007470065006E006500720061006C002F0000000000000000000000FFFFFFFF
-      FFFFFFFF00000000000000000B470065006E006500720061006C002000280032
-      002900270000000000000000000000FFFFFFFFFFFFFFFF000000000000000007
-      4E006500740077006F0072006B002F0000000000000000000000FFFFFFFFFFFF
-      FFFF00000000000000000B53004900500020006100630063006F0075006E0074
-      002D0000000000000000000000FFFFFFFFFFFFFFFF00000000000000000A5300
-      700065006500640020004400690061006C00230000000000000000000000FFFF
-      FFFFFFFFFFFF000000000000000005430061006C006C00730027000000000000
-      0000000000FFFFFFFFFFFFFFFF00000000000000000744006900730070006C00
-      61007900210000000000000000000000FFFFFFFFFFFFFFFF0000000000000000
-      04520069006E0067002B0000000000000000000000FFFFFFFFFFFFFFFF000000
-      00000000000941007500640069006F00200049002F004F003900000000000000
-      00000000FFFFFFFFFFFFFFFF00000000000000001041007500640069006F0020
-      00500072006F00630065007300730069006E0067002B00000000000000000000
-      00FFFFFFFFFFFFFFFF0000000000000000095200650063006F00720064006900
-      6E006700250000000000000000000000FFFFFFFFFFFFFFFF0000000000000000
-      0643006F0064006500630073002F0000000000000000000000FFFFFFFFFFFFFF
-      FF00000000000000000B49006E0074006500670072006100740069006F006E00
-      270000000000000000000000FFFFFFFFFFFFFFFF00000000000000000748006F
-      0074006B00650079007300290000000000000000000000FFFFFFFFFFFFFFFF00
-      000000000000000843006F006E00740061006300740073002700000000000000
-      00000000FFFFFFFFFFFFFFFF00000000000000000748006900730074006F0072
-      007900390000000000000000000000FFFFFFFFFFFFFFFF000000000000000010
-      500068006F006E00650073002000280070006C007500670069006E0073002900
-      330000000000000000000000FFFFFFFFFFFFFFFF00000000000000000D540072
-      006100790020004E006F00740069006600690065007200270000000000000000
-      000000FFFFFFFFFFFFFFFF000000000000000007530063007200690070007400
-      7300270000000000000000000000FFFFFFFFFFFFFFFF0000000000000000074C
-      006F006700670069006E006700}
+      0007470065006E006500720061006C00270000000000000000000000FFFFFFFF
+      FFFFFFFF0000000000000000074E006500740077006F0072006B002F00000000
+      00000000000000FFFFFFFFFFFFFFFF00000000000000000B5300490050002000
+      6100630063006F0075006E0074002D0000000000000000000000FFFFFFFFFFFF
+      FFFF00000000000000000A5300700065006500640020004400690061006C0023
+      0000000000000000000000FFFFFFFFFFFFFFFF00000000000000000543006100
+      6C006C007300270000000000000000000000FFFFFFFFFFFFFFFF000000000000
+      00000744006900730070006C0061007900270000000000000000000000FFFFFF
+      FFFFFFFFFF0000000000000000074C006F0063006B0069006E00670021000000
+      0000000000000000FFFFFFFFFFFFFFFF000000000000000004520069006E0067
+      002B0000000000000000000000FFFFFFFFFFFFFFFF0000000000000000094100
+      7500640069006F00200049002F004F00390000000000000000000000FFFFFFFF
+      FFFFFFFF00000000000000001041007500640069006F002000500072006F0063
+      0065007300730069006E0067002B0000000000000000000000FFFFFFFFFFFFFF
+      FF0000000000000000095200650063006F007200640069006E00670025000000
+      0000000000000000FFFFFFFFFFFFFFFF00000000000000000643006F00640065
+      00630073002F0000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      000B49006E0074006500670072006100740069006F006E002700000000000000
+      00000000FFFFFFFFFFFFFFFF00000000000000000748006F0074006B00650079
+      007300290000000000000000000000FFFFFFFFFFFFFFFF000000000000000008
+      43006F006E0074006100630074007300270000000000000000000000FFFFFFFF
+      FFFFFFFF00000000000000000748006900730074006F00720079003900000000
+      00000000000000FFFFFFFFFFFFFFFF000000000000000010500068006F006E00
+      650073002000280070006C007500670069006E00730029003300000000000000
+      00000000FFFFFFFFFFFFFFFF00000000000000000D540072006100790020004E
+      006F00740069006600690065007200270000000000000000000000FFFFFFFFFF
+      FFFFFF0000000000000000075300630072006900700074007300270000000000
+      000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F006700670069
+      006E006700}
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

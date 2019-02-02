@@ -43,6 +43,7 @@ Settings::_frmMain::_frmMain(void):
 	bNoBeepOnEnterKey(false),
 	bHideSettings(false),
 	bHideView(false),
+	bHideTools(false),
 	bHideHelp(false),
 	bKioskMode(false),
 	bHideMouseCursor(false),
@@ -515,6 +516,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bNoBeepOnEnterKey = frmMainJson.get("NoBeepOnEnterKey", frmMain.bNoBeepOnEnterKey).asBool();
 		frmMain.bHideSettings = frmMainJson.get("HideSettings", frmMain.bHideSettings).asBool();
 		frmMain.bHideView = frmMainJson.get("HideView", frmMain.bHideView).asBool();
+		frmMain.bHideTools = frmMainJson.get("HideTools", frmMain.bHideTools).asBool();
 		frmMain.bHideHelp = frmMainJson.get("HideHelp", frmMain.bHideHelp).asBool();
 		frmMain.bKioskMode = frmMainJson.get("KioskMode", frmMain.bKioskMode).asBool();
 		frmMain.bHideMouseCursor = frmMainJson.get("HideMouseCursor", frmMain.bHideMouseCursor).asBool();
@@ -713,6 +715,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["NoBeepOnEnterKey"] = frmMain.bNoBeepOnEnterKey;
 		jv["HideSettings"] = frmMain.bHideSettings;
 		jv["HideView"] = frmMain.bHideView;
+		jv["HideTools"] = frmMain.bHideTools;
 		jv["HideHelp"] = frmMain.bHideHelp;
 		jv["KioskMode"] = frmMain.bKioskMode;
 		jv["HideMouseCursor"] = frmMain.bHideMouseCursor;
