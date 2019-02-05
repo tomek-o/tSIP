@@ -104,6 +104,7 @@ private:
 	friend int luaopen_tsip_winapi (lua_State *L);
 	static int l_WinapiFindWindow(lua_State* L);
 	static int l_WinapiSendMessage(lua_State* L);
+	static int l_WinapiGetAsyncKeyState(lua_State* L);
 
 	static int l_Call(lua_State* L);
 	static int l_Hangup(lua_State* L);

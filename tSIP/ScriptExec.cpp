@@ -373,16 +373,24 @@ int ScriptExec::l_WinapiSendMessage(lua_State* L)
 	return 1;
 }
 
+int ScriptExec::l_WinapiGetAsyncKeyState(lua_State* L)
+{
+	int vKey = lua_tointegerx(L, 1, NULL);
+	int ret = GetAsyncKeyState(vKey);
+	lua_pushnumber(L, ret);
+	return 1;
+}
+
 int luaopen_tsip_winapi (lua_State *L) {
 	static const struct luaL_Reg tsip_winapi[] = {
 		{"FindWindow", ScriptExec::l_WinapiFindWindow},
 		{"SendMessage", ScriptExec::l_WinapiSendMessage},
 		{"Beep", ScriptExec::l_Beep},
 		{"MessageBox", ScriptExec::l_MessageBox},
+		{"GetAsyncKeyState", ScriptExec::l_WinapiGetAsyncKeyState},
 		{NULL, NULL}
 	};
 	luaL_newlib(L, tsip_winapi);
-	int TODO__GetKeyState;
 	return 1;
 }
 
