@@ -31,7 +31,7 @@ Settings::_frmMain::_frmMain(void):
 	bAlwaysOnTop(false),
 	bStartMinimizedToTray(false),	
     bSpeedDialVisible(false),
-	iSpeedDialSize(2),
+	iSpeedDialSize(1),	// default: 2 columns
 	iSpeedDialWidth(105),
 	bSpeedDialOnly(false),
 	bSpeedDialPopupMenu(true),
@@ -496,7 +496,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bSpeedDialIgnorePresenceNote = frmMainJson.get("SpeedDialIgnorePresenceNote", frmMain.bSpeedDialIgnorePresenceNote).asBool();
 		frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();
 		int iSpeedDialSize = frmMainJson.get("SpeedDialSize", frmMain.iSpeedDialSize).asUInt();
-		if (iSpeedDialSize >= 1 && iSpeedDialSize <= ProgrammableButtons::EXT_CONSOLE_COLUMNS)
+		if (iSpeedDialSize >= 0 && iSpeedDialSize < ProgrammableButtons::EXT_CONSOLE_COLUMNS)
 		{
 			frmMain.iSpeedDialSize = iSpeedDialSize;
 		}

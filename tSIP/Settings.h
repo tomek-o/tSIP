@@ -73,7 +73,7 @@ public:
 		bool bAlwaysOnTop;
 		bool bStartMinimizedToTray;
 		bool bSpeedDialVisible;
-		int iSpeedDialSize;				///< number of console columns
+		int iSpeedDialSize;				///< number of console columns minus 1 (0 = 1 column)
 		int iSpeedDialWidth;			///< width of single console column
 		bool bSpeedDialOnly;
 		bool bSpeedDialPopupMenu;       ///< enable/disable popup menu (editing) for speed dial / BLF panels
