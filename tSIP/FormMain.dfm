@@ -4,7 +4,7 @@ object frmMain: TfrmMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'tSIP'
-  ClientHeight = 380
+  ClientHeight = 381
   ClientWidth = 479
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -27,20 +27,22 @@ object frmMain: TfrmMain
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 361
+    Top = 362
     Width = 479
     Height = 19
     Panels = <>
     SimplePanel = True
+    ExplicitTop = 361
   end
   object pnlMain: TPanel
     Left = 0
     Top = 0
     Width = 267
-    Height = 361
+    Height = 362
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 361
     object lblCallState: TLabel
       Left = 8
       Top = 71
@@ -504,7 +506,7 @@ object frmMain: TfrmMain
     Left = 265
     Top = 4
     Width = 214
-    Height = 357
+    Height = 358
     Margins.Left = 0
     Margins.Top = 4
     Margins.Right = 0
@@ -512,6 +514,7 @@ object frmMain: TfrmMain
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitHeight = 357
   end
   object MainMenu: TMainMenu
     Left = 419
