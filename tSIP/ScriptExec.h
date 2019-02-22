@@ -45,7 +45,7 @@ private:
 	typedef int (__closure *CallbackPluginSendMessageText)(const char* dllName, const char* text);
 	typedef std::string (__closure *CallbackGetRecordFile)(void);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number);
-	typedef int (__closure *CallbackRecordStart)(const char* file, int channels);
+	typedef int (__closure *CallbackRecordStart)(const char* file, int channels, int side);
 	typedef int (__closure *CallbackGetRecordingState)(void);
 	// pop single DTMF character from RX queue
 	typedef std::string (__closure *CallbackGetRxDtmf)(void);

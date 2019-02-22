@@ -323,6 +323,11 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	cbRecDirTypeChange(NULL);	
 	this->edCustomRecDir->Text = tmpSettings.uaConf.recording.customRecDir.c_str();
 	cbRecordingChannels->ItemIndex = tmpSettings.uaConf.recording.channels - 1;
+	cbRecordingChannelsChange(NULL);
+	if (tmpSettings.uaConf.recording.side < cbRecordedSide->Items->Count)
+	{
+		cbRecordedSide->ItemIndex = tmpSettings.uaConf.recording.side;
+    }
 	cbRecordingStart->ItemIndex = tmpSettings.uaConf.recording.recStart;
 
 	chbAutoAnswer->Checked = tmpSettings.uaConf.autoAnswer;
@@ -389,7 +394,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TfrmSettings::btnCancelClick(TObject *Sender)
 {
-	this->Close();	
+	this->Close();
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
@@ -537,6 +542,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.recording.recDir = static_cast<UaConf::RecordingCfg::RecDir>(cbRecDirType->ItemIndex);
 	tmpSettings.uaConf.recording.customRecDir = edCustomRecDir->Text.c_str();
 	tmpSettings.uaConf.recording.channels = cbRecordingChannels->ItemIndex + 1;
+	tmpSettings.uaConf.recording.side = cbRecordedSide->ItemIndex;
 	tmpSettings.uaConf.recording.recStart = static_cast<UaConf::RecordingCfg::RecStart>(cbRecordingStart->ItemIndex);
 
    	tmpSettings.uaConf.autoAnswer = chbAutoAnswer->Checked;
@@ -865,6 +871,21 @@ void __fastcall TfrmSettings::cbRecDirTypeChange(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmSettings::cbRecordingChannelsChange(TObject *Sender)
+{
+	if (cbRecordingChannels->ItemIndex == 0)
+	{
+		lblRecordedSide->Visible = true;
+		cbRecordedSide->Visible = true;
+	}
+	else
+	{
+		lblRecordedSide->Visible = false;
+		cbRecordedSide->Visible = false;
+    }
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TfrmSettings::btnSelectCustomRecDirClick(TObject *Sender)
 {
     AnsiString asDir;
@@ -1190,4 +1211,5 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	frmLuaScript->OpenFile(file);
 }
 //---------------------------------------------------------------------------
+
 

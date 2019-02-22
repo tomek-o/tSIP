@@ -44,6 +44,7 @@ public:
 	AnsiString pagingTxCodec;
 	unsigned int pagingTxPtime;
 	unsigned int channels;
+	unsigned int recSide;
 	unsigned int softvol;
 };
 

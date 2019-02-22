@@ -276,6 +276,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			if (channels >= UaConf::RecordingCfg::CHANNELS_MIN && channels <= UaConf::RecordingCfg::CHANNELS_MAX) {
 				uaConf.recording.channels = channels;
 			}
+			uaConf.recording.side = uaConfRecordingJson.get("side", uaConf.recording.side).asUInt();
 			UaConf::RecordingCfg::RecStart recStart = static_cast<UaConf::RecordingCfg::RecStart>(uaConfRecordingJson.get("recStart", uaConf.recording.recStart).asInt());
 			if (recStart >= 0 && recStart < UaConf::RecordingCfg::RecStartLimiter) {
 				uaConf.recording.recStart = recStart;
@@ -441,10 +442,10 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 
 	{
 		const Json::Value &phoneConfJson = root["phoneConf"];
-		std::list<PhoneConf>::iterator iter = phoneConf.begin();
 		if (phoneConfJson.type() == Json::arrayValue)
 		{
-            phoneConf.resize(phoneConfJson.size());
+			phoneConf.resize(phoneConfJson.size());
+			std::list<PhoneConf>::iterator iter = phoneConf.begin();
 			for (int i=0; i<phoneConfJson.size(); i++)
 			{
 				const Json::Value &phoneJson = phoneConfJson[i];
@@ -801,11 +802,13 @@ int Settings::Write(AnsiString asFileName)
 
 	if (Branding::recording)
 	{
-		root["uaConf"]["recording"]["enabled"] = uaConf.recording.enabled;
-		root["uaConf"]["recording"]["recDir"] = uaConf.recording.recDir;
-		root["uaConf"]["recording"]["customRecDir"] = uaConf.recording.customRecDir;
-		root["uaConf"]["recording"]["channels"] = uaConf.recording.channels;
-		root["uaConf"]["recording"]["recStart"] = uaConf.recording.recStart;
+		Json::Value &jv = root["uaConf"]["recording"];
+		jv["enabled"] = uaConf.recording.enabled;
+		jv["recDir"] = uaConf.recording.recDir;
+		jv["customRecDir"] = uaConf.recording.customRecDir;
+		jv["channels"] = uaConf.recording.channels;
+		jv["side"] = uaConf.recording.side;
+		jv["recStart"] = uaConf.recording.recStart;
 	}
 
 	{

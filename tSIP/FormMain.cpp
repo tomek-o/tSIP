@@ -759,7 +759,7 @@ int TfrmMain::OnPluginSendMessageText(const char* dllName, const char* text)
 	return PhoneInterface::SendMessageText(dllName, text);
 }
 
-int TfrmMain::OnRecordStart(const char* file, int channels)
+int TfrmMain::OnRecordStart(const char* file, int channels, int side)
 {
 	if (appSettings.uaConf.recording.enabled == false)
 	{
@@ -771,7 +771,7 @@ int TfrmMain::OnRecordStart(const char* file, int channels)
 		LOG("OnRecordStart: no current call with active media\n");
 		return -2;
 	}
-	UA->Record(file, channels);
+	UA->Record(file, channels, side);
 	call.recordFile = file;
 	call.recording = true;
 	return 0;
@@ -1523,7 +1523,7 @@ void TfrmMain::StartRecording(void)
 			file += b64uri.c_str();
 			file += ".wav";
 			LOG("Record file: %s\n", file.c_str());
-			UA->Record(file, appSettings.uaConf.recording.channels);
+			UA->Record(file, appSettings.uaConf.recording.channels, appSettings.uaConf.recording.side);
 			call.recordFile = file;
 			call.recording = true;
 		}

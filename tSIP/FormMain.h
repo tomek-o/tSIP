@@ -194,7 +194,7 @@ private:	// User declarations
 	void OnSetButtonDown(int id, bool state);	
 	void OnSetButtonImage(int id, const char* file);
 	int OnPluginSendMessageText(const char* dllName, const char* text);
-	int OnRecordStart(const char* file, int channels);
+	int OnRecordStart(const char* file, int channels, int side);
 	int OnGetRecordingState(void);
 	std::string OnGetRxDtmf(void);
 	std::string OnGetUserName(void);

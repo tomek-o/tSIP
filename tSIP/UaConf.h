@@ -167,6 +167,7 @@ public:
 		std::string customRecDir;
 		enum { CHANNELS_MIN = 1, CHANNELS_MAX = 2 };
 		unsigned int channels;
+		unsigned int side;				///< which party to record in single channel mode, \sa baresip.h: enum recorder_side; 0 = both parties mixed
 		enum RecStart {
 			RecStartManual = 0,			///< start recording manually, e.g. using Lua API
 			RecStartCallConfirmed,		///< recording starts on call confirmed
@@ -178,6 +179,7 @@ public:
 			enabled(false),
 			recDir(RecDirRelative),
 			channels(1),
+			side(0),
 			recStart(RecStartCallConfirmed)
 		{}
 		bool operator==(const RecordingCfg& right) const {
@@ -185,6 +187,7 @@ public:
 				recDir == right.recDir &&
 				customRecDir == right.customRecDir &&
 				channels == right.channels &&
+				side == right.side &&
 				recStart == right.recStart
 				;
 		}

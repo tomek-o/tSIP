@@ -794,10 +794,10 @@ int ScriptExec::l_GetBlfState(lua_State* L)
 
 int ScriptExec::l_RecordStart(lua_State* L)
 {
-    /** \todo This would require adding option to recording to not start recording automatically */
 	const char* file = lua_tostring( L, 1 );
 	int channels = lua_tointeger( L, 2 );
-	int ret = GetContext(L)->onRecordStart(file, channels);
+	int side = lua_tointeger( L, 3 );	// optional, introduced in tSIP 0.1.66
+	int ret = GetContext(L)->onRecordStart(file, channels, side);
 	lua_pushinteger(L, ret);
 	return 1;
 }

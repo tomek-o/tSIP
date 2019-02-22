@@ -741,7 +741,7 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::RECORD: {
-        recorder_start(cmd.target.c_str(), cmd.channels);
+        recorder_start(cmd.target.c_str(), cmd.channels, static_cast<enum recorder_side>(cmd.recSide));
 		break;
 	}
 	case Command::PAGING_TX: {

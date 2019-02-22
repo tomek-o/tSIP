@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsLocking
+    ActivePage = tsRecording
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -1322,6 +1322,13 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Start mode'
       end
+      object lblRecordedSide: TLabel
+        Left = 3
+        Top = 148
+        Width = 68
+        Height = 13
+        Caption = 'Recorded side'
+      end
       object chbRecordingEnabled: TCheckBox
         Left = 3
         Top = 3
@@ -1333,7 +1340,7 @@ object frmSettings: TfrmSettings
       object cbRecDirType: TComboBox
         Left = 167
         Top = 34
-        Width = 207
+        Width = 274
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1348,12 +1355,12 @@ object frmSettings: TfrmSettings
       object edCustomRecDir: TEdit
         Left = 167
         Top = 61
-        Width = 207
+        Width = 247
         Height = 21
         TabOrder = 2
       end
       object btnSelectCustomRecDir: TButton
-        Left = 380
+        Left = 420
         Top = 61
         Width = 21
         Height = 21
@@ -1364,17 +1371,17 @@ object frmSettings: TfrmSettings
       object cbRecordingChannels: TComboBox
         Left = 167
         Top = 89
-        Width = 207
+        Width = 274
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
         TabOrder = 4
-        Text = 'mono (both sides mixed)'
-        OnChange = cbRecDirTypeChange
+        Text = 'mono (both sides mixed or one side only)'
+        OnChange = cbRecordingChannelsChange
         Items.Strings = (
-          'mono (both sides mixed)'
-          'stereo (sides separated, larger size)')
+          'mono (both sides mixed or one side only)'
+          'stereo (both sides, separated, larger size)')
       end
       object cbRecordingStart: TComboBox
         Left = 167
@@ -1386,11 +1393,26 @@ object frmSettings: TfrmSettings
         ItemIndex = 1
         TabOrder = 5
         Text = 'automatic - call confirmed state'
-        OnChange = cbRecDirTypeChange
         Items.Strings = (
           'manual (Lua script)'
           'automatic - call confirmed state'
           'automatic - call early media or call confirmed')
+      end
+      object cbRecordedSide: TComboBox
+        Left = 167
+        Top = 145
+        Width = 274
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
+        TabOrder = 6
+        Text = 'both local and remote (mixed)'
+        OnChange = cbRecDirTypeChange
+        Items.Strings = (
+          'both local and remote (mixed)'
+          'local party only (your microphone)'
+          'remote party only')
       end
     end
     object tsCodecs: TTabSheet

@@ -20,13 +20,16 @@ static struct lock* rec_lock = NULL;
 static bool filename_set = false;
 static char filename[512];
 static unsigned int channels = 1;
+static enum recorder_side side = RECORDER_SIDE_BOTH;
 
-int recorder_start(const char* const file, unsigned int rec_channels) {
+
+int recorder_start(const char* const file, unsigned int rec_channels, enum recorder_side rec_side) {
 	if (rec_lock == NULL)
 		return -1;
 	lock_write_get(rec_lock);
 	filename_set = false;
 	channels = rec_channels;
+	side = rec_side;
 	strncpy(filename, file, sizeof(filename));
 	filename[sizeof(filename)-1] = '\0';
 	filename_set = true;
@@ -316,12 +319,20 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 
 		if (channels == 1) {
 			//DEBUG_WARNING("write %d\n", cnt);
+        	// single channel: either one of the sides or both sides mixed (sum)
 			short *dst = (short*)bufrx;
 			short *src = (short*)buftx;
-			for (i=0; i<cnt/sizeof(short); i++) {
-				dst[i] += src[i];
+			if (side == RECORDER_SIDE_LOCAL) {
+				fwrite(bufrx, cnt, 1, rec->pFile);
+			} else if (side == RECORDER_SIDE_REMOTE) {
+				fwrite(buftx, cnt, 1, rec->pFile);
+			} else {
+				// default: both parties mixed
+				for (i=0; i<cnt/sizeof(short); i++) {
+					dst[i] += src[i];
+				}
+				fwrite(bufrx, cnt, 1, rec->pFile);
 			}
-			fwrite(bufrx, cnt, 1, rec->pFile);
 		} else if (channels == 2) {
 			short bufstereo[8000];
 			short *srcA = (short*)bufrx;

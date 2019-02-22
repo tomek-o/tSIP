@@ -351,7 +351,14 @@ int auplay_alloc(struct auplay_st **stp, const char *name,
 /*
  * Audio recorder
  */
-int recorder_start(const char* const filename, unsigned int rec_channels);
+
+enum recorder_side
+{
+	RECORDER_SIDE_BOTH = 0,	// record both parties (mixed)
+	RECORDER_SIDE_LOCAL,	// record only local party (i.e. what comes from microphone)
+	RECORDER_SIDE_REMOTE	// record only remote party
+};
+int recorder_start(const char* const filename, unsigned int rec_channels, enum recorder_side rec_side);
 
 /*
  * Audio Filter
