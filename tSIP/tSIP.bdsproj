@@ -50,7 +50,7 @@
         <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.arg.1" value="debug_build\precompiled.csm"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.arg.merge" value="0"/>
-        <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.Hc.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.He.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
@@ -447,6 +447,7 @@
         <FILE FILENAME="common\BtnController.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="LuaExamples.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="ScriptSource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="Paths.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Paths" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Paths.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -455,7 +456,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">65</VersionInfo>
-          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Build">3</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -467,7 +468,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.65.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.65.3</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

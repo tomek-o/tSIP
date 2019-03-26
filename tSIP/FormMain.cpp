@@ -5,6 +5,7 @@
 
 #include "FormMain.h"
 #include "CommandLine.h"
+#include "Paths.h"
 #include "TrayIcon.h"
 #include "FormAbout.h"
 #include "FormSettings.h"
@@ -71,12 +72,6 @@ namespace {
 		//ShowWindow(frmContactPopup->Handle,SW_SHOWNOACTIVATE);
 		//SetWindowPos(frmContactPopup->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	}
-	AnsiString GetFullImgName(AnsiString name)
-	{
-		AnsiString fname;
-		fname.sprintf("%s\\img\\%s", ExtractFileDir(Application->ExeName).c_str(), name.c_str());
-		return fname;
-	}
 	AnsiString GetPeerName(AnsiString displayName)
 	{
 		if (appSettings.Display.bDecodeUtfDisplayToAnsi)
@@ -102,7 +97,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmHistory->Visible = true;
 
 	AnsiString asButtonsFile;
-	asButtonsFile.sprintf("%s\\%s_buttons.json", ExtractFileDir(Application->ExeName).c_str(),
+	asButtonsFile.sprintf("%s\\%s_buttons.json", Paths::GetProfileDir().c_str(),
 		ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
 	buttons.SetFilename(asButtonsFile);
 	buttons.Read();
@@ -152,7 +147,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		Graphics::TBitmap *bmp = new Graphics::TBitmap();
 		try
 		{
-			bmp->LoadFromFile(GetFullImgName(appSettings.frmMain.trayNotificationImage));
+			bmp->LoadFromFile(Paths::GetFullImgName(appSettings.frmMain.trayNotificationImage));
 			imgListIcons->Clear();
 			imgListIcons->Add(bmp, NULL);
 		}
@@ -201,7 +196,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	}
 
 	AnsiString asContactsFile;
-	asContactsFile.sprintf("%s\\%s_contacts.json", ExtractFileDir(Application->ExeName).c_str(),
+	asContactsFile.sprintf("%s\\%s_contacts.json", Paths::GetProfileDir().c_str(),
 		ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
 	contacts.SetFilename(asContactsFile);
 	contacts.Read();
@@ -210,7 +205,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 
 	/** \note must be initialized AFTER contacts */
 	AnsiString asHistoryFile;
-	asHistoryFile.sprintf("%s\\%s_history.json", ExtractFileDir(Application->ExeName).c_str(),
+	asHistoryFile.sprintf("%s\\%s_history.json", Paths::GetProfileDir().c_str(),
 		ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
 	history.SetFilename(asHistoryFile);
 	history.Read(&OnGetContactName);
@@ -270,7 +265,6 @@ void TfrmMain::Finalize(void)
 
 	PhoneInterface::Close();
 
-	AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 	// inverting trackbars
 	appSettings.uaConf.audioSoftVol.tx = trbarSoftvolMic->Max - trbarSoftvolMic->Position + trbarSoftvolMic->Min;
 	appSettings.uaConf.audioSoftVol.rx = trbarSoftvolSpeaker->Max - trbarSoftvolSpeaker->Position + trbarSoftvolSpeaker->Min;
@@ -294,7 +288,7 @@ void TfrmMain::Finalize(void)
 	// update application version in settings
 	GetFileVer(Application->ExeName, appSettings.info.appVersion.FileVersionMS, appSettings.info.appVersion.FileVersionLS);
 		
-	appSettings.Write(asConfigFile);
+	appSettings.Write(Paths::GetConfig());
 	if (appSettings.History.bNoStoreToFile == false)
 	{
 		history.Write();
@@ -424,10 +418,9 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	tmrScript->Interval = appSettings.Scripts.timer;
 	tmrScript->Enabled = true;
 
-	AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 	// update application version in settings
 	GetFileVer(Application->ExeName, appSettings.info.appVersion.FileVersionMS, appSettings.info.appVersion.FileVersionLS);
-	appSettings.Write(asConfigFile);
+	appSettings.Write(Paths::GetConfig());
 }
 
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
@@ -474,7 +467,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 		cbCallURI->SetFocus();
 	}
 
-	AnsiString dir = ExtractFileDir(Application->ExeName);
+	AnsiString dir = Paths::GetProfileDir();
 	PhoneInterface::callbackKey = OnPhoneKey;
 	PhoneInterface::callbackPagingTx = OnPhonePagingTx;
 	PhoneInterface::callbackClearDial = OnPhoneClearDial;
@@ -494,7 +487,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	if (appSettings.Scripts.onStartup != "")
 	{
 		AnsiString asScriptFile;
-		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onStartup.c_str());
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onStartup.c_str());
 		RunScriptFile(SCRIPT_SRC_ON_STARTUP, -1, asScriptFile.c_str());
 	}
 
@@ -581,7 +574,7 @@ void TfrmMain::MakeCall(AnsiString target)
 	if (appSettings.Scripts.onMakeCall != "")
 	{
 		AnsiString asScriptFile;
-		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onMakeCall.c_str());
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onMakeCall.c_str());
 		// this script may change initial target implementing SIP originate function
 		RunScriptFile(SCRIPT_SRC_ON_MAKING_CALL, -1, asScriptFile.c_str());
 	}
@@ -710,7 +703,7 @@ void TfrmMain::OnSetTrayIcon(const char* file)
 		Graphics::TBitmap *bmp = new Graphics::TBitmap();
 		try
 		{
-			bmp->LoadFromFile(GetFullImgName(file));
+			bmp->LoadFromFile(Paths::GetFullImgName(file));
 			imgListIcons->Clear();
 			imgListIcons->Add(bmp, NULL);
 			trIcon->SetIcon(imgListIcons, 0);
@@ -1131,7 +1124,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			if (appSettings.Scripts.onCallState != "")
 			{
 				AnsiString asScriptFile;
-				asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onCallState.c_str());
+				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onCallState.c_str());
 				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, -1, asScriptFile.c_str());
 			}
 
@@ -1219,7 +1212,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			if (appSettings.Scripts.onRegistrationState != "")
 			{
 				AnsiString asScriptFile;
-				asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onRegistrationState.c_str());
+				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onRegistrationState.c_str());
 				RunScriptFile(SCRIPT_SRC_ON_REGISTRATION_STATE, -1, asScriptFile.c_str());
 			}
 
@@ -1307,7 +1300,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			if (appSettings.Scripts.onDialogInfo != "")
 			{
 				AnsiString asScriptFile;
-				asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onDialogInfo.c_str());
+				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDialogInfo.c_str());
 				RunScriptFile(SCRIPT_SRC_ON_DIALOG_INFO, cb.contactId, asScriptFile.c_str());
 			}
 			break;
@@ -1363,7 +1356,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			if (appSettings.Scripts.onStreamingState != "")
 			{
 				AnsiString asScriptFile;
-				asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onStreamingState.c_str());
+				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onStreamingState.c_str());
 				RunScriptFile(SCRIPT_SRC_ON_STREAMING_STATE, -1, asScriptFile.c_str());
 			}
 
@@ -1449,7 +1442,7 @@ void __fastcall TfrmMain::btnDialClick(TObject *Sender)
 	if (appSettings.Scripts.onDial != "")
 	{
 		AnsiString asScriptFile;
-		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onDial.c_str());
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDial.c_str());
 		RunScriptFile(SCRIPT_SRC_ON_DIAL, digit, asScriptFile.c_str());
 	}	
 }
@@ -1495,7 +1488,7 @@ void TfrmMain::StartRecording(void)
 		AnsiString dir;
 		if (appSettings.uaConf.recording.recDir == UaConf::RecordingCfg::RecDirRelative)
 		{
-			dir = ExtractFileDir(Application->ExeName) + "\\recordings\\";
+			dir = Paths::GetProfileDir() + "\\recordings\\";
 		}
 		else
 		{
@@ -1836,7 +1829,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	case Button::SCRIPT: {
 		AnsiString asScriptFile;
-		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), cfg.script.c_str());
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), cfg.script.c_str());
 		RunScriptFile(SCRIPT_SRC_BUTTON, id, asScriptFile.c_str());
 		break;
 	}
@@ -1954,7 +1947,7 @@ void TfrmMain::UpdateLogConfig(void)
 {
 	CLog *log = CLog::Instance();
 	if (appSettings.Logging.bLogToFile)
-		log->SetFile(ChangeFileExt(Application->ExeName, ".log").c_str());
+		log->SetFile((Paths::GetProfileDir() + "\\" + ChangeFileExt(ExtractFileName(Application->ExeName), ".log")).c_str());
 	else
 		log->SetFile("");
 	log->SetFlush(appSettings.Logging.bFlush);
@@ -2053,7 +2046,7 @@ void __fastcall TfrmMain::cbCallURIKeyPress(TObject *Sender, char &Key)
 	if (appSettings.Scripts.onDial != "")
 	{
 		AnsiString asScriptFile;
-		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onDial.c_str());
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDial.c_str());
 		RunScriptFile(SCRIPT_SRC_ON_DIAL, Key, asScriptFile.c_str());
 	}
 }
@@ -2322,7 +2315,7 @@ AnsiString TfrmMain::RingFile(AnsiString alertInfo)
 			if (file != "")
 			{
 				AnsiString fileFull;
-				fileFull.sprintf("%s\\%s", ExtractFileDir(Application->ExeName).c_str(), file.c_str());
+				fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), file.c_str());
 				if (FileExists(fileFull))
 					return file;
 			}
@@ -2625,8 +2618,7 @@ void TfrmMain::UpdateDialpadBackgroundImage(void)
 		static AnsiString lastImage;
 		if (appSettings.frmMain.dialpadBackgroundImage != "" && appSettings.frmMain.dialpadBackgroundImage != lastImage)
 		{
-			asDialpadBackgroundFile.sprintf("%s\\img\\%s", ExtractFileDir(Application->ExeName).c_str(),
-				appSettings.frmMain.dialpadBackgroundImage.c_str());
+			asDialpadBackgroundFile = Paths::GetFullImgName(appSettings.frmMain.dialpadBackgroundImage);
 			imgDialpadBackground->Picture->Bitmap->PixelFormat = pf24bit;
 			imgDialpadBackground->Picture->LoadFromFile(asDialpadBackgroundFile);
 			lastImage = appSettings.frmMain.dialpadBackgroundImage;
@@ -2644,7 +2636,7 @@ void __fastcall TfrmMain::tmrScriptTimer(TObject *Sender)
 	if (appSettings.Scripts.onTimer != "")
 	{
 		AnsiString asScriptFile;
-		asScriptFile.sprintf("%s\\scripts\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.Scripts.onTimer.c_str());
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onTimer.c_str());
 		RunScriptFile(SCRIPT_SRC_ON_TIMER, -1, asScriptFile.c_str(), false);
 		tmrScript->Enabled = true;
 	}

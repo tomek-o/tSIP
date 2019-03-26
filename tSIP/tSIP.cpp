@@ -35,6 +35,7 @@ USEFORM("FormTextEditor.cpp", frmTextEditor);
 #pragma link "scintilla.lib"
 
 #include "Settings.h"
+#include "Paths.h"
 #include "FormMain.h"
 #include "FormContactPopup.h"
 #include "CommandLine.h"
@@ -42,16 +43,6 @@ USEFORM("FormTextEditor.cpp", frmTextEditor);
 #include "LogUnit.h"
 #include "Log.h"
 #include "Branding.h"
-
-namespace
-{
-	AnsiString GetFullImgName(AnsiString name)
-	{
-		AnsiString fname;
-		fname.sprintf("%s\\img\\%s", ExtractFileDir(Application->ExeName).c_str(), name.c_str());
-		return fname;
-	}
-}
 
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -61,14 +52,14 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Branding::init();
 		Application -> ShowMainForm = false;
 
-		AnsiString dir = ExtractFileDir(Application->ExeName);
-		if (chdir(dir.c_str()) != 0)
+        Paths::SetProfileDir(CommandLine::GetProfileDir());
+
+		if (chdir(Paths::GetProfileDir().c_str()) != 0)
 		{
 			ShowMessage("Failed to set path for current directory");
 		}
 
-		AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
-		appSettings.Read(asConfigFile);
+		appSettings.Read(Paths::GetConfig());
 
 		if (appSettings.frmMain.bUseCustomApplicationTitle)
 		{
@@ -83,7 +74,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		{
 			try
 			{
-				Application->Icon->LoadFromFile(GetFullImgName(appSettings.frmMain.mainIcon));
+				Application->Icon->LoadFromFile(Paths::GetFullImgName(appSettings.frmMain.mainIcon));
 			}
 			catch (...)
 			{
@@ -133,7 +124,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		CLog::Instance()->SetLevel(E_LOG_TRACE);
 		CLog::Instance()->callbackLog = frmLog->OnLog;
 		LOG("\n===================\nApplication started\n");
-		LOG("Main config file: %s\n", asConfigFile.c_str());
+		LOG("Main config file: %s\n", Paths::GetConfig().c_str());
 #if 0
 		frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
 		frmLog->BorderStyle = bsNone;

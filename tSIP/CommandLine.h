@@ -34,6 +34,8 @@ public:
 	} action;
 	AnsiString asTarget;
 	int programmableBtnId;
+
+	static AnsiString GetProfileDir(void);
 };
 
 #endif

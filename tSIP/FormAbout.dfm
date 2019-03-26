@@ -3,8 +3,8 @@ object frmAbout: TfrmAbout
   Top = 108
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 360
-  ClientWidth = 538
+  ClientHeight = 378
+  ClientWidth = 537
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,7 +21,7 @@ object frmAbout: TfrmAbout
     Left = 0
     Top = 0
     Width = 537
-    Height = 321
+    Height = 342
     BevelInner = bvRaised
     BevelOuter = bvLowered
     ParentColor = True
@@ -30,7 +30,7 @@ object frmAbout: TfrmAbout
       Left = 8
       Top = 10
       Width = 48
-      Height = 48
+      Height = 49
       Picture.Data = {
         07544269746D6170361B0000424D361B00000000000036000000280000003000
         0000300000000100180000000000001B00000000000000000000000000000000
@@ -272,7 +272,7 @@ object frmAbout: TfrmAbout
     end
     object Copyright: TLabel
       Left = 8
-      Top = 279
+      Top = 300
       Width = 510
       Height = 13
       Caption = 
@@ -289,14 +289,14 @@ object frmAbout: TfrmAbout
     end
     object lblInfo1: TLabel
       Left = 8
-      Top = 299
+      Top = 320
       Width = 19
       Height = 13
       Caption = 'Visit'
     end
     object lblInfo2: TLabel
       Left = 33
-      Top = 299
+      Top = 320
       Width = 84
       Height = 13
       Cursor = crHandPoint
@@ -313,7 +313,7 @@ object frmAbout: TfrmAbout
     end
     object lblInfo3: TLabel
       Left = 123
-      Top = 299
+      Top = 320
       Width = 150
       Height = 13
       Caption = 'for updates and documentation.'
@@ -336,7 +336,7 @@ object frmAbout: TfrmAbout
     end
     object lblBaresipLicense: TLabel
       Left = 8
-      Top = 68
+      Top = 86
       Width = 332
       Height = 13
       Caption = 
@@ -378,14 +378,14 @@ object frmAbout: TfrmAbout
     end
     object Label1: TLabel
       Left = 8
-      Top = 83
+      Top = 101
       Width = 271
       Height = 13
       Caption = 'and other projects used with respect to following licenses:'
     end
     object Label2: TLabel
       Left = 344
-      Top = 68
+      Top = 86
       Width = 112
       Height = 13
       Cursor = crHandPoint
@@ -426,9 +426,35 @@ object frmAbout: TfrmAbout
       Caption = 'Location'
       IsControl = True
     end
+    object lblProfileDir: TLabel
+      Left = 88
+      Top = 65
+      Width = 43
+      Height = 13
+      Caption = 'Profile dir'
+      IsControl = True
+    end
+    object lblProfileDirLocation: TLabel
+      Left = 159
+      Top = 65
+      Width = 368
+      Height = 13
+      Cursor = crHandPoint
+      AutoSize = False
+      Caption = 'D:\progs\...'
+      Color = clBtnFace
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = [fsUnderline]
+      ParentColor = False
+      ParentFont = False
+      OnClick = lblProfileDirLocationClick
+    end
     object Memo: TMemo
       Left = 8
-      Top = 100
+      Top = 118
       Width = 519
       Height = 174
       Color = clBtnFace
@@ -918,7 +944,7 @@ object frmAbout: TfrmAbout
   end
   object OKButton: TButton
     Left = 227
-    Top = 327
+    Top = 348
     Width = 75
     Height = 25
     Caption = 'OK'

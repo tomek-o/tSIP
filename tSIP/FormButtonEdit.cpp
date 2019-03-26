@@ -6,6 +6,7 @@
 #include "FormButtonEdit.h"
 #include "ButtonType.h"
 #include "ButtonConf.h"
+#include "Paths.h"
 #include "Colors.h"
 #include "AudioDevicesList.h"
 #include "UaConf.h"
@@ -370,7 +371,7 @@ void __fastcall TfrmButtonEdit::SelectImgClick(TObject *Sender)
 
 	if (!edit)
 		return;
-	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\img\\";
+	AnsiString dir = Paths::GetProfileDir() + "\\img\\";
 	openDialog->InitialDir = dir;
 	openDialog->Filter = "";	
 	if (FileExists(dir + edit->Text))
@@ -416,7 +417,7 @@ void __fastcall TfrmButtonEdit::cbBackgroundColorChange(TObject *Sender)
 void __fastcall TfrmButtonEdit::btnSelectWaveClick(TObject *Sender)
 {
 	TEdit *edit = edPagingTxWaveFile;
-	AnsiString dir = ExtractFileDir(Application->ExeName);
+	AnsiString dir = Paths::GetProfileDir();
 	ForceDirectories(dir);
 	openDialog->Filter = "WAVE files (*.wav)|*.wav|All files|*.*";
 	openDialog->InitialDir = dir;
@@ -440,7 +441,7 @@ void __fastcall TfrmButtonEdit::btnSelectWaveClick(TObject *Sender)
 void __fastcall TfrmButtonEdit::btnSelectScriptClick(TObject *Sender)
 {
 	TEdit *edit = edScriptFile;
-	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\scripts";
+	AnsiString dir = Paths::GetProfileDir() + "\\scripts";
 	ForceDirectories(dir);
 	openDialog->InitialDir = dir;
 	openDialog->Filter = "Lua files (*.lua)|*.lua|All files|*.*";
@@ -496,14 +497,14 @@ void __fastcall TfrmButtonEdit::cbSoundInputModChange(TObject *Sender)
 
 void __fastcall TfrmButtonEdit::btnSelectWaveFileClick(TObject *Sender)
 {
-	dlgOpenRing->InitialDir = ExtractFileDir(Application->ExeName);
+	dlgOpenRing->InitialDir = Paths::GetProfileDir();
 	if (edSoundInputWave->Text != "")
 	{
-		dlgOpenRing->FileName = ExtractFileDir(Application->ExeName) + "\\" + edSoundInputWave->Text;
+		dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edSoundInputWave->Text;
 	}
 	if (dlgOpenRing->Execute())
 	{
-		if (UpperCase(ExtractFileDir(Application->ExeName)) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
 		{
 			MessageBox(this->Handle, "File was not updated.\nFor portability source WAVE files must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
 			return;

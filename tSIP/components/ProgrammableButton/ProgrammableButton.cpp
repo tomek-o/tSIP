@@ -6,23 +6,18 @@
 
 #include "ProgrammableButton.h"
 #include "ButtonConf.h"
+#include "Paths.h"
 #pragma package(smart_init)
 
 // #define ON_MOUSE_ENTER_LEAVE
 
 namespace
 {
-	AnsiString GetFullImgName(AnsiString name)
-	{
-		AnsiString fname;
-		fname.sprintf("%s\\img\\%s", ExtractFileDir(Application->ExeName).c_str(), name.c_str());
-		return fname;
-	}
 	void LoadBitmap(Graphics::TBitmap *bmp, AnsiString name)
 	{
 		try
 		{
-			AnsiString fname = GetFullImgName(name);
+			AnsiString fname = Paths::GetFullImgName(name);
 			if (FileExists(fname))
 			{
 				bmp->LoadFromFile(fname);

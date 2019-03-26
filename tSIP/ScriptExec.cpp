@@ -8,6 +8,7 @@
 #include "LuaState.h"
 #include "lua.hpp"
 #include "AudioDevicesList.h"
+#include "Paths.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -851,6 +852,12 @@ int ScriptExec::l_GetExeName(lua_State* L)
 	return 1;
 }
 
+int ScriptExec::l_GetProfileDir(lua_State* L)
+{
+	lua_pushstring(L, Paths::GetProfileDir().c_str());
+	return 1;
+}
+
 int ScriptExec::l_RefreshAudioDevicesList(lua_State* L)
 {
 	AudioDevicesList::Instance().Refresh();
@@ -1107,6 +1114,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetBlfState", l_GetBlfState);
 	lua_register(L, "RecordStart", l_RecordStart);
 	lua_register(L, "GetExeName", l_GetExeName);
+	lua_register(L, "GetProfileDir", l_GetProfileDir);
 	lua_register(L, "GetRecordingState", l_GetRecordingState);
 	lua_register(L, "GetRxDtmf", l_GetRxDtmf);
 	lua_register(L, "ShowTrayNotifier", l_ShowTrayNotifier);

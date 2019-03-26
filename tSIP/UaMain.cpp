@@ -10,6 +10,7 @@
 #include "CallbackQueue.h"
 #include "Callback.h"
 #include "Settings.h"
+#include "Paths.h"
 #include <re.h>
 #include "baresip.h"
 #include "Log.h"
@@ -322,10 +323,7 @@ static int app_init(void)
 
 	/* Initialise dynamic modules */
 	mod_init();
-#if 0
-	static AnsiString asConfPath = ExtractFileDir(Application->ExeName).c_str();
-	conf_path_set(asConfPath.c_str());
-#endif
+
 	struct config * cfg = conf_config();
 
 	strncpyz(cfg->audio.src_mod, appSettings.uaConf.audioCfgSrc.mod, sizeof(cfg->audio.src_mod));
@@ -336,7 +334,7 @@ static int app_init(void)
 	else
 	{
 		AnsiString fileFull;
-		fileFull.sprintf("%s\\%s", ExtractFileDir(Application->ExeName).c_str(), appSettings.uaConf.audioCfgSrc.wavefile);
+		fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), appSettings.uaConf.audioCfgSrc.wavefile);
 		strncpyz(cfg->audio.src_dev, fileFull.c_str(), sizeof(cfg->audio.src_dev));
 	}
 	strncpyz(cfg->audio.play_mod, appSettings.uaConf.audioCfgPlay.mod, sizeof(cfg->audio.play_mod));
@@ -531,7 +529,7 @@ static int app_start(void)
 
 
 	AnsiString dllPath;
-	dllPath.sprintf("%s\\modules", ExtractFileDir(Application->ExeName).c_str());
+	dllPath.sprintf("%s\\modules", Paths::GetProfileDir().c_str());
 	struct pl plDllPath;
 	pl_set_str(&plDllPath, dllPath.c_str());
 
@@ -853,7 +851,7 @@ __fastcall Worker::Worker(bool CreateSuspended)
 void __fastcall Worker::Execute()
 {
 	int err;
-    play_set_path(ExtractFilePath(Application->ExeName).c_str());
+    play_set_path((Paths::GetProfileDir() + "\\").c_str());
 	do
 	{
 		appRestart = false;

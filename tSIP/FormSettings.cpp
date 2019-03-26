@@ -11,6 +11,7 @@
 #include "ProgrammableButtons.h"
 #include "FormLuaScript.h"
 #include "UaMain.h"
+#include "Paths.h"
 #include "Registry.hpp"
 #include "Branding.h"
 #include <FileCtrl.hpp>
@@ -761,6 +762,10 @@ void __fastcall TfrmSettings::btnCreateIntegrationProtocolClick(TObject *Sender)
 			if (registry->OpenKey(key, true))
 			{
 				val.sprintf("%s /%s=\"%1\"", Application->ExeName.c_str(), Branding::appProto.c_str());
+				if (LowerCase(Paths::GetProfileDir()) != LowerCase(ExtractFileDir(Application->ExeName)))
+				{
+                	val.cat_printf(" /profiledir=\"%s\"", Paths::GetProfileDir().c_str());
+				}
 				registry->WriteString("", val);
 				registry->CloseKey();
 			}
@@ -829,11 +834,11 @@ void __fastcall TfrmSettings::btnRingSelectClick(TObject *Sender)
 		edit = edRingBellcoreDr8;
 		str = &tmpSettings.Ring.bellcore[7];
 	}
-	dlgOpenRing->InitialDir = ExtractFileDir(Application->ExeName);
-	dlgOpenRing->FileName = ExtractFileDir(Application->ExeName) + "\\" + edit->Text;
+	dlgOpenRing->InitialDir = Paths::GetProfileDir();
+	dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edit->Text;
 	if (dlgOpenRing->Execute())
 	{
-		if (UpperCase(ExtractFileDir(Application->ExeName)) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
 		{
 			MessageBox(this->Handle, "Ring file was not updated.\nFor portability ring WAVE files must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
 			return;
@@ -898,14 +903,14 @@ void __fastcall TfrmSettings::btnSelectCustomRecDirClick(TObject *Sender)
 
 void __fastcall TfrmSettings::btnSelectWaveFileClick(TObject *Sender)
 {
-	dlgOpenRing->InitialDir = ExtractFileDir(Application->ExeName);
+	dlgOpenRing->InitialDir = Paths::GetProfileDir();
 	if (edSoundInputWave->Text != "")
 	{
-		dlgOpenRing->FileName = ExtractFileDir(Application->ExeName) + "\\" + edSoundInputWave->Text;
+		dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edSoundInputWave->Text;
 	}
 	if (dlgOpenRing->Execute())
 	{
-		if (UpperCase(ExtractFileDir(Application->ExeName)) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
 		{
 			MessageBox(this->Handle, "File was not updated.\nFor portability source WAVE files must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
 			return;
@@ -960,7 +965,7 @@ void __fastcall TfrmSettings::btnSelectImageClick(
         assert(!"Unhandler sender!");
 		return;
 	}
-	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\img\\";
+	AnsiString dir = Paths::GetProfileDir() + "\\img\\";
 	openDialog->InitialDir = dir;
 	if (FileExists(dir + edit->Text))
 		openDialog->FileName = dir + edit->Text;
@@ -1107,7 +1112,7 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 		assert(0);
 		return;
     }
-	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\scripts";
+	AnsiString dir = Paths::GetProfileDir() + "\\scripts";
 	ForceDirectories(dir);
 	openDialog->InitialDir = dir;
 	openDialog->Filter = "Lua files (*.lua)|*.lua|All files|*.*";
@@ -1179,7 +1184,7 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 		assert(0);
 		return;
 	}
-	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\scripts";
+	AnsiString dir = Paths::GetProfileDir() + "\\scripts";
 	ForceDirectories(dir);
 	AnsiString file = dir + "\\";
 	if (edit->Text != "")

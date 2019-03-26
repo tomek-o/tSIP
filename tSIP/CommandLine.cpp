@@ -14,7 +14,6 @@
 
 namespace {
 
-
 	std::string UrlDecode(const std::string &SRC) {
 		std::string ret;
 		char ch;
@@ -33,7 +32,9 @@ namespace {
 	}
 
 	const char* PROGRAMMABLE_BTN_STR = "PROGRAMMABLE_BTN_";
-}
+
+}	// namespace
+
 
 CommandLine CommandLine::instance;
 
@@ -97,7 +98,7 @@ int CommandLine::Process(void)
 		}
 		else
 		{
-        	//ShowMessage("WM_COPYDATA: failed to send");
+			//ShowMessage("WM_COPYDATA: failed to send");
 		}
 		delete[] data;
 		return 1;
@@ -119,7 +120,7 @@ void CommandLine::Execute(char* buf, int paramcnt)
 	for (int i=1; i<=paramcnt; i++)
 	{
 		AnsiString asParam = buf + (MAX_CMD_PARAM_LEN*i);
-		if (LowerCase(asParam).Pos(szCallParam))
+		if (LowerCase(asParam).Pos(szCallParam) == 1)
 		{
 			AnsiString asCallTo =
 				asParam.SubString(strlen(szCallParam)+1, asParam.Length() - strlen(szCallParam)).Trim();
@@ -174,3 +175,18 @@ void CommandLine::Execute(char* buf, int paramcnt)
 	}
 }
 
+AnsiString CommandLine::GetProfileDir(void)
+{
+	AnsiString needle = "/profiledir=";
+	int paramcnt = ParamCount() + 1;
+	for (int i=1; i<paramcnt; i++)
+	{
+		AnsiString asParam = ParamStr(i);
+		if (LowerCase(asParam).Pos(needle) == 1)
+		{
+			AnsiString dir = asParam.SubString(needle.Length()+1, asParam.Length() - needle.Length());
+			return dir;
+		}
+	}
+	return "";
+}

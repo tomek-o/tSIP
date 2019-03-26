@@ -143,6 +143,7 @@ private:
 	static int l_GetBlfState(lua_State* L);
 	static int l_RecordStart(lua_State* L);
 	static int l_GetExeName(lua_State* L);
+	static int l_GetProfileDir(lua_State* L);
 	static int l_GetRecordingState(lua_State* L);
 	static int l_GetRxDtmf(lua_State* L);
 	static int l_ShowTrayNotifier(lua_State* L);

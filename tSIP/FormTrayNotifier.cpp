@@ -5,6 +5,7 @@
 
 #include "FormTrayNotifier.h"
 #include "Settings.h"
+#include "Paths.h"
 #include "Log.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -62,7 +63,7 @@ void TfrmTrayNotifier::UpdateBackgroundImage(void)
 		AnsiString image = appSettings.frmTrayNotifier.backgroundImage;
 		if (image != "" && image != lastImage)
 		{
-			asBackgroundFile.sprintf("%s\\img\\%s", ExtractFileDir(Application->ExeName).c_str(), image.c_str());
+			asBackgroundFile = Paths::GetFullImgName(image);
 			imgBackground->Picture->Bitmap->PixelFormat = pf24bit;
 			imgBackground->Picture->LoadFromFile(asBackgroundFile);
 			lastImage = image;

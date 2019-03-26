@@ -39,10 +39,13 @@ __published:
 	TLabel *Label2;
 	TLabel *lblExeLocation;
 	TLabel *lblLocation;
+	TLabel *lblProfileDir;
+	TLabel *lblProfileDirLocation;
 	void __fastcall lblInfo2Click(TObject *Sender);
 	void __fastcall lblCodeGuardStateClick(TObject *Sender);
 	void __fastcall lblExeLocationClick(TObject *Sender);
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
+	void __fastcall lblProfileDirLocationClick(TObject *Sender);
 private:
 public:
 	virtual __fastcall TfrmAbout(TComponent* AOwner);

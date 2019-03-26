@@ -14,6 +14,7 @@
 #include "common/ScopedLock.h"
 #include "common/Mutex.h"
 #include "Settings.h"
+#include "Paths.h"
 #include "ControlQueue.h"
 
 //---------------------------------------------------------------------------
@@ -164,7 +165,7 @@ void __fastcall TfrmLog::chbLogToFileClick(TObject *Sender)
 {
 	appSettings.Logging.bLogToFile = chbLogToFile->Checked;
 	if (appSettings.Logging.bLogToFile)
-		CLog::Instance()->SetFile(ChangeFileExt(Application->ExeName, ".log").c_str());
+		CLog::Instance()->SetFile((Paths::GetProfileDir() + "\\" + ChangeFileExt(ExtractFileName(Application->ExeName), ".log")).c_str());
 	else
 		CLog::Instance()->SetFile("");
 }
