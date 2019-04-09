@@ -1542,7 +1542,7 @@ void __fastcall TfrmMain::FormClose(TObject *Sender, TCloseAction &Action)
     {
         ShowWindow(Application->Handle, SW_HIDE);
         Visible = false;
-        Action = caNone;
+		Action = caNone;
     }
 	else
 	{
@@ -2158,6 +2158,10 @@ void TfrmMain::AutoAnswer(void)
 		} else {
 			Answer();
 		}
+		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
+		{
+			frmTrayNotifier->Close();
+		}
 	} else if (autoAnswerCode >= 400) {
 		UA->Hangup(0, autoAnswerCode);
 		lbl2ndParty->Caption = "";
@@ -2166,7 +2170,10 @@ void TfrmMain::AutoAnswer(void)
 		call.incoming = false;
 		call.progress = false;
 		call.connected = false;
-		return;
+		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
+		{
+			frmTrayNotifier->Close();
+		}
 	}
 }
 

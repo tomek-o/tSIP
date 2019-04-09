@@ -233,6 +233,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edTrayNotifierBackgroundImage->Text = tmpSettings.frmTrayNotifier.backgroundImage;
 	edTrayNotifierGuiScaling->Text = tmpSettings.frmTrayNotifier.scalingPct;
 	chbTrayNotifierHideWhenAnsweringCall->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCall;
+	chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically;
 	chbFrmMainUseCustomApplicationTitle->Checked = tmpSettings.frmMain.bUseCustomApplicationTitle;
 	edFrmMainCustomApplicationTitle->Text = tmpSettings.frmMain.customApplicationTitle;
 	chbFrmMainUseCustomCaption->Checked = tmpSettings.frmMain.bUseCustomCaption;
@@ -420,6 +421,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		tmpSettings.frmTrayNotifier.scalingPct = Settings::_frmTrayNotifier::SCALING_DEF;
 	}
 	tmpSettings.frmTrayNotifier.hideWhenAnsweringCall = chbTrayNotifierHideWhenAnsweringCall->Checked;
+	tmpSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically = chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked;
 	tmpSettings.frmMain.bUseCustomApplicationTitle = chbFrmMainUseCustomApplicationTitle->Checked;
 	tmpSettings.frmMain.customApplicationTitle = edFrmMainCustomApplicationTitle->Text;
 	tmpSettings.frmMain.bUseCustomCaption = chbFrmMainUseCustomCaption->Checked;

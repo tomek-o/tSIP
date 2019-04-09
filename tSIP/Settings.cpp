@@ -64,6 +64,7 @@ Settings::_frmTrayNotifier::_frmTrayNotifier(void):
 	skipIfMainWindowVisible(false),
 	showOnOutgoing(false),
 	hideWhenAnsweringCall(false),
+	hideWhenAnsweringCallAutomatically(false),
 	scalingPct(SCALING_DEF)
 {
 	int maxX = GetSystemMetrics(SM_CXSCREEN);
@@ -545,6 +546,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmTrayNotifier.skipIfMainWindowVisible = frmTrayNotifierJson.get("SkipIfMainWindowVisible", frmTrayNotifier.skipIfMainWindowVisible).asBool();
 		frmTrayNotifier.showOnOutgoing = frmTrayNotifierJson.get("ShowOnOutgoing", frmTrayNotifier.showOnOutgoing).asBool();
 		frmTrayNotifier.hideWhenAnsweringCall = frmTrayNotifierJson.get("HideWhenAnsweringCall", frmTrayNotifier.hideWhenAnsweringCall).asBool();
+		frmTrayNotifier.hideWhenAnsweringCallAutomatically = frmTrayNotifierJson.get("HideWhenAnsweringCallAutomatically", frmTrayNotifier.hideWhenAnsweringCallAutomatically).asBool();
 		frmTrayNotifier.backgroundImage = frmTrayNotifierJson.get("BackgroundImage", frmTrayNotifier.backgroundImage.c_str()).asString().c_str();
 		int scalingPct = frmTrayNotifierJson.get("ScalingPct", frmTrayNotifier.scalingPct).asInt();
 		if (scalingPct >= _frmTrayNotifier::SCALING_MIN && frmTrayNotifier.scalingPct <= _frmTrayNotifier::SCALING_MAX) {
@@ -735,6 +737,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["SkipIfMainWindowVisible"] = frmTrayNotifier.skipIfMainWindowVisible;
 		jv["ShowOnOutgoing"] = frmTrayNotifier.showOnOutgoing;
 		jv["HideWhenAnsweringCall"] = frmTrayNotifier.hideWhenAnsweringCall;
+		jv["HideWhenAnsweringCallAutomatically"] = frmTrayNotifier.hideWhenAnsweringCallAutomatically;
 		jv["BackgroundImage"] = frmTrayNotifier.backgroundImage.c_str();
 		jv["ScalingPct"] = frmTrayNotifier.scalingPct;
 	}

@@ -289,6 +289,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chbHideToolsMenu;
 	TLabel *lblRecordedSide;
 	TComboBox *cbRecordedSide;
+	TCheckBox *chbTrayNotifierHideWhenAnsweringCallAutomatically;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

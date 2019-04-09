@@ -107,7 +107,8 @@ public:
 		bool showOnIncoming;
 		bool skipIfMainWindowVisible;
 		bool showOnOutgoing;
-		bool hideWhenAnsweringCall;
+		bool hideWhenAnsweringCall;		///< for manual call answer
+		bool hideWhenAnsweringCallAutomatically;
 		AnsiString backgroundImage;
 		enum { SCALING_MIN = 50 };
 		enum { SCALING_DEF = 100 };
