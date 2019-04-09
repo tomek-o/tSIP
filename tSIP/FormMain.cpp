@@ -1285,7 +1285,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				direction = static_cast<enum dialog_info_direction>(cb.dlgInfoDirection);
 				remoteIdentity = cb.dlgInfoRemoteIdentity;
-				remoteIdentityDisplay = cb.dlgInfoRemoteIdentityDisplay;
+				remoteIdentityDisplay = GetPeerName(cb.dlgInfoRemoteIdentityDisplay);
             }
 			appSettings.uaConf.contacts[cb.contactId].dialog_info_state = cb.dlgInfoState;
 			std::list<int> &ids = appSettings.uaConf.contacts[cb.contactId].btnIds;
