@@ -1106,7 +1106,10 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				if (appSettings.frmTrayNotifier.showOnIncoming)
 				{
-					if (Visible == false || appSettings.frmTrayNotifier.skipIfMainWindowVisible == false)
+					if (
+						(Visible == false || appSettings.frmTrayNotifier.skipIfMainWindowVisible == false) &&
+						((answered && appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically) == false)
+						)
 					{
 						ShowTrayNotifier(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call.incoming);
 					}
