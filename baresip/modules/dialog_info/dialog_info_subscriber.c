@@ -266,7 +266,7 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg,
 			"\t\t\t\t</target>\n"
 			"\t\t\t</local>\n"
 			"\t\t\t<remote>\n"
-			"\t\t\t\t<identity display=\"0310000\">sip:0310000@pbx.xxxx.net</identity>\n"
+			"\t\t\t\t<identity display=\"UTF8: gżegżółka\">sip:0310000@pbx.xxxx.net</identity>\n"
 			"\t\t\t\t<target uri=\"sip:**11@pbx.xxxx.net\"/>\n"
 			"\t\t\t</remote>\n"
 			"\t\t</dialog>\n"
