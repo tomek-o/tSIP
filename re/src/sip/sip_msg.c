@@ -15,6 +15,7 @@
 #include <re_uri.h>
 #include <re_udp.h>
 #include <re_sip.h>
+#include <re_dbg.h>
 #include "sip.h"
 
 
@@ -204,12 +205,12 @@ static inline int hdr_add(struct sip_msg *msg, const struct pl *name,
 
 	case SIP_HDR_FROM:
 		err = sip_addr_decode((struct sip_addr *)&msg->from,
-				      &hdr->val);
+					  &hdr->val);
 		if (err)
 			break;
 
 		(void)sip_param_decode(&msg->from.params, "tag",
-				       &msg->from.tag);
+					   &msg->from.tag);
 		msg->from.val = hdr->val;
 		break;
 
@@ -247,6 +248,16 @@ static inline int hdr_add(struct sip_msg *msg, const struct pl *name,
 
 	case SIP_HDR_ACCESS_URL:
 		err = sip_access_url_decode(name, &msg->access_url, &hdr->val);
+		break;
+
+	case SIP_HDR_P_ASSERTED_IDENTITY:
+		err = sip_addr_decode((struct sip_addr *)&msg->p_asserted_identity, &hdr->val);
+		if (err == 0) {
+			msg->p_asserted_identity_present = true;
+			msg->p_asserted_identity.val = hdr->val;
+		} else {
+			DEBUG_WARNING("Failed to decode P-Asserted-Identity value (ignored)\n");
+		}
 		break;
 
 	default:

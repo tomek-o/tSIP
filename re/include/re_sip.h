@@ -227,6 +227,8 @@ struct sip_msg {
 	struct sip_call_info call_info;
 	struct sip_alert_info alert_info;
 	struct sip_access_url access_url;
+    bool p_asserted_identity_present;
+	struct sip_taddr p_asserted_identity;
 	struct pl callid;
 	struct pl maxfwd;
 	struct pl expires;

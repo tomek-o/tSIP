@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsTrayNotifier
+    ActivePage = tsDisplay
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -655,6 +655,14 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Decode Display Name (UTF8) to local (ANSI) code page'
         TabOrder = 1
+      end
+      object chbUsePAssertedIdentity: TCheckBox
+        Left = 3
+        Top = 49
+        Width = 325
+        Height = 17
+        Caption = 'Use P-Asserted-Identity if present'
+        TabOrder = 2
       end
     end
     object tsLocking: TTabSheet

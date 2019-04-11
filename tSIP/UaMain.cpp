@@ -100,40 +100,51 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 
 			state = Callback::CALL_STATE_INCOMING;
 			app.callp = call;
+
 			const char* alert_info = call_alert_info(call);
 			if (alert_info == NULL)
 				alert_info = "";
+
 			const char* access_url = call_access_url(call);
 			if (access_url == NULL)
 				access_url = "";
-			UA_CB->ChangeCallState(state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call));
+
+			const char* pai_peer_uri = call_pai_peeruri(call);
+			if (pai_peer_uri == NULL)
+				pai_peer_uri = "";
+
+			const char* pai_peer_name = call_pai_peername(call);
+			if (pai_peer_name == NULL)
+				pai_peer_name = "";
+
+			UA_CB->ChangeCallState(state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name);
 			break;
 		}
 	case UA_EVENT_CALL_RINGING:
 		state = Callback::CALL_STATE_RINGING;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1);
+		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "");
 		break;
 	case UA_EVENT_CALL_TRYING:
 		state = Callback::CALL_STATE_TRYING;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1);
+		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "");
 		break;
 	case UA_EVENT_CALL_OUTGOING:
 		state = Callback::CALL_STATE_OUTGOING;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1);
+		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "");
 		break;
 	case UA_EVENT_CALL_PROGRESS:
 		state = Callback::CALL_STATE_PROGRESS;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1);
+		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "");
 		break;
 	case UA_EVENT_CALL_ESTABLISHED:
 		state = Callback::CALL_STATE_ESTABLISHED;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1);
+		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "");
 		break;
 	case UA_EVENT_CALL_CLOSED:
 		if (call == app.callp)
 		{
 			state = Callback::CALL_STATE_CLOSED;
-			UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1);
+			UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "");
 			app.callp = NULL;
 		}
 		else
@@ -150,11 +161,24 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 	case UA_EVENT_CALL_TRANSFER:
 		app.callp = call;
 		state = Callback::CALL_STATE_TRANSFER;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode, -1, "", "", -1);
+		UA_CB->ChangeCallState(state, prm, peer_name, scode, -1, "", "", -1, "", "");
 		break;
 	case UA_EVENT_CALL_TRANSFER_OOD:
 		state = Callback::CALL_STATE_TRANSFER_OOD;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode, -1, "", "", -1);
+		UA_CB->ChangeCallState(state, prm, peer_name, scode, -1, "", "", -1, "", "");
+		break;
+	case UA_EVENT_CALL_REINVITE_RECEIVED:
+		{
+			const char* pai_peer_uri = call_pai_peeruri(call);
+			if (pai_peer_uri == NULL)
+				pai_peer_uri = "";
+
+			const char* pai_peer_name = call_pai_peername(call);
+			if (pai_peer_name == NULL)
+				pai_peer_name = "";
+
+			UA_CB->OnReinviteReceived(prm, peer_name, pai_peer_uri, pai_peer_name);
+		}
 		break;
 	case UA_EVENT_REGISTERING:
 		reg_state = Callback::REG_STATE_REGISTERING;
@@ -701,7 +725,7 @@ extern "C" void control_handler(void)
 		if (app.callp)
 		{
 			ua_hangup(ua_cur(), app.callp, cmd.code, NULL);
-			UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1);
+			UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "");
 			app.callp = NULL;
 		}
 		if (app.paging_txp)
@@ -907,7 +931,7 @@ void Ua::Restart(void)
 	/** \todo ugly forced hangup */
 	if (app.callp)
 	{
-		UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1);
+		UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "");
 		app.callp = NULL;
 	}
 	if (app.paging_txp)

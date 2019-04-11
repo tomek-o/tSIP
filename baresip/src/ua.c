@@ -396,6 +396,11 @@ static void call_event_handler(struct call *call, enum call_event ev,
 			mem_deref(call2);
 		}
 		break;
+
+	case CALL_EVENT_REINVITE_RECEIVED:
+		ua_event(ua, UA_EVENT_CALL_REINVITE_RECEIVED, call, peeruri);	
+		break;
+
 	}
 }
 

@@ -13,6 +13,7 @@ public:
 	enum Type
 	{
 		CALL_STATE = 0,
+		CALL_REINVITE_RECEIVED,
 		CALL_DTMF_STATE,
 		REG_STATE,
 		APP_STATE,
@@ -73,6 +74,8 @@ public:
 	int contactId;
 	int callAnswerAfter;
 	AnsiString initialRxInvite;
+	AnsiString paiPeerUri;
+	AnsiString paiPeerName;
 
 	int dlgInfoState;
 	int dlgInfoDirection;

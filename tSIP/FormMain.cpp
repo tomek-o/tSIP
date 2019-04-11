@@ -58,6 +58,22 @@ namespace {
 	AnsiString asTransferHint = "Transfer to ... [Enter]";
 	bool useOwnTrayIcon = false;
 
+	Call call;
+	struct PagingTx {
+		bool active;
+		int state;				///< as in Callback
+		PagingTx(void):
+			active(false),
+			state(0)
+		{}
+	} pagingTx;
+	struct Registration {
+		int state;
+		Registration(void):
+			state(0)
+		{}
+	} registration;
+
 	Contacts::Entry *lastContactEntry = NULL;
 	void ShowContactPopup(Contacts::Entry *entry)
 	{
@@ -72,12 +88,33 @@ namespace {
 		//ShowWindow(frmContactPopup->Handle,SW_SHOWNOACTIVATE);
 		//SetWindowPos(frmContactPopup->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	}
+
 	AnsiString GetPeerName(AnsiString displayName)
 	{
 		if (appSettings.Display.bDecodeUtfDisplayToAnsi)
 			return ::Utf8ToAnsi(displayName);
 		else
 			return displayName;
+	}
+
+	AnsiString GetCallPeerUri(void)
+	{
+		if (appSettings.Display.bUsePAssertedIdentity)
+		{
+			if (call.paiPeerUri != "")
+				return call.paiPeerUri;
+		}
+		return call.uri;
+	}
+
+	AnsiString GetCallPeerName(void)
+	{
+		if (appSettings.Display.bUsePAssertedIdentity)
+		{
+			if (call.paiPeerUri != "")	// using uri to check if header line is present as it shouldn't be empty
+				return call.paiPeerName;
+		}
+		return call.peerName;
 	}
 }
 
@@ -868,6 +905,8 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				call.peerName = GetPeerName(cb.callerName);
 				call.recordFile = "";
 				call.dtmfRxQueue.clear();
+				call.paiPeerUri = cb.paiPeerUri;
+				call.paiPeerName = GetPeerName(cb.paiPeerName);
 				autoAnswerIntercom = false;
 				if (appSettings.uaConf.autoAnswerCallInfo && cb.callAnswerAfter >= 0)
 				{
@@ -923,8 +962,8 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				{
 					StartRing(RingFile(cb.alertInfo));
 				}
-				lbl2ndParty->Caption = GetClip(cb.caller);
-				lastContactEntry = contacts.GetEntry(CleanUri(cb.caller));
+				lbl2ndParty->Caption = GetClip(GetCallPeerUri());
+				lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri()));
 				if (lastContactEntry)
 				{
 					lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -938,9 +977,9 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				}
 				else
 				{
-					lbl2ndPartyDesc->Caption = call.peerName;
+					lbl2ndPartyDesc->Caption = GetCallPeerName();
 				}
-				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(cb.caller).c_str()); //CleanUri(cb.caller).c_str());
+				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(GetCallPeerUri()).c_str()); //CleanUri(cb.caller).c_str());
 				if (appSettings.HttpQuery.openMode == Settings::_HttpQuery::openAutomaticOnIncoming)
 				{
 					HttpQuery();
@@ -1130,6 +1169,37 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onCallState.c_str());
 				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, -1, asScriptFile.c_str());
 			}
+
+			break;
+		}
+		case Callback::CALL_REINVITE_RECEIVED:
+		{
+			call.uri = cb.caller;
+			call.peerName = GetPeerName(cb.callerName);
+			call.paiPeerUri = cb.paiPeerUri;
+			call.paiPeerName = GetPeerName(cb.paiPeerName);
+
+			lbl2ndParty->Caption = GetClip(GetCallPeerUri());
+			lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri()));
+			if (lastContactEntry)
+			{
+				lbl2ndPartyDesc->Caption = lastContactEntry->description;
+			#if 0
+				if (appSettings.frmContactPopup.showOnIncoming)
+				{
+					if (lastContactEntry->note != "")
+					{
+						ShowContactPopup(lastContactEntry);
+					}
+				}
+			#endif
+			}
+			else
+			{
+				lbl2ndPartyDesc->Caption = GetCallPeerName();
+			}
+
+			frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);			
 
 			break;
 		}
@@ -1508,7 +1578,7 @@ void TfrmMain::StartRecording(void)
 			AnsiString uri;
 			if (call.incoming)
 			{
-				uri = ExtractNumberFromUri(call.uri.c_str()).c_str();
+				uri = ExtractNumberFromUri(GetCallPeerUri().c_str()).c_str();
 			}
 			else
 			{

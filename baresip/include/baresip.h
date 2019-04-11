@@ -58,6 +58,7 @@ enum call_event {
 	CALL_EVENT_CLOSED,
 	CALL_EVENT_TRANSFER,
 	CALL_EVENT_TRANSFER_FAILED,
+	CALL_EVENT_REINVITE_RECEIVED
 };
 
 struct call;
@@ -86,6 +87,8 @@ const char   *call_alert_info(const struct call *call);
 const char   *call_access_url(const struct call *call);
 int           call_access_url_mode(const struct call *call);
 const char   *call_initial_rx_invite(const struct call *call);
+const char   *call_pai_peeruri(const struct call *call);
+const char   *call_pai_peername(const struct call *call);
 struct audio *call_audio(const struct call *call);
 struct video *call_video(const struct call *call);
 struct list  *call_streaml(const struct call *call);
@@ -498,6 +501,7 @@ enum ua_event {
 	UA_EVENT_CALL_DTMF_END,
 	UA_EVENT_CALL_TRANSFER,
 	UA_EVENT_CALL_TRANSFER_OOD,	///< transfer (incoming REFER) outside of dialog 
+    UA_EVENT_CALL_REINVITE_RECEIVED,
 
 	UA_EVENT_MAX,
 };

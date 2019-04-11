@@ -163,7 +163,8 @@ public:
 	struct _Display
 	{
 		bool bUserOnlyClip;				///< show only user part of URI (if present)
-		bool bDecodeUtfDisplayToAnsi;		 
+		bool bDecodeUtfDisplayToAnsi;
+		bool bUsePAssertedIdentity;		///< use PAI if present		 
 	} Display;
 	struct _Integration
 	{

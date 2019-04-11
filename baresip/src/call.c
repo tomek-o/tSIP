@@ -69,8 +69,10 @@ struct call {
 	char *extra_hdr_lines;    /**< Extra header lines for outgoing call; must include trailing \r\n if not NULL */
 	char *alert_info;         /**< Alert-Info header value              */
 	char *access_url;         /**< Access-URL header: URL               */
-	char *initial_rx_invite;  /**< Intial received INVITE               */
 	int access_url_mode;      /**< 0 = unknown, 1 = passive, 2 = active */
+	char *initial_rx_invite;  /**< Intial received INVITE               */
+	char *pai_peer_uri;       /**< P-Asserted-Identity uri              */
+	char *pai_peer_name;      /**< P-Asserted-Identity display name     */
 	struct tmr tmr_inv;       /**< Timer for incoming calls             */
 	struct tmr tmr_dtmf;      /**< Timer for incoming DTMF events       */
 	time_t time_start;        /**< Time when call started               */
@@ -378,6 +380,8 @@ static void call_destructor(void *arg)
 	mem_deref(call->alert_info);
 	mem_deref(call->access_url);
 	mem_deref(call->initial_rx_invite);
+	mem_deref(call->pai_peer_uri);
+	mem_deref(call->pai_peer_name);
 	mem_deref(call->audio);
 #ifdef USE_VIDEO
 	mem_deref(call->video);
@@ -847,6 +851,16 @@ const char *call_localuri(const struct call *call)
 	return call ? call->local_uri : NULL;
 }
 
+const char *call_pai_peeruri(const struct call *call)
+{
+	return call ? call->pai_peer_uri : NULL;
+}
+
+const char *call_pai_peername(const struct call *call)
+{
+	return call ? call->pai_peer_name : NULL;
+}
+
 
 /**
  * Get the name of the peer
@@ -1011,7 +1025,7 @@ static int sipsess_offer_handler(struct mbuf **descp,
 {
 	const bool got_offer = mbuf_get_left(msg->mb);
 	struct call *call = arg;
-	int err;
+	int err, status;
 
 	MAGIC_CHECK(call);
 
@@ -1030,7 +1044,28 @@ static int sipsess_offer_handler(struct mbuf **descp,
 	}
 
 	/* Encode SDP Answer */
-	return sdp_encode(descp, call->sdp, !got_offer);
+	status = sdp_encode(descp, call->sdp, !got_offer);
+
+	if (msg->p_asserted_identity_present) {
+		mem_deref(call->pai_peer_uri);
+		call->pai_peer_uri = NULL;
+		err = pl_strdup(&call->pai_peer_uri, &msg->p_asserted_identity.auri);
+		if (err) {
+			return err;
+		}
+		mem_deref(call->pai_peer_name);
+		call->pai_peer_name = NULL;
+		if (pl_isset(&msg->p_asserted_identity.dname)) {
+			err = pl_strdup(&call->pai_peer_name, &msg->p_asserted_identity.dname);
+			if (err) {
+            	return err;
+			}
+		}
+	}
+
+	call_event_handler(call, CALL_EVENT_REINVITE_RECEIVED, call->peer_uri);
+
+	return status;
 }
 
 
@@ -1306,6 +1341,19 @@ int call_accept(struct call *call, struct sipsess_sock *sess_sock,
 	if (err)
 		return err;
 	call->access_url_mode = msg->access_url.mode;
+
+	if (msg->p_asserted_identity_present) {
+		err = pl_strdup(&call->pai_peer_uri, &msg->p_asserted_identity.auri);
+		if (err) {
+			return err;
+		}
+		if (pl_isset(&msg->p_asserted_identity.dname)) {
+			err = pl_strdup(&call->pai_peer_name, &msg->p_asserted_identity.dname);
+			if (err) {
+            	return err;
+			}
+		}
+	}
 
 	if (got_offer) {
 

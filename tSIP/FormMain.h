@@ -149,21 +149,7 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	TrayIcon *trIcon;
 	TfrmButtonContainer* frmButtonContainers[1 + ProgrammableButtons::EXT_CONSOLE_COLUMNS];
-	Call call;
-	struct PagingTx {
-		bool active;
-		int state;				///< as in Callback
-		PagingTx(void):
-			active(false),
-			state(0)
-		{}
-	} pagingTx;
-	struct Registration {
-		int state;
-		Registration(void):
-			state(0)
-		{}
-	} registration;
+
 	void UpdateLogConfig(void);
 	void SetSpeedDial(bool visible);
 	void UpdateDialpadBackgroundImage(void);

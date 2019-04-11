@@ -95,6 +95,7 @@ Settings::Settings(void)
 
 	Display.bUserOnlyClip = false;
 	Display.bDecodeUtfDisplayToAnsi = false;
+	Display.bUsePAssertedIdentity = false;
 
 	Integration.bAddFilterWMCopyData = false;
 	Integration.asProtocol = Branding::appProto;
@@ -590,6 +591,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		const Json::Value &DisplayJson = root["Display"];
 		Display.bUserOnlyClip = DisplayJson.get("UserOnlyClip", Display.bUserOnlyClip).asBool();
 		Display.bDecodeUtfDisplayToAnsi = DisplayJson.get("DecodeUtfDisplayToAnsi", Display.bDecodeUtfDisplayToAnsi).asBool();
+		Display.bUsePAssertedIdentity = DisplayJson.get("UsePAssertedIdentity", Display.bUsePAssertedIdentity).asBool();
     }
 
 	{
@@ -759,6 +761,7 @@ int Settings::Write(AnsiString asFileName)
 
 	root["Display"]["UserOnlyClip"] = Display.bUserOnlyClip;
 	root["Display"]["DecodeUtfDisplayToAnsi"] = Display.bDecodeUtfDisplayToAnsi;
+	root["Display"]["UsePAssertedIdentity"] = Display.bUsePAssertedIdentity;
 
 	root["Integration"]["AddFilterWMCopyData"] = Integration.bAddFilterWMCopyData;
 	root["Integration"]["Protocol"] = Integration.asProtocol.c_str();

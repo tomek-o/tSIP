@@ -27,6 +27,8 @@ struct Call
 	bool recording;
 	std::deque<char> dtmfRxQueue;
 	bool ringStarted;
+	AnsiString paiPeerUri;
+	AnsiString paiPeerName;
 	Call(void):
 		incoming(false),
 		progress(false),
