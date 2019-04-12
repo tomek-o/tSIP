@@ -291,6 +291,9 @@ __published:	// IDE-managed Components
 	TComboBox *cbRecordedSide;
 	TCheckBox *chbTrayNotifierHideWhenAnsweringCallAutomatically;
 	TCheckBox *chbUsePAssertedIdentity;
+	TCheckBox *chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
+	TLabel *lblSpeedDialBlfSettings;
+	TCheckBox *chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

@@ -79,6 +79,8 @@ public:
 		bool bSpeedDialPopupMenu;       ///< enable/disable popup menu (editing) for speed dial / BLF panels
 		bool bSpeedDialIgnorePresenceNote;	///< do not show "note" for presence
 		bool bSpeedDialIgnoreDialogInfoRemoteIdentity;	///< do not show remote id as 2nd line for BLF
+		bool bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;		///< if dialog-info remote identity is missing (e.g. in state = confirmed) keep identity from previous notification 
+		bool bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;	///< ignore/clear remote id for BLF if state = terminated (idle)
 		bool bXBtnMinimize;				///< minimize to tray when 'X' is pressed
 		bool bRestoreOnIncomingCall;	///< restore minimized window on incoming call
 		bool bSingleInstance;			///< check if another instance is running if started without parameters and bring it to front

@@ -54,7 +54,7 @@ public:
 	__fastcall ~TProgrammableButton();
 	void SetConfig(const ButtonConf &cfg);
 	void SetCaption(AnsiString text);
-	void SetState(enum dialog_info_status state, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
+	void SetState(enum dialog_info_status state, bool updateRemoteIdentity, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
 	enum dialog_info_status GetState(void) {
 		return state;
 	}

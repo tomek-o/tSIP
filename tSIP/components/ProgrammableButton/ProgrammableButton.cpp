@@ -194,7 +194,7 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	LoadBitmap(bmpEarly, cfg.imgEarly.c_str());
 	LoadBitmap(bmpConfirmed, cfg.imgConfirmed.c_str());
 
-	SetState(DIALOG_INFO_UNKNOWN, DIALOG_INFO_DIR_UNKNOWN, "", "");
+	SetState(DIALOG_INFO_UNKNOWN, true, DIALOG_INFO_DIR_UNKNOWN, "", "");
 	//SetPresenceState(PRESENCE_UNKNOWN, "");
 	presence_state = PRESENCE_UNKNOWN;
 
@@ -221,7 +221,7 @@ void TProgrammableButton::SetCaption(AnsiString text)
 	label->Caption = text;
 
 }
-void TProgrammableButton::SetState(enum dialog_info_status state, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay)
+void TProgrammableButton::SetState(enum dialog_info_status state, bool updateRemoteIdentity, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay)
 {
 	this->state = state;
 	switch (state)
@@ -238,35 +238,38 @@ void TProgrammableButton::SetState(enum dialog_info_status state, enum dialog_in
 	default: // DIALOG_INFO_UNKNOWN included
 		SetImage(bmpIdle);
 	}
-	if (remoteIdentityDisplay.Length() || remoteIdentity.Length())
+	if (updateRemoteIdentity)
 	{
-		AnsiString ridCaption;
-		if (direction == DIALOG_INFO_DIR_INITIATOR)
+		if (remoteIdentityDisplay.Length() || remoteIdentity.Length())
 		{
-			ridCaption = "-> ";
-		}
-		else if (direction == DIALOG_INFO_DIR_RECIPIENT)
-		{
-			ridCaption = "<- ";
-		}
-		if (remoteIdentityDisplay.Length())
-		{
-			ridCaption += remoteIdentityDisplay;
+			AnsiString ridCaption;
+			if (direction == DIALOG_INFO_DIR_INITIATOR)
+			{
+				ridCaption = "-> ";
+			}
+			else if (direction == DIALOG_INFO_DIR_RECIPIENT)
+			{
+				ridCaption = "<- ";
+			}
+			if (remoteIdentityDisplay.Length())
+			{
+				ridCaption += remoteIdentityDisplay;
+			}
+			else
+			{
+				ridCaption += remoteIdentity;
+			}
+			label2->Caption = ridCaption;
+			SetLines(2);
 		}
 		else
 		{
-            ridCaption += remoteIdentity;
-        }
-		label2->Caption = ridCaption;
-		SetLines(2);
-	}
-	else
-	{
-		SetLines(configuredLines);
-		if (configuredLines == 2)
-		{
-			label2->Caption = caption2;
-        }
+			SetLines(configuredLines);
+			if (configuredLines == 2)
+			{
+				label2->Caption = caption2;
+			}
+		}
 	}
 }
 

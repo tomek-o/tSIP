@@ -242,7 +242,10 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbShowSpeedDialOnly->Checked = tmpSettings.frmMain.bSpeedDialOnly;
 	chbSpeedDialPopupMenu->Checked = tmpSettings.frmMain.bSpeedDialPopupMenu;
 	chbSpeedDialIgnorePresenceNote->Checked = tmpSettings.frmMain.bSpeedDialIgnorePresenceNote;
-	chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked = tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;	
+	chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked = tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
+	chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing->Checked = tmpSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
+	chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked = tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
+
 	chbKioskMode->Checked = tmpSettings.frmMain.bKioskMode;
 	chbHideMouseCursor->Checked = tmpSettings.frmMain.bHideMouseCursor;
 
@@ -432,6 +435,9 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bSpeedDialPopupMenu = chbSpeedDialPopupMenu->Checked;
 	tmpSettings.frmMain.bSpeedDialIgnorePresenceNote = chbSpeedDialIgnorePresenceNote->Checked;
 	tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked;
+	tmpSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing = chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing->Checked;
+	tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated = chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked;
+
 	tmpSettings.frmMain.bKioskMode = chbKioskMode->Checked;
 	tmpSettings.frmMain.bHideMouseCursor = chbHideMouseCursor->Checked;
 

@@ -37,6 +37,8 @@ Settings::_frmMain::_frmMain(void):
 	bSpeedDialPopupMenu(true),
 	bSpeedDialIgnorePresenceNote(false),
 	bSpeedDialIgnoreDialogInfoRemoteIdentity(false),
+	bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing(false),
+	bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated(true),
 	bXBtnMinimize(false),
 	bRestoreOnIncomingCall(false),
 	bSingleInstance(false),
@@ -498,6 +500,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bSpeedDialPopupMenu = frmMainJson.get("SpeedDialPopupMenu", frmMain.bSpeedDialPopupMenu).asBool();
 		frmMain.bSpeedDialIgnorePresenceNote = frmMainJson.get("SpeedDialIgnorePresenceNote", frmMain.bSpeedDialIgnorePresenceNote).asBool();
 		frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();
+		frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing = frmMainJson.get("SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing", frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing).asBool();
+		frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated = frmMainJson.get("SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated", frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated).asBool();
 		int iSpeedDialSize = frmMainJson.get("SpeedDialSize", frmMain.iSpeedDialSize).asUInt();
 		if (iSpeedDialSize >= 0 && iSpeedDialSize < ProgrammableButtons::EXT_CONSOLE_COLUMNS)
 		{
@@ -708,6 +712,8 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialPopupMenu"] = frmMain.bSpeedDialPopupMenu;
 		jv["SpeedDialIgnorePresenceNote"] = frmMain.bSpeedDialIgnorePresenceNote;
 		jv["SpeedDialIgnoreDialogInfoRemoteIdentity"] = frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
+		jv["SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing"] = frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
+		jv["SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated"] = frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
 		jv["SpeedDialSize"] = frmMain.iSpeedDialSize;
 		jv["SpeedDialWidth"] = frmMain.iSpeedDialWidth;
 		jv["StartMinimizedToTray"] = frmMain.bStartMinimizedToTray;

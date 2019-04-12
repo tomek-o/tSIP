@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsDisplay
+    ActivePage = tsSpeedDial
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -441,6 +441,8 @@ object frmSettings: TfrmSettings
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
+      ExplicitLeft = 6
+      ExplicitTop = 24
       object lblSpeedDial: TLabel
         Left = 3
         Top = 3
@@ -454,6 +456,13 @@ object frmSettings: TfrmSettings
         Width = 215
         Height = 13
         Caption = 'Width of speed dial column (restart required)'
+      end
+      object lblSpeedDialBlfSettings: TLabel
+        Left = 3
+        Top = 132
+        Width = 122
+        Height = 13
+        Caption = 'BLF / dialog-info settings:'
       end
       object cbSpeedDialSize: TComboBox
         Left = 227
@@ -507,12 +516,34 @@ object frmSettings: TfrmSettings
         TabOrder = 4
       end
       object chbSpeedDialIgnoreDialogInfoRemoteIdentity: TCheckBox
-        Left = 3
-        Top = 120
-        Width = 366
+        Left = 19
+        Top = 154
+        Width = 486
         Height = 17
-        Caption = 'Ignore remote identity info for dialog-info / BLF button'
+        Caption = 
+          'Ignore remote identity info (2nd line with caller/callee and cal' +
+          'l direction, if present in notifications)'
         TabOrder = 5
+      end
+      object chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing: TCheckBox
+        Left = 19
+        Top = 177
+        Width = 478
+        Height = 17
+        Caption = 
+          'Keep previous remote identity info if remote identity is missing' +
+          ' in notification'
+        TabOrder = 6
+      end
+      object chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated: TCheckBox
+        Left = 19
+        Top = 200
+        Width = 478
+        Height = 17
+        Caption = 
+          'Ignore or clear remote identity if call state is set to terminat' +
+          'ed'
+        TabOrder = 7
       end
     end
     object tsCalls: TTabSheet

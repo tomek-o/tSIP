@@ -1354,12 +1354,25 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			enum dialog_info_direction direction = DIALOG_INFO_DIR_UNKNOWN;
 			AnsiString remoteIdentity;
 			AnsiString remoteIdentityDisplay;
+			bool updateRemoteIdentity = true;
 			if (!appSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity)
 			{
-				direction = static_cast<enum dialog_info_direction>(cb.dlgInfoDirection);
-				remoteIdentity = cb.dlgInfoRemoteIdentity;
-				remoteIdentityDisplay = GetPeerName(cb.dlgInfoRemoteIdentityDisplay);
-            }
+
+				if (cb.dlgInfoState == DIALOG_INFO_TERMINATED && appSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated)
+				{
+					// clearing/ignoring remote identity if call is terminated
+				}
+				else
+				{
+					direction = static_cast<enum dialog_info_direction>(cb.dlgInfoDirection);
+					remoteIdentity = cb.dlgInfoRemoteIdentity;
+					remoteIdentityDisplay = GetPeerName(cb.dlgInfoRemoteIdentityDisplay);
+					if (!remoteIdentity.Length() && !remoteIdentity.Length() && appSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing)
+					{
+						updateRemoteIdentity = false;
+					}
+				}
+			}
 			appSettings.uaConf.contacts[cb.contactId].dialog_info_state = cb.dlgInfoState;
 			std::list<int> &ids = appSettings.uaConf.contacts[cb.contactId].btnIds;
 			std::list<int>::iterator iter;
@@ -1367,7 +1380,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 					TfrmButtonContainer *& container = frmButtonContainers[i];
-					container->UpdateDlgInfoState(*iter, cb.dlgInfoState, direction, remoteIdentity, remoteIdentityDisplay);
+					container->UpdateDlgInfoState(*iter, cb.dlgInfoState, updateRemoteIdentity, direction, remoteIdentity, remoteIdentityDisplay);
 				}
 			}
 			if (appSettings.Scripts.onDialogInfo != "")

@@ -30,7 +30,7 @@ __published:	// IDE-managed Components
 	void __fastcall miEditSpeedDialClick(TObject *Sender);
 public:
 	typedef void (__closure *CallbackClick)(int id, TProgrammableButton* btn);
-	void UpdateDlgInfoState(int id, int state, int direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
+	void UpdateDlgInfoState(int id, int state, bool updateRemoteIdentity, int direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
 	void UpdatePresenceState(int id, int state, AnsiString note);
 	void UpdateBtnState(Button::Type type, bool state);
 	void UpdateBtnCaption(int id, AnsiString text);
