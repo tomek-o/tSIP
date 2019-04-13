@@ -40,6 +40,16 @@ int l_WinapiGetAsyncKeyState(lua_State* L)
 	return 1;
 }
 
+int l_WinapiPlaySound(lua_State* L)
+{
+	const char* pszSound = lua_tostring(L, 1);
+	unsigned int hmod = lua_tointegerx(L, 2, NULL);
+	unsigned fdwSound = lua_tointegerx(L, 3, NULL);
+	int ret = PlaySound(pszSound, reinterpret_cast<HMODULE>(hmod), fdwSound);
+	lua_pushnumber(L, ret);
+	return 1;
+}
+
 }	// namespace
 
 
@@ -51,6 +61,7 @@ int luaopen_tsip_winapi (lua_State *L)
 		{"Beep", ScriptExec::l_Beep},
 		{"MessageBox", ScriptExec::l_MessageBox},
 		{"GetAsyncKeyState", l_WinapiGetAsyncKeyState},
+		{"PlaySound", l_WinapiPlaySound},
 		{NULL, NULL}
 	};
 	luaL_newlib(L, tsip_winapi);

@@ -263,5 +263,26 @@ const LuaExample luaExamples [] =
 	"SetVariable(\"runcount\", count)\n"
 	"print(string.format(\"Script executed %d time(s)\\n\", count))  "
 	}
+	,
+	{
+	"PlaySound",
+
+	"-- Playing sound asynchronously\n"
+	"-- note: more powerful (sound device selection) option is using sox tool + ShellExecute\n"
+	"-- (http://tomeko.net/software/SIPclient/howto/sox.php, http://tomeko.net/software/SIPclient/howto/local_dtmfs.php)\n"
+	"\n"
+	"local winapi = require(\"tsip_winapi\")\n"
+	"\n"
+	"-- let's use path relative to exe location\n"
+	"local filename = GetExeName()\n"
+	"local index = string.find(filename:reverse(), \"\\\\\")\n"
+	"local dir = string.sub(filename, 1, -index)\n"
+	"local audio_file = dir .. \"pluck.wav\"\n"
+	"\n"
+	"-- PlaySound is identical to WinAPI function with same name\n"
+	"local SND_FILENAME = tonumber(0x00020000)\n"
+	"local SND_ASYNC = tonumber(0x0001)\n"
+	"winapi.PlaySound(audio_file, 0, SND_FILENAME | SND_ASYNC)"
+	}
 
 };
