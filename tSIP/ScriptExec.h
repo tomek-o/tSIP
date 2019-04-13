@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 
 #include "ScriptSource.h"
+#include "LuaWinapi.h"
 
 #include <string>
 #include <System.hpp>
@@ -12,8 +13,6 @@
 class LuaState;
 struct lua_State;
 struct luaL_reg;
-
-extern "C" int luaopen_tsip_winapi (lua_State *L);
 
 class ScriptExec
 {
@@ -100,11 +99,8 @@ private:
 	static int l_ForceDirectories(lua_State* L);
 	static int l_FindWindowByCaptionAndExeName(lua_State* L);
 
-	// let's put some winapi equivalents into library
+	// sharing "Beep" and "MessageBox" - both in global namespace (backward compatibility) and in library
 	friend int luaopen_tsip_winapi (lua_State *L);
-	static int l_WinapiFindWindow(lua_State* L);
-	static int l_WinapiSendMessage(lua_State* L);
-	static int l_WinapiGetAsyncKeyState(lua_State* L);
 
 	static int l_Call(lua_State* L);
 	static int l_Hangup(lua_State* L);

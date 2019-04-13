@@ -117,16 +117,12 @@ and whether it can be addressed?
 
 button: mouse down event
 
-> I was  
-> wondering if it is possible to pause or stop the recording while still  
-> on the call?
+> I was wondering if it is possible to pause or stop the recording while still on the call?
 
 
 new type of input audio device: wave player with wav queue (for IVR); silence if no file is queued
 
 Lua: get BLF button state => route incoming call to selected (idle) extension
-
-- add script edit button next to script selection button(s)
 
 - audible DTMF keypad tones during the call and while dialing: as opt-in options, PlaySound, resources, ASYNC?
 
@@ -163,7 +159,7 @@ One more flaw is that full URI from REFER is stored in call history.
 
 DEBUG_INFO: w³¹cznik
 
-aufile: required S16LE, 1ch, 8kSps
+aufile: required S16LE, 1ch
 
 	
 latency tracker
@@ -182,7 +178,6 @@ tSIP scripting: help for commands (factory pattern)
 tSIP scripting: let Sleep return specific value if Break was used?
 tSIP scripting: example for rand()
 tSIP scripting: Unregister, Reregister
-tSIP scripting: Error registering Scintilla on 2nd plugin run
 luaopen_io(lua);
 
 
@@ -192,12 +187,12 @@ tSIP plugin: logout from group in inactivity (mouse, keyboard)
 tSIP plugin: scripted audio source (create wave file, call with it)
 
 tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(), 
-tSIP scripting: file I/O example (report call quality after each call
+tSIP scripting: file I/O example (report call quality after each call)
 
 TODO: warn user if wave file source is selected but source file does not exist
 
 
-BUG? halt if audio device (mic with autosensing) is detached during call
+BUG: halt if audio device (mic with autosensing) is detached during call - winwave
 
 
 FIXME: btn reregister not always working correctly, depending on current registration state
@@ -208,7 +203,7 @@ font selection for console (ugly looking font under Wine)
 
 accessibility & GUI scaling: remember column width in call history, scale column width in phonebook
 
-script: ability to read Ctrl, Alt, Shift state
+update Lua to 5.3.x, remove CVS tags from Lua source
 */
 
 

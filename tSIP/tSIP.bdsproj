@@ -435,6 +435,7 @@
         <FILE FILENAME="Colors.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Colors" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Colors.h"/>
         <FILE FILENAME="ScriptExec.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScriptExec" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ScriptExec.h"/>
         <FILE FILENAME="LuaState.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaState" FORMNAME="" DESIGNCLASS="" ADDITIONAL="LuaState.h"/>
+        <FILE FILENAME="LuaWinapi.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaWinapi" FORMNAME="" DESIGNCLASS="" ADDITIONAL="LuaWinapi.h"/>
         <FILE FILENAME="AudioDevicesList.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioDevicesList" FORMNAME="" DESIGNCLASS="" ADDITIONAL="AudioDevicesList.h"/>
         <FILE FILENAME="Call.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Call" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Call.h"/>
         <FILE FILENAME="Unicode.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Unicode" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Unicode.h"/>
@@ -456,7 +457,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">65</VersionInfo>
-          <VersionInfo Name="Build">3</VersionInfo>
+          <VersionInfo Name="Build">6</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -468,7 +469,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.65.3</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.65.6</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

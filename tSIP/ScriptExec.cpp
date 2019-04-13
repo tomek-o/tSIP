@@ -335,7 +335,7 @@ int ScriptExec::l_ForceDirectories(lua_State* L)
 int ScriptExec::l_FindWindowByCaptionAndExeName(lua_State* L)
 {
 	static Mutex mutex;
-	
+
 	ScopedLock<Mutex> lock(mutex);
 	findWindowData.hWndFound = NULL;
 
@@ -351,47 +351,6 @@ int ScriptExec::l_FindWindowByCaptionAndExeName(lua_State* L)
 	::EnumWindows((WNDENUMPROC)EnumWindowsProc, NULL);
 
 	lua_pushnumber(L, reinterpret_cast<unsigned int>(findWindowData.hWndFound));
-	return 1;
-}
-
-int ScriptExec::l_WinapiFindWindow(lua_State* L)
-{
-	const char* className = lua_tostring(L, 1);
-	const char* windowName = lua_tostring(L, 2);
-	HWND hWnd = FindWindow(className, windowName);
-	lua_pushnumber(L, reinterpret_cast<unsigned int>(hWnd));
-	return 1;
-}
-
-int ScriptExec::l_WinapiSendMessage(lua_State* L)
-{
-	unsigned int hWnd = lua_tointegerx(L, 1, NULL);
-	unsigned int msg = lua_tointegerx(L, 2, NULL);
-	unsigned int wParam = lua_tointegerx(L, 3, NULL);
-	unsigned int lParam = lua_tointegerx(L, 4, NULL);
-	int ret = SendMessage((HWND)hWnd, msg, wParam, lParam);
-	lua_pushnumber(L, ret);
-	return 1;
-}
-
-int ScriptExec::l_WinapiGetAsyncKeyState(lua_State* L)
-{
-	int vKey = lua_tointegerx(L, 1, NULL);
-	int ret = GetAsyncKeyState(vKey);
-	lua_pushnumber(L, ret);
-	return 1;
-}
-
-int luaopen_tsip_winapi (lua_State *L) {
-	static const struct luaL_Reg tsip_winapi[] = {
-		{"FindWindow", ScriptExec::l_WinapiFindWindow},
-		{"SendMessage", ScriptExec::l_WinapiSendMessage},
-		{"Beep", ScriptExec::l_Beep},
-		{"MessageBox", ScriptExec::l_MessageBox},
-		{"GetAsyncKeyState", ScriptExec::l_WinapiGetAsyncKeyState},
-		{NULL, NULL}
-	};
-	luaL_newlib(L, tsip_winapi);
 	return 1;
 }
 
