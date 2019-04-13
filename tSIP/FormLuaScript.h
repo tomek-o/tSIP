@@ -66,12 +66,16 @@ private:	// User declarations
 	void OnTextModified(void);
 	void SetText(AnsiString text);
 	int OnGetCurrentFileName(AnsiString &filename);
+	void __fastcall WMDropFiles(TWMDropFiles &message);	
 public:		// User declarations
 	__fastcall TfrmLuaScript(TComponent* Owner);
 	typedef int (__closure *CallbackRunScript)(int srcType, int srcId, AnsiString script, bool &breakRequest);
 	static void SetCallbackRunScript(CallbackRunScript cb);
 	void SetScript(AnsiString asString);
 	void OpenFile(AnsiString filename);
+	BEGIN_MESSAGE_MAP
+		MESSAGE_HANDLER(WM_DROPFILES, TWMDropFiles, WMDropFiles)
+	END_MESSAGE_MAP(TForm);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmLuaScript *frmLuaScript;

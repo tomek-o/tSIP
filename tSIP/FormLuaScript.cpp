@@ -58,6 +58,9 @@ __fastcall TfrmLuaScript::TfrmLuaScript(TComponent* Owner)
 	/** \note Strange: style is not applied without this call (duplicating frmEditor constructor)
 	*/
 	frmEditor->Init(SC_STYLE_LUA);
+
+	// inform OS that we accepting dropping files
+	DragAcceptFiles(Handle, True);	
 }
 //---------------------------------------------------------------------------
 
@@ -391,3 +394,32 @@ void __fastcall TfrmLuaScript::FormClose(TObject *Sender, TCloseAction &Action)
 }
 //---------------------------------------------------------------------------
 
+// fires an event when a file, or files are dropped onto the application.
+void __fastcall TfrmLuaScript::WMDropFiles(TWMDropFiles &message)
+{
+    AnsiString FileName;
+    FileName.SetLength(MAX_PATH);
+
+	int Count = DragQueryFile((HDROP)message.Drop, 0xFFFFFFFF, NULL, MAX_PATH);
+
+	// ignore all files but first one
+	if (Count > 1)
+		Count = 1;
+
+	if (CheckFileNotSavedDialog() == 0)
+	{
+		// index through the files and query the OS for each file name...
+		for (int index = 0; index < Count; ++index)
+		{
+			// the following code gets the FileName of the dropped file. it
+			// looks cryptic but that's only because it is. Hey, Why do you think
+			// Delphi and C++Builder are so popular anyway? Look up DragQueryFile
+			// the Win32.hlp Windows API help file.
+			FileName.SetLength(DragQueryFile((HDROP)message.Drop, index,FileName.c_str(), MAX_PATH));
+            //appSettings.Editor.asDefaultDir = ExtractFileDir(FileName);
+			OpenFile(FileName);
+		}
+	}
+    // tell the OS that you're finished...
+	DragFinish((HDROP) message.Drop);
+}
