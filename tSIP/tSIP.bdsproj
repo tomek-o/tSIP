@@ -50,7 +50,7 @@
         <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.arg.1" value="debug_build\precompiled.csm"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.arg.merge" value="0"/>
-        <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.Hc.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.He.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
@@ -456,8 +456,8 @@
           <VersionInfo Name="AutoIncBuild">False</VersionInfo>
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
-          <VersionInfo Name="Release">65</VersionInfo>
-          <VersionInfo Name="Build">6</VersionInfo>
+          <VersionInfo Name="Release">66</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -469,7 +469,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.65.6</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.66.0</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
