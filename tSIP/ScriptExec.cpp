@@ -908,11 +908,19 @@ int ScriptExec::l_UpdateSettings(lua_State* L)
 	return 1;
 }
 
+int ScriptExec::l_SetHandled(lua_State* L)
+{
+	bool handled = lua_tointeger( L, 1 );
+	GetContext(L)->handled = handled;	
+	return 0;
+}
+
 
 ScriptExec::ScriptExec(
 	enum ScriptSource srcType,
 	int srcId,
 	bool &breakReq,
+	bool &handled,
 	CallbackAddOutputText onAddOutputText,
 	CallbackCall onCall,
 	CallbackHangup onHangup,
@@ -949,6 +957,7 @@ ScriptExec::ScriptExec(
 	srcType(srcType),
 	srcId(srcId),
 	breakReq(breakReq),
+	handled(handled),
 	onAddOutputText(onAddOutputText),
 	onCall(onCall),
 	onHangup(onHangup),
@@ -1082,6 +1091,8 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "RefreshAudioDevicesList", l_RefreshAudioDevicesList);
 	lua_register(L, "GetAudioDevice", l_GetAudioDevice);
 	lua_register(L, "UpdateSettings", l_UpdateSettings);
+
+	lua_register(L, "SetHandled", l_SetHandled);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);

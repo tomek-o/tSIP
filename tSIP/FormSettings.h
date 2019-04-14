@@ -294,6 +294,10 @@ __published:	// IDE-managed Components
 	TCheckBox *chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 	TLabel *lblSpeedDialBlfSettings;
 	TCheckBox *chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
+	TLabel *lblScriptOnProgrammableButton;
+	TEdit *edScriptOnProgrammableButtonFile;
+	TButton *btnSelectedScriptOnProgrammableButtonChange;
+	TBitBtn *btnSelectedScriptOnProgrammableButtonEdit;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

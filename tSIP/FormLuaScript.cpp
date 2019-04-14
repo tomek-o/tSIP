@@ -94,7 +94,8 @@ void __fastcall TfrmLuaScript::btnExecuteClick(TObject *Sender)
 	BtnController btnCtrl(dynamic_cast<TButton*>(Sender));
 	breakRequest = false;
 	running = true;
-	callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, frmEditor->GetText().c_str(), breakRequest);
+	bool handled = true;
+	callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, frmEditor->GetText().c_str(), breakRequest, handled);
 	running = false;
 }
 //---------------------------------------------------------------------------

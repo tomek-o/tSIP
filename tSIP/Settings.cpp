@@ -659,6 +659,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			Scripts.timer = timer;
 		Scripts.onDialogInfo = ScriptsJson.get("OnDialogInfo", Scripts.onDialogInfo.c_str()).asString().c_str();
 		Scripts.onDial = ScriptsJson.get("OnDial", Scripts.onDial.c_str()).asString().c_str();
+		Scripts.onProgrammableButton = ScriptsJson.get("OnProgrammableButton", Scripts.onProgrammableButton.c_str()).asString().c_str();
 	}
 
 	{
@@ -787,15 +788,19 @@ int Settings::Write(AnsiString asFileName)
 
 	root["History"]["NoStoreToFile"] = History.bNoStoreToFile;
 
-	root["Scripts"]["OnMakeCall"] = Scripts.onMakeCall.c_str();
-	root["Scripts"]["OnCallState"] = Scripts.onCallState.c_str();
-	root["Scripts"]["OnStreamingState"] = Scripts.onStreamingState.c_str();
-	root["Scripts"]["OnRegistrationState"] = Scripts.onRegistrationState.c_str();
-	root["Scripts"]["OnStartup"] = Scripts.onStartup.c_str();
-	root["Scripts"]["OnTimer"] = Scripts.onTimer.c_str();
-	root["Scripts"]["Timer"] = Scripts.timer;
-	root["Scripts"]["OnDialogInfo"] = Scripts.onDialogInfo.c_str();
-	root["Scripts"]["OnDial"] = Scripts.onDial.c_str();
+	{
+		Json::Value &jv = root["Scripts"];
+		jv["OnMakeCall"] = Scripts.onMakeCall.c_str();
+		jv["OnCallState"] = Scripts.onCallState.c_str();
+		jv["OnStreamingState"] = Scripts.onStreamingState.c_str();
+		jv["OnRegistrationState"] = Scripts.onRegistrationState.c_str();
+		jv["OnStartup"] = Scripts.onStartup.c_str();
+		jv["OnTimer"] = Scripts.onTimer.c_str();
+		jv["Timer"] = Scripts.timer;
+		jv["OnDialogInfo"] = Scripts.onDialogInfo.c_str();
+		jv["OnDial"] = Scripts.onDial.c_str();
+		jv["OnProgrammableButton"] = Scripts.onProgrammableButton.c_str();
+	}
 
 	root["uaConf"]["audioCfgSrc"]["mod"] = uaConf.audioCfgSrc.mod;
 	root["uaConf"]["audioCfgSrc"]["dev"] = uaConf.audioCfgSrc.dev;

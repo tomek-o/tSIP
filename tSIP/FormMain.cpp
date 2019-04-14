@@ -524,8 +524,9 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	if (appSettings.Scripts.onStartup != "")
 	{
 		AnsiString asScriptFile;
+		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onStartup.c_str());
-		RunScriptFile(SCRIPT_SRC_ON_STARTUP, -1, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_ON_STARTUP, -1, asScriptFile.c_str(), handled);
 	}
 
 	tmrScript->Interval = appSettings.Scripts.timer;
@@ -611,9 +612,10 @@ void TfrmMain::MakeCall(AnsiString target)
 	if (appSettings.Scripts.onMakeCall != "")
 	{
 		AnsiString asScriptFile;
+		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onMakeCall.c_str());
 		// this script may change initial target implementing SIP originate function
-		RunScriptFile(SCRIPT_SRC_ON_MAKING_CALL, -1, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_ON_MAKING_CALL, -1, asScriptFile.c_str(), handled);
 	}
 
 	UA->Call(0, call.initialTarget, appSettings.Calls.extraHeaderLines);
@@ -1166,8 +1168,9 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			if (appSettings.Scripts.onCallState != "")
 			{
 				AnsiString asScriptFile;
+				bool handled = true;
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onCallState.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, -1, asScriptFile.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, -1, asScriptFile.c_str(), handled);
 			}
 
 			break;
@@ -1285,8 +1288,9 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			if (appSettings.Scripts.onRegistrationState != "")
 			{
 				AnsiString asScriptFile;
+				bool handled = true;
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onRegistrationState.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_REGISTRATION_STATE, -1, asScriptFile.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_REGISTRATION_STATE, -1, asScriptFile.c_str(), handled);
 			}
 
 			break;
@@ -1386,8 +1390,9 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			if (appSettings.Scripts.onDialogInfo != "")
 			{
 				AnsiString asScriptFile;
+				bool handled = true;
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDialogInfo.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_DIALOG_INFO, cb.contactId, asScriptFile.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_DIALOG_INFO, cb.contactId, asScriptFile.c_str(), handled);
 			}
 			break;
 		}
@@ -1442,8 +1447,9 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			if (appSettings.Scripts.onStreamingState != "")
 			{
 				AnsiString asScriptFile;
+				bool handled = true;
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onStreamingState.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_STREAMING_STATE, -1, asScriptFile.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_STREAMING_STATE, -1, asScriptFile.c_str(), handled);
 			}
 
 			break;
@@ -1528,8 +1534,9 @@ void __fastcall TfrmMain::btnDialClick(TObject *Sender)
 	if (appSettings.Scripts.onDial != "")
 	{
 		AnsiString asScriptFile;
+		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDial.c_str());
-		RunScriptFile(SCRIPT_SRC_ON_DIAL, digit, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_ON_DIAL, digit, asScriptFile.c_str(), handled);
 	}	
 }
 //---------------------------------------------------------------------------
@@ -1789,6 +1796,18 @@ AnsiString TfrmMain::OnGetContactName(AnsiString uri)
 void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 {
 	assert(id >= 0 && id < buttons.btnConf.size());
+
+	{
+		AnsiString asScriptFile;
+		bool handled = false;
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onProgrammableButton.c_str());
+		RunScriptFile(SCRIPT_SRC_BUTTON, id, asScriptFile.c_str(), handled);
+		if (handled)
+		{
+        	return;
+		}
+	}
+
 	ButtonConf &cfg = buttons.btnConf[id];
 	bool down = btn->GetDown();
 	switch (cfg.type)
@@ -1915,8 +1934,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	case Button::SCRIPT: {
 		AnsiString asScriptFile;
+		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), cfg.script.c_str());
-		RunScriptFile(SCRIPT_SRC_BUTTON, id, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_BUTTON, id, asScriptFile.c_str(), handled);
 		break;
 	}
 	case Button::SIP_ACCESS_URL:
@@ -1952,7 +1972,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	}
 }
 
-void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool showLog)
+void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog)
 {
 	if (showLog)
 	{
@@ -1975,7 +1995,7 @@ void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool s
 			return;
 		}
 		bool breakReq = false;
-		RunScript(srcType, srcId, scriptText, breakReq);
+		RunScript(srcType, srcId, scriptText, breakReq, handled);
 	}
 	else
 	{
@@ -1985,10 +2005,10 @@ void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool s
 	}
 }
 
-int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest)
+int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled)
 {
 	ScriptExec scriptExec(
-		static_cast<enum ScriptSource>(srcType), srcId, breakRequest,
+		static_cast<enum ScriptSource>(srcType), srcId, breakRequest, handled,
 		&OnAddOutputText, &OnCall2, &Hangup, &Answer, &OnGetDial, &OnSetDial,
 		&OnSwitchAudioSource, &DialString, &OnBlindTransfer, &OnGetCallState,
 		&OnIsCallIncoming, &OnGetCallPeer, &OnGetCallInitialRxInvite,
@@ -2132,8 +2152,9 @@ void __fastcall TfrmMain::cbCallURIKeyPress(TObject *Sender, char &Key)
 	if (appSettings.Scripts.onDial != "")
 	{
 		AnsiString asScriptFile;
+		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDial.c_str());
-		RunScriptFile(SCRIPT_SRC_ON_DIAL, Key, asScriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_ON_DIAL, Key, asScriptFile.c_str(), handled);
 	}
 }
 //---------------------------------------------------------------------------
@@ -2729,8 +2750,9 @@ void __fastcall TfrmMain::tmrScriptTimer(TObject *Sender)
 	if (appSettings.Scripts.onTimer != "")
 	{
 		AnsiString asScriptFile;
+		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onTimer.c_str());
-		RunScriptFile(SCRIPT_SRC_ON_TIMER, -1, asScriptFile.c_str(), false);
+		RunScriptFile(SCRIPT_SRC_ON_TIMER, -1, asScriptFile.c_str(), handled, false);
 		tmrScript->Enabled = true;
 	}
 	// timer disables itself if onTimer script is not configured

@@ -148,14 +148,18 @@ private:
     static int l_RefreshAudioDevicesList(lua_State* L);
 	static int l_GetAudioDevice(lua_State* L);
 	static int l_UpdateSettings(lua_State* L);
+	static int l_SetHandled(lua_State* L);
 
 	bool &breakReq;
+	bool &handled;	///< notifying back that event handling is completed - used to skip default action
+					///< when programmable button was clicked, with calling "SetHandled" froom "on programmable button" script 
 	bool running;
 public:
 	ScriptExec(
 		enum ScriptSource srcType,
 		int srcId,
 		bool &breakReq,
+		bool &handled,
 		CallbackAddOutputText onAddOutputText,
 		CallbackCall onCall,
 		CallbackHangup onHangup,

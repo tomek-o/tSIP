@@ -69,7 +69,7 @@ private:	// User declarations
 	void __fastcall WMDropFiles(TWMDropFiles &message);	
 public:		// User declarations
 	__fastcall TfrmLuaScript(TComponent* Owner);
-	typedef int (__closure *CallbackRunScript)(int srcType, int srcId, AnsiString script, bool &breakRequest);
+	typedef int (__closure *CallbackRunScript)(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
 	static void SetCallbackRunScript(CallbackRunScript cb);
 	void SetScript(AnsiString asString);
 	void OpenFile(AnsiString filename);

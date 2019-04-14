@@ -223,8 +223,8 @@ private:	// User declarations
 	void ToggleSpeedDial(void);
 	void RegisterGlobalHotKeys(void);
 	void ExecAction(const struct Action& action);
-	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool showLog = true);
-	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest);
+	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
+	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
 	bool notificationIconState;
 	void SetNotificationIcon(bool state);
 	void SetKioskMode(bool state);

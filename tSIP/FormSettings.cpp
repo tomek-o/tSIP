@@ -391,6 +391,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edScriptOnStartupFile->Text = tmpSettings.Scripts.onStartup;
 	edScriptOnDialogInfoFile->Text = tmpSettings.Scripts.onDialogInfo;
 	edScriptOnDialFile->Text = tmpSettings.Scripts.onDial;
+	edScriptOnProgrammableButtonFile->Text = tmpSettings.Scripts.onProgrammableButton;
 
 
 	frmHotkeys->SetCfg(&tmpSettings.hotKeyConf);
@@ -613,6 +614,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onStartup = edScriptOnStartupFile->Text;
 	tmpSettings.Scripts.onDialogInfo = edScriptOnDialogInfoFile->Text;
 	tmpSettings.Scripts.onDial = edScriptOnDialFile->Text;
+	tmpSettings.Scripts.onProgrammableButton = edScriptOnProgrammableButtonFile->Text;
 
 
 	appSettings = tmpSettings;
@@ -1117,7 +1119,11 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 	else if (Sender == btnSelectedScriptOnDialChange)
 	{
         edit = edScriptOnDialFile;
-    }
+	}
+	else if (Sender == btnSelectedScriptOnProgrammableButtonChange)
+	{
+    	edit = edScriptOnProgrammableButtonFile;
+	}
 	else
 	{
 		assert(0);
@@ -1189,7 +1195,12 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	{
 		edit = edScriptOnDialFile;
 		eventName = "on_dial";
-    }
+	}
+	else if (Sender == btnSelectedScriptOnProgrammableButtonEdit)
+	{
+		edit = edScriptOnProgrammableButtonFile;
+		eventName = "on_programmable_button";
+	}
 	else
 	{
 		assert(0);
