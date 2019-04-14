@@ -14,6 +14,8 @@ class LuaState;
 struct lua_State;
 struct luaL_reg;
 
+class ButtonConf;
+
 class ScriptExec
 {
 private:
@@ -52,6 +54,7 @@ private:
 	typedef std::string (__closure *CallbackGetUserName)(void);
 	typedef void (__closure *CallbackProgrammableButtonClick)(int id);
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
+	typedef const ButtonConf* (__closure *CallbackGetButtonConf)(int id);
 
 	CallbackAddOutputText onAddOutputText;
 	CallbackCall onCall;
@@ -85,6 +88,7 @@ private:
 	CallbackGetUserName onGetUserName;
 	CallbackProgrammableButtonClick onProgrammableButtonClick;
 	CallbackUpdateSettings onUpdateSettings;
+	CallbackGetButtonConf onGetButtonConf;
 
 	static int LuaPrint(lua_State *L);
 	static int LuaError( lua_State *L );
@@ -149,6 +153,8 @@ private:
 	static int l_GetAudioDevice(lua_State* L);
 	static int l_UpdateSettings(lua_State* L);
 	static int l_SetHandled(lua_State* L);
+	static int l_GetButtonType(lua_State* L);
+	static int l_GetButtonNumber(lua_State* L);
 
 	bool &breakReq;
 	bool &handled;	///< notifying back that event handling is completed - used to skip default action
@@ -191,7 +197,8 @@ public:
 		CallbackShowTrayNotifier onShowTrayNotifier,
 		CallbackGetUserName onGetUserName,
 		CallbackProgrammableButtonClick onProgrammableButtonClick,
-		CallbackUpdateSettings onUpdateSettings
+		CallbackUpdateSettings onUpdateSettings,
+		CallbackGetButtonConf onGetButtonConf
 		);
 	~ScriptExec();
 	void Run(const char* script);

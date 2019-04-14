@@ -9,6 +9,7 @@
 #include "lua.hpp"
 #include "AudioDevicesList.h"
 #include "Paths.h"
+#include "ButtonConf.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -915,6 +916,33 @@ int ScriptExec::l_SetHandled(lua_State* L)
 	return 0;
 }
 
+int ScriptExec::l_GetButtonType(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	const ButtonConf* btnConf = GetContext(L)->onGetButtonConf(id);
+	if (btnConf == NULL)
+	{
+		LOG("Lua error: no button configuration for id = %d\n", id);
+		return 0;
+	}
+	lua_pushinteger(L, btnConf->type);
+	return 1;
+}
+
+int ScriptExec::l_GetButtonNumber(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	const ButtonConf* btnConf = GetContext(L)->onGetButtonConf(id);
+	if (btnConf == NULL)
+	{
+		LOG("Lua error: no button configuration for id = %d\n", id);
+		return 0;
+	}
+	lua_pushstring(L, btnConf->number.c_str());
+	return 1;
+}
+
+
 
 ScriptExec::ScriptExec(
 	enum ScriptSource srcType,
@@ -952,7 +980,8 @@ ScriptExec::ScriptExec(
 	CallbackShowTrayNotifier onShowTrayNotifier,
 	CallbackGetUserName onGetUserName,
 	CallbackProgrammableButtonClick onProgrammableButtonClick,
-	CallbackUpdateSettings onUpdateSettings
+	CallbackUpdateSettings onUpdateSettings,
+	CallbackGetButtonConf onGetButtonConf
 	):
 	srcType(srcType),
 	srcId(srcId),
@@ -989,7 +1018,8 @@ ScriptExec::ScriptExec(
 	onShowTrayNotifier(onShowTrayNotifier),
 	onGetUserName(onGetUserName),
 	onProgrammableButtonClick(onProgrammableButtonClick),
-    onUpdateSettings(onUpdateSettings),
+	onUpdateSettings(onUpdateSettings),
+	onGetButtonConf(onGetButtonConf),
 
 	running(false)
 {
@@ -1011,7 +1041,8 @@ ScriptExec::ScriptExec(
 		onShowTrayNotifier &&
 		onGetUserName &&
 		onProgrammableButtonClick &&
-		onUpdateSettings
+		onUpdateSettings &&
+		onGetButtonConf
 		);
 }
 
@@ -1093,6 +1124,9 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "UpdateSettings", l_UpdateSettings);
 
 	lua_register(L, "SetHandled", l_SetHandled);
+
+	lua_register(L, "GetButtonType", l_GetButtonType);
+	lua_register(L, "GetButtonNumber", l_GetButtonNumber);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);

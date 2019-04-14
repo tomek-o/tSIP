@@ -28,6 +28,7 @@
 class TrayIcon;
 class TfrmButtonContainer;
 class TProgrammableButton;
+class ButtonConf;
 class PhoneInterface;
 struct HotKeyConf;
 struct Action;
@@ -184,6 +185,7 @@ private:	// User declarations
 	int OnGetRecordingState(void);
 	std::string OnGetRxDtmf(void);
 	std::string OnGetUserName(void);
+	const ButtonConf* OnGetButtonConf(int id);
 
 	int autoAnswerCode;
 	bool autoAnswerIntercom;

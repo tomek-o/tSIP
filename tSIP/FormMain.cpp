@@ -830,6 +830,15 @@ std::string TfrmMain::OnGetUserName(void)
 	return appSettings.uaConf.accounts[0].user.c_str();
 }
 
+const ButtonConf* TfrmMain::OnGetButtonConf(int id)
+{
+	if (id < 0 || id >= buttons.btnConf.size())
+	{
+		return NULL;
+	}
+	return &buttons.btnConf[id];
+}
+
 AnsiString TfrmMain::CleanUri(AnsiString uri)
 {
 	AnsiString res = uri;
@@ -1804,7 +1813,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		RunScriptFile(SCRIPT_SRC_BUTTON, id, asScriptFile.c_str(), handled);
 		if (handled)
 		{
-        	return;
+			return;
 		}
 	}
 
@@ -2027,7 +2036,8 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&ShowTrayNotifier,
 		&OnGetUserName,
 		&ProgrammableButtonClick,
-		&UpdateSettingsFromJson
+		&UpdateSettingsFromJson,
+		&OnGetButtonConf
 		);
 	scriptExec.Run(script.c_str());
 	return 0;
