@@ -1806,6 +1806,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 {
 	assert(id >= 0 && id < buttons.btnConf.size());
 
+	if (appSettings.Scripts.onProgrammableButton != "")
 	{
 		AnsiString asScriptFile;
 		bool handled = false;
