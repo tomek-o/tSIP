@@ -100,8 +100,9 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	frmPhones->Parent = tsPhones;
 	frmPhones->Visible = true;
 
-	// fill number of columns combobox according to limit in settings
+	// fill number of columns combobox and widths vleditor according to limit in settings
 	cbSpeedDialSize->Items->Clear();
+	//vleSpeedDialColWidths->RowCount = ProgrammableButtons::EXT_CONSOLE_COLUMNS
 	for (int i=1; i<=ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
 	{
 		AnsiString desc;
@@ -114,6 +115,7 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 			desc.sprintf("%d columns", i);
 		}
 		cbSpeedDialSize->Items->Add(desc);
+		vleSpeedDialColWidths->Values[i] = 100 + i;
 	}
 
 	for (int i=0; i<pcGeneral->PageCount; i++)
@@ -252,7 +254,10 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbFrmMainShowWhenAnsweringCall->Checked = tmpSettings.frmMain.bShowWhenAnsweringCall;
 
 	cbSpeedDialSize->ItemIndex = tmpSettings.frmMain.iSpeedDialSize;
-	edSpeedDialColumnWidth->Text = tmpSettings.frmMain.iSpeedDialWidth;
+	for (int i=0; i<tmpSettings.frmMain.speedDialWidth.size(); i++)
+	{
+		vleSpeedDialColWidths->Values[i+1] = tmpSettings.frmMain.speedDialWidth[i];
+	}
 	chbXBtnMinimize->Checked = tmpSettings.frmMain.bXBtnMinimize;
 	chbRestoreMainWindowOnIncomingCall->Checked = tmpSettings.frmMain.bRestoreOnIncomingCall;
     chbSingleInstance->Checked = tmpSettings.frmMain.bSingleInstance;
@@ -445,7 +450,12 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bShowWhenAnsweringCall = chbFrmMainShowWhenAnsweringCall->Checked;
 
 	tmpSettings.frmMain.iSpeedDialSize = cbSpeedDialSize->ItemIndex;
-	tmpSettings.frmMain.iSpeedDialWidth = StrToIntDef(edSpeedDialColumnWidth->Text, 105);
+
+	for (int i=0; i<tmpSettings.frmMain.speedDialWidth.size(); i++)
+	{
+		tmpSettings.frmMain.speedDialWidth[i] = StrToIntDef(vleSpeedDialColWidths->Values[i+1], tmpSettings.frmMain.speedDialWidth[i]);
+	}
+
 	tmpSettings.frmMain.bXBtnMinimize = chbXBtnMinimize->Checked;
 	tmpSettings.frmMain.bRestoreOnIncomingCall = chbRestoreMainWindowOnIncomingCall->Checked;
 	tmpSettings.frmMain.bSingleInstance = chbSingleInstance->Checked;
@@ -1238,5 +1248,6 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	frmLuaScript->OpenFile(file);
 }
 //---------------------------------------------------------------------------
+
 
 

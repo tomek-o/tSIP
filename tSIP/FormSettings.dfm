@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsScripts
+    ActivePage = tsSpeedDial
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -451,19 +451,19 @@ object frmSettings: TfrmSettings
       object lblSpeedDialColumnWidth: TLabel
         Left = 3
         Top = 28
-        Width = 215
+        Width = 220
         Height = 13
-        Caption = 'Width of speed dial column (restart required)'
+        Caption = 'Width of speed dial columns (restart required)'
       end
       object lblSpeedDialBlfSettings: TLabel
         Left = 3
-        Top = 132
+        Top = 196
         Width = 122
         Height = 13
         Caption = 'BLF / dialog-info settings:'
       end
       object cbSpeedDialSize: TComboBox
-        Left = 227
+        Left = 235
         Top = 0
         Width = 121
         Height = 21
@@ -480,68 +480,78 @@ object frmSettings: TfrmSettings
           '7 columns'
           '8 columns')
       end
-      object edSpeedDialColumnWidth: TEdit
-        Left = 227
-        Top = 25
-        Width = 42
-        Height = 21
-        TabOrder = 1
-      end
       object chbShowSpeedDialOnly: TCheckBox
         Left = 3
-        Top = 51
+        Top = 115
         Width = 325
         Height = 17
         Caption = 'Show only speed dial (console-only mode)'
-        TabOrder = 2
+        TabOrder = 1
       end
       object chbSpeedDialPopupMenu: TCheckBox
         Left = 3
-        Top = 74
+        Top = 138
         Width = 325
         Height = 17
         Caption = 'Enable popup menu (editing) for programmable keys'
-        TabOrder = 3
+        TabOrder = 2
       end
       object chbSpeedDialIgnorePresenceNote: TCheckBox
         Left = 3
-        Top = 97
+        Top = 161
         Width = 398
         Height = 17
         Caption = 
           'Ignore presence note (do not show second line for presence butto' +
           'n)'
-        TabOrder = 4
+        TabOrder = 3
       end
       object chbSpeedDialIgnoreDialogInfoRemoteIdentity: TCheckBox
         Left = 19
-        Top = 154
+        Top = 218
         Width = 486
         Height = 17
         Caption = 
           'Ignore remote identity info (2nd line with caller/callee and cal' +
           'l direction, if present in notifications)'
-        TabOrder = 5
+        TabOrder = 4
       end
       object chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing: TCheckBox
         Left = 19
-        Top = 177
+        Top = 241
         Width = 478
         Height = 17
         Caption = 
           'Keep previous remote identity info if remote identity is missing' +
           ' in notification'
-        TabOrder = 6
+        TabOrder = 5
       end
       object chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated: TCheckBox
         Left = 19
-        Top = 200
+        Top = 264
         Width = 478
         Height = 17
         Caption = 
           'Ignore or clear remote identity if call state is set to terminat' +
           'ed'
+        TabOrder = 6
+      end
+      object vleSpeedDialColWidths: TValueListEditor
+        Left = 235
+        Top = 23
+        Width = 142
+        Height = 86
+        DefaultColWidth = 50
+        ScrollBars = ssVertical
+        Strings.Strings = (
+          '=')
         TabOrder = 7
+        TitleCaptions.Strings = (
+          'Column'
+          'Width')
+        ColWidths = (
+          50
+          86)
       end
     end
     object tsCalls: TTabSheet

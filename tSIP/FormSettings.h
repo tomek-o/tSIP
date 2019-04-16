@@ -14,6 +14,8 @@
 #include <Dialogs.hpp>
 #include <CheckLst.hpp>
 #include <Buttons.hpp>
+#include <Grids.hpp>
+#include <ValEdit.hpp>
 
 #include <vector>
 
@@ -133,7 +135,6 @@ __published:	// IDE-managed Components
 	TLabel *lblSpeedDial;
 	TComboBox *cbSpeedDialSize;
 	TLabel *lblSpeedDialColumnWidth;
-	TEdit *edSpeedDialColumnWidth;
 	TCheckBox *chbShowSpeedDialOnly;
 	TCheckBox *chbRestoreMainWindowOnIncomingCall;
 	TTabSheet *tsPhones;
@@ -298,6 +299,7 @@ __published:	// IDE-managed Components
 	TEdit *edScriptOnProgrammableButtonFile;
 	TButton *btnSelectedScriptOnProgrammableButtonChange;
 	TBitBtn *btnSelectedScriptOnProgrammableButtonEdit;
+	TValueListEditor *vleSpeedDialColWidths;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

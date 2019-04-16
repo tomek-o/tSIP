@@ -74,7 +74,13 @@ public:
 		bool bStartMinimizedToTray;
 		bool bSpeedDialVisible;
 		int iSpeedDialSize;				///< number of console columns minus 1 (0 = 1 column)
-		int iSpeedDialWidth;			///< width of single console column
+		enum {
+			MIN_SPEED_DIAL_COL_WIDTH = 40
+		};
+		enum {
+        	MAX_SPEED_DIAL_COL_WIDTH = 400
+		};
+		std::vector<int> speedDialWidth;///< width of each console column
 		bool bSpeedDialOnly;
 		bool bSpeedDialPopupMenu;       ///< enable/disable popup menu (editing) for speed dial / BLF panels
 		bool bSpeedDialIgnorePresenceNote;	///< do not show "note" for presence

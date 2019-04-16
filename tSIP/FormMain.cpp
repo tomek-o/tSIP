@@ -154,7 +154,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		TfrmButtonContainer *& container = frmButtonContainers[i];
 		container = new TfrmButtonContainer(this->pnlSpeedDial,
 			buttons,
-			appSettings.frmMain.iSpeedDialWidth, 0, appSettings.gui.scalingPct,
+			appSettings.frmMain.speedDialWidth[i-1], 0, appSettings.gui.scalingPct,
 			i * ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN, ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN,
 			&OnProgrammableBtnClick);
 		container->Parent = this->pnlSpeedDial;
@@ -2076,7 +2076,12 @@ void TfrmMain::SetSpeedDial(bool visible)
 {
 	if (visible)
 	{
-		pnlSpeedDial->Width = (frmButtonContainers[1]->Width) * (appSettings.frmMain.iSpeedDialSize + 1) + 4;
+		int width = 4;
+		for (int i=1; i<appSettings.frmMain.iSpeedDialSize + 2; i++)
+		{
+			width += frmButtonContainers[i]->Width;
+		}
+		pnlSpeedDial->Width = width;
 		/*
 		This weird column handling order and switching to alNone and back to alLeft
 		is intended to keep proper order of components (align with respect to each order).

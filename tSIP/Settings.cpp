@@ -32,7 +32,6 @@ Settings::_frmMain::_frmMain(void):
 	bStartMinimizedToTray(false),	
     bSpeedDialVisible(false),
 	iSpeedDialSize(1),	// default: 2 columns
-	iSpeedDialWidth(105),
 	bSpeedDialOnly(false),
 	bSpeedDialPopupMenu(true),
 	bSpeedDialIgnorePresenceNote(false),
@@ -55,6 +54,11 @@ Settings::_frmMain::_frmMain(void):
 	bUseCustomApplicationTitle(false),
 	customApplicationTitle(Branding::appName)
 {
+	speedDialWidth.clear();
+	for (unsigned int i=0; i<ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
+	{
+		speedDialWidth.push_back(105);
+	}
 }
 
 Settings::_frmTrayNotifier::_frmTrayNotifier(void):
@@ -507,11 +511,38 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		{
 			frmMain.iSpeedDialSize = iSpeedDialSize;
 		}
-		int iSpeedDialWidth = frmMainJson.get("SpeedDialWidth", frmMain.iSpeedDialWidth).asUInt();
-		if (iSpeedDialWidth >= 50 && frmMain.iSpeedDialWidth <= 300)
+
 		{
-			frmMain.iSpeedDialWidth = iSpeedDialWidth;
+			// speed dial column width(s) - changed from single int to array in 0.1.66.2
+			const Json::Value &jvs = frmMainJson["SpeedDialWidth"];
+			if (jvs.type() == Json::intValue || jvs.type() == Json::uintValue)
+			{
+				int iSpeedDialWidth = jvs.asUInt();
+				if (iSpeedDialWidth >= _frmMain::MIN_SPEED_DIAL_COL_WIDTH && iSpeedDialWidth <= _frmMain::MAX_SPEED_DIAL_COL_WIDTH)
+				{
+					for (unsigned int i=0; i<frmMain.speedDialWidth.size(); i++)
+					{
+						frmMain.speedDialWidth[i] = iSpeedDialWidth;
+					}
+				}
+			}
+			else if (jvs.type() == Json::arrayValue)
+			{
+				for (unsigned int i=0; i<jvs.size(); i++)
+				{
+					if (i >= frmMain.speedDialWidth.size())
+					{
+						break;
+					}
+					int iSpeedDialWidth = jvs[i].asInt();
+					if (iSpeedDialWidth >= _frmMain::MIN_SPEED_DIAL_COL_WIDTH && iSpeedDialWidth <= _frmMain::MAX_SPEED_DIAL_COL_WIDTH)
+					{
+                    	frmMain.speedDialWidth[i] = iSpeedDialWidth;
+					}
+				}
+			}
 		}
+
 		frmMain.bStartMinimizedToTray = frmMainJson.get("StartMinimizedToTray", frmMain.bStartMinimizedToTray).asBool();
 		frmMain.bXBtnMinimize = frmMainJson.get("XBtnMinimize", frmMain.bXBtnMinimize).asBool();
 		frmMain.bRestoreOnIncomingCall = frmMainJson.get("RestoreOnIncomingCall", frmMain.bRestoreOnIncomingCall).asBool();
@@ -716,7 +747,12 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing"] = frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 		jv["SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated"] = frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
 		jv["SpeedDialSize"] = frmMain.iSpeedDialSize;
-		jv["SpeedDialWidth"] = frmMain.iSpeedDialWidth;
+		Json::Value& jvs = jv["SpeedDialWidth"];
+		jvs.resize(frmMain.speedDialWidth.size());
+		for (unsigned int i=0; i<frmMain.speedDialWidth.size(); i++)
+		{
+			jvs[i] = frmMain.speedDialWidth[i];
+		}
 		jv["StartMinimizedToTray"] = frmMain.bStartMinimizedToTray;
 		jv["XBtnMinimize"] = frmMain.bXBtnMinimize;
 		jv["RestoreOnIncomingCall"] = frmMain.bRestoreOnIncomingCall;
