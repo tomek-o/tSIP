@@ -211,9 +211,11 @@ void TProgrammableButton::UpdateCallbacks(void)
 {
 	image->OnClick = OnClick;
 	label->OnClick = OnClick;
+	label2->OnClick = OnClick;
 
 	image->OnDblClick = OnDblClick;
 	label->OnDblClick = OnDblClick;
+	label2->OnDblClick = OnDblClick;
 }
 
 void TProgrammableButton::SetCaption(AnsiString text)
