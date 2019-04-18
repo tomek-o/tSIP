@@ -137,8 +137,17 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "");
 		break;
 	case UA_EVENT_CALL_ESTABLISHED:
-		state = Callback::CALL_STATE_ESTABLISHED;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "");
+		{
+			state = Callback::CALL_STATE_ESTABLISHED;
+			const char* pai_peer_uri = call_pai_peeruri(call);
+			if (pai_peer_uri == NULL)
+				pai_peer_uri = "";
+
+			const char* pai_peer_name = call_pai_peername(call);
+			if (pai_peer_name == NULL)
+				pai_peer_name = "";
+			UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, pai_peer_uri, pai_peer_name);
+		}
 		break;
 	case UA_EVENT_CALL_CLOSED:
 		if (call == app.callp)

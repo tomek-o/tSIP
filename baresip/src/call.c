@@ -448,6 +448,29 @@ static void stream_error_handler(struct stream *strm, int err, void *arg)
 	call_stream_stop(call);
 	call_event_handler(call, CALL_EVENT_CLOSED, "rtp stream error");
 }
+
+void call_update_pai(struct call *call, const struct sip_msg *msg) {
+	if (msg->p_asserted_identity_present) {
+        int err;
+		mem_deref(call->pai_peer_uri);
+		call->pai_peer_uri = NULL;
+		err = pl_strdup(&call->pai_peer_uri, &msg->p_asserted_identity.auri);
+		if (err) {
+			return err;
+		}
+		mem_deref(call->pai_peer_name);
+		call->pai_peer_name = NULL;
+		if (pl_isset(&msg->p_asserted_identity.dname)) {
+			err = pl_strdup(&call->pai_peer_name, &msg->p_asserted_identity.dname);
+			if (err) {
+				return err;
+			}
+		}
+	}
+	return 0;
+}
+
+
 /**
  * Allocate a new Call state object
  *
@@ -1046,22 +1069,7 @@ static int sipsess_offer_handler(struct mbuf **descp,
 	/* Encode SDP Answer */
 	status = sdp_encode(descp, call->sdp, !got_offer);
 
-	if (msg->p_asserted_identity_present) {
-		mem_deref(call->pai_peer_uri);
-		call->pai_peer_uri = NULL;
-		err = pl_strdup(&call->pai_peer_uri, &msg->p_asserted_identity.auri);
-		if (err) {
-			return err;
-		}
-		mem_deref(call->pai_peer_name);
-		call->pai_peer_name = NULL;
-		if (pl_isset(&msg->p_asserted_identity.dname)) {
-			err = pl_strdup(&call->pai_peer_name, &msg->p_asserted_identity.dname);
-			if (err) {
-            	return err;
-			}
-		}
-	}
+	call_update_pai(call, msg);
 
 	call_event_handler(call, CALL_EVENT_REINVITE_RECEIVED, call->peer_uri);
 
@@ -1121,6 +1129,8 @@ static void sipsess_estab_handler(const struct sip_msg *msg, void *arg)
 	if (call->not) {
 		(void)call_notify_sipfrag(call, 200, "OK");
 	}
+
+	call_update_pai(call, msg);
 
 	/* must be done last, the handler might deref this call */
 	call_event_handler(call, CALL_EVENT_ESTABLISHED, call->peer_uri);
@@ -1342,18 +1352,7 @@ int call_accept(struct call *call, struct sipsess_sock *sess_sock,
 		return err;
 	call->access_url_mode = msg->access_url.mode;
 
-	if (msg->p_asserted_identity_present) {
-		err = pl_strdup(&call->pai_peer_uri, &msg->p_asserted_identity.auri);
-		if (err) {
-			return err;
-		}
-		if (pl_isset(&msg->p_asserted_identity.dname)) {
-			err = pl_strdup(&call->pai_peer_name, &msg->p_asserted_identity.dname);
-			if (err) {
-            	return err;
-			}
-		}
-	}
+	call_update_pai(call, msg);
 
 	if (got_offer) {
 

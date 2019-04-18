@@ -876,6 +876,30 @@ AnsiString TfrmMain::GetClip(AnsiString uri)
 	}
 }
 
+void TfrmMain::UpdateClip(void)
+{
+	lbl2ndParty->Caption = GetClip(GetCallPeerUri());
+	lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri()));
+	if (lastContactEntry)
+	{
+		lbl2ndPartyDesc->Caption = lastContactEntry->description;
+		/** \todo popup contact note if clip changes */
+	#if 0
+		if (appSettings.frmContactPopup.showOnIncoming)
+		{
+			if (lastContactEntry->note != "")
+			{
+				ShowContactPopup(lastContactEntry);
+			}
+		}
+	#endif
+	}
+	else
+	{
+		lbl2ndPartyDesc->Caption = GetCallPeerName();
+	}
+}
+
 void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 {
 	{
@@ -1050,6 +1074,11 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				call.connected = true;
 				call.timeTalkStart = Now();
 				call.ringStarted = false;
+				call.paiPeerUri = cb.paiPeerUri;
+				call.paiPeerName = GetPeerName(cb.paiPeerName);
+
+				UpdateClip();
+
 				PhoneInterface::UpdateRing(0);
 				tmrAutoAnswer->Enabled = false;
 				if (appSettings.uaConf.recording.enabled && call.recording == false &&
@@ -1191,25 +1220,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			call.paiPeerUri = cb.paiPeerUri;
 			call.paiPeerName = GetPeerName(cb.paiPeerName);
 
-			lbl2ndParty->Caption = GetClip(GetCallPeerUri());
-			lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri()));
-			if (lastContactEntry)
-			{
-				lbl2ndPartyDesc->Caption = lastContactEntry->description;
-			#if 0
-				if (appSettings.frmContactPopup.showOnIncoming)
-				{
-					if (lastContactEntry->note != "")
-					{
-						ShowContactPopup(lastContactEntry);
-					}
-				}
-			#endif
-			}
-			else
-			{
-				lbl2ndPartyDesc->Caption = GetCallPeerName();
-			}
+			UpdateClip();
 
 			frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);			
 
