@@ -449,6 +449,8 @@
         <FILE FILENAME="LuaExamples.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="ScriptSource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="Paths.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Paths" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Paths.h"/>
+        <FILE FILENAME="FormTroubleshooting.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTroubleshooting" FORMNAME="frmTroubleshooting" DESIGNCLASS="" ADDITIONAL="FormTroubleshooting.h"/>
+        <FILE FILENAME="Troubleshooting.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Troubleshooting" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Troubleshooting.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -457,7 +459,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">66</VersionInfo>
-          <VersionInfo Name="Build">1</VersionInfo>
+          <VersionInfo Name="Build">4</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -469,7 +471,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.66.1</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.66.4</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

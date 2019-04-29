@@ -39,6 +39,8 @@
 #include "PhoneInterface.h"
 #include "FormContactsCsvImport.h"
 #include "FormLuaScript.h"
+#include "Troubleshooting.h"
+#include "FormTroubleshooting.h"
 #include "Utilities.h"
 #include <Clipbrd.hpp>
 
@@ -2872,6 +2874,13 @@ void __fastcall TfrmMain::miScriptingClick(TObject *Sender)
 	}
 	// self-deleting with caFree
 	//delete frmLuaScript;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miTroubleshootingClick(TObject *Sender)
+{
+    Troubleshooting::Update();
+	frmTroubleshooting->ShowModal();
 }
 //---------------------------------------------------------------------------
 

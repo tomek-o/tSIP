@@ -20,6 +20,7 @@ USEFORM("FormPhones.cpp", frmPhones);
 USEFORM("FormContactsCsvImport.cpp", frmContactsCsvImport);
 USEFORM("FormLuaScript.cpp", frmLuaScript);
 USEFORM("FormTextEditor.cpp", frmTextEditor);
+USEFORM("FormTroubleshooting.cpp", frmTroubleshooting);
 //---------------------------------------------------------------------------
 #pragma link "re.lib"
 #pragma link "rem.lib"
@@ -107,6 +108,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmContactPopup), &frmContactPopup);
 		Application->CreateForm(__classid(TfrmPhones), &frmPhones);
 		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
+		Application->CreateForm(__classid(TfrmTroubleshooting), &frmTroubleshooting);
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
 		frmContactPopup->Width = appSettings.frmContactPopup.iWidth;

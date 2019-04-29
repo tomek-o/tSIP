@@ -24,8 +24,6 @@ Bunch of things to do in future releases. No particular order:
 
 - DTMF local playback
 
-- ring and talk: volume control
-
 
 Call recording:
 - fixme: possible hazards when starting recording
@@ -204,6 +202,12 @@ font selection for console (ugly looking font under Wine)
 accessibility & GUI scaling: remember column width in call history, scale column width in phonebook
 
 update Lua to 5.3.x, remove CVS tags from Lua source
+
+update call history with PAI URI/name
+
+- wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
+(=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)
+
 */
 
 

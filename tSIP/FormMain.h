@@ -105,6 +105,7 @@ __published:	// IDE-managed Components
 	TTimer *tmrClearCallState;
 	TMenuItem *miTools;
 	TMenuItem *miScripting;
+	TMenuItem *miTroubleshooting;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -147,6 +148,7 @@ __published:	// IDE-managed Components
 	void __fastcall miClearCallsHistoryClick(TObject *Sender);
 	void __fastcall tmrClearCallStateTimer(TObject *Sender);
 	void __fastcall miScriptingClick(TObject *Sender);
+	void __fastcall miTroubleshootingClick(TObject *Sender);
 private:	// User declarations
 	TrayIcon *trIcon;
 	TfrmButtonContainer* frmButtonContainers[1 + ProgrammableButtons::EXT_CONSOLE_COLUMNS];

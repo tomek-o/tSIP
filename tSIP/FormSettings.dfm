@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsSpeedDial
+    ActivePage = tsAudioProcessing
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -1294,7 +1294,7 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 
           'Enable audio preprocessing for microphone path (transmitted audi' +
-          'o)'
+          'o) [UNSTABLE/EXPERIMENTAL]'
         TabOrder = 3
         OnClick = chbAudioPreprocessingTxEnabledClick
       end
