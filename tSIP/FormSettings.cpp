@@ -224,7 +224,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		frmAccountVector.push_back(frmAccount);
 	}
 
-    edGuiScaling->Text = tmpSettings.gui.scalingPct;
+	edGuiScaling->Text = tmpSettings.gui.scalingPct;
+
+	edMainWindowHeight->Text = tmpSettings.frmMain.iHeight;
 
 	chbAlwaysOnTop->Checked = tmpSettings.frmMain.bAlwaysOnTop;
 	chbStartMinimizedToTray->Checked = tmpSettings.frmMain.bStartMinimizedToTray;
@@ -416,6 +418,12 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		tmpSettings.gui.scalingPct > tmpSettings.gui.SCALING_MAX)
 	{
 		tmpSettings.gui.scalingPct = 100;
+	}
+
+	int iHeight = StrToIntDef(edMainWindowHeight->Text, tmpSettings.frmMain.iHeight);
+	if (iHeight >= Settings::_frmMain::MIN_HEIGHT)
+	{
+		tmpSettings.frmMain.iHeight = iHeight;
 	}
 
 	tmpSettings.frmMain.bAlwaysOnTop = chbAlwaysOnTop->Checked;

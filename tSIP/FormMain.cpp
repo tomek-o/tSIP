@@ -249,13 +249,8 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	history.SetFilename(asHistoryFile);
 	history.Read(&OnGetContactName);
 
-#if 0
-	if (this->BorderStyle != bsSingle)
-	{
-		this->Width = appSettings.frmMain.iWidth;
-		this->Height = appSettings.frmMain.iHeight;
-	}
-#endif
+	this->Height = appSettings.frmMain.iHeight;
+
 	this->Top = appSettings.frmMain.iPosY;
 	this->Left = appSettings.frmMain.iPosX;
 	if (appSettings.frmMain.bAlwaysOnTop)
@@ -311,8 +306,10 @@ void TfrmMain::Finalize(void)
 	if (!appSettings.frmMain.bWindowMaximized)
 	{
 		// these values are meaningless is wnd is maximized
+	#if 0
 		appSettings.frmMain.iWidth = this->Width;
-		appSettings.frmMain.iHeight = this->Height;
+		appSettings.frmMain.iHeight = this->Height;	// editing only through settings window
+	#endif
 		appSettings.frmMain.iPosY = this->Top;
 		appSettings.frmMain.iPosX = this->Left;
 	}
@@ -367,6 +364,8 @@ int TfrmMain::UpdateSettingsFromJson(AnsiString json)
 
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
+	this->Height = appSettings.frmMain.iHeight;
+
 	// modify application title and main window caption only if config changes,
 	// allowing to keep text set by Lua API or other methods
 	if ((prev.frmMain.bUseCustomApplicationTitle != appSettings.frmMain.bUseCustomApplicationTitle) ||

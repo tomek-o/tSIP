@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsAudioProcessing
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -75,38 +75,45 @@ object frmSettings: TfrmSettings
       end
       object lblDialpadBackgroundImage: TLabel
         Left = 3
-        Top = 181
+        Top = 207
         Width = 125
         Height = 13
         Caption = 'Dialpad background image'
       end
       object lblMainIconFile: TLabel
         Left = 3
-        Top = 205
+        Top = 231
         Width = 128
         Height = 13
         Caption = 'Custom main icon file (.ico)'
       end
       object lblTrayNotificationIcon: TLabel
         Left = 3
-        Top = 229
+        Top = 255
         Width = 168
         Height = 13
         Caption = 'Custom tray icon notification image'
       end
       object lblRestartRequired1: TLabel
         Left = 340
-        Top = 205
+        Top = 231
         Width = 84
         Height = 13
         Caption = '(restart required)'
       end
       object lblRestartRequired2: TLabel
         Left = 340
-        Top = 229
+        Top = 255
         Width = 84
         Height = 13
         Caption = '(restart required)'
+      end
+      object lblMainWindowHeight: TLabel
+        Left = 3
+        Top = 142
+        Width = 94
+        Height = 13
+        Caption = 'Main window height'
       end
       object chbAlwaysOnTop: TCheckBox
         Left = 3
@@ -149,7 +156,7 @@ object frmSettings: TfrmSettings
       end
       object chbSingleInstance: TCheckBox
         Left = 3
-        Top = 137
+        Top = 163
         Width = 382
         Height = 17
         Caption = 
@@ -159,14 +166,14 @@ object frmSettings: TfrmSettings
       end
       object edDialpadBackgroundImage: TEdit
         Left = 178
-        Top = 178
+        Top = 204
         Width = 121
         Height = 21
         TabOrder = 6
       end
       object btnSelectDialpadBackgroundImage: TButton
         Left = 305
-        Top = 178
+        Top = 204
         Width = 22
         Height = 21
         Caption = '...'
@@ -175,7 +182,7 @@ object frmSettings: TfrmSettings
       end
       object chbNoBeepOnEnterKey: TCheckBox
         Left = 3
-        Top = 158
+        Top = 184
         Width = 382
         Height = 17
         Caption = 
@@ -185,14 +192,14 @@ object frmSettings: TfrmSettings
       end
       object edMainIconFile: TEdit
         Left = 178
-        Top = 202
+        Top = 228
         Width = 121
         Height = 21
         TabOrder = 9
       end
       object btnSelectMainIconFile: TButton
         Left = 305
-        Top = 202
+        Top = 228
         Width = 22
         Height = 21
         Caption = '...'
@@ -201,14 +208,14 @@ object frmSettings: TfrmSettings
       end
       object edTrayNotificationImage: TEdit
         Left = 178
-        Top = 226
+        Top = 252
         Width = 121
         Height = 21
         TabOrder = 11
       end
       object btnSelectTrayNotificationImage: TButton
         Left = 305
-        Top = 226
+        Top = 252
         Width = 22
         Height = 21
         Caption = '...'
@@ -217,7 +224,7 @@ object frmSettings: TfrmSettings
       end
       object chbCustomUserAgent: TCheckBox
         Left = 3
-        Top = 253
+        Top = 279
         Width = 157
         Height = 17
         Caption = 'Custom User-Agent value'
@@ -225,7 +232,7 @@ object frmSettings: TfrmSettings
       end
       object edUserAgent: TEdit
         Left = 178
-        Top = 251
+        Top = 277
         Width = 121
         Height = 21
         TabOrder = 14
@@ -242,7 +249,7 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainUseCustomApplicationTitle: TCheckBox
         Left = 3
-        Top = 276
+        Top = 302
         Width = 223
         Height = 17
         Caption = 'Custom application title (text in taskbar)'
@@ -250,7 +257,7 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainUseCustomCaption: TCheckBox
         Left = 3
-        Top = 300
+        Top = 326
         Width = 191
         Height = 17
         Caption = 'Custom caption for main window'
@@ -258,17 +265,24 @@ object frmSettings: TfrmSettings
       end
       object edFrmMainCustomApplicationTitle: TEdit
         Left = 232
-        Top = 274
+        Top = 300
         Width = 193
         Height = 21
         TabOrder = 18
       end
       object edFrmMainCustomCaption: TEdit
         Left = 232
-        Top = 298
+        Top = 324
         Width = 193
         Height = 21
         TabOrder = 19
+      end
+      object edMainWindowHeight: TEdit
+        Left = 178
+        Top = 139
+        Width = 42
+        Height = 21
+        TabOrder = 20
       end
     end
     object tsNetwork: TTabSheet

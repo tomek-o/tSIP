@@ -25,8 +25,8 @@ inline void strncpyz(char* dst, const char* src, int dstsize) {
 Settings::_frmMain::_frmMain(void):
 	iPosX(30),
 	iPosY(30),
-	iWidth(350),
-	iHeight(300),
+	iWidth(273),
+	iHeight(425),
 	bWindowMaximized(false),
 	bAlwaysOnTop(false),
 	bStartMinimizedToTray(false),	
@@ -483,7 +483,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			frmMain.iWidth = iWidth;
 		}
 		int iHeight = frmMainJson.get("AppHeight", frmMain.iHeight).asInt();
-		if (iHeight >= 200 && iHeight <= maxY + 20)
+		if (iHeight >= _frmMain::MIN_HEIGHT && iHeight <= maxY + 20)
 		{
 			frmMain.iHeight = iHeight;
 		}

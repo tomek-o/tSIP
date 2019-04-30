@@ -300,6 +300,8 @@ __published:	// IDE-managed Components
 	TButton *btnSelectedScriptOnProgrammableButtonChange;
 	TBitBtn *btnSelectedScriptOnProgrammableButtonEdit;
 	TValueListEditor *vleSpeedDialColWidths;
+	TLabel *lblMainWindowHeight;
+	TEdit *edMainWindowHeight;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

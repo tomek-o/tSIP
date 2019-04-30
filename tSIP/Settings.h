@@ -67,6 +67,7 @@ public:
 	} info;
 	struct _frmMain
 	{
+		enum { MIN_HEIGHT = 200 };
 		int iPosX, iPosY;				///< main window coordinates
 		int iWidth, iHeight;			///< main window size
 		bool bWindowMaximized;			///< is main window maximize?
