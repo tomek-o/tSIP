@@ -250,6 +250,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	history.Read(&OnGetContactName);
 
 	this->Height = appSettings.frmMain.iHeight;
+	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;	
 
 	this->Top = appSettings.frmMain.iPosY;
 	this->Left = appSettings.frmMain.iPosX;
@@ -365,6 +366,7 @@ int TfrmMain::UpdateSettingsFromJson(AnsiString json)
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
 	this->Height = appSettings.frmMain.iHeight;
+	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
 
 	// modify application title and main window caption only if config changes,
 	// allowing to keep text set by Lua API or other methods

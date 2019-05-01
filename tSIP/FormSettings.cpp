@@ -251,6 +251,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked = tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
 
 	chbKioskMode->Checked = tmpSettings.frmMain.bKioskMode;
+	chbHideSpeedDialToggleButton->Checked = tmpSettings.frmMain.bHideSpeedDialToggleButton;
 	chbHideMouseCursor->Checked = tmpSettings.frmMain.bHideMouseCursor;
 
 	chbFrmMainShowWhenAnsweringCall->Checked = tmpSettings.frmMain.bShowWhenAnsweringCall;
@@ -453,6 +454,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated = chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked;
 
 	tmpSettings.frmMain.bKioskMode = chbKioskMode->Checked;
+	tmpSettings.frmMain.bHideSpeedDialToggleButton = chbHideSpeedDialToggleButton->Checked;
 	tmpSettings.frmMain.bHideMouseCursor = chbHideMouseCursor->Checked;
 
 	tmpSettings.frmMain.bShowWhenAnsweringCall = chbFrmMainShowWhenAnsweringCall->Checked;

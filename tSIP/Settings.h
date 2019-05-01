@@ -100,6 +100,7 @@ public:
 		bool bHideTools;				///< hide "Tools" menu from user
 		bool bHideHelp;					///< hide "Help" menu from user
 		bool bKioskMode;
+		bool bHideSpeedDialToggleButton;///< hide "<<"/">>" button
 		bool bHideMouseCursor;
 		bool bShowWhenAnsweringCall;
 		bool bUseCustomCaption;				///< use customCaption

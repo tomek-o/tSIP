@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsGeneral
+    ActivePage = tsLocking
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -757,7 +757,7 @@ object frmSettings: TfrmSettings
       end
       object chbHideMouseCursor: TCheckBox
         Left = 3
-        Top = 105
+        Top = 126
         Width = 398
         Height = 17
         Caption = 'Hide mouse cursor'
@@ -770,6 +770,14 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Hide "Tools" menu'
         TabOrder = 5
+      end
+      object chbHideSpeedDialToggleButton: TCheckBox
+        Left = 3
+        Top = 105
+        Width = 398
+        Height = 17
+        Caption = 'Hide speed dial toggle button (button with "<<" / ">>")'
+        TabOrder = 6
       end
     end
     object tsRing: TTabSheet
