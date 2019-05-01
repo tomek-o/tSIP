@@ -30,6 +30,7 @@ public:
 	void ChangePagingTxState(Callback::paging_tx_state_e state);
 	void NotifyEventTalk(void);
 	void SetCallData(AnsiString initialRxInvite);
+	void NotifyAudioError(void);
 };
 
 #define UA_CB CallbackQueue::Instance()

@@ -155,17 +155,19 @@ static void timeout(void *arg)
 {
 	struct ausrc_st *st = arg;
 
-	tmr_start(&st->tmr, 1000, timeout, st);
-
 	/* check if audio buffer is empty */
 	if (aubuf_cur_size(st->aubuf) < (2 * st->sampc)) {
 
 		DEBUG_INFO("aufile: end of file\n");
 
 		/* error handler must be called from re_main thread */
-		if (st->errh)
+		if (st->errh) {
 			st->errh(0, "end of file", st->arg);
+			return;	/* not rescheduling timer */
+		}
 	}
+
+	tmr_start(&st->tmr, 1000, timeout, st);
 }
 
 

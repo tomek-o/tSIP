@@ -357,6 +357,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHandleOodRefer->Checked = tmpSettings.uaConf.handleOodRefer;
 
 	memoCallsExtraHeaderLines->Text = tmpSettings.Calls.extraHeaderLines;
+	chbDisconnectCallOnAudioError->Checked = tmpSettings.Calls.bDisconnectCallOnAudioError;
 
 	edWebRtcAecMsInSndCardBuf->Text = tmpSettings.uaConf.webrtcAec.msInSndCardBuf;
 	edWebRtcAecSkew->Text = tmpSettings.uaConf.webrtcAec.skew;
@@ -599,6 +600,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.handleOodRefer = chbHandleOodRefer->Checked;
 
 	tmpSettings.Calls.extraHeaderLines = memoCallsExtraHeaderLines->Text.Trim();
+	tmpSettings.Calls.bDisconnectCallOnAudioError = chbDisconnectCallOnAudioError->Checked;
 
 	tmpSettings.uaConf.webrtcAec.msInSndCardBuf = StrToIntDef(edWebRtcAecMsInSndCardBuf->Text, 120);
 	if (tmpSettings.uaConf.webrtcAec.msInSndCardBuf < 0) {

@@ -1492,6 +1492,15 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			}
 			break;
 		}
+		case Callback::AUDIO_ERROR:
+		{
+			if (appSettings.Calls.bDisconnectCallOnAudioError)
+			{
+				LOG("Disconnecting call on audio error\n");
+				Hangup();
+			}
+			break;
+		}
 		default:
 		{
 			assert(!"Unhandled callback type");

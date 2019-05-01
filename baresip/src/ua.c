@@ -1489,6 +1489,7 @@ const char *uag_event_str(enum ua_event ev)
 	case UA_EVENT_CALL_ESTABLISHED: return "CALL_ESTABLISHED";
 	case UA_EVENT_CALL_CLOSED:      return "CALL_CLOSED";
 	case UA_EVENT_CALL_TRANSFER:	return "CALL_TRANSFER";
+    case UA_EVENT_AUDIO_ERROR:      return "AUDIO_ERROR";
 	default: return "?";
 	}
 }

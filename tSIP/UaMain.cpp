@@ -213,6 +213,9 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		reg_state = Callback::REG_STATE_UNREGISTER_FAIL;
 		UA_CB->ChangeRegState(0, reg_state, prm);
 		break;
+	case UA_EVENT_AUDIO_ERROR:
+		UA_CB->NotifyAudioError();
+		break;
 	default:
 		assert(!"Unhandled UA event");
 	}

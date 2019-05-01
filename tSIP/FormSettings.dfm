@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsLocking
+    ActivePage = tsCalls
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -688,6 +688,16 @@ object frmSettings: TfrmSettings
         Font.Style = []
         ParentFont = False
         TabOrder = 8
+      end
+      object chbDisconnectCallOnAudioError: TCheckBox
+        Left = 3
+        Top = 289
+        Width = 462
+        Height = 17
+        Caption = 
+          'Disconnect call on audio error (disable when using "on audio err' +
+          'or" script event)'
+        TabOrder = 9
       end
     end
     object tsDisplay: TTabSheet

@@ -181,6 +181,16 @@ void CallbackQueue::NotifyEventTalk(void)
 	fifo.push();
 }
 
+void CallbackQueue::NotifyAudioError(void)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Callback *cb = fifo.getWriteable();
+	if (!cb)
+		return;
+	cb->type = Callback::AUDIO_ERROR;
+	fifo.push();
+}
+
 
 
 

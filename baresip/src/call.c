@@ -417,8 +417,7 @@ static void audio_error_handler(int err, const char *str, void *arg)
 		DEBUG_WARNING("Audio error: %m (%s)\n", err, str);
 	}
 
-	call_stream_stop(call);
-	call_event_handler(call, CALL_EVENT_CLOSED, str);
+	ua_event(call->ua, UA_EVENT_AUDIO_ERROR, call, "%d,%s", err, str);
 }
 
 
@@ -449,7 +448,7 @@ static void stream_error_handler(struct stream *strm, int err, void *arg)
 	call_event_handler(call, CALL_EVENT_CLOSED, "rtp stream error");
 }
 
-void call_update_pai(struct call *call, const struct sip_msg *msg) {
+static int call_update_pai(struct call *call, const struct sip_msg *msg) {
 	if (msg->p_asserted_identity_present) {
         int err;
 		mem_deref(call->pai_peer_uri);

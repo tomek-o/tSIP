@@ -622,6 +622,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 	{
 		const Json::Value &CallsJson = root["Calls"];
 		Calls.extraHeaderLines = CallsJson.get("ExtraHeaderLines", Calls.extraHeaderLines.c_str()).asString().c_str();
+		Calls.bDisconnectCallOnAudioError = CallsJson.get("DisconnectCallOnAudioError", Calls.bDisconnectCallOnAudioError).asBool();
     }
 
 	{
@@ -804,6 +805,7 @@ int Settings::Write(AnsiString asFileName)
 	root["Logging"]["MaxUiLogLines"] = Logging.iMaxUiLogLines;
 
 	root["Calls"]["ExtraHeaderLines"] = Calls.extraHeaderLines.c_str();
+	root["Calls"]["DisconnectCallOnAudioError"] = Calls.bDisconnectCallOnAudioError;
 
 	root["Display"]["UserOnlyClip"] = Display.bUserOnlyClip;
 	root["Display"]["DecodeUtfDisplayToAnsi"] = Display.bDecodeUtfDisplayToAnsi;

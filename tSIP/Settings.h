@@ -169,6 +169,11 @@ public:
 	struct _Calls
 	{
 		AnsiString extraHeaderLines;
+		bool bDisconnectCallOnAudioError;
+		_Calls(void):
+			bDisconnectCallOnAudioError(true)
+		{
+		}
 	} Calls;
 	struct _Display
 	{
