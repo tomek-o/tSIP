@@ -304,6 +304,10 @@ __published:	// IDE-managed Components
 	TEdit *edMainWindowHeight;
 	TCheckBox *chbHideSpeedDialToggleButton;
 	TCheckBox *chbDisconnectCallOnAudioError;
+	TLabel *lblScriptOnAudioError;
+	TEdit *edScriptOnAudioErrorFile;
+	TButton *btnSelectedScriptOnAudioErrorChange;
+	TBitBtn *btnSelectedScriptOnAudioErrorEdit;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

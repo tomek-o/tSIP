@@ -401,7 +401,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edScriptOnDialogInfoFile->Text = tmpSettings.Scripts.onDialogInfo;
 	edScriptOnDialFile->Text = tmpSettings.Scripts.onDial;
 	edScriptOnProgrammableButtonFile->Text = tmpSettings.Scripts.onProgrammableButton;
-
+	edScriptOnAudioErrorFile->Text = tmpSettings.Scripts.onAudioDeviceError;
 
 	frmHotkeys->SetCfg(&tmpSettings.hotKeyConf);
 
@@ -637,6 +637,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onDialogInfo = edScriptOnDialogInfoFile->Text;
 	tmpSettings.Scripts.onDial = edScriptOnDialFile->Text;
 	tmpSettings.Scripts.onProgrammableButton = edScriptOnProgrammableButtonFile->Text;
+	tmpSettings.Scripts.onAudioDeviceError = edScriptOnAudioErrorFile->Text;
 
 
 	appSettings = tmpSettings;
@@ -1146,6 +1147,10 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 	{
     	edit = edScriptOnProgrammableButtonFile;
 	}
+	else if (Sender == btnSelectedScriptOnAudioErrorChange)
+	{
+    	edit = edScriptOnAudioErrorFile;
+	}
 	else
 	{
 		assert(0);
@@ -1222,6 +1227,11 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	{
 		edit = edScriptOnProgrammableButtonFile;
 		eventName = "on_programmable_button";
+	}
+	else if (Sender == btnSelectedScriptOnAudioErrorEdit)
+	{
+		edit = edScriptOnAudioErrorFile;
+		eventName = "on_audio_error";
 	}
 	else
 	{

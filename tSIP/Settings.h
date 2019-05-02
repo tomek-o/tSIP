@@ -234,7 +234,8 @@ public:
 		AnsiString onDialogInfo;	///< on BLF (dialog-info) state change
 		AnsiString onDial;			///< running when user presses one of the dialpad buttons or any key when main number edit is focused
 									///< key value (char) is passed as srcId
-        AnsiString onProgrammableButton;
+		AnsiString onProgrammableButton;
+		AnsiString onAudioDeviceError;
 		AnsiString lastScriptWindowDir;
 	} Scripts;
 
