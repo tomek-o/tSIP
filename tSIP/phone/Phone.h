@@ -221,6 +221,10 @@ DECLARE_FN(void, SetQueueClearCallback, CALLBACK_QUEUE_CLEAR lpFn);
 
 DECLARE_FN(void, SetQueueGetSizeCallback, CALLBACK_QUEUE_GET_SIZE lpFn);
 
+/** \brief Called on audio device error (e.g. end of wave file)
+*/
+DECLARE_FN(void, SetAudioError, void);
+
 #ifdef __cplusplus
 }
 #endif

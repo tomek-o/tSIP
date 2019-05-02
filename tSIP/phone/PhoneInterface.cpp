@@ -192,6 +192,16 @@ int PhoneInterface::SendMessageText(AnsiString asDllName, AnsiString text)
 	return itinst->second->SendMessageText(text);
 }
 
+void PhoneInterface::UpdateAudioError(void)
+{
+	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
+	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
+	{
+		itinst->second->SetAudioError();
+	}
+}
+
+
 enum PhoneInterface::E_LIB_STATUS PhoneInterface::VerifyDll(AnsiString filename, struct DllInfo* const dllinfo)
 {
 #if 0
@@ -463,7 +473,8 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetQueuePushCallback(NULL),
 	dllSetQueuePopCallback(NULL),
 	dllSetQueueClearCallback(NULL),
-	dllSetQueueGetSizeCallback(NULL)
+	dllSetQueueGetSizeCallback(NULL),
+	dllSetAudioError(NULL)
 {
 	LOG("Creating object using %s\n", asDllName.c_str());
 	connInfo.state = DEVICE_DISCONNECTED;
@@ -512,6 +523,8 @@ int PhoneInterface::Load(void)
 	dllSetQueuePopCallback = (pfSetQueuePopCallback)GetProcAddress(hInstance, "SetQueuePopCallback");
 	dllSetQueueClearCallback = (pfSetQueueClearCallback)GetProcAddress(hInstance, "SetQueueClearCallback");
 	dllSetQueueGetSizeCallback = (pfSetQueueGetSizeCallback)GetProcAddress(hInstance, "SetQueueGetSizeCallback");
+
+    dllSetAudioError = (pfSetAudioError)GetProcAddress(hInstance, "SetAudioError");
 
 	if ((dllSetCallbacks && dllShowSettings &&
 		dllGetPhoneCapabilities && dllConnect &&

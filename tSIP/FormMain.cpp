@@ -1501,6 +1501,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onAudioDeviceError.c_str());
 				RunScriptFile(SCRIPT_SRC_ON_AUDIO_ERROR, -1, asScriptFile.c_str(), handled);
 			}
+			PhoneInterface::UpdateAudioError();
 			if (appSettings.Calls.bDisconnectCallOnAudioError)
 			{
 				LOG("Disconnecting call on audio error\n");

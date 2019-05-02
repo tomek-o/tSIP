@@ -81,7 +81,9 @@ private:
 	pfSetQueuePushCallback dllSetQueuePushCallback;
 	pfSetQueuePopCallback dllSetQueuePopCallback;
 	pfSetQueueClearCallback dllSetQueueClearCallback;
-    pfSetQueueGetSizeCallback dllSetQueueGetSizeCallback;
+	pfSetQueueGetSizeCallback dllSetQueueGetSizeCallback;
+
+	pfSetAudioError dllSetAudioError;
 
 	struct ConnectionInfo connInfo;
 
@@ -124,7 +126,9 @@ public:
 
 	static void UpdatePagingTxState(int state);
 
-	static int SendMessageText(AnsiString asDllName, AnsiString text); 
+	static int SendMessageText(AnsiString asDllName, AnsiString text);
+
+	static void UpdateAudioError(void); 
 
 	/** \brief Constructor
 		\param asDllName	Name of dll used by object to communicate with device
@@ -237,6 +241,16 @@ public:
 	{
 		if (dllSetPagingTxState)
 			return dllSetPagingTxState(state);
+		return -1;
+	}
+
+	int SetAudioError(void)
+	{
+		if (dllSetAudioError)
+		{
+			dllSetAudioError();
+			return 0;
+		}
 		return -1;
 	}
 
