@@ -42,6 +42,7 @@
 #include "Troubleshooting.h"
 #include "FormTroubleshooting.h"
 #include "Utilities.h"
+#include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
 
 //---------------------------------------------------------------------------
@@ -518,6 +519,8 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackQueuePop = OnQueuePop;
 	PhoneInterface::callbackQueueClear = OnQueueClear;
 	PhoneInterface::callbackQueueGetSize = OnQueueGetSize;
+	PhoneInterface::callbackRunScriptAsync = OnRunScriptAsync;
+
 	PhoneInterface::EnumerateDlls(dir + "\\phone");
 	PhoneInterface::SetCfg(appSettings.phoneConf);
 	PhoneInterface::UpdateRegistrationState(0);
@@ -920,6 +923,8 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			}
 		}
 	}
+
+    PollScriptQueue();
 
 	Callback cb;
 	bool answered = false;
@@ -2075,6 +2080,35 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 	return 0;
 }
 
+int TfrmMain::EnqueueScript(AnsiString script)
+{
+	ScopedLock<Mutex> lock(mutexScriptQueue);
+
+	if (enqueuedScripts.size() < MAX_SCRIPT_QUEUE_SIZE)
+	{
+		enqueuedScripts.push_back(script);
+		return 0;
+	}
+	return -1;
+}
+
+void TfrmMain::PollScriptQueue(void)
+{
+	ScopedLock<Mutex> lock(mutexScriptQueue);
+	if (enqueuedScripts.empty())
+	{
+		return;
+	}
+	AnsiString script = enqueuedScripts.front();
+	enqueuedScripts.pop_front();
+
+	/** \todo Globall break request */
+	bool breakRequest = false;
+	bool handled = true;
+	RunScript(SCRIPT_SRC_PLUGIN_QUEUE, -1, script, breakRequest, handled);
+}
+
+
 void __fastcall TfrmMain::edTransferEnter(TObject *Sender)
 {
 	if (edTransfer->Text == asTransferHint)
@@ -2700,6 +2734,15 @@ int TfrmMain::OnQueueGetSize(const char* name)
 void TfrmMain::OnAddOutputText(const char* text)
 {
 	LOG("%s", text);
+}
+
+int TfrmMain::OnRunScriptAsync(const char* script)
+{
+	if (script == NULL)
+	{
+    	return -10;
+	}
+	return EnqueueScript(script);
 }
 
 void __fastcall TfrmMain::FormCloseQuery(TObject *Sender, bool &CanClose)

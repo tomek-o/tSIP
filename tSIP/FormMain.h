@@ -17,13 +17,14 @@
 #include <ExtCtrls.hpp>
 #include <StdActns.hpp>
 #include <Buttons.hpp>
-
 #include "ButtonType.h"
 #include "Call.h"
 #include "common/Observer.h"
+#include "common/Mutex.h"
 #include <Dialogs.hpp>
 #include <list>
 #include <string>
+#include <deque>
 
 class TrayIcon;
 class TfrmButtonContainer;
@@ -221,6 +222,7 @@ private:	// User declarations
 	int OnQueueClear(const char* name);
 	int OnQueueGetSize(const char* name);
 	void OnAddOutputText(const char* text);
+	int OnRunScriptAsync(const char* script);
 
 	void SetStatus(AnsiString text);
 	void ToggleVisibility(void);
@@ -229,6 +231,11 @@ private:	// User declarations
 	void ExecAction(const struct Action& action);
 	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
 	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
+	std::deque<AnsiString> enqueuedScripts;
+	enum { MAX_SCRIPT_QUEUE_SIZE = 1000 };
+	Mutex mutexScriptQueue;
+	int EnqueueScript(AnsiString script);
+	void PollScriptQueue(void);
 	bool notificationIconState;
 	void SetNotificationIcon(bool state);
 	void SetKioskMode(bool state);

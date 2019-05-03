@@ -26,6 +26,7 @@ PhoneInterface::CallbackQueuePush PhoneInterface::callbackQueuePush = NULL;
 PhoneInterface::CallbackQueuePop PhoneInterface::callbackQueuePop = NULL;
 PhoneInterface::CallbackQueueClear PhoneInterface::callbackQueueClear = NULL;
 PhoneInterface::CallbackQueueGetSize PhoneInterface::callbackQueueGetSize = NULL;
+PhoneInterface::CallbackRunScriptAsync PhoneInterface::callbackRunScriptAsync = NULL;
 
 void PhoneInterface::EnumerateDlls(AnsiString dir)
 {
@@ -448,6 +449,19 @@ int __stdcall PhoneInterface::OnQueueGetSize(void *cookie, const char* name)
 	return -2;
 }
 
+int __stdcall PhoneInterface::OnRunScriptAsync(void *cookie, const char* script)
+{
+	class PhoneInterface *dev;
+	dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	{
+		return -1;
+	}
+	if (dev->callbackRunScriptAsync)
+		return dev->callbackRunScriptAsync(script);
+	return -2;
+}
+
 PhoneInterface::PhoneInterface(AnsiString asDllName):
 	hInstance(NULL),
 	filename(asDllName),
@@ -474,7 +488,8 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetQueuePopCallback(NULL),
 	dllSetQueueClearCallback(NULL),
 	dllSetQueueGetSizeCallback(NULL),
-	dllSetAudioError(NULL)
+	dllSetAudioError(NULL),
+	dllSetRunScriptAsyncCallback(NULL)
 {
 	LOG("Creating object using %s\n", asDllName.c_str());
 	connInfo.state = DEVICE_DISCONNECTED;
@@ -524,7 +539,9 @@ int PhoneInterface::Load(void)
 	dllSetQueueClearCallback = (pfSetQueueClearCallback)GetProcAddress(hInstance, "SetQueueClearCallback");
 	dllSetQueueGetSizeCallback = (pfSetQueueGetSizeCallback)GetProcAddress(hInstance, "SetQueueGetSizeCallback");
 
-    dllSetAudioError = (pfSetAudioError)GetProcAddress(hInstance, "SetAudioError");
+	dllSetAudioError = (pfSetAudioError)GetProcAddress(hInstance, "SetAudioError");
+
+	dllSetRunScriptAsyncCallback = (pfSetRunScriptAsyncCallback)GetProcAddress(hInstance, "SetRunScriptAsyncCallback");
 
 	if ((dllSetCallbacks && dllShowSettings &&
 		dllGetPhoneCapabilities && dllConnect &&
@@ -580,7 +597,12 @@ int PhoneInterface::Load(void)
 	if (dllSetQueueGetSizeCallback)
 	{
         dllSetQueueGetSizeCallback(&OnQueueGetSize);
-    }
+	}
+
+	if (dllSetRunScriptAsyncCallback)
+	{
+    	dllSetRunScriptAsyncCallback(&OnRunScriptAsync);
+	}
 
 	GetSettings(&settings);
 

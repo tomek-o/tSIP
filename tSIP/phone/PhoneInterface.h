@@ -85,6 +85,8 @@ private:
 
 	pfSetAudioError dllSetAudioError;
 
+    pfSetRunScriptAsyncCallback dllSetRunScriptAsyncCallback;
+
 	struct ConnectionInfo connInfo;
 
 	S_PHONE_SETTINGS settings;	
@@ -101,6 +103,7 @@ private:
 	typedef int (__closure *CallbackQueuePop)(const char* name, AnsiString &value);
 	typedef int (__closure *CallbackQueueClear)(const char* name);
 	typedef int (__closure *CallbackQueueGetSize)(const char* name);
+	typedef int (__closure *CallbackRunScriptAsync)(const char* script);
 
 	static std::list<PhoneConf> cfg;
 	static PhoneConf& FindCfg(AnsiString dllName);
@@ -153,6 +156,7 @@ public:
 	static CallbackQueuePop callbackQueuePop;
 	static CallbackQueueClear callbackQueueClear;
 	static CallbackQueueGetSize callbackQueueGetSize;
+	static CallbackRunScriptAsync callbackRunScriptAsync;
 
 	// dll callbacks
 	static void __stdcall OnLog(void *cookie, const char *szText);                   ///< called to generate log in parent application
@@ -167,6 +171,7 @@ public:
 	static int __stdcall OnQueuePop(void *cookie, const char* name, char* value, unsigned int valueSize);
 	static int __stdcall OnQueueClear(void *cookie, const char* name);
 	static int __stdcall OnQueueGetSize(void *cookie, const char* name);
+	static int __stdcall OnRunScriptAsync(void *cookie, const char* script);
 
     /** \brief Show device settings window.
      *

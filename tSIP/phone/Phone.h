@@ -152,6 +152,11 @@ typedef int (__stdcall *CALLBACK_QUEUE_CLEAR)(void *cookie, const char* name);
 	\return number of elements in queue; 0 if queue does not exist
 */
 typedef int (__stdcall *CALLBACK_QUEUE_GET_SIZE)(void *cookie, const char* name);
+/** \brief Run Lua script - asynchronously, main/GUI thread of the application
+	\param script script to execute
+	\return 0 on success (script enqueued)
+*/
+typedef int (__stdcall *CALLBACK_RUN_SCRIPT_ASYNC)(void *cookie, const char* script);
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXPORTED/IMPORTED FUNCTION SET
@@ -220,6 +225,8 @@ DECLARE_FN(void, SetQueuePopCallback, CALLBACK_QUEUE_POP lpFn);
 DECLARE_FN(void, SetQueueClearCallback, CALLBACK_QUEUE_CLEAR lpFn);
 
 DECLARE_FN(void, SetQueueGetSizeCallback, CALLBACK_QUEUE_GET_SIZE lpFn);
+
+DECLARE_FN(void, SetRunScriptAsyncCallback, CALLBACK_RUN_SCRIPT_ASYNC lpFn);
 
 /** \brief Called on audio device error (e.g. end of wave file)
 */
