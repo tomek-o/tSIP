@@ -232,6 +232,10 @@ DECLARE_FN(void, SetRunScriptAsyncCallback, CALLBACK_RUN_SCRIPT_ASYNC lpFn);
 */
 DECLARE_FN(void, SetAudioError, void);
 
+/** \brief Pass information about profile directory to DLL
+*/
+DECLARE_FN(void, SetProfileDir, const char*);
+
 #ifdef __cplusplus
 }
 #endif

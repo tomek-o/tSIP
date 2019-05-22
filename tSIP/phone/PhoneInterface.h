@@ -85,6 +85,8 @@ private:
 
 	pfSetAudioError dllSetAudioError;
 
+	pfSetProfileDir dllSetProfileDir;
+
     pfSetRunScriptAsyncCallback dllSetRunScriptAsyncCallback;
 
 	struct ConnectionInfo connInfo;
@@ -131,7 +133,9 @@ public:
 
 	static int SendMessageText(AnsiString asDllName, AnsiString text);
 
-	static void UpdateAudioError(void); 
+	static void UpdateAudioError(void);
+
+	static void UpdateProfileDir(AnsiString dir); 
 
 	/** \brief Constructor
 		\param asDllName	Name of dll used by object to communicate with device
@@ -254,6 +258,16 @@ public:
 		if (dllSetAudioError)
 		{
 			dllSetAudioError();
+			return 0;
+		}
+		return -1;
+	}
+
+	int SetProfileDir(AnsiString dir)
+	{
+		if (dllSetProfileDir)
+		{
+			dllSetProfileDir(dir.c_str());
 			return 0;
 		}
 		return -1;

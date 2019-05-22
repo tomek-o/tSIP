@@ -526,6 +526,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::UpdateRegistrationState(0);
 	PhoneInterface::UpdateCallState(0, "");
 	PhoneInterface::UpdatePagingTxState(0);
+	PhoneInterface::UpdateProfileDir(dir);
 
 	if (appSettings.Scripts.onStartup != "")
 	{

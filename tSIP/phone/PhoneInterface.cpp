@@ -202,6 +202,15 @@ void PhoneInterface::UpdateAudioError(void)
 	}
 }
 
+void PhoneInterface::UpdateProfileDir(AnsiString dir)
+{
+	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
+	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
+	{
+		itinst->second->SetProfileDir(dir);
+	}
+}
+
 
 enum PhoneInterface::E_LIB_STATUS PhoneInterface::VerifyDll(AnsiString filename, struct DllInfo* const dllinfo)
 {
@@ -489,6 +498,7 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetQueueClearCallback(NULL),
 	dllSetQueueGetSizeCallback(NULL),
 	dllSetAudioError(NULL),
+	dllSetProfileDir(NULL),
 	dllSetRunScriptAsyncCallback(NULL)
 {
 	LOG("Creating object using %s\n", asDllName.c_str());
@@ -540,6 +550,8 @@ int PhoneInterface::Load(void)
 	dllSetQueueGetSizeCallback = (pfSetQueueGetSizeCallback)GetProcAddress(hInstance, "SetQueueGetSizeCallback");
 
 	dllSetAudioError = (pfSetAudioError)GetProcAddress(hInstance, "SetAudioError");
+
+    dllSetProfileDir = (pfSetProfileDir)GetProcAddress(hInstance, "SetProfileDir");
 
 	dllSetRunScriptAsyncCallback = (pfSetRunScriptAsyncCallback)GetProcAddress(hInstance, "SetRunScriptAsyncCallback");
 
