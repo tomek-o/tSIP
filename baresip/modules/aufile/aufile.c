@@ -274,6 +274,8 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 		goto out;
 
 	err = read_file(st);
+	// releasing source file immediately
+	st->aufile = mem_deref(st->aufile);
 	if (err)
 		goto out;
 
