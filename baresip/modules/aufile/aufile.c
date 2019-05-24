@@ -25,6 +25,7 @@
  */
 
 static const int SPEEX_RESAMP_QUALITY = 1;	// 0...10
+static const int TIMER_TEST_EOF = 100; 		// ms
 
 struct ausrc_st {
 	struct ausrc *as;  /* base class */
@@ -156,18 +157,20 @@ static void timeout(void *arg)
 	struct ausrc_st *st = arg;
 
 	/* check if audio buffer is empty */
-	if (aubuf_cur_size(st->aubuf) < (2 * st->sampc)) {
+	if (aubuf_cur_size(st->aubuf) < (2 * st->in_samples_per_frame)) {
 
-		DEBUG_INFO("aufile: end of file\n");
+		DEBUG_INFO("aufile: end of file, calling errh\n");
 
 		/* error handler must be called from re_main thread */
 		if (st->errh) {
 			st->errh(0, "end of file", st->arg);
 			return;	/* not rescheduling timer */
 		}
+	} else {
+    	//DEBUG_INFO("aufile: timer: audio buffer is not empty\n");
 	}
 
-	tmr_start(&st->tmr, 1000, timeout, st);
+	tmr_start(&st->tmr, TIMER_TEST_EOF, timeout, st);
 }
 
 
@@ -279,7 +282,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	if (err)
 		goto out;
 
-	tmr_start(&st->tmr, 1000, timeout, st);
+	tmr_start(&st->tmr, TIMER_TEST_EOF, timeout, st);
 
 	st->run = true;
 	//err = pthread_create(&st->thread, NULL, play_thread, st);
