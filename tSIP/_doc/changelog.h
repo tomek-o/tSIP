@@ -653,5 +653,43 @@ Version 0.1.65
 	- rewritten reading main config and button config file - using previous values as defaults when reading JSON
 	- added RefreshAudioDevicesList() and GetAudioDevice() Lua functions
 	- added UpdateSettings(jsonText) Lua function
+
+Version 0.1.66
+	- separated few settings into "Locking" tab (kiosk mode and other settings disabling functionality)
+	- added "Hide Tools menu" option
+	- fixed wrong interpretation of number of console column settings (broken in 0.1.65)
+	- corrected main window height to match exactly default console buttons height (broken in 0.1.65)
+	- added Lua WinAPI GetAsyncKeyState() function - allowing to e.g. modify script button action depending on Ctrl/Shift/Alt state
+	- added options to record only one side of the call (local or remote)
+	- extended Lua RecordStart(file, channels, side) function; third (optional) argument specifies which side(s) of the call should be recorded (0 = both/mixed, 1 = local, 2 = remote); third parameter applies only to single channel recording (channels = 1), otherwise call parties are recorded in separate left/right channels as previously
+	- added command line option to specify settings/profile directory; allows sharing single exe by multiple instances or multiple users; example: tSIP.exe /profiledir="E:\zrzut\aa bb"
+	- added Lua funcion: GetProfileDir()
+	- added "Hide tray notifier when call is auto-answered" setting
+	- FIXED: UTF8 decoding not applied to BLF remote identity display name
+	- added P-Asserted-Identity handling
+	- added REINVITE event handling (updating CLIP from PAI)
+	- added BLF settings: "Keep previous remote identity info if remote identity is missing in notification" and "Ignore or clear remote identity if call state is set to terminated"
+	- added Lua PlaySound() function (WinAPI equivalent in tsip_winapi module)
+	- script window accepts file drag-and-drop
+	- added "on programmable button" script event and "SetHandled" Lua function
+	- added Lua GetButtonType(btnId) and GetButtonNumber(btnId) functions
+
+Version 0.1.67
+	- FIXED: missing checking if "on programmable button" event script was set (problem of 0.1.66)
+	- added separate width setting for each speed dial column
+	- added missing onClick handler to label2 of programmable button
+	- using PAI from 200/OK reply (updating calee number/name after pickup)
+	- added Help/Troubleshooting function
+	- added main window height setting
+	- added option allowing to hide speed dial toggle button
+	- added option modifying behavior on audio error (not disconnecting call) - Call settings tab
+	- added "on audio device error" script event	
+	- added audio device error event to plugin interface
+	- extended plugin interface with capability of running scripts
+	- extended plugin interface: SetProfileDir(dir) function
+	- change wav audio source: releasing input file immediately after reading
+	- FIXED: error handler possibly not being called for resampled aufile
+	- prevent divide by zero exception if switching to nullaudio before CONFIRMED state
+	- new plugin: Text-To-Speech input
 */
 

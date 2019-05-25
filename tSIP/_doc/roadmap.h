@@ -140,7 +140,6 @@ out-of-dialog REFER:
 I've cut some corners with skipping subscription creation but I would expect ANVEO is no better (not passing transfer status to the user) so it might work.
 One more flaw is that full URI from REFER is stored in call history.
 
-- add option to hide button switching sidecar (useful for kiosk mode)
 
 - ua_init: add option to disable udp/tcp transport (now both UDP/TCP are always enabled)
 
