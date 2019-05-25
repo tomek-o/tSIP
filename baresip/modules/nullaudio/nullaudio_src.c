@@ -99,6 +99,11 @@ int nullaudio_src_alloc(struct ausrc_st **stp, struct ausrc *as,
 	if (!stp || !as || !prm)
 		return EINVAL;
 
+	if (prm->srate == 0 || prm->ch == 0 || prm->frame_size == 0) {
+		DEBUG_INFO("nullaudio src: invalid/unitialized audio prm\n");
+		return EINVAL;
+	}
+
 	st = mem_zalloc(sizeof(*st), ausrc_destructor);
 	if (!st)
 		return ENOMEM;
