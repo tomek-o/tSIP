@@ -53,7 +53,8 @@ Settings::_frmMain::_frmMain(void):
 	bUseCustomCaption(false),
 	customCaption(Branding::appName),
 	bUseCustomApplicationTitle(false),
-	customApplicationTitle(Branding::appName)
+	customApplicationTitle(Branding::appName),
+	bShowSettingsIfAccountSettingIsHidden(false)
 {
 	speedDialWidth.clear();
 	for (unsigned int i=0; i<ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
@@ -394,6 +395,12 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 				new_acc.ptime = ptime;
 			}
 
+			new_acc.hide_reg_server = acc.get("hide_reg_server", new_acc.hide_reg_server).asBool();
+			new_acc.hide_user = acc.get("hide_user", new_acc.hide_user).asBool();
+			new_acc.hide_auth_user = acc.get("hide_auth_user", new_acc.hide_auth_user).asBool();
+			new_acc.hide_pwd = acc.get("hide_pwd", new_acc.hide_pwd).asBool();
+			new_acc.hide_cuser = acc.get("hide_cuser", new_acc.hide_cuser).asBool();
+
 			new_acc.stun_server = acc.get("stun_server", new_acc.stun_server).asString();
 			new_acc.outbound1 = acc.get("outbound1", new_acc.outbound1).asString();
 			new_acc.outbound2 = acc.get("outbound2", new_acc.outbound2).asString();
@@ -565,6 +572,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.customApplicationTitle = frmMainJson.get("CustomApplicationTitle", frmMain.customApplicationTitle.c_str()).asString().c_str();
 		frmMain.bUseCustomCaption = frmMainJson.get("UseCustomCaption", frmMain.bUseCustomCaption).asBool();
 		frmMain.customCaption = frmMainJson.get("CustomCaption", frmMain.customCaption.c_str()).asString().c_str();
+		frmMain.bShowSettingsIfAccountSettingIsHidden = frmMainJson.get("ShowSettingsIfAccountSettingIsHidden", frmMain.bShowSettingsIfAccountSettingIsHidden).asBool();
 	}
 
 	{
@@ -777,6 +785,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["CustomApplicationTitle"] = frmMain.customApplicationTitle.c_str();
 		jv["UseCustomCaption"] = frmMain.bUseCustomCaption;
 		jv["CustomCaption"] = frmMain.customCaption.c_str();
+		jv["ShowSettingsIfAccountSettingIsHidden"] = frmMain.bShowSettingsIfAccountSettingIsHidden;
 	}
 
     {
@@ -915,15 +924,27 @@ int Settings::Write(AnsiString asFileName)
 	{
 		UaConf::Account &acc = uaConf.accounts[i];
 		Json::Value &cfgAcc = root["Accounts"][i];
-		cfgAcc["reg_server"] = acc.reg_server;
-		cfgAcc["user"] = acc.user;
-		cfgAcc["auth_user"] = acc.auth_user;
-		cfgAcc["pwd"] = acc.pwd;
-		cfgAcc["cuser"] = acc.cuser;
+		if (!acc.hide_reg_server)
+			cfgAcc["reg_server"] = acc.reg_server;
+		if (!acc.hide_user)
+			cfgAcc["user"] = acc.user;
+		if (!acc.hide_auth_user)
+			cfgAcc["auth_user"] = acc.auth_user;
+		if (!acc.hide_pwd)
+			cfgAcc["pwd"] = acc.pwd;
+		if (!acc.hide_cuser)
+			cfgAcc["cuser"] = acc.cuser;
 		cfgAcc["transport"] = acc.transport;
 		cfgAcc["reg_expires"] = acc.reg_expires;
 		cfgAcc["answer_any"] = acc.answer_any;
-        cfgAcc["ptime"] = acc.ptime;
+		cfgAcc["ptime"] = acc.ptime;
+
+		cfgAcc["hide_reg_server"] = acc.hide_reg_server;
+		cfgAcc["hide_user"] = acc.hide_user;
+		cfgAcc["hide_auth_user"] = acc.hide_auth_user;
+		cfgAcc["hide_pwd"] = acc.hide_pwd;
+		cfgAcc["hide_cuser"] = acc.hide_cuser;
+
 		cfgAcc["stun_server"] = acc.stun_server;
 		cfgAcc["outbound1"] = acc.outbound1;
 		cfgAcc["outbound2"] = acc.outbound2;

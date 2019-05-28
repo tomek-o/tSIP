@@ -30,6 +30,12 @@ public:
 		bool answer_any;
 		std::vector<std::string> audio_codecs;
 
+		bool hide_reg_server;	// hide in settings and not store in settings file
+		bool hide_user;
+		bool hide_auth_user;
+		bool hide_pwd;
+		bool hide_cuser;
+
         enum {
 			MIN_PTIME = 1,
 			DEF_PTIME = 20,
@@ -50,6 +56,13 @@ public:
 				transport == right.transport &&
 				reg_expires == right.reg_expires &&
 				answer_any == right.answer_any &&
+
+				hide_reg_server == right.hide_reg_server &&
+				hide_user == right.hide_user &&
+				hide_auth_user == right.hide_auth_user &&
+				hide_pwd == right.hide_pwd &&
+				hide_cuser == right.hide_cuser &&
+
 				audio_codecs == right.audio_codecs &&
 				ptime == right.ptime &&
 				stun_server == right.stun_server &&
@@ -68,6 +81,13 @@ public:
 			cuser(""),
 			reg_expires(0),	// no registration in default configuration
 			answer_any(false),
+
+			hide_reg_server(false),
+			hide_user(false),
+			hide_auth_user(false),
+			hide_pwd(false),
+			hide_cuser(false),
+
 			ptime(DEF_PTIME)
 		{
 			audio_codecs.push_back("PCMU/8000/1");
@@ -84,6 +104,14 @@ public:
 				assert(!"Unhandled cfg transport type");
 				return "???";
 			}
+		}
+		bool isAnySettingHidden(void) const {
+			return
+				hide_reg_server ||
+				hide_user ||
+				hide_auth_user ||
+				hide_pwd ||
+				hide_cuser;
 		}
 	};
 	std::vector<Account> accounts;

@@ -5,7 +5,7 @@ object frmAccount: TfrmAccount
   BorderStyle = bsNone
   Caption = 'Account'
   ClientHeight = 274
-  ClientWidth = 418
+  ClientWidth = 532
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -115,8 +115,8 @@ object frmAccount: TfrmAccount
     ParentFont = False
   end
   object grboxAccount: TGroupBox
-    Left = 314
-    Top = 158
+    Left = 193
+    Top = 241
     Width = 95
     Height = 25
     Align = alCustom
@@ -279,5 +279,50 @@ object frmAccount: TfrmAccount
     ParentFont = False
     TabOrder = 11
     OnChange = edCuserChange
+  end
+  object chbHideRegServer: TCheckBox
+    Left = 380
+    Top = 7
+    Width = 145
+    Height = 17
+    Caption = 'Hide/do not store in file'
+    TabOrder = 12
+    OnClick = chbHideRegServerClick
+  end
+  object chbHideUser: TCheckBox
+    Left = 380
+    Top = 31
+    Width = 145
+    Height = 17
+    Caption = 'Hide/do not store in file'
+    TabOrder = 13
+    OnClick = chbHideUserClick
+  end
+  object chbHidePassword: TCheckBox
+    Left = 380
+    Top = 55
+    Width = 145
+    Height = 17
+    Caption = 'Hide/do not store in file'
+    TabOrder = 14
+    OnClick = chbHidePasswordClick
+  end
+  object chbHideAuthUser: TCheckBox
+    Left = 380
+    Top = 138
+    Width = 145
+    Height = 17
+    Caption = 'Hide/do not store in file'
+    TabOrder = 15
+    OnClick = chbHideAuthUserClick
+  end
+  object chbHideCuser: TCheckBox
+    Left = 380
+    Top = 162
+    Width = 145
+    Height = 17
+    Caption = 'Hide/do not store in file'
+    TabOrder = 16
+    OnClick = chbHideCuserClick
   end
 end

@@ -498,6 +498,18 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
 
+	if (appSettings.frmMain.bShowSettingsIfAccountSettingIsHidden)
+	{
+		for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+		{
+			if (appSettings.uaConf.accounts[i].isAnySettingHidden())
+			{
+				actShowSettingsExecute(NULL);
+				break;
+			}
+		}
+	}
+
 	Ua::Instance().Start();
 	SetStatus("Initializing...");
 

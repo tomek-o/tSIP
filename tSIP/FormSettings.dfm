@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsScripts
+    ActivePage = tsAccount
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -431,9 +431,8 @@ object frmSettings: TfrmSettings
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        Visible = False
         object btnAddAccount: TButton
-          Left = 8
+          Left = 464
           Top = 4
           Width = 75
           Height = 25
@@ -441,6 +440,14 @@ object frmSettings: TfrmSettings
           TabOrder = 0
           Visible = False
           OnClick = btnAddAccountClick
+        end
+        object chbShowSettingsIfAnyAccountSettingsIsHidden: TCheckBox
+          Left = 5
+          Top = 8
+          Width = 356
+          Height = 17
+          Caption = 'Show settings on startup if any account setting is hidden'
+          TabOrder = 1
         end
       end
       object scrbAccounts: TScrollBox

@@ -15,12 +15,24 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 {
 	AnsiString title;
 	title.sprintf("Account #%02d", id + 1);
-	grboxAccount->Caption = title;	
-	edRegServer->Text = acc.reg_server.c_str();
-	edUser->Text = acc.user.c_str();
-	edAuthUser->Text = acc.auth_user.c_str();
-	edCuser->Text = acc.cuser.c_str();
-	edPassword->Text = acc.pwd.c_str();
+	grboxAccount->Caption = title;
+
+	chbHideRegServer->Checked = acc.hide_reg_server;
+	chbHideUser->Checked = acc.hide_user;
+	chbHideAuthUser->Checked = acc.hide_auth_user;
+	chbHideCuser->Checked = acc.hide_cuser;
+	chbHidePassword->Checked = acc.hide_pwd;
+
+	if (!acc.hide_reg_server)
+		edRegServer->Text = acc.reg_server.c_str();
+	if (!acc.hide_user)
+		edUser->Text = acc.user.c_str();
+	if (!acc.hide_auth_user)
+		edAuthUser->Text = acc.auth_user.c_str();
+	if (!acc.hide_cuser)
+		edCuser->Text = acc.cuser.c_str();
+	if (!acc.hide_pwd)
+		edPassword->Text = acc.pwd.c_str();
 	cbTransport->ItemIndex = acc.transport;
 	edExpires->Text = acc.reg_expires;
 
@@ -111,6 +123,46 @@ void __fastcall TfrmAccount::edPtimeChange(TObject *Sender)
 void __fastcall TfrmAccount::edCuserChange(TObject *Sender)
 {
 	acc.cuser = edCuser->Text.c_str();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::chbHideRegServerClick(TObject *Sender)
+{
+	acc.hide_reg_server = chbHideRegServer->Checked;
+	if (!chbHideRegServer->Checked)
+		acc.reg_server = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::chbHideUserClick(TObject *Sender)
+{
+	acc.hide_user = chbHideUser->Checked;
+	if (!chbHideUser->Checked)
+		acc.user = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::chbHidePasswordClick(TObject *Sender)
+{
+	acc.hide_pwd = chbHidePassword->Checked;
+	if (!chbHidePassword->Checked)
+		acc.pwd = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::chbHideAuthUserClick(TObject *Sender)
+{
+	acc.hide_auth_user = chbHideAuthUser->Checked;
+	if (!chbHideAuthUser->Checked)
+		acc.auth_user = "";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::chbHideCuserClick(TObject *Sender)
+{
+	acc.hide_cuser = chbHideCuser->Checked;
+	if (!chbHideCuser->Checked)
+		acc.cuser = "";	
 }
 //---------------------------------------------------------------------------
 

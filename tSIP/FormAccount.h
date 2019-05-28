@@ -39,6 +39,11 @@ __published:	// IDE-managed Components
 	TLabel *lblContactUser;
 	TEdit *edCuser;
 	TLabel *lblExpiresInfo2;
+	TCheckBox *chbHideRegServer;
+	TCheckBox *chbHideUser;
+	TCheckBox *chbHidePassword;
+	TCheckBox *chbHideAuthUser;
+	TCheckBox *chbHideCuser;
 	void __fastcall edRegServerChange(TObject *Sender);
 	void __fastcall edUserChange(TObject *Sender);
 	void __fastcall edPasswordChange(TObject *Sender);
@@ -51,6 +56,11 @@ __published:	// IDE-managed Components
 	void __fastcall chbAnswerAnyKeyPress(TObject *Sender, char &Key);
 	void __fastcall edPtimeChange(TObject *Sender);
 	void __fastcall edCuserChange(TObject *Sender);
+	void __fastcall chbHideRegServerClick(TObject *Sender);
+	void __fastcall chbHideUserClick(TObject *Sender);
+	void __fastcall chbHidePasswordClick(TObject *Sender);
+	void __fastcall chbHideAuthUserClick(TObject *Sender);
+	void __fastcall chbHideCuserClick(TObject *Sender);
 private:	// User declarations
 	UaConf::Account& acc;
 public:		// User declarations

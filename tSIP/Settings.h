@@ -107,6 +107,7 @@ public:
 		AnsiString customCaption;			///< custom caption for main window
 		bool bUseCustomApplicationTitle;       ///< use customApplicationTitle
 		AnsiString customApplicationTitle;	///< custom title for application (taskbar text)
+        bool bShowSettingsIfAccountSettingIsHidden;
 
 		_frmMain(void);
 	} frmMain;

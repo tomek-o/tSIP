@@ -403,6 +403,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edScriptOnProgrammableButtonFile->Text = tmpSettings.Scripts.onProgrammableButton;
 	edScriptOnAudioErrorFile->Text = tmpSettings.Scripts.onAudioDeviceError;
 
+	chbShowSettingsIfAnyAccountSettingsIsHidden->Checked = tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden;
+
 	frmHotkeys->SetCfg(&tmpSettings.hotKeyConf);
 
 	frmPhones->SetCfg(&tmpSettings.phoneConf);
@@ -639,6 +641,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onProgrammableButton = edScriptOnProgrammableButtonFile->Text;
 	tmpSettings.Scripts.onAudioDeviceError = edScriptOnAudioErrorFile->Text;
 
+	tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden = chbShowSettingsIfAnyAccountSettingsIsHidden->Checked;
 
 	appSettings = tmpSettings;
 	this->Close();	
