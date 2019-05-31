@@ -1,4 +1,4 @@
-/** \file
+﻿/** \file
 */
 #include <re.h>
 #include <baresip.h>
@@ -266,7 +266,7 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg,
 			"\t\t\t\t</target>\n"
 			"\t\t\t</local>\n"
 			"\t\t\t<remote>\n"
-			"\t\t\t\t<identity display=\"UTF8: gżegżółka\">sip:0310000@pbx.xxxx.net</identity>\n"
+			"\t\t\t\t<identity display=\"UTF8: gĹĽegĹĽĂłĹ‚ka\">sip:0310000@pbx.xxxx.net</identity>\n"
 			"\t\t\t\t<target uri=\"sip:**11@pbx.xxxx.net\"/>\n"
 			"\t\t\t</remote>\n"
 			"\t\t</dialog>\n"
@@ -275,6 +275,7 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg,
 	#else
 		const char* body = "<dialog-info xmlns=\"urn:ietf:params:xml:ns:dialog-info\" version=\"0\" state=\"full\" entity=\"sip:12@pbx.xxx.net\"></dialog-info>";
 	#endif
+		status = DIALOG_INFO_CONFIRMED;	
 		XMLDoc_parse_buffer_SAX_len(body, strlen(body), "root", &sax, &ctx);
 	}
 #endif
