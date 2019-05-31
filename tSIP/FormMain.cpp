@@ -2946,15 +2946,21 @@ void __fastcall TfrmMain::miScriptingClick(TObject *Sender)
 	{
 		frmLuaScript->Show();
 	}
-	// self-deleting with caFree
-	//delete frmLuaScript;
+	// frmLuaScript is self-deleting with caFree
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmMain::miTroubleshootingClick(TObject *Sender)
 {
     Troubleshooting::Update();
-	frmTroubleshooting->ShowModal();
+	if (Troubleshooting::getItems().empty())
+	{
+		MessageBox(this->Handle, "No issues detected", this->Caption.c_str(), MB_ICONINFORMATION);
+	}
+	else
+	{
+		frmTroubleshooting->ShowModal();
+	}
 }
 //---------------------------------------------------------------------------
 
