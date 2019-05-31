@@ -63,7 +63,7 @@ PhoneConf* TfrmPhones::FindCfg(AnsiString dllName)
 	return NULL;
 }
 
-void __fastcall TfrmPhones::btnToggleActivationClick(TObject *Sender)
+void TfrmPhones::ToggleActivation(void)
 {
 	if (!lvDlls->Selected)
 		return;
@@ -85,6 +85,11 @@ void __fastcall TfrmPhones::btnToggleActivationClick(TObject *Sender)
 	cfg->push_back(newConf);
 	lvDlls->Invalidate();
 }
+
+void __fastcall TfrmPhones::btnToggleActivationClick(TObject *Sender)
+{
+	ToggleActivation();
+}
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmPhones::btnRefreshListClick(TObject *Sender)
@@ -92,6 +97,12 @@ void __fastcall TfrmPhones::btnRefreshListClick(TObject *Sender)
 	PhoneInterface::ReEnumerateDlls();
 	lvDlls->Items->Count = PhoneInterface::dlls.size();
 	lvDlls->Invalidate();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmPhones::lvDllsDblClick(TObject *Sender)
+{
+	ToggleActivation();	
 }
 //---------------------------------------------------------------------------
 

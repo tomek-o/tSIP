@@ -68,5 +68,6 @@ object frmPhones: TfrmPhones
     TabOrder = 1
     ViewStyle = vsReport
     OnData = lvDllsData
+    OnDblClick = lvDllsDblClick
   end
 end

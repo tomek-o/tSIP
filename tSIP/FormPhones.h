@@ -25,9 +25,11 @@ __published:	// IDE-managed Components
 	void __fastcall lvDllsData(TObject *Sender, TListItem *Item);
 	void __fastcall btnToggleActivationClick(TObject *Sender);
 	void __fastcall btnRefreshListClick(TObject *Sender);
+	void __fastcall lvDllsDblClick(TObject *Sender);
 private:	// User declarations
 	std::list<PhoneConf> *cfg;
 	PhoneConf* FindCfg(AnsiString dllName);
+	void ToggleActivation(void);
 public:		// User declarations
 	__fastcall TfrmPhones(TComponent* Owner);
 	void SetCfg(std::list<PhoneConf> *hotkeyCfg);
