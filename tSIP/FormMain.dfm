@@ -863,6 +863,7 @@ object frmMain: TfrmMain
       000000000000}
   end
   object tmrStartup: TTimer
+    Enabled = False
     OnTimer = tmrStartupTimer
     Left = 392
     Top = 307

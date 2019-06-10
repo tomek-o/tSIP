@@ -97,9 +97,10 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			ChangeWindowMessageFilter(WM_COPYDATA, MSGFLT_ADD);
 		}
 
+		Application->CreateForm(__classid(TfrmMain), &frmMain);
 		Application->CreateForm(__classid(TfrmLog), &frmLog);
 		Application->CreateForm(__classid(TfrmSettings), &frmSettings);
-		Application->CreateForm(__classid(TfrmMain), &frmMain);
+		frmMain->tmrStartup->Enabled = true;	// delaying tmrStartup as it may use settings window if any account setting is hidden
 		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
 		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
 		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
