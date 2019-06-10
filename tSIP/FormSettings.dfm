@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 375
-    ActivePage = tsAccount
+    ActivePage = tsIntegration
     Align = alClient
     TabHeight = 14
     TabOrder = 1
@@ -1596,7 +1596,7 @@ object frmSettings: TfrmSettings
       end
       object lblIntegrationSoftphoneToBrowser: TLabel
         Left = 3
-        Top = 131
+        Top = 184
         Width = 446
         Height = 13
         Caption = 
@@ -1605,14 +1605,14 @@ object frmSettings: TfrmSettings
       end
       object lblIntegrationSoftphoneToBrowserMode: TLabel
         Left = 26
-        Top = 150
+        Top = 203
         Width = 26
         Height = 13
         Caption = 'Mode'
       end
       object chAddFilterWMCopyData: TCheckBox
         Left = 26
-        Top = 81
+        Top = 83
         Width = 511
         Height = 17
         Caption = 
@@ -1639,7 +1639,7 @@ object frmSettings: TfrmSettings
       end
       object cbSipAccessUrlMode: TComboBox
         Left = 127
-        Top = 147
+        Top = 200
         Width = 322
         Height = 21
         Style = csDropDownList
@@ -1651,6 +1651,16 @@ object frmSettings: TfrmSettings
           'always passive (only using "Access-URL" button)'
           'as specified by "mode" parameter in received message'
           'always active (always automatic)')
+      end
+      object chbDoNotUseSipPrefixForDirectIpCalls: TCheckBox
+        Left = 26
+        Top = 102
+        Width = 511
+        Height = 17
+        Caption = 
+          'Do not use "sip:" prefix for direct IP calls (clean passed text ' +
+          'even if starts with "sip:")'
+        TabOrder = 4
       end
     end
     object tsHotkeys: TTabSheet

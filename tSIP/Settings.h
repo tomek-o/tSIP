@@ -186,6 +186,7 @@ public:
 	{
 		bool bAddFilterWMCopyData;
 		AnsiString asProtocol;
+		bool bDoNotUseSipPrefixForDirectIpCalls;
 	} Integration;
 	struct _Ring
 	{

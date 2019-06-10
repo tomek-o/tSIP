@@ -107,6 +107,7 @@ Settings::Settings(void)
 
 	Integration.bAddFilterWMCopyData = false;
 	Integration.asProtocol = Branding::appProto;
+	Integration.bDoNotUseSipPrefixForDirectIpCalls = false;
 
 	Ring.defaultRing = "ring.wav";
 	for (int i=0; i<sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]); i++)
@@ -644,6 +645,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		const Json::Value &IntegrationJson = root["Integration"];
 		Integration.bAddFilterWMCopyData = IntegrationJson.get("AddFilterWMCopyData", Integration.bAddFilterWMCopyData).asBool();
 		Integration.asProtocol = IntegrationJson.get("Protocol", Integration.asProtocol.c_str()).asString().c_str();
+		Integration.bDoNotUseSipPrefixForDirectIpCalls = IntegrationJson.get("DoNotUseSipPrefixForDirectIpCalls", Integration.bDoNotUseSipPrefixForDirectIpCalls).asBool();
     }
 
 	{
@@ -823,6 +825,7 @@ int Settings::Write(AnsiString asFileName)
 
 	root["Integration"]["AddFilterWMCopyData"] = Integration.bAddFilterWMCopyData;
 	root["Integration"]["Protocol"] = Integration.asProtocol.c_str();
+	root["Integration"]["DoNotUseSipPrefixForDirectIpCalls"] = Integration.bDoNotUseSipPrefixForDirectIpCalls;
 
 	root["Ring"]["DefaultRing"] = Ring.defaultRing.c_str();
 	for (int i=0; i<sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]); i++)

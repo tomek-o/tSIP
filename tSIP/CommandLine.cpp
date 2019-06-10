@@ -158,7 +158,7 @@ void CommandLine::Execute(char* buf, int paramcnt)
             }
 			else
 			{
-				if (asCallTo.Pos("sip:") == 1)
+				if (asCallTo.Pos("sip:") == 1 && (appSettings.Integration.bDoNotUseSipPrefixForDirectIpCalls == false))
 				{
 					asTarget = asCallTo;
 				}
