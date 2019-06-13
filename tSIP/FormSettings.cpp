@@ -255,6 +255,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHideMouseCursor->Checked = tmpSettings.frmMain.bHideMouseCursor;
 
 	chbFrmMainShowWhenAnsweringCall->Checked = tmpSettings.frmMain.bShowWhenAnsweringCall;
+	chbFrmMainShowWhenMakingCall->Checked = tmpSettings.frmMain.bShowWhenMakingCall;
 
 	cbSpeedDialSize->ItemIndex = tmpSettings.frmMain.iSpeedDialSize;
 	for (int i=0; i<tmpSettings.frmMain.speedDialWidth.size(); i++)
@@ -462,6 +463,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bHideMouseCursor = chbHideMouseCursor->Checked;
 
 	tmpSettings.frmMain.bShowWhenAnsweringCall = chbFrmMainShowWhenAnsweringCall->Checked;
+	tmpSettings.frmMain.bShowWhenMakingCall = chbFrmMainShowWhenMakingCall->Checked;
 
 	tmpSettings.frmMain.iSpeedDialSize = cbSpeedDialSize->ItemIndex;
 

@@ -103,6 +103,7 @@ public:
 		bool bHideSpeedDialToggleButton;///< hide "<<"/">>" button
 		bool bHideMouseCursor;
 		bool bShowWhenAnsweringCall;
+		bool bShowWhenMakingCall;
 		bool bUseCustomCaption;				///< use customCaption
 		AnsiString customCaption;			///< custom caption for main window
 		bool bUseCustomApplicationTitle;       ///< use customApplicationTitle

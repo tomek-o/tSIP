@@ -310,6 +310,7 @@ __published:	// IDE-managed Components
 	TBitBtn *btnSelectedScriptOnAudioErrorEdit;
 	TCheckBox *chbShowSettingsIfAnyAccountSettingsIsHidden;
 	TCheckBox *chbDoNotUseSipPrefixForDirectIpCalls;
+	TCheckBox *chbFrmMainShowWhenMakingCall;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

@@ -628,6 +628,22 @@ void TfrmMain::MakeCall(AnsiString target)
 	call.recordFile = "";
 	call.dtmfRxQueue.clear();
 
+	if (appSettings.frmMain.bShowWhenMakingCall)
+	{
+		if (!Visible)
+		{
+			ToggleVisibility();
+		}
+		else
+		{
+			Application->Restore();
+			SetActiveWindow (Handle);
+			SetForegroundWindow (Handle);
+			SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+		}
+		BringToFront();
+	}
+
 	if (appSettings.Scripts.onMakeCall != "")
 	{
 		AnsiString asScriptFile;

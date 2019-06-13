@@ -4,7 +4,7 @@ object frmSettings: TfrmSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Settings'
-  ClientHeight = 412
+  ClientHeight = 429
   ClientWidth = 665
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,12 +22,13 @@ object frmSettings: TfrmSettings
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 375
+    Top = 392
     Width = 665
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 375
     object btnCancel: TButton
       Left = 584
       Top = 6
@@ -51,66 +52,68 @@ object frmSettings: TfrmSettings
     Left = 117
     Top = 0
     Width = 548
-    Height = 375
-    ActivePage = tsIntegration
+    Height = 392
+    ActivePage = tsGeneral
     Align = alClient
-    TabHeight = 14
+    TabHeight = 10
     TabOrder = 1
     TabStop = False
     object tsGeneral: TTabSheet
       Caption = 'General'
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object lblGuiScaling: TLabel
         Left = 3
-        Top = 118
+        Top = 143
         Width = 140
         Height = 13
         Caption = 'GUI scaling (restart required)'
       end
       object lblGuiScalingPct: TLabel
         Left = 226
-        Top = 118
+        Top = 143
         Width = 11
         Height = 13
         Caption = '%'
       end
       object lblDialpadBackgroundImage: TLabel
         Left = 3
-        Top = 207
+        Top = 232
         Width = 125
         Height = 13
         Caption = 'Dialpad background image'
       end
       object lblMainIconFile: TLabel
         Left = 3
-        Top = 231
+        Top = 256
         Width = 128
         Height = 13
         Caption = 'Custom main icon file (.ico)'
       end
       object lblTrayNotificationIcon: TLabel
         Left = 3
-        Top = 255
+        Top = 280
         Width = 168
         Height = 13
         Caption = 'Custom tray icon notification image'
       end
       object lblRestartRequired1: TLabel
         Left = 340
-        Top = 231
+        Top = 256
         Width = 84
         Height = 13
         Caption = '(restart required)'
       end
       object lblRestartRequired2: TLabel
         Left = 340
-        Top = 255
+        Top = 280
         Width = 84
         Height = 13
         Caption = '(restart required)'
       end
       object lblMainWindowHeight: TLabel
         Left = 3
-        Top = 142
+        Top = 167
         Width = 94
         Height = 13
         Caption = 'Main window height'
@@ -133,7 +136,7 @@ object frmSettings: TfrmSettings
       end
       object edGuiScaling: TEdit
         Left = 178
-        Top = 115
+        Top = 140
         Width = 42
         Height = 21
         TabOrder = 2
@@ -156,7 +159,7 @@ object frmSettings: TfrmSettings
       end
       object chbSingleInstance: TCheckBox
         Left = 3
-        Top = 163
+        Top = 188
         Width = 382
         Height = 17
         Caption = 
@@ -166,14 +169,14 @@ object frmSettings: TfrmSettings
       end
       object edDialpadBackgroundImage: TEdit
         Left = 178
-        Top = 204
+        Top = 229
         Width = 121
         Height = 21
         TabOrder = 6
       end
       object btnSelectDialpadBackgroundImage: TButton
         Left = 305
-        Top = 204
+        Top = 229
         Width = 22
         Height = 21
         Caption = '...'
@@ -182,7 +185,7 @@ object frmSettings: TfrmSettings
       end
       object chbNoBeepOnEnterKey: TCheckBox
         Left = 3
-        Top = 184
+        Top = 209
         Width = 382
         Height = 17
         Caption = 
@@ -192,14 +195,14 @@ object frmSettings: TfrmSettings
       end
       object edMainIconFile: TEdit
         Left = 178
-        Top = 228
+        Top = 253
         Width = 121
         Height = 21
         TabOrder = 9
       end
       object btnSelectMainIconFile: TButton
         Left = 305
-        Top = 228
+        Top = 253
         Width = 22
         Height = 21
         Caption = '...'
@@ -208,14 +211,14 @@ object frmSettings: TfrmSettings
       end
       object edTrayNotificationImage: TEdit
         Left = 178
-        Top = 252
+        Top = 277
         Width = 121
         Height = 21
         TabOrder = 11
       end
       object btnSelectTrayNotificationImage: TButton
         Left = 305
-        Top = 252
+        Top = 277
         Width = 22
         Height = 21
         Caption = '...'
@@ -224,7 +227,7 @@ object frmSettings: TfrmSettings
       end
       object chbCustomUserAgent: TCheckBox
         Left = 3
-        Top = 279
+        Top = 304
         Width = 157
         Height = 17
         Caption = 'Custom User-Agent value'
@@ -232,7 +235,7 @@ object frmSettings: TfrmSettings
       end
       object edUserAgent: TEdit
         Left = 178
-        Top = 277
+        Top = 302
         Width = 121
         Height = 21
         TabOrder = 14
@@ -249,7 +252,7 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainUseCustomApplicationTitle: TCheckBox
         Left = 3
-        Top = 302
+        Top = 327
         Width = 223
         Height = 17
         Caption = 'Custom application title (text in taskbar)'
@@ -257,7 +260,7 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainUseCustomCaption: TCheckBox
         Left = 3
-        Top = 326
+        Top = 351
         Width = 191
         Height = 17
         Caption = 'Custom caption for main window'
@@ -265,29 +268,41 @@ object frmSettings: TfrmSettings
       end
       object edFrmMainCustomApplicationTitle: TEdit
         Left = 232
-        Top = 300
+        Top = 325
         Width = 193
         Height = 21
         TabOrder = 18
       end
       object edFrmMainCustomCaption: TEdit
         Left = 232
-        Top = 324
+        Top = 349
         Width = 193
         Height = 21
         TabOrder = 19
       end
       object edMainWindowHeight: TEdit
         Left = 178
-        Top = 139
+        Top = 164
         Width = 42
         Height = 21
         TabOrder = 20
+      end
+      object chbFrmMainShowWhenMakingCall: TCheckBox
+        Left = 3
+        Top = 117
+        Width = 478
+        Height = 17
+        Caption = 
+          'Show main form when making call (using shortcut, script, command' +
+          ' line / protocol handler...)'
+        TabOrder = 21
       end
     end
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
+      ExplicitTop = 20
+      ExplicitHeight = 351
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -423,14 +438,17 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
+      ExplicitTop = 20
+      ExplicitHeight = 351
       object pnlAccountsBottom: TPanel
         Left = 0
-        Top = 320
+        Top = 341
         Width = 540
         Height = 31
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitTop = 320
         object btnAddAccount: TButton
           Left = 464
           Top = 4
@@ -454,14 +472,17 @@ object frmSettings: TfrmSettings
         Left = 0
         Top = 0
         Width = 540
-        Height = 320
+        Height = 341
         Align = alClient
         TabOrder = 1
+        ExplicitHeight = 320
       end
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
+      ExplicitTop = 20
+      ExplicitHeight = 351
       object lblSpeedDial: TLabel
         Left = 3
         Top = 3
@@ -578,6 +599,8 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -710,6 +733,8 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -738,6 +763,8 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -800,6 +827,8 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1011,6 +1040,8 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblSoundInputModule: TLabel
         Left = 43
         Top = 22
@@ -1262,6 +1293,8 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -1380,6 +1413,8 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -1504,6 +1539,8 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -1564,6 +1601,8 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
+      ExplicitTop = 20
+      ExplicitHeight = 351
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -1666,10 +1705,14 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
+      ExplicitTop = 20
+      ExplicitHeight = 368
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblContactPopup: TLabel
         Left = 7
         Top = 7
@@ -1744,6 +1787,8 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -1756,10 +1801,14 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Phones'
       ImageIndex = 13
+      ExplicitTop = 20
+      ExplicitHeight = 368
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblTrayNotifierBackgroundImage: TLabel
         Left = 3
         Top = 72
@@ -1850,6 +1899,8 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblScriptOnCallStateFile: TLabel
         Left = 19
         Top = 59
@@ -2455,6 +2506,8 @@ object frmSettings: TfrmSettings
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
+      ExplicitTop = 20
+      ExplicitHeight = 368
       object lblUiCapacity: TLabel
         Left = 5
         Top = 122
@@ -2555,7 +2608,7 @@ object frmSettings: TfrmSettings
     Left = 0
     Top = 0
     Width = 117
-    Height = 375
+    Height = 392
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -2601,6 +2654,7 @@ object frmSettings: TfrmSettings
       FFFFFF0000000000000000075300630072006900700074007300270000000000
       000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F006700670069
       006E006700}
+    ExplicitHeight = 375
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

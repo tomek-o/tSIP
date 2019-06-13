@@ -50,6 +50,7 @@ Settings::_frmMain::_frmMain(void):
 	bHideSpeedDialToggleButton(false),
 	bHideMouseCursor(false),
 	bShowWhenAnsweringCall(false),
+	bShowWhenMakingCall(false),
 	bUseCustomCaption(false),
 	customCaption(Branding::appName),
 	bUseCustomApplicationTitle(false),
@@ -569,6 +570,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bHideSpeedDialToggleButton = frmMainJson.get("HideSpeedDialToggleButton", frmMain.bHideSpeedDialToggleButton).asBool();
 		frmMain.bHideMouseCursor = frmMainJson.get("HideMouseCursor", frmMain.bHideMouseCursor).asBool();
 		frmMain.bShowWhenAnsweringCall = frmMainJson.get("ShowWhenAnsweringCall", frmMain.bShowWhenAnsweringCall).asBool();
+		frmMain.bShowWhenMakingCall = frmMainJson.get("ShowWhenMakingCall", frmMain.bShowWhenMakingCall).asBool();
 		frmMain.bUseCustomApplicationTitle = frmMainJson.get("UseCustomApplicationTitle", frmMain.bUseCustomApplicationTitle).asBool();
 		frmMain.customApplicationTitle = frmMainJson.get("CustomApplicationTitle", frmMain.customApplicationTitle.c_str()).asString().c_str();
 		frmMain.bUseCustomCaption = frmMainJson.get("UseCustomCaption", frmMain.bUseCustomCaption).asBool();
@@ -783,6 +785,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["HideSpeedDialToggleButton"] = frmMain.bHideSpeedDialToggleButton;
 		jv["HideMouseCursor"] = frmMain.bHideMouseCursor;
 		jv["ShowWhenAnsweringCall"] = frmMain.bShowWhenAnsweringCall;
+		jv["ShowWhenMakingCall"] = frmMain.bShowWhenMakingCall;
 		jv["UseCustomApplicationTitle"] = frmMain.bUseCustomApplicationTitle;
 		jv["CustomApplicationTitle"] = frmMain.customApplicationTitle.c_str();
 		jv["UseCustomCaption"] = frmMain.bUseCustomCaption;
