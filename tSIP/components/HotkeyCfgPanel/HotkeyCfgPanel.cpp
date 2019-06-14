@@ -6,7 +6,7 @@
 
 #include "HotkeyCfgPanel.h"
 #include "HotKeyConf.h"
-#include "KeybKeys.h"
+#include "common\KeybKeys.h"
 #include "Settings.h"
 #include "ProgrammableButtons.h"
 #pragma package(smart_init)

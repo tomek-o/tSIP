@@ -34,13 +34,14 @@ USEFORM("FormTroubleshooting.cpp", frmTroubleshooting);
 #pragma link "lua_static.lib"
 //#pragma link "libopus.lib"
 #pragma link "scintilla.lib"
+#pragma link "common.lib"
 
 #include "Settings.h"
 #include "Paths.h"
 #include "FormMain.h"
 #include "FormContactPopup.h"
 #include "CommandLine.h"
-#include "WindowsMessageFilter.h"
+#include "common\WindowsMessageFilter.h"
 #include "LogUnit.h"
 #include "Log.h"
 #include "Branding.h"
@@ -100,7 +101,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
 		Application->CreateForm(__classid(TfrmLog), &frmLog);
 		Application->CreateForm(__classid(TfrmSettings), &frmSettings);
-		frmMain->tmrStartup->Enabled = true;	// delaying tmrStartup as it may use settings window if any account setting is hidden
 		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
 		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
 		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
@@ -110,10 +110,13 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmPhones), &frmPhones);
 		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
 		Application->CreateForm(__classid(TfrmTroubleshooting), &frmTroubleshooting);
+
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
 		frmContactPopup->Width = appSettings.frmContactPopup.iWidth;
 		frmContactPopup->Height = appSettings.frmContactPopup.iHeight;
+
+		frmMain->tmrStartup->Enabled = true;	// delaying tmrStartup as it may use settings window if any account setting is hidden
 
 		if (appSettings.frmMain.bStartMinimizedToTray == false)
 		{

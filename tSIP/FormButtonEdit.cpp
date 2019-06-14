@@ -7,7 +7,7 @@
 #include "ButtonType.h"
 #include "ButtonConf.h"
 #include "Paths.h"
-#include "Colors.h"
+#include "common\Colors.h"
 #include "AudioDevicesList.h"
 #include "UaConf.h"
 //---------------------------------------------------------------------------

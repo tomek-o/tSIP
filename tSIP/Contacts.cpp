@@ -4,7 +4,7 @@
 #pragma hdrstop
 
 #include "Contacts.h"
-#include "Utils.h"
+#include "common/Utils.h"
 #include <assert.h>
 #include <algorithm>
 #include <fstream> 

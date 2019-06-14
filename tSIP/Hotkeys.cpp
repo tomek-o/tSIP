@@ -6,7 +6,7 @@
 #include "Hotkeys.h"
 #include "HotKeyConf.h"
 #include "Log.h"
-#include "OS.h"
+#include "common/OS.h"
 #include <windows.h>
 
 //---------------------------------------------------------------------------

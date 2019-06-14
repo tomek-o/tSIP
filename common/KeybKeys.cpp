@@ -183,7 +183,7 @@ const vkey vkey_list[] = {
 
 };
 
-int vkey_list_size(void)
+unsigned int vkey_list_size(void)
 {
 	return sizeof(vkey_list)/sizeof(vkey_list[0]);
 }

@@ -8,7 +8,9 @@
 			<Option Name="GUID">{F0C559FB-00A4-4848-B2B0-DA5D99B5E4BE}</Option>
 		</Option>
 	</PersonalityInfo>
-	<Default.Personality>  <Projects>
+	<Default.Personality>  
+    
+    <Projects>
       <Projects Name="re.lib">re\mk\win32-tc\re.bdsproj</Projects>
       <Projects Name="rem.lib">rem\mk\win32-tc\rem.bdsproj</Projects>
       <Projects Name="baresip.lib">baresip\mk\win32-tc\baresip.bdsproj</Projects>
@@ -20,11 +22,13 @@
       <Projects Name="lua_static.lib">lua\turbo_cpp\lua_static.bdsproj</Projects>
       <Projects Name="webrtc_tc.lib">webrtc\webrtc_tc.bdsproj</Projects>
       <Projects Name="scintilla.lib">scintilla\scintilla.bdsproj</Projects>
+      <Projects Name="common.lib">common\common.bdsproj</Projects>
       <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
-      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib jsoncpp.lib lua_static.lib webrtc_tc.lib scintilla.lib tSIP.exe</Projects>
+      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib jsoncpp.lib lua_static.lib webrtc_tc.lib scintilla.lib common.lib tSIP.exe</Projects>
     </Projects>
     <Dependencies>
       <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">
+        <Dependency GUID="{690A683A-7576-4D98-9293-8AA35B0903D5}"/>
         <Dependency GUID="{2D189B4A-4FE9-49A2-9586-2D657EE0EA61}"/>
         <Dependency GUID="{2F20C27F-EE96-4AC2-83B0-B3997AEB97ED}"/>
         <Dependency GUID="{EE04A80D-3549-4554-880A-FDA45DFA6797}"/>

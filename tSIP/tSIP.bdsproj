@@ -28,7 +28,6 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
-        <property category="build.node" name="lastconfig" value="Debug_Build"/>
         <property category="build.node" name="libraries" value="vclx.lib vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="tSIP.exe"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;dsnap;soaprtl;bdertl;vcldbx"/>
@@ -71,6 +70,7 @@
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.11" value="..\lua\turbo_cpp\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.12" value="..\opus\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.13" value="..\scintilla\debug_build"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.14" value="..\common\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.2" value="..\re\mk\win32-tc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.3" value="..\rem\mk\win32-tc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.4" value="..\baresip\mk\win32-tc\debug_build"/>
@@ -104,6 +104,7 @@
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.11" value="..\lua\turbo_cpp\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.12" value="..\opus\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.13" value="..\scintilla\release_build"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.14" value="..\common\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.2" value="..\re\mk\win32-tc\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.3" value="..\baresip\mk\win32-tc\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.4" value="..\rem\mk\win32-tc\release_build"/>
@@ -151,6 +152,7 @@
           <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="..\gsm\inc"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\lua\src"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\scintilla\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value=".."/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="components\HotkeyCfgPanel"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="components\ProgrammableButton"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
@@ -376,12 +378,6 @@
       <FILELIST>
         <FILE FILENAME="_doc\roadmap.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="_doc\changelog.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="common\ScopedLock.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="common\Observer.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="common\Observable.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="common\Mutex.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="common\fifo.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="common\singleton.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="components\ProgrammableButton\ProgrammableButton.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ProgrammableButton" FORMNAME="" DESIGNCLASS="" ADDITIONAL="components\ProgrammableButton\ProgrammableButton.h"/>
         <FILE FILENAME="phone\PhoneInterface.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PhoneInterface" FORMNAME="" DESIGNCLASS="" ADDITIONAL="phone\PhoneInterface.h"/>
         <FILE FILENAME="tSIP.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tSIP" FORMNAME="" DESIGNCLASS=""/>
@@ -400,7 +396,6 @@
         <FILE FILENAME="Callback.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Callback" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Callback.h"/>
         <FILE FILENAME="CallbackQueue.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CallbackQueue" FORMNAME="" DESIGNCLASS="" ADDITIONAL="CallbackQueue.h"/>
         <FILE FILENAME="tSIP.todo" CONTAINERID="ToDo" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="Utils.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Utils" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Utils.h"/>
         <FILE FILENAME="FormHistory.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormHistory" FORMNAME="frmHistory" DESIGNCLASS="" ADDITIONAL="FormHistory.h"/>
         <FILE FILENAME="History.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="History" FORMNAME="" DESIGNCLASS="" ADDITIONAL="History.h"/>
         <FILE FILENAME="FormButtonContainer.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonContainer" FORMNAME="frmButtonContainer" DESIGNCLASS="" ADDITIONAL="FormButtonContainer.h"/>
@@ -415,37 +410,29 @@
         <FILE FILENAME="ButtonType.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonType" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ButtonType.h"/>
         <FILE FILENAME="ButtonConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ButtonConf.h"/>
         <FILE FILENAME="CommandLine.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CommandLine" FORMNAME="" DESIGNCLASS="" ADDITIONAL="CommandLine.h"/>
-        <FILE FILENAME="WindowsMessageFilter.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="WindowsMessageFilter" FORMNAME="" DESIGNCLASS="" ADDITIONAL="WindowsMessageFilter.h"/>
         <FILE FILENAME="Hotkeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Hotkeys" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Hotkeys.h"/>
         <FILE FILENAME="FormHotkeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormHotkeys" FORMNAME="frmHotkeys" DESIGNCLASS="" ADDITIONAL="FormHotkeys.h"/>
         <FILE FILENAME="HotKeyConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="components\HotkeyCfgPanel\HotkeyCfgPanel.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="HotkeyCfgPanel" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="KeybKeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="KeybKeys" FORMNAME="" DESIGNCLASS="" ADDITIONAL="KeybKeys.h"/>
         <FILE FILENAME="Action.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Action" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Action.h"/>
         <FILE FILENAME="TimeCounter.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="Branding.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Branding" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Branding.h"/>
-        <FILE FILENAME="base64.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="base64" FORMNAME="" DESIGNCLASS="" ADDITIONAL="base64.h"/>
         <FILE FILENAME="resource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="resource.rc" CONTAINERID="RCCompiler" LOCALCOMMAND="" UNITNAME="resource.rc" FORMNAME="resource.res" DESIGNCLASS=""/>
-        <FILE FILENAME="OS.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="OS" FORMNAME="" DESIGNCLASS="" ADDITIONAL="OS.h"/>
-        <FILE FILENAME="Utilities.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Utilities" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Utilities.h"/>
         <FILE FILENAME="FormPhones.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormPhones" FORMNAME="frmPhones" DESIGNCLASS="" ADDITIONAL="FormPhones.h"/>
         <FILE FILENAME="PhoneConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="FormContactsCsvImport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactsCsvImport" FORMNAME="frmContactsCsvImport" DESIGNCLASS="" ADDITIONAL="FormContactsCsvImport.h"/>
-        <FILE FILENAME="Colors.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Colors" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Colors.h"/>
         <FILE FILENAME="ScriptExec.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScriptExec" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ScriptExec.h"/>
         <FILE FILENAME="LuaState.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaState" FORMNAME="" DESIGNCLASS="" ADDITIONAL="LuaState.h"/>
         <FILE FILENAME="LuaWinapi.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaWinapi" FORMNAME="" DESIGNCLASS="" ADDITIONAL="LuaWinapi.h"/>
         <FILE FILENAME="AudioDevicesList.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioDevicesList" FORMNAME="" DESIGNCLASS="" ADDITIONAL="AudioDevicesList.h"/>
         <FILE FILENAME="Call.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Call" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Call.h"/>
-        <FILE FILENAME="Unicode.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Unicode" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Unicode.h"/>
         <FILE FILENAME="phone\Phone.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="phone\PhoneCapabilities.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="phone\PhoneSettings.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="FormLuaScript.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLuaScript" FORMNAME="frmLuaScript" DESIGNCLASS="" ADDITIONAL="FormLuaScript.h"/>
         <FILE FILENAME="FormTextEditor.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTextEditor" FORMNAME="frmTextEditor" DESIGNCLASS="" ADDITIONAL="FormTextEditor.h"/>
         <FILE FILENAME="ScEdit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScEdit" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ScEdit.h"/>
-        <FILE FILENAME="common\BtnController.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="LuaExamples.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="ScriptSource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="Paths.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Paths" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Paths.h"/>
@@ -459,7 +446,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">67</VersionInfo>
-          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Build">4</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -471,7 +458,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.67.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.67.4</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

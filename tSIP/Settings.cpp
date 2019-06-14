@@ -4,7 +4,7 @@
 #pragma hdrstop
 
 #include "Settings.h"
-#include "KeybKeys.h"
+#include "common\KeybKeys.h"
 #include "ProgrammableButtons.h"
 #include "Branding.h"
 #include <algorithm>
