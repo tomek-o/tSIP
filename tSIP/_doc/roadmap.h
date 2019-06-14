@@ -60,14 +60,6 @@ Call recording:
 
 - settings: time for hotkey anti-repeat timer
 
-- dialing using speech recognition
-
-- BLF: alert me on when extension become idle
-
-- contacts: assign short number (example purpose: direct IP calling using short numbers)
-
-- entering password at startup and after unregistering (do not store password)
-
 - prepare some extra icons for programmable keys
 
 - separate icon for recorviewer
@@ -151,9 +143,6 @@ One more flaw is that full URI from REFER is stored in call history.
 
 
 
-
-
-
 DEBUG_INFO: w³¹cznik
 
 aufile: required S16LE, 1ch
@@ -172,8 +161,6 @@ lepsze informowanie o problemach: brak kompatybilnego kodeka, brak urz¹dzenia au
 RecordViewer: keep sorting column/dir after restart
 
 tSIP scripting: help for commands (factory pattern)
-tSIP scripting: let Sleep return specific value if Break was used?
-tSIP scripting: example for rand()
 tSIP scripting: Unregister, Reregister
 luaopen_io(lua);
 
@@ -181,7 +168,6 @@ luaopen_io(lua);
 plugin interface: showsettings
 
 tSIP plugin: logout from group in inactivity (mouse, keyboard)
-tSIP plugin: scripted audio source (create wave file, call with it)
 
 tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(), 
 tSIP scripting: file I/O example (report call quality after each call)
@@ -192,7 +178,7 @@ TODO: warn user if wave file source is selected but source file does not exist
 BUG: halt if audio device (mic with autosensing) is detached during call - winwave
 
 
-FIXME: btn reregister not always working correctly, depending on current registration state
+FIXME: btn reregister not always working correctly, depending on current registration state (?)
 
 www: scripting with javascript
 

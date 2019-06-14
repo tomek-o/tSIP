@@ -236,6 +236,7 @@ int ScriptExec::l_InputQuery(lua_State* L)
 	return 2;
 }
 
+/** \note Sleep(ms) returns non-zero if break is called */
 int ScriptExec::l_Sleep(lua_State* L)
 {
 	int ret = 0;
