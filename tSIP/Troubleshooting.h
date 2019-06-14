@@ -31,6 +31,8 @@ namespace Troubleshooting {
 		NoRegistration,
 		NoLocalPortAssigned,
 		SpeexPreprocessingEnabled,
+		NoCodecsEnabled,
+		TooManyCodecsEnabled,
 
 		ItemTypeLimiter
 	};

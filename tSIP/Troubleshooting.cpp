@@ -153,6 +153,28 @@ namespace {
 		return false;
 	}
 
+	bool CheckNoCodecsEnabled(void)
+	{
+		if (appSettings.uaConf.accounts.size())
+		{
+			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
+			if (acc.audio_codecs.empty())
+				return true;
+		}
+		return false;
+	}
+
+	bool CheckTooManyCodecs(void)
+	{
+		if (appSettings.uaConf.accounts.size())
+		{
+			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
+			if (acc.audio_codecs.size() > 10)
+				return true;
+		}
+		return false;
+	}
+
 	struct ItemTypeData itemTypeData[ItemTypeLimiter] =
 	{
 		{ LevelWarning, "No audio input device", "", CheckAudioInputDevice },
@@ -175,6 +197,11 @@ namespace {
 			, CheckNoLocalPort
 			},
 		{ LevelWarning, "Speex preprocessing enabled", "Audio preprocessing function may be unstable (rare crashes related to this functions were reported), it is for test purposes only.", CheckSpeexPreprocessing },
+		{ LevelWarning, "No codecs enabled", "List of enabled codecs is empty.", CheckNoCodecsEnabled },
+		{ LevelWarning, "List of enabled codecs might be too long",
+			"Having too many codecs activated might cause problems with UDP message fragmentation.",
+			CheckTooManyCodecs
+			},
 	};
 
 	enum Level getItemLevel(enum ItemType type)
