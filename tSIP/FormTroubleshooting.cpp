@@ -25,7 +25,15 @@ void __fastcall TfrmTroubleshooting::FormShow(TObject *Sender)
 {
 	const std::vector<Troubleshooting::Item> &items = Troubleshooting::getItems();
 	lvItems->Items->Count = items.size();
-	lvItems->Invalidate();	
+	lvItems->Invalidate();
+	if (lvItems->Selected)
+	{
+		SelectItem(lvItems->Selected);
+	}
+	else
+	{
+    	memoDetails->Text = "";
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -64,15 +72,20 @@ void __fastcall TfrmTroubleshooting::lvItemsSelectItem(TObject *Sender,
 {
 	if (Item && Selected)
 	{
-		int id = Item->Index;
-		const std::vector<Troubleshooting::Item> &items = Troubleshooting::getItems();		
-		const Troubleshooting::Item &ti = items[id];
-		memoDetails->Text = ti.getDescription();
-		if (ti.extraMsg != "")
-		{
-        	memoDetails->Text = memoDetails->Text + "\n" + ti.extraMsg;
-		}
+		SelectItem(Item);
 	}
 }
 //---------------------------------------------------------------------------
+
+void TfrmTroubleshooting::SelectItem(TListItem *Item)
+{
+	int id = Item->Index;
+	const std::vector<Troubleshooting::Item> &items = Troubleshooting::getItems();
+	const Troubleshooting::Item &ti = items[id];
+	memoDetails->Text = ti.getDescription();
+	if (ti.extraMsg != "")
+	{
+		memoDetails->Text = memoDetails->Text + "\n" + ti.extraMsg;
+	}
+}
 

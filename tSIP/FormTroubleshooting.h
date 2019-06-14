@@ -24,6 +24,7 @@ __published:	// IDE-managed Components
 	void __fastcall lvItemsSelectItem(TObject *Sender, TListItem *Item,
           bool Selected);
 private:	// User declarations
+	void SelectItem(TListItem *Item);
 public:		// User declarations
 	__fastcall TfrmTroubleshooting(TComponent* Owner);
 };
