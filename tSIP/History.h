@@ -37,12 +37,18 @@ public:
 		AnsiString uri;
 		AnsiString peerName;	///< display name
 		AnsiString contactName;	///< name associated with contact; not stored in file, cached only after resolving
+
+		AnsiString paiUri;
+		AnsiString paiPeerName;
+		AnsiString paiContactName;
+
 		bool incoming;
 		int time;	///< call time in seconds (starting from CONFIRMED state)
 
 		bool operator==(const Entry& right) const {
 			return (
 				uri == right.uri &&
+				paiUri == right.paiUri &&
 				incoming == right.incoming &&
 				timestamp == right.timestamp
 				);

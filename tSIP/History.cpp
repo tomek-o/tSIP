@@ -27,6 +27,7 @@ void History::AddEntry(History::Entry& entry)
 	}
 	assert(callbackGetContactName);
 	entry.contactName = callbackGetContactName(entry.uri.c_str()).c_str();
+	entry.paiContactName = callbackGetContactName(entry.paiUri.c_str()).c_str();
 	entries.push_front(entry);
 	if (entries.size() > CALL_HISTORY_LIMIT)
 	{
@@ -76,6 +77,11 @@ int History::Read(CallbackGetContactName callbackGetContactName)
 		entry.uri = call.get("uri", "").asString().c_str();
 		entry.peerName = call.get("peerName", "").asString().c_str();
 		entry.contactName = callbackGetContactName(entry.uri.c_str()).c_str();
+
+		entry.paiUri = call.get("paiUri", "").asString().c_str();
+		entry.paiPeerName = call.get("paiPeerName", "").asString().c_str();
+		entry.paiContactName = callbackGetContactName(entry.paiUri.c_str()).c_str();
+
 		entry.incoming = call.get("incoming", "").asBool();
 		entry.time = call.get("time", 0).asInt();
 
@@ -107,8 +113,13 @@ int History::Write(void)
 	{
 		Entry &entry = entries[i];
 		Json::Value &jEntry = jCallHistory[i];
+
 		jEntry["uri"] = entry.uri.c_str();
 		jEntry["peerName"] = entry.peerName.c_str();
+
+		jEntry["paiUri"] = entry.paiUri.c_str();
+		jEntry["paiPeerName"] = entry.paiPeerName.c_str();
+
 		jEntry["incoming"] = entry.incoming;
 		jEntry["time"] = entry.time;
 		jEntry["timestamp"]["year"] = entry.timestamp.year;

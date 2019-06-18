@@ -21,7 +21,8 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 	callbackCall(callbackCall),
 	callbackPhonebookEdit(callbackPhonebookEdit),
 	callbackHttpQuery(callbackHttpQuery),
-	updateNeeded(false), updating(false)
+	updateNeeded(false), updating(false),
+	usePaiIfAvailable(true)
 {
 	assert(history);
 	assert(callbackCall);
@@ -55,7 +56,10 @@ void TfrmHistory::FilterHistory(void)
 			if (
 				UpperCase(entry.uri.c_str()).Pos(needle) > 0 ||
 				UpperCase(entry.peerName.c_str()).Pos(needle) > 0 ||
-				UpperCase(entry.contactName.c_str()).Pos(needle) > 0
+				UpperCase(entry.contactName.c_str()).Pos(needle) > 0 ||
+				UpperCase(entry.paiUri.c_str()).Pos(needle) > 0 ||
+				UpperCase(entry.paiPeerName.c_str()).Pos(needle) > 0 ||
+				UpperCase(entry.paiContactName.c_str()).Pos(needle) > 0
 				)
 			{
 				fentry.id = i;
@@ -113,16 +117,34 @@ void __fastcall TfrmHistory::lvHistoryData(TObject *Sender, TListItem *Item)
         entry.timestamp.day,
 		entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec);
 	Item->Caption = ts;
-	AnsiString contactName = entry.contactName;
-	if (contactName == "")
+
+	if (usePaiIfAvailable && entry.paiUri != "")
 	{
-		contactName = entry.peerName;
+		AnsiString contactName = entry.paiContactName;
 		if (contactName == "")
 		{
-			contactName = entry.uri;
+			contactName = entry.paiPeerName;
+			if (contactName == "")
+			{
+				contactName = entry.paiUri;
+			}
 		}
+		Item->SubItems->Add(contactName);
 	}
-	Item->SubItems->Add(contactName);
+	else
+	{
+		AnsiString contactName = entry.contactName;
+		if (contactName == "")
+		{
+			contactName = entry.peerName;
+			if (contactName == "")
+			{
+				contactName = entry.uri;
+			}
+		}
+		Item->SubItems->Add(contactName);
+	}
+	
 	if (entry.incoming)
 	{
 		if (entry.time > 0)
@@ -225,5 +247,15 @@ void TfrmHistory::Scale(int percentage)
         lv->Columns->Items[i]->Width = (float)lv->Columns->Items[i]->Width * percentage / 100.0f;
     }
 }
+
+void TfrmHistory::UsePaiIfAvailable(bool state)
+{
+	if (usePaiIfAvailable != state)
+	{
+		usePaiIfAvailable = state;
+		FilterHistory();
+	}
+}
+
 
 

@@ -133,6 +133,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	lblCallState->Caption = "";
 	frmHistory = new TfrmHistory(this->tsHistory, &history, &OnCall, &OnPhonebookEdit, &OnHttpQuery);
 	frmHistory->Scale(appSettings.gui.scalingPct);
+	frmHistory->UsePaiIfAvailable(appSettings.History.bUsePaiIfAvailable);
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
 
@@ -445,6 +446,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		RegisterGlobalHotKeys();
 	}
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
+	frmHistory->UsePaiIfAvailable(appSettings.History.bUsePaiIfAvailable);
 	UpdateDialpadBackgroundImage();
 	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
@@ -1173,6 +1175,8 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 					entry.timestamp.msec);
 				entry.uri = call.uri.c_str();
 				entry.peerName = call.peerName.c_str();
+				entry.paiUri = call.paiPeerUri.c_str();
+				entry.paiPeerName = call.paiPeerName.c_str();
 				entry.incoming = call.incoming;
 				if (call.connected)
 				{
@@ -1189,6 +1193,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				if (entry.incoming)
 				{
 					entry.uri = ExtractNumberFromUri(entry.uri.c_str()).c_str();
+					entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
 				}
 				history.AddEntry(entry);
 				UpdateCallHistory();

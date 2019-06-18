@@ -28,7 +28,6 @@ object frmSettings: TfrmSettings
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 375
     object btnCancel: TButton
       Left = 584
       Top = 6
@@ -53,15 +52,13 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsGeneral
+    ActivePage = tsHistory
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitLeft = 6
-      ExplicitTop = 14
       object lblGuiScaling: TLabel
         Left = 3
         Top = 143
@@ -301,8 +298,6 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
-      ExplicitTop = 20
-      ExplicitHeight = 351
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -438,8 +433,6 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
-      ExplicitTop = 20
-      ExplicitHeight = 351
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 341
@@ -448,7 +441,6 @@ object frmSettings: TfrmSettings
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitTop = 320
         object btnAddAccount: TButton
           Left = 464
           Top = 4
@@ -475,14 +467,11 @@ object frmSettings: TfrmSettings
         Height = 341
         Align = alClient
         TabOrder = 1
-        ExplicitHeight = 320
       end
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
-      ExplicitTop = 20
-      ExplicitHeight = 351
       object lblSpeedDial: TLabel
         Left = 3
         Top = 3
@@ -599,8 +588,6 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -733,8 +720,6 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -763,8 +748,6 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -827,8 +810,6 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1040,8 +1021,6 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblSoundInputModule: TLabel
         Left = 43
         Top = 22
@@ -1293,8 +1272,6 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -1413,8 +1390,6 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -1539,8 +1514,6 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -1601,8 +1574,6 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
-      ExplicitTop = 20
-      ExplicitHeight = 351
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -1705,14 +1676,10 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
-      ExplicitTop = 20
-      ExplicitHeight = 368
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblContactPopup: TLabel
         Left = 7
         Top = 7
@@ -1787,8 +1754,8 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
-      ExplicitTop = 20
-      ExplicitHeight = 368
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -1797,18 +1764,24 @@ object frmSettings: TfrmSettings
         Caption = 'Do not store history to file'
         TabOrder = 0
       end
+      object chbHistoryUsePaiIfAvailable: TCheckBox
+        Left = 3
+        Top = 26
+        Width = 422
+        Height = 17
+        Caption = 
+          'Prefer P-Asserted-Identity information if available (see also: "' +
+          'Display" tab)'
+        TabOrder = 1
+      end
     end
     object tsPhones: TTabSheet
       Caption = 'Phones'
       ImageIndex = 13
-      ExplicitTop = 20
-      ExplicitHeight = 368
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblTrayNotifierBackgroundImage: TLabel
         Left = 3
         Top = 72
@@ -1899,8 +1872,6 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblScriptOnCallStateFile: TLabel
         Left = 19
         Top = 59
@@ -2506,8 +2477,6 @@ object frmSettings: TfrmSettings
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitTop = 20
-      ExplicitHeight = 368
       object lblUiCapacity: TLabel
         Left = 5
         Top = 122
@@ -2654,7 +2623,6 @@ object frmSettings: TfrmSettings
       FFFFFF0000000000000000075300630072006900700074007300270000000000
       000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F006700670069
       006E006700}
-    ExplicitHeight = 375
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

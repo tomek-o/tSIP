@@ -123,6 +123,7 @@ Settings::Settings(void)
 	SipAccessUrl.accessMode = _SipAccessUrl::accessModeAlwaysPassive;
 
 	History.bNoStoreToFile = false;
+	History.bUsePaiIfAvailable = true;
 
 	Scripts.timer = 1000;
 
@@ -690,6 +691,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 	{
 		const Json::Value &HistoryJson = root["History"];
 		History.bNoStoreToFile = HistoryJson.get("NoStoreToFile", History.bNoStoreToFile).asBool();
+		History.bUsePaiIfAvailable = HistoryJson.get("UsePaiIfAvailable", History.bUsePaiIfAvailable).asBool();
     }
 
 	{
@@ -844,6 +846,7 @@ int Settings::Write(AnsiString asFileName)
 	root["Contacts"]["FilterUsingNote"] = Contacts.filterUsingNote;
 
 	root["History"]["NoStoreToFile"] = History.bNoStoreToFile;
+	root["History"]["UsePaiIfAvailable"] = History.bUsePaiIfAvailable;
 
 	{
 		Json::Value &jv = root["Scripts"];

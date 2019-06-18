@@ -56,6 +56,7 @@ private:	// User declarations
 	void FilterHistory(void);
 	bool updateNeeded;
 	bool updating;					///< view needs to be updated on data change (window is visible)
+	bool usePaiIfAvailable;
 	History::Entry* getSelectedEntry(void);
 public:		// User declarations
 	__fastcall TfrmHistory(TComponent* Owner, History *history,
@@ -71,6 +72,8 @@ public:		// User declarations
 	/** Scaling - manual scaling required for listview column width
 	*/
 	void Scale(int percentage);
+
+	void UsePaiIfAvailable(bool state);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmHistory *frmHistory;
