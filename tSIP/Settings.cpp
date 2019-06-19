@@ -123,7 +123,8 @@ Settings::Settings(void)
 	SipAccessUrl.accessMode = _SipAccessUrl::accessModeAlwaysPassive;
 
 	History.bNoStoreToFile = false;
-	History.bUsePaiIfAvailable = true;
+	History.bUsePaiForDisplayIfAvailable = true;
+	History.bUsePaiForDialIfAvailable = true;
 
 	Scripts.timer = 1000;
 
@@ -691,8 +692,9 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 	{
 		const Json::Value &HistoryJson = root["History"];
 		History.bNoStoreToFile = HistoryJson.get("NoStoreToFile", History.bNoStoreToFile).asBool();
-		History.bUsePaiIfAvailable = HistoryJson.get("UsePaiIfAvailable", History.bUsePaiIfAvailable).asBool();
-    }
+		History.bUsePaiForDisplayIfAvailable = HistoryJson.get("UsePaiForDisplayIfAvailable", History.bUsePaiForDisplayIfAvailable).asBool();
+		History.bUsePaiForDialIfAvailable = HistoryJson.get("UsePaiForDialIfAvailable", History.bUsePaiForDialIfAvailable).asBool();
+	}
 
 	{
 		const Json::Value &ScriptsJson = root["Scripts"];
@@ -846,7 +848,8 @@ int Settings::Write(AnsiString asFileName)
 	root["Contacts"]["FilterUsingNote"] = Contacts.filterUsingNote;
 
 	root["History"]["NoStoreToFile"] = History.bNoStoreToFile;
-	root["History"]["UsePaiIfAvailable"] = History.bUsePaiIfAvailable;
+	root["History"]["UsePaiForDisplayIfAvailable"] = History.bUsePaiForDisplayIfAvailable;
+	root["History"]["UsePaiForDialIfAvailable"] = History.bUsePaiForDialIfAvailable;
 
 	{
 		Json::Value &jv = root["Scripts"];

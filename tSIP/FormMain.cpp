@@ -133,7 +133,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	lblCallState->Caption = "";
 	frmHistory = new TfrmHistory(this->tsHistory, &history, &OnCall, &OnPhonebookEdit, &OnHttpQuery);
 	frmHistory->Scale(appSettings.gui.scalingPct);
-	frmHistory->UsePaiIfAvailable(appSettings.History.bUsePaiIfAvailable);
+	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
+	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
 
@@ -446,7 +447,8 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		RegisterGlobalHotKeys();
 	}
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
-	frmHistory->UsePaiIfAvailable(appSettings.History.bUsePaiIfAvailable);
+	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
+	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
 	UpdateDialpadBackgroundImage();
 	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);

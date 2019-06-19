@@ -56,7 +56,8 @@ private:	// User declarations
 	void FilterHistory(void);
 	bool updateNeeded;
 	bool updating;					///< view needs to be updated on data change (window is visible)
-	bool usePaiIfAvailable;
+	bool usePaiForDisplayIfAvailable;
+	bool usePaiForDialIfAvailable;
 	History::Entry* getSelectedEntry(void);
 public:		// User declarations
 	__fastcall TfrmHistory(TComponent* Owner, History *history,
@@ -73,7 +74,9 @@ public:		// User declarations
 	*/
 	void Scale(int percentage);
 
-	void UsePaiIfAvailable(bool state);
+	void UsePaiForDisplayIfAvailable(bool state);
+
+	void UsePaiForDialIfAvailable(bool state);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmHistory *frmHistory;

@@ -1754,8 +1754,6 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
-      ExplicitLeft = 6
-      ExplicitTop = 14
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -1764,15 +1762,25 @@ object frmSettings: TfrmSettings
         Caption = 'Do not store history to file'
         TabOrder = 0
       end
-      object chbHistoryUsePaiIfAvailable: TCheckBox
+      object chbHistoryUsePaiForDisplayIfAvailable: TCheckBox
         Left = 3
         Top = 26
-        Width = 422
+        Width = 446
         Height = 17
         Caption = 
-          'Prefer P-Asserted-Identity information if available (see also: "' +
-          'Display" tab)'
+          'Prefer P-Asserted-Identity information for display if available ' +
+          '(see also: "Display" tab)'
         TabOrder = 1
+      end
+      object chbHistoryUsePaiForDialIfAvailable: TCheckBox
+        Left = 3
+        Top = 49
+        Width = 446
+        Height = 17
+        Caption = 
+          'Prefer P-Asserted-Identity information for dialing if available ' +
+          '(see also: "Display" tab)'
+        TabOrder = 2
       end
     end
     object tsPhones: TTabSheet

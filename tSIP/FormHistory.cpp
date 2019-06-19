@@ -22,7 +22,8 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 	callbackPhonebookEdit(callbackPhonebookEdit),
 	callbackHttpQuery(callbackHttpQuery),
 	updateNeeded(false), updating(false),
-	usePaiIfAvailable(true)
+	usePaiForDisplayIfAvailable(true),
+	usePaiForDialIfAvailable(true)
 {
 	assert(history);
 	assert(callbackCall);
@@ -118,7 +119,7 @@ void __fastcall TfrmHistory::lvHistoryData(TObject *Sender, TListItem *Item)
 		entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec);
 	Item->Caption = ts;
 
-	if (usePaiIfAvailable && entry.paiUri != "")
+	if (usePaiForDisplayIfAvailable && entry.paiUri != "")
 	{
 		AnsiString contactName = entry.paiContactName;
 		if (contactName == "")
@@ -181,7 +182,18 @@ void __fastcall TfrmHistory::lvHistoryDblClick(TObject *Sender)
 	{
 		return;
 	}
-	callbackCall(entry->uri.c_str());
+
+	AnsiString uri;
+	if (usePaiForDisplayIfAvailable && entry->paiUri != "")
+	{
+		uri = entry->paiUri;
+	}
+	else
+	{
+		uri = entry->uri;
+	}
+
+	callbackCall(uri.c_str());
 }
 //---------------------------------------------------------------------------
 
@@ -248,13 +260,18 @@ void TfrmHistory::Scale(int percentage)
     }
 }
 
-void TfrmHistory::UsePaiIfAvailable(bool state)
+void TfrmHistory::UsePaiForDisplayIfAvailable(bool state)
 {
-	if (usePaiIfAvailable != state)
+	if (usePaiForDisplayIfAvailable != state)
 	{
-		usePaiIfAvailable = state;
+		usePaiForDisplayIfAvailable = state;
 		FilterHistory();
 	}
+}
+
+void TfrmHistory::UsePaiForDialIfAvailable(bool state)
+{
+	usePaiForDialIfAvailable = state;
 }
 
 

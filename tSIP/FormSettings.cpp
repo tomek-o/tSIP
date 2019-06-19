@@ -392,7 +392,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbContactFilterUsingNote->Checked = tmpSettings.Contacts.filterUsingNote;
 
 	chbHistoryNoStoreToFile->Checked = tmpSettings.History.bNoStoreToFile;
-	chbHistoryUsePaiIfAvailable->Checked = tmpSettings.History.bUsePaiIfAvailable;
+	chbHistoryUsePaiForDisplayIfAvailable->Checked = tmpSettings.History.bUsePaiForDisplayIfAvailable;
+	chbHistoryUsePaiForDialIfAvailable->Checked = tmpSettings.History.bUsePaiForDialIfAvailable;
 
     edScriptOnMakeCallFile->Text = tmpSettings.Scripts.onMakeCall;
 	edScriptOnCallStateChangeFile->Text = tmpSettings.Scripts.onCallState;
@@ -631,7 +632,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Contacts.filterUsingNote = chbContactFilterUsingNote->Checked;
 
 	tmpSettings.History.bNoStoreToFile = chbHistoryNoStoreToFile->Checked;
-	tmpSettings.History.bUsePaiIfAvailable = chbHistoryUsePaiIfAvailable->Checked;
+	tmpSettings.History.bUsePaiForDisplayIfAvailable = chbHistoryUsePaiForDisplayIfAvailable->Checked;
+	tmpSettings.History.bUsePaiForDialIfAvailable = chbHistoryUsePaiForDialIfAvailable->Checked;
 
 	tmpSettings.Scripts.onMakeCall = edScriptOnMakeCallFile->Text;
 	tmpSettings.Scripts.onCallState = edScriptOnCallStateChangeFile->Text;

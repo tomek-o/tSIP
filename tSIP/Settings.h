@@ -224,7 +224,8 @@ public:
 	struct _History
 	{
 		bool bNoStoreToFile;
-		bool bUsePaiIfAvailable;
+		bool bUsePaiForDisplayIfAvailable;
+		bool bUsePaiForDialIfAvailable;
 	} History;
 	struct _Scripts
 	{
