@@ -174,6 +174,18 @@ History::Entry* TfrmHistory::getSelectedEntry(void)
 	return &filteredEntries[id].entry;
 }
 
+AnsiString TfrmHistory::getDefaultUri(const History::Entry* entry)
+{
+	assert(entry);
+	if (usePaiForDisplayIfAvailable && entry->paiUri != "")
+	{
+		return entry->paiUri;
+	}
+	else
+	{
+		return entry->uri;
+	}
+}
 
 void __fastcall TfrmHistory::lvHistoryDblClick(TObject *Sender)
 {
@@ -183,15 +195,7 @@ void __fastcall TfrmHistory::lvHistoryDblClick(TObject *Sender)
 		return;
 	}
 
-	AnsiString uri;
-	if (usePaiForDisplayIfAvailable && entry->paiUri != "")
-	{
-		uri = entry->paiUri;
-	}
-	else
-	{
-		uri = entry->uri;
-	}
+	AnsiString uri = getDefaultUri(entry);
 
 	callbackCall(uri.c_str());
 }
@@ -210,7 +214,7 @@ void __fastcall TfrmHistory::miCopyNumberClick(TObject *Sender)
 	{
 		return;
 	}
-	Clipboard()->AsText = entry->uri;
+	Clipboard()->AsText = getDefaultUri(entry);
 }
 //---------------------------------------------------------------------------
 
@@ -221,7 +225,7 @@ void __fastcall TfrmHistory::miAddEditPhonebookClick(TObject *Sender)
 	{
 		return;
 	}
-	callbackPhonebookEdit(entry->uri);
+	callbackPhonebookEdit(getDefaultUri(entry));
 }
 //---------------------------------------------------------------------------
 
@@ -232,7 +236,7 @@ void __fastcall TfrmHistory::miHttpQueryClick(TObject *Sender)
 	{
 		return;
 	}
-	callbackHttpQuery(entry->uri);
+	callbackHttpQuery(getDefaultUri(entry));
 }
 //---------------------------------------------------------------------------
 

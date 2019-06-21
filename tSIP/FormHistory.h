@@ -59,6 +59,7 @@ private:	// User declarations
 	bool usePaiForDisplayIfAvailable;
 	bool usePaiForDialIfAvailable;
 	History::Entry* getSelectedEntry(void);
+	AnsiString getDefaultUri(const History::Entry* entry);
 public:		// User declarations
 	__fastcall TfrmHistory(TComponent* Owner, History *history,
 		CallbackCall callbackCall,
