@@ -278,5 +278,92 @@ void TfrmHistory::UsePaiForDialIfAvailable(bool state)
 	usePaiForDialIfAvailable = state;
 }
 
+AnsiString TfrmHistory::GetHint(TListItem *item)
+{
+	if (item == NULL)
+	{
+		return "";
+	}
+	int id = item->Index;
+	const History::Entry &entry = filteredEntries[id].entry;
 
+	AnsiString hint;
 
+	hint.cat_sprintf("%02d.%02d  %02d:%02d:%02d     %s%s",
+		entry.timestamp.month, entry.timestamp.day,
+		entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec,
+		entry.incoming?"Incoming call":"Outgoing call",
+		entry.time==0?(entry.incoming?" (unanswered)":" (not completed)"):""
+		);
+	hint += "\n";
+
+	if (usePaiForDisplayIfAvailable)
+	{
+		AddPaiToHint(hint, entry);
+	}
+
+	if (entry.uri != entry.paiUri) {
+		AnsiString contactName = entry.contactName;
+		if (contactName == "")
+		{
+			contactName = entry.peerName;
+		}
+		if (contactName != "")
+		{
+			hint.cat_sprintf("\n%s   %s", contactName.c_str(), entry.uri.c_str());
+		}
+		else
+		{
+        	hint.cat_sprintf("\n%s", entry.uri.c_str());
+		}
+	}
+
+	if (usePaiForDisplayIfAvailable == false && entry.uri != entry.paiUri)
+	{
+		AddPaiToHint(hint, entry);
+	}
+
+	if (entry.time > 0)
+	{
+		hint.cat_sprintf("\nCall time: %d s", entry.time);
+	}
+
+	return hint;
+}
+
+void TfrmHistory::AddPaiToHint(AnsiString &hint, const History::Entry &entry)
+{
+	if (entry.paiUri != "")
+	{
+		AnsiString contactName = entry.paiContactName;
+		if (contactName == "")
+		{
+			contactName = entry.paiPeerName;
+		}
+		hint.cat_sprintf("\nPAI:   ");
+		if (contactName != "")
+		{
+			hint.cat_sprintf("%s   %s", contactName.c_str(), entry.paiUri.c_str());
+		}
+		else
+		{
+        	hint += entry.paiUri;
+		}
+	}
+}
+
+void __fastcall TfrmHistory::lvHistoryInfoTip(TObject *Sender, TListItem *Item,
+      AnsiString &InfoTip)
+{
+	if (Item == NULL)
+	{
+		return;
+	}
+	InfoTip = GetHint(Item);
+}
+//---------------------------------------------------------------------------
+
+void TfrmHistory::ShowHint(bool state)
+{
+	lvHistory->ShowHint = state;
+}

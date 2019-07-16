@@ -313,6 +313,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chbFrmMainShowWhenMakingCall;
 	TCheckBox *chbHistoryUsePaiForDisplayIfAvailable;
 	TCheckBox *chbHistoryUsePaiForDialIfAvailable;
+	TCheckBox *chbHistoryShowHint;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

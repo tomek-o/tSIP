@@ -125,6 +125,7 @@ Settings::Settings(void)
 	History.bNoStoreToFile = false;
 	History.bUsePaiForDisplayIfAvailable = true;
 	History.bUsePaiForDialIfAvailable = true;
+	History.bShowHint = true;
 
 	Scripts.timer = 1000;
 
@@ -694,6 +695,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		History.bNoStoreToFile = HistoryJson.get("NoStoreToFile", History.bNoStoreToFile).asBool();
 		History.bUsePaiForDisplayIfAvailable = HistoryJson.get("UsePaiForDisplayIfAvailable", History.bUsePaiForDisplayIfAvailable).asBool();
 		History.bUsePaiForDialIfAvailable = HistoryJson.get("UsePaiForDialIfAvailable", History.bUsePaiForDialIfAvailable).asBool();
+		History.bShowHint = HistoryJson.get("ShowHint", History.bShowHint).asBool();
 	}
 
 	{
@@ -850,6 +852,7 @@ int Settings::Write(AnsiString asFileName)
 	root["History"]["NoStoreToFile"] = History.bNoStoreToFile;
 	root["History"]["UsePaiForDisplayIfAvailable"] = History.bUsePaiForDisplayIfAvailable;
 	root["History"]["UsePaiForDialIfAvailable"] = History.bUsePaiForDialIfAvailable;
+	root["History"]["ShowHint"] = History.bShowHint;
 
 	{
 		Json::Value &jv = root["Scripts"];

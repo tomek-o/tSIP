@@ -226,6 +226,7 @@ public:
 		bool bNoStoreToFile;
 		bool bUsePaiForDisplayIfAvailable;
 		bool bUsePaiForDialIfAvailable;
+		bool bShowHint;
 	} History;
 	struct _Scripts
 	{

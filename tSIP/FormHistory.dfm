@@ -30,15 +30,20 @@ object frmHistory: TfrmHistory
         Caption = 'Name/number'
         Width = 132
       end>
+    HideSelection = False
     OwnerData = True
     ReadOnly = True
     RowSelect = True
+    ParentShowHint = False
     PopupMenu = popupHistory
+    ShowHint = True
     SmallImages = imgList
     TabOrder = 0
     ViewStyle = vsReport
     OnData = lvHistoryData
     OnDblClick = lvHistoryDblClick
+    OnInfoTip = lvHistoryInfoTip
+    ExplicitTop = -1
   end
   object pnlBottom: TPanel
     Left = 0

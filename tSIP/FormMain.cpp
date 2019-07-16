@@ -135,6 +135,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmHistory->Scale(appSettings.gui.scalingPct);
 	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
 	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
+	frmHistory->ShowHint(appSettings.History.bShowHint);
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
 
@@ -453,6 +454,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
 	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
 	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
+	frmHistory->ShowHint(appSettings.History.bShowHint);
 	UpdateDialpadBackgroundImage();
 	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);

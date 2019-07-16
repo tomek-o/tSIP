@@ -38,6 +38,8 @@ __published:	// IDE-managed Components
 	void __fastcall miAddEditPhonebookClick(TObject *Sender);
 	void __fastcall miHttpQueryClick(TObject *Sender);
 	void __fastcall edFilterKeyPress(TObject *Sender, char &Key);
+	void __fastcall lvHistoryInfoTip(TObject *Sender, TListItem *Item,
+          AnsiString &InfoTip);
 public:
 	typedef void (__closure *CallbackCall)(AnsiString uri);
 	typedef void (__closure *CallbackPhonebookEdit)(AnsiString uri);
@@ -60,6 +62,8 @@ private:	// User declarations
 	bool usePaiForDialIfAvailable;
 	History::Entry* getSelectedEntry(void);
 	AnsiString getDefaultUri(const History::Entry* entry);
+	AnsiString GetHint(TListItem *item);
+	void AddPaiToHint(AnsiString &hint, const History::Entry &entry);
 public:		// User declarations
 	__fastcall TfrmHistory(TComponent* Owner, History *history,
 		CallbackCall callbackCall,
@@ -78,6 +82,8 @@ public:		// User declarations
 	void UsePaiForDisplayIfAvailable(bool state);
 
 	void UsePaiForDialIfAvailable(bool state);
+
+	void ShowHint(bool state);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmHistory *frmHistory;

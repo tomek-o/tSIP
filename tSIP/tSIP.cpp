@@ -110,13 +110,14 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmPhones), &frmPhones);
 		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
 		Application->CreateForm(__classid(TfrmTroubleshooting), &frmTroubleshooting);
-
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
 		frmContactPopup->Width = appSettings.frmContactPopup.iWidth;
 		frmContactPopup->Height = appSettings.frmContactPopup.iHeight;
 
 		frmMain->tmrStartup->Enabled = true;	// delaying tmrStartup as it may use settings window if any account setting is hidden
+
+        Application->HintHidePause = 5000;
 
 		if (appSettings.frmMain.bStartMinimizedToTray == false)
 		{
