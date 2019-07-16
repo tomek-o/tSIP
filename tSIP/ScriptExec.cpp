@@ -170,6 +170,36 @@ int ScriptExec::QueueGetSize(const char* name)
 	return 0;
 }
 
+void ScriptExec::BreakAllScripts(void)
+{
+	std::map<lua_State*, ScriptExec*>::iterator it = contexts.begin();
+	while (it != contexts.end()) {
+		ScriptExec* se = it->second;
+		se->Break();
+		++it;
+	}
+}
+
+void ScriptExec::WaitWhileAnyRunning(unsigned int ms)
+{
+	const int sleepPerPoll = 10;
+	for (unsigned int i=0; i<ms/sleepPerPoll; i++) {
+		std::map<lua_State*, ScriptExec*>::iterator it = contexts.begin();
+		bool anyRunning = false;
+		while (it != contexts.end()) {
+			ScriptExec* se = it->second;
+			if (se->isRunning()) {
+				anyRunning = true;
+				break;
+			}
+			++it;
+		}
+		if (anyRunning == false) {
+			break;
+		}
+		Sleep(sleepPerPoll);
+	}
+}
 
 int ScriptExec::LuaPrint(lua_State *L)
 {

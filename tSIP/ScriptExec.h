@@ -230,7 +230,12 @@ public:
 		\return number of elements in queue; 0 if queue does not exist
 	*/
 	static int QueueGetSize(const char* name);
-
+	/** \brief Set break flag for all currently active scripts
+	*/
+	static void BreakAllScripts(void);
+	/** \brief Try to wait while any of the script is running
+	*/
+	static void WaitWhileAnyRunning(unsigned int ms);
 private:
 	enum ScriptSource srcType;
 	int srcId;

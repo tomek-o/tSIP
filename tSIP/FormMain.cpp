@@ -303,6 +303,8 @@ void TfrmMain::Finalize(void)
 
 	PhoneInterface::Close();
 
+	ScriptExec::BreakAllScripts();
+
 	// inverting trackbars
 	appSettings.uaConf.audioSoftVol.tx = trbarSoftvolMic->Max - trbarSoftvolMic->Position + trbarSoftvolMic->Min;
 	appSettings.uaConf.audioSoftVol.rx = trbarSoftvolSpeaker->Max - trbarSoftvolSpeaker->Position + trbarSoftvolSpeaker->Min;
@@ -341,6 +343,8 @@ void TfrmMain::Finalize(void)
 	}
 
 	// no need to write buttons configuration here
+
+	ScriptExec::WaitWhileAnyRunning(2000);
 }
 
 //---------------------------------------------------------------------------
@@ -2138,7 +2142,7 @@ void TfrmMain::PollScriptQueue(void)
 	AnsiString script = enqueuedScripts.front();
 	enqueuedScripts.pop_front();
 
-	/** \todo Globall break request */
+	/** \todo Global break request */
 	bool breakRequest = false;
 	bool handled = true;
 	RunScript(SCRIPT_SRC_PLUGIN_QUEUE, -1, script, breakRequest, handled);
