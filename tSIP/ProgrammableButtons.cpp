@@ -43,6 +43,12 @@ ProgrammableButtons::ProgrammableButtons(void)
 	cfg->caption = " Re-register";
 	cfg->noIcon = true;
 	cfg->type = Button::REREGISTER;
+
+	cfg = &btnConf[4];
+	cfg->captionLines = 2;
+	cfg->caption = "Right click";
+	cfg->caption2 = "to edit btn";
+	cfg->noIcon = true;
 	cfg->marginBottom = 200;
 }
 
