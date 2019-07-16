@@ -66,7 +66,7 @@ object frmContactEditor: TfrmContactEditor
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 3
+    TabOrder = 6
     object btnCancel: TButton
       Left = 330
       Top = 7
@@ -98,34 +98,34 @@ object frmContactEditor: TfrmContactEditor
     Top = 52
     Width = 177
     Height = 21
-    TabOrder = 1
+    TabOrder = 2
   end
   object memoNote: TRichEdit
     Left = 48
     Top = 125
     Width = 375
     Height = 158
-    TabOrder = 2
+    TabOrder = 5
   end
   object edNumber2: TEdit
     Left = 96
     Top = 75
     Width = 177
     Height = 21
-    TabOrder = 4
+    TabOrder = 3
   end
   object edNumber3: TEdit
     Left = 96
     Top = 98
     Width = 177
     Height = 21
-    TabOrder = 5
+    TabOrder = 4
   end
   object edCompany: TEdit
     Left = 96
     Top = 28
     Width = 177
     Height = 21
-    TabOrder = 6
+    TabOrder = 1
   end
 end
