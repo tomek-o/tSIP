@@ -56,8 +56,6 @@ Call recording:
 - buttons: Dialpad/Contacts/History and equivalent hotkey actions replacing existing tab row
 - combine regular number edit and transfer number edit into one 
 
-- show main window on outgoing call made using protocol handler / hotkey
-
 - settings: time for hotkey anti-repeat timer
 
 - prepare some extra icons for programmable keys
@@ -102,8 +100,6 @@ and whether it can be addressed?
 - "BLF" p2p: subscription server
 
 - Lua: receive DTMF from queue; IVR
-
-- Lua: text to speech during regular call
 
 button: mouse down event
 
@@ -187,8 +183,6 @@ font selection for console (ugly looking font under Wine)
 accessibility & GUI scaling: remember column width in call history, scale column width in phonebook
 
 update Lua to 5.3.x, remove CVS tags from Lua source
-
-update call history with PAI URI/name
 
 - wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
 (=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)

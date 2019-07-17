@@ -138,7 +138,7 @@
           <property category="win32.*.win32b.bcc32" name="option.H.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
           <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
-          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.He.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Hs.enabled" value="0"/>
@@ -415,7 +415,6 @@
         <FILE FILENAME="HotKeyConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="components\HotkeyCfgPanel\HotkeyCfgPanel.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="HotkeyCfgPanel" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="Action.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Action" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Action.h"/>
-        <FILE FILENAME="TimeCounter.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="Branding.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Branding" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Branding.h"/>
         <FILE FILENAME="resource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="resource.rc" CONTAINERID="RCCompiler" LOCALCOMMAND="" UNITNAME="resource.rc" FORMNAME="resource.res" DESIGNCLASS=""/>
@@ -445,8 +444,8 @@
           <VersionInfo Name="AutoIncBuild">False</VersionInfo>
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
-          <VersionInfo Name="Release">67</VersionInfo>
-          <VersionInfo Name="Build">4</VersionInfo>
+          <VersionInfo Name="Release">68</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -458,7 +457,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.67.4</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.68.0</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -504,10 +503,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

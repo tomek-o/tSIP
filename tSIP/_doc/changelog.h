@@ -691,5 +691,21 @@ Version 0.1.67
 	- FIXED: error handler possibly not being called for resampled aufile
 	- prevent divide by zero exception if switching to nullaudio before CONFIRMED state
 	- new plugin: Text-To-Speech input
+
+Version 0.1.68
+	- added options hiding sensitive account settings
+		- intended to increase security when using on shared PC
+		- selected settings are not visible in GUI and not stored in file
+	- double click on plugin list enables/disables selected plugin
+	- added math.random() to Lua call loop example
+	- added setting to not use "sip:" as direct IP call mark from command line
+	- added "Show main form when making call" option, intended to be used when making call with global shortcut, command line or protocol handler
+	- moved some code into common.lib project
+	- Troubleshooting function: added checks for no and too many codecs
+	- call history: added settings to prefer PAI information for display and for dialing
+	- scripting: break signal is sent to running scripts before exiting application
+	- fixed tab order in contact editor window
+	- added hint with additional info for call history entries
+	- default configuration / first run: added extra button with hint that buttons can be edited with right-click
 */
 
