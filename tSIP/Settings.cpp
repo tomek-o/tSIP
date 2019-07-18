@@ -126,6 +126,7 @@ Settings::Settings(void)
 	History.bUsePaiForDisplayIfAvailable = true;
 	History.bUsePaiForDialIfAvailable = true;
 	History.bShowHint = true;
+	History.bFormatCallDurationAsHourMinSec = true;
 
 	Scripts.timer = 1000;
 
@@ -696,6 +697,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		History.bUsePaiForDisplayIfAvailable = HistoryJson.get("UsePaiForDisplayIfAvailable", History.bUsePaiForDisplayIfAvailable).asBool();
 		History.bUsePaiForDialIfAvailable = HistoryJson.get("UsePaiForDialIfAvailable", History.bUsePaiForDialIfAvailable).asBool();
 		History.bShowHint = HistoryJson.get("ShowHint", History.bShowHint).asBool();
+		History.bFormatCallDurationAsHourMinSec = HistoryJson.get("FormatCallDurationAsHourMinSec", History.bFormatCallDurationAsHourMinSec).asBool();
 	}
 
 	{
@@ -849,10 +851,14 @@ int Settings::Write(AnsiString asFileName)
 
 	root["Contacts"]["FilterUsingNote"] = Contacts.filterUsingNote;
 
-	root["History"]["NoStoreToFile"] = History.bNoStoreToFile;
-	root["History"]["UsePaiForDisplayIfAvailable"] = History.bUsePaiForDisplayIfAvailable;
-	root["History"]["UsePaiForDialIfAvailable"] = History.bUsePaiForDialIfAvailable;
-	root["History"]["ShowHint"] = History.bShowHint;
+	{
+		Json::Value &jv = root["History"];
+		jv["NoStoreToFile"] = History.bNoStoreToFile;
+		jv["UsePaiForDisplayIfAvailable"] = History.bUsePaiForDisplayIfAvailable;
+		jv["UsePaiForDialIfAvailable"] = History.bUsePaiForDialIfAvailable;
+		jv["ShowHint"] = History.bShowHint;
+		jv["FormatCallDurationAsHourMinSec"] = History.bFormatCallDurationAsHourMinSec;
+	}
 
 	{
 		Json::Value &jv = root["Scripts"];

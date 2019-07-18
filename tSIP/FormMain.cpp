@@ -136,6 +136,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
 	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
 	frmHistory->ShowHint(appSettings.History.bShowHint);
+	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
 
@@ -455,6 +456,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
 	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
 	frmHistory->ShowHint(appSettings.History.bShowHint);
+	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
 	UpdateDialpadBackgroundImage();
 	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);

@@ -23,13 +23,15 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 	callbackHttpQuery(callbackHttpQuery),
 	updateNeeded(false), updating(false),
 	usePaiForDisplayIfAvailable(true),
-	usePaiForDialIfAvailable(true)
+	usePaiForDialIfAvailable(true),
+	formatCallDurationAsHourMinSec(true)
 {
 	assert(history);
 	assert(callbackCall);
 	assert(callbackPhonebookEdit);
 	assert(callbackHttpQuery);
 	history->addObserver(*this);
+	lvHistory->DoubleBuffered = true;
 }
 //---------------------------------------------------------------------------
 
@@ -325,7 +327,24 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 
 	if (entry.time > 0)
 	{
-		hint.cat_sprintf("\nCall time: %d s", entry.time);
+		if (formatCallDurationAsHourMinSec)
+		{
+			int hours = entry.time/3600;
+			int mins = (entry.time - (hours*3600))/60;
+			int seconds = entry.time % 60;
+			if (hours > 0)
+			{
+				hint.cat_sprintf("\nCall time: %d:%02d:%02d", hours, mins, seconds);
+			}
+			else
+			{
+				hint.cat_sprintf("\nCall time: %d:%02d", mins, seconds);
+			}
+		}
+		else
+		{
+			hint.cat_sprintf("\nCall time: %d s", entry.time);
+		}
 	}
 
 	return hint;
@@ -367,3 +386,9 @@ void TfrmHistory::ShowHint(bool state)
 {
 	lvHistory->ShowHint = state;
 }
+
+void TfrmHistory::FormatCallDurationAsHourMinSec(bool state)
+{
+	this->formatCallDurationAsHourMinSec = state;
+}
+

@@ -60,6 +60,7 @@ private:	// User declarations
 	bool updating;					///< view needs to be updated on data change (window is visible)
 	bool usePaiForDisplayIfAvailable;
 	bool usePaiForDialIfAvailable;
+	bool formatCallDurationAsHourMinSec;
 	History::Entry* getSelectedEntry(void);
 	AnsiString getDefaultUri(const History::Entry* entry);
 	AnsiString GetHint(TListItem *item);
@@ -82,6 +83,8 @@ public:		// User declarations
 	void UsePaiForDisplayIfAvailable(bool state);
 
 	void UsePaiForDialIfAvailable(bool state);
+
+	void FormatCallDurationAsHourMinSec(bool state);
 
 	void ShowHint(bool state);
 };

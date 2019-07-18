@@ -314,6 +314,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chbHistoryUsePaiForDisplayIfAvailable;
 	TCheckBox *chbHistoryUsePaiForDialIfAvailable;
 	TCheckBox *chbHistoryShowHint;
+	TCheckBox *chbHistoryFormatCallDurationAsHourMinSec;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
