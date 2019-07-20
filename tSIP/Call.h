@@ -29,6 +29,7 @@ struct Call
 	bool ringStarted;
 	AnsiString paiPeerUri;
 	AnsiString paiPeerName;
+	AnsiString codecName;
 	Call(void):
 		incoming(false),
 		progress(false),

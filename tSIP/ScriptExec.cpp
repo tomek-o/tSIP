@@ -519,6 +519,13 @@ int ScriptExec::l_GetCallInitialRxInvite(lua_State* L)
 	return 1;
 }
 
+int ScriptExec::l_GetCallCodecName(lua_State* L)
+{
+	std::string name = GetContext(L)->onGetCallCodecName();
+	lua_pushstring(L, name.c_str());
+	return 1;
+}
+
 int ScriptExec::l_GetContactName(lua_State* L)
 {
 	const char* number = lua_tostring( L, -1 );
@@ -993,6 +1000,7 @@ ScriptExec::ScriptExec(
 	CallbackIsCallIncoming onIsCallIncoming,
 	CallbackGetCallPeer onGetCallPeer,
 	CallbackGetCallInitialRxInvite onGetCallInitialRxInvite,
+	CallbackGetCallCodecName onGetCallCodecName,
 	CallbackGetContactName onGetContactName,
 	CallbackGetStreamingState onGetStreamingState,
 	CallbackGetInitialCallTarget onGetInitialCallTarget,
@@ -1031,6 +1039,7 @@ ScriptExec::ScriptExec(
 	onIsCallIncoming(onIsCallIncoming),
 	onGetCallPeer(onGetCallPeer),
 	onGetCallInitialRxInvite(onGetCallInitialRxInvite),
+	onGetCallCodecName(onGetCallCodecName),
 	onGetContactName(onGetContactName),
 	onGetStreamingState(onGetStreamingState),
 	onGetInitialCallTarget(onGetInitialCallTarget),
@@ -1056,7 +1065,7 @@ ScriptExec::ScriptExec(
 {
 	assert(onAddOutputText && onCall && onHangup && onAnswer && onGetDial && onSetDial &&
 		onSwitchAudioSource && onSendDtmf && onBlindTransfer && onGetCallState &&
-		onIsCallIncoming && onGetCallPeer && onGetCallInitialRxInvite &&
+		onIsCallIncoming && onGetCallPeer && onGetCallInitialRxInvite && onGetCallCodecName &&
 		onGetContactName &&
 		onGetStreamingState &&
 		onGetInitialCallTarget && onSetInitialCallTarget &&
@@ -1113,6 +1122,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "IsCallIncoming", l_IsCallIncoming);
 	lua_register(L, "GetCallPeer", l_GetCallPeer);
 	lua_register(L, "GetCallInitialRxInvite", l_GetCallInitialRxInvite);
+	lua_register(L, "GetCallCodecName", l_GetCallCodecName);
 	lua_register(L, "GetContactName", l_GetContactName);
 	lua_register(L, "GetStreamingState", l_GetStreamingState);
 

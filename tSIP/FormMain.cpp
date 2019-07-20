@@ -781,6 +781,11 @@ std::string TfrmMain::OnGetInitialCallTarget(void)
 	return call.initialTarget.c_str();
 }
 
+std::string TfrmMain::OnGetCallCodecName(void)
+{
+	return call.codecName.c_str();
+}
+
 void TfrmMain::OnSetTrayIcon(const char* file)
 {
 	if (file != NULL && file[0] != '\0')
@@ -1125,6 +1130,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				call.ringStarted = false;
 				call.paiPeerUri = cb.paiPeerUri;
 				call.paiPeerName = GetPeerName(cb.paiPeerName);
+                call.codecName = cb.codecName;
 
 				UpdateClip();
 
@@ -1214,6 +1220,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				call.recording = false;
 				call.uri = "";
 				call.last_scode = cb.scode;
+				call.codecName = "";
 				UpdateBtnState(Button::HOLD, false);
 				UpdateBtnState(Button::MUTE, false);
 				tmrAutoAnswer->Enabled = false;				
@@ -2101,7 +2108,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		static_cast<enum ScriptSource>(srcType), srcId, breakRequest, handled,
 		&OnAddOutputText, &OnCall2, &Hangup, &Answer, &OnGetDial, &OnSetDial,
 		&OnSwitchAudioSource, &DialString, &OnBlindTransfer, &OnGetCallState,
-		&OnIsCallIncoming, &OnGetCallPeer, &OnGetCallInitialRxInvite,
+		&OnIsCallIncoming, &OnGetCallPeer, &OnGetCallInitialRxInvite, &OnGetCallCodecName,
 		&OnGetContactName,
 		&OnGetStreamingState,
 		&OnGetInitialCallTarget, &OnSetInitialCallTarget,

@@ -1488,3 +1488,14 @@ int audio_set_player(struct audio *au, const char *mod, const char *device)
 
 	return 0;
 }
+
+const char* audio_get_rx_aucodec_name(const struct audio *a)
+{
+	if (a == NULL)
+		return "";
+	if (a->rx.ac == NULL)
+		return "";
+	if (a->rx.ac->name == NULL)
+		return "";
+	return a->rx.ac->name;
+}

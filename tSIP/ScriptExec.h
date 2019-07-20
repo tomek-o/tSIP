@@ -34,6 +34,7 @@ private:
 	typedef int (__closure *CallbackIsCallIncoming)(void);	///< check if call is incoming (check call direction)
 	typedef std::string (__closure *CallbackGetCallPeer)(void);	///< get either caller or called number
 	typedef std::string (__closure *CallbackGetCallInitialRxInvite)(void);
+	typedef std::string (__closure *CallbackGetCallCodecName)(void);
 	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString number);	///< get name for number/uri
 	typedef int (__closure *CallbackGetStreamingState)(void);	///< get current streaming (paging) state, values as in Callback::paging_tx_state_e
 	typedef std::string (__closure *CallbackGetInitialCallTarget)(void);
@@ -69,6 +70,7 @@ private:
 	CallbackIsCallIncoming onIsCallIncoming;
 	CallbackGetCallPeer onGetCallPeer;
 	CallbackGetCallInitialRxInvite onGetCallInitialRxInvite;
+	CallbackGetCallCodecName onGetCallCodecName;
 	CallbackGetContactName onGetContactName;
 	CallbackGetStreamingState onGetStreamingState;
 	CallbackGetInitialCallTarget onGetInitialCallTarget;
@@ -129,6 +131,7 @@ private:
 	static int l_ClearVariable(lua_State* L);
 	static int l_ClearAllVariables(lua_State* L);
 	static int l_GetInitialCallTarget(lua_State* L);
+	static int l_GetCallCodecName(lua_State* L);
 	static int l_SetInitialCallTarget(lua_State* L);
 	static int l_ShellExecute(lua_State* L);
 	static int l_SetTrayIcon(lua_State* L);
@@ -179,6 +182,7 @@ public:
 		CallbackIsCallIncoming onIsCallIncoming,
 		CallbackGetCallPeer onGetCallPeer,
 		CallbackGetCallInitialRxInvite onGetCallInitialRxInvite,
+		CallbackGetCallCodecName onGetCallCodecName,
 		CallbackGetContactName onGetContactName,
 		CallbackGetStreamingState onGetStreamingState,
 		CallbackGetInitialCallTarget onGetInitialCallTarget,

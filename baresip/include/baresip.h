@@ -835,6 +835,8 @@ int  audio_set_source(struct audio *au, const char *mod, const char *device);
 int  audio_set_player(struct audio *au, const char *mod, const char *device);
 void audio_encoder_cycle(struct audio *audio);
 int  audio_debug(struct re_printf *pf, const struct audio *a);
+/* Get name of the codec used in RX direction */
+const char* audio_get_rx_aucodec_name(const struct audio *a);
 
 
 /*

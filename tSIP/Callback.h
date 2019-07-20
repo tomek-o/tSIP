@@ -77,6 +77,7 @@ public:
 	AnsiString initialRxInvite;
 	AnsiString paiPeerUri;
 	AnsiString paiPeerName;
+	AnsiString codecName;
 
 	int dlgInfoState;
 	int dlgInfoDirection;

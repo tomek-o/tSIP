@@ -173,6 +173,7 @@ private:	// User declarations
 	int OnIsCallIncoming(void);
 	std::string OnGetCallPeer(void);
 	std::string OnGetCallInitialRxInvite(void);
+	std::string OnGetCallCodecName(void);
 	std::string OnGetRecordFile(void);
 	int OnGetBlfState(int contactId, std::string &number);
 	int OnGetStreamingState(void);

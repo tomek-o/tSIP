@@ -50,7 +50,7 @@ void CallbackQueue::SetCallData(AnsiString initialRxInvite)
 	fifo.push();
 }
 
-void CallbackQueue::ChangeCallState(Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name)
+void CallbackQueue::ChangeCallState(Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -67,6 +67,7 @@ void CallbackQueue::ChangeCallState(Callback::ua_state_e state, AnsiString calle
 	cb->accessUrlMode = access_url_mode;
 	cb->paiPeerUri = pai_peer_uri;
 	cb->paiPeerName = pai_peer_name;
+	cb->codecName = codec_name;
 	fifo.push();
 }
 
