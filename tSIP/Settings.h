@@ -228,6 +228,7 @@ public:
 		bool bUsePaiForDialIfAvailable;
 		bool bShowHint;
 		bool bFormatCallDurationAsHourMinSec;
+		bool bShowCodecNameInHint;
 	} History;
 	struct _Scripts
 	{

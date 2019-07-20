@@ -127,6 +127,7 @@ Settings::Settings(void)
 	History.bUsePaiForDialIfAvailable = true;
 	History.bShowHint = true;
 	History.bFormatCallDurationAsHourMinSec = true;
+	History.bShowCodecNameInHint = true;
 
 	Scripts.timer = 1000;
 
@@ -698,6 +699,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		History.bUsePaiForDialIfAvailable = HistoryJson.get("UsePaiForDialIfAvailable", History.bUsePaiForDialIfAvailable).asBool();
 		History.bShowHint = HistoryJson.get("ShowHint", History.bShowHint).asBool();
 		History.bFormatCallDurationAsHourMinSec = HistoryJson.get("FormatCallDurationAsHourMinSec", History.bFormatCallDurationAsHourMinSec).asBool();
+		History.bShowCodecNameInHint = HistoryJson.get("ShowCodecNameInHint", History.bShowCodecNameInHint).asBool();
 	}
 
 	{
@@ -858,6 +860,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["UsePaiForDialIfAvailable"] = History.bUsePaiForDialIfAvailable;
 		jv["ShowHint"] = History.bShowHint;
 		jv["FormatCallDurationAsHourMinSec"] = History.bFormatCallDurationAsHourMinSec;
+		jv["ShowCodecNameInHint"] = History.bShowCodecNameInHint;
 	}
 
 	{

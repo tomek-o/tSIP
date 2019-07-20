@@ -396,6 +396,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHistoryUsePaiForDialIfAvailable->Checked = tmpSettings.History.bUsePaiForDialIfAvailable;
 	chbHistoryShowHint->Checked = tmpSettings.History.bShowHint;
 	chbHistoryFormatCallDurationAsHourMinSec->Checked = tmpSettings.History.bFormatCallDurationAsHourMinSec;
+	chbHistoryShowCodecNameInHint->Checked = tmpSettings.History.bShowCodecNameInHint;
 
     edScriptOnMakeCallFile->Text = tmpSettings.Scripts.onMakeCall;
 	edScriptOnCallStateChangeFile->Text = tmpSettings.Scripts.onCallState;
@@ -638,6 +639,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.History.bUsePaiForDialIfAvailable = chbHistoryUsePaiForDialIfAvailable->Checked;
 	tmpSettings.History.bShowHint = chbHistoryShowHint->Checked;
 	tmpSettings.History.bFormatCallDurationAsHourMinSec = chbHistoryFormatCallDurationAsHourMinSec->Checked;
+	tmpSettings.History.bShowCodecNameInHint = chbHistoryShowCodecNameInHint->Checked;
 
 	tmpSettings.Scripts.onMakeCall = edScriptOnMakeCallFile->Text;
 	tmpSettings.Scripts.onCallState = edScriptOnCallStateChangeFile->Text;

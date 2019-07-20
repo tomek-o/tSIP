@@ -1754,6 +1754,8 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -1791,12 +1793,20 @@ object frmSettings: TfrmSettings
         TabOrder = 3
       end
       object chbHistoryFormatCallDurationAsHourMinSec: TCheckBox
-        Left = 3
-        Top = 95
+        Left = 2
+        Top = 118
         Width = 446
         Height = 17
         Caption = 'Format call duration time as hours:minutes:seconds'
         TabOrder = 4
+      end
+      object chbHistoryShowCodecNameInHint: TCheckBox
+        Left = 21
+        Top = 95
+        Width = 446
+        Height = 17
+        Caption = 'Show codec name in hint'
+        TabOrder = 5
       end
     end
     object tsPhones: TTabSheet

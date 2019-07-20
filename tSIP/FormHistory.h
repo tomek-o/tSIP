@@ -61,6 +61,7 @@ private:	// User declarations
 	bool usePaiForDisplayIfAvailable;
 	bool usePaiForDialIfAvailable;
 	bool formatCallDurationAsHourMinSec;
+	bool showCodecNameInHint;
 	History::Entry* getSelectedEntry(void);
 	AnsiString getDefaultUri(const History::Entry* entry);
 	AnsiString GetHint(TListItem *item);
@@ -87,6 +88,10 @@ public:		// User declarations
 	void FormatCallDurationAsHourMinSec(bool state);
 
 	void ShowHint(bool state);
+
+	void ShowCodecNameInHint(bool state) {
+    	showCodecNameInHint = state;
+	}
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmHistory *frmHistory;

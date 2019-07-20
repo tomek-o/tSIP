@@ -137,6 +137,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
 	frmHistory->ShowHint(appSettings.History.bShowHint);
 	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
+	frmHistory->ShowCodecNameInHint(appSettings.History.bShowCodecNameInHint);
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
 
@@ -457,6 +458,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
 	frmHistory->ShowHint(appSettings.History.bShowHint);
 	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
+	frmHistory->ShowCodecNameInHint(appSettings.History.bShowCodecNameInHint);
 	UpdateDialpadBackgroundImage();
 	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
@@ -1194,6 +1196,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				entry.paiUri = call.paiPeerUri.c_str();
 				entry.paiPeerName = call.paiPeerName.c_str();
 				entry.incoming = call.incoming;
+				entry.codecName = call.codecName;
 				if (call.connected)
 				{
 					entry.time = SecondsBetween(Now(), call.timeTalkStart) + 1;
@@ -1211,6 +1214,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 					entry.uri = ExtractNumberFromUri(entry.uri.c_str()).c_str();
 					entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
 				}
+				
 				history.AddEntry(entry);
 				UpdateCallHistory();
 				call.incoming = false;

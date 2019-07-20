@@ -45,6 +45,8 @@ public:
 		bool incoming;
 		int time;	///< call time in seconds (starting from CONFIRMED state)
 
+		AnsiString codecName;
+
 		bool operator==(const Entry& right) const {
 			return (
 				uri == right.uri &&

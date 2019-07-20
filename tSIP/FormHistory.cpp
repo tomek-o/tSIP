@@ -24,7 +24,8 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 	updateNeeded(false), updating(false),
 	usePaiForDisplayIfAvailable(true),
 	usePaiForDialIfAvailable(true),
-	formatCallDurationAsHourMinSec(true)
+	formatCallDurationAsHourMinSec(true),
+	showCodecNameInHint(true)
 {
 	assert(history);
 	assert(callbackCall);
@@ -345,6 +346,12 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 		{
 			hint.cat_sprintf("\nCall time: %d s", entry.time);
 		}
+
+	}
+
+	if (showCodecNameInHint && entry.codecName != "")
+	{
+		hint.cat_sprintf("\nCodec: %s", entry.codecName.c_str());
 	}
 
 	return hint;

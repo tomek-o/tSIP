@@ -85,6 +85,8 @@ int History::Read(CallbackGetContactName callbackGetContactName)
 		entry.incoming = call.get("incoming", "").asBool();
 		entry.time = call.get("time", 0).asInt();
 
+        entry.codecName = call.get("codecName", "").asString().c_str();
+
 		const Json::Value &ts = call["timestamp"];
 		entry.timestamp.year = ts.get("year", 0).asInt();
 		entry.timestamp.month = ts.get("month", 0).asInt();
@@ -119,6 +121,8 @@ int History::Write(void)
 
 		jEntry["paiUri"] = entry.paiUri.c_str();
 		jEntry["paiPeerName"] = entry.paiPeerName.c_str();
+
+        jEntry["codecName"] = entry.codecName.c_str();
 
 		jEntry["incoming"] = entry.incoming;
 		jEntry["time"] = entry.time;
