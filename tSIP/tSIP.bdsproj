@@ -142,27 +142,28 @@
           <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.He.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Hs.enabled" value="0"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="contacts"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\baresip\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\re\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\rem\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="$(BDS)\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="$(BDS)\include\dinkumware"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="$(BDS)\include\vcl"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="..\portaudio\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\speex\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\gsm\inc"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value="..\lua\src"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="scripting"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.20" value="..\scintilla\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.21" value=".."/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="phone"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="resources"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="..\jsoncpp\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="buttons"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\jsoncpp\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\baresip\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\re\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="..\rem\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\portaudio\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\speex\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value="..\gsm\inc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="contacts"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.20" value="..\lua\src"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.21" value="..\scintilla\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.22" value=".."/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="scripting"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="phone"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="resources"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="components\SpeedDialPanel"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Jgi.enabled" value="0"/>
@@ -221,113 +222,118 @@
           <property category="win32.*.win32b.bcc32" name="option.wuse.enabled" value="1"/>
           <property category="win32.*.win32b.brcc32" name="option.16.enabled" value="0"/>
           <property category="win32.*.win32b.brcc32" name="option.31.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="contacts"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="modules\gsm"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.11" value="modules\speex"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.12" value="modules\stun"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.13" value="modules\speex_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.14" value="modules\portaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.15" value="jsoncpp\src\lib_json"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.16" value="modules\winwave"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.17" value="modules\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.18" value="ua\"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.19" value="..\_PROJEKTY\turbocpp_template"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="scripting"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="phone"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="resources"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="buttons"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.11" value="modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.12" value="modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.13" value="modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.14" value="modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.15" value="modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.16" value="jsoncpp\src\lib_json"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.17" value="modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.18" value="modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.19" value="ua\"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="contacts"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.20" value="..\_PROJEKTY\turbocpp_template"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="scripting"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="phone"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="resources"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="components\SpeedDialPanel"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="contacts"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="modules\gsm"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.11" value="modules\speex"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.12" value="modules\stun"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.13" value="modules\speex_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.14" value="modules\portaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.15" value="jsoncpp\src\lib_json"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.16" value="modules\winwave"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.17" value="modules\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.18" value="ua\"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.19" value="..\_PROJEKTY\turbocpp_template"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="scripting"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="phone"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="resources"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="buttons"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.11" value="modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.12" value="modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.13" value="modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.14" value="modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.15" value="modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.16" value="jsoncpp\src\lib_json"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.17" value="modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.18" value="modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.19" value="ua\"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="contacts"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.20" value="..\_PROJEKTY\turbocpp_template"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="scripting"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="phone"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="resources"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="components\SpeedDialPanel"/>
           <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="contacts"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="modules\gsm"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.11" value="modules\speex"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.12" value="modules\stun"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.13" value="modules\speex_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.14" value="modules\portaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.15" value="jsoncpp\src\lib_json"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.16" value="modules\winwave"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.17" value="modules\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.18" value="ua\"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.19" value="..\_PROJEKTY\turbocpp_template"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="scripting"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="phone"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="resources"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="buttons"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.11" value="modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.12" value="modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.13" value="modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.14" value="modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.15" value="modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.16" value="jsoncpp\src\lib_json"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.17" value="modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.18" value="modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.19" value="ua\"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="contacts"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.20" value="..\_PROJEKTY\turbocpp_template"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="scripting"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="phone"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="resources"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="components\SpeedDialPanel"/>
           <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="contacts"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="modules\gsm"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="modules\speex"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="modules\stun"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="modules\speex_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.14" value="modules\portaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.15" value="jsoncpp\src\lib_json"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.16" value="modules\winwave"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.17" value="modules\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.18" value="ua\"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.19" value="..\_PROJEKTY\turbocpp_template"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="scripting"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.20" value="..\..\Borland Studio Projects"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.21" value="$(BDS)\lib"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.22" value="$(BDS)\lib\obj"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="phone"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="resources"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="buttons"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.14" value="modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.15" value="modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.16" value="jsoncpp\src\lib_json"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.17" value="modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.18" value="modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.19" value="ua\"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="contacts"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.20" value="..\_PROJEKTY\turbocpp_template"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.21" value="..\..\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.22" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.23" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="scripting"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="phone"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="resources"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="components\SpeedDialPanel"/>
           <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
           <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="contacts"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="modules\gsm"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="modules\speex"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.12" value="modules\stun"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.13" value="modules\speex_aec"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.14" value="modules\portaudio"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.15" value="jsoncpp\src\lib_json"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.16" value="modules\winwave"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.17" value="modules\g711"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.18" value="ua\"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.19" value="..\_PROJEKTY\turbocpp_template"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="scripting"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="phone"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="resources"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="modules\g726_32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="buttons"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="modules\g726_32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="modules\gsm"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.12" value="modules\speex"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.13" value="modules\stun"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.14" value="modules\speex_aec"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.15" value="modules\portaudio"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.16" value="jsoncpp\src\lib_json"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.17" value="modules\winwave"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.18" value="modules\g711"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.19" value="ua\"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="contacts"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.20" value="..\_PROJEKTY\turbocpp_template"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="scripting"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="phone"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="resources"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="components\SpeedDialPanel"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
           <property category="win32.*.win32b.ilink32" name="container.SelectedWarnings.containerenabled" value="1"/>
@@ -335,18 +341,19 @@
           <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.Gpd.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.Gpr.enabled" value="0"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="contacts"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.10" value="$(BDS)\lib"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.11" value="$(BDS)\lib\obj"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.12" value="$(BDS)\lib\psdk"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="scripting"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="phone"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.4" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.5" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.6" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.7" value="resources"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.8" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.9" value="jsoncpp\src\lib_json"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="buttons"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.10" value="jsoncpp\src\lib_json"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.11" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.12" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.13" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="contacts"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="scripting"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.4" value="phone"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.5" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.6" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.7" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.8" value="resources"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.9" value="components\SpeedDialPanel"/>
           <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
           <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
           <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
@@ -355,25 +362,26 @@
           <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="1"/>
           <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.1" value="contacts"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.10" value="modules\gsm"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.11" value="modules\speex"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.12" value="modules\stun"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.13" value="modules\speex_aec"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.14" value="modules\portaudio"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.15" value="jsoncpp\src\lib_json"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.16" value="modules\winwave"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.17" value="modules\g711"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.18" value="ua\"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.19" value="..\_PROJEKTY\turbocpp_template"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.2" value="scripting"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.3" value="phone"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.4" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.5" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.6" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.7" value="resources"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.8" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.ilink32" name="option.j.arg.9" value="modules\g726_32"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.1" value="buttons"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.10" value="modules\g726_32"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.11" value="modules\gsm"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.12" value="modules\speex"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.13" value="modules\stun"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.14" value="modules\speex_aec"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.15" value="modules\portaudio"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.16" value="jsoncpp\src\lib_json"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.17" value="modules\winwave"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.18" value="modules\g711"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.19" value="ua\"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.2" value="contacts"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.20" value="..\_PROJEKTY\turbocpp_template"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.3" value="scripting"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.4" value="phone"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.5" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.6" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.7" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.8" value="resources"/>
+          <property category="win32.*.win32b.ilink32" name="option.j.arg.9" value="components\SpeedDialPanel"/>
           <property category="win32.*.win32b.ilink32" name="option.j.arg.merge" value="1"/>
           <property category="win32.*.win32b.ilink32" name="option.j.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.m.enabled" value="0"/>
@@ -403,6 +411,11 @@
         <FILE FILENAME="contacts\FormContactEditor.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactEditor" FORMNAME="frmContactEditor" DESIGNCLASS="" ADDITIONAL="contacts\FormContactEditor.h"/>
         <FILE FILENAME="contacts\FormContactCsvImport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactCsvImport" FORMNAME="frmContactCsvImport" DESIGNCLASS="" ADDITIONAL="contacts\FormContactCsvImport.h"/>
         <FILE FILENAME="contacts\Contacts.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Contacts" FORMNAME="" DESIGNCLASS="" ADDITIONAL="contacts\Contacts.h"/>
+        <FILE FILENAME="buttons\ProgrammableButtons.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ProgrammableButtons" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ProgrammableButtons.h"/>
+        <FILE FILENAME="buttons\FormButtonEdit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonEdit" FORMNAME="frmButtonEdit" DESIGNCLASS="" ADDITIONAL="buttons\FormButtonEdit.h"/>
+        <FILE FILENAME="buttons\FormButtonContainer.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonContainer" FORMNAME="frmButtonContainer" DESIGNCLASS="" ADDITIONAL="buttons\FormButtonContainer.h"/>
+        <FILE FILENAME="buttons\ButtonType.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonType" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ButtonType.h"/>
+        <FILE FILENAME="buttons\ButtonConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ButtonConf.h"/>
         <FILE FILENAME="tSIP.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tSIP" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="tSIP.res" CONTAINERID="ResTool" LOCALCOMMAND="" UNITNAME="tSIP.res" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="FormMain.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormMain" FORMNAME="frmMain" DESIGNCLASS="" ADDITIONAL="FormMain.h"/>
@@ -421,13 +434,8 @@
         <FILE FILENAME="tSIP.todo" CONTAINERID="ToDo" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="FormHistory.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormHistory" FORMNAME="frmHistory" DESIGNCLASS="" ADDITIONAL="FormHistory.h"/>
         <FILE FILENAME="History.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="History" FORMNAME="" DESIGNCLASS="" ADDITIONAL="History.h"/>
-        <FILE FILENAME="FormButtonContainer.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonContainer" FORMNAME="frmButtonContainer" DESIGNCLASS="" ADDITIONAL="FormButtonContainer.h"/>
-        <FILE FILENAME="ProgrammableButtons.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ProgrammableButtons" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ProgrammableButtons.h"/>
-        <FILE FILENAME="FormButtonEdit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonEdit" FORMNAME="frmButtonEdit" DESIGNCLASS="" ADDITIONAL="FormButtonEdit.h"/>
         <FILE FILENAME="TrayIcon.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="TrayIcon" FORMNAME="" DESIGNCLASS="" ADDITIONAL="TrayIcon.h"/>
         <FILE FILENAME="FormTrayNotifier.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTrayNotifier" FORMNAME="frmTrayNotifier" DESIGNCLASS="" ADDITIONAL="FormTrayNotifier.h"/>
-        <FILE FILENAME="ButtonType.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonType" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ButtonType.h"/>
-        <FILE FILENAME="ButtonConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ButtonConf.h"/>
         <FILE FILENAME="CommandLine.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CommandLine" FORMNAME="" DESIGNCLASS="" ADDITIONAL="CommandLine.h"/>
         <FILE FILENAME="Hotkeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Hotkeys" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Hotkeys.h"/>
         <FILE FILENAME="FormHotkeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormHotkeys" FORMNAME="frmHotkeys" DESIGNCLASS="" ADDITIONAL="FormHotkeys.h"/>
