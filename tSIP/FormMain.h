@@ -169,17 +169,10 @@ private:	// User declarations
 	void OnSetDial(std::string number);
 	void OnSwitchAudioSource(std::string mod, std::string dev);
 	void OnBlindTransfer(const std::string& target);
-	int OnGetCallState(void);
-	int OnIsCallIncoming(void);
-	std::string OnGetCallPeer(void);
-	std::string OnGetCallInitialRxInvite(void);
-	std::string OnGetCallCodecName(void);
-	std::string OnGetRecordFile(void);
+	Call* OnGetCall(void);
 	int OnGetBlfState(int contactId, std::string &number);
 	int OnGetStreamingState(void);
 	int OnGetRegistrationState(void);
-	std::string OnGetInitialCallTarget(void);
-	void OnSetInitialCallTarget(std::string number);
 	void OnSetTrayIcon(const char* file);
 	void OnSetButtonCaption(int id, std::string text);
 	void OnSetButtonDown(int id, bool state);	

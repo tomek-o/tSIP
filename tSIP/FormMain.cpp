@@ -721,39 +721,9 @@ void TfrmMain::OnBlindTransfer(const std::string& target)
 	UA->Transfer(0, target.c_str());
 }
 
-int TfrmMain::OnGetCallState(void)
+Call* TfrmMain::OnGetCall(void)
 {
-	//STATIC_CHECK(Callback::CALL_STATE_CLOSED == 0, UpdateCallStateInitializer);
-	return call.state;
-}
-
-int TfrmMain::OnIsCallIncoming(void)
-{
-    return call.incoming;
-}
-
-std::string TfrmMain::OnGetCallPeer(void)
-{
-	AnsiString uri;
-	if (call.incoming)
-	{
-		uri = ExtractNumberFromUri(call.uri.c_str()).c_str();
-	}
-	else
-	{
-		uri = call.uri;
-	}
-	return uri.c_str();
-}
-
-std::string TfrmMain::OnGetCallInitialRxInvite(void)
-{
-	return call.initialRxInvite.c_str();
-}
-
-std::string TfrmMain::OnGetRecordFile(void)
-{
-	return call.recordFile.c_str();
+	return &call;
 }
 
 int TfrmMain::OnGetBlfState(int contactId, std::string &number)
@@ -778,16 +748,6 @@ int TfrmMain::OnGetRegistrationState(void)
 	return registration.state;
 }
 
-std::string TfrmMain::OnGetInitialCallTarget(void)
-{
-	return call.initialTarget.c_str();
-}
-
-std::string TfrmMain::OnGetCallCodecName(void)
-{
-	return call.codecName.c_str();
-}
-
 void TfrmMain::OnSetTrayIcon(const char* file)
 {
 	if (file != NULL && file[0] != '\0')
@@ -809,11 +769,6 @@ void TfrmMain::OnSetTrayIcon(const char* file)
 		}
 		delete bmp;
 	}
-}
-
-void TfrmMain::OnSetInitialCallTarget(std::string number)
-{
-    call.initialTarget = number.c_str();
 }
 
 void TfrmMain::OnSetButtonCaption(int id, std::string text)
@@ -2111,16 +2066,14 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 	ScriptExec scriptExec(
 		static_cast<enum ScriptSource>(srcType), srcId, breakRequest, handled,
 		&OnAddOutputText, &OnCall2, &Hangup, &Answer, &OnGetDial, &OnSetDial,
-		&OnSwitchAudioSource, &DialString, &OnBlindTransfer, &OnGetCallState,
-		&OnIsCallIncoming, &OnGetCallPeer, &OnGetCallInitialRxInvite, &OnGetCallCodecName,
+		&OnSwitchAudioSource, &DialString, &OnBlindTransfer,
+		&OnGetCall,
 		&OnGetContactName,
 		&OnGetStreamingState,
-		&OnGetInitialCallTarget, &OnSetInitialCallTarget,
 		&OnSetTrayIcon,
 		&OnGetRegistrationState,
 		&OnSetButtonCaption, &OnSetButtonDown, &OnSetButtonImage,
 		&OnPluginSendMessageText,
-		&OnGetRecordFile,
 		&OnGetBlfState,
 		&OnRecordStart,
 		&OnGetRecordingState,

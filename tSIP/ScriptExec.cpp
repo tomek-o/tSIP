@@ -9,7 +9,9 @@
 #include "lua.hpp"
 #include "AudioDevicesList.h"
 #include "Paths.h"
+#include "common/Utils.h"
 #include "ButtonConf.h"
+#include "Call.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -437,15 +439,28 @@ int ScriptExec::l_SetInitialCallTarget(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	GetContext(L)->onSetInitialCallTarget(str);
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		call->initialTarget = str;
+	}
+	else
+	{
+		LOG("Lua error: no call for SetInitialCallTarget\n");
+	}
 	return 0;
 }
 
 int ScriptExec::l_GetInitialCallTarget(lua_State* L)
 {
-	std::string num = GetContext(L)->onGetInitialCallTarget();
-	lua_pushstring( L, num.c_str() );
-	return 1;
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		std::string num = call->initialTarget.c_str();
+		lua_pushstring( L, num.c_str() );
+		return 1;
+	}
+	return 0;
 }
 
 int ScriptExec::l_SwitchAudioSource(lua_State* L)
@@ -493,37 +508,65 @@ int ScriptExec::l_BlindTransfer(lua_State* L)
 
 int ScriptExec::l_GetCallState(lua_State* L)
 {
-	int state = GetContext(L)->onGetCallState();
-	lua_pushinteger( L, state );
-	return 1;
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		lua_pushinteger( L, call->state );
+		return 1;
+	}
+	return 0;
 }
 
 int ScriptExec::l_IsCallIncoming(lua_State* L)
 {
-	int incoming = GetContext(L)->onIsCallIncoming();
-	lua_pushinteger( L, incoming );
-	return 1;
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		lua_pushinteger( L, call->incoming );
+		return 1;
+	}
+	return 0;
 }
 
 int ScriptExec::l_GetCallPeer(lua_State* L)
 {
-	std::string num = GetContext(L)->onGetCallPeer();
-	lua_pushstring( L, num.c_str() );
+	Call *call = GetContext(L)->onGetCall();
+	if (call == NULL)
+		return 0;
+
+	AnsiString uri;
+	if (call->incoming)
+	{
+		uri = ExtractNumberFromUri(call->uri.c_str());
+	}
+	else
+	{
+		uri = call->uri;
+	}
+	lua_pushstring( L, uri.c_str() );
 	return 1;
 }
 
 int ScriptExec::l_GetCallInitialRxInvite(lua_State* L)
 {
-	std::string num = GetContext(L)->onGetCallInitialRxInvite();
-	lua_pushstring( L, num.c_str() );
-	return 1;
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		lua_pushstring( L, call->initialRxInvite.c_str() );
+		return 1;
+	}
+	return 0;
 }
 
 int ScriptExec::l_GetCallCodecName(lua_State* L)
 {
-	std::string name = GetContext(L)->onGetCallCodecName();
-	lua_pushstring(L, name.c_str());
-	return 1;
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		lua_pushstring( L, call->codecName.c_str() );
+		return 1;
+	}
+	return 0;
 }
 
 int ScriptExec::l_GetContactName(lua_State* L)
@@ -775,9 +818,13 @@ int ScriptExec::l_GetExecSourceId(lua_State* L)
 
 int ScriptExec::l_GetRecordFile(lua_State* L)
 {
-	std::string file = GetContext(L)->onGetRecordFile();
-	lua_pushstring( L, file.c_str() );
-	return 1;
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		lua_pushstring( L, call->recordFile.c_str() );
+		return 1;
+	}
+	return 0;
 }
 
 int ScriptExec::l_GetBlfState(lua_State* L)
@@ -996,22 +1043,15 @@ ScriptExec::ScriptExec(
 	CallbackSwitchAudioSource onSwitchAudioSource,
 	CallbackSendDtmf onSendDtmf,
 	CallbackBlindTransfer onBlindTransfer,
-	CallbackGetCallState onGetCallState,
-	CallbackIsCallIncoming onIsCallIncoming,
-	CallbackGetCallPeer onGetCallPeer,
-	CallbackGetCallInitialRxInvite onGetCallInitialRxInvite,
-	CallbackGetCallCodecName onGetCallCodecName,
+	CallbackGetCall onGetCall,
 	CallbackGetContactName onGetContactName,
 	CallbackGetStreamingState onGetStreamingState,
-	CallbackGetInitialCallTarget onGetInitialCallTarget,
-	CallbackSetInitialCallTarget onSetInitialCallTarget,
 	CallbackSetTrayIcon onSetTrayIcon,
 	CallbackGetRegistrationState onGetRegistrationState,
 	CallbackSetButtonCaption onSetButtonCaption,
 	CallbackSetButtonDown onSetButtonDown,
 	CallbackSetButtonImage onSetButtonImage,
 	CallbackPluginSendMessageText onPluginSendMessageText,
-	CallbackGetRecordFile onGetRecordFile,
 	CallbackGetBlfState onGetBlfState,
 	CallbackRecordStart onRecordStart,
 	CallbackGetRecordingState onGetRecordingState,
@@ -1035,22 +1075,15 @@ ScriptExec::ScriptExec(
 	onSwitchAudioSource(onSwitchAudioSource),
 	onSendDtmf(onSendDtmf),
 	onBlindTransfer(onBlindTransfer),
-	onGetCallState(onGetCallState),
-	onIsCallIncoming(onIsCallIncoming),
-	onGetCallPeer(onGetCallPeer),
-	onGetCallInitialRxInvite(onGetCallInitialRxInvite),
-	onGetCallCodecName(onGetCallCodecName),
+	onGetCall(onGetCall),
 	onGetContactName(onGetContactName),
 	onGetStreamingState(onGetStreamingState),
-	onGetInitialCallTarget(onGetInitialCallTarget),
-	onSetInitialCallTarget(onSetInitialCallTarget),
 	onSetTrayIcon(onSetTrayIcon),
 	onGetRegistrationState(onGetRegistrationState),
 	onSetButtonCaption(onSetButtonCaption),
 	onSetButtonDown(onSetButtonDown),
 	onSetButtonImage(onSetButtonImage),
 	onPluginSendMessageText(onPluginSendMessageText),
-	onGetRecordFile(onGetRecordFile),
 	onGetBlfState(onGetBlfState),
 	onRecordStart(onRecordStart),
 	onGetRecordingState(onGetRecordingState),
@@ -1064,16 +1097,14 @@ ScriptExec::ScriptExec(
 	running(false)
 {
 	assert(onAddOutputText && onCall && onHangup && onAnswer && onGetDial && onSetDial &&
-		onSwitchAudioSource && onSendDtmf && onBlindTransfer && onGetCallState &&
-		onIsCallIncoming && onGetCallPeer && onGetCallInitialRxInvite && onGetCallCodecName &&
+		onSwitchAudioSource && onSendDtmf && onBlindTransfer &&
+		onGetCall &&
 		onGetContactName &&
 		onGetStreamingState &&
-		onGetInitialCallTarget && onSetInitialCallTarget &&
 		onSetTrayIcon &&
 		onGetRegistrationState &&
 		onSetButtonCaption && onSetButtonDown && onSetButtonImage &&
 		onPluginSendMessageText &&
-		onGetRecordFile &&
 		onGetBlfState &&
 		onRecordStart &&
 		onGetRecordingState &&

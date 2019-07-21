@@ -16,6 +16,8 @@ struct luaL_reg;
 
 class ButtonConf;
 
+struct Call;
+
 class ScriptExec
 {
 private:
@@ -30,22 +32,15 @@ private:
 	typedef void (__closure *CallbackSwitchAudioSource)(std::string mod, std::string dev);	
 	typedef void (__closure *CallbackSendDtmf)(const std::string& digits);
 	typedef void (__closure *CallbackBlindTransfer)(const std::string& target);
-	typedef int (__closure *CallbackGetCallState)(void);	///< get current call state, values as in Callback::ua_state_e
-	typedef int (__closure *CallbackIsCallIncoming)(void);	///< check if call is incoming (check call direction)
-	typedef std::string (__closure *CallbackGetCallPeer)(void);	///< get either caller or called number
-	typedef std::string (__closure *CallbackGetCallInitialRxInvite)(void);
-	typedef std::string (__closure *CallbackGetCallCodecName)(void);
+	typedef Call* (__closure *CallbackGetCall)(void);
 	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString number);	///< get name for number/uri
 	typedef int (__closure *CallbackGetStreamingState)(void);	///< get current streaming (paging) state, values as in Callback::paging_tx_state_e
-	typedef std::string (__closure *CallbackGetInitialCallTarget)(void);
-	typedef void (__closure *CallbackSetInitialCallTarget)(std::string number);
 	typedef void (__closure *CallbackSetTrayIcon)(const char* file);
 	typedef int (__closure *CallbackGetRegistrationState)(void);///< as in Callback::reg_state_e
 	typedef void (__closure *CallbackSetButtonCaption)(int id, std::string text);
 	typedef void (__closure *CallbackSetButtonDown)(int id, bool state);
 	typedef void (__closure *CallbackSetButtonImage)(int id, const char* file);
 	typedef int (__closure *CallbackPluginSendMessageText)(const char* dllName, const char* text);
-	typedef std::string (__closure *CallbackGetRecordFile)(void);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number);
 	typedef int (__closure *CallbackRecordStart)(const char* file, int channels, int side);
 	typedef int (__closure *CallbackGetRecordingState)(void);
@@ -66,22 +61,15 @@ private:
 	CallbackSwitchAudioSource onSwitchAudioSource;
 	CallbackSendDtmf onSendDtmf;
 	CallbackBlindTransfer onBlindTransfer;
-	CallbackGetCallState onGetCallState;
-	CallbackIsCallIncoming onIsCallIncoming;
-	CallbackGetCallPeer onGetCallPeer;
-	CallbackGetCallInitialRxInvite onGetCallInitialRxInvite;
-	CallbackGetCallCodecName onGetCallCodecName;
+	CallbackGetCall onGetCall;
 	CallbackGetContactName onGetContactName;
 	CallbackGetStreamingState onGetStreamingState;
-	CallbackGetInitialCallTarget onGetInitialCallTarget;
-	CallbackSetInitialCallTarget onSetInitialCallTarget;
 	CallbackSetTrayIcon onSetTrayIcon;
 	CallbackGetRegistrationState onGetRegistrationState;
 	CallbackSetButtonCaption onSetButtonCaption;
 	CallbackSetButtonDown onSetButtonDown;
 	CallbackSetButtonImage onSetButtonImage;
 	CallbackPluginSendMessageText onPluginSendMessageText;
-	CallbackGetRecordFile onGetRecordFile;
 	CallbackGetBlfState onGetBlfState;
 	CallbackRecordStart onRecordStart;
 	CallbackGetRecordingState onGetRecordingState;
@@ -178,22 +166,15 @@ public:
 		CallbackSwitchAudioSource onSwitchAudioSource,
 		CallbackSendDtmf onSendDtmf,
 		CallbackBlindTransfer onBlindTransfer,
-		CallbackGetCallState onGetCallState,
-		CallbackIsCallIncoming onIsCallIncoming,
-		CallbackGetCallPeer onGetCallPeer,
-		CallbackGetCallInitialRxInvite onGetCallInitialRxInvite,
-		CallbackGetCallCodecName onGetCallCodecName,
+		CallbackGetCall onGetCall,
 		CallbackGetContactName onGetContactName,
 		CallbackGetStreamingState onGetStreamingState,
-		CallbackGetInitialCallTarget onGetInitialCallTarget,
-		CallbackSetInitialCallTarget onSetInitialCallTarget,
 		CallbackSetTrayIcon onSetTrayIcon,
 		CallbackGetRegistrationState onGetRegistrationState,
 		CallbackSetButtonCaption onSetButtonCaption,
 		CallbackSetButtonDown onSetButtonDown,
 		CallbackSetButtonImage onSetButtonImage,
 		CallbackPluginSendMessageText onPluginSendMessageText,
-		CallbackGetRecordFile onGetRecordFile,
 		CallbackGetBlfState onGetBlfState,
 		CallbackRecordStart onRecordStart,
 		CallbackGetRecordingState onGetRecordingState,
