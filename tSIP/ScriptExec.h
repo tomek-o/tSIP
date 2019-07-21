@@ -43,7 +43,6 @@ private:
 	typedef int (__closure *CallbackPluginSendMessageText)(const char* dllName, const char* text);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number);
 	typedef int (__closure *CallbackRecordStart)(const char* file, int channels, int side);
-	typedef int (__closure *CallbackGetRecordingState)(void);
 	// pop single DTMF character from RX queue
 	typedef std::string (__closure *CallbackGetRxDtmf)(void);
 	typedef void (__closure *CallbackShowTrayNotifier)(AnsiString description, AnsiString uri, bool incoming);
@@ -72,7 +71,6 @@ private:
 	CallbackPluginSendMessageText onPluginSendMessageText;
 	CallbackGetBlfState onGetBlfState;
 	CallbackRecordStart onRecordStart;
-	CallbackGetRecordingState onGetRecordingState;
 	CallbackGetRxDtmf onGetRxDtmf;
 	CallbackShowTrayNotifier onShowTrayNotifier;
 	CallbackGetUserName onGetUserName;
@@ -177,7 +175,6 @@ public:
 		CallbackPluginSendMessageText onPluginSendMessageText,
 		CallbackGetBlfState onGetBlfState,
 		CallbackRecordStart onRecordStart,
-		CallbackGetRecordingState onGetRecordingState,
 		CallbackGetRxDtmf onGetRxDtmf,
 		CallbackShowTrayNotifier onShowTrayNotifier,
 		CallbackGetUserName onGetUserName,

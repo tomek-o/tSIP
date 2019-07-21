@@ -25,83 +25,84 @@
 #pragma link "psapi.lib"
 
 namespace {
-	std::map<lua_State*, ScriptExec*> contexts;
 
-	ScriptExec* GetContext(lua_State* L)
+std::map<lua_State*, ScriptExec*> contexts;
+
+ScriptExec* GetContext(lua_State* L)
+{
+	std::map<lua_State*, ScriptExec*>::iterator it;
+	it = contexts.find(L);
+	if (it == contexts.end())
 	{
-		std::map<lua_State*, ScriptExec*>::iterator it;
-		it = contexts.find(L);
-		if (it == contexts.end())
-		{
-			assert(!"Unregistered lua_State!");
-			return NULL;
-		}
-		return it->second;
+		assert(!"Unregistered lua_State!");
+		return NULL;
 	}
+	return it->second;
+}
 
-	/** \brief Mutex protecting access to variables */
-	Mutex mutexVariables;
-	/** \brief Named variables - shared by scripts and plugins */
-	std::map<AnsiString, AnsiString> variables;
+/** \brief Mutex protecting access to variables */
+Mutex mutexVariables;
+/** \brief Named variables - shared by scripts and plugins */
+std::map<AnsiString, AnsiString> variables;
 
-	/** \brief Mutex protecting access to queues */
-	Mutex mutexQueues;
-	/** \brief Named queues - shared by scripts and plugins */
-	std::map<AnsiString, std::deque<AnsiString> > queues;
+/** \brief Mutex protecting access to queues */
+Mutex mutexQueues;
+/** \brief Named queues - shared by scripts and plugins */
+std::map<AnsiString, std::deque<AnsiString> > queues;
 
-	long timediff(clock_t t1, clock_t t2) {
-		long elapsed;
-		elapsed = static_cast<long>(((double)t2 - t1) / CLOCKS_PER_SEC * 1000);
-		return elapsed;
-	}
+long timediff(clock_t t1, clock_t t2) {
+	long elapsed;
+	elapsed = static_cast<long>(((double)t2 - t1) / CLOCKS_PER_SEC * 1000);
+	return elapsed;
+}
 
-	struct {
-		HWND hWndFound;
-		const char* windowName;
-		const char* exeName;
-	} findWindowData =
-		{ NULL, NULL, NULL };
+struct {
+	HWND hWndFound;
+	const char* windowName;
+	const char* exeName;
+} findWindowData =
+	{ NULL, NULL, NULL };
 
-	static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
+static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
+{
+	DWORD dwThreadId, dwProcessId;
+	HINSTANCE hInstance;
+	char String[255];
+	HANDLE hProcess;
+	if (!hWnd)
+		return TRUE;		// Not a window
+	if (findWindowData.windowName)
 	{
-		DWORD dwThreadId, dwProcessId;
-		HINSTANCE hInstance;
-		char String[255];
-		HANDLE hProcess;
-		if (!hWnd)
-			return TRUE;		// Not a window
-		if (findWindowData.windowName)
+		if (!SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String))
 		{
-			if (!SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String))
-			{
-				return TRUE;		// No window title (length = 0)
-			}
-			if (strcmp(String, findWindowData.windowName))
-			{
-				return TRUE;
-            }
+			return TRUE;		// No window title (length = 0)
 		}
-		if (findWindowData.exeName)
+		if (strcmp(String, findWindowData.windowName))
 		{
-			hInstance = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);
-			dwThreadId = GetWindowThreadProcessId(hWnd, &dwProcessId);
-			hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwProcessId);
-			// GetModuleFileNameEx uses psapi, which works for NT only!
-			BOOL result = TRUE;
-			if (GetModuleFileNameEx(hProcess, hInstance, String, sizeof(String)))
-			{
-				String[sizeof(String)-1] = '\0';
-				if (stricmp(String, findWindowData.exeName) == 0)
-				{
-					findWindowData.hWndFound = hWnd;
-					result = FALSE;
-				}
-			}
-			CloseHandle(hProcess);
-			return result;
+			return TRUE;
 		}
-		return TRUE;
 	}
+	if (findWindowData.exeName)
+	{
+		hInstance = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);
+		dwThreadId = GetWindowThreadProcessId(hWnd, &dwProcessId);
+		hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwProcessId);
+		// GetModuleFileNameEx uses psapi, which works for NT only!
+		BOOL result = TRUE;
+		if (GetModuleFileNameEx(hProcess, hInstance, String, sizeof(String)))
+		{
+			String[sizeof(String)-1] = '\0';
+			if (stricmp(String, findWindowData.exeName) == 0)
+			{
+				findWindowData.hWndFound = hWnd;
+				result = FALSE;
+			}
+		}
+		CloseHandle(hProcess);
+		return result;
+	}
+	return TRUE;
+}
 
 }	// namespace
 
@@ -850,9 +851,13 @@ int ScriptExec::l_RecordStart(lua_State* L)
 
 int ScriptExec::l_GetRecordingState(lua_State* L)
 {
-	int ret = GetContext(L)->onGetRecordingState();
-	lua_pushinteger(L, ret);
-	return 1;
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		lua_pushinteger( L, call->recording );
+		return 1;
+	}
+	return 0;
 }
 
 int ScriptExec::l_GetRxDtmf(lua_State* L)
@@ -1054,7 +1059,6 @@ ScriptExec::ScriptExec(
 	CallbackPluginSendMessageText onPluginSendMessageText,
 	CallbackGetBlfState onGetBlfState,
 	CallbackRecordStart onRecordStart,
-	CallbackGetRecordingState onGetRecordingState,
 	CallbackGetRxDtmf onGetRxDtmf,
 	CallbackShowTrayNotifier onShowTrayNotifier,
 	CallbackGetUserName onGetUserName,
@@ -1086,7 +1090,6 @@ ScriptExec::ScriptExec(
 	onPluginSendMessageText(onPluginSendMessageText),
 	onGetBlfState(onGetBlfState),
 	onRecordStart(onRecordStart),
-	onGetRecordingState(onGetRecordingState),
 	onGetRxDtmf(onGetRxDtmf),
 	onShowTrayNotifier(onShowTrayNotifier),
 	onGetUserName(onGetUserName),
@@ -1107,7 +1110,6 @@ ScriptExec::ScriptExec(
 		onPluginSendMessageText &&
 		onGetBlfState &&
 		onRecordStart &&
-		onGetRecordingState &&
 		onGetRxDtmf &&
 		onShowTrayNotifier &&
 		onGetUserName &&

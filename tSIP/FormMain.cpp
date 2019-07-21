@@ -818,11 +818,6 @@ int TfrmMain::OnRecordStart(const char* file, int channels, int side)
 	return 0;
 }
 
-int TfrmMain::OnGetRecordingState(void)
-{
-	return call.recording;
-}
-
 std::string TfrmMain::OnGetRxDtmf(void)
 {
 	if (call.dtmfRxQueue.empty())
@@ -2076,7 +2071,6 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnPluginSendMessageText,
 		&OnGetBlfState,
 		&OnRecordStart,
-		&OnGetRecordingState,
 		&OnGetRxDtmf,
 		&ShowTrayNotifier,
 		&OnGetUserName,
