@@ -18,9 +18,9 @@ USEFORM("FormTrayNotifier.cpp", frmTrayNotifier);
 USEFORM("FormHotkeys.cpp", frmHotkeys);
 USEFORM("FormPhones.cpp", frmPhones);
 USEFORM("FormContactsCsvImport.cpp", frmContactsCsvImport);
-USEFORM("FormLuaScript.cpp", frmLuaScript);
 USEFORM("FormTextEditor.cpp", frmTextEditor);
 USEFORM("FormTroubleshooting.cpp", frmTroubleshooting);
+USEFORM("scripting\FormLuaScript.cpp", frmLuaScript);
 //---------------------------------------------------------------------------
 #pragma link "re.lib"
 #pragma link "rem.lib"
@@ -110,6 +110,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmPhones), &frmPhones);
 		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
 		Application->CreateForm(__classid(TfrmTroubleshooting), &frmTroubleshooting);
+		Application->CreateForm(__classid(TfrmLuaScript), &frmLuaScript);
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
 		frmContactPopup->Width = appSettings.frmContactPopup.iWidth;
