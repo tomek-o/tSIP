@@ -399,3 +399,25 @@ void TfrmHistory::FormatCallDurationAsHourMinSec(bool state)
 	this->formatCallDurationAsHourMinSec = state;
 }
 
+std::vector<int> TfrmHistory::GetColumnWidths(void)
+{
+	std::vector<int> widths;
+	for (int i=0; i<lvHistory->Columns->Count; i++)
+	{
+    	widths.push_back(lvHistory->Columns->Items[i]->Width);
+	}
+	return widths;
+}
+
+void TfrmHistory::SetColumnWidths(const std::vector<int>& widths)
+{
+	for (unsigned int i=0; i<widths.size(); i++)
+	{
+		if (i >= lvHistory->Columns->Count)
+		{
+        	break;
+		}
+		lvHistory->Columns->Items[i]->Width = widths[i];
+	}
+}
+

@@ -155,6 +155,7 @@ private:	// User declarations
 	TfrmButtonContainer* frmButtonContainers[1 + ProgrammableButtons::EXT_CONSOLE_COLUMNS];
 
 	void UpdateLogConfig(void);
+	void UpdateHistoryConfig(void);
 	void SetSpeedDial(bool visible);
 	void UpdateDialpadBackgroundImage(void);
 	void UpdateCallHistory(void);

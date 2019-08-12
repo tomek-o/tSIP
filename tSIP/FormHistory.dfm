@@ -13,8 +13,6 @@ object frmHistory: TfrmHistory
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object lvHistory: TListView
@@ -45,7 +43,6 @@ object frmHistory: TfrmHistory
     OnData = lvHistoryData
     OnDblClick = lvHistoryDblClick
     OnInfoTip = lvHistoryInfoTip
-    ExplicitTop = -1
   end
   object pnlBottom: TPanel
     Left = 0

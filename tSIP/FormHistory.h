@@ -92,6 +92,9 @@ public:		// User declarations
 	void ShowCodecNameInHint(bool state) {
     	showCodecNameInHint = state;
 	}
+
+	std::vector<int> GetColumnWidths(void);
+	void SetColumnWidths(const std::vector<int>& widths);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmHistory *frmHistory;

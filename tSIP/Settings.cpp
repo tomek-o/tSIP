@@ -700,6 +700,16 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		History.bShowHint = HistoryJson.get("ShowHint", History.bShowHint).asBool();
 		History.bFormatCallDurationAsHourMinSec = HistoryJson.get("FormatCallDurationAsHourMinSec", History.bFormatCallDurationAsHourMinSec).asBool();
 		History.bShowCodecNameInHint = HistoryJson.get("ShowCodecNameInHint", History.bShowCodecNameInHint).asBool();
+		{
+			const Json::Value &jlcw = HistoryJson["ListColumnWidths"];
+			if (jlcw.type() == Json::arrayValue)
+			{
+				for (unsigned int i=0; i<jlcw.size(); i++)
+				{
+					History.listColumnWidths.push_back(jlcw[i].asInt());
+				}
+			}
+		}
 	}
 
 	{
@@ -861,6 +871,13 @@ int Settings::Write(AnsiString asFileName)
 		jv["ShowHint"] = History.bShowHint;
 		jv["FormatCallDurationAsHourMinSec"] = History.bFormatCallDurationAsHourMinSec;
 		jv["ShowCodecNameInHint"] = History.bShowCodecNameInHint;
+
+		Json::Value &jlcw = jv["ListColumnWidths"];
+		jlcw.resize(0);
+		for (unsigned int i=0; i<History.listColumnWidths.size(); i++)
+		{
+			jlcw.append(History.listColumnWidths[i]);
+		}
 	}
 
 	{

@@ -133,11 +133,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	lblCallState->Caption = "";
 	frmHistory = new TfrmHistory(this->tsHistory, &history, &OnCall, &OnPhonebookEdit, &OnHttpQuery);
 	frmHistory->Scale(appSettings.gui.scalingPct);
-	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
-	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
-	frmHistory->ShowHint(appSettings.History.bShowHint);
-	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
-	frmHistory->ShowCodecNameInHint(appSettings.History.bShowCodecNameInHint);
+	UpdateHistoryConfig();
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
 
@@ -330,6 +326,8 @@ void TfrmMain::Finalize(void)
 	appSettings.frmContactPopup.iWidth = frmContactPopup->Width;
 	appSettings.frmContactPopup.iHeight = frmContactPopup->Height;
 
+	appSettings.History.listColumnWidths = frmHistory->GetColumnWidths();
+
 	// update application version in settings
 	GetFileVer(Application->ExeName, appSettings.info.appVersion.FileVersionMS, appSettings.info.appVersion.FileVersionLS);
 		
@@ -454,11 +452,9 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		RegisterGlobalHotKeys();
 	}
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
-	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
-	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
-	frmHistory->ShowHint(appSettings.History.bShowHint);
-	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
-	frmHistory->ShowCodecNameInHint(appSettings.History.bShowCodecNameInHint);
+
+	UpdateHistoryConfig();
+
 	UpdateDialpadBackgroundImage();
 	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
@@ -2137,6 +2133,16 @@ void TfrmMain::UpdateLogConfig(void)
 	log->SetFlush(appSettings.Logging.bFlush);
 	log->SetMaxFileSize(appSettings.Logging.iMaxFileSize);
 	log->SetLogRotateCnt(appSettings.Logging.iLogRotate);
+}
+
+void TfrmMain::UpdateHistoryConfig(void)
+{
+	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
+	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
+	frmHistory->ShowHint(appSettings.History.bShowHint);
+	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
+	frmHistory->ShowCodecNameInHint(appSettings.History.bShowCodecNameInHint);
+	frmHistory->SetColumnWidths(appSettings.History.listColumnWidths);
 }
 
 void TfrmMain::SetSpeedDial(bool visible)

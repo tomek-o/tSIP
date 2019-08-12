@@ -229,6 +229,7 @@ public:
 		bool bShowHint;
 		bool bFormatCallDurationAsHourMinSec;
 		bool bShowCodecNameInHint;
+		std::vector<int> listColumnWidths;
 	} History;
 	struct _Scripts
 	{
