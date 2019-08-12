@@ -151,6 +151,8 @@ __published:	// IDE-managed Components
 	void __fastcall miScriptingClick(TObject *Sender);
 	void __fastcall miTroubleshootingClick(TObject *Sender);
 private:	// User declarations
+	double initialScaling;
+
 	TrayIcon *trIcon;
 	TfrmButtonContainer* frmButtonContainers[1 + ProgrammableButtons::EXT_CONSOLE_COLUMNS];
 

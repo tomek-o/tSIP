@@ -26,6 +26,7 @@
 #include "CallbackQueue.h"
 #include <assert.h>
 #include <stdio.h>
+#include <math.h>
 #include "CustomDateUtils.hpp"
 #include "ProgrammableButton.h"
 #include "ProgrammableButtons.h"
@@ -124,6 +125,7 @@ namespace {
 //---------------------------------------------------------------------------
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	: TForm(Owner),
+	initialScaling(1.0),
 	muteRing(false),
 	notificationIconState(false)
 {
@@ -251,7 +253,8 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	history.SetFilename(asHistoryFile);
 	history.Read(&OnGetContactName);
 
-	this->Height = appSettings.frmMain.iHeight;
+	initialScaling = static_cast<double>(appSettings.gui.scalingPct) / 100;
+	this->Height = floor(appSettings.frmMain.iHeight * initialScaling + 0.5);
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;	
 
 	this->Top = appSettings.frmMain.iPosY;
@@ -373,7 +376,7 @@ int TfrmMain::UpdateSettingsFromJson(AnsiString json)
 
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
-	this->Height = appSettings.frmMain.iHeight;
+	this->Height = floor(appSettings.frmMain.iHeight * initialScaling + 0.5);
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
 
 	// modify application title and main window caption only if config changes,
