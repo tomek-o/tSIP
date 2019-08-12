@@ -2860,14 +2860,22 @@ void __fastcall TfrmMain::tmrScriptTimer(TObject *Sender)
 void __fastcall TfrmMain::trbarSoftvolMicChange(TObject *Sender)
 {
 	TTrackBar* tr = trbarSoftvolMic;
-	UA->UpdateSoftvolTx(tr->Max - tr->Position + tr->Min);
+	AnsiString asHint;
+	int value = tr->Max - tr->Position + tr->Min;
+	asHint.sprintf("%d%%", value*100/128);
+	tr->Hint = asHint;
+	UA->UpdateSoftvolTx(value);
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmMain::trbarSoftvolSpeakerChange(TObject *Sender)
 {
 	TTrackBar* tr = trbarSoftvolSpeaker;
-	UA->UpdateSoftvolRx(tr->Max - tr->Position + tr->Min);
+	AnsiString asHint;
+	int value = tr->Max - tr->Position + tr->Min;
+	asHint.sprintf("%d%%", value*100/128);
+	tr->Hint = asHint;
+	UA->UpdateSoftvolRx(value);
 }
 //---------------------------------------------------------------------------
 
