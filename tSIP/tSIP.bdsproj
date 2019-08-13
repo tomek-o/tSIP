@@ -446,7 +446,6 @@
         <FILE FILENAME="resource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="resource.rc" CONTAINERID="RCCompiler" LOCALCOMMAND="" UNITNAME="resource.rc" FORMNAME="resource.res" DESIGNCLASS=""/>
         <FILE FILENAME="FormPhones.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormPhones" FORMNAME="frmPhones" DESIGNCLASS="" ADDITIONAL="FormPhones.h"/>
-        <FILE FILENAME="PhoneConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="AudioDevicesList.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioDevicesList" FORMNAME="" DESIGNCLASS="" ADDITIONAL="AudioDevicesList.h"/>
         <FILE FILENAME="Call.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Call" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Call.h"/>
         <FILE FILENAME="phone\Phone.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
@@ -458,10 +457,11 @@
         <FILE FILENAME="FormTroubleshooting.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTroubleshooting" FORMNAME="frmTroubleshooting" DESIGNCLASS="" ADDITIONAL="FormTroubleshooting.h"/>
         <FILE FILENAME="Troubleshooting.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Troubleshooting" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Troubleshooting.h"/>
         <FILE FILENAME="scripting\FormLuaScript.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLuaScript" FORMNAME="frmLuaScript" DESIGNCLASS="" ADDITIONAL="scripting\FormLuaScript.h"/>
-        <FILE FILENAME="scripting\LuaExamples.h" CONTAINERID="" LOCALCOMMAND=""/>
-        <FILE FILENAME="scripting\ScriptSource.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="scripting\LuaExamples.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="scripting\ScriptSource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="scripting\LuaState.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaState" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaState.h"/>
         <FILE FILENAME="scripting\LuaWinapi.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaWinapi" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaWinapi.h"/>
+        <FILE FILENAME="phone\PhoneConf.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
