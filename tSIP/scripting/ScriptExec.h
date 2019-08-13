@@ -41,6 +41,7 @@ private:
 	typedef void (__closure *CallbackSetButtonDown)(int id, bool state);
 	typedef void (__closure *CallbackSetButtonImage)(int id, const char* file);
 	typedef int (__closure *CallbackPluginSendMessageText)(const char* dllName, const char* text);
+	typedef int (__closure *CallbackPluginEnable)(const char* dllName, bool state);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number);
 	typedef int (__closure *CallbackRecordStart)(const char* file, int channels, int side);
 	// pop single DTMF character from RX queue
@@ -69,6 +70,7 @@ private:
 	CallbackSetButtonDown onSetButtonDown;
 	CallbackSetButtonImage onSetButtonImage;
 	CallbackPluginSendMessageText onPluginSendMessageText;
+	CallbackPluginEnable onPluginEnable;
 	CallbackGetBlfState onGetBlfState;
 	CallbackRecordStart onRecordStart;
 	CallbackGetRxDtmf onGetRxDtmf;
@@ -126,6 +128,7 @@ private:
 	static int l_SetButtonDown(lua_State* L);
 	static int l_SetButtonImage(lua_State* L);
 	static int l_PluginSendMessageText(lua_State* L);
+	static int l_PluginEnable(lua_State* L);
 	static int l_GetExecSourceType(lua_State* L);
 	static int l_GetExecSourceId(lua_State* L);
 	static int l_GetRecordFile(lua_State* L);
@@ -173,6 +176,7 @@ public:
 		CallbackSetButtonDown onSetButtonDown,
 		CallbackSetButtonImage onSetButtonImage,
 		CallbackPluginSendMessageText onPluginSendMessageText,
+		CallbackPluginEnable onPluginEnable,
 		CallbackGetBlfState onGetBlfState,
 		CallbackRecordStart onRecordStart,
 		CallbackGetRxDtmf onGetRxDtmf,

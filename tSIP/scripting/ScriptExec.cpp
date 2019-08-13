@@ -650,6 +650,21 @@ int ScriptExec::l_PluginSendMessageText(lua_State* L)
 	return 1;
 }
 
+int ScriptExec::l_PluginEnable(lua_State* L)
+{
+	const char* dllName = lua_tostring(L, 1);
+	if (dllName == NULL)
+	{
+		lua_pushinteger( L, -1 );
+		return 1;
+	}
+	int state = lua_tointeger(L, 2);
+	int ret = GetContext(L)->onPluginEnable(dllName, state);
+
+	lua_pushinteger( L, ret );
+	return 1;
+}
+
 int ScriptExec::l_SetVariable(lua_State* L)
 {
 	const char* name = lua_tostring( L, 1 );
@@ -1057,6 +1072,7 @@ ScriptExec::ScriptExec(
 	CallbackSetButtonDown onSetButtonDown,
 	CallbackSetButtonImage onSetButtonImage,
 	CallbackPluginSendMessageText onPluginSendMessageText,
+	CallbackPluginEnable onPluginEnable,
 	CallbackGetBlfState onGetBlfState,
 	CallbackRecordStart onRecordStart,
 	CallbackGetRxDtmf onGetRxDtmf,
@@ -1088,6 +1104,7 @@ ScriptExec::ScriptExec(
 	onSetButtonDown(onSetButtonDown),
 	onSetButtonImage(onSetButtonImage),
 	onPluginSendMessageText(onPluginSendMessageText),
+	onPluginEnable(onPluginEnable),
 	onGetBlfState(onGetBlfState),
 	onRecordStart(onRecordStart),
 	onGetRxDtmf(onGetRxDtmf),
@@ -1107,7 +1124,7 @@ ScriptExec::ScriptExec(
 		onSetTrayIcon &&
 		onGetRegistrationState &&
 		onSetButtonCaption && onSetButtonDown && onSetButtonImage &&
-		onPluginSendMessageText &&
+		onPluginSendMessageText && onPluginEnable &&
 		onGetBlfState &&
 		onRecordStart &&
 		onGetRxDtmf &&
@@ -1181,6 +1198,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "SetButtonDown", l_SetButtonDown);
 	lua_register(L, "SetButtonImage", l_SetButtonImage);
 	lua_register(L, "PluginSendMessageText", l_PluginSendMessageText);
+	lua_register(L, "PluginEnable", l_PluginEnable);	// PluginEnable("TTS.dll", 0/1)
 	lua_register(L, "GetExecSourceType", l_GetExecSourceType);
 	lua_register(L, "GetExecSourceId", l_GetExecSourceId);
 	lua_register(L, "GetRecordFile", l_GetRecordFile);

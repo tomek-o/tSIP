@@ -787,6 +787,47 @@ int TfrmMain::OnPluginSendMessageText(const char* dllName, const char* text)
 	return PhoneInterface::SendMessageText(dllName, text);
 }
 
+int TfrmMain::OnPluginEnable(const char* dllName, bool state)
+{
+	bool changed = false;
+	std::list<PhoneConf>::iterator iter;
+
+	if (state)
+	{
+		for (iter = appSettings.phoneConf.begin(); iter != appSettings.phoneConf.end(); ++iter)
+		{
+			if (iter->dllName == dllName)
+			{
+				return -1;
+			}
+		}
+		PhoneConf pconf;
+		pconf.dllName = dllName;
+		appSettings.phoneConf.push_back(pconf);
+		changed = true;
+	}
+	else
+	{
+		for (iter = appSettings.phoneConf.begin(); iter != appSettings.phoneConf.end(); ++iter)
+		{
+			if (iter->dllName == dllName)
+			{
+				appSettings.phoneConf.erase(iter);
+				changed = true;
+				break;
+			}
+		}
+	}
+
+	if (changed)
+	{
+        PhoneInterface::SetCfg(appSettings.phoneConf);
+		appSettings.Write(Paths::GetConfig());
+		return 0;
+	}
+	return -1;
+}
+
 int TfrmMain::OnRecordStart(const char* file, int channels, int side)
 {
 	if (appSettings.uaConf.recording.enabled == false)
@@ -2055,7 +2096,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnSetTrayIcon,
 		&OnGetRegistrationState,
 		&OnSetButtonCaption, &OnSetButtonDown, &OnSetButtonImage,
-		&OnPluginSendMessageText,
+		&OnPluginSendMessageText, &OnPluginEnable,
 		&OnGetBlfState,
 		&OnRecordStart,
 		&OnGetRxDtmf,
