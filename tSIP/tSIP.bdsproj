@@ -445,7 +445,6 @@
         <FILE FILENAME="Branding.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Branding" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Branding.h"/>
         <FILE FILENAME="resource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="resource.rc" CONTAINERID="RCCompiler" LOCALCOMMAND="" UNITNAME="resource.rc" FORMNAME="resource.res" DESIGNCLASS=""/>
-        <FILE FILENAME="FormPhones.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormPhones" FORMNAME="frmPhones" DESIGNCLASS="" ADDITIONAL="FormPhones.h"/>
         <FILE FILENAME="AudioDevicesList.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AudioDevicesList" FORMNAME="" DESIGNCLASS="" ADDITIONAL="AudioDevicesList.h"/>
         <FILE FILENAME="Call.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Call" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Call.h"/>
         <FILE FILENAME="phone\Phone.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
@@ -462,6 +461,7 @@
         <FILE FILENAME="scripting\LuaState.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaState" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaState.h"/>
         <FILE FILENAME="scripting\LuaWinapi.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaWinapi" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaWinapi.h"/>
         <FILE FILENAME="phone\PhoneConf.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="phone\FormPhones.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormPhones" FORMNAME="frmPhones" DESIGNCLASS="" ADDITIONAL="phone\FormPhones.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
