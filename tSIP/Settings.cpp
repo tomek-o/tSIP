@@ -1,10 +1,11 @@
 //---------------------------------------------------------------------------
 
-
+#include <vcl.h>
 #pragma hdrstop
 
 #include "Settings.h"
 #include "common\KeybKeys.h"
+#include "common\Utilities.h"
 #include "ProgrammableButtons.h"
 #include "Branding.h"
 #include <algorithm>
@@ -761,6 +762,10 @@ int Settings::Write(AnsiString asFileName)
 
 	{
 		Json::Value &jv = root["info"];
+
+		// update application version in settings
+		GetFileVer(Application->ExeName, info.appVersion.FileVersionMS, info.appVersion.FileVersionLS);
+
 		jv["FileVersionMS"] = info.appVersion.FileVersionMS;
 		jv["FileVersionLS"] = info.appVersion.FileVersionLS;
 	}

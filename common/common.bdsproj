@@ -219,6 +219,6 @@
           <Linker Name="LibVersion"></Linker>
         </Linker>
       </IDEOPTIONS>
-    </BCBPROJECT>
-	</CPlusPlusBuilder.Personality>
+    </BCBPROJECT>  <buildevents/>
+  </CPlusPlusBuilder.Personality>
 </BorlandProject>

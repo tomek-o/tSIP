@@ -331,9 +331,6 @@ void TfrmMain::Finalize(void)
 
 	appSettings.History.listColumnWidths = frmHistory->GetColumnWidths();
 
-	// update application version in settings
-	GetFileVer(Application->ExeName, appSettings.info.appVersion.FileVersionMS, appSettings.info.appVersion.FileVersionLS);
-		
 	appSettings.Write(Paths::GetConfig());
 	if (appSettings.History.bNoStoreToFile == false)
 	{
@@ -473,8 +470,6 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	tmrScript->Interval = appSettings.Scripts.timer;
 	tmrScript->Enabled = true;
 
-	// update application version in settings
-	GetFileVer(Application->ExeName, appSettings.info.appVersion.FileVersionMS, appSettings.info.appVersion.FileVersionLS);
 	appSettings.Write(Paths::GetConfig());
 }
 

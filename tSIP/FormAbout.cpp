@@ -3,7 +3,7 @@
 #pragma hdrstop
 
 #include "FormAbout.h"
-#include "common\Utils.h"
+#include "common\Utilities.h"
 #include "Paths.h"
 //---------------------------------------------------------------------
 #pragma resource "*.dfm"

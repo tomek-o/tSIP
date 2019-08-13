@@ -14,7 +14,7 @@
 #include <re.h>
 #include "baresip.h"
 #include "Log.h"
-#include "common\Utils.h"
+#include "common\Utilities.h"
 #include "Branding.h"
 #include <assert.h>
 

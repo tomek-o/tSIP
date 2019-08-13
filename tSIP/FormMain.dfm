@@ -484,10 +484,18 @@ object frmMain: TfrmMain
       object tsContacts: TTabSheet
         Caption = 'Contacts'
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object tsHistory: TTabSheet
         Caption = 'History'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
     end
   end
