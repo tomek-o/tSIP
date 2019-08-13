@@ -65,7 +65,6 @@ private:	// User declarations
 	int CheckFileNotSavedDialog(void);
 	void OnTextModified(void);
 	void SetText(AnsiString text);
-	int OnGetCurrentFileName(AnsiString &filename);
 	void __fastcall WMDropFiles(TWMDropFiles &message);	
 public:		// User declarations
 	__fastcall TfrmLuaScript(TComponent* Owner);

@@ -82,13 +82,6 @@ void TfrmLuaScript::SetScript(AnsiString asString)
 	SetTitle(asCurrentFile, modified);
 }
 
-int TfrmLuaScript::OnGetCurrentFileName(AnsiString &filename)
-{
-	/** \todo OnGetCurrentFileName not hadled */
-	filename = "???";
-    return 0;
-}
-
 void __fastcall TfrmLuaScript::btnExecuteClick(TObject *Sender)
 {
 	BtnController btnCtrl(dynamic_cast<TButton*>(Sender));
