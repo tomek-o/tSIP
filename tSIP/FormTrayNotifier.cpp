@@ -32,6 +32,19 @@ void TfrmTrayNotifier::SetData(AnsiString description, AnsiString uri, bool inco
 	this->ActiveControl = btnStopFocus;	
 }
 
+void TfrmTrayNotifier::ShowWithoutFocus(void)
+{
+#if 1
+	/** \todo frmTrayNotifier steals focus at first call */
+	frmTrayNotifier->Visible = true;
+#else
+	/** \todo frmTrayNotifier: no focus stealed, but inconsistent window state */
+	ShowWindow(frmTrayNotifier->Handle, SW_SHOWNOACTIVATE);
+	SetWindowPos(frmTrayNotifier->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+	//frmTrayNotifier->BringToFront();
+#endif
+}
+
 void __fastcall TfrmTrayNotifier::btnHangupClick(TObject *Sender)
 {
 	if (OnHangup)

@@ -460,6 +460,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 
 	UpdateDialpadBackgroundImage();
 	frmTrayNotifier->UpdateBackgroundImage();
+	/** \todo bug? use prev settings */
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
 	miSettings->Visible = !appSettings.frmMain.bHideSettings;
@@ -601,15 +602,7 @@ void TfrmMain::UpdateCallHistory(void)
 void TfrmMain::ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming)
 {
 	frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call.incoming);
-#if 1
-	/** \todo frmTrayNotifier steals focus at first call */
-	frmTrayNotifier->Visible = true;
-#else
-	/** \todo frmTrayNotifier: no focus stealed, but inconsistent window state */
-	ShowWindow(frmTrayNotifier->Handle, SW_SHOWNOACTIVATE);
-	SetWindowPos(frmTrayNotifier->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-	//frmTrayNotifier->BringToFront();
-#endif
+	frmTrayNotifier->ShowWithoutFocus();
 }
 
 void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)

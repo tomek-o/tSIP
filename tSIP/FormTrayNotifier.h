@@ -27,6 +27,7 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmTrayNotifier(TComponent* Owner);
 	void SetData(AnsiString description, AnsiString uri, bool incoming);
+	void ShowWithoutFocus(void);
 	void UpdateBackgroundImage(void);
 	CallbackHangup OnHangup;
 	CallbackAnswer OnAnswer;
