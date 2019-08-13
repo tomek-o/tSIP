@@ -18,10 +18,10 @@ USEFORM("FormAccount.cpp", frmAccount);
 USEFORM("FormHistory.cpp", frmHistory);
 USEFORM("FormTrayNotifier.cpp", frmTrayNotifier);
 USEFORM("FormHotkeys.cpp", frmHotkeys);
-USEFORM("FormPhones.cpp", frmPhones);
 USEFORM("FormTextEditor.cpp", frmTextEditor);
 USEFORM("FormTroubleshooting.cpp", frmTroubleshooting);
 USEFORM("scripting\FormLuaScript.cpp", frmLuaScript);
+USEFORM("phone\FormPhones.cpp", frmPhones);
 //---------------------------------------------------------------------------
 #pragma link "re.lib"
 #pragma link "rem.lib"
@@ -104,30 +104,11 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmSettings), &frmSettings);
 		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
 		Application->CreateForm(__classid(TfrmTrayNotifier), &frmTrayNotifier);
-		Application->CreateForm(__classid(TfrmHotkeys), &frmHotkeys);
-		Application->CreateForm(__classid(TfrmPhones), &frmPhones);
 		Application->CreateForm(__classid(TfrmTroubleshooting), &frmTroubleshooting);
-		Application->CreateForm(__classid(TfrmLuaScript), &frmLuaScript);
-		Application->CreateForm(__classid(TfrmContactCsvImport), &frmContactCsvImport);
-		Application->CreateForm(__classid(TfrmContactCsvImport), &frmContactCsvImport);
 		Application->CreateForm(__classid(TfrmContactCsvImport), &frmContactCsvImport);
 		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
-		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
-		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
 		Application->CreateForm(__classid(TfrmContactPopup), &frmContactPopup);
-		Application->CreateForm(__classid(TfrmContactPopup), &frmContactPopup);
-		Application->CreateForm(__classid(TfrmContactPopup), &frmContactPopup);
-		Application->CreateForm(__classid(TfrmContacts), &frmContacts);
-		Application->CreateForm(__classid(TfrmContacts), &frmContacts);
-		Application->CreateForm(__classid(TfrmContacts), &frmContacts);
 		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
-		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
-		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
-		Application->CreateForm(__classid(TfrmButtonContainer), &frmButtonContainer);
-		Application->CreateForm(__classid(TfrmButtonContainer), &frmButtonContainer);
-		Application->CreateForm(__classid(TfrmButtonContainer), &frmButtonContainer);
-		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
-		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
 		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
