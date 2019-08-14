@@ -486,6 +486,7 @@ static int app_start(void)
 			// "local account"
 			addr.cat_printf(";answer_any=1");
 		}
+		addr.cat_printf(";dtmf_tx_format=%d", acc.dtmf_tx_format);
 		addr.cat_printf(";ptime=%d", acc.ptime);
 
 		{

@@ -41,6 +41,7 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 	edStunServer->Text = acc.stun_server.c_str();
 	edOutbound1->Text = acc.outbound1.c_str();
 	//edOutbound2->Text = acc.outbound2.c_str();
+	cbDtmfTxFormat->ItemIndex = acc.dtmf_tx_format;
 }
 //---------------------------------------------------------------------------
 
@@ -163,6 +164,12 @@ void __fastcall TfrmAccount::chbHideCuserClick(TObject *Sender)
 	acc.hide_cuser = chbHideCuser->Checked;
 	if (!chbHideCuser->Checked)
 		acc.cuser = "";	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::cbDtmfTxFormatChange(TObject *Sender)
+{
+	acc.dtmf_tx_format = cbDtmfTxFormat->ItemIndex;	
 }
 //---------------------------------------------------------------------------
 

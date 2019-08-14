@@ -1021,10 +1021,37 @@ int call_info(struct re_printf *pf, const struct call *call)
  */
 int call_send_digit(struct call *call, char key)
 {
+	struct mbuf *body;
+	int err;
 	if (!call)
 		return EINVAL;
 
-	return audio_send_digit(call->audio, key);
+	if (call->acc->dtmf_tx_format == DTMF_FMT_SIP_INFO) {
+		if (!call->sess)
+			return EINVAL;
+		if (key == 0)
+			return 0;
+		if (key == 'R')			// I don't think FLASH is handled by dtmf-relay (maybe as code = 16 but this does not seem correct?)
+			return EINVAL;
+
+		body = mbuf_alloc(1024);
+
+		// Yealink v71 (+v60?) problem:
+		// * and # encoded not according to http://tools.ietf.org/html/draft-kaplan-dispatch-info-dtmf-package-00
+		/** \note *, # used for dtmf-relay; for dtmf content-type should be substituted by 10, 11 */
+		/** \todo is decoding correct in re/baresip? */
+
+		err  = mbuf_printf(body, "Signal=%c\r\nDuration=%d", key, 160);
+		if (err)
+			return err;
+		body->pos = 0;
+		err = sipsess_info(call->sess, "application/dtmf-relay", body, NULL, NULL);
+		mem_deref(body);
+		return err;
+	} else {
+		// RFC2833
+		return audio_send_digit(call->audio, key);
+	}
 }
 
 
@@ -1179,6 +1206,7 @@ static void sipsess_info_handler(struct sip *sip, const struct sip_msg *msg,
 
 		pl_set_mbuf(&body, msg->mb);
 
+		/** \todo Shouldn't this actually accept *, #, A, B, C, D? */
 		err  = re_regex(body.p, body.l, "Signal=[0-9]+", &sig);
 		err |= re_regex(body.p, body.l, "Duration=[0-9]+", &dur);
 
@@ -1700,7 +1728,7 @@ int call_transfer(struct call *call, const char *uri)
 
 	call->sub = mem_deref(call->sub);
 	err = sipevent_drefer(&call->sub, uag_sipevent_sock(),
-			      sipsess_dialog(call->sess), ua_cuser(call->ua),
+				  sipsess_dialog(call->sess), ua_cuser(call->ua),
 			      auth_handler, call->acc, true,
 			      sipsub_notify_handler, sipsub_close_handler,
 			      call,

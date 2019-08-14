@@ -4,7 +4,7 @@ object frmAccount: TfrmAccount
   Align = alTop
   BorderStyle = bsNone
   Caption = 'Account'
-  ClientHeight = 274
+  ClientHeight = 294
   ClientWidth = 532
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -88,8 +88,8 @@ object frmAccount: TfrmAccount
     Caption = 'Outbound proxy'
   end
   object lblPtime: TLabel
-    Left = 9
-    Top = 249
+    Left = 8
+    Top = 270
     Width = 26
     Height = 13
     Caption = 'ptime'
@@ -114,9 +114,16 @@ object frmAccount: TfrmAccount
     Font.Style = [fsBold]
     ParentFont = False
   end
+  object lblDtmfTxFormat: TLabel
+    Left = 8
+    Top = 232
+    Width = 81
+    Height = 13
+    Caption = 'DTMF TX method'
+  end
   object grboxAccount: TGroupBox
-    Left = 193
-    Top = 241
+    Left = 192
+    Top = 265
     Width = 95
     Height = 25
     Align = alCustom
@@ -240,8 +247,8 @@ object frmAccount: TfrmAccount
     OnChange = edOutbound1Change
   end
   object chbAnswerAny: TCheckBox
-    Left = 9
-    Top = 229
+    Left = 8
+    Top = 250
     Width = 346
     Height = 17
     Caption = 
@@ -253,7 +260,7 @@ object frmAccount: TfrmAccount
   end
   object edPtime: TEdit
     Left = 126
-    Top = 246
+    Top = 267
     Width = 50
     Height = 22
     Font.Charset = DEFAULT_CHARSET
@@ -324,5 +331,20 @@ object frmAccount: TfrmAccount
     Caption = 'Hide/do not store in file'
     TabOrder = 16
     OnClick = chbHideCuserClick
+  end
+  object cbDtmfTxFormat: TComboBox
+    Left = 126
+    Top = 229
+    Width = 131
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    ItemIndex = 0
+    TabOrder = 17
+    Text = 'RFC2833'
+    OnChange = cbDtmfTxFormatChange
+    Items.Strings = (
+      'RFC2833'
+      'SIP INFO / dtmf-relay')
   end
 end

@@ -28,6 +28,7 @@ public:
 		std::string cuser;
 		int reg_expires;
 		bool answer_any;
+		int dtmf_tx_format;
 		std::vector<std::string> audio_codecs;
 
 		bool hide_reg_server;	// hide in settings and not store in settings file
@@ -56,6 +57,7 @@ public:
 				transport == right.transport &&
 				reg_expires == right.reg_expires &&
 				answer_any == right.answer_any &&
+				dtmf_tx_format == right.dtmf_tx_format &&
 
 				hide_reg_server == right.hide_reg_server &&
 				hide_user == right.hide_user &&
@@ -81,6 +83,7 @@ public:
 			cuser(""),
 			reg_expires(0),	// no registration in default configuration
 			answer_any(false),
+			dtmf_tx_format(0),
 
 			hide_reg_server(false),
 			hide_user(false),

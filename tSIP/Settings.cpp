@@ -396,6 +396,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			{
 				new_acc.reg_expires = reg_expires;
 			}
+			new_acc.dtmf_tx_format = acc.get("dtmf_tx_format", new_acc.dtmf_tx_format).asInt();
 			new_acc.answer_any = acc.get("answer_any", new_acc.answer_any).asBool();
 			int ptime = acc.get("ptime", new_acc.ptime).asInt();
 			if (ptime >= UaConf::Account::MIN_PTIME && new_acc.ptime < UaConf::Account::MAX_PTIME)
@@ -982,6 +983,7 @@ int Settings::Write(AnsiString asFileName)
 			cfgAcc["cuser"] = acc.cuser;
 		cfgAcc["transport"] = acc.transport;
 		cfgAcc["reg_expires"] = acc.reg_expires;
+		cfgAcc["dtmf_tx_format"] = acc.dtmf_tx_format;
 		cfgAcc["answer_any"] = acc.answer_any;
 		cfgAcc["ptime"] = acc.ptime;
 

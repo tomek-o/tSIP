@@ -286,6 +286,7 @@ static int sip_params_decode(struct account *acc, const struct sip_addr *aor)
 	struct pl auth_user;
 	size_t i;
 	int err = 0;
+	unsigned int tmp = 0;
 
 	if (!acc || !aor)
 		return EINVAL;
@@ -296,6 +297,9 @@ static int sip_params_decode(struct account *acc, const struct sip_addr *aor)
 	err |= param_dstr(&acc->regq, &aor->params, "regq");
 
 	err |= param_u32(&acc->answer_any, &aor->params, "answer_any");
+
+	err |= param_u32(&tmp, &aor->params, "dtmf_tx_format");
+	acc->dtmf_tx_format = tmp;
 
 	for (i=0; i<ARRAY_SIZE(acc->outbound); i++) {
 

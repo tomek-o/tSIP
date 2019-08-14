@@ -44,6 +44,8 @@ __published:	// IDE-managed Components
 	TCheckBox *chbHidePassword;
 	TCheckBox *chbHideAuthUser;
 	TCheckBox *chbHideCuser;
+	TComboBox *cbDtmfTxFormat;
+	TLabel *lblDtmfTxFormat;
 	void __fastcall edRegServerChange(TObject *Sender);
 	void __fastcall edUserChange(TObject *Sender);
 	void __fastcall edPasswordChange(TObject *Sender);
@@ -61,6 +63,7 @@ __published:	// IDE-managed Components
 	void __fastcall chbHidePasswordClick(TObject *Sender);
 	void __fastcall chbHideAuthUserClick(TObject *Sender);
 	void __fastcall chbHideCuserClick(TObject *Sender);
+	void __fastcall cbDtmfTxFormatChange(TObject *Sender);
 private:	// User declarations
 	UaConf::Account& acc;
 public:		// User declarations

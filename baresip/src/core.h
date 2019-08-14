@@ -37,6 +37,11 @@ enum answermode {
 	ANSWERMODE_AUTO
 };
 
+enum dtmf_fmt {
+	DTMF_FMT_RFC2833 = 0,
+	DTMF_FMT_SIP_INFO
+};
+
 struct account {
 	char *buf;                   /**< Buffer for the SIP address         */
 	char *buf_pwd;               /**< Buffer for the password (separated from SIP address because of decoding problems */
@@ -68,6 +73,7 @@ struct account {
 	struct le vcv[4];            /**< List elements for vidcodecl        */
 	struct list vidcodecl;       /**< List of preferred video-codecs     */
 	uint32_t answer_any;         /**< This account can be used to handle ANY incoming call */
+	enum dtmf_fmt dtmf_tx_format;/**< Method used for transmitting DTMF */
 };
 
 
