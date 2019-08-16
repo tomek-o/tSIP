@@ -63,7 +63,7 @@ void __fastcall TfrmLog::tmrUpdateTimer(TObject *Sender)
 		redMain->SelStart = redMain->GetTextLen();
 		redMain->SelLength = 0;
 		redMain->SelAttributes->Color = iter->color;
-		redMain->SelAttributes->Name = "Courier New";
+		redMain->SelAttributes->Name = appSettings.Logging.consoleFont.name;
 		redMain->SelText = iter->asText;
 	}
 	queDisplay.clear();
@@ -145,6 +145,9 @@ void TfrmLog::UpdateUi(void)
 {
 	chbLogMessages->Checked = appSettings.uaConf.logMessages;
 	chbLogToFile->Checked = appSettings.Logging.bLogToFile;
+	redMain->Font->Name = appSettings.Logging.consoleFont.name;
+	redMain->Font->Size = appSettings.Logging.consoleFont.size;
+	redMain->Font->Style = appSettings.Logging.consoleFont.style;	
 }
 
 void __fastcall TfrmLog::miSaveToFileClick(TObject *Sender)

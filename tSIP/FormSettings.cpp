@@ -284,6 +284,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	}
 	cbLogMaxFileSize->Text = tmpSettings.Logging.iMaxFileSize;
 	cbLogRotate->ItemIndex = tmpSettings.Logging.iLogRotate;
+	ShowFonts();
 
 	chbUserOnlyClip->Checked = tmpSettings.Display.bUserOnlyClip;
 	chbDecodeUtfDisplayToAnsi->Checked = tmpSettings.Display.bDecodeUtfDisplayToAnsi;
@@ -1289,4 +1290,42 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 //---------------------------------------------------------------------------
 
 
+
+void __fastcall TfrmSettings::btnLoggingConsoleFontSelectClick(TObject *Sender)
+{
+	TButton *btn = dynamic_cast<TButton*>(Sender);
+	assert(btn);
+	struct Font *font = &tmpSettings.Logging.consoleFont;
+	fontDialog->Font->Name = font->name;
+	fontDialog->Font->Size = font->size;
+	fontDialog->Font->Style = font->style;
+	if (fontDialog->Execute())
+	{
+	#if 0
+		if (btn->Tag == 2 || btn->Tag == 4)	// Scintilla: own styling
+		{
+			fontDialog->Font->Style = TFontStyles();
+			//fontDialog->Options << fdNoStyleSel;
+		}
+	#endif
+		font->name = fontDialog->Font->Name;
+		font->size = fontDialog->Font->Size;
+		font->style = fontDialog->Font->Style;
+		ShowFonts();
+	}
+}
+//---------------------------------------------------------------------------
+
+void TfrmSettings::ShowFonts(void)
+{
+	TEdit *ed;
+	struct Font *font;
+
+	ed = this->edLoggingConsoleFont;
+	font = &tmpSettings.Logging.consoleFont;
+
+	ed->Font->Name = font->name;
+	ed->Font->Size = font->size;
+	ed->Font->Style = font->style;
+}
 

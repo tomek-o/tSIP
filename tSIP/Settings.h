@@ -6,6 +6,7 @@
 #define SettingsH
 //---------------------------------------------------------------------------
 #include <System.hpp>
+#include <Graphics.hpp>
 #include "UaConf.h"
 #include "ButtonConf.h"
 #include "HotKeyConf.h"
@@ -19,6 +20,23 @@ namespace Json
 	struct Value;
 }
 
+struct Font
+{
+	AnsiString name;
+	int size;
+	TFontStyles style;
+	Font(void);
+	bool operator==(const Font& right) const {
+		return (
+			name == right.name &&
+			size == right.size &&
+			style == right.style
+		);
+	}
+	bool operator!=(const Font& right) const {
+		return !(*this == right);
+	}
+};
 
 class Settings
 {
@@ -159,13 +177,16 @@ public:
 		unsigned int iLogRotate;
 		unsigned int iMaxUiLogLines;		
 
+		Font consoleFont;
+
         _Logging(void):
             bLogToFile(false),
             bFlush(false),
             iMaxFileSize(Settings::_Logging::DEF_MAX_FILE_SIZE),
             iLogRotate(Settings::_Logging::DEF_LOGROTATE),
             iMaxUiLogLines(5000)
-        {
+		{
+			consoleFont.name = "Courier New";
         }
 	} Logging;
 	struct _Calls

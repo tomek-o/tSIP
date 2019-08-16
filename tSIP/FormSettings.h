@@ -316,6 +316,10 @@ __published:	// IDE-managed Components
 	TCheckBox *chbHistoryShowHint;
 	TCheckBox *chbHistoryFormatCallDurationAsHourMinSec;
 	TCheckBox *chbHistoryShowCodecNameInHint;
+	TLabel *lblLoggingConsoleFont;
+	TEdit *edLoggingConsoleFont;
+	TButton *btnLoggingConsoleFontSelect;
+	TFontDialog *fontDialog;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -348,6 +352,7 @@ __published:	// IDE-managed Components
 	void __fastcall cbSoundRingOutputModChange(TObject *Sender);
 	void __fastcall btnSelectedScriptEditClick(TObject *Sender);
 	void __fastcall cbRecordingChannelsChange(TObject *Sender);
+	void __fastcall btnLoggingConsoleFontSelectClick(TObject *Sender);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
 	void FillDevList(TComboBox *target, int module, bool out, AnsiString selected);
@@ -359,6 +364,7 @@ private:	// User declarations
 	void AudioCodecEnableSelected(void);
 	void AudioCodecDisableSelected(void);
 	void AudioPreprocessingUpdate(void);
+	void ShowFonts(void);
 public:		// User declarations
 	__fastcall TfrmSettings(TComponent* Owner);
 	Settings tmpSettings;

@@ -23,6 +23,13 @@ inline void strncpyz(char* dst, const char* src, int dstsize) {
 	dst[dstsize-1] = '\0';
 }
 
+Font::Font(void)
+{
+	name = "Tahoma";
+	size = 8;
+	style = TFontStyles();
+}
+
 Settings::_frmMain::_frmMain(void):
 	iPosX(30),
 	iPosY(30),
@@ -137,7 +144,7 @@ Settings::Settings(void)
 	struct UaConf::Account new_acc;
 	uaConf.accounts.push_back(new_acc);
 
-	ScriptWindow.ClearMruItems();	
+	ScriptWindow.ClearMruItems();
 }
 
 int Settings::UpdateFromText(AnsiString text)
@@ -635,6 +642,28 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			Logging.iLogRotate = iLogRotate;
 		}
 		Logging.iMaxUiLogLines = LoggingJson.get("MaxUiLogLines", Logging.iMaxUiLogLines).asInt();
+		{
+			const Json::Value &jv = LoggingJson["ConsoleFont"];
+			struct Font &font = Logging.consoleFont;
+			font.name = jv.get("name", font.name.c_str()).asAString();
+			font.size = jv.get("size", font.size).asInt();
+			font.style = TFontStyles();
+			bool bold = jv.get("bold", false).asBool();
+			if (bold)
+			{
+				font.style << fsBold;
+			}
+			bool italic = jv.get("italic", false).asBool();
+			if (italic)
+			{
+				font.style << fsItalic;
+			}
+			bool underline = jv.get("underline", false).asBool();
+			if (underline)
+			{
+				font.style << fsUnderline;
+			}
+		}
 	}
 
 	{
@@ -839,11 +868,23 @@ int Settings::Write(AnsiString asFileName)
 	root["frmContactPopup"]["Width"] = frmContactPopup.iWidth;
 	root["frmContactPopup"]["Height"] = frmContactPopup.iHeight;
 
-	root["Logging"]["LogToFile"] = Logging.bLogToFile;
-	root["Logging"]["Flush"] = Logging.bFlush;
-	root["Logging"]["MaxFileSize"] = Logging.iMaxFileSize;
-	root["Logging"]["LogRotate"] = Logging.iLogRotate;
-	root["Logging"]["MaxUiLogLines"] = Logging.iMaxUiLogLines;
+	{
+		Json::Value &jLogging = root["Logging"];
+		jLogging["LogToFile"] = Logging.bLogToFile;
+		jLogging["Flush"] = Logging.bFlush;
+		jLogging["MaxFileSize"] = Logging.iMaxFileSize;
+		jLogging["LogRotate"] = Logging.iLogRotate;
+		jLogging["MaxUiLogLines"] = Logging.iMaxUiLogLines;
+		{
+			Json::Value &jFont = jLogging["ConsoleFont"];
+			const struct Font &font = Logging.consoleFont;
+			jFont["name"] = font.name.c_str();
+			jFont["size"] = font.size;
+			jFont["bold"] = font.style.Contains(fsBold);
+			jFont["italic"] = font.style.Contains(fsItalic);
+			jFont["underline"] = font.style.Contains(fsUnderline);
+		}
+	}
 
 	root["Calls"]["ExtraHeaderLines"] = Calls.extraHeaderLines.c_str();
 	root["Calls"]["DisconnectCallOnAudioError"] = Calls.bDisconnectCallOnAudioError;
