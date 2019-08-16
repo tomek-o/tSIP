@@ -364,10 +364,25 @@ Value::Value( const std::string &value )
    , itemIsUsed_( 0 )
 #endif
 {
-   value_.string_ = valueAllocator()->duplicateStringValue( value.c_str(), 
-                                                            (unsigned int)value.length() );
+   value_.string_ = valueAllocator()->duplicateStringValue( value.c_str(),
+															(unsigned int)value.length() );
 
 }
+
+#ifdef __BORLANDC__
+Value::Value( const AnsiString &value )
+   : type_( stringValue )
+   , allocated_( true )
+   , comments_( 0 )
+# ifdef JSON_VALUE_USE_INTERNAL_MAP
+   , itemIsUsed_( 0 )
+#endif
+{
+   value_.string_ = valueAllocator()->duplicateStringValue( value.c_str(),
+															(unsigned int)value.Length() );
+
+}
+#endif
 
 Value::Value( const StaticString &value )
    : type_( stringValue )
@@ -671,17 +686,17 @@ Value::asCString() const
 }
 
 
-std::string 
+std::string
 Value::asString() const
 {
    switch ( type_ )
    {
    case nullValue:
-      return "";
+	  return "";
    case stringValue:
-      return value_.string_ ? value_.string_ : "";
+	  return value_.string_ ? value_.string_ : "";
    case booleanValue:
-      return value_.bool_ ? "true" : "false";
+	  return value_.bool_ ? "true" : "false";
    case intValue:
    case uintValue:
    case realValue:
@@ -691,10 +706,37 @@ Value::asString() const
 	  JSON_ASSERT_MESSAGE( false, "Type is not convertible to string" );
 #pragma warn .8008
    default:
-      JSON_ASSERT_UNREACHABLE;
+	  JSON_ASSERT_UNREACHABLE;
    }
    return ""; // unreachable
 }
+
+#ifdef __BORLANDC__
+AnsiString
+Value::asAString() const
+{
+   switch ( type_ )
+   {
+   case nullValue:
+	  return "";
+   case stringValue:
+	  return value_.string_ ? value_.string_ : "";
+   case booleanValue:
+	  return value_.bool_ ? "true" : "false";
+   case intValue:
+   case uintValue:
+   case realValue:
+   case arrayValue:
+   case objectValue:
+#pragma warn -8008
+	  JSON_ASSERT_MESSAGE( false, "Type is not convertible to string" );
+#pragma warn .8008
+   default:
+	  JSON_ASSERT_UNREACHABLE;
+   }
+   return ""; // unreachable
+}
+#endif
 
 # ifdef JSON_USE_CPPTL
 CppTL::ConstString 

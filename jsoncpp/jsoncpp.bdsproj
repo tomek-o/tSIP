@@ -160,6 +160,10 @@
         <FILE FILENAME="src\lib_json\json_reader.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="json_reader" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="src\lib_json\json_value.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="json_value" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="include\json\json.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\json\config.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="include\json\forwards.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="include\json\reader.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="include\json\value.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

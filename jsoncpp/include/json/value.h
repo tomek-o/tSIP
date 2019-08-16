@@ -14,6 +14,10 @@
 #  include <cpptl/forwards.h>
 # endif
 
+# ifdef __BORLANDC__
+#  include <System.hpp>	// AnsiString
+# endif
+
 /** \brief JSON (JavaScript Object Notation).
  */
 namespace Json {
@@ -197,7 +201,10 @@ namespace Json {
        * \endcode
        */
       Value( const StaticString &value );
-      Value( const std::string &value );
+	  Value( const std::string &value );
+#ifdef __BORLANDC__
+	  Value( const AnsiString &value );
+#endif
 # ifdef JSON_USE_CPPTL
       Value( const CppTL::ConstString &value );
 # endif
@@ -224,7 +231,10 @@ namespace Json {
       int compare( const Value &other );
 
       const char *asCString() const;
-      std::string asString() const;
+	  std::string asString() const;
+#ifdef __BORLANDC__
+	  AnsiString asAString() const;
+#endif
 # ifdef JSON_USE_CPPTL
       CppTL::ConstString asConstString() const;
 # endif
