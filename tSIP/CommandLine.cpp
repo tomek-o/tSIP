@@ -51,7 +51,16 @@ int CommandLine::Process(void)
 	char *buf = NULL;
 
 	// check for previous app instance
-	HWND hWnd = FindWindow("TfrmMain", Branding::appName.c_str());
+	AnsiString expectedCaption;
+	if (appSettings.frmMain.bUseCustomCaption)
+	{
+		expectedCaption = appSettings.frmMain.customCaption;
+	}
+	else
+	{
+		expectedCaption = Branding::appName;
+	}
+	HWND hWnd = FindWindow("TfrmMain", expectedCaption.c_str());
 
 	int paramcnt = ParamCount() + 1;
 	if (paramcnt <= 1)
