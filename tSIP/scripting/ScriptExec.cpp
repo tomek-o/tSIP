@@ -1047,7 +1047,12 @@ int ScriptExec::l_GetButtonNumber(lua_State* L)
 	return 1;
 }
 
-
+int ScriptExec::l_MainMenuShow(lua_State* L)
+{
+	bool state = lua_tointeger( L, 1 );
+	GetContext(L)->onMainMenuShow(state);
+	return 0;
+}
 
 ScriptExec::ScriptExec(
 	enum ScriptSource srcType,
@@ -1080,7 +1085,8 @@ ScriptExec::ScriptExec(
 	CallbackGetUserName onGetUserName,
 	CallbackProgrammableButtonClick onProgrammableButtonClick,
 	CallbackUpdateSettings onUpdateSettings,
-	CallbackGetButtonConf onGetButtonConf
+	CallbackGetButtonConf onGetButtonConf,
+	CallbackMainMenuShow onMainMenuShow
 	):
 	srcType(srcType),
 	srcId(srcId),
@@ -1113,6 +1119,7 @@ ScriptExec::ScriptExec(
 	onProgrammableButtonClick(onProgrammableButtonClick),
 	onUpdateSettings(onUpdateSettings),
 	onGetButtonConf(onGetButtonConf),
+	onMainMenuShow(onMainMenuShow),
 
 	running(false)
 {
@@ -1132,7 +1139,8 @@ ScriptExec::ScriptExec(
 		onGetUserName &&
 		onProgrammableButtonClick &&
 		onUpdateSettings &&
-		onGetButtonConf
+		onGetButtonConf &&
+		onMainMenuShow
 		);
 }
 
@@ -1219,6 +1227,8 @@ void ScriptExec::Run(const char* script)
 
 	lua_register(L, "GetButtonType", l_GetButtonType);
 	lua_register(L, "GetButtonNumber", l_GetButtonNumber);
+
+    lua_register(L, "MainMenuShow", l_MainMenuShow);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);

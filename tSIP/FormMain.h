@@ -186,6 +186,7 @@ private:	// User declarations
 	std::string OnGetRxDtmf(void);
 	std::string OnGetUserName(void);
 	const ButtonConf* OnGetButtonConf(int id);
+	void MainMenuShow(bool state);
 
 	int autoAnswerCode;
 	bool autoAnswerIntercom;

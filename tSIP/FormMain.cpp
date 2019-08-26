@@ -871,6 +871,11 @@ const ButtonConf* TfrmMain::OnGetButtonConf(int id)
 	return &buttons.btnConf[id];
 }
 
+void TfrmMain::MainMenuShow(bool state)
+{
+	this->Menu = (state)?(MainMenu):(NULL);
+}
+
 AnsiString TfrmMain::CleanUri(AnsiString uri)
 {
 	AnsiString res = uri;
@@ -2104,7 +2109,8 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetUserName,
 		&ProgrammableButtonClick,
 		&UpdateSettingsFromJson,
-		&OnGetButtonConf
+		&OnGetButtonConf,
+		&MainMenuShow
 		);
 	scriptExec.Run(script.c_str());
 	return 0;
