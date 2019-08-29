@@ -5,6 +5,7 @@
 #include "Settings.h"
 #include "common/Utils.h"
 #include "Branding.h"
+#include "Log.h"
 #include <string>
 #include <stdio.h>
 
@@ -129,36 +130,42 @@ void CommandLine::Execute(char* buf, int paramcnt)
 	for (int i=1; i<=paramcnt; i++)
 	{
 		AnsiString asParam = buf + (MAX_CMD_PARAM_LEN*i);
+        //LOG("asParam = %s\n", asParam.c_str());
 		if (LowerCase(asParam).Pos(szCallParam) == 1)
 		{
 			AnsiString asCallTo =
 				asParam.SubString(strlen(szCallParam)+1, asParam.Length() - strlen(szCallParam)).Trim();
-		#if 0
+
+			AnsiString asCommandPart;
 			int i = asCallTo.Pos(":");
 			if (i)
-				asCallTo = asCallTo.SubString(i+1, asCallTo.Length()-i);
-		#endif
+				asCommandPart = asCallTo.SubString(i+1, asCallTo.Length()-i);
+			else
+				asCommandPart = asCallTo;
+
 			asCallTo = UrlDecode(asCallTo.c_str()).c_str();
 
-			if (asCallTo == "HANGUP")
+			//LOG("asCallTo = %s\n", asCallTo.c_str());
+
+			if (asCommandPart == "HANGUP")
 			{
 				action = ACTION_HANGUP;
 			}
-			else if (asCallTo == "ANSWER")
+			else if (asCommandPart == "ANSWER")
 			{
 				action = ACTION_ANSWER;
 			}
-			else if (asCallTo == "SHOWWINDOW")
+			else if (asCommandPart == "SHOWWINDOW")
 			{
 				action = ACTION_SHOWWINDOW;
 			}
-			else if (asCallTo == "APP_QUIT")
+			else if (asCommandPart == "APP_QUIT")
 			{
                 action = ACTION_APP_QUIT;
 			}
-			else if (asCallTo.Pos(PROGRAMMABLE_BTN_STR) == 1)
+			else if (asCommandPart.Pos(PROGRAMMABLE_BTN_STR) == 1)
 			{
-				AnsiString btnIdStr = asCallTo.SubString(strlen(PROGRAMMABLE_BTN_STR)+1, asCallTo.Length() - strlen(PROGRAMMABLE_BTN_STR));
+				AnsiString btnIdStr = asCommandPart.SubString(strlen(PROGRAMMABLE_BTN_STR)+1, asCommandPart.Length() - strlen(PROGRAMMABLE_BTN_STR));
 				programmableBtnId = StrToIntDef(btnIdStr, programmableBtnId);
 				if (programmableBtnId >= 0)
 				{

@@ -2473,8 +2473,8 @@ void __fastcall TfrmMain::WMHotKey(TWMHotKey &Message)
 
 void TfrmMain::HandleCommandLine(void)
 {
-	LOG("Handling commnand line\n");
 	CommandLine &cmd = CommandLine::Instance();
+	LOG("Handling commnand line\n");
 	if (cmd.action == CommandLine::ACTION_HANGUP)
 	{
 		LOG("action = HANGUP\n");
@@ -2511,10 +2511,12 @@ void TfrmMain::HandleCommandLine(void)
 	}
 	else if (cmd.action == CommandLine::ACTION_APP_QUIT)
 	{
+		LOG("action = APP_QUIT\n");	
     	actExit->Execute();
 	}
 	else if (cmd.action == CommandLine::ACTION_PROGRAMMABLE_BTN)
 	{
+		LOG("action = PROGRAMMABLE_BTN\n");	
 		ProgrammableButtonClick(cmd.programmableBtnId);
 	}
 	cmd.action = CommandLine::ACTION_NONE;
