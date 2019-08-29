@@ -239,7 +239,7 @@ namespace Json {
       CppTL::ConstString asConstString() const;
 # endif
       Int asInt() const;
-      UInt asUInt() const;
+	  UInt asUInt() const;
       double asDouble() const;
       bool asBool() const;
 
@@ -330,13 +330,22 @@ namespace Json {
                  const Value &defaultValue ) const;
       /// Return the member named key if it exist, defaultValue otherwise.
       Value get( const std::string &key,
-                 const Value &defaultValue ) const;
+				 const Value &defaultValue ) const;
 # ifdef JSON_USE_CPPTL
-      /// Return the member named key if it exist, defaultValue otherwise.
-      Value get( const CppTL::ConstString &key,
-                 const Value &defaultValue ) const;
+	  /// Return the member named key if it exist, defaultValue otherwise.
+	  Value get( const CppTL::ConstString &key,
+				 const Value &defaultValue ) const;
 # endif
-      /// \brief Remove and return the named member.  
+
+      /// Try to get value with specified name, leave val as is otherwise
+#ifdef __BORLANDC__
+	  void getAString(const char* key, AnsiString &val) const;
+#endif
+	  void getInt(const char* key, int &val) const;
+	  void getUInt(const char* key, unsigned int &val) const;
+	  void getBool(const char* key, bool &val) const;
+
+	  /// \brief Remove and return the named member.
       ///
       /// Do nothing if it did not exist.
       /// \return the removed Value, or null.

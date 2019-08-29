@@ -196,8 +196,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 {
 	{
 		const Json::Value &jv = root["info"];
-		info.appVersion.FileVersionMS = jv.get("FileVersionMS", info.appVersion.FileVersionMS).asUInt();
-		info.appVersion.FileVersionLS = jv.get("FileVersionLS", info.appVersion.FileVersionLS).asUInt();
+		jv.getUInt("FileVersionMS", info.appVersion.FileVersionMS);
+		jv.getUInt("FileVersionLS", info.appVersion.FileVersionLS);
 	}
 
 	{
@@ -291,7 +291,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		if (Branding::recording)
 		{
 			const Json::Value &uaConfRecordingJson = uaConfJson["recording"];
-			uaConf.recording.enabled = uaConfRecordingJson.get("enabled", uaConf.recording.enabled).asBool();
+			uaConfRecordingJson.getBool("enabled", uaConf.recording.enabled);
 			UaConf::RecordingCfg::RecDir recDir = static_cast<UaConf::RecordingCfg::RecDir>(uaConfRecordingJson.get("recDir", uaConf.recording.recDir).asInt());
 			if (recDir >= 0 && uaConf.recording.recDir < UaConf::RecordingCfg::RecDirLimiter) {
 				uaConf.recording.recDir = recDir;

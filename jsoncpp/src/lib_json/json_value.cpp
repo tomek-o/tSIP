@@ -1177,6 +1177,29 @@ Value::get( const std::string &key,
    return get( key.c_str(), defaultValue );
 }
 
+#ifdef __BORLANDC__
+void Value::getAString(const char* key, AnsiString &val) const
+{
+	val = get(key, val).asAString();
+}
+#endif
+
+void Value::getInt(const char* key, int &val) const
+{
+	val = get(key, val).asInt();
+}
+
+void Value::getUInt(const char* key, unsigned int &val) const
+{
+	val = get(key, val).asUInt();
+}
+
+void Value::getBool(const char* key, bool &val) const
+{
+	val = get(key, val).asBool();
+}                                
+
+
 Value
 Value::removeMember( const char* key )
 {
