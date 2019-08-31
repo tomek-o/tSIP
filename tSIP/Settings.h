@@ -261,6 +261,8 @@ public:
 		AnsiString onStartup;
 		AnsiString onTimer;
 		int timer;					///< ms
+		AnsiString onTimer2;		///< second timer; having two timers allows having two different timer periods, putting long script in one timer even, shorted, frequently running in other
+		int timer2;					///< ms
 		AnsiString onDialogInfo;	///< on BLF (dialog-info) state change
 		AnsiString onDial;			///< running when user presses one of the dialpad buttons or any key when main number edit is focused
 									///< key value (char) is passed as srcId

@@ -484,18 +484,10 @@ object frmMain: TfrmMain
       object tsContacts: TTabSheet
         Caption = 'Contacts'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object tsHistory: TTabSheet
         Caption = 'History'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
@@ -512,6 +504,8 @@ object frmMain: TfrmMain
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitLeft = 263
+    ExplicitTop = 1
   end
   object MainMenu: TMainMenu
     Left = 283
@@ -1468,7 +1462,7 @@ object frmMain: TfrmMain
     Enabled = False
     OnTimer = tmrScriptTimer
     Left = 285
-    Top = 307
+    Top = 171
   end
   object tmrClearCallState: TTimer
     Enabled = False
@@ -1476,5 +1470,11 @@ object frmMain: TfrmMain
     OnTimer = tmrClearCallStateTimer
     Left = 285
     Top = 267
+  end
+  object tmrScript2: TTimer
+    Enabled = False
+    OnTimer = tmrScript2Timer
+    Left = 317
+    Top = 171
   end
 end

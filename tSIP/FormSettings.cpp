@@ -405,6 +405,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edScriptOnRegistrationStateChangeFile->Text = tmpSettings.Scripts.onRegistrationState;
 	edScriptOnTimerFile->Text = tmpSettings.Scripts.onTimer;
 	edScriptTimer->Text = tmpSettings.Scripts.timer;
+	edScriptOnTimer2File->Text = tmpSettings.Scripts.onTimer2;
+	edScriptTimer2->Text = tmpSettings.Scripts.timer2;
 	edScriptOnStartupFile->Text = tmpSettings.Scripts.onStartup;
 	edScriptOnDialogInfoFile->Text = tmpSettings.Scripts.onDialogInfo;
 	edScriptOnDialFile->Text = tmpSettings.Scripts.onDial;
@@ -650,6 +652,10 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.timer = StrToIntDef(edScriptTimer->Text, -1);
 	if (tmpSettings.Scripts.timer <= 0)
 		tmpSettings.Scripts.timer = 1000;
+	tmpSettings.Scripts.onTimer2 = edScriptOnTimer2File->Text;
+	tmpSettings.Scripts.timer2 = StrToIntDef(edScriptTimer2->Text, -1);
+	if (tmpSettings.Scripts.timer2 <= 0)
+		tmpSettings.Scripts.timer2 = 1000;
 	tmpSettings.Scripts.onStartup = edScriptOnStartupFile->Text;
 	tmpSettings.Scripts.onDialogInfo = edScriptOnDialogInfoFile->Text;
 	tmpSettings.Scripts.onDial = edScriptOnDialFile->Text;
@@ -1149,6 +1155,10 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 	{
 		edit = edScriptOnTimerFile;
 	}
+	else if (Sender == btnSelectedScriptOnTimer2Change)
+	{
+    	edit = edScriptOnTimer2File;
+	}
 	else if (Sender == btnSelectedScriptOnStartupChange)
 	{
 		edit = edScriptOnStartupFile;
@@ -1225,6 +1235,11 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	{
 		edit = edScriptOnTimerFile;
 		eventName = "on_timer";
+	}
+	else if (Sender == btnSelectedScriptOnTimer2Edit)
+	{
+		edit = edScriptOnTimer2File;
+		eventName = "on_timer2";
 	}
 	else if (Sender == btnSelectedScriptOnStartupEdit)
 	{
@@ -1328,4 +1343,7 @@ void TfrmSettings::ShowFonts(void)
 	ed->Font->Size = font->size;
 	ed->Font->Style = font->style;
 }
+
+
+
 

@@ -52,17 +52,13 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsLogging
+    ActivePage = tsScripts
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblGuiScaling: TLabel
         Left = 3
         Top = 143
@@ -302,10 +298,6 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -441,10 +433,6 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 341
@@ -484,10 +472,6 @@ object frmSettings: TfrmSettings
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblSpeedDial: TLabel
         Left = 3
         Top = 3
@@ -604,10 +588,6 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -740,10 +720,6 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -772,10 +748,6 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -838,10 +810,6 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1053,10 +1021,6 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblSoundInputModule: TLabel
         Left = 43
         Top = 22
@@ -1185,7 +1149,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 1
       end
       object cbSoundOutputMod: TComboBox
@@ -1210,7 +1174,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 3
       end
       object cbSoundAlertOutputMod: TComboBox
@@ -1235,7 +1199,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 5
       end
       object cbSoundOutputIntercomMod: TComboBox
@@ -1260,7 +1224,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 7
       end
       object btnSelectWaveFile: TButton
@@ -1285,7 +1249,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 10
       end
       object cbSoundRingOutputMod: TComboBox
@@ -1308,10 +1272,6 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -1430,10 +1390,6 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -1558,10 +1514,6 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -1622,10 +1574,6 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -1728,18 +1676,10 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblContactPopup: TLabel
         Left = 7
         Top = 7
@@ -1814,10 +1754,6 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -1874,18 +1810,10 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Phones'
       ImageIndex = 13
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblTrayNotifierBackgroundImage: TLabel
         Left = 3
         Top = 72
@@ -1976,12 +1904,10 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitLeft = 6
+      ExplicitTop = 20
       object lblScriptOnCallStateFile: TLabel
-        Left = 19
+        Left = 5
         Top = 59
         Width = 96
         Height = 13
@@ -1995,84 +1921,112 @@ object frmSettings: TfrmSettings
         Caption = 'Lua scripts executed on events (\script subdirectory)'
       end
       object lblScriptOnStreamingStateFile: TLabel
-        Left = 19
+        Left = 5
         Top = 85
         Width = 128
         Height = 13
         Caption = 'on streaming state change'
       end
       object lblScriptOnMakeCall: TLabel
-        Left = 19
+        Left = 5
         Top = 33
         Width = 66
         Height = 13
         Caption = 'on making call'
       end
       object lblScriptOnTimer: TLabel
-        Left = 19
+        Left = 5
         Top = 162
         Width = 39
         Height = 13
         Caption = 'on timer'
       end
-      object lblScriptTimer: TLabel
-        Left = 60
-        Top = 188
-        Width = 50
+      object lblScriptTimerPeriod: TLabel
+        Left = 423
+        Top = 162
+        Width = 30
         Height = 13
-        Caption = 'Timer [ms]'
+        Caption = 'Period'
       end
       object lblScriptOnRegistrationStateChange: TLabel
-        Left = 19
+        Left = 5
         Top = 112
         Width = 136
         Height = 13
         Caption = 'on registration state change'
       end
       object lblScriptOnStartup: TLabel
-        Left = 19
+        Left = 5
         Top = 137
         Width = 50
         Height = 13
         Caption = 'on startup'
       end
       object lblScriptOnBlf: TLabel
-        Left = 19
+        Left = 5
         Top = 214
         Width = 131
         Height = 13
         Caption = 'on BLF (dialog-info) change'
       end
       object lblScriptOnDial: TLabel
-        Left = 19
+        Left = 5
         Top = 240
         Width = 77
         Height = 13
         Caption = 'on dial (keypad)'
       end
       object lblScriptOnProgrammableButton: TLabel
-        Left = 19
+        Left = 17
         Top = 266
         Width = 118
         Height = 13
         Caption = 'on programmable button'
       end
       object lblScriptOnAudioError: TLabel
-        Left = 19
+        Left = 5
         Top = 292
         Width = 102
         Height = 13
         Caption = 'on audio device error'
       end
+      object lblScriptPeriodMs: TLabel
+        Left = 519
+        Top = 162
+        Width = 13
+        Height = 13
+        Caption = 'ms'
+      end
+      object lblScriptOnTimer2: TLabel
+        Left = 5
+        Top = 188
+        Width = 48
+        Height = 13
+        Caption = 'on timer 2'
+      end
+      object lblScriptTimer2Period: TLabel
+        Left = 423
+        Top = 188
+        Width = 30
+        Height = 13
+        Caption = 'Period'
+      end
+      object lblScriptTimer2Ms: TLabel
+        Left = 519
+        Top = 188
+        Width = 13
+        Height = 13
+        Caption = 'ms'
+      end
       object edScriptOnCallStateChangeFile: TEdit
-        Left = 162
+        Left = 145
         Top = 56
-        Width = 239
+        Width = 212
         Height = 21
         TabOrder = 0
       end
       object btnSelectedScriptOnCallStateChange: TButton
-        Left = 405
+        Left = 363
         Top = 56
         Width = 22
         Height = 21
@@ -2081,14 +2035,14 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnStreamingStateChangeFile: TEdit
-        Left = 162
+        Left = 145
         Top = 82
-        Width = 239
+        Width = 212
         Height = 21
         TabOrder = 2
       end
       object btnSelectedScriptOnStreamingStateChange: TButton
-        Left = 405
+        Left = 363
         Top = 82
         Width = 22
         Height = 21
@@ -2097,14 +2051,14 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnMakeCallFile: TEdit
-        Left = 162
+        Left = 145
         Top = 30
-        Width = 239
+        Width = 212
         Height = 21
         TabOrder = 4
       end
       object btnSelectedScriptOnMakeCallChange: TButton
-        Left = 405
+        Left = 363
         Top = 30
         Width = 22
         Height = 21
@@ -2113,14 +2067,14 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnTimerFile: TEdit
-        Left = 162
-        Top = 159
-        Width = 239
+        Left = 145
+        Top = 158
+        Width = 212
         Height = 21
         TabOrder = 6
       end
       object btnSelectedScriptOnTimerChange: TButton
-        Left = 405
+        Left = 363
         Top = 159
         Width = 22
         Height = 21
@@ -2129,21 +2083,21 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptTimer: TEdit
-        Left = 162
-        Top = 185
-        Width = 63
+        Left = 459
+        Top = 159
+        Width = 54
         Height = 21
         TabOrder = 8
       end
       object edScriptOnRegistrationStateChangeFile: TEdit
-        Left = 162
+        Left = 145
         Top = 109
-        Width = 239
+        Width = 212
         Height = 21
         TabOrder = 9
       end
       object btnSelectedScriptOnRegistrationStateChange: TButton
-        Left = 405
+        Left = 363
         Top = 109
         Width = 22
         Height = 21
@@ -2152,14 +2106,14 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnStartupFile: TEdit
-        Left = 162
+        Left = 145
         Top = 134
-        Width = 239
+        Width = 212
         Height = 21
         TabOrder = 12
       end
       object btnSelectedScriptOnStartupChange: TButton
-        Left = 405
+        Left = 363
         Top = 134
         Width = 22
         Height = 21
@@ -2168,14 +2122,14 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnDialogInfoFile: TEdit
-        Left = 162
+        Left = 145
         Top = 212
-        Width = 239
+        Width = 212
         Height = 21
         TabOrder = 13
       end
       object btnSelectedScriptOnDialogInfoChange: TButton
-        Left = 405
+        Left = 363
         Top = 212
         Width = 22
         Height = 21
@@ -2184,14 +2138,14 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnDialFile: TEdit
-        Left = 162
+        Left = 145
         Top = 238
-        Width = 239
+        Width = 212
         Height = 21
         TabOrder = 15
       end
       object btnSelectedScriptOnDialChange: TButton
-        Left = 405
+        Left = 363
         Top = 238
         Width = 22
         Height = 21
@@ -2200,7 +2154,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object btnSelectedScriptOnMakeCallEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 30
         Width = 22
         Height = 21
@@ -2235,7 +2189,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object btnSelectedScriptOnCallStateEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 56
         Width = 22
         Height = 21
@@ -2270,7 +2224,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object btnSelectedScriptOnStreamingStateEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 82
         Width = 22
         Height = 21
@@ -2305,7 +2259,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object btnSelectedScriptOnRegistrationStateEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 109
         Width = 22
         Height = 21
@@ -2340,7 +2294,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object btnSelectedScriptOnStartupEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 134
         Width = 22
         Height = 21
@@ -2375,7 +2329,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object btnSelectedScriptOnTimerEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 159
         Width = 22
         Height = 21
@@ -2410,7 +2364,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object btnSelectedScriptOnDialogInfoEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 212
         Width = 22
         Height = 21
@@ -2445,7 +2399,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object btnSelectedScriptOnDialEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 238
         Width = 22
         Height = 21
@@ -2480,15 +2434,15 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object edScriptOnProgrammableButtonFile: TEdit
-        Left = 162
-        Top = 264
-        Width = 239
+        Left = 145
+        Top = 263
+        Width = 212
         Height = 21
         TabOrder = 25
       end
       object btnSelectedScriptOnProgrammableButtonChange: TButton
-        Left = 405
-        Top = 264
+        Left = 363
+        Top = 263
         Width = 22
         Height = 21
         Caption = '...'
@@ -2496,8 +2450,8 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object btnSelectedScriptOnProgrammableButtonEdit: TBitBtn
-        Left = 432
-        Top = 264
+        Left = 390
+        Top = 263
         Width = 22
         Height = 21
         TabOrder = 27
@@ -2531,14 +2485,14 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object edScriptOnAudioErrorFile: TEdit
-        Left = 162
+        Left = 145
         Top = 290
-        Width = 239
+        Width = 212
         Height = 21
         TabOrder = 28
       end
       object btnSelectedScriptOnAudioErrorChange: TButton
-        Left = 405
+        Left = 363
         Top = 290
         Width = 22
         Height = 21
@@ -2547,7 +2501,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object btnSelectedScriptOnAudioErrorEdit: TBitBtn
-        Left = 432
+        Left = 390
         Top = 290
         Width = 22
         Height = 21
@@ -2581,14 +2535,68 @@ object frmSettings: TfrmSettings
           FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
+      object edScriptOnTimer2File: TEdit
+        Left = 145
+        Top = 185
+        Width = 212
+        Height = 21
+        TabOrder = 31
+      end
+      object btnSelectedScriptOnTimer2Change: TButton
+        Left = 363
+        Top = 185
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 32
+        OnClick = btnSelectedScriptClick
+      end
+      object btnSelectedScriptOnTimer2Edit: TBitBtn
+        Left = 390
+        Top = 185
+        Width = 22
+        Height = 21
+        TabOrder = 33
+        OnClick = btnSelectedScriptEditClick
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+          000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
+          D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8
+          FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
+      end
+      object edScriptTimer2: TEdit
+        Left = 459
+        Top = 185
+        Width = 54
+        Height = 21
+        TabOrder = 34
+      end
     end
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblUiCapacity: TLabel
         Left = 5
         Top = 122
