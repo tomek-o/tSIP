@@ -38,7 +38,9 @@ private:
 	typedef void (__closure *CallbackSetTrayIcon)(const char* file);
 	typedef int (__closure *CallbackGetRegistrationState)(void);///< as in Callback::reg_state_e
 	typedef void (__closure *CallbackSetButtonCaption)(int id, std::string text);
+	typedef void (__closure *CallbackSetButtonCaption2)(int id, std::string text);
 	typedef void (__closure *CallbackSetButtonDown)(int id, bool state);
+	typedef bool (__closure *CallbackGetButtonDown)(int id);
 	typedef void (__closure *CallbackSetButtonImage)(int id, const char* file);
 	typedef int (__closure *CallbackPluginSendMessageText)(const char* dllName, const char* text);
 	typedef int (__closure *CallbackPluginEnable)(const char* dllName, bool state);
@@ -68,7 +70,9 @@ private:
 	CallbackSetTrayIcon onSetTrayIcon;
 	CallbackGetRegistrationState onGetRegistrationState;
 	CallbackSetButtonCaption onSetButtonCaption;
+	CallbackSetButtonCaption2 onSetButtonCaption2;
 	CallbackSetButtonDown onSetButtonDown;
+	CallbackGetButtonDown onGetButtonDown;
 	CallbackSetButtonImage onSetButtonImage;
 	CallbackPluginSendMessageText onPluginSendMessageText;
 	CallbackPluginEnable onPluginEnable;
@@ -127,7 +131,9 @@ private:
 	static int l_SetTrayIcon(lua_State* L);
 	static int l_GetRegistrationState(lua_State* L);
 	static int l_SetButtonCaption(lua_State* L);
+	static int l_SetButtonCaption2(lua_State* L);
 	static int l_SetButtonDown(lua_State* L);
+	static int l_GetButtonDown(lua_State* L);
 	static int l_SetButtonImage(lua_State* L);
 	static int l_PluginSendMessageText(lua_State* L);
 	static int l_PluginEnable(lua_State* L);
@@ -176,7 +182,9 @@ public:
 		CallbackSetTrayIcon onSetTrayIcon,
 		CallbackGetRegistrationState onGetRegistrationState,
 		CallbackSetButtonCaption onSetButtonCaption,
+		CallbackSetButtonCaption2 onSetButtonCaption2,
 		CallbackSetButtonDown onSetButtonDown,
+		CallbackGetButtonDown onGetButtonDown,
 		CallbackSetButtonImage onSetButtonImage,
 		CallbackPluginSendMessageText onPluginSendMessageText,
 		CallbackPluginEnable onPluginEnable,

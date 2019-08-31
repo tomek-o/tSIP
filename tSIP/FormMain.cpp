@@ -789,12 +789,39 @@ void TfrmMain::OnSetButtonCaption(int id, std::string text)
 	}
 }
 
+void TfrmMain::OnSetButtonCaption2(int id, std::string text)
+{
+	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
+		TfrmButtonContainer *& container = frmButtonContainers[i];
+		if (container) {
+			container->UpdateBtnCaption2(id, text.c_str());
+		}
+	}
+}
+
 void TfrmMain::OnSetButtonDown(int id, bool state)
 {
 	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 		TfrmButtonContainer *& container = frmButtonContainers[i];
 		container->UpdateBtnDown(id, state);
 	}
+}
+
+bool TfrmMain::OnGetButtonDown(int buttonId)
+{
+	if (buttonId >= 0)
+	{
+		int containerId = buttonId/ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN;
+		if (containerId < sizeof(frmButtonContainers)/sizeof(frmButtonContainers[0]))
+		{
+			int id = buttonId % ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN;
+			if (frmButtonContainers[containerId] == NULL)
+				return false;
+			TProgrammableButton* btn = frmButtonContainers[containerId]->GetBtn(id);
+			return btn->GetDown();
+		}
+	}
+	return false;
 }
 
 void TfrmMain::OnSetButtonImage(int id, const char* file)
@@ -2123,7 +2150,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetStreamingState,
 		&OnSetTrayIcon,
 		&OnGetRegistrationState,
-		&OnSetButtonCaption, &OnSetButtonDown, &OnSetButtonImage,
+		&OnSetButtonCaption, &OnSetButtonCaption2, &OnSetButtonDown, &OnGetButtonDown, &OnSetButtonImage,
 		&OnPluginSendMessageText, &OnPluginEnable,
 		&OnGetBlfState,
 		&OnRecordStart,

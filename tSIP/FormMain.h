@@ -180,7 +180,9 @@ private:	// User declarations
 	int OnGetRegistrationState(void);
 	void OnSetTrayIcon(const char* file);
 	void OnSetButtonCaption(int id, std::string text);
+	void OnSetButtonCaption2(int id, std::string text);
 	void OnSetButtonDown(int id, bool state);	
+	bool OnGetButtonDown(int id);	
 	void OnSetButtonImage(int id, const char* file);
 	int OnPluginSendMessageText(const char* dllName, const char* text);
 	int OnPluginEnable(const char* dllName, bool state);

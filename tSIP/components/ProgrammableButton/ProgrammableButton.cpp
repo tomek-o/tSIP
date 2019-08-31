@@ -223,6 +223,17 @@ void TProgrammableButton::SetCaption(AnsiString text)
 	label->Caption = text;
 
 }
+void TProgrammableButton::SetCaption2(AnsiString text)
+{
+	label2->Caption = text;
+#if 0
+	if (centerLabel2Horizontally)
+	{
+		label2->Left = (Width - label2->Width)/2;
+	}
+#endif
+}
+
 void TProgrammableButton::SetState(enum dialog_info_status state, bool updateRemoteIdentity, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay)
 {
 	this->state = state;

@@ -607,12 +607,30 @@ int ScriptExec::l_SetButtonCaption(lua_State* L)
 	return 0;
 }
 
+int ScriptExec::l_SetButtonCaption2(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	const char* str = lua_tostring( L, 2 );
+	if (str == NULL)
+		str = "";
+	GetContext(L)->onSetButtonCaption2(id, str);
+	return 0;
+}
+
 int ScriptExec::l_SetButtonDown(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	int state = lua_tointeger( L, 2 );
 	GetContext(L)->onSetButtonDown(id, state);
 	return 0;
+}
+
+int ScriptExec::l_GetButtonDown(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	bool down = GetContext(L)->onGetButtonDown(id);
+	lua_pushinteger( L, down?1:0 );
+	return 1;
 }
 
 int ScriptExec::l_SetButtonImage(lua_State* L)
@@ -1074,7 +1092,9 @@ ScriptExec::ScriptExec(
 	CallbackSetTrayIcon onSetTrayIcon,
 	CallbackGetRegistrationState onGetRegistrationState,
 	CallbackSetButtonCaption onSetButtonCaption,
+	CallbackSetButtonCaption2 onSetButtonCaption2,
 	CallbackSetButtonDown onSetButtonDown,
+	CallbackGetButtonDown onGetButtonDown,
 	CallbackSetButtonImage onSetButtonImage,
 	CallbackPluginSendMessageText onPluginSendMessageText,
 	CallbackPluginEnable onPluginEnable,
@@ -1107,7 +1127,9 @@ ScriptExec::ScriptExec(
 	onSetTrayIcon(onSetTrayIcon),
 	onGetRegistrationState(onGetRegistrationState),
 	onSetButtonCaption(onSetButtonCaption),
+	onSetButtonCaption2(onSetButtonCaption2),	
 	onSetButtonDown(onSetButtonDown),
+	onGetButtonDown(onGetButtonDown),
 	onSetButtonImage(onSetButtonImage),
 	onPluginSendMessageText(onPluginSendMessageText),
 	onPluginEnable(onPluginEnable),
@@ -1130,7 +1152,7 @@ ScriptExec::ScriptExec(
 		onGetStreamingState &&
 		onSetTrayIcon &&
 		onGetRegistrationState &&
-		onSetButtonCaption && onSetButtonDown && onSetButtonImage &&
+		onSetButtonCaption && onSetButtonCaption2 && onSetButtonDown && onGetButtonDown && onSetButtonImage &&
 		onPluginSendMessageText && onPluginEnable &&
 		onGetBlfState &&
 		onRecordStart &&
@@ -1203,7 +1225,9 @@ void ScriptExec::Run(const char* script)
     lua_register(L, "SetTrayIcon", l_SetTrayIcon);
     lua_register(L, "GetRegistrationState", l_GetRegistrationState);
 	lua_register(L, "SetButtonCaption", l_SetButtonCaption);
+	lua_register(L, "SetButtonCaption2", l_SetButtonCaption2);
 	lua_register(L, "SetButtonDown", l_SetButtonDown);
+	lua_register(L, "GetButtonDown", l_GetButtonDown);
 	lua_register(L, "SetButtonImage", l_SetButtonImage);
 	lua_register(L, "PluginSendMessageText", l_PluginSendMessageText);
 	lua_register(L, "PluginEnable", l_PluginEnable);	// PluginEnable("TTS.dll", 0/1)

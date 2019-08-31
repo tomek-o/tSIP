@@ -34,6 +34,7 @@ public:
 	void UpdatePresenceState(int id, int state, AnsiString note);
 	void UpdateBtnState(Button::Type type, bool state);
 	void UpdateBtnCaption(int id, AnsiString text);
+	void UpdateBtnCaption2(int id, AnsiString text);
 	void UpdateBtnDown(int id, bool state);
 	void UpdateBtnImage(int id, AnsiString file);
 	void UpdateMwiState(int newMsg, int oldMsg);

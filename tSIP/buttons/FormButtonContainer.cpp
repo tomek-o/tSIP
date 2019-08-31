@@ -180,6 +180,14 @@ void TfrmButtonContainer::UpdateBtnCaption(int id, AnsiString text)
 	vpanels[id]->SetCaption(text);
 }
 
+void TfrmButtonContainer::UpdateBtnCaption2(int id, AnsiString text)
+{
+	id -= startBtnId;
+	if (id < 0 || id >= vpanels.size())
+		return;
+	vpanels[id]->SetCaption2(text);
+}
+
 void TfrmButtonContainer::UpdateBtnDown(int id, bool state)
 {
 	id -= startBtnId;
