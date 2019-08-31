@@ -300,6 +300,7 @@ void TfrmMain::Finalize(void)
 	LOG("Finalizing...\n");
 
 	tmrScript->Enabled = false;
+	tmrScript2->Enabled = false;
 
 	hotKeys.Unregister(Handle);
 
@@ -470,6 +471,9 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	tmrScript->Interval = appSettings.Scripts.timer;
 	tmrScript->Enabled = true;
 
+	tmrScript2->Interval = appSettings.Scripts.timer2;
+	tmrScript2->Enabled = true;
+
 	appSettings.Write(Paths::GetConfig());
 }
 
@@ -559,6 +563,9 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 
 	tmrScript->Interval = appSettings.Scripts.timer;
 	tmrScript->Enabled = true;
+
+	tmrScript2->Interval = appSettings.Scripts.timer2;
+	tmrScript2->Enabled = true;
 }
 //---------------------------------------------------------------------------
 
@@ -3004,6 +3011,21 @@ void __fastcall TfrmMain::miTroubleshootingClick(TObject *Sender)
 	{
 		frmTroubleshooting->ShowModal();
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::tmrScript2Timer(TObject *Sender)
+{
+	tmrScript2->Enabled = false;
+	if (appSettings.Scripts.onTimer2 != "")
+	{
+		AnsiString asScriptFile;
+		bool handled = true;
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onTimer2.c_str());
+		RunScriptFile(SCRIPT_SRC_ON_TIMER, -1, asScriptFile.c_str(), handled, false);
+		tmrScript2->Enabled = true;
+	}
+	// timer2 disables itself if onTimer script is not configured
 }
 //---------------------------------------------------------------------------
 

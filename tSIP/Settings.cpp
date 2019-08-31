@@ -754,6 +754,10 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		int timer = ScriptsJson.get("Timer", Scripts.timer).asInt();
 		if (timer > 0)
 			Scripts.timer = timer;
+		ScriptsJson.getAString("OnTimer2", Scripts.onTimer2);
+		int timer2 = ScriptsJson.get("Timer2", Scripts.timer2).asInt();
+		if (timer2 > 0)
+			Scripts.timer2 = timer2;
 		Scripts.onDialogInfo = ScriptsJson.get("OnDialogInfo", Scripts.onDialogInfo.c_str()).asString().c_str();
 		Scripts.onDial = ScriptsJson.get("OnDial", Scripts.onDial.c_str()).asString().c_str();
 		Scripts.onProgrammableButton = ScriptsJson.get("OnProgrammableButton", Scripts.onProgrammableButton.c_str()).asString().c_str();
@@ -936,6 +940,8 @@ int Settings::Write(AnsiString asFileName)
 		jv["OnStartup"] = Scripts.onStartup.c_str();
 		jv["OnTimer"] = Scripts.onTimer.c_str();
 		jv["Timer"] = Scripts.timer;
+		jv["OnTimer2"] = Scripts.onTimer2;
+		jv["Timer2"] = Scripts.timer2;
 		jv["OnDialogInfo"] = Scripts.onDialogInfo.c_str();
 		jv["OnDial"] = Scripts.onDial.c_str();
 		jv["OnProgrammableButton"] = Scripts.onProgrammableButton.c_str();

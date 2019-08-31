@@ -234,7 +234,7 @@ __published:	// IDE-managed Components
 	TLabel *lblScriptOnTimer;
 	TEdit *edScriptOnTimerFile;
 	TButton *btnSelectedScriptOnTimerChange;
-	TLabel *lblScriptTimer;
+	TLabel *lblScriptTimerPeriod;
 	TEdit *edScriptTimer;
 	TCheckBox *chbCustomUserAgent;
 	TEdit *edUserAgent;
@@ -320,6 +320,14 @@ __published:	// IDE-managed Components
 	TEdit *edLoggingConsoleFont;
 	TButton *btnLoggingConsoleFontSelect;
 	TFontDialog *fontDialog;
+	TLabel *lblScriptPeriodMs;
+	TLabel *Label7;
+	TEdit *edScriptOnTimer2File;
+	TButton *btnSelectedScriptOnTimer2Change;
+	TBitBtn *btnSelectedScriptOnTimer2Edit;
+	TLabel *lblScriptTimer2Period;
+	TEdit *edScriptTimer2;
+	TLabel *lblScriptTimer2Ms;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
