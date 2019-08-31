@@ -55,6 +55,8 @@ Settings::_frmMain::_frmMain(void):
 	bHideTools(false),
 	bHideHelp(false),
 	bKioskMode(false),
+	bHideStatusBar(false),
+	bHideMainMenu(false),
 	bHideSpeedDialToggleButton(false),
 	bHideMouseCursor(false),
 	bShowWhenAnsweringCall(false),
@@ -581,6 +583,9 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bHideTools = frmMainJson.get("HideTools", frmMain.bHideTools).asBool();
 		frmMain.bHideHelp = frmMainJson.get("HideHelp", frmMain.bHideHelp).asBool();
 		frmMain.bKioskMode = frmMainJson.get("KioskMode", frmMain.bKioskMode).asBool();
+		frmMain.bHideStatusBar = frmMainJson.get("HideStatusBar", frmMain.bHideStatusBar).asBool();
+		frmMain.bHideMainMenu = frmMainJson.get("HideMainMenu", frmMain.bHideMainMenu).asBool();
+
 		frmMain.bHideSpeedDialToggleButton = frmMainJson.get("HideSpeedDialToggleButton", frmMain.bHideSpeedDialToggleButton).asBool();
 		frmMain.bHideMouseCursor = frmMainJson.get("HideMouseCursor", frmMain.bHideMouseCursor).asBool();
 		frmMain.bShowWhenAnsweringCall = frmMainJson.get("ShowWhenAnsweringCall", frmMain.bShowWhenAnsweringCall).asBool();
@@ -841,6 +846,9 @@ int Settings::Write(AnsiString asFileName)
 		jv["HideTools"] = frmMain.bHideTools;
 		jv["HideHelp"] = frmMain.bHideHelp;
 		jv["KioskMode"] = frmMain.bKioskMode;
+		jv["HideStatusBar"] = frmMain.bHideStatusBar;
+		jv["HideMainMenu"] = frmMain.bHideMainMenu;
+
 		jv["HideSpeedDialToggleButton"] = frmMain.bHideSpeedDialToggleButton;
 		jv["HideMouseCursor"] = frmMain.bHideMouseCursor;
 		jv["ShowWhenAnsweringCall"] = frmMain.bShowWhenAnsweringCall;

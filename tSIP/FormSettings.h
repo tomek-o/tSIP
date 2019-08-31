@@ -328,6 +328,8 @@ __published:	// IDE-managed Components
 	TLabel *lblScriptTimer2Period;
 	TEdit *edScriptTimer2;
 	TLabel *lblScriptTimer2Ms;
+	TCheckBox *chbHideStatusBar;
+	TCheckBox *chbHideMainMenu;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

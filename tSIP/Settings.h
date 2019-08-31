@@ -8,7 +8,6 @@
 #include <System.hpp>
 #include <Graphics.hpp>
 #include "UaConf.h"
-#include "ButtonConf.h"
 #include "HotKeyConf.h"
 #include "PhoneConf.h"
 #include <deque>
@@ -118,6 +117,9 @@ public:
 		bool bHideTools;				///< hide "Tools" menu from user
 		bool bHideHelp;					///< hide "Help" menu from user
 		bool bKioskMode;
+		bool bHideStatusBar;
+		bool bHideMainMenu;
+
 		bool bHideSpeedDialToggleButton;///< hide "<<"/">>" button
 		bool bHideMouseCursor;
 		bool bShowWhenAnsweringCall;

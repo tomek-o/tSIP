@@ -165,7 +165,7 @@ object frmMain: TfrmMain
       Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
-      ItemHeight = 19
+      ItemHeight = 0
       ParentFont = False
       TabOrder = 0
       Text = '3000'
@@ -183,6 +183,10 @@ object frmMain: TfrmMain
       OnChange = pcMainChange
       object tsDialpad: TTabSheet
         Caption = 'Dialpad'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object imgDialpadBackground: TImage
           Left = 0
           Top = 0
@@ -484,10 +488,18 @@ object frmMain: TfrmMain
       object tsContacts: TTabSheet
         Caption = 'Contacts'
         ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
       object tsHistory: TTabSheet
         Caption = 'History'
         ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
       end
     end
   end
@@ -504,8 +516,6 @@ object frmMain: TfrmMain
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitLeft = 263
-    ExplicitTop = 1
   end
   object MainMenu: TMainMenu
     Left = 283

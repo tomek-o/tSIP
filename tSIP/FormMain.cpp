@@ -426,6 +426,14 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	{
     	Screen->Cursor = crDefault;
 	}
+	if (appSettings.frmMain.bHideStatusBar)
+	{
+		StatusBar->Visible = false;
+	}
+	if (appSettings.frmMain.bHideMainMenu)
+	{
+		this->Menu = NULL;
+	}
 	if ((appSettings.frmMain.iSpeedDialSize != prev.frmMain.iSpeedDialSize && (appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly)) ||
 		prev.frmMain.bSpeedDialOnly != appSettings.frmMain.bSpeedDialOnly
 		)
@@ -504,6 +512,14 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	{
 		SetKioskMode(appSettings.frmMain.bKioskMode);
     }
+	if (appSettings.frmMain.bHideStatusBar)
+	{
+		StatusBar->Visible = false;
+	}
+	if (appSettings.frmMain.bHideMainMenu)
+	{
+		this->Menu = NULL;
+	}
 
     frmTrayNotifier->Caption = Branding::appName;
 	frmTrayNotifier->OnHangup = Hangup;
@@ -603,7 +619,7 @@ void TfrmMain::UpdateCallHistory(void)
 
 void TfrmMain::ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming)
 {
-	frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call.incoming);
+	frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, incoming);
 	frmTrayNotifier->ShowWithoutFocus();
 }
 
@@ -2956,8 +2972,14 @@ void TfrmMain::SetKioskMode(bool state)
 	}
 	else
 	{
-		this->Menu = MainMenu;
-		this->StatusBar->Visible = true;
+		if (appSettings.frmMain.bHideMainMenu == false)
+		{
+			this->Menu = MainMenu;
+		}
+		if (appSettings.frmMain.bHideStatusBar == false)
+		{
+			this->StatusBar->Visible = true;
+		}
 		this->BorderStyle = bsSingle;
 		SetSpeedDial(false);
 		SetSpeedDial(true);

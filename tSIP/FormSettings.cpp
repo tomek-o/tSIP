@@ -254,6 +254,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHideSpeedDialToggleButton->Checked = tmpSettings.frmMain.bHideSpeedDialToggleButton;
 	chbHideMouseCursor->Checked = tmpSettings.frmMain.bHideMouseCursor;
 
+	chbHideStatusBar->Checked = tmpSettings.frmMain.bHideStatusBar;
+	chbHideMainMenu->Checked = tmpSettings.frmMain.bHideMainMenu;
+
 	chbFrmMainShowWhenAnsweringCall->Checked = tmpSettings.frmMain.bShowWhenAnsweringCall;
 	chbFrmMainShowWhenMakingCall->Checked = tmpSettings.frmMain.bShowWhenMakingCall;
 
@@ -469,6 +472,9 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bKioskMode = chbKioskMode->Checked;
 	tmpSettings.frmMain.bHideSpeedDialToggleButton = chbHideSpeedDialToggleButton->Checked;
 	tmpSettings.frmMain.bHideMouseCursor = chbHideMouseCursor->Checked;
+
+	tmpSettings.frmMain.bHideStatusBar = chbHideStatusBar->Checked;
+	tmpSettings.frmMain.bHideMainMenu = chbHideMainMenu->Checked;
 
 	tmpSettings.frmMain.bShowWhenAnsweringCall = chbFrmMainShowWhenAnsweringCall->Checked;
 	tmpSettings.frmMain.bShowWhenMakingCall = chbFrmMainShowWhenMakingCall->Checked;
