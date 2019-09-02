@@ -138,7 +138,7 @@
           <property category="win32.*.win32b.bcc32" name="option.H.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
           <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
-          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.He.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Hs.enabled" value="0"/>
@@ -460,8 +460,9 @@
         <FILE FILENAME="scripting\ScriptSource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="scripting\LuaState.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaState" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaState.h"/>
         <FILE FILENAME="scripting\LuaWinapi.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaWinapi" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaWinapi.h"/>
-        <FILE FILENAME="phone\PhoneConf.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="phone\PhoneConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="phone\FormPhones.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormPhones" FORMNAME="frmPhones" DESIGNCLASS="" ADDITIONAL="phone\FormPhones.h"/>
+        <FILE FILENAME="UaCustomRequests.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="UaCustomRequests" FORMNAME="" DESIGNCLASS="" ADDITIONAL="UaCustomRequests.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -470,7 +471,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">68</VersionInfo>
-          <VersionInfo Name="Build">2</VersionInfo>
+          <VersionInfo Name="Build">5</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -482,7 +483,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.68.2</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.68.5</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

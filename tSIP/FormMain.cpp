@@ -21,6 +21,7 @@
 #include "LogUnit.h"
 #include "Log.h"
 #include "UaMain.h"
+#include "UaCustomRequests.h"
 #include "ControlQueue.h"
 #include "Callback.h"
 #include "CallbackQueue.h"
@@ -1424,6 +1425,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				break;
 			case Callback::APP_INITIALIZED:
 				miSettings->Enabled = true;
+				UaCustomRequests::Clear();
 				text = "Initialized";
 				if (appSettings.uaConf.accounts.size())
 				{
@@ -1600,6 +1602,11 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				LOG("Disconnecting call on audio error\n");
 				Hangup();
 			}
+			break;
+		}
+		case Callback::CUSTOM_REQUEST_STATUS:
+		{
+			UaCustomRequests::NotifyReply(cb.requestUid, cb.requestError, cb.scode);
 			break;
 		}
 		default:

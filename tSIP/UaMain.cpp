@@ -229,6 +229,36 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 
 }
 
+static void custom_req_response_handler(int err, const struct sip_msg *msg, void *arg)
+{
+	int requestUid = reinterpret_cast<int>(arg);
+	(void)arg;
+
+	if (err) {
+		DEBUG_WARNING("custom request uid %d reply error: %m\n", requestUid, err);
+	} else {
+		if (msg->scode < 200) {
+			DEBUG_WARNING("Reply for custom request uid %d: scode = %d\n", requestUid, msg->scode);
+		} else 	if (msg->scode < 300) {
+		#if 0		
+			mbuf_set_pos(msg->mb, 0);
+			DEBUG_WARNING("----- Reply for custom request uid %d to %r -----\n%b",
+				 requestUid,
+				 &(msg->to.auri), mbuf_buf(msg->mb),
+				 mbuf_get_left(msg->mb));
+		#else
+			DEBUG_WARNING("Reply for custom request uid %d: scode = %d\n", requestUid, msg->scode);
+		#endif
+			return;
+		} else {
+			DEBUG_WARNING("%r: custom request %d failed: %u %r\n", &(msg->to.auri), requestUid,
+				msg->scode, &msg->reason);
+		}
+	}
+
+	UA_CB->NotifyCustomRequestStatus(requestUid, err, msg->scode);	
+}
+
 static int ua_add(const struct pl *addr, const char *pwd, const char *cuser)
 {
 	char buf[1024];
@@ -877,6 +907,17 @@ extern "C" void control_handler(void)
 	case Command::UPDATE_SOFTVOL_RX: {
 		struct config * cfg = conf_config();	
 		cfg->audio.softvol_rx = cmd.softvol;
+		break;
+	}
+	case Command::SEND_CUSTOM_REQUEST: {
+		DEBUG_WARNING("SEND_CUSTOM_REQUEST, uid = %d, method = %s\n", cmd.requestId, cmd.method.c_str());
+		err = sip_req_send(ua_cur(), cmd.method.c_str(), cmd.target.c_str(),
+					custom_req_response_handler, reinterpret_cast<void*>(cmd.requestId),
+					"%s", cmd.extraHeaderLines.c_str());
+		if (err != 0) {
+			DEBUG_WARNING("Failed send custom request (%m)\n", err);
+			int TODO__FORCE_CALLBACK_TO_RELEASE_REQUEST_STRUCTURE;
+		}
 		break;
 	}
 	default:

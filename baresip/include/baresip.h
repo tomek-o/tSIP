@@ -290,6 +290,11 @@ int  message_init(message_recv_h *recvh, void *arg);
 void message_close(void);
 int  message_send(struct ua *ua, const char *peer, const char *msg);
 
+/*
+ * Custom requests
+ */
+int sip_req_send(struct ua *ua, const char *method, const char *uri,
+		 sip_resp_h *resph, void *arg, const char *fmt, ...);	/* duplicating declaration from core.h */
 
 /*
  * Audio Source

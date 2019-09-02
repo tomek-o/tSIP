@@ -156,6 +156,7 @@ private:
 	static int l_GetButtonType(lua_State* L);
 	static int l_GetButtonNumber(lua_State* L);
 	static int l_MainMenuShow(lua_State* L);
+	static int l_SendCustomRequest(lua_State* L);	
 
 	bool &breakReq;
 	bool &handled;	///< notifying back that event handling is completed - used to skip default action

@@ -43,6 +43,7 @@ public:
 	void SwitchAudioPlayer(int callId, AnsiString audioMod, AnsiString audioDev);
 	void UpdateSoftvolTx(unsigned int val);
 	void UpdateSoftvolRx(unsigned int val);
+	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines);
 };
 
 #define UA ControlQueue::Instance()

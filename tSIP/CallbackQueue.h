@@ -31,6 +31,7 @@ public:
 	void NotifyEventTalk(void);
 	void SetCallData(AnsiString initialRxInvite);
 	void NotifyAudioError(void);
+	void NotifyCustomRequestStatus(int requestUid, int requestError, int sipStatusCode);
 };
 
 #define UA_CB CallbackQueue::Instance()

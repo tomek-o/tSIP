@@ -12,6 +12,7 @@
 #include "common/Utils.h"
 #include "ButtonConf.h"
 #include "Call.h"
+#include "UaCustomRequests.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -1072,6 +1073,36 @@ int ScriptExec::l_MainMenuShow(lua_State* L)
 	return 0;
 }
 
+int ScriptExec::l_SendCustomRequest(lua_State* L)
+{
+	const char* uri = lua_tostring(L, 1);
+	if (uri == NULL)
+	{
+		LOG("Lua error: uri == NULL for SendCustomRequest()\n");
+		return 0;
+	}
+	const char* method = lua_tostring(L, 2);
+	if (method == NULL)
+	{
+		LOG("Lua error: method == NULL for SendCustomRequest()\n");
+		return 0;
+	}
+	AnsiString extraHeaderLines;
+	const char* extraHeaderLinesStr = lua_tostring(L, 3);
+	if (extraHeaderLinesStr != NULL)
+	{
+		extraHeaderLines = extraHeaderLinesStr;
+	}
+
+	int uid = -1;
+	int status = UaCustomRequests::Send(uid, uri, method, extraHeaderLines);
+	if (status != 0)
+		uid = -1;
+	lua_pushinteger(L, uid);
+	return 1;
+}
+
+
 ScriptExec::ScriptExec(
 	enum ScriptSource srcType,
 	int srcId,
@@ -1253,6 +1284,11 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetButtonNumber", l_GetButtonNumber);
 
     lua_register(L, "MainMenuShow", l_MainMenuShow);
+
+	// requestUid = SendCustomRequest(uri, method, extraHeaderLines)
+	// requestUid is > 0 on success
+	// extraHeaderLines parameter is optional
+    lua_register(L, "SendCustomRequest", l_SendCustomRequest);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);

@@ -24,7 +24,8 @@ public:
 		EVENT_TALK,
 		AUDIO_CODEC_LIST,			///< audio codec list sent after static and dynamic modules are loaded
 		SET_CALL_DATA,
-		AUDIO_ERROR
+		AUDIO_ERROR,
+		CUSTOM_REQUEST_STATUS
 	} type;
 
 	enum ua_state_e
@@ -94,6 +95,9 @@ public:
 
 	AnsiString dtmf;
 	bool dtmfActive;	
+
+	int requestUid;
+	int requestError;	
 };
 
 #endif

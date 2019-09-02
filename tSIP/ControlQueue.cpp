@@ -268,3 +268,34 @@ void ControlQueue::UpdateSoftvolRx(unsigned int val)
 	fifo.push();
 }
 
+int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return -1;
+	cmd->type = Command::SEND_CUSTOM_REQUEST;
+	cmd->requestId = requestId;
+	cmd->method = method;
+	cmd->target = target;
+	if (extraHeaderLines != "")
+	{
+		if (extraHeaderLines.Length() < 2)
+		{
+			extraHeaderLines += "\r\n";
+		}
+		else
+		{
+			AnsiString end = extraHeaderLines.SubString(extraHeaderLines.Length() - 1, 2);
+			if (end != "\r\n")
+			{
+        		extraHeaderLines += "\r\n";
+			}
+        }
+    }
+	cmd->extraHeaderLines = extraHeaderLines;
+	fifo.push();
+	return 0;
+}
+
+
