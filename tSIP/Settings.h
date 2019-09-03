@@ -270,6 +270,8 @@ public:
 									///< key value (char) is passed as srcId
 		AnsiString onProgrammableButton;
 		AnsiString onAudioDeviceError;
+		AnsiString onCustomRequestReply;
+
 		AnsiString lastScriptWindowDir;
 	} Scripts;
 

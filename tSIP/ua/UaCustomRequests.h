@@ -21,6 +21,7 @@ struct Request
 	bool haveReply;
 	int error;
 	int sipStatusCode;
+	AnsiString replyText;
 
 	Request(void):
 		uid(-1),
@@ -38,9 +39,15 @@ void Clear(void);
 */
 int Send(int &uid, AnsiString uri, AnsiString method, AnsiString extraHeaderLines);
 
-void NotifyReply(int uid, int err, int sipStatusCode);
+/** \return 0 if request uid is found (it may be deleted before receving reply)
+*/
+int NotifyReply(int uid, int err, int sipStatusCode, AnsiString replyText);
 
 void DeleteRequest(int uid);
+
+/** \return pointer to request structure or NULL
+*/
+struct Request* GetRequest(int uid);
 
 }	// namespace UaCustomRequests
 

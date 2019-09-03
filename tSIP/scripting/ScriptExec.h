@@ -10,9 +10,7 @@
 #include <string>
 #include <System.hpp>
 
-class LuaState;
 struct lua_State;
-struct luaL_reg;
 
 class ButtonConf;
 
@@ -86,77 +84,13 @@ private:
 	CallbackGetButtonConf onGetButtonConf;
 	CallbackMainMenuShow onMainMenuShow;
 
-	static int LuaPrint(lua_State *L);
-	static int LuaError( lua_State *L );
-	static int l_ShowMessage( lua_State* L );
-	static int l_MessageBox(lua_State* L);
-	static int l_InputQuery(lua_State* L);
-	static int l_Sleep(lua_State *L);
+	friend class ScriptImp;
+
 	static int l_Beep(lua_State *L);
-	static int l_CheckBreak(lua_State *L);
-	static int l_GetClipboardText(lua_State* L);	
-	static int l_SetClipboardText(lua_State* L);
-	static int l_ForceDirectories(lua_State* L);
-	static int l_FindWindowByCaptionAndExeName(lua_State* L);
+	static int l_MessageBox(lua_State* L);
 
 	// sharing "Beep" and "MessageBox" - both in global namespace (backward compatibility) and in library
 	friend int luaopen_tsip_winapi (lua_State *L);
-
-	static int l_Call(lua_State* L);
-	static int l_Hangup(lua_State* L);
-	static int l_Answer(lua_State* L);
-	static int l_GetDial(lua_State* L);
-	static int l_SetDial(lua_State* L);
-	static int l_SwitchAudioSource(lua_State* L);
-	static int l_SendDtmf(lua_State* L);
-	static int l_BlindTransfer(lua_State* L);
-	static int l_GetCallState(lua_State* L);
-	static int l_IsCallIncoming(lua_State* L);
-	static int l_GetCallPeer(lua_State* L);
-	static int l_GetCallInitialRxInvite(lua_State* L);
-	static int l_GetContactName(lua_State* L);
-	static int l_GetStreamingState(lua_State* L);
-	static int l_SetVariable(lua_State* L);
-	static int l_GetVariable(lua_State* L);
-	static int l_QueuePush(lua_State* L);
-	static int l_QueuePop(lua_State* L);
-	static int l_QueueClear(lua_State* L);
-	static int l_QueueGetSize(lua_State* L);
-	static int l_ClearVariable(lua_State* L);
-	static int l_ClearAllVariables(lua_State* L);
-	static int l_GetInitialCallTarget(lua_State* L);
-	static int l_GetCallCodecName(lua_State* L);
-	static int l_SetInitialCallTarget(lua_State* L);
-	static int l_ShellExecute(lua_State* L);
-	static int l_SetTrayIcon(lua_State* L);
-	static int l_GetRegistrationState(lua_State* L);
-	static int l_SetButtonCaption(lua_State* L);
-	static int l_SetButtonCaption2(lua_State* L);
-	static int l_SetButtonDown(lua_State* L);
-	static int l_GetButtonDown(lua_State* L);
-	static int l_SetButtonImage(lua_State* L);
-	static int l_PluginSendMessageText(lua_State* L);
-	static int l_PluginEnable(lua_State* L);
-	static int l_GetExecSourceType(lua_State* L);
-	static int l_GetExecSourceId(lua_State* L);
-	static int l_GetRecordFile(lua_State* L);
-	static int l_GetBlfState(lua_State* L);
-	static int l_RecordStart(lua_State* L);
-	static int l_GetExeName(lua_State* L);
-	static int l_GetProfileDir(lua_State* L);
-	static int l_GetRecordingState(lua_State* L);
-	static int l_GetRxDtmf(lua_State* L);
-	static int l_ShowTrayNotifier(lua_State* L);
-	static int l_GetUserName(lua_State* L);
-	static int l_ProgrammableButtonClick(lua_State* L);
-    static int l_RefreshAudioDevicesList(lua_State* L);
-	static int l_GetAudioDevice(lua_State* L);
-	static int l_UpdateSettings(lua_State* L);
-	static int l_SetHandled(lua_State* L);
-	static int l_GetButtonType(lua_State* L);
-	static int l_GetButtonNumber(lua_State* L);
-	static int l_MainMenuShow(lua_State* L);
-	static int l_SendCustomRequest(lua_State* L);	
 
 	bool &breakReq;
 	bool &handled;	///< notifying back that event handling is completed - used to skip default action

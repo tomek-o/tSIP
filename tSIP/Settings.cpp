@@ -140,6 +140,7 @@ Settings::Settings(void)
 	History.bShowCodecNameInHint = true;
 
 	Scripts.timer = 1000;
+	Scripts.timer2 = 1000;
 
 	uaConf.accounts.clear();
 
@@ -767,6 +768,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		Scripts.onDial = ScriptsJson.get("OnDial", Scripts.onDial.c_str()).asString().c_str();
 		Scripts.onProgrammableButton = ScriptsJson.get("OnProgrammableButton", Scripts.onProgrammableButton.c_str()).asString().c_str();
 		Scripts.onAudioDeviceError = ScriptsJson.get("OnAudioDeviceError", Scripts.onAudioDeviceError.c_str()).asString().c_str();
+		ScriptsJson.getAString("OnCustomRequestReply", Scripts.onCustomRequestReply);
 	}
 
 	{
@@ -954,6 +956,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["OnDial"] = Scripts.onDial.c_str();
 		jv["OnProgrammableButton"] = Scripts.onProgrammableButton.c_str();
 		jv["OnAudioDeviceError"] = Scripts.onAudioDeviceError.c_str();
+		jv["OnCustomRequestReply"] = Scripts.onCustomRequestReply;
 	}
 
 	root["uaConf"]["audioCfgSrc"]["mod"] = uaConf.audioCfgSrc.mod;

@@ -233,6 +233,7 @@ static void custom_req_response_handler(int err, const struct sip_msg *msg, void
 {
 	int requestUid = reinterpret_cast<int>(arg);
 	(void)arg;
+	AnsiString replyText;
 
 	if (err) {
 		DEBUG_WARNING("custom request uid %d reply error: %m\n", requestUid, err);
@@ -249,14 +250,19 @@ static void custom_req_response_handler(int err, const struct sip_msg *msg, void
 		#else
 			DEBUG_WARNING("Reply for custom request uid %d: scode = %d\n", requestUid, msg->scode);
 		#endif
-			return;
 		} else {
 			DEBUG_WARNING("%r: custom request %d failed: %u %r\n", &(msg->to.auri), requestUid,
 				msg->scode, &msg->reason);
 		}
+		// copy whole reply text
+		mbuf_set_pos(msg->mb, 0);
+		int length = mbuf_get_left(msg->mb);
+		char *ptr = (char*)mbuf_buf(msg->mb);
+		replyText.SetLength(length);
+		memcpy(&replyText[1], ptr, length);
 	}
 
-	UA_CB->NotifyCustomRequestStatus(requestUid, err, msg->scode);	
+	UA_CB->NotifyCustomRequestStatus(requestUid, err, msg?msg->scode:0, replyText);	
 }
 
 static int ua_add(const struct pl *addr, const char *pwd, const char *cuser)
@@ -916,7 +922,7 @@ extern "C" void control_handler(void)
 					"%s", cmd.extraHeaderLines.c_str());
 		if (err != 0) {
 			DEBUG_WARNING("Failed send custom request (%m)\n", err);
-			int TODO__FORCE_CALLBACK_TO_RELEASE_REQUEST_STRUCTURE;
+			UA_CB->NotifyCustomRequestStatus(cmd.requestId, err, 0, "");
 		}
 		break;
 	}

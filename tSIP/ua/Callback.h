@@ -98,6 +98,7 @@ public:
 
 	int requestUid;
 	int requestError;	
+	AnsiString requestReplyText;	
 };
 
 #endif

@@ -1606,7 +1606,16 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 		case Callback::CUSTOM_REQUEST_STATUS:
 		{
-			UaCustomRequests::NotifyReply(cb.requestUid, cb.requestError, cb.scode);
+			if (UaCustomRequests::NotifyReply(cb.requestUid, cb.requestError, cb.scode, cb.requestReplyText) == 0)
+			{
+				if (appSettings.Scripts.onCustomRequestReply != "")
+				{
+					AnsiString asScriptFile;
+					bool handled = true;
+					asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onCustomRequestReply.c_str());
+					RunScriptFile(SCRIPT_SRC_ON_CUSTOM_REQUEST_REPLY, cb.requestUid, asScriptFile.c_str(), handled);
+				}
+			}
 			break;
 		}
 		default:

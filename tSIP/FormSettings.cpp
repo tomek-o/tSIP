@@ -415,6 +415,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edScriptOnDialFile->Text = tmpSettings.Scripts.onDial;
 	edScriptOnProgrammableButtonFile->Text = tmpSettings.Scripts.onProgrammableButton;
 	edScriptOnAudioErrorFile->Text = tmpSettings.Scripts.onAudioDeviceError;
+	edScriptOnCustomRequestReplyFile->Text = tmpSettings.Scripts.onCustomRequestReply;
 
 	chbShowSettingsIfAnyAccountSettingsIsHidden->Checked = tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden;
 
@@ -667,6 +668,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onDial = edScriptOnDialFile->Text;
 	tmpSettings.Scripts.onProgrammableButton = edScriptOnProgrammableButtonFile->Text;
 	tmpSettings.Scripts.onAudioDeviceError = edScriptOnAudioErrorFile->Text;
+	tmpSettings.Scripts.onCustomRequestReply = edScriptOnCustomRequestReplyFile->Text;
 
 	tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden = chbShowSettingsIfAnyAccountSettingsIsHidden->Checked;
 
@@ -1185,6 +1187,10 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 	{
     	edit = edScriptOnAudioErrorFile;
 	}
+	else if (Sender == btnSelectedScriptOnCustomRequestReplyChange)
+	{
+		edit = edScriptOnCustomRequestReplyFile;
+	}
 	else
 	{
 		assert(0);
@@ -1272,6 +1278,11 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 		edit = edScriptOnAudioErrorFile;
 		eventName = "on_audio_error";
 	}
+	else if (Sender == btnSelectedScriptOnCustomRequestReplyEdit)
+	{
+		edit = edScriptOnCustomRequestReplyFile;
+		eventName = "on_custom_request_reply";
+	}
 	else
 	{
 		assert(0);
@@ -1349,7 +1360,4 @@ void TfrmSettings::ShowFonts(void)
 	ed->Font->Size = font->size;
 	ed->Font->Style = font->style;
 }
-
-
-
 

@@ -46,6 +46,18 @@ void UaCustomRequests::DeleteRequest(int uid)
 	requests.erase(uid);
 }
 
+struct UaCustomRequests::Request* UaCustomRequests::GetRequest(int uid)
+{
+	std::map<int, UaCustomRequests::Request>::iterator iter;
+	iter = requests.find(uid);
+	if (iter != requests.end())
+	{
+		return &iter->second;
+	}
+	return NULL;
+}
+
+
 int UaCustomRequests::Send(int &uid, AnsiString uri, AnsiString method, AnsiString extraHeaderLines)
 {
 	int status;
@@ -69,7 +81,7 @@ int UaCustomRequests::Send(int &uid, AnsiString uri, AnsiString method, AnsiStri
 	return status;
 }
 
-void UaCustomRequests::NotifyReply(int uid, int err, int sipStatusCode)
+int UaCustomRequests::NotifyReply(int uid, int err, int sipStatusCode, AnsiString replyText)
 {
 	LOG("UaCustomRequests: NotifyReply for %d: err = %d, SIP status code = %d\n", uid, err, sipStatusCode);
 	std::map<int, UaCustomRequests::Request>::iterator iter;
@@ -79,11 +91,14 @@ void UaCustomRequests::NotifyReply(int uid, int err, int sipStatusCode)
 		Request &req = iter->second;
 		req.haveReply = true;
 		req.error = err;
-		req.sipStatusCode = 0;
+		req.sipStatusCode = sipStatusCode;
+		req.replyText = replyText;
+		return 0;
 	}
 	else
 	{
 		LOG("UaCustomRequests: request uid %d not found\n", uid);
+		return -1;
 	}
 }
 

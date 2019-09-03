@@ -330,6 +330,10 @@ __published:	// IDE-managed Components
 	TLabel *lblScriptTimer2Ms;
 	TCheckBox *chbHideStatusBar;
 	TCheckBox *chbHideMainMenu;
+	TLabel *lblOnCustomRequestReply;
+	TEdit *edScriptOnCustomRequestReplyFile;
+	TButton *btnSelectedScriptOnCustomRequestReplyChange;
+	TBitBtn *btnSelectedScriptOnCustomRequestReplyEdit;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

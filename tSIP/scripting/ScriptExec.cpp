@@ -205,7 +205,36 @@ void ScriptExec::WaitWhileAnyRunning(unsigned int ms)
 	}
 }
 
-int ScriptExec::LuaPrint(lua_State *L)
+/** Beep(frequency, time_ms)
+	\note blocking and not interruptable
+*/
+int ScriptExec::l_Beep(lua_State *L)
+{
+	/*
+	To refer to elements in the stack, the API uses indices. The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on. We can also access elements using the top of the stack as our reference, using negative indices. In that case, -1 refers to the element at the top (that is, the last element pushed), -2 to the previous element, and so on. For instance, the call lua_tostring(L, -1) returns the value at the top of the stack as a string.
+	*/
+	int freq = lua_tointegerx(L, 1, NULL);
+	int time = lua_tointegerx(L, 2, NULL);
+	if (freq > 0 && time > 0)
+	{
+		Beep(freq, time);
+    }
+	return 0;
+}
+
+int ScriptExec::l_MessageBox(lua_State* L)
+{
+	const char* msg = lua_tostring(L, 1);
+	const char* title = lua_tostring(L, 2);
+	unsigned int flags = lua_tointegerx(L, 3, NULL);
+	int ret = MessageBox(Application->Handle, msg, title, flags);
+	lua_pushnumber(L, ret);
+	return 1;
+}
+
+class ScriptImp {
+public:
+static int LuaPrint(lua_State *L)
 {
 	int nArgs = lua_gettop(L);
 	int i;
@@ -230,9 +259,9 @@ int ScriptExec::LuaPrint(lua_State *L)
 	//ret.append("\n");
 	GetContext(L)->onAddOutputText(ret.c_str());
 	return 0;
-};
+}
 
-int ScriptExec::LuaError( lua_State *L )
+static int LuaError( lua_State *L )
 {
 	const char* str = lua_tostring( L, -1 );
 	lua_pop(L, 1);
@@ -241,7 +270,7 @@ int ScriptExec::LuaError( lua_State *L )
 	return 0;
 }
 
-int ScriptExec::l_ShowMessage( lua_State* L )
+static int l_ShowMessage( lua_State* L )
 {
 	AnsiString msg = lua_tostring(L, -1);
 	MessageBox(NULL, msg.c_str(), "Lua message", MB_ICONINFORMATION);
@@ -249,17 +278,7 @@ int ScriptExec::l_ShowMessage( lua_State* L )
 	return 1;
 }
 
-int ScriptExec::l_MessageBox(lua_State* L)
-{
-	const char* msg = lua_tostring(L, 1);
-	const char* title = lua_tostring(L, 2);
-	unsigned int flags = lua_tointegerx(L, 3, NULL);
-	int ret = MessageBox(Application->Handle, msg, title, flags);
-	lua_pushnumber(L, ret);
-	return 1;
-}
-
-int ScriptExec::l_InputQuery(lua_State* L)
+static int l_InputQuery(lua_State* L)
 {
 	const char* caption = lua_tostring(L, 1);
 	const char* prompt = lua_tostring(L, 2);
@@ -271,7 +290,7 @@ int ScriptExec::l_InputQuery(lua_State* L)
 }
 
 /** \note Sleep(ms) returns non-zero if break is called */
-int ScriptExec::l_Sleep(lua_State* L)
+static int l_Sleep(lua_State* L)
 {
 	int ret = 0;
 	int time = lua_tointegerx(L, -1, NULL);
@@ -305,40 +324,23 @@ int ScriptExec::l_Sleep(lua_State* L)
 	return 1;					// number of return values
 }
 
-/** Beep(frequency, time_ms)
-	\note blocking and not interruptable
-*/
-int ScriptExec::l_Beep(lua_State *L)
-{
-	/*
-	To refer to elements in the stack, the API uses indices. The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on. We can also access elements using the top of the stack as our reference, using negative indices. In that case, -1 refers to the element at the top (that is, the last element pushed), -2 to the previous element, and so on. For instance, the call lua_tostring(L, -1) returns the value at the top of the stack as a string.
-	*/
-	int freq = lua_tointegerx(L, 1, NULL);
-	int time = lua_tointegerx(L, 2, NULL);
-	if (freq > 0 && time > 0)
-	{
-		Beep(freq, time);
-    }
-	return 0;
-}
-
 /** \brief Check if user interrupted script for clean, controlled exit
 */
-int ScriptExec::l_CheckBreak(lua_State *L)
+static int l_CheckBreak(lua_State *L)
 {
 	int ret = GetContext(L)->breakReq?1:0;
 	lua_pushnumber(L, ret);
 	return 1;					// number of return values
 }
 
-int ScriptExec::l_GetClipboardText( lua_State* L )
+static int l_GetClipboardText( lua_State* L )
 {
 	AnsiString text = Clipboard()->AsText;
 	lua_pushstring( L, text.c_str() );
 	return 1;
 }
 
-int ScriptExec::l_SetClipboardText( lua_State* L )
+static int l_SetClipboardText( lua_State* L )
 {
 	const char* str = lua_tostring( L, -1 );
 	if (str == NULL)
@@ -351,7 +353,7 @@ int ScriptExec::l_SetClipboardText( lua_State* L )
 }
 
 /** \return 0 on success */
-int ScriptExec::l_ForceDirectories(lua_State* L)
+static int l_ForceDirectories(lua_State* L)
 {
 	const char* str = lua_tostring(L, -1);
 	if (DirectoryExists(str))
@@ -368,7 +370,7 @@ int ScriptExec::l_ForceDirectories(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_FindWindowByCaptionAndExeName(lua_State* L)
+static int l_FindWindowByCaptionAndExeName(lua_State* L)
 {
 	static Mutex mutex;
 
@@ -390,7 +392,7 @@ int ScriptExec::l_FindWindowByCaptionAndExeName(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_Call(lua_State* L)
+static int l_Call(lua_State* L)
 {
 	const char* str = lua_tostring( L, -1 );
 	if (str == NULL)
@@ -402,19 +404,19 @@ int ScriptExec::l_Call(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_Hangup(lua_State* L)
+static int l_Hangup(lua_State* L)
 {
 	GetContext(L)->onHangup();
 	return 0;
 }
 
-int ScriptExec::l_Answer(lua_State* L)
+static int l_Answer(lua_State* L)
 {
 	GetContext(L)->onAnswer();
 	return 0;
 }
 
-int ScriptExec::l_SetDial(lua_State* L)
+static int l_SetDial(lua_State* L)
 {
 	const char* str = lua_tostring( L, -1 );
 	if (str == NULL)
@@ -426,14 +428,14 @@ int ScriptExec::l_SetDial(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetDial(lua_State* L)
+static int l_GetDial(lua_State* L)
 {
 	std::string num = GetContext(L)->onGetDial();
 	lua_pushstring( L, num.c_str() );
 	return 1;
 }
 
-int ScriptExec::l_SetInitialCallTarget(lua_State* L)
+static int l_SetInitialCallTarget(lua_State* L)
 {
 	const char* str = lua_tostring( L, -1 );
 	if (str == NULL)
@@ -453,7 +455,7 @@ int ScriptExec::l_SetInitialCallTarget(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetInitialCallTarget(lua_State* L)
+static int l_GetInitialCallTarget(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
 	if (call)
@@ -465,7 +467,7 @@ int ScriptExec::l_GetInitialCallTarget(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_SwitchAudioSource(lua_State* L)
+static int l_SwitchAudioSource(lua_State* L)
 {
 	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
 	const char* mod = lua_tostring( L, 1 );
@@ -484,7 +486,7 @@ int ScriptExec::l_SwitchAudioSource(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_SendDtmf(lua_State* L)
+static int l_SendDtmf(lua_State* L)
 {
 	const char* str = lua_tostring( L, -1 );
 	if (str == NULL)
@@ -496,7 +498,7 @@ int ScriptExec::l_SendDtmf(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_BlindTransfer(lua_State* L)
+static int l_BlindTransfer(lua_State* L)
 {
 	const char* str = lua_tostring( L, -1 );
 	if (str == NULL)
@@ -508,7 +510,7 @@ int ScriptExec::l_BlindTransfer(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetCallState(lua_State* L)
+static int l_GetCallState(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
 	if (call)
@@ -519,7 +521,7 @@ int ScriptExec::l_GetCallState(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_IsCallIncoming(lua_State* L)
+static int l_IsCallIncoming(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
 	if (call)
@@ -530,7 +532,7 @@ int ScriptExec::l_IsCallIncoming(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetCallPeer(lua_State* L)
+static int l_GetCallPeer(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
 	if (call == NULL)
@@ -549,7 +551,7 @@ int ScriptExec::l_GetCallPeer(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_GetCallInitialRxInvite(lua_State* L)
+static int l_GetCallInitialRxInvite(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
 	if (call)
@@ -560,7 +562,7 @@ int ScriptExec::l_GetCallInitialRxInvite(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetCallCodecName(lua_State* L)
+static int l_GetCallCodecName(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
 	if (call)
@@ -571,7 +573,7 @@ int ScriptExec::l_GetCallCodecName(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetContactName(lua_State* L)
+static int l_GetContactName(lua_State* L)
 {
 	const char* number = lua_tostring( L, -1 );
 	if (number == NULL)
@@ -584,21 +586,21 @@ int ScriptExec::l_GetContactName(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_GetStreamingState(lua_State* L)
+static int l_GetStreamingState(lua_State* L)
 {
 	int state = GetContext(L)->onGetStreamingState();
 	lua_pushinteger( L, state );
 	return 1;
 }
 
-int ScriptExec::l_GetRegistrationState(lua_State* L)
+static int l_GetRegistrationState(lua_State* L)
 {
 	int state = GetContext(L)->onGetRegistrationState();
 	lua_pushinteger( L, state );
 	return 1;
 }
 
-int ScriptExec::l_SetButtonCaption(lua_State* L)
+static int l_SetButtonCaption(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
@@ -608,7 +610,7 @@ int ScriptExec::l_SetButtonCaption(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_SetButtonCaption2(lua_State* L)
+static int l_SetButtonCaption2(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
@@ -618,7 +620,7 @@ int ScriptExec::l_SetButtonCaption2(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_SetButtonDown(lua_State* L)
+static int l_SetButtonDown(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	int state = lua_tointeger( L, 2 );
@@ -626,7 +628,7 @@ int ScriptExec::l_SetButtonDown(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetButtonDown(lua_State* L)
+static int l_GetButtonDown(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	bool down = GetContext(L)->onGetButtonDown(id);
@@ -634,7 +636,7 @@ int ScriptExec::l_GetButtonDown(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_SetButtonImage(lua_State* L)
+static int l_SetButtonImage(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
@@ -642,14 +644,14 @@ int ScriptExec::l_SetButtonImage(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_ProgrammableButtonClick(lua_State* L)
+static int l_ProgrammableButtonClick(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	GetContext(L)->onProgrammableButtonClick(id);
 	return 0;
 }
 
-int ScriptExec::l_PluginSendMessageText(lua_State* L)
+static int l_PluginSendMessageText(lua_State* L)
 {
 	const char* dllName = lua_tostring(L, 1);
 	if (dllName == NULL)
@@ -669,7 +671,7 @@ int ScriptExec::l_PluginSendMessageText(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_PluginEnable(lua_State* L)
+static int l_PluginEnable(lua_State* L)
 {
 	const char* dllName = lua_tostring(L, 1);
 	if (dllName == NULL)
@@ -684,7 +686,7 @@ int ScriptExec::l_PluginEnable(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_SetVariable(lua_State* L)
+static int l_SetVariable(lua_State* L)
 {
 	const char* name = lua_tostring( L, 1 );
 	if (name == NULL)
@@ -698,11 +700,11 @@ int ScriptExec::l_SetVariable(lua_State* L)
 		LOG("Lua error: value == NULL\n");
 		return 0;
 	}
-	SetVariable(name, value);
+	ScriptExec::SetVariable(name, value);
 	return 0;
 }
 
-int ScriptExec::l_GetVariable(lua_State* L)
+static int l_GetVariable(lua_State* L)
 {
 	const char* name = lua_tostring( L, 1 );
 	if (name == NULL)
@@ -728,7 +730,7 @@ int ScriptExec::l_GetVariable(lua_State* L)
 	return 2;
 }
 
-int ScriptExec::l_ClearVariable(lua_State* L)
+static int l_ClearVariable(lua_State* L)
 {
 	const char* name = lua_tostring( L, 1 );
 	if (name == NULL)
@@ -736,17 +738,17 @@ int ScriptExec::l_ClearVariable(lua_State* L)
 		LOG("Lua error: name == NULL\n");
 		return 0;
 	}	
-	ClearVariable(name);
+	ScriptExec::ClearVariable(name);
 	return 0;
 }
 
-int ScriptExec::l_ClearAllVariables(lua_State* L)
+static int l_ClearAllVariables(lua_State* L)
 {
 	variables.clear();
 	return 0;
 }
 
-int ScriptExec::l_QueuePush(lua_State* L)
+static int l_QueuePush(lua_State* L)
 {
 	int argCnt = lua_gettop(L);
 	if (argCnt < 2)
@@ -766,11 +768,11 @@ int ScriptExec::l_QueuePush(lua_State* L)
 		LOG("Lua error: value == NULL\n");
 		return 0;
 	}
-	QueuePush(queue_name, value);
+	ScriptExec::QueuePush(queue_name, value);
 	return 0;
 }
 
-int ScriptExec::l_QueuePop(lua_State* L)
+static int l_QueuePop(lua_State* L)
 {
 	const char* queue_name = lua_tostring( L, 1 );
 	if (queue_name == NULL)
@@ -779,7 +781,7 @@ int ScriptExec::l_QueuePop(lua_State* L)
 		return 0;
 	}
 	AnsiString value;
-	int ret = QueuePop(queue_name, value);
+	int ret = ScriptExec::QueuePop(queue_name, value);
 	lua_pushstring(L, value.c_str());
 	if (ret != 0)
 	{
@@ -792,7 +794,7 @@ int ScriptExec::l_QueuePop(lua_State* L)
 	return 2;
 }
 
-int ScriptExec::l_QueueClear(lua_State* L)
+static int l_QueueClear(lua_State* L)
 {
 	const char* queue_name = lua_tostring( L, 1 );
 	if (queue_name == NULL)
@@ -801,12 +803,12 @@ int ScriptExec::l_QueueClear(lua_State* L)
 		lua_pushinteger(L, -1);
 		return 1;
 	}
-	int ret = QueueClear(queue_name);
+	int ret = ScriptExec::QueueClear(queue_name);
 	lua_pushinteger(L, ret);
 	return 1;
 }
 
-int ScriptExec::l_QueueGetSize(lua_State* L)
+static int l_QueueGetSize(lua_State* L)
 {
 	const char* queue_name = lua_tostring( L, 1 );
 	if (queue_name == NULL)
@@ -815,12 +817,12 @@ int ScriptExec::l_QueueGetSize(lua_State* L)
 		lua_pushinteger(L, 0);
 		return 1;
 	}
-	int ret = QueueGetSize(queue_name);
+	int ret = ScriptExec::QueueGetSize(queue_name);
 	lua_pushinteger(L, ret);
 	return 1;
 }
 
-int ScriptExec::l_ShellExecute(lua_State* L)
+static int l_ShellExecute(lua_State* L)
 {
 	const char* verb = lua_tostring( L, 1 );
 	const char* file = lua_tostring( L, 2 );
@@ -832,26 +834,26 @@ int ScriptExec::l_ShellExecute(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_SetTrayIcon(lua_State* L)
+static int l_SetTrayIcon(lua_State* L)
 {
 	const char* file = lua_tostring( L, 1 );
 	GetContext(L)->onSetTrayIcon(file);
 	return 0;
 }
 
-int ScriptExec::l_GetExecSourceType(lua_State* L)
+static int l_GetExecSourceType(lua_State* L)
 {
 	lua_pushinteger(L, GetContext(L)->srcType);
 	return 1;
 }
 
-int ScriptExec::l_GetExecSourceId(lua_State* L)
+static int l_GetExecSourceId(lua_State* L)
 {
 	lua_pushinteger(L, GetContext(L)->srcId);
 	return 1;
 }
 
-int ScriptExec::l_GetRecordFile(lua_State* L)
+static int l_GetRecordFile(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
 	if (call)
@@ -862,7 +864,7 @@ int ScriptExec::l_GetRecordFile(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetBlfState(lua_State* L)
+static int l_GetBlfState(lua_State* L)
 {
 	int contactId = lua_tointeger( L, 1 );
 
@@ -873,7 +875,7 @@ int ScriptExec::l_GetBlfState(lua_State* L)
 	return 2;
 }
 
-int ScriptExec::l_RecordStart(lua_State* L)
+static int l_RecordStart(lua_State* L)
 {
 	const char* file = lua_tostring( L, 1 );
 	int channels = lua_tointeger( L, 2 );
@@ -883,7 +885,7 @@ int ScriptExec::l_RecordStart(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_GetRecordingState(lua_State* L)
+static int l_GetRecordingState(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
 	if (call)
@@ -894,14 +896,14 @@ int ScriptExec::l_GetRecordingState(lua_State* L)
 	return 0;
 }
 
-int ScriptExec::l_GetRxDtmf(lua_State* L)
+static int l_GetRxDtmf(lua_State* L)
 {
 	std::string num = GetContext(L)->onGetRxDtmf();
 	lua_pushstring( L, num.c_str() );
 	return 1;
 }
 
-int ScriptExec::l_ShowTrayNotifier(lua_State* L)
+static int l_ShowTrayNotifier(lua_State* L)
 {
 	const char* description = lua_tostring(L, 1);
 	if (description == NULL)
@@ -923,32 +925,32 @@ int ScriptExec::l_ShowTrayNotifier(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_GetUserName(lua_State* L)
+static int l_GetUserName(lua_State* L)
 {
 	std::string user = GetContext(L)->onGetUserName();
 	lua_pushstring(L, user.c_str());
 	return 1;
 }
 
-int ScriptExec::l_GetExeName(lua_State* L)
+static int l_GetExeName(lua_State* L)
 {
 	lua_pushstring(L, Application->ExeName.c_str());
 	return 1;
 }
 
-int ScriptExec::l_GetProfileDir(lua_State* L)
+static int l_GetProfileDir(lua_State* L)
 {
 	lua_pushstring(L, Paths::GetProfileDir().c_str());
 	return 1;
 }
 
-int ScriptExec::l_RefreshAudioDevicesList(lua_State* L)
+static int l_RefreshAudioDevicesList(lua_State* L)
 {
 	AudioDevicesList::Instance().Refresh();
 	return 0;
 }
 
-int ScriptExec::l_GetAudioDevice(lua_State* L)
+static int l_GetAudioDevice(lua_State* L)
 {
 	const char* module = lua_tostring(L, 1);
 	if (module == NULL)
@@ -1020,7 +1022,7 @@ int ScriptExec::l_GetAudioDevice(lua_State* L)
 	return 2;
 }
 
-int ScriptExec::l_UpdateSettings(lua_State* L)
+static int l_UpdateSettings(lua_State* L)
 {
 	const char* json = lua_tostring(L, 1);
 	if (json == NULL)
@@ -1033,14 +1035,14 @@ int ScriptExec::l_UpdateSettings(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_SetHandled(lua_State* L)
+static int l_SetHandled(lua_State* L)
 {
 	bool handled = lua_tointeger( L, 1 );
 	GetContext(L)->handled = handled;	
 	return 0;
 }
 
-int ScriptExec::l_GetButtonType(lua_State* L)
+static int l_GetButtonType(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	const ButtonConf* btnConf = GetContext(L)->onGetButtonConf(id);
@@ -1053,7 +1055,7 @@ int ScriptExec::l_GetButtonType(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_GetButtonNumber(lua_State* L)
+static int l_GetButtonNumber(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	const ButtonConf* btnConf = GetContext(L)->onGetButtonConf(id);
@@ -1066,14 +1068,14 @@ int ScriptExec::l_GetButtonNumber(lua_State* L)
 	return 1;
 }
 
-int ScriptExec::l_MainMenuShow(lua_State* L)
+static int l_MainMenuShow(lua_State* L)
 {
 	bool state = lua_tointeger( L, 1 );
 	GetContext(L)->onMainMenuShow(state);
 	return 0;
 }
 
-int ScriptExec::l_SendCustomRequest(lua_State* L)
+static int l_SendCustomRequest(lua_State* L)
 {
 	const char* uri = lua_tostring(L, 1);
 	if (uri == NULL)
@@ -1101,6 +1103,55 @@ int ScriptExec::l_SendCustomRequest(lua_State* L)
 	lua_pushinteger(L, uid);
 	return 1;
 }
+
+static int l_ClearCustomRequests(lua_State* L)
+{
+	UaCustomRequests::Clear();
+	return 0;
+}
+
+static int l_DeleteCustomRequest(lua_State* L)
+{
+	int uid = lua_tointeger( L, 1 );
+	UaCustomRequests::DeleteRequest(uid);
+	return 0;
+}
+
+static int l_GetCustomRequest(lua_State* L)
+{
+	int uid = lua_tointeger(L, 1);
+	struct UaCustomRequests::Request* request = UaCustomRequests::GetRequest(uid);
+	if (request == NULL)
+		return 0;
+	lua_pushstring(L, request->uri.c_str());
+	lua_pushstring(L, request->method.c_str());
+	lua_pushstring(L, request->extraHeaderLines.c_str());
+	return 3;
+}
+
+static int l_GetCustomRequestReply(lua_State* L)
+{
+	int uid = lua_tointeger(L, 1);
+	struct UaCustomRequests::Request* request = UaCustomRequests::GetRequest(uid);
+	if (request == NULL)
+		return 0;
+	lua_pushinteger(L, request->haveReply?1:0);
+	lua_pushinteger(L, request->error);
+	lua_pushinteger(L, request->sipStatusCode);
+	return 3;
+}
+
+static int l_GetCustomRequestReplyText(lua_State* L)
+{
+	int uid = lua_tointeger(L, 1);
+	struct UaCustomRequests::Request* request = UaCustomRequests::GetRequest(uid);
+	if (request == NULL)
+		return 0;
+	lua_pushstring(L, request->replyText.c_str());
+	return 1;
+}
+
+};	// ScriptImp
 
 
 ScriptExec::ScriptExec(
@@ -1209,86 +1260,91 @@ void ScriptExec::Run(const char* script)
 	luaL_openlibs(L);
 	contexts[L] = this;
 
-	lua_register(L, "_ALERT", LuaError );
-	lua_register(L, "print", LuaPrint );
-	lua_register(L, "ShowMessage", l_ShowMessage);
+	lua_register(L, "_ALERT", ScriptImp::LuaError );
+	lua_register(L, "print", ScriptImp::LuaPrint );
+	lua_register(L, "ShowMessage", ScriptImp::l_ShowMessage);
 	lua_register(L, "MessageBox", l_MessageBox);
-	lua_register(L, "InputQuery", l_InputQuery);
-	lua_register(L, "Sleep", l_Sleep);
+	lua_register(L, "InputQuery", ScriptImp::l_InputQuery);
+	lua_register(L, "Sleep", ScriptImp::l_Sleep);
 	lua_register(L, "Beep", l_Beep);
-	lua_register(L, "CheckBreak",l_CheckBreak);
-	lua_register(L, "GetClipboardText", l_GetClipboardText);
-	lua_register(L, "SetClipboardText", l_SetClipboardText);
-	lua_register(L, "ForceDirectories", l_ForceDirectories);
-	lua_register(L, "FindWindowByCaptionAndExeName", l_FindWindowByCaptionAndExeName);
-	lua_register(L, "Call", l_Call);
-	lua_register(L, "Hangup", l_Hangup);
-	lua_register(L, "Answer", l_Answer);
-	lua_register(L, "GetDial", l_GetDial);
-	lua_register(L, "SetDial", l_SetDial);
-	lua_register(L, "SwitchAudioSource", l_SwitchAudioSource);
-	lua_register(L, "SendDtmf", l_SendDtmf);
-	lua_register(L, "BlindTransfer", l_BlindTransfer);
-	lua_register(L, "GetCallState", l_GetCallState);
-	lua_register(L, "IsCallIncoming", l_IsCallIncoming);
-	lua_register(L, "GetCallPeer", l_GetCallPeer);
-	lua_register(L, "GetCallInitialRxInvite", l_GetCallInitialRxInvite);
-	lua_register(L, "GetCallCodecName", l_GetCallCodecName);
-	lua_register(L, "GetContactName", l_GetContactName);
-	lua_register(L, "GetStreamingState", l_GetStreamingState);
+	lua_register(L, "CheckBreak", ScriptImp::l_CheckBreak);
+	lua_register(L, "GetClipboardText", ScriptImp::l_GetClipboardText);
+	lua_register(L, "SetClipboardText", ScriptImp::l_SetClipboardText);
+	lua_register(L, "ForceDirectories", ScriptImp::l_ForceDirectories);
+	lua_register(L, "FindWindowByCaptionAndExeName", ScriptImp::l_FindWindowByCaptionAndExeName);
+	lua_register(L, "Call", ScriptImp::l_Call);
+	lua_register(L, "Hangup", ScriptImp::l_Hangup);
+	lua_register(L, "Answer", ScriptImp::l_Answer);
+	lua_register(L, "GetDial", ScriptImp::l_GetDial);
+	lua_register(L, "SetDial", ScriptImp::l_SetDial);
+	lua_register(L, "SwitchAudioSource", ScriptImp::l_SwitchAudioSource);
+	lua_register(L, "SendDtmf", ScriptImp::l_SendDtmf);
+	lua_register(L, "BlindTransfer", ScriptImp::l_BlindTransfer);
+	lua_register(L, "GetCallState", ScriptImp::l_GetCallState);
+	lua_register(L, "IsCallIncoming", ScriptImp::l_IsCallIncoming);
+	lua_register(L, "GetCallPeer", ScriptImp::l_GetCallPeer);
+	lua_register(L, "GetCallInitialRxInvite", ScriptImp::l_GetCallInitialRxInvite);
+	lua_register(L, "GetCallCodecName", ScriptImp::l_GetCallCodecName);
+	lua_register(L, "GetContactName", ScriptImp::l_GetContactName);
+	lua_register(L, "GetStreamingState", ScriptImp::l_GetStreamingState);
 
-	lua_register(L, "SetVariable", l_SetVariable);
-	lua_register(L, "GetVariable", l_GetVariable);
-	lua_register(L, "ClearVariable", l_ClearVariable);
-	lua_register(L, "ClearAllVariables", l_ClearAllVariables);
+	lua_register(L, "SetVariable", ScriptImp::l_SetVariable);
+	lua_register(L, "GetVariable", ScriptImp::l_GetVariable);
+	lua_register(L, "ClearVariable", ScriptImp::l_ClearVariable);
+	lua_register(L, "ClearAllVariables", ScriptImp::l_ClearAllVariables);
 
 	// QueuePush(queueName, stringValue)
-	lua_register(L, "QueuePush", l_QueuePush);
+	lua_register(L, "QueuePush", ScriptImp::l_QueuePush);
 	// local value, isValid = QueuePop(queueName)
-	lua_register(L, "QueuePop", l_QueuePop);
-	lua_register(L, "QueueClear", l_QueueClear);
+	lua_register(L, "QueuePop", ScriptImp::l_QueuePop);
+	lua_register(L, "QueueClear", ScriptImp::l_QueueClear);
 	// local queue_size = QueueGetSize(queueName)
-	lua_register(L, "QueueGetSize", l_QueueGetSize);
+	lua_register(L, "QueueGetSize", ScriptImp::l_QueueGetSize);
 
-	lua_register(L, "GetInitialCallTarget", l_GetInitialCallTarget);
-	lua_register(L, "SetInitialCallTarget", l_SetInitialCallTarget);
-    lua_register(L, "ShellExecute", l_ShellExecute);
-    lua_register(L, "SetTrayIcon", l_SetTrayIcon);
-    lua_register(L, "GetRegistrationState", l_GetRegistrationState);
-	lua_register(L, "SetButtonCaption", l_SetButtonCaption);
-	lua_register(L, "SetButtonCaption2", l_SetButtonCaption2);
-	lua_register(L, "SetButtonDown", l_SetButtonDown);
-	lua_register(L, "GetButtonDown", l_GetButtonDown);
-	lua_register(L, "SetButtonImage", l_SetButtonImage);
-	lua_register(L, "PluginSendMessageText", l_PluginSendMessageText);
-	lua_register(L, "PluginEnable", l_PluginEnable);	// PluginEnable("TTS.dll", 0/1)
-	lua_register(L, "GetExecSourceType", l_GetExecSourceType);
-	lua_register(L, "GetExecSourceId", l_GetExecSourceId);
-	lua_register(L, "GetRecordFile", l_GetRecordFile);
-	lua_register(L, "GetBlfState", l_GetBlfState);
-	lua_register(L, "RecordStart", l_RecordStart);
-	lua_register(L, "GetExeName", l_GetExeName);
-	lua_register(L, "GetProfileDir", l_GetProfileDir);
-	lua_register(L, "GetRecordingState", l_GetRecordingState);
-	lua_register(L, "GetRxDtmf", l_GetRxDtmf);
-	lua_register(L, "ShowTrayNotifier", l_ShowTrayNotifier);
-	lua_register(L, "GetUserName", l_GetUserName);	
-	lua_register(L, "ProgrammableButtonClick", l_ProgrammableButtonClick);
-	lua_register(L, "RefreshAudioDevicesList", l_RefreshAudioDevicesList);
-	lua_register(L, "GetAudioDevice", l_GetAudioDevice);
-	lua_register(L, "UpdateSettings", l_UpdateSettings);
+	lua_register(L, "GetInitialCallTarget", ScriptImp::l_GetInitialCallTarget);
+	lua_register(L, "SetInitialCallTarget", ScriptImp::l_SetInitialCallTarget);
+    lua_register(L, "ShellExecute", ScriptImp::l_ShellExecute);
+    lua_register(L, "SetTrayIcon", ScriptImp::l_SetTrayIcon);
+    lua_register(L, "GetRegistrationState", ScriptImp::l_GetRegistrationState);
+	lua_register(L, "SetButtonCaption", ScriptImp::l_SetButtonCaption);
+	lua_register(L, "SetButtonCaption2", ScriptImp::l_SetButtonCaption2);
+	lua_register(L, "SetButtonDown", ScriptImp::l_SetButtonDown);
+	lua_register(L, "GetButtonDown", ScriptImp::l_GetButtonDown);
+	lua_register(L, "SetButtonImage", ScriptImp::l_SetButtonImage);
+	lua_register(L, "PluginSendMessageText", ScriptImp::l_PluginSendMessageText);
+	lua_register(L, "PluginEnable", ScriptImp::l_PluginEnable);	// PluginEnable("TTS.dll", 0/1)
+	lua_register(L, "GetExecSourceType", ScriptImp::l_GetExecSourceType);
+	lua_register(L, "GetExecSourceId", ScriptImp::l_GetExecSourceId);
+	lua_register(L, "GetRecordFile", ScriptImp::l_GetRecordFile);
+	lua_register(L, "GetBlfState", ScriptImp::l_GetBlfState);
+	lua_register(L, "RecordStart", ScriptImp::l_RecordStart);
+	lua_register(L, "GetExeName", ScriptImp::l_GetExeName);
+	lua_register(L, "GetProfileDir", ScriptImp::l_GetProfileDir);
+	lua_register(L, "GetRecordingState", ScriptImp::l_GetRecordingState);
+	lua_register(L, "GetRxDtmf", ScriptImp::l_GetRxDtmf);
+	lua_register(L, "ShowTrayNotifier", ScriptImp::l_ShowTrayNotifier);
+	lua_register(L, "GetUserName", ScriptImp::l_GetUserName);	
+	lua_register(L, "ProgrammableButtonClick", ScriptImp::l_ProgrammableButtonClick);
+	lua_register(L, "RefreshAudioDevicesList", ScriptImp::l_RefreshAudioDevicesList);
+	lua_register(L, "GetAudioDevice", ScriptImp::l_GetAudioDevice);
+	lua_register(L, "UpdateSettings", ScriptImp::l_UpdateSettings);
 
-	lua_register(L, "SetHandled", l_SetHandled);
+	lua_register(L, "SetHandled", ScriptImp::l_SetHandled);
 
-	lua_register(L, "GetButtonType", l_GetButtonType);
-	lua_register(L, "GetButtonNumber", l_GetButtonNumber);
+	lua_register(L, "GetButtonType", ScriptImp::l_GetButtonType);
+	lua_register(L, "GetButtonNumber", ScriptImp::l_GetButtonNumber);
 
-    lua_register(L, "MainMenuShow", l_MainMenuShow);
+	lua_register(L, "MainMenuShow", ScriptImp::l_MainMenuShow);
 
 	// requestUid = SendCustomRequest(uri, method, extraHeaderLines)
 	// requestUid is > 0 on success
 	// extraHeaderLines parameter is optional
-    lua_register(L, "SendCustomRequest", l_SendCustomRequest);
+	lua_register(L, "SendCustomRequest", ScriptImp::l_SendCustomRequest);
+	lua_register(L, "ClearCustomRequests", ScriptImp::l_ClearCustomRequests);
+	lua_register(L, "DeleteCustomRequest", ScriptImp::l_DeleteCustomRequest);
+	lua_register(L, "GetCustomRequest", ScriptImp::l_GetCustomRequest);
+	lua_register(L, "GetCustomRequestReply", ScriptImp::l_GetCustomRequestReply);
+	lua_register(L, "GetCustomRequestReplyText", ScriptImp::l_GetCustomRequestReplyText);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);

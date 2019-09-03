@@ -193,7 +193,7 @@ void CallbackQueue::NotifyAudioError(void)
 }
 
 
-void CallbackQueue::NotifyCustomRequestStatus(int requestUid, int requestError, int sipStatusCode)
+void CallbackQueue::NotifyCustomRequestStatus(int requestUid, int requestError, int sipStatusCode, AnsiString requestReplyText)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -204,10 +204,10 @@ void CallbackQueue::NotifyCustomRequestStatus(int requestUid, int requestError, 
 	cb->requestUid = requestUid;
 	cb->requestError = requestError;
 	cb->scode = sipStatusCode;
+	cb->requestReplyText = requestReplyText;
 
 	fifo.push();
 }
-
 
 
 
