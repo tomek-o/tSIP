@@ -85,6 +85,12 @@ DWORD WINAPI play_thread(LPVOID arg)
 	int16_t *source_samples = NULL;
 	int16_t *sampv;
 
+	HANDLE timer;   /* Timer handle */
+	LARGE_INTEGER li;   /* Time defintion */
+
+	li.LowPart = 0;
+	li.HighPart = 0;
+
 	if (st->speex_state) {
 		source_samples = mem_alloc(st->in_samples_per_frame * 2, NULL);
 		if (!source_samples) {
@@ -97,11 +103,29 @@ DWORD WINAPI play_thread(LPVOID arg)
 		return NULL;
 	}
 
+	/* Create timer */
+	timer = CreateWaitableTimer(NULL, TRUE, NULL);
+	if (timer == NULL) {
+		DEBUG_WARNING("Error creating waitable timer!\n");
+		mem_deref(sampv);
+		mem_deref(source_samples);
+		return NULL;
+	}
+
 	while (st->run) {
 		unsigned int in_length;
 		unsigned int out_length;
-		
-		Sleep(4);
+
+		//Sleep(4);	// too imprecise under Windows on low-end PC (Atom N270, Windows Embedded, 10ms frame time, 3 calls at once)
+
+		/* Set timer properties */
+		li.QuadPart = -33333;	/* negative value = relative time; unit = 100 ns */
+		if(!SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE)){
+            DEBUG_WARNING("Error setting waitable timer!\n");
+			break;
+		}
+		/* Start & wait for timer */
+		WaitForSingleObject(timer, INFINITE);
 
 		now = tmr_jiffies();
 
@@ -138,6 +162,9 @@ DWORD WINAPI play_thread(LPVOID arg)
 
 		ts += st->ptime;
 	}
+
+	if (timer != NULL)
+		CloseHandle(timer);	
 
 	if (source_samples) {
 		mem_deref(source_samples);
