@@ -16,7 +16,7 @@
 
 namespace
 {
-	Fifo<Command, 512> fifo;
+	Fifo<Command, 1024> fifo;
 	Mutex mutex;
 }
 

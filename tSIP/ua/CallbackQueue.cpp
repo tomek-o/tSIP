@@ -17,7 +17,7 @@
 
 namespace
 {
-	Fifo<Callback, 512> fifo;
+	Fifo<Callback, 1024> fifo;
 	Mutex mutex;
 }
 
