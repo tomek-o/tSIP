@@ -115,56 +115,70 @@ DWORD WINAPI play_thread(LPVOID arg)
 	while (st->run) {
 		unsigned int in_length;
 		unsigned int out_length;
-
-		//Sleep(4);	// too imprecise under Windows on low-end PC (Atom N270, Windows Embedded, 10ms frame time, 3 calls at once)
-
+		int i;
+	#if 0
+		Sleep(4);	// too imprecise under Windows on low-end PC (Atom N270, Windows Embedded, 10ms frame time, 3 calls at once)
+	#else
 		/* Set timer properties */
-		li.QuadPart = -33333;	/* negative value = relative time; unit = 100 ns */
+		li.QuadPart = -40000;	/* negative value = relative time; unit = 100 ns */
 		if(!SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE)){
-            DEBUG_WARNING("Error setting waitable timer!\n");
+			DEBUG_WARNING("Error setting waitable timer!\n");
 			break;
 		}
 		/* Start & wait for timer */
 		WaitForSingleObject(timer, INFINITE);
+	#endif
 
-		now = tmr_jiffies();
+		// WinXP (WES 2009) on Atom N270: read handler called with 16ms interval,
+		// sporadically pauses up to few hundreds ms
+		// => problem (mainly?) if 10ms codec is used
+		// 	=> calling whole routine up to 4 times each time to mitigate this
+		for (i=0; i<4; i++) {
+			now = tmr_jiffies();
 
-		if (ts > now)
-			continue;
+			if (ts > now)
+				continue;
 
-		in_length = st->in_samples_per_frame;
-		out_length = st->out_samples_per_frame;
+			in_length = st->in_samples_per_frame;
+			out_length = st->out_samples_per_frame;
 
-		if (st->speex_state) {
-			aubuf_read(st->aubuf, (uint8_t*)source_samples, st->in_samples_per_frame*sizeof(int16_t));
+			if (st->speex_state) {
+				aubuf_read(st->aubuf, (uint8_t*)source_samples, st->in_samples_per_frame*sizeof(int16_t));
 
-			speex_resampler_process_interleaved_int(st->speex_state,
-							source_samples, &in_length,
-							sampv, &out_length);
+				speex_resampler_process_interleaved_int(st->speex_state,
+								source_samples, &in_length,
+								sampv, &out_length);
+			#if 0
+				if (in_length != st->in_samples_per_frame) {
+					DEBUG_INFO("aufile: in_length = %u, in_samples_per_frame = %d\n", in_length, st->in_samples_per_frame);
+				}
+			#endif
+				assert(in_length == st->in_samples_per_frame);
+			#if 0
+				if (out_length != st->out_samples_per_frame) {
+					DEBUG_INFO("aufile: in_length = %d, in_samples_per_frame = %d, out_length = %d, out_samples_per_frame = %d",
+						in_length, st->in_samples_per_frame, out_length, st->out_samples_per_frame);
+				}
+			#endif
+				assert(out_length == st->out_samples_per_frame);
+			} else {
+				aubuf_read(st->aubuf, (uint8_t*)sampv, st->sampc*sizeof(int16_t));
+			}
 		#if 0
-			if (in_length != st->in_samples_per_frame) {
-				DEBUG_INFO("aufile: in_length = %u, in_samples_per_frame = %d\n", in_length, st->in_samples_per_frame);
+			{
+				char buf[64];
+				/* debugging exact timing of read handler calls */
+				(void)re_printf("[%s] rh %p\n", sys_time(buf, sizeof(buf)), st);
 			}
 		#endif
-			assert(in_length == st->in_samples_per_frame);
-		#if 0
-			if (out_length != st->out_samples_per_frame) {
-				DEBUG_INFO("aufile: in_length = %d, in_samples_per_frame = %d, out_length = %d, out_samples_per_frame = %d",
-					in_length, st->in_samples_per_frame, out_length, st->out_samples_per_frame);
-			}
-		#endif
-			assert(out_length == st->out_samples_per_frame);
-		} else {
-			aubuf_read(st->aubuf, (uint8_t*)sampv, st->sampc*sizeof(int16_t));
+			st->rh((uint8_t *)sampv, st->sampc*sizeof(int16_t), st->arg);
+
+			ts += st->ptime;
 		}
-
-		st->rh((uint8_t *)sampv, st->sampc*sizeof(int16_t), st->arg);
-
-		ts += st->ptime;
 	}
 
 	if (timer != NULL)
-		CloseHandle(timer);	
+		CloseHandle(timer);
 
 	if (source_samples) {
 		mem_deref(source_samples);
@@ -207,7 +221,7 @@ static int read_file(struct ausrc_st *st)
 	int err;
 
 	for (;;) {
-		mb = mbuf_alloc(4096);
+		mb = mbuf_alloc(128*1024);
 		if (!mb)
 			return ENOMEM;
 
@@ -318,6 +332,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 		st->run = false;
 		goto out;
 	}
+	SetThreadPriority(st->thread, THREAD_PRIORITY_HIGHEST);
 
  out:
 	if (err)
