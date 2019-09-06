@@ -2,7 +2,7 @@ object frmLuaScript: TfrmLuaScript
   Left = 0
   Top = 0
   Caption = 'Script'
-  ClientHeight = 341
+  ClientHeight = 360
   ClientWidth = 493
   Color = clBtnFace
   Constraints.MinHeight = 300
@@ -22,12 +22,13 @@ object frmLuaScript: TfrmLuaScript
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 299
+    Top = 318
     Width = 493
     Height = 42
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 299
     object pnlBottom2: TPanel
       Left = 0
       Top = 0
@@ -73,6 +74,10 @@ object frmLuaScript: TfrmLuaScript
       end
       object SaveAs1: TMenuItem
         Action = actFileSaveAs
+      end
+      object miCloseWindow: TMenuItem
+        Caption = 'Close window'
+        OnClick = miCloseWindowClick
       end
     end
     object miHelp: TMenuItem

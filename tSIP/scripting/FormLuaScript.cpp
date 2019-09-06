@@ -417,3 +417,10 @@ void __fastcall TfrmLuaScript::WMDropFiles(TWMDropFiles &message)
     // tell the OS that you're finished...
 	DragFinish((HDROP) message.Drop);
 }
+
+void __fastcall TfrmLuaScript::miCloseWindowClick(TObject *Sender)
+{
+	Close();
+}
+//---------------------------------------------------------------------------
+

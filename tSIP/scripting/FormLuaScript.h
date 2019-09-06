@@ -39,6 +39,7 @@ __published:	// IDE-managed Components
 	TAction *actFileSave;
 	TMenuItem *Save1;
 	TMenuItem *miOpenRecent;
+	TMenuItem *miCloseWindow;
 	void __fastcall btnExecuteClick(TObject *Sender);
 	void __fastcall btnBreakClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
@@ -48,6 +49,7 @@ __published:	// IDE-managed Components
 	void __fastcall actFileSaveExecute(TObject *Sender);
 	void __fastcall miFileClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall miCloseWindowClick(TObject *Sender);
 private:	// User declarations
 	bool breakRequest;
 	volatile bool running;
