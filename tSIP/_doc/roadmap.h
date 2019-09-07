@@ -148,7 +148,6 @@ latency tracker
 
 tSIP: help on button types (+ images)
 tSIP: directory import from vcard
-tSIP: call destination display	
 tSIP: verify wave file format when selecting for wave source audio device
 tSIP: "zawieszenie" przy po³¹czeniu przychodz¹cym gdy brak urz¹dzenia audio (?)
 tSIP: RecordViewer: play multiple files one by one (multiple selection list)
@@ -168,9 +167,6 @@ tSIP plugin: logout from group in inactivity (mouse, keyboard)
 tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(), 
 tSIP scripting: file I/O example (report call quality after each call)
 
-TODO: warn user if wave file source is selected but source file does not exist
-
-
 BUG: halt if audio device (mic with autosensing) is detached during call - winwave
 
 
@@ -178,15 +174,12 @@ FIXME: btn reregister not always working correctly, depending on current registr
 
 www: scripting with javascript
 
-font selection for console (ugly looking font under Wine)
-
-accessibility & GUI scaling: remember column width in call history, scale column width in phonebook
-
 update Lua to 5.3.x, remove CVS tags from Lua source
 
 - wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
 (=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)
 
++ separate some settings from General into Branding
 */
 
 

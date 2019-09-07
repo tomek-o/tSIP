@@ -707,5 +707,38 @@ Version 0.1.68
 	- fixed tab order in contact editor window
 	- added hint with additional info for call history entries
 	- default configuration / first run: added extra button with hint that buttons can be edited with right-click
+
+Version 0.1.69
+	- added option formatting call duration in call history as minutes:seconds
+	- added codec name to history (hint, opt-out)
+	- storing history window list column widths in settings
+	- Lua: added codecName = GetCallCodecName() function
+	- added hints to software volume constrol sliders
+	- added scaling to main window height setting (may need manual changing when upgrading if scaling was other than 100%)
+	- Lua: added PluginEnable(dllName, state) function, e.g. PluginEnable("TTS.dll", 1)
+	- account settings: added configuration (RFC2833 / SIP INFO) for "DTMF" transmit method
+	- added configuration for logging window font (default font looked ugly under Wine)
+	- jsoncpp.lib: added few convenience functions and AnsiString handling
+	- Lua: added MainMenuShow(state) function (state = 0/1)
+	- added options ("Locking") hiding main menu and status bar
+	- FIXED: browser integration: previous window not being found if custom window caption was used
+	- FIXED: browser integration: commands from links like tsip:HANGUP not working
+	- scripting: added second timer as event source
+	- Lua: added SetButtonCaption2(btnId, text) function
+	- Lua: added state = GetButtonDown(btnId) function (state = 0/1)
+	- script window: added example determining event source type and id for script
+	- increased command and callback queues sizes to 1024
+	- mechanism for sending sustom requests
+		- Lua: requestId = SendCustomRequest(uri, method, extraHeaderLines), e.g.<br>
+			local requestUid = SendCustomRequest("sip:192.168.1.12", "OPTIONS", "Accept: application/sdp\r\nContent-Length: 0\r\n\r\n")
+		- Lua: ClearCustomRequests() - deleting state of all custom requests
+		- Lua: DeleteCustomRequest(requestId)
+		- Lua: uri, method, extraHeaderLines = GetCustomRequest(requestId)
+		- Lua: haveReply, error, sipStatusCode = GetCustomRequestReply(requestId)
+		- Lua: replyText = GetCustomRequestReplyText(requestId)
+		- "on custom request reply" script event
+		- script window: example for scanning local network with OPTIONS
+	- some effort to improve aufile work on low-end PC (Atom N270, L16/44100, 10ms framing) - using waitable timer
+	- some code cleanup and reorganization for tSIP.exe project
 */
 

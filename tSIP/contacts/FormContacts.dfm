@@ -13,8 +13,6 @@ object frmContacts: TfrmContacts
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object lvContacts: TListView
@@ -37,7 +35,6 @@ object frmContacts: TfrmContacts
     ViewStyle = vsReport
     OnData = lvContactsData
     OnDblClick = lvContactsDblClick
-    ExplicitWidth = 210
   end
   object pnlBottom: TPanel
     Left = 0
@@ -47,7 +44,6 @@ object frmContacts: TfrmContacts
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 210
     object imgFilter: TImage
       Left = 6
       Top = 5
