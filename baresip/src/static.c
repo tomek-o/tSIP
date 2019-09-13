@@ -19,6 +19,7 @@ extern const struct mod_export exports_presence;
 extern const struct mod_export exports_dialog_info;
 extern const struct mod_export exports_recorder;
 extern const struct mod_export exports_aufile;
+extern const struct mod_export exports_aufile_mm;
 extern const struct mod_export exports_softvol;
 extern const struct mod_export exports_nullaudio;
 
@@ -41,6 +42,7 @@ const struct mod_export *mod_table[] = {
 	&exports_dialog_info,
 	&exports_recorder,
 	&exports_aufile,
+	&exports_aufile_mm,
 	&exports_softvol,
 	&exports_nullaudio,
 	NULL

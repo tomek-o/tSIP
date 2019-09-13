@@ -202,6 +202,11 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 		cfg->audioRxMod = UaConf::modAufile;
 		cfg->audioRxDev = edSoundInputWave->Text.c_str();
 	}
+	else if (cbSoundInputMod->ItemIndex == 4)
+	{
+		cfg->audioRxMod = UaConf::modAufileMm;
+		cfg->audioRxDev = edSoundInputWave->Text.c_str();
+	}
 	else
 	{
         cfg->audioRxMod = UaConf::modNullaudio;
@@ -319,9 +324,13 @@ void TfrmButtonEdit::SetType(Button::Type type)
 		{
 			cbSoundInputMod->ItemIndex = 2;
 		}
-		else
+		else if (!strcmp(cfg->audioRxMod.c_str(), UaConf::modAufileMm))
 		{
 			cbSoundInputMod->ItemIndex = 3;
+		}
+		else
+		{
+			cbSoundInputMod->ItemIndex = 4;
         }
 		cbSoundInputModChange(NULL);
 

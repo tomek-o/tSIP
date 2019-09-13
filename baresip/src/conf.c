@@ -152,6 +152,9 @@ int configure(void)
 	pl_set_str(&modname, "aufile");
 	load_module2(NULL, &modname);
 
+	pl_set_str(&modname, "aufile_mm");
+	load_module2(NULL, &modname);
+
 	pl_set_str(&modname, "nullaudio");
 	load_module2(NULL, &modname);
 

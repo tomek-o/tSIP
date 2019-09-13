@@ -406,7 +406,9 @@ static int app_init(void)
 	struct config * cfg = conf_config();
 
 	strncpyz(cfg->audio.src_mod, appSettings.uaConf.audioCfgSrc.mod, sizeof(cfg->audio.src_mod));
-	if (strcmp(appSettings.uaConf.audioCfgSrc.mod, UaConf::modAufile))
+	if (strcmp(appSettings.uaConf.audioCfgSrc.mod, UaConf::modAufile) &&
+        strcmp(appSettings.uaConf.audioCfgSrc.mod, UaConf::modAufileMm)
+		)
 	{
 		strncpyz(cfg->audio.src_dev, appSettings.uaConf.audioCfgSrc.dev, sizeof(cfg->audio.src_dev));
 	}

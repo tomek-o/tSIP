@@ -213,6 +213,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			if (!strcmp(str, UaConf::modPortaudio) ||
 				!strcmp(str, UaConf::modWinwave) ||
 				!strcmp(str, UaConf::modAufile) ||
+				!strcmp(str, UaConf::modAufileMm) ||
 				!strcmp(str, UaConf::modNullaudio)
 				) {
 				strncpyz(uaConf.audioCfgSrc.mod, str, sizeof(uaConf.audioCfgSrc.mod));

@@ -152,6 +152,7 @@ public:
 	static const char* modPortaudio;
 	static const char* modWinwave;
 	static const char* modAufile;
+	static const char* modAufileMm;
 	static const char* modNullaudio;
 
 	struct AudioCfg {

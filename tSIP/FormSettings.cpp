@@ -179,9 +179,13 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	{
 		cbSoundInputMod->ItemIndex = 2;
 	}
-	else if (!strcmp(tmpSettings.uaConf.audioCfgSrc.mod, UaConf::modNullaudio))
+	else if (!strcmp(tmpSettings.uaConf.audioCfgSrc.mod, UaConf::modAufileMm))
 	{
 		cbSoundInputMod->ItemIndex = 3;
+	}
+	else if (!strcmp(tmpSettings.uaConf.audioCfgSrc.mod, UaConf::modNullaudio))
+	{
+		cbSoundInputMod->ItemIndex = 4;
 	}
 	else
 	{
@@ -537,6 +541,10 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	{
     	ptr = UaConf::modAufile;
 	}
+	else if (cbSoundInputMod->ItemIndex == 3)
+	{
+		ptr = UaConf::modAufileMm;
+	}
 	else
 	{
         ptr = UaConf::modNullaudio;
@@ -726,12 +734,13 @@ void __fastcall TfrmSettings::cbSoundInputModChange(TObject *Sender)
 				tmpSettings.uaConf.audioCfgSrc.dev);
 			break;
 		case 2:
+		case 3:
 			btnSelectWaveFile->Visible = true;
 			edSoundInputWave->Visible = true;
 			cbSoundInputDev->Visible = false;
 			lblSoundInputDevice->Visible = true;
 			break;
-		case 3:	// nullaudio
+		case 4:	// nullaudio
 			btnSelectWaveFile->Visible = false;
 			edSoundInputWave->Visible = false;
 			cbSoundInputDev->Visible = false;
