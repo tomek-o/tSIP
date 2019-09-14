@@ -52,6 +52,7 @@ private:
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
 	typedef const ButtonConf* (__closure *CallbackGetButtonConf)(int id);
 	typedef void (__closure *CallbackMainMenuShow)(bool state);
+	typedef void (__closure *CallbackApplicationClose)(void);
 
 	CallbackAddOutputText onAddOutputText;
 	CallbackCall onCall;
@@ -83,6 +84,7 @@ private:
 	CallbackUpdateSettings onUpdateSettings;
 	CallbackGetButtonConf onGetButtonConf;
 	CallbackMainMenuShow onMainMenuShow;
+	CallbackApplicationClose onApplicationClose;
 
 	friend class ScriptImp;
 
@@ -131,7 +133,8 @@ public:
 		CallbackProgrammableButtonClick onProgrammableButtonClick,
 		CallbackUpdateSettings onUpdateSettings,
 		CallbackGetButtonConf onGetButtonConf,
-		CallbackMainMenuShow onMainMenuShow
+		CallbackMainMenuShow onMainMenuShow,
+		CallbackApplicationClose onApplicationClose
 		);
 	~ScriptExec();
 	void Run(const char* script);

@@ -1075,6 +1075,12 @@ static int l_MainMenuShow(lua_State* L)
 	return 0;
 }
 
+static int l_ApplicationClose(lua_State* L)
+{
+	GetContext(L)->onApplicationClose();
+	return 0;
+}
+
 static int l_SendCustomRequest(lua_State* L)
 {
 	const char* uri = lua_tostring(L, 1);
@@ -1188,7 +1194,8 @@ ScriptExec::ScriptExec(
 	CallbackProgrammableButtonClick onProgrammableButtonClick,
 	CallbackUpdateSettings onUpdateSettings,
 	CallbackGetButtonConf onGetButtonConf,
-	CallbackMainMenuShow onMainMenuShow
+	CallbackMainMenuShow onMainMenuShow,
+	CallbackApplicationClose onApplicationClose
 	):
 	srcType(srcType),
 	srcId(srcId),
@@ -1224,6 +1231,7 @@ ScriptExec::ScriptExec(
 	onUpdateSettings(onUpdateSettings),
 	onGetButtonConf(onGetButtonConf),
 	onMainMenuShow(onMainMenuShow),
+	onApplicationClose(onApplicationClose),
 
 	running(false)
 {
@@ -1244,7 +1252,8 @@ ScriptExec::ScriptExec(
 		onProgrammableButtonClick &&
 		onUpdateSettings &&
 		onGetButtonConf &&
-		onMainMenuShow
+		onMainMenuShow &&
+		onApplicationClose
 		);
 }
 
@@ -1335,6 +1344,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetButtonNumber", ScriptImp::l_GetButtonNumber);
 
 	lua_register(L, "MainMenuShow", ScriptImp::l_MainMenuShow);
+	lua_register(L, "ApplicationClose", ScriptImp::l_ApplicationClose);
 
 	// requestUid = SendCustomRequest(uri, method, extraHeaderLines)
 	// requestUid is > 0 on success

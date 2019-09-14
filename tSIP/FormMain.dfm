@@ -4,7 +4,7 @@ object frmMain: TfrmMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'tSIP'
-  ClientHeight = 381
+  ClientHeight = 400
   ClientWidth = 479
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -27,20 +27,22 @@ object frmMain: TfrmMain
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 362
+    Top = 381
     Width = 479
     Height = 19
     Panels = <>
     SimplePanel = True
+    ExplicitTop = 362
   end
   object pnlMain: TPanel
     Left = 0
     Top = 0
     Width = 267
-    Height = 362
+    Height = 381
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 362
     object lblCallState: TLabel
       Left = 8
       Top = 71
@@ -165,7 +167,7 @@ object frmMain: TfrmMain
       Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
-      ItemHeight = 0
+      ItemHeight = 19
       ParentFont = False
       TabOrder = 0
       Text = '3000'
@@ -183,10 +185,6 @@ object frmMain: TfrmMain
       OnChange = pcMainChange
       object tsDialpad: TTabSheet
         Caption = 'Dialpad'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object imgDialpadBackground: TImage
           Left = 0
           Top = 0
@@ -508,7 +506,7 @@ object frmMain: TfrmMain
     Left = 265
     Top = 4
     Width = 214
-    Height = 358
+    Height = 377
     Margins.Left = 0
     Margins.Top = 4
     Margins.Right = 0
@@ -516,6 +514,7 @@ object frmMain: TfrmMain
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitHeight = 358
   end
   object MainMenu: TMainMenu
     Left = 283

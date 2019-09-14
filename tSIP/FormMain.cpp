@@ -927,6 +927,11 @@ void TfrmMain::MainMenuShow(bool state)
 	this->Menu = (state)?(MainMenu):(NULL);
 }
 
+void TfrmMain::ApplicationClose(void)
+{
+	actExit->Execute();
+}
+
 AnsiString TfrmMain::CleanUri(AnsiString uri)
 {
 	AnsiString res = uri;
@@ -2176,7 +2181,8 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&ProgrammableButtonClick,
 		&UpdateSettingsFromJson,
 		&OnGetButtonConf,
-		&MainMenuShow
+		&MainMenuShow,
+		&ApplicationClose
 		);
 	scriptExec.Run(script.c_str());
 	return 0;

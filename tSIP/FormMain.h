@@ -191,6 +191,7 @@ private:	// User declarations
 	std::string OnGetUserName(void);
 	const ButtonConf* OnGetButtonConf(int id);
 	void MainMenuShow(bool state);
+	void ApplicationClose(void);
 
 	int autoAnswerCode;
 	bool autoAnswerIntercom;
