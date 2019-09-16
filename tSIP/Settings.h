@@ -211,6 +211,8 @@ public:
 		bool bAddFilterWMCopyData;
 		AnsiString asProtocol;
 		bool bDoNotUseSipPrefixForDirectIpCalls;
+		bool bDoNotPassParametersToPreviousInstance;
+		_Integration(void);
 	} Integration;
 	struct _Ring
 	{

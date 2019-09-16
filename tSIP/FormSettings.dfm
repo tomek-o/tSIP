@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsAudioIO
+    ActivePage = tsIntegration
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1617,9 +1617,11 @@ object frmSettings: TfrmSettings
       object lblIntegrationFromBrowser: TLabel
         Left = 3
         Top = 3
-        Width = 247
+        Width = 364
         Height = 13
-        Caption = 'Browser or e-mail client -> softphone ("click to call")'
+        Caption = 
+          'Browser or e-mail client -> softphone ("click to call" / command' +
+          ' line handling)'
       end
       object lblIntegrationSoftphoneToBrowser: TLabel
         Left = 3
@@ -1688,6 +1690,16 @@ object frmSettings: TfrmSettings
           'Do not use "sip:" prefix for direct IP calls (clean passed text ' +
           'even if starts with "sip:")'
         TabOrder = 4
+      end
+      object chbDoNotPassParametersToPreviousInstance: TCheckBox
+        Left = 26
+        Top = 122
+        Width = 511
+        Height = 17
+        Caption = 
+          'Do not pass parameters to previous instance (run new instance on' +
+          ' each click / command line call)'
+        TabOrder = 5
       end
     end
     object tsHotkeys: TTabSheet

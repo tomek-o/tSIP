@@ -95,7 +95,7 @@ int CommandLine::Process(void)
 		}
 	}
 
-	if (hWnd)
+	if (hWnd && (appSettings.Integration.bDoNotPassParametersToPreviousInstance == false))
 	{
 		// Forward the command line in a WM_COPYDATA message to other instance.
 		COPYDATASTRUCT cds;

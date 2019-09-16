@@ -311,6 +311,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chAddFilterWMCopyData->Checked = tmpSettings.Integration.bAddFilterWMCopyData;
 	edProtocolName->Text = tmpSettings.Integration.asProtocol;
 	chbDoNotUseSipPrefixForDirectIpCalls->Checked = tmpSettings.Integration.bDoNotUseSipPrefixForDirectIpCalls;
+	chbDoNotPassParametersToPreviousInstance->Checked = tmpSettings.Integration.bDoNotPassParametersToPreviousInstance;
 
 	cbSipAccessUrlMode->ItemIndex = tmpSettings.SipAccessUrl.accessMode;
 
@@ -525,6 +526,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Integration.bAddFilterWMCopyData = chAddFilterWMCopyData->Checked;
 	tmpSettings.Integration.asProtocol = edProtocolName->Text;
 	tmpSettings.Integration.bDoNotUseSipPrefixForDirectIpCalls = chbDoNotUseSipPrefixForDirectIpCalls->Checked;
+	tmpSettings.Integration.bDoNotPassParametersToPreviousInstance = chbDoNotPassParametersToPreviousInstance->Checked;
 
 	tmpSettings.SipAccessUrl.accessMode = static_cast<Settings::_SipAccessUrl::AccessMode>(cbSipAccessUrlMode->ItemIndex);
 

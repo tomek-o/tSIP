@@ -101,8 +101,14 @@ void __fastcall TfrmLuaScript::btnBreakClick(TObject *Sender)
 
 void __fastcall TfrmLuaScript::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
+	if (CheckFileNotSavedDialog())
+	{
+		CanClose = false;
+		return;
+	}
 	breakRequest = true;
-	while (running) {
+	while (running)
+	{
 		Application->ProcessMessages();
 		Sleep(100);
 	}
@@ -384,7 +390,7 @@ void __fastcall TfrmLuaScript::miFileClick(TObject *Sender)
 
 void __fastcall TfrmLuaScript::FormClose(TObject *Sender, TCloseAction &Action)
 {
-	Action = caFree;	
+	Action = caFree;
 }
 //---------------------------------------------------------------------------
 

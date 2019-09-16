@@ -103,6 +103,14 @@ Settings::_frmContactPopup::_frmContactPopup(void):
 {
 }
 
+Settings::_Integration::_Integration(void):
+	bAddFilterWMCopyData(false),
+	asProtocol(Branding::appProto),
+	bDoNotUseSipPrefixForDirectIpCalls(false),
+	bDoNotPassParametersToPreviousInstance(false)
+{
+}
+
 Settings::Settings(void)
 {
 	int maxX = GetSystemMetrics(SM_CXSCREEN);
@@ -115,10 +123,6 @@ Settings::Settings(void)
 	Display.bUserOnlyClip = false;
 	Display.bDecodeUtfDisplayToAnsi = false;
 	Display.bUsePAssertedIdentity = false;
-
-	Integration.bAddFilterWMCopyData = false;
-	Integration.asProtocol = Branding::appProto;
-	Integration.bDoNotUseSipPrefixForDirectIpCalls = false;
 
 	Ring.defaultRing = "ring.wav";
 	for (int i=0; i<sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]); i++)
@@ -691,6 +695,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		Integration.bAddFilterWMCopyData = IntegrationJson.get("AddFilterWMCopyData", Integration.bAddFilterWMCopyData).asBool();
 		Integration.asProtocol = IntegrationJson.get("Protocol", Integration.asProtocol.c_str()).asString().c_str();
 		Integration.bDoNotUseSipPrefixForDirectIpCalls = IntegrationJson.get("DoNotUseSipPrefixForDirectIpCalls", Integration.bDoNotUseSipPrefixForDirectIpCalls).asBool();
+		IntegrationJson.getBool("DoNotPassParametersToPreviousInstance", Integration.bDoNotPassParametersToPreviousInstance);
     }
 
 	{
@@ -911,6 +916,8 @@ int Settings::Write(AnsiString asFileName)
 	root["Integration"]["AddFilterWMCopyData"] = Integration.bAddFilterWMCopyData;
 	root["Integration"]["Protocol"] = Integration.asProtocol.c_str();
 	root["Integration"]["DoNotUseSipPrefixForDirectIpCalls"] = Integration.bDoNotUseSipPrefixForDirectIpCalls;
+	root["Integration"]["DoNotPassParametersToPreviousInstance"] = Integration.bDoNotPassParametersToPreviousInstance;
+
 
 	root["Ring"]["DefaultRing"] = Ring.defaultRing.c_str();
 	for (int i=0; i<sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]); i++)
