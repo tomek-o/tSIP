@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsNetwork
+    ActivePage = tsRecording
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1549,6 +1549,15 @@ object frmSettings: TfrmSettings
           'both local and remote (mixed)'
           'local party only (your microphone)'
           'remote party only')
+      end
+      object btnOpenRecordingFolder: TButton
+        Left = 447
+        Top = 34
+        Width = 75
+        Height = 21
+        Caption = 'Open'
+        TabOrder = 7
+        OnClick = btnOpenRecordingFolderClick
       end
     end
     object tsCodecs: TTabSheet

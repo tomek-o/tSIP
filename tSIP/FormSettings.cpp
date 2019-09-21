@@ -1372,3 +1372,20 @@ void TfrmSettings::ShowFonts(void)
 	ed->Font->Style = font->style;
 }
 
+void __fastcall TfrmSettings::btnOpenRecordingFolderClick(TObject *Sender)
+{
+	AnsiString dir;
+	if (appSettings.uaConf.recording.recDir == UaConf::RecordingCfg::RecDirRelative)
+	{
+		dir = Paths::GetProfileDir() + "\\recordings\\";
+	}
+	else
+	{
+		dir = appSettings.uaConf.recording.customRecDir.c_str();
+		if (dir[dir.Length()] != '\\')
+			dir += "\\";
+	}
+	ShellExecute(NULL, "explore", dir.c_str(), NULL, NULL, SW_SHOWNORMAL);
+}
+//---------------------------------------------------------------------------
+
