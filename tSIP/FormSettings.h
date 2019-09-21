@@ -335,6 +335,9 @@ __published:	// IDE-managed Components
 	TButton *btnSelectedScriptOnCustomRequestReplyChange;
 	TBitBtn *btnSelectedScriptOnCustomRequestReplyEdit;
 	TCheckBox *chbDoNotPassParametersToPreviousInstance;
+	TLabel *lblNetworkInterfaceInfo1;
+	TLabel *lblNetworkInterfaceInfo2;
+	TLabel *lblNetworkInterfaceInfo;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

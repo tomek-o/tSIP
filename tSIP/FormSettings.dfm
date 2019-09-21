@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsIntegration
+    ActivePage = tsNetwork
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -307,21 +307,21 @@ object frmSettings: TfrmSettings
       end
       object lblRtpPortRange: TLabel
         Left = 3
-        Top = 97
+        Top = 161
         Width = 130
         Height = 13
         Caption = 'RTP/RTCP local  port range'
       end
       object lblRtpPortMin: TLabel
         Left = 205
-        Top = 97
+        Top = 161
         Width = 16
         Height = 13
         Caption = 'min'
       end
       object lblRtpPortMax: TLabel
         Left = 280
-        Top = 97
+        Top = 161
         Width = 20
         Height = 13
         Caption = 'max'
@@ -346,21 +346,21 @@ object frmSettings: TfrmSettings
       end
       object lblRtpJitterBufDelay: TLabel
         Left = 3
-        Top = 121
+        Top = 185
         Width = 151
         Height = 13
         Caption = 'RTP jitter buffer delay (frames)'
       end
       object lblJbufDelayMin: TLabel
         Left = 205
-        Top = 121
+        Top = 185
         Width = 16
         Height = 13
         Caption = 'min'
       end
       object lblJbufDelayMax: TLabel
         Left = 280
-        Top = 121
+        Top = 185
         Width = 20
         Height = 13
         Caption = 'max'
@@ -374,10 +374,33 @@ object frmSettings: TfrmSettings
       end
       object lblRtpTimeout: TLabel
         Left = 3
-        Top = 145
+        Top = 209
         Width = 140
         Height = 13
         Caption = 'RTP timeout; 0 = disabled [s]'
+      end
+      object lblNetworkInterfaceInfo1: TLabel
+        Left = 24
+        Top = 84
+        Width = 294
+        Height = 13
+        Caption = 'Binding to network interface instead of binding to IP address.'
+      end
+      object lblNetworkInterfaceInfo2: TLabel
+        Left = 24
+        Top = 103
+        Width = 259
+        Height = 13
+        Caption = 'Windows requires full interface GUID, including braces'
+      end
+      object lblNetworkInterfaceInfo: TLabel
+        Left = 24
+        Top = 122
+        Width = 434
+        Height = 13
+        Caption = 
+          '(e.g. {80FF9360-D258-4F48-AE85-32CA2A7A1896} as listed in log at' +
+          ' application startup).'
       end
       object edLocalAddress: TEdit
         Left = 227
@@ -388,28 +411,28 @@ object frmSettings: TfrmSettings
       end
       object edRtpPortMin: TEdit
         Left = 227
-        Top = 94
+        Top = 158
         Width = 42
         Height = 21
         TabOrder = 1
       end
       object edRtpPortMax: TEdit
         Left = 305
-        Top = 94
+        Top = 158
         Width = 42
         Height = 21
         TabOrder = 2
       end
       object edJbufDelayMin: TEdit
         Left = 227
-        Top = 118
+        Top = 182
         Width = 42
         Height = 21
         TabOrder = 3
       end
       object edJbufDelayMax: TEdit
         Left = 305
-        Top = 118
+        Top = 182
         Width = 42
         Height = 21
         TabOrder = 4
@@ -423,7 +446,7 @@ object frmSettings: TfrmSettings
       end
       object edRtpTimeout: TEdit
         Left = 227
-        Top = 142
+        Top = 206
         Width = 42
         Height = 21
         TabOrder = 6
