@@ -1301,7 +1301,12 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 						Application->Restore();
                     SetForegroundWindow( Application->Handle );
 					//this->BringToFront();
-					//SetWindowPos(this->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+					// https://stackoverflow.com/questions/19136365/win32-setforegroundwindow-not-working-all-the-time
+					SetWindowPos(this->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+					if (appSettings.frmMain.bAlwaysOnTop == false)
+					{
+						SetWindowPos(this->Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+					}
 				}
 			}
 
