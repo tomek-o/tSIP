@@ -936,7 +936,52 @@ object frmAbout: TfrmAbout
         
           'AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARIS' +
           'ING OUT OF OR '
-        'IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. ')
+        'IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. '
+        ''
+        ''
+        
+          '================================================================' +
+          '============='
+        'json-cpp license:'
+        
+          '================================================================' +
+          '============='
+        ''
+        
+          'The JsonCpp library'#39's source code, including accompanying docume' +
+          'ntation, tests and demonstration '
+        'applications, are licensed under the following conditions...'
+        ''
+        
+          'The author (Baptiste Lepilleur) explicitly disclaims copyright i' +
+          'n all jurisdictions which recognize such a '
+        
+          'disclaimer. In such jurisdictions, this software is released int' +
+          'o the Public Domain.'
+        ''
+        
+          'In jurisdictions which do not recognize Public Domain property (' +
+          'e.g. Germany as of 2010), this software is '
+        
+          'Copyright (c) 2007-2010 by Baptiste Lepilleur, and is released u' +
+          'nder the terms of the MIT License.'
+        ''
+        
+          'In jurisdictions which recognize Public Domain property, the use' +
+          'r of this software may choose to accept it '
+        
+          'either as 1) Public Domain, 2) under the conditions of the MIT L' +
+          'icense (see below), or 3) under the terms '
+        
+          'of dual Public Domain/MIT License conditions described here, as ' +
+          'they choose.'
+        ''
+        
+          'The MIT License is about as close to Public Domain as a license ' +
+          'can get, and is described in clear, '
+        'concise terms at:'
+        ''
+        '   http://en.wikipedia.org/wiki/MIT_License ')
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
