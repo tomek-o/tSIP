@@ -9,6 +9,7 @@
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
 //---------------------------------------------------------------------------
+#include <StrUtils.hpp>	// TStringSearchOptions; required only on some TC installations?
 #include "ScEditStyle.h"
 
 class TScEdit;
