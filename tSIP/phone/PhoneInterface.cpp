@@ -16,6 +16,8 @@ std::map<AnsiString, class PhoneInterface*> PhoneInterface::instances;
 AnsiString PhoneInterface::asDllDir;
 std::list<PhoneConf> PhoneInterface::cfg;
 
+AnsiString PhoneInterface::profileDir;
+
 PhoneInterface::CallbackKey PhoneInterface::callbackKey = NULL;
 PhoneInterface::CallbackPagingTx PhoneInterface::callbackPagingTx = NULL;
 PhoneInterface::CallbackClearDial PhoneInterface::callbackClearDial = NULL;
@@ -123,6 +125,7 @@ void PhoneInterface::SetCfg(std::list<PhoneConf> &newcfg)
 				{
 					LOG("Loaded %s\n", dllName.c_str());
 					instances[LowerCase(dllName)] = newPhone;
+					newPhone->SetProfileDir(profileDir);
 					newPhone->Connect();
 				}
 			}
@@ -204,6 +207,7 @@ void PhoneInterface::UpdateAudioError(void)
 
 void PhoneInterface::UpdateProfileDir(AnsiString dir)
 {
+	profileDir = dir;
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
 	{

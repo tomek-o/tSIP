@@ -256,7 +256,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 
 	initialScaling = static_cast<double>(appSettings.gui.scalingPct) / 100;
 	this->Height = floor(appSettings.frmMain.iHeight * initialScaling + 0.5);
-	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;	
+	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
 
 	this->Top = appSettings.frmMain.iPosY;
 	this->Left = appSettings.frmMain.iPosX;
@@ -512,7 +512,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	if (appSettings.frmMain.bKioskMode)
 	{
 		SetKioskMode(appSettings.frmMain.bKioskMode);
-    }
+	}
 	if (appSettings.frmMain.bHideStatusBar)
 	{
 		StatusBar->Visible = false;
@@ -564,11 +564,11 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackRunScriptAsync = OnRunScriptAsync;
 
 	PhoneInterface::EnumerateDlls(dir + "\\phone");
+	PhoneInterface::UpdateProfileDir(dir);
 	PhoneInterface::SetCfg(appSettings.phoneConf);
 	PhoneInterface::UpdateRegistrationState(0);
 	PhoneInterface::UpdateCallState(0, "");
-	PhoneInterface::UpdatePagingTxState(0);
-	PhoneInterface::UpdateProfileDir(dir);
+	PhoneInterface::UpdatePagingTxState(0);	
 
 	if (appSettings.Scripts.onStartup != "")
 	{
@@ -872,7 +872,7 @@ int TfrmMain::OnPluginEnable(const char* dllName, bool state)
 
 	if (changed)
 	{
-        PhoneInterface::SetCfg(appSettings.phoneConf);
+		PhoneInterface::SetCfg(appSettings.phoneConf);
 		appSettings.Write(Paths::GetConfig());
 		return 0;
 	}

@@ -110,6 +110,8 @@ private:
 	static std::list<PhoneConf> cfg;
 	static PhoneConf& FindCfg(AnsiString dllName);
 
+	static AnsiString profileDir;
+
 
 public:
 	/** \brief Make list of valid dlls in supplied location
