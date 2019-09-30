@@ -455,6 +455,27 @@ static int l_SetInitialCallTarget(lua_State* L)
 	return 0;
 }
 
+static int l_SetCallTarget(lua_State* L)
+{
+	const char* str = lua_tostring( L, -1 );
+	if (str == NULL)
+	{
+		LOG("Lua error: str == NULL\n");
+		return 0;
+	}
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+        call->uri = str;
+		call->initialTarget = str;
+	}
+	else
+	{
+		LOG("Lua error: no call for SetCallTarget\n");
+	}
+	return 0;
+}
+
 static int l_GetInitialCallTarget(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
@@ -1312,7 +1333,8 @@ void ScriptExec::Run(const char* script)
 
 	lua_register(L, "GetInitialCallTarget", ScriptImp::l_GetInitialCallTarget);
 	lua_register(L, "SetInitialCallTarget", ScriptImp::l_SetInitialCallTarget);
-    lua_register(L, "ShellExecute", ScriptImp::l_ShellExecute);
+	lua_register(L, "SetCallTarget", ScriptImp::l_SetCallTarget);
+	lua_register(L, "ShellExecute", ScriptImp::l_ShellExecute);
     lua_register(L, "SetTrayIcon", ScriptImp::l_SetTrayIcon);
     lua_register(L, "GetRegistrationState", ScriptImp::l_GetRegistrationState);
 	lua_register(L, "SetButtonCaption", ScriptImp::l_SetButtonCaption);
