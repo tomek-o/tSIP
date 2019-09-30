@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsRecording
+    ActivePage = tsScripts
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2036,7 +2036,7 @@ object frmSettings: TfrmSettings
         Caption = 'on dial (keypad)'
       end
       object lblScriptOnProgrammableButton: TLabel
-        Left = 17
+        Left = 5
         Top = 266
         Width = 118
         Height = 13
