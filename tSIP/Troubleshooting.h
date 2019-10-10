@@ -25,6 +25,7 @@ namespace Troubleshooting {
 		WavFileMissing,
 		IncorrectWavFormat,
 		VirtualboxNetworkAdapter,
+		LocalAutomaticPrivateIpAddress,
 		InvalidFrameLength,
 		UncommonFrameLength,
 		PopularCodecsDisabled,

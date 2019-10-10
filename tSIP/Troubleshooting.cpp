@@ -88,6 +88,31 @@ namespace {
 		return false;
 	}
 
+	/** 169.254.x.x = Automatic Private IP address (Windows)
+	*/
+	bool CheckLocalAutomaticPrivateIpAddress(void)
+	{
+		const struct sa *addr = net_laddr_af(AF_INET);
+		assert(addr);
+
+		if (appSettings.uaConf.ifname != "")
+			return false;
+
+		if (strncmp(appSettings.uaConf.local.c_str(), "0.0.0.0", strlen("0.0.0.0")))
+			return false;
+
+		char buf[64];
+		int st = sa_ntop(addr, buf, sizeof(buf));
+		if (st == 0)
+		{
+			if (strncmp(buf, "169.154.", strlen("169.154.")) == 0)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	bool CheckAudioInputDevice(void)
 	{
 		const UaConf::AudioCfg &cfg = appSettings.uaConf.audioCfgSrc;
@@ -181,11 +206,18 @@ namespace {
 		{ LevelWarning, "No audio output device", "", CheckAudioOutputDevice },
 		{ LevelWarning, "Missing wave file for audio input", "Audio file specified as input device does not exist.", NULL },
 		{ LevelWarning, "Incorrect wav file format", "Invalid file format for input device.", NULL },
-		{ LevelWarning, "Binding to VirtualBox adapter",
+		{ LevelWarning, "Binding to VirtualBox network adapter",
 			"Local address seems to be the address of VirtualBox network adapter.\n"
-			"It is very like that this configuration would not be usable, e.g. would not allow registering to server.\n"
+			"It is very likely that this configuration would not be usable, e.g. would not allow registering to server.\n"
 			"You may/should bind to other network interface by entering local address or network adapter GUID in \"Network\" settings tab."
 			, CheckLocalAddressVirtualBox
+			},
+		{ LevelWarning, "Binding to network adapter with automatic private IP address",
+			"Local address seems to be Windows' automatic private IP address.\n"
+			"It is very likely that this configuration would not be usable, e.g. would not allow registering to server.\n"
+			"You may/should bind to other network interface by entering local address or network adapter GUID in \"Network\" settings tab."
+			"If this is correct interface - make sure ethernet cable is connected / DHCP server is working."
+			, CheckLocalAutomaticPrivateIpAddress
 			},
 		{ LevelWarning, "Invalid frame ptime", "Selected RTP ptime may not work well with specified codec(s), exceeding network MTU.", NULL },
 		{ LevelHint, "Selected ptime is different then commonly used 20ms.", "Ptime other than 20ms with commonly used codecs may cause interoperability problems.", CheckUncommonFrameLength },
