@@ -17,7 +17,6 @@
 #include <re_fmt.h>
 #include <re_mbuf.h>
 #include <re_sa.h>
-#include "sa.h"
 
 
 #define DEBUG_MODULE "net_ntop"

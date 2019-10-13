@@ -13,6 +13,10 @@
 #endif
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct pl;
 
 /** Socket Address flags */
@@ -60,3 +64,12 @@ bool     sa_is_any(const struct sa *sa);
 
 struct re_printf;
 int      sa_print_addr(struct re_printf *pf, const struct sa *sa);
+
+/* Net ntop/pton */
+int      net_inet_ntop(const struct sa *sa, char *buf, int size);
+int      net_inet_pton(const char *addr, struct sa *sa);
+
+
+#ifdef __cplusplus
+}
+#endif

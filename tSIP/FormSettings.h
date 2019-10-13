@@ -335,10 +335,9 @@ __published:	// IDE-managed Components
 	TButton *btnSelectedScriptOnCustomRequestReplyChange;
 	TBitBtn *btnSelectedScriptOnCustomRequestReplyEdit;
 	TCheckBox *chbDoNotPassParametersToPreviousInstance;
-	TLabel *lblNetworkInterfaceInfo1;
-	TLabel *lblNetworkInterfaceInfo2;
-	TLabel *lblNetworkInterfaceInfo;
 	TButton *btnOpenRecordingFolder;
+	TComboBox *cbNetworkInterfaces;
+	TLabel *lblNetworkInterfaceInfo;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -373,6 +372,7 @@ __published:	// IDE-managed Components
 	void __fastcall cbRecordingChannelsChange(TObject *Sender);
 	void __fastcall btnLoggingConsoleFontSelectClick(TObject *Sender);
 	void __fastcall btnOpenRecordingFolderClick(TObject *Sender);
+	void __fastcall cbNetworkInterfacesChange(TObject *Sender);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
 	void FillDevList(TComboBox *target, int module, bool out, AnsiString selected);
@@ -385,6 +385,7 @@ private:	// User declarations
 	void AudioCodecDisableSelected(void);
 	void AudioPreprocessingUpdate(void);
 	void ShowFonts(void);
+	void UpdateNetworkInterface(void);
 public:		// User declarations
 	__fastcall TfrmSettings(TComponent* Owner);
 	Settings tmpSettings;

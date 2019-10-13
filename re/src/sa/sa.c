@@ -9,7 +9,6 @@
 #include <re_fmt.h>
 #include <re_list.h>
 #include <re_sa.h>
-#include "sa.h"
 
 
 #define DEBUG_MODULE "sa"

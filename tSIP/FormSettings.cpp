@@ -11,6 +11,7 @@
 #include "ProgrammableButtons.h"
 #include "FormLuaScript.h"
 #include "UaMain.h"
+#include "NetInterfaces.h"
 #include "Paths.h"
 #include "Registry.hpp"
 #include "Branding.h"
@@ -55,13 +56,17 @@ namespace
 		assert(!"Unhandled module name!");
 		return 0;
 	}
-}
 
-inline void strncpyz(char* dst, const char* src, int dstsize)
-{
-	strncpy(dst, src, dstsize);
-	dst[dstsize-1] = '\0';
-}
+    inline void strncpyz(char* dst, const char* src, int dstsize)
+	{
+		strncpy(dst, src, dstsize);
+		dst[dstsize-1] = '\0';
+	}
+
+	std::vector<NetInterface> networkInterfaces;
+}	// namespace
+
+
 
 //---------------------------------------------------------------------------
 __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
@@ -209,13 +214,42 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	cbSoundOutputIntercomModChange(NULL);
 
 	cbAec->ItemIndex = tmpSettings.uaConf.aec;
+
+
 	edLocalAddress->Text = tmpSettings.uaConf.local.c_str();
+
 	edIfName->Text = tmpSettings.uaConf.ifname.c_str();
+	{
+		cbNetworkInterfaces->Items->Clear();
+		if (GetNetInterfaces(networkInterfaces) == 0)
+		{
+			for (unsigned int i=0; i<networkInterfaces.size(); i++)
+			{
+				const NetInterface &ni = networkInterfaces[i];
+				AnsiString text;
+				text.sprintf("%s - %s", ni.name.c_str(), ni.ip.c_str());
+				cbNetworkInterfaces->Items->Add(text);
+			}
+		}
+		cbNetworkInterfaces->Items->Add("Custom (Windows: full GUID with braces) / none (empty string)");
+		cbNetworkInterfaces->ItemIndex = cbNetworkInterfaces->Items->Count - 1;
+		for (unsigned int i=0; i<networkInterfaces.size(); i++)
+		{
+			const NetInterface &ni = networkInterfaces[i];
+			if (ni.name == tmpSettings.uaConf.ifname.c_str())
+			{
+				cbNetworkInterfaces->ItemIndex = i;
+			}
+		}
+		UpdateNetworkInterface();
+	}
+
 	edRtpPortMin->Text = tmpSettings.uaConf.avt.portMin;
 	edRtpPortMax->Text = tmpSettings.uaConf.avt.portMax;
 	edJbufDelayMin->Text = tmpSettings.uaConf.avt.jbufDelayMin;
 	edJbufDelayMax->Text = tmpSettings.uaConf.avt.jbufDelayMax;
 	edRtpTimeout->Text = tmpSettings.uaConf.avt.rtpTimeout;
+
 
 	for (int i=0; i<tmpSettings.uaConf.accounts.size(); i++)
 	{
@@ -428,6 +462,21 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	frmPhones->SetCfg(&tmpSettings.phoneConf);
 }
+
+void TfrmSettings::UpdateNetworkInterface(void)
+{
+	if (cbNetworkInterfaces->ItemIndex == cbNetworkInterfaces->Items->Count - 1)
+	{
+		lblNetworkInterfaceInfo->Visible = true;
+		edIfName->Visible = true;
+	}
+	else
+	{
+		lblNetworkInterfaceInfo->Visible = false;
+		edIfName->Visible = false;
+	}
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TfrmSettings::btnCancelClick(TObject *Sender)
 {
@@ -575,7 +624,14 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.aec = (UaConf::Aec)cbAec->ItemIndex;
 
 	tmpSettings.uaConf.local = edLocalAddress->Text.c_str();
-	tmpSettings.uaConf.ifname = edIfName->Text.c_str();
+	if (cbNetworkInterfaces->ItemIndex == cbNetworkInterfaces->Items->Count - 1)
+	{
+		tmpSettings.uaConf.ifname = edIfName->Text.c_str();
+	}
+	else
+	{
+		tmpSettings.uaConf.ifname = networkInterfaces[cbNetworkInterfaces->ItemIndex].name.c_str();
+	}
 	tmpSettings.uaConf.avt.portMin = StrToIntDef(edRtpPortMin->Text, 0);
 	tmpSettings.uaConf.avt.portMax = StrToIntDef(edRtpPortMax->Text, 0);
 	if (tmpSettings.uaConf.avt.ValidatePorts())
@@ -1386,6 +1442,12 @@ void __fastcall TfrmSettings::btnOpenRecordingFolderClick(TObject *Sender)
 			dir += "\\";
 	}
 	ShellExecute(NULL, "explore", dir.c_str(), NULL, NULL, SW_SHOWNORMAL);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::cbNetworkInterfacesChange(TObject *Sender)
+{
+	UpdateNetworkInterface();	
 }
 //---------------------------------------------------------------------------
 

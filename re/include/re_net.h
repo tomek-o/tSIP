@@ -20,6 +20,11 @@
 #endif
 
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
 #ifndef HAVE_GAI_STRERROR
 /** stub */
 #ifndef gai_strerror
@@ -133,4 +138,9 @@ const char *net_af2name(int af);
 /* todo: this does not really belong here.. */
 #ifdef __SYMBIAN32__
 int kerr2errno(int kerr);
+#endif
+
+
+#ifdef __cplusplus
+}
 #endif

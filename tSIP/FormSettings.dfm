@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsScripts
+    ActivePage = tsNetwork
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -298,6 +298,8 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -307,21 +309,21 @@ object frmSettings: TfrmSettings
       end
       object lblRtpPortRange: TLabel
         Left = 3
-        Top = 161
+        Top = 152
         Width = 130
         Height = 13
         Caption = 'RTP/RTCP local  port range'
       end
       object lblRtpPortMin: TLabel
         Left = 205
-        Top = 161
+        Top = 152
         Width = 16
         Height = 13
         Caption = 'min'
       end
       object lblRtpPortMax: TLabel
         Left = 280
-        Top = 161
+        Top = 152
         Width = 20
         Height = 13
         Caption = 'max'
@@ -346,21 +348,21 @@ object frmSettings: TfrmSettings
       end
       object lblRtpJitterBufDelay: TLabel
         Left = 3
-        Top = 185
+        Top = 176
         Width = 151
         Height = 13
         Caption = 'RTP jitter buffer delay (frames)'
       end
       object lblJbufDelayMin: TLabel
         Left = 205
-        Top = 185
+        Top = 176
         Width = 16
         Height = 13
         Caption = 'min'
       end
       object lblJbufDelayMax: TLabel
         Left = 280
-        Top = 185
+        Top = 176
         Width = 20
         Height = 13
         Caption = 'max'
@@ -368,39 +370,25 @@ object frmSettings: TfrmSettings
       object lblIfName: TLabel
         Left = 3
         Top = 65
-        Width = 135
+        Width = 435
         Height = 13
-        Caption = 'Network interface (optional)'
+        Caption = 
+          'Network interface (optional) - binding to network interface inst' +
+          'ead of binding to IP address'
       end
       object lblRtpTimeout: TLabel
         Left = 3
-        Top = 209
+        Top = 200
         Width = 140
         Height = 13
         Caption = 'RTP timeout; 0 = disabled [s]'
       end
-      object lblNetworkInterfaceInfo1: TLabel
-        Left = 24
-        Top = 84
-        Width = 294
-        Height = 13
-        Caption = 'Binding to network interface instead of binding to IP address.'
-      end
-      object lblNetworkInterfaceInfo2: TLabel
-        Left = 24
-        Top = 103
-        Width = 259
-        Height = 13
-        Caption = 'Windows requires full interface GUID, including braces'
-      end
       object lblNetworkInterfaceInfo: TLabel
         Left = 24
-        Top = 122
-        Width = 434
+        Top = 107
+        Width = 186
         Height = 13
-        Caption = 
-          '(e.g. {80FF9360-D258-4F48-AE85-32CA2A7A1896} as listed in log at' +
-          ' application startup).'
+        Caption = 'Interface name (GUID) or empty string'
       end
       object edLocalAddress: TEdit
         Left = 227
@@ -411,46 +399,56 @@ object frmSettings: TfrmSettings
       end
       object edRtpPortMin: TEdit
         Left = 227
-        Top = 158
+        Top = 149
         Width = 42
         Height = 21
         TabOrder = 1
       end
       object edRtpPortMax: TEdit
         Left = 305
-        Top = 158
+        Top = 149
         Width = 42
         Height = 21
         TabOrder = 2
       end
       object edJbufDelayMin: TEdit
         Left = 227
-        Top = 182
+        Top = 173
         Width = 42
         Height = 21
         TabOrder = 3
       end
       object edJbufDelayMax: TEdit
         Left = 305
-        Top = 182
+        Top = 173
         Width = 42
         Height = 21
         TabOrder = 4
       end
       object edIfName: TEdit
-        Left = 226
-        Top = 62
-        Width = 231
+        Left = 216
+        Top = 104
+        Width = 241
         Height = 21
         TabOrder = 5
       end
       object edRtpTimeout: TEdit
         Left = 227
-        Top = 206
+        Top = 197
         Width = 42
         Height = 21
         TabOrder = 6
         Text = '0'
+      end
+      object cbNetworkInterfaces: TComboBox
+        Left = 24
+        Top = 81
+        Width = 433
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 7
+        OnChange = cbNetworkInterfacesChange
       end
     end
     object tsAccount: TTabSheet
