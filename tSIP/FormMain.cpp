@@ -684,6 +684,7 @@ void TfrmMain::MakeCall(AnsiString target)
 void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
 {
 	Hangup();
+	UA->PlayStop();
 }
 //---------------------------------------------------------------------------
 
@@ -1213,7 +1214,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			case Callback::CALL_STATE_CLOSED: {
 				//LOG("Callback::CALL_STATE_CLOSED\n");
 				if (call.ringStarted) {
-					UA->StopRing();
+					UA->PlayStop();
 					call.ringStarted = false;
 				}
 				if (cb.scode != 0)
@@ -2066,7 +2067,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		{
 			if (call.incoming)
 			{
-				UA->StopRing();
+				UA->PlayStop();
 				PhoneInterface::UpdateRing(0);
 				call.ringStarted = false;
 			}

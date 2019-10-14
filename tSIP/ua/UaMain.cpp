@@ -814,9 +814,9 @@ extern "C" void control_handler(void)
 		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), -1);
 		break;
 	}
-	case Command::STOP_RING: {
+	case Command::PLAY_STOP: {
 		struct ua* ua = ua_cur();
-		//LOG("UaMain: STOP_RING\n");
+		//LOG("UaMain: PLAY_STOP\n");
 		ua_play_stop(ua);
 		break;
 	}

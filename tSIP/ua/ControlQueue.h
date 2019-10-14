@@ -28,7 +28,7 @@ public:
 	void ReRegister(int accountId);
 	void UnRegister(int accountId);
 	void StartRing(AnsiString wavFile);
-	void StopRing(void);
+	void PlayStop(void);
 	void Record(AnsiString wavFile, unsigned int channels, unsigned int side);
 	/** \brief Start transmitting RTP to specified targee
 		\param target address IP + port

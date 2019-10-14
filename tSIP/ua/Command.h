@@ -22,7 +22,7 @@ public:
 		UNREGISTER,
 		MUTE,
 		START_RING,			///< start playing ring tone / wave file
-		STOP_RING,			///< stop playing ring wave file
+		PLAY_STOP,			///< stop playing currently played wave file
 		RECORD,
 		PAGING_TX,
 		SWITCH_AUDIO_SOURCE,///< change source audio device for current call (audioMod/audioDev)

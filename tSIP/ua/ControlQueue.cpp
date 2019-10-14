@@ -183,13 +183,13 @@ void ControlQueue::StartRing(AnsiString wavFile)
 	fifo.push();
 }
 
-void ControlQueue::StopRing(void)
+void ControlQueue::PlayStop(void)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
 	if (!cmd)
 		return;
-	cmd->type = Command::STOP_RING;
+	cmd->type = Command::PLAY_STOP;
 	fifo.push();
 }
 
