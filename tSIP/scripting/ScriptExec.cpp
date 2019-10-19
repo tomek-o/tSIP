@@ -1017,7 +1017,7 @@ static int l_GetAudioDevice(lua_State* L)
 		else
 			v = &AudioDevicesList::Instance().portaudioDevsIn;
 	}
-	else if (strcmp(module, "winwave") == 0)
+	else if (strcmp(module, "winwave") == 0 || strcmp(module, "winwave2") == 0)
 	{
 		if (out)
 			v = &AudioDevicesList::Instance().winwaveDevsOut;

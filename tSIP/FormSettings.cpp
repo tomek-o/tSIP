@@ -8,6 +8,7 @@
 #include "FormHotkeys.h"
 #include "FormPhones.h"
 #include "AudioDevicesList.h"
+#include "AudioModules.h"
 #include "ProgrammableButtons.h"
 #include "FormLuaScript.h"
 #include "UaMain.h"
@@ -26,36 +27,6 @@ TfrmSettings *frmSettings;
 namespace
 {
 	int audioCodecsEnabledDraggedIndex = -1;
-
-	/** \brief Common combobox index -> output audio module name function
-	*/
-	const char* GetOutputModuleForCbIndex(int id)
-	{
-		switch (id)
-		{
-			case 0:
-				return UaConf::modPortaudio;
-			case 1:
-				return UaConf::modWinwave;
-			case 2:
-				return UaConf::modNullaudio;
-			default:
-				assert(!"Unhandled module index!");
-				return UaConf::modPortaudio;
-		}
-	}
-
-	int GetOutputModuleCbIndex(const char* name)
-	{
-		if (strcmp(name, UaConf::modPortaudio) == 0)
-			return 0;
-		else if (strcmp(name, UaConf::modWinwave) == 0)
-			return 1;
-		else if (strcmp(name, UaConf::modNullaudio) == 0)
-			return 2;
-		assert(!"Unhandled module name!");
-		return 0;
-	}
 
     inline void strncpyz(char* dst, const char* src, int dstsize)
 	{
@@ -129,42 +100,14 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	}
 	// make "Accounts" selected and visible
 	tvSelector->Items->Item[tsAccount->PageIndex]->Selected = true;
+
+	AudioModules::FillInputSelectorCb(cbSoundInputMod);
+	AudioModules::FillOutputSelectorCb(cbSoundOutputMod);
+	AudioModules::FillOutputSelectorCb(cbSoundAlertOutputMod);
+	AudioModules::FillOutputSelectorCb(cbSoundRingOutputMod);
+	AudioModules::FillOutputSelectorCb(cbSoundOutputIntercomMod);
 }
 //---------------------------------------------------------------------------
-
-void TfrmSettings::FillDevList(TComboBox *target, int module, bool out, AnsiString selected)
-{
-	target->Items->Clear();
-	std::vector<AnsiString> *v = NULL;
-	if (module == 0)
-	{
-		if (out)
-			v = &AudioDevicesList::Instance().portaudioDevsOut;
-		else
-			v = &AudioDevicesList::Instance().portaudioDevsIn;
-	}
-	else if (module == 1)
-	{
-		if (out)
-			v = &AudioDevicesList::Instance().winwaveDevsOut;
-		else
-			v = &AudioDevicesList::Instance().winwaveDevsIn;
-	}
-	else
-	{
-		return;
-    }
-	assert(v);
-	for (int i=0; i<v->size(); i++)
-	{
-		AnsiString dev = v->at(i);
-		target->Items->Add(dev);
-		if (dev == selected)
-		{
-        	target->ItemIndex = i;
-		}
-	}
-}
 
 void __fastcall TfrmSettings::FormShow(TObject *Sender)
 {
@@ -172,45 +115,20 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	tmpSettings = appSettings;
 
-	if (!strcmp(tmpSettings.uaConf.audioCfgSrc.mod, UaConf::modPortaudio))
-	{
-		cbSoundInputMod->ItemIndex = 0;
-	}
-	else if (!strcmp(tmpSettings.uaConf.audioCfgSrc.mod, UaConf::modWinwave))
-	{
-		cbSoundInputMod->ItemIndex = 1;
-	}
-	else if (!strcmp(tmpSettings.uaConf.audioCfgSrc.mod, UaConf::modAufile))
-	{
-		cbSoundInputMod->ItemIndex = 2;
-	}
-	else if (!strcmp(tmpSettings.uaConf.audioCfgSrc.mod, UaConf::modAufileMm))
-	{
-		cbSoundInputMod->ItemIndex = 3;
-	}
-	else if (!strcmp(tmpSettings.uaConf.audioCfgSrc.mod, UaConf::modNullaudio))
-	{
-		cbSoundInputMod->ItemIndex = 4;
-	}
-	else
-	{
-		assert(!"Unhandled audio module type!");
-		cbSoundInputMod->ItemIndex = 0;
-	}
+	cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(tmpSettings.uaConf.audioCfgSrc.mod);
 	cbSoundInputModChange(NULL);
-
-	cbSoundOutputMod->ItemIndex = GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgPlay.mod);
-	cbSoundOutputModChange(NULL);
-
 	edSoundInputWave->Text = tmpSettings.uaConf.audioCfgSrc.wavefile;
 
-	cbSoundAlertOutputMod->ItemIndex = GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgAlert.mod);
+	cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgPlay.mod);
+	cbSoundOutputModChange(NULL);
+
+	cbSoundAlertOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgAlert.mod);
 	cbSoundAlertOutputModChange(NULL);
 
-	cbSoundRingOutputMod->ItemIndex = GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgRing.mod);
+	cbSoundRingOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgRing.mod);
 	cbSoundRingOutputModChange(NULL);
 
-	cbSoundOutputIntercomMod->ItemIndex = GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgPlayIntercom.mod);
+	cbSoundOutputIntercomMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgPlayIntercom.mod);
 	cbSoundOutputIntercomModChange(NULL);
 
 	cbAec->ItemIndex = tmpSettings.uaConf.aec;
@@ -580,43 +498,25 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.SipAccessUrl.accessMode = static_cast<Settings::_SipAccessUrl::AccessMode>(cbSipAccessUrlMode->ItemIndex);
 
 	const char* ptr = NULL;
-	if (cbSoundInputMod->ItemIndex == 0)
-	{
-		ptr = UaConf::modPortaudio;
-	}
-	else if (cbSoundInputMod->ItemIndex == 1)
-	{
-		ptr = UaConf::modWinwave;
-	}
-	else if (cbSoundInputMod->ItemIndex == 2)
-	{
-    	ptr = UaConf::modAufile;
-	}
-	else if (cbSoundInputMod->ItemIndex == 3)
-	{
-		ptr = UaConf::modAufileMm;
-	}
-	else
-	{
-        ptr = UaConf::modNullaudio;
-    }
+	ptr = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
+
 	strncpyz(tmpSettings.uaConf.audioCfgSrc.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgSrc.mod));
 	strncpyz(tmpSettings.uaConf.audioCfgSrc.dev, cbSoundInputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgSrc.dev));
 	strncpyz(tmpSettings.uaConf.audioCfgSrc.wavefile, edSoundInputWave->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgSrc.wavefile));
 
-	ptr = GetOutputModuleForCbIndex(cbSoundOutputMod->ItemIndex);
+	ptr = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgPlay.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgPlay.mod));
 	strncpyz(tmpSettings.uaConf.audioCfgPlay.dev, cbSoundOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgPlay.dev));
 
-	ptr = GetOutputModuleForCbIndex(cbSoundAlertOutputMod->ItemIndex);
+	ptr = AudioModules::GetOutputModuleFromCbIndex(cbSoundAlertOutputMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgAlert.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgAlert.mod));
 	strncpyz(tmpSettings.uaConf.audioCfgAlert.dev, cbSoundAlertOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgAlert.dev));
 
-	ptr = GetOutputModuleForCbIndex(cbSoundRingOutputMod->ItemIndex);
+	ptr = AudioModules::GetOutputModuleFromCbIndex(cbSoundRingOutputMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgRing.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgRing.mod));
 	strncpyz(tmpSettings.uaConf.audioCfgRing.dev, cbSoundRingOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgRing.dev));
 
-	ptr = GetOutputModuleForCbIndex(cbSoundOutputIntercomMod->ItemIndex);
+	ptr = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputIntercomMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgPlayIntercom.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgPlayIntercom.mod));
 	strncpyz(tmpSettings.uaConf.audioCfgPlayIntercom.dev, cbSoundOutputIntercomDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgPlayIntercom.dev));
 
@@ -780,53 +680,55 @@ void __fastcall TfrmSettings::FormClose(TObject *Sender, TCloseAction &Action)
 
 void __fastcall TfrmSettings::cbSoundInputModChange(TObject *Sender)
 {
-	switch (cbSoundInputMod->ItemIndex)
+	AnsiString mod = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
+	if (mod == AudioModules::portaudio ||
+		mod == AudioModules::winwave ||
+		mod == AudioModules::winwave2)
 	{
-		case 0:
-		case 1:
-			btnSelectWaveFile->Visible = false;
-			edSoundInputWave->Visible = false;
-			cbSoundInputDev->Visible = true;
-			lblSoundInputDevice->Visible = true;
-			FillDevList(cbSoundInputDev, cbSoundInputMod->ItemIndex, false,
-				tmpSettings.uaConf.audioCfgSrc.dev);
-			break;
-		case 2:
-		case 3:
-			btnSelectWaveFile->Visible = true;
-			edSoundInputWave->Visible = true;
-			cbSoundInputDev->Visible = false;
-			lblSoundInputDevice->Visible = true;
-			break;
-		case 4:	// nullaudio
-			btnSelectWaveFile->Visible = false;
-			edSoundInputWave->Visible = false;
-			cbSoundInputDev->Visible = false;
-			lblSoundInputDevice->Visible = false;
-			break;
-		default:
-			assert(!"Unhandled cbSoundInputMod item index!");
-			break;
+		btnSelectWaveFile->Visible = false;
+		edSoundInputWave->Visible = false;
+		cbSoundInputDev->Visible = true;
+		lblSoundInputDevice->Visible = true;
+		AudioDevicesList::FillComboBox(cbSoundInputDev, mod, false, tmpSettings.uaConf.audioCfgSrc.dev);
+	}
+	else if (mod == AudioModules::aufile || mod == AudioModules::aufileMm)
+	{
+		btnSelectWaveFile->Visible = true;
+		edSoundInputWave->Visible = true;
+		cbSoundInputDev->Visible = false;
+		lblSoundInputDevice->Visible = true;
+	}
+	else if (mod == AudioModules::nullaudio)
+	{
+		btnSelectWaveFile->Visible = false;
+		edSoundInputWave->Visible = false;
+		cbSoundInputDev->Visible = false;
+		lblSoundInputDevice->Visible = false;
+	}
+	else
+	{
+		assert(!"Unhandled cbSoundInputMod item index!");
 	}
 }
 //---------------------------------------------------------------------------
 
 void TfrmSettings::ChangeSoundOutputMod(TComboBox *target, TLabel *label, int moduleIndex, AnsiString selected)
 {
-	switch (moduleIndex)
+	AnsiString mod = AudioModules::GetOutputModuleFromCbIndex(moduleIndex);
+	if (mod == AudioModules::portaudio || mod == AudioModules::winwave || mod == AudioModules::winwave2)
 	{
-		case 0:
-		case 1:
-			target->Visible = true;
-			label->Visible = true;
-			FillDevList(target, moduleIndex, true, selected);
-			break;
-		case 2:	// nullaudio
-			target->Visible = false;
-			label->Visible = false;
-			break;
-		default:
-			assert(!"Unhandled output module index!");
+		target->Visible = true;
+		label->Visible = true;
+		AudioDevicesList::FillComboBox(target, mod, true, selected);
+	}
+	else if (mod == AudioModules::nullaudio)
+	{
+		target->Visible = false;
+		label->Visible = false;
+	}
+	else
+	{
+		assert(!"Unhandled output module index!");
 	}
 }
 

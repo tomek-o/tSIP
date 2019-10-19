@@ -2,8 +2,13 @@
 #pragma hdrstop
 
 #include "AudioDevicesList.h"
+#include "AudioModules.h"
 #include <portaudio.h>
 #include <mmsystem.h>
+
+#include <Classes.hpp>
+#include <Controls.hpp>
+#include <StdCtrls.hpp>
 
 //---------------------------------------------------------------------------
 
@@ -70,6 +75,40 @@ void AudioDevicesList::Refresh(void)
 		if (waveInGetDevCaps(i, &wic, sizeof(WAVEINCAPS))==MMSYSERR_NOERROR)
 		{
 			winwaveDevsIn.push_back(wic.szPname);
+		}
+	}
+}
+
+void AudioDevicesList::FillComboBox(Stdctrls::TComboBox *target, AnsiString module, bool out, AnsiString selected)
+{
+	target->Items->Clear();
+	std::vector<AnsiString> *v = NULL;
+	if (module == AudioModules::portaudio)
+	{
+		if (out)
+			v = &AudioDevicesList::Instance().portaudioDevsOut;
+		else
+			v = &AudioDevicesList::Instance().portaudioDevsIn;
+	}
+	else if (module == AudioModules::winwave || module == AudioModules::winwave2)
+	{
+		if (out)
+			v = &AudioDevicesList::Instance().winwaveDevsOut;
+		else
+			v = &AudioDevicesList::Instance().winwaveDevsIn;
+	}
+	else
+	{
+		return;
+    }
+	assert(v);
+	for (int i=0; i<v->size(); i++)
+	{
+		AnsiString dev = v->at(i);
+		target->Items->Add(dev);
+		if (dev == selected)
+		{
+        	target->ItemIndex = i;
 		}
 	}
 }

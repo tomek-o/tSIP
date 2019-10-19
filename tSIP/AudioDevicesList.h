@@ -7,6 +7,11 @@
 #include <System.hpp>
 #include <vector>
 
+namespace Stdctrls
+{
+	class TComboBox;
+}
+
 class AudioDevicesList
 {
 private:
@@ -24,6 +29,8 @@ public:
 	std::vector<AnsiString> winwaveDevsIn;
 	std::vector<AnsiString> winwaveDevsOut;
 	void Refresh(void);
+
+	static void FillComboBox(Stdctrls::TComboBox *target, AnsiString module, bool out, AnsiString selected);
 };
 
 #endif

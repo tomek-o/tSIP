@@ -5,6 +5,7 @@
 
 #include "Troubleshooting.h"
 #include "Settings.h"
+#include "AudioModules.h"
 #include "AudioDevicesList.h"
 
 #include <re.h>
@@ -118,13 +119,13 @@ namespace {
 		const UaConf::AudioCfg &cfg = appSettings.uaConf.audioCfgSrc;
 		AudioDevicesList &adl = AudioDevicesList::Instance();
 		adl.Refresh();
-		if (strcmp(cfg.mod, UaConf::modPortaudio) == 0)
+		if (strcmp(cfg.mod, AudioModules::portaudio) == 0)
 		{
             // one default entry is always present (?)
 			if (adl.portaudioDevsIn.size() <= 1)
 				return true;
 		}
-		else if (strcmp(cfg.mod, UaConf::modWinwave) == 0)
+		else if (strcmp(cfg.mod, AudioModules::winwave) == 0 || strcmp(cfg.mod, AudioModules::winwave2) == 0)
 		{
 			if (adl.winwaveDevsIn.empty())
 				return true;
@@ -137,13 +138,13 @@ namespace {
 		const UaConf::AudioCfg &cfg = appSettings.uaConf.audioCfgPlay;
 		AudioDevicesList &adl = AudioDevicesList::Instance();
 		adl.Refresh();
-		if (strcmp(cfg.mod, UaConf::modPortaudio) == 0)
+		if (strcmp(cfg.mod, AudioModules::portaudio) == 0)
 		{
             // one default entry is always present (?)
 			if (adl.portaudioDevsOut.size() <= 1)
 				return true;
 		}
-		else if (strcmp(cfg.mod, UaConf::modWinwave) == 0)
+		else if (strcmp(cfg.mod, AudioModules::winwave) == 0 || strcmp(cfg.mod, AudioModules::winwave2) == 0)
 		{
 			if (adl.winwaveDevsOut.empty())
 				return true;

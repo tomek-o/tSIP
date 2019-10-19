@@ -9,47 +9,12 @@
 #include "Paths.h"
 #include "common\Colors.h"
 #include "AudioDevicesList.h"
+#include "AudioModules.h"
 #include "UaConf.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TfrmButtonEdit *frmButtonEdit;
-
-namespace {
-	void FillDevList(TComboBox *target, int module, bool out, AnsiString selected)
-	{
-		target->Items->Clear();
-		std::vector<AnsiString> *v = NULL;
-		if (module == 0)
-		{
-			if (out)
-				v = &AudioDevicesList::Instance().portaudioDevsOut;
-			else
-				v = &AudioDevicesList::Instance().portaudioDevsIn;
-		}
-		else if (module == 1)
-		{
-			if (out)
-				v = &AudioDevicesList::Instance().winwaveDevsOut;
-			else
-				v = &AudioDevicesList::Instance().winwaveDevsIn;
-		}
-		else
-		{
-			return;
-		}
-		assert(v);
-		for (int i=0; i<v->size(); i++)
-		{
-			AnsiString dev = v->at(i);
-			target->Items->Add(dev);
-			if (dev == selected)
-			{
-				target->ItemIndex = i;
-			}
-		}
-	}
-}
 
 //---------------------------------------------------------------------------
 __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
@@ -71,6 +36,9 @@ __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
 	{
 		pcBehavior->Pages[i]->TabVisible = false;
 	}
+
+	AudioModules::FillInputSelectorCb(cbSoundInputMod);
+	AudioModules::FillOutputSelectorCb(cbSoundOutputMod);
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmButtonEdit::FormShow(TObject *Sender)
@@ -134,6 +102,9 @@ void TfrmButtonEdit::ApplyConf(void)
 
 	edScriptFile->Text = cfg->script.c_str();
 
+	cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod.c_str());
+	cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod.c_str());
+
 	SetType(cfg->type);
 }
 
@@ -187,43 +158,17 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 
 	cfg->script = edScriptFile->Text.c_str();
 
-	if (cbSoundInputMod->ItemIndex == 0)
+	cfg->audioRxMod = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
+	if (cbSoundInputDev->Visible)
 	{
-		cfg->audioRxMod = UaConf::modPortaudio;
 		cfg->audioRxDev = cbSoundInputDev->Text.c_str();
 	}
-	else if (cbSoundInputMod->ItemIndex == 1)
+	else if (edSoundInputWave->Visible)
 	{
-		cfg->audioRxMod = UaConf::modWinwave;
-		cfg->audioRxDev = cbSoundInputDev->Text.c_str();
-	}
-	else if (cbSoundInputMod->ItemIndex == 2)
-	{
-		cfg->audioRxMod = UaConf::modAufile;
 		cfg->audioRxDev = edSoundInputWave->Text.c_str();
 	}
-	else if (cbSoundInputMod->ItemIndex == 4)
-	{
-		cfg->audioRxMod = UaConf::modAufileMm;
-		cfg->audioRxDev = edSoundInputWave->Text.c_str();
-	}
-	else
-	{
-        cfg->audioRxMod = UaConf::modNullaudio;
-    }
 
-	if (cbSoundOutputMod->ItemIndex == 0)
-	{
-		cfg->audioTxMod = UaConf::modPortaudio;
-	}
-	else if (cbSoundOutputMod->ItemIndex == 1)
-	{
-		cfg->audioTxMod = UaConf::modWinwave;
-	}
-	else
-	{
-        cfg->audioTxMod = UaConf::modNullaudio;
-    }
+	cfg->audioTxMod = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputMod->ItemIndex);
 	cfg->audioTxDev = cbSoundOutputDev->Text.c_str();
 
 	Close();
@@ -312,26 +257,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 			refreshAudioDevList = false;
 			AudioDevicesList::Instance().Refresh();
 		}
-		if (!strcmp(cfg->audioRxMod.c_str(), UaConf::modPortaudio))
-		{
-			cbSoundInputMod->ItemIndex = 0;
-		}
-		else if (!strcmp(cfg->audioRxMod.c_str(), UaConf::modWinwave))
-		{
-			cbSoundInputMod->ItemIndex = 1;
-		}
-		else if (!strcmp(cfg->audioRxMod.c_str(), UaConf::modAufile))
-		{
-			cbSoundInputMod->ItemIndex = 2;
-		}
-		else if (!strcmp(cfg->audioRxMod.c_str(), UaConf::modAufileMm))
-		{
-			cbSoundInputMod->ItemIndex = 3;
-		}
-		else
-		{
-			cbSoundInputMod->ItemIndex = 4;
-        }
+		cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod.c_str());
 		cbSoundInputModChange(NULL);
 
 		break;
@@ -345,18 +271,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 			refreshAudioDevList = false;
 			AudioDevicesList::Instance().Refresh();
 		}
-		if (!strcmp(cfg->audioTxMod.c_str(), UaConf::modPortaudio))
-		{
-			cbSoundOutputMod->ItemIndex = 0;
-		}
-		else if (!strcmp(cfg->audioTxMod.c_str(), UaConf::modWinwave))
-		{
-			cbSoundOutputMod->ItemIndex = 1;
-		}
-		else
-		{
-			cbSoundOutputMod->ItemIndex = 2;
-		}
+		cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod.c_str());
 		cbSoundOutputModChange(NULL);
 
 		break;
@@ -471,35 +386,37 @@ void __fastcall TfrmButtonEdit::btnSelectScriptClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
 void __fastcall TfrmButtonEdit::cbSoundInputModChange(TObject *Sender)
 {
-	switch (cbSoundInputMod->ItemIndex)
+	AnsiString mod = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
+	if (mod == AudioModules::portaudio ||
+		mod == AudioModules::winwave ||
+		mod == AudioModules::winwave2)
 	{
-		case 0:	// portaudio
-		case 1:	// winwave
-			btnSelectWaveFile->Visible = false;
-			edSoundInputWave->Visible = false;
-			cbSoundInputDev->Visible = true;
-			lblSoundInputDevice->Visible = true;
-			FillDevList(cbSoundInputDev, cbSoundInputMod->ItemIndex, false, cfg->audioRxDev.c_str());
-			break;
-		case 2:	// aufile
-			btnSelectWaveFile->Visible = true;
-			edSoundInputWave->Visible = true;
-			cbSoundInputDev->Visible = false;
-			lblSoundInputDevice->Visible = true;
-			edSoundInputWave->Text = cfg->audioRxDev.c_str();
-			break;
-		case 3:	// nullaudio
-			btnSelectWaveFile->Visible = false;
-			edSoundInputWave->Visible = false;
-			cbSoundInputDev->Visible = false;
-			lblSoundInputDevice->Visible = false;
-			break;
-		default:
-			assert(!"Unhandled cbSoundInputMod index!");
-			break;
+		btnSelectWaveFile->Visible = false;
+		edSoundInputWave->Visible = false;
+		cbSoundInputDev->Visible = true;
+		lblSoundInputDevice->Visible = true;
+		AudioDevicesList::FillComboBox(cbSoundInputDev, mod, false, cfg->audioRxDev.c_str());
+	}
+	else if (mod == AudioModules::aufile)
+	{
+		btnSelectWaveFile->Visible = true;
+		edSoundInputWave->Visible = true;
+		cbSoundInputDev->Visible = false;
+		lblSoundInputDevice->Visible = true;
+		edSoundInputWave->Text = cfg->audioRxDev.c_str();
+	}
+	else if (mod == AudioModules::nullaudio)
+	{
+		btnSelectWaveFile->Visible = false;
+		edSoundInputWave->Visible = false;
+		cbSoundInputDev->Visible = false;
+		lblSoundInputDevice->Visible = false;
+	}
+	else
+	{
+		assert(!"Unhandled cbSoundInputMod index!");
 	}
 }
 //---------------------------------------------------------------------------
@@ -534,21 +451,23 @@ void __fastcall TfrmButtonEdit::FormKeyPress(TObject *Sender, char &Key)
 
 void __fastcall TfrmButtonEdit::cbSoundOutputModChange(TObject *Sender)
 {
-	switch (cbSoundOutputMod->ItemIndex)
+	AnsiString mod = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputMod->ItemIndex);
+	if (mod == AudioModules::portaudio ||
+		mod == AudioModules::winwave ||
+		mod == AudioModules::winwave2)
 	{
-		case 0:	// portaudio
-		case 1:	// winwave
-			cbSoundOutputDev->Visible = true;
-			lblSoundOutputDev->Visible = true;
-			FillDevList(cbSoundOutputDev, cbSoundOutputMod->ItemIndex, true, cfg->audioTxDev.c_str());
-			break;
-		case 2:	// nullaudio
-			cbSoundOutputDev->Visible = false;
-			lblSoundOutputDev->Visible = false;
-			break;
-		default:
-			assert(!"Unhandled cbSoundOutputMod index!");
-			break;
+		cbSoundOutputDev->Visible = true;
+		lblSoundOutputDev->Visible = true;
+		AudioDevicesList::FillComboBox(cbSoundOutputDev, mod, true, cfg->audioTxDev.c_str());
+	}
+	else if (mod == AudioModules::nullaudio)
+	{
+		cbSoundOutputDev->Visible = false;
+		lblSoundOutputDev->Visible = false;
+	}
+	else
+	{
+		assert(!"Unhandled cbSoundOutputMod index!");
 	}
 }
 //---------------------------------------------------------------------------

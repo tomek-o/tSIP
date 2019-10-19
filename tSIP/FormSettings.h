@@ -375,7 +375,6 @@ __published:	// IDE-managed Components
 	void __fastcall cbNetworkInterfacesChange(TObject *Sender);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
-	void FillDevList(TComboBox *target, int module, bool out, AnsiString selected);
 	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, int moduleIndex, AnsiString selected);
 	TfrmHotkeys *frmHotkeys;
 	TfrmPhones *frmPhones;

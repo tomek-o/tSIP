@@ -406,14 +406,15 @@ static int app_init(void)
 	struct config * cfg = conf_config();
 
 	strncpyz(cfg->audio.src_mod, appSettings.uaConf.audioCfgSrc.mod, sizeof(cfg->audio.src_mod));
-	if (strcmp(appSettings.uaConf.audioCfgSrc.mod, UaConf::modAufile) &&
-        strcmp(appSettings.uaConf.audioCfgSrc.mod, UaConf::modAufileMm)
+	if (strcmp(appSettings.uaConf.audioCfgSrc.mod, AudioModules::aufile) &&
+        strcmp(appSettings.uaConf.audioCfgSrc.mod, AudioModules::aufileMm)
 		)
 	{
 		strncpyz(cfg->audio.src_dev, appSettings.uaConf.audioCfgSrc.dev, sizeof(cfg->audio.src_dev));
 	}
 	else
 	{
+        // aufile / aufile_mm
 		AnsiString fileFull;
 		fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), appSettings.uaConf.audioCfgSrc.wavefile);
 		strncpyz(cfg->audio.src_dev, fileFull.c_str(), sizeof(cfg->audio.src_dev));

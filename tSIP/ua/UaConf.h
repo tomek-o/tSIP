@@ -10,6 +10,8 @@
 #include <assert.h>
 #include <mem.h>
 
+#include "AudioModules.h"
+
 class UaConf
 {
 public:
@@ -149,12 +151,6 @@ public:
 
 	bool logMessages;
 
-	static const char* modPortaudio;
-	static const char* modWinwave;
-	static const char* modAufile;
-	static const char* modAufileMm;
-	static const char* modNullaudio;
-
 	struct AudioCfg {
 		enum { MAX_MOD_LENGTH = 32 };
 		char mod[MAX_MOD_LENGTH];       /**< Audio source module            */
@@ -162,7 +158,7 @@ public:
 		char wavefile[512];
 		AudioCfg(void) {
 			//mod[0] = '\0';
-			strcpy(mod, modWinwave);
+			strcpy(mod, AudioModules::winwave);
 			dev[0] = '\0';
 		}
 		bool operator==(const AudioCfg& right) const {

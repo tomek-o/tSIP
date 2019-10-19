@@ -4,6 +4,7 @@
 
 extern const struct mod_export exports_g711;
 extern const struct mod_export exports_winwave;
+extern const struct mod_export exports_winwave2;
 extern const struct mod_export exports_portaudio;
 extern const struct mod_export exports_stun;
 extern const struct mod_export exports_speex;
@@ -27,6 +28,7 @@ extern const struct mod_export exports_nullaudio;
 const struct mod_export *mod_table[] = {
 	&exports_g711,
 	&exports_winwave,
+	&exports_winwave2,
 	&exports_portaudio,
 	&exports_stun,
 	&exports_speex,

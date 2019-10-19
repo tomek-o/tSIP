@@ -7,6 +7,7 @@
 #include "common\KeybKeys.h"
 #include "common\Utilities.h"
 #include "ProgrammableButtons.h"
+#include "AudioModules.h"
 #include "Branding.h"
 #include <algorithm>
 #include <fstream>
@@ -214,12 +215,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			const Json::Value &uaConfAudioCfgSrcJson = uaConfJson["audioCfgSrc"];
 			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
 			strncpyz(str, uaConfAudioCfgSrcJson.get("mod", uaConf.audioCfgSrc.mod).asString().c_str(), sizeof(str));
-			if (!strcmp(str, UaConf::modPortaudio) ||
-				!strcmp(str, UaConf::modWinwave) ||
-				!strcmp(str, UaConf::modAufile) ||
-				!strcmp(str, UaConf::modAufileMm) ||
-				!strcmp(str, UaConf::modNullaudio)
-				) {
+			if (AudioModules::IsInput(str))
+			{
 				strncpyz(uaConf.audioCfgSrc.mod, str, sizeof(uaConf.audioCfgSrc.mod));
 			}
 			strncpyz(uaConf.audioCfgSrc.dev, uaConfAudioCfgSrcJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgSrc.dev));
@@ -230,10 +227,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			const Json::Value &uaConfAudioCfgPlayJson = uaConfJson["audioCfgPlay"];
 			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
 			strncpyz(str, uaConfAudioCfgPlayJson.get("mod", uaConf.audioCfgPlay.mod).asString().c_str(), sizeof(str));
-			if (!strcmp(str, UaConf::modPortaudio) ||
-				!strcmp(str, UaConf::modWinwave) ||
-				!strcmp(str, UaConf::modNullaudio)
-				) {
+			if (AudioModules::IsOutput(str))
+			{
 				strncpyz(uaConf.audioCfgPlay.mod, str, sizeof(uaConf.audioCfgPlay.mod));
 			}
 			strncpyz(uaConf.audioCfgPlay.dev, uaConfAudioCfgPlayJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgPlay.dev));
@@ -243,10 +238,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			const Json::Value &uaConfAudioCfgAlertJson = uaConfJson["audioCfgAlert"];
 			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
 			strncpyz(str, uaConfAudioCfgAlertJson.get("mod", uaConf.audioCfgAlert.mod).asString().c_str(), sizeof(str));
-			if (!strcmp(str, UaConf::modPortaudio) ||
-				!strcmp(str, UaConf::modWinwave) ||
-				!strcmp(str, UaConf::modNullaudio)
-				) {
+			if (AudioModules::IsOutput(str))
+			{
 				strncpyz(uaConf.audioCfgAlert.mod, str, sizeof(uaConf.audioCfgAlert.mod));
 			}
 			strncpyz(uaConf.audioCfgAlert.dev, uaConfAudioCfgAlertJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgAlert.dev));
@@ -267,10 +260,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 				const Json::Value &uaConfAudioCfgRingJson = uaConfJson["audioCfgRing"];
 				char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
 				strncpyz(str, uaConfAudioCfgRingJson.get("mod", uaConf.audioCfgRing.mod).asString().c_str(), sizeof(str));
-				if (!strcmp(str, UaConf::modPortaudio) ||
-					!strcmp(str, UaConf::modWinwave) ||
-					!strcmp(str, UaConf::modNullaudio)
-					) {
+				if (AudioModules::IsOutput(str))
+				{
 					strncpyz(uaConf.audioCfgRing.mod, str, sizeof(uaConf.audioCfgRing.mod));
 				}
 				strncpyz(uaConf.audioCfgRing.dev, uaConfAudioCfgRingJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgRing.dev));
@@ -281,10 +272,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			const Json::Value &uaConfAudioCfgPlayIntercomJson = uaConfJson["audioCfgPlayIntercom"];
 			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
 			strncpyz(str, uaConfAudioCfgPlayIntercomJson.get("mod", uaConf.audioCfgPlayIntercom.mod).asString().c_str(), sizeof(str));
-			if (!strcmp(str, UaConf::modPortaudio) ||
-				!strcmp(str, UaConf::modWinwave) ||
-				!strcmp(str, UaConf::modNullaudio)
-				) {
+			if (AudioModules::IsOutput(str))
+			{
 				strncpyz(uaConf.audioCfgPlayIntercom.mod, str, sizeof(uaConf.audioCfgPlayIntercom.mod));
 			}
 			strncpyz(uaConf.audioCfgPlayIntercom.dev, uaConfAudioCfgPlayIntercomJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgPlayIntercom.dev));
