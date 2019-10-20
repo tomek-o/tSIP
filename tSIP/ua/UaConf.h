@@ -184,6 +184,25 @@ public:
 		{}
 	} audioSoftVol;
 
+	struct AudioAgc {
+		bool enabled;		/**< on/off switch */
+		unsigned int target;/**< amplitude that AGC should regulate to */
+		double maxGain;		/**< maximum allowed gain */
+		double attackRate;	/**<  */
+		double releaseRate;
+		AudioAgc (void):
+			enabled(false),
+			target(12000),
+			maxGain(6.0),
+			attackRate(0.01),
+			releaseRate(0.01)
+		{}
+		bool operator==(const AudioAgc& right) const;
+		bool operator!=(const AudioAgc& right) const {
+        	return !(*this == right);
+		}
+	} audioAgcRx;
+
 	struct RecordingCfg {
 		bool enabled;
 		enum RecDir {
@@ -412,6 +431,8 @@ public:
 			return false;
 	#endif
 		if (recording != right.recording)
+			return false;
+		if (audioAgcRx != right.audioAgcRx)
 			return false;
 		if (audioPreprocTx != right.audioPreprocTx)
 			return false;

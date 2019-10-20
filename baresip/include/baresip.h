@@ -179,6 +179,13 @@ struct config {
 		enum audio_mode txmode; /**< Audio transmit mode            */
 		unsigned int softvol_tx;/**< Software volume control for TX; formula: sample = (sample * volume)/128 */
 		unsigned int softvol_rx;/**< Software volume control for RX; formula: sample = (sample * volume)/128 */
+		struct config_agc {
+			bool enabled;		/**< on/off switch */
+			uint16_t target;	/**< amplitude that AGC should regulate to */
+			float max_gain;		/**< maximum allowed gain */
+			float attack_rate;	/**<  */
+			float release_rate;
+		} agc_rx;
 	} audio;
 
 #ifdef USE_VIDEO

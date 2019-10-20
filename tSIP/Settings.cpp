@@ -283,7 +283,16 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			const Json::Value &uaConfAudioSoftVol = uaConfJson["audioSoftVol"];
 			uaConf.audioSoftVol.tx = uaConfAudioSoftVol.get("tx", uaConf.audioSoftVol.tx).asUInt();
 			uaConf.audioSoftVol.rx = uaConfAudioSoftVol.get("rx", uaConf.audioSoftVol.rx).asUInt();
-        }
+		}
+
+		{
+			const Json::Value &jv = uaConfJson["audioAgcRx"];
+			jv.getBool("enabled", uaConf.audioAgcRx.enabled);
+			jv.getUInt("target", uaConf.audioAgcRx.target);
+			jv.getDouble("maxGain", uaConf.audioAgcRx.maxGain);
+			jv.getDouble("attackRate", uaConf.audioAgcRx.attackRate);
+			jv.getDouble("releaseRate", uaConf.audioAgcRx.releaseRate);
+		}
 
 		if (Branding::recording)
 		{
@@ -970,6 +979,15 @@ int Settings::Write(AnsiString asFileName)
 
 	root["uaConf"]["audioSoftVol"]["tx"] = uaConf.audioSoftVol.tx;
 	root["uaConf"]["audioSoftVol"]["rx"] = uaConf.audioSoftVol.rx;
+
+	{
+		Json::Value &jv = root["uaConf"]["audioAgcRx"];
+		jv["enabled"] = uaConf.audioAgcRx.enabled;
+		jv["target"] = uaConf.audioAgcRx.target;
+		jv["maxGain"] = uaConf.audioAgcRx.maxGain;
+		jv["attackRate"] = uaConf.audioAgcRx.attackRate;
+		jv["releaseRate"] = uaConf.audioAgcRx.releaseRate;
+	}
 
 	if (Branding::recording)
 	{

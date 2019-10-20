@@ -3,6 +3,8 @@
 #include <re.h>
 #include <baresip.h>
 
+#include "agc.h"
+
 
 #define DEBUG_MODULE "softvol"
 #define DEBUG_LEVEL 5
@@ -22,6 +24,7 @@ struct enc_st {
 struct dec_st {
 	struct aufilt_dec_st af;  /* base class */
 	struct softvol_st *st;
+	struct agc_st agc_state;
 };
 
 static void enc_destructor(void *arg)
@@ -125,6 +128,8 @@ static int decode_update(struct aufilt_dec_st **stp, void **ctx,
 	if (!st)
 		return ENOMEM;
 
+	agc_reset(&st->agc_state);
+
 	err = softvol_alloc(&st->st, ctx, prm);
 
 	if (err)
@@ -173,9 +178,19 @@ static int decode(struct aufilt_dec_st *st, int16_t *sampv, size_t *sampc)
 	struct softvol_st *wr = dst->st;
 	int status = 0;
 	unsigned int i;
+	
 	int softvol_rx = (int)(conf_config()->audio.softvol_rx);
+	bool agc_enabled = conf_config()->audio.agc_rx.enabled;
+	uint16_t agc_target = conf_config()->audio.agc_rx.target;
+	float max_gain = conf_config()->audio.agc_rx.max_gain;
+	float attack_rate = conf_config()->audio.agc_rx.attack_rate;
+	float release_rate = conf_config()->audio.agc_rx.release_rate;
 
 	(void)wr;
+
+	if (agc_enabled && agc_target != 0) {
+    	agc_process(&dst->agc_state, sampv, *sampc, agc_target, max_gain, attack_rate, release_rate);
+	}
 
 	for (i=0; i<*sampc; i++) {
 		sampv[i] = saturate_s16(((int32_t)sampv[i] * softvol_rx) / SOFTVOL_BASE);

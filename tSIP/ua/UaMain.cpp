@@ -451,6 +451,12 @@ static int app_init(void)
 	cfg->audio_preproc_tx.dereverb_enabled = appSettings.uaConf.audioPreprocTx.dereverbEnabled;
 	cfg->audio_preproc_tx.agc_level = appSettings.uaConf.audioPreprocTx.agcLevel;
 
+	cfg->audio.agc_rx.enabled = appSettings.uaConf.audioAgcRx.enabled;
+	cfg->audio.agc_rx.target = appSettings.uaConf.audioAgcRx.target;
+	cfg->audio.agc_rx.max_gain = appSettings.uaConf.audioAgcRx.maxGain;
+	cfg->audio.agc_rx.attack_rate = appSettings.uaConf.audioAgcRx.attackRate;
+	cfg->audio.agc_rx.release_rate = appSettings.uaConf.audioAgcRx.releaseRate;
+
 	configure();
 
 	/* Initialise User Agents */

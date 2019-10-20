@@ -305,7 +305,7 @@
           <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
-          <property category="win32.*.win32b.tlib" name="option.P.arg" value="64"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg" value="128"/>
           <property category="win32.*.win32b.tlib" name="option.P.arg.merge" value="1"/>
           <property category="win32.*.win32b.tlib" name="option.P.enabled" value="1"/>
           <property category="win32.*.win32b.tlib" name="option.dynamicrtl.enabled" value="0"/>
@@ -386,6 +386,8 @@
         <FILE FILENAME="..\..\include\baresip_dialog_info_direction.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\baresip_dialog_info_status.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\baresip_presence_status.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\softvol\agc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="agc" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\softvol\agc.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

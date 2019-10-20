@@ -338,6 +338,15 @@ __published:	// IDE-managed Components
 	TButton *btnOpenRecordingFolder;
 	TComboBox *cbNetworkInterfaces;
 	TLabel *lblNetworkInterfaceInfo;
+	TCheckBox *chbAudioRxAgcEnabled;
+	TLabel *lblAudioAgcRxLevel;
+	TEdit *edAudioRxAgcTarget;
+	TLabel *lblAudioAgcRxMaxGain;
+	TEdit *edAudioRxAgcMaxGain;
+	TLabel *lblAudioAgcRxAttackRate;
+	TEdit *edAudioRxAgcAttackRate;
+	TEdit *edAudioRxAgcReleaseRate;
+	TLabel *lblAudioAgcRxReleaseRate;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

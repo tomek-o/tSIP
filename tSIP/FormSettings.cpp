@@ -332,6 +332,12 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbAudioPreprocessingTxDereverbEnabled->Checked = tmpSettings.uaConf.audioPreprocTx.dereverbEnabled;
 	edAudioPreprocessingTxAgcLevel->Text = tmpSettings.uaConf.audioPreprocTx.agcLevel;
 
+	chbAudioRxAgcEnabled->Checked = tmpSettings.uaConf.audioAgcRx.enabled;
+	edAudioRxAgcTarget->Text = tmpSettings.uaConf.audioAgcRx.target;
+	edAudioRxAgcMaxGain->Text = tmpSettings.uaConf.audioAgcRx.maxGain;
+	edAudioRxAgcAttackRate->Text = tmpSettings.uaConf.audioAgcRx.attackRate;
+	edAudioRxAgcReleaseRate->Text = tmpSettings.uaConf.audioAgcRx.releaseRate;
+
 	AudioPreprocessingUpdate();
 
 	edRingDefault->Text = tmpSettings.Ring.defaultRing;
@@ -601,6 +607,12 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.audioPreprocTx.vadEnabled = chbAudioPreprocessingTxVadEnabled->Checked;
 	tmpSettings.uaConf.audioPreprocTx.dereverbEnabled = chbAudioPreprocessingTxDereverbEnabled->Checked;
 	tmpSettings.uaConf.audioPreprocTx.agcLevel = StrToIntDef(edAudioPreprocessingTxAgcLevel->Text, UaConf::AudioPreproc::AGC_LEVEL_DEFAULT);
+
+	tmpSettings.uaConf.audioAgcRx.enabled = chbAudioRxAgcEnabled->Checked;
+	tmpSettings.uaConf.audioAgcRx.target = StrToIntDef(edAudioRxAgcTarget->Text, tmpSettings.uaConf.audioAgcRx.target);
+	tmpSettings.uaConf.audioAgcRx.maxGain = StrToFloatDef(edAudioRxAgcMaxGain->Text, tmpSettings.uaConf.audioAgcRx.maxGain);
+	tmpSettings.uaConf.audioAgcRx.attackRate = StrToFloatDef(edAudioRxAgcAttackRate->Text, tmpSettings.uaConf.audioAgcRx.attackRate);
+	tmpSettings.uaConf.audioAgcRx.releaseRate = StrToFloatDef(edAudioRxAgcReleaseRate->Text, tmpSettings.uaConf.audioAgcRx.releaseRate);
 
 	tmpSettings.frmContactPopup.showOnIncoming = chbContactPopupShowOnIncoming->Checked;
 	tmpSettings.frmContactPopup.showOnOutgoing = chbContactPopupShowOnOutgoing->Checked;
