@@ -344,6 +344,7 @@ namespace Json {
 	  void getInt(const char* key, int &val) const;
 	  void getUInt(const char* key, unsigned int &val) const;
 	  void getBool(const char* key, bool &val) const;
+	  void getDouble(const char* key, double &val) const;
 
 	  /// \brief Remove and return the named member.
       ///

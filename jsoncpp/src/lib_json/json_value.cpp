@@ -1197,7 +1197,12 @@ void Value::getUInt(const char* key, unsigned int &val) const
 void Value::getBool(const char* key, bool &val) const
 {
 	val = get(key, val).asBool();
-}                                
+}
+
+void Value::getDouble(const char* key, double &val) const
+{
+	val = get(key, val).asDouble();
+}
 
 
 Value
