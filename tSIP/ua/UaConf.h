@@ -192,7 +192,7 @@ public:
 		double releaseRate;
 		AudioAgc (void):
 			enabled(false),
-			target(12000),
+			target(20000),	/**< of 32767 */
 			maxGain(6.0),
 			attackRate(0.01),
 			releaseRate(0.01)
