@@ -186,6 +186,8 @@ struct config {
 			float attack_rate;	/**<  */
 			float release_rate;
 		} agc_rx;
+		double portaudioInSuggestedLatency;
+		double portaudioOutSuggestedLatency;
 	} audio;
 
 #ifdef USE_VIDEO

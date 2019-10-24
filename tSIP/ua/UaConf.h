@@ -175,6 +175,19 @@ public:
 		}
 	} audioCfgSrc, audioCfgPlay, audioCfgAlert, audioCfgRing, audioCfgPlayIntercom;
 
+	struct AudioPortaudio {
+		double inSuggestedLatency;
+		double outSuggestedLatency;
+		AudioPortaudio(void):
+			inSuggestedLatency(0.1),
+			outSuggestedLatency(0.1)
+		{}
+		bool operator==(const AudioPortaudio& right) const;
+		bool operator!=(const AudioPortaudio& right) const {
+        	return !(*this == right);
+		}
+	} audioPortaudio;
+
 	struct AudioSoftVol {
 		unsigned int tx;
 		unsigned int rx;
@@ -433,6 +446,8 @@ public:
 		if (recording != right.recording)
 			return false;
 		if (audioAgcRx != right.audioAgcRx)
+			return false;
+		if (audioPortaudio != right.audioPortaudio)
 			return false;
 		if (audioPreprocTx != right.audioPreprocTx)
 			return false;

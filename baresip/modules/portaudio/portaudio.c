@@ -92,7 +92,7 @@ static int read_stream_open(struct ausrc_st *st, const struct ausrc_prm *prm,
 	prm_in.device           = dev;
 	prm_in.channelCount     = prm->ch;
 	prm_in.sampleFormat     = paInt16;
-	prm_in.suggestedLatency = 0.100;
+	prm_in.suggestedLatency = conf_config()->audio.portaudioInSuggestedLatency;
 
 	st->stream_rd = NULL;
 	err = Pa_OpenStream(&st->stream_rd, &prm_in, NULL, prm->srate,
@@ -130,7 +130,7 @@ static int write_stream_open(struct auplay_st *st,
 	prm_out.device           = dev;
 	prm_out.channelCount     = prm->ch;
 	prm_out.sampleFormat     = paInt16;
-	prm_out.suggestedLatency = 0.100;
+	prm_out.suggestedLatency = conf_config()->audio.portaudioOutSuggestedLatency;
 
 	st->stream_wr = NULL;
 	err = Pa_OpenStream(&st->stream_wr, NULL, &prm_out, prm->srate,

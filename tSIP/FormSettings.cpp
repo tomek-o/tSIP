@@ -338,6 +338,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edAudioRxAgcAttackRate->Text = tmpSettings.uaConf.audioAgcRx.attackRate;
 	edAudioRxAgcReleaseRate->Text = tmpSettings.uaConf.audioAgcRx.releaseRate;
 
+	edPortaudioInSuggestedLatency->Text = tmpSettings.uaConf.audioPortaudio.inSuggestedLatency;
+	edPortaudioOutSuggestedLatency->Text = tmpSettings.uaConf.audioPortaudio.outSuggestedLatency;
+
 	AudioPreprocessingUpdate();
 
 	edRingDefault->Text = tmpSettings.Ring.defaultRing;
@@ -613,6 +616,9 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.audioAgcRx.maxGain = StrToFloatDef(edAudioRxAgcMaxGain->Text, tmpSettings.uaConf.audioAgcRx.maxGain);
 	tmpSettings.uaConf.audioAgcRx.attackRate = StrToFloatDef(edAudioRxAgcAttackRate->Text, tmpSettings.uaConf.audioAgcRx.attackRate);
 	tmpSettings.uaConf.audioAgcRx.releaseRate = StrToFloatDef(edAudioRxAgcReleaseRate->Text, tmpSettings.uaConf.audioAgcRx.releaseRate);
+
+	tmpSettings.uaConf.audioPortaudio.inSuggestedLatency = StrToFloatDef(edPortaudioInSuggestedLatency->Text, tmpSettings.uaConf.audioPortaudio.inSuggestedLatency);
+	tmpSettings.uaConf.audioPortaudio.outSuggestedLatency = StrToFloatDef(edPortaudioOutSuggestedLatency->Text, tmpSettings.uaConf.audioPortaudio.outSuggestedLatency);
 
 	tmpSettings.frmContactPopup.showOnIncoming = chbContactPopupShowOnIncoming->Checked;
 	tmpSettings.frmContactPopup.showOnOutgoing = chbContactPopupShowOnOutgoing->Checked;

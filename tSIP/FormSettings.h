@@ -347,6 +347,11 @@ __published:	// IDE-managed Components
 	TEdit *edAudioRxAgcAttackRate;
 	TEdit *edAudioRxAgcReleaseRate;
 	TLabel *lblAudioAgcRxReleaseRate;
+	TLabel *lblPortaudio;
+	TLabel *lblPoraudioIn;
+	TLabel *lblPortaudioOut;
+	TEdit *edPortaudioInSuggestedLatency;
+	TEdit *edPortaudioOutSuggestedLatency;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

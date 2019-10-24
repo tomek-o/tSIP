@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsAudioProcessing
+    ActivePage = tsAudioIO
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1056,9 +1056,11 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object lblSoundInputModule: TLabel
-        Left = 43
-        Top = 22
+        Left = 30
+        Top = 20
         Width = 34
         Height = 13
         Caption = 'Module'
@@ -1071,7 +1073,7 @@ object frmSettings: TfrmSettings
         Caption = 'Input'
       end
       object lblSoundInputDevice: TLabel
-        Left = 43
+        Left = 30
         Top = 47
         Width = 32
         Height = 13
@@ -1079,87 +1081,108 @@ object frmSettings: TfrmSettings
       end
       object lblAudioOutput: TLabel
         Left = 3
-        Top = 67
+        Top = 65
         Width = 34
         Height = 13
         Caption = 'Output'
       end
       object Label3: TLabel
-        Left = 43
-        Top = 86
+        Left = 30
+        Top = 84
         Width = 34
         Height = 13
         Caption = 'Module'
       end
       object lblSoundOutputDev: TLabel
-        Left = 43
-        Top = 111
+        Left = 30
+        Top = 108
         Width = 32
         Height = 13
         Caption = 'Device'
       end
       object lblAudioAlertOutput: TLabel
         Left = 3
-        Top = 131
+        Top = 128
         Width = 241
         Height = 13
         Caption = 'Alert output (call progress, ringback, busy signals)'
       end
       object Label6: TLabel
-        Left = 43
-        Top = 150
+        Left = 30
+        Top = 147
         Width = 34
         Height = 13
         Caption = 'Module'
       end
       object lblSoundAlertOutputDev: TLabel
-        Left = 43
-        Top = 175
+        Left = 30
+        Top = 171
         Width = 32
         Height = 13
         Caption = 'Device'
       end
       object lblAudioOutputIntercom: TLabel
         Left = 3
-        Top = 257
+        Top = 252
         Width = 131
         Height = 13
         Caption = 'Output for paging/intercom'
       end
       object Label2: TLabel
-        Left = 43
-        Top = 276
+        Left = 30
+        Top = 271
         Width = 34
         Height = 13
         Caption = 'Module'
       end
       object lblSoundOutputIntercomDev: TLabel
-        Left = 43
-        Top = 301
+        Left = 30
+        Top = 295
         Width = 32
         Height = 13
         Caption = 'Device'
       end
       object lblAudioRingOutput: TLabel
         Left = 3
-        Top = 193
+        Top = 189
         Width = 141
         Height = 13
         Caption = 'Ring output (on incoming call)'
       end
       object Label9: TLabel
-        Left = 43
-        Top = 212
+        Left = 30
+        Top = 208
         Width = 34
         Height = 13
         Caption = 'Module'
       end
       object lblSoundRingOutputDev: TLabel
-        Left = 43
-        Top = 237
+        Left = 30
+        Top = 232
         Width = 32
         Height = 13
         Caption = 'Device'
+      end
+      object lblPortaudio: TLabel
+        Left = 3
+        Top = 344
+        Width = 141
+        Height = 13
+        Caption = 'PortAudio suggested latency'
+      end
+      object lblPoraudioIn: TLabel
+        Left = 184
+        Top = 344
+        Width = 28
+        Height = 13
+        Caption = 'in [s]:'
+      end
+      object lblPortaudioOut: TLabel
+        Left = 288
+        Top = 344
+        Width = 36
+        Height = 13
+        Caption = 'out [s]:'
       end
       object cbSoundInputMod: TComboBox
         Left = 121
@@ -1173,7 +1196,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundInputDev: TComboBox
         Left = 121
-        Top = 44
+        Top = 41
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1182,7 +1205,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundOutputMod: TComboBox
         Left = 121
-        Top = 83
+        Top = 81
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1192,7 +1215,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundOutputDev: TComboBox
         Left = 121
-        Top = 108
+        Top = 105
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1201,7 +1224,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundAlertOutputMod: TComboBox
         Left = 121
-        Top = 147
+        Top = 144
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1211,7 +1234,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundAlertOutputDev: TComboBox
         Left = 121
-        Top = 172
+        Top = 168
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1220,7 +1243,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundOutputIntercomMod: TComboBox
         Left = 121
-        Top = 273
+        Top = 268
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1230,7 +1253,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundOutputIntercomDev: TComboBox
         Left = 121
-        Top = 298
+        Top = 292
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1239,7 +1262,7 @@ object frmSettings: TfrmSettings
       end
       object btnSelectWaveFile: TButton
         Left = 367
-        Top = 45
+        Top = 43
         Width = 21
         Height = 19
         Caption = '...'
@@ -1248,14 +1271,14 @@ object frmSettings: TfrmSettings
       end
       object edSoundInputWave: TEdit
         Left = 121
-        Top = 44
+        Top = 41
         Width = 240
         Height = 21
         TabOrder = 9
       end
       object cbSoundRingOutputDev: TComboBox
         Left = 121
-        Top = 234
+        Top = 229
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1264,13 +1287,27 @@ object frmSettings: TfrmSettings
       end
       object cbSoundRingOutputMod: TComboBox
         Left = 121
-        Top = 209
+        Top = 205
         Width = 240
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         TabOrder = 11
         OnChange = cbSoundRingOutputModChange
+      end
+      object edPortaudioInSuggestedLatency: TEdit
+        Left = 218
+        Top = 341
+        Width = 49
+        Height = 21
+        TabOrder = 12
+      end
+      object edPortaudioOutSuggestedLatency: TEdit
+        Left = 330
+        Top = 341
+        Width = 49
+        Height = 21
+        TabOrder = 13
       end
     end
     object tsAudioProcessing: TTabSheet

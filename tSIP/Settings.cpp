@@ -280,6 +280,12 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		}
 
 		{
+			const Json::Value &jv = uaConfJson["audioPortaudio"];
+			jv.getDouble("inSuggestedLatency", uaConf.audioPortaudio.inSuggestedLatency);
+			jv.getDouble("outSuggestedLatency", uaConf.audioPortaudio.outSuggestedLatency);
+		}
+
+		{
 			const Json::Value &uaConfAudioSoftVol = uaConfJson["audioSoftVol"];
 			uaConf.audioSoftVol.tx = uaConfAudioSoftVol.get("tx", uaConf.audioSoftVol.tx).asUInt();
 			uaConf.audioSoftVol.rx = uaConfAudioSoftVol.get("rx", uaConf.audioSoftVol.rx).asUInt();
@@ -976,6 +982,9 @@ int Settings::Write(AnsiString asFileName)
 	root["uaConf"]["audioCfgRing"]["dev"] = uaConf.audioCfgRing.dev;
 	root["uaConf"]["audioCfgPlayIntercom"]["mod"] = uaConf.audioCfgPlayIntercom.mod;
 	root["uaConf"]["audioCfgPlayIntercom"]["dev"] = uaConf.audioCfgPlayIntercom.dev;
+
+	root["uaConf"]["audioPortaudio"]["inSuggestedLatency"] = uaConf.audioPortaudio.inSuggestedLatency;
+	root["uaConf"]["audioPortaudio"]["outSuggestedLatency"] = uaConf.audioPortaudio.outSuggestedLatency;
 
 	root["uaConf"]["audioSoftVol"]["tx"] = uaConf.audioSoftVol.tx;
 	root["uaConf"]["audioSoftVol"]["rx"] = uaConf.audioSoftVol.rx;

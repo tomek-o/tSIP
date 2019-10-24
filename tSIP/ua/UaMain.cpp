@@ -457,6 +457,9 @@ static int app_init(void)
 	cfg->audio.agc_rx.attack_rate = appSettings.uaConf.audioAgcRx.attackRate;
 	cfg->audio.agc_rx.release_rate = appSettings.uaConf.audioAgcRx.releaseRate;
 
+	cfg->audio.portaudioInSuggestedLatency = appSettings.uaConf.audioPortaudio.inSuggestedLatency;
+	cfg->audio.portaudioOutSuggestedLatency = appSettings.uaConf.audioPortaudio.outSuggestedLatency;
+
 	configure();
 
 	/* Initialise User Agents */
