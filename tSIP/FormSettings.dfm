@@ -1351,7 +1351,7 @@ object frmSettings: TfrmSettings
         Text = 'WebRTC'
         Items.Strings = (
           'none'
-          'Speex'
+          'Speex [not recommended]'
           'WebRTC')
       end
       object edWebRtcAecMsInSndCardBuf: TEdit
