@@ -644,14 +644,11 @@ void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
 
 void TfrmMain::MakeCall(AnsiString target)
 {
+	call.reset();
 	call.timestamp = Now();
 	call.incoming = false;
-	call.progress = false;
 	call.uri = target;
 	call.initialTarget = call.uri;
-	call.peerName = "";
-	call.recordFile = "";
-	call.dtmfRxQueue.clear();
 
 	if (appSettings.frmMain.bShowWhenMakingCall)
 	{
@@ -1257,6 +1254,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				
 				history.AddEntry(entry);
 				UpdateCallHistory();
+			#if 0
 				call.incoming = false;
 				call.progress = false;
 				call.connected = false;
@@ -1265,6 +1263,9 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				call.uri = "";
 				call.last_scode = cb.scode;
 				call.codecName = "";
+			#else
+				call.reset();
+			#endif
 				UpdateBtnState(Button::HOLD, false);
 				UpdateBtnState(Button::MUTE, false);
 				tmrAutoAnswer->Enabled = false;

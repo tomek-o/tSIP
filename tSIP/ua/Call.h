@@ -41,6 +41,7 @@ struct Call
 		recording(false),
 		ringStarted(false)
 	{}
+	void reset(void);
 };
 
 #endif
