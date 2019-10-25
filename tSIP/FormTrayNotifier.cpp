@@ -36,13 +36,18 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 {
 #if 1
 	/** \todo frmTrayNotifier steals focus at first call */
-	frmTrayNotifier->Visible = true;
+	Visible = true;
 #else
 	/** \todo frmTrayNotifier: no focus stealed, but inconsistent window state */
-	ShowWindow(frmTrayNotifier->Handle, SW_SHOWNOACTIVATE);
-	SetWindowPos(frmTrayNotifier->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+	ShowWindow(Handle, SW_SHOWNOACTIVATE);
+	SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	//frmTrayNotifier->BringToFront();
 #endif
+}
+
+void TfrmTrayNotifier::HideWindow(void)
+{
+	Visible = false;
 }
 
 void __fastcall TfrmTrayNotifier::btnHangupClick(TObject *Sender)
@@ -86,6 +91,13 @@ void TfrmTrayNotifier::UpdateBackgroundImage(void)
 	{
 		LOG("Failed to load notifier window background (%s)\n", asBackgroundFile.c_str());
 	}
+}
+
+void __fastcall TfrmTrayNotifier::CreateParams(TCreateParams &Params)
+{
+	TForm::CreateParams(Params);
+	Params.ExStyle  |= WS_EX_APPWINDOW;
+	Params.WndParent = GetDesktopWindow();
 }
 
 

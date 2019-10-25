@@ -24,10 +24,13 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	typedef void(__closure *CallbackHangup)(void);
 	typedef void(__closure *CallbackAnswer)(void);
+	void __fastcall Close(void);
+	void __fastcall CreateParams(TCreateParams &Params);	
 public:		// User declarations
 	__fastcall TfrmTrayNotifier(TComponent* Owner);
 	void SetData(AnsiString description, AnsiString uri, bool incoming);
 	void ShowWithoutFocus(void);
+    void HideWindow(void);
 	void UpdateBackgroundImage(void);
 	CallbackHangup OnHangup;
 	CallbackAnswer OnAnswer;

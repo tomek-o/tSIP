@@ -708,7 +708,7 @@ void TfrmMain::Answer(void)
 		}
 		if (appSettings.frmTrayNotifier.hideWhenAnsweringCall)
 		{
-			frmTrayNotifier->Close();
+			frmTrayNotifier->HideWindow();
         }
 	}
 }
@@ -1267,8 +1267,8 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				call.codecName = "";
 				UpdateBtnState(Button::HOLD, false);
 				UpdateBtnState(Button::MUTE, false);
-				tmrAutoAnswer->Enabled = false;				
-				frmTrayNotifier->Close();
+				tmrAutoAnswer->Enabled = false;
+				frmTrayNotifier->HideWindow();
 				lbl2ndParty->Caption = "";
 				lbl2ndPartyDesc->Caption = "";
 				PhoneInterface::UpdateCallState(0, "");
@@ -2472,7 +2472,7 @@ void TfrmMain::AutoAnswer(void)
 		}
 		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
 		{
-			frmTrayNotifier->Close();
+			frmTrayNotifier->HideWindow();
 		}
 	} else if (autoAnswerCode >= 400) {
 		UA->Hangup(0, autoAnswerCode);
@@ -2484,7 +2484,7 @@ void TfrmMain::AutoAnswer(void)
 		call.connected = false;
 		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
 		{
-			frmTrayNotifier->Close();
+			frmTrayNotifier->HideWindow();
 		}
 	}
 }
@@ -3105,4 +3105,5 @@ void __fastcall TfrmMain::tmrScript2Timer(TObject *Sender)
 	// timer2 disables itself if onTimer script is not configured
 }
 //---------------------------------------------------------------------------
+
 
