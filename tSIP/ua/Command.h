@@ -30,6 +30,7 @@ public:
 		UPDATE_SOFTVOL_TX,
 		UPDATE_SOFTVOL_RX,
 		SEND_CUSTOM_REQUEST,
+		SEND_MESSAGE,
 
 		TYPE__LIMITER
 	} type;
@@ -52,6 +53,7 @@ public:
 
 	int requestId;
 	AnsiString method;				///< SEND_CUSTOM_REQUEST
+	AnsiString text;				///< SEND_MESSAGE
 
 	Command(void):
 		type(TYPE__LIMITER),

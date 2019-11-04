@@ -732,7 +732,7 @@ int ua_connect(struct ua *ua, struct call **callp,
 
 	len = str_len(uri);
 
-	dialbuf = mbuf_alloc(64);
+	dialbuf = mbuf_alloc(128);
 	if (!dialbuf)
 		return ENOMEM;
 

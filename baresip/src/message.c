@@ -7,6 +7,9 @@
 #include <baresip.h>
 #include "core.h"
 
+#define DEBUG_MODULE "message"
+#define DEBUG_LEVEL 5
+#include <re_dbg.h>
 
 static struct sip_lsnr *lsnr;
 static message_recv_h *recvh;
@@ -64,13 +67,12 @@ static void resp_handler(int err, const struct sip_msg *msg, void *arg)
 	(void)ua;
 
 	if (err) {
-		(void)re_fprintf(stderr, " \x1b[31m%m\x1b[;m\n", err);
+		DEBUG_WARNING("MESSAGE response handler: error = %d\n", err);
 		return;
 	}
 
 	if (msg->scode >= 300) {
-		(void)re_fprintf(stderr, " \x1b[31m%u %r\x1b[;m\n",
-				 msg->scode, &msg->reason);
+		DEBUG_WARNING("MESSAGE response: code %u, reason: %r", msg->scode, &msg->reason);
 	}
 }
 
@@ -108,22 +110,61 @@ void message_close(void)
 int message_send(struct ua *ua, const char *peer, const char *msg)
 {
 	struct sip_addr addr;
-	struct pl pl;
 	char *uri = NULL;
 	int err = 0;
+	struct mbuf *dialbuf;
+	size_t len;
+	struct account *acc;
 
 	if (!ua || !peer || !msg)
 		return EINVAL;
 
-	pl_set_str(&pl, peer);
+	acc = ua_prm(ua);
+	if (!acc)
+		return EINVAL;
 
-	err = sip_addr_decode(&addr, &pl);
+	len = str_len(peer);
+
+	dialbuf = mbuf_alloc(128);
+	if (!dialbuf)
+		return ENOMEM;
+	memset(dialbuf->buf, 0, 128);
+
+	/* Append sip: scheme if missing */
+	if (0 != re_regex(peer, len, "sip:"))
+		err |= mbuf_printf(dialbuf, "sip:");
+
+	err |= mbuf_write_str(dialbuf, peer);
+
+	// assuming that if sip: is present than domain is present
+	if (0 != re_regex(peer, len, "sip:")) {
+#if HAVE_INET6
+		if (AF_INET6 == ua->acc->luri.af)
+			err |= mbuf_printf(dialbuf, "@[%r]", &acc->luri.host);
+		else
+#endif
+			err |= mbuf_printf(dialbuf, "@%r", &acc->luri.host);
+		/* Also append port if specified and not 5060 */
+		switch (acc->luri.port) {
+		case 0:
+		case SIP_PORT:
+			break;
+		default:
+			err |= mbuf_printf(dialbuf, ":%u", acc->luri.port);
+			break;
+		}
+	}
+
 	if (err)
-		return err;
+		goto out;
+
+	err = sip_addr_decode(&addr, dialbuf);
+	if (err)
+		goto out;
 
 	err = pl_strdup(&uri, &addr.auri);
 	if (err)
-		return err;
+		goto out;
 
 	err = sip_req_send(ua, "MESSAGE", uri, resp_handler, ua,
 			   "Accept: text/plain\r\n"
@@ -134,5 +175,8 @@ int message_send(struct ua *ua, const char *peer, const char *msg)
 
 	mem_deref(uri);
 
+ out:
+	mem_deref(dialbuf);
+		
 	return err;
 }

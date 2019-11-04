@@ -384,6 +384,24 @@ static int print_handler_log(const char *p, size_t size, void *arg)
 	return 0;
 }
 
+static void message_recv_handler(const struct pl *peer, const struct pl *ctype, struct mbuf *body, void *arg)
+{
+	LOG("message received\n");
+	AnsiString caller, contentType, asBody;
+	caller.SetLength(peer->l);
+	memcpy(&caller[1], peer->p, peer->l);
+	contentType.SetLength(ctype->l);
+	memcpy(&contentType[1], ctype->p, ctype->l);
+
+	//mbuf_set_pos(body, 0);
+	int length = mbuf_get_left(body);
+	char *ptr = (char*)mbuf_buf(body);
+	asBody.SetLength(length);
+	memcpy(&asBody[1], ptr, length);
+
+	UA_CB->OnMessageReceived(caller, contentType, asBody);
+}
+
 static int app_init(void)
 {
 	int err;
@@ -489,6 +507,11 @@ static int app_init(void)
 
 	if (paging_tx_register_handler(paging_tx_handler)) {
     	LOG("Failed to register paging TX handler!\n");
+	}
+
+	err = message_init(message_recv_handler, NULL);
+	if (err != 0) {
+    	LOG("Failed to register handler for MESSAGE RX (err = %d)!\n", err);
 	}
 
 	return 0;
@@ -679,6 +702,7 @@ static int app_start(void)
 
 static void app_close(void)
 {
+    message_close();
 	ua_close();
 	mod_close();
 	libre_close();
@@ -936,6 +960,11 @@ extern "C" void control_handler(void)
 			DEBUG_WARNING("Failed send custom request (%m)\n", err);
 			UA_CB->NotifyCustomRequestStatus(cmd.requestId, err, 0, "");
 		}
+		break;
+	}
+	case Command::SEND_MESSAGE: {
+		err = message_send(ua_cur(), cmd.target.c_str(), cmd.text.c_str());
+		DEBUG_WARNING("Sending message to %s: status = %d\n", cmd.target.c_str(), err);
 		break;
 	}
 	default:

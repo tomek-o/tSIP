@@ -22,6 +22,7 @@ USEFORM("FormTextEditor.cpp", frmTextEditor);
 USEFORM("FormTroubleshooting.cpp", frmTroubleshooting);
 USEFORM("scripting\FormLuaScript.cpp", frmLuaScript);
 USEFORM("phone\FormPhones.cpp", frmPhones);
+USEFORM("FormMessage.cpp", frmMessage);
 //---------------------------------------------------------------------------
 #pragma link "re.lib"
 #pragma link "rem.lib"

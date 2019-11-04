@@ -552,6 +552,10 @@ object frmMain: TfrmMain
         Caption = 'Script window'
         OnClick = miScriptingClick
       end
+      object miMessages: TMenuItem
+        Caption = 'Messages'
+        OnClick = miMessagesClick
+      end
     end
     object miHelp: TMenuItem
       Caption = 'Help'

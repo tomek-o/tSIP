@@ -33,6 +33,7 @@
 #include "ProgrammableButtons.h"
 #include "ScriptExec.h"
 #include "HotKeys.h"
+#include "FormMessage.h"
 #include "common\Utils.h"
 #include "common\Unicode.h"
 #include "common\OS.h"
@@ -43,6 +44,7 @@
 #include "FormLuaScript.h"
 #include "Troubleshooting.h"
 #include "FormTroubleshooting.h"
+#include "SIMPLE_Messages.h"
 #include "common\Utilities.h"
 #include "common\ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -308,6 +310,8 @@ void TfrmMain::Finalize(void)
 	PhoneInterface::Close();
 
 	ScriptExec::BreakAllScripts();
+
+	SIMPLE_Messages::CloseAllWindows();
 
 	// inverting trackbars
 	appSettings.uaConf.audioSoftVol.tx = trbarSoftvolMic->Max - trbarSoftvolMic->Position + trbarSoftvolMic->Min;
@@ -1628,6 +1632,11 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 					RunScriptFile(SCRIPT_SRC_ON_CUSTOM_REQUEST_REPLY, cb.requestUid, asScriptFile.c_str(), handled);
 				}
 			}
+			break;
+		}
+		case Callback::SIMPLE_MESSAGE:
+		{
+			SIMPLE_Messages::OnIncomingMessage(cb.caller, cb.contentType, cb.body);
 			break;
 		}
 		default:
@@ -3107,4 +3116,11 @@ void __fastcall TfrmMain::tmrScript2Timer(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TfrmMain::miMessagesClick(TObject *Sender)
+{
+	TfrmMessage *frmMessage = new TfrmMessage(NULL);
+	frmMessage->Show();
+}
+//---------------------------------------------------------------------------
 

@@ -209,6 +209,21 @@ void CallbackQueue::NotifyCustomRequestStatus(int requestUid, int requestError, 
 	fifo.push();
 }
 
+void CallbackQueue::OnMessageReceived(AnsiString caller, AnsiString contentType, AnsiString body)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Callback *cb = fifo.getWriteable();
+	if (!cb)
+		return;
+		
+	cb->type = Callback::SIMPLE_MESSAGE;
+	cb->caller = caller;
+	cb->contentType = contentType;
+	cb->body = body;
+
+	fifo.push();
+}
+
 
 
 

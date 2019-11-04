@@ -25,7 +25,8 @@ public:
 		AUDIO_CODEC_LIST,			///< audio codec list sent after static and dynamic modules are loaded
 		SET_CALL_DATA,
 		AUDIO_ERROR,
-		CUSTOM_REQUEST_STATUS
+		CUSTOM_REQUEST_STATUS,
+		SIMPLE_MESSAGE
 	} type;
 
 	enum ua_state_e
@@ -98,7 +99,10 @@ public:
 
 	int requestUid;
 	int requestError;	
-	AnsiString requestReplyText;	
+	AnsiString requestReplyText;
+
+	AnsiString contentType;		// MESSAGE
+	AnsiString body;			// MESSAGE
 };
 
 #endif

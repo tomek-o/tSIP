@@ -108,6 +108,7 @@ __published:	// IDE-managed Components
 	TMenuItem *miScripting;
 	TMenuItem *miTroubleshooting;
 	TTimer *tmrScript2;
+	TMenuItem *miMessages;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -152,6 +153,7 @@ __published:	// IDE-managed Components
 	void __fastcall miScriptingClick(TObject *Sender);
 	void __fastcall miTroubleshootingClick(TObject *Sender);
 	void __fastcall tmrScript2Timer(TObject *Sender);
+	void __fastcall miMessagesClick(TObject *Sender);
 private:	// User declarations
 	double initialScaling;
 
