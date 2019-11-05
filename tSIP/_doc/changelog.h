@@ -740,5 +740,24 @@ Version 0.1.69
 		- script window: example for scanning local network with OPTIONS
 	- some effort to improve aufile work on low-end PC (Atom N270, L16/44100, 10ms framing) - using waitable timer
 	- some code cleanup and reorganization for tSIP.exe project
+    
+ Version 0.1.70
+    - added aufile_mm audio source module (wave file with multimedia timer - working better on low end PC)
+    - Lua:
+        - added ApplicationClose()
+        - added SetCallTarget(target) for preprocessing number with "on make call" script event, e.g. removing some of the pasted characters
+    - added "Do not pass parameters to previous instance" setting (example use: launch application for single call and forget, closing application after the call)
+    - add button opening recordings folder
+    - FIXED: plugin profile directory was not updated on plugin reload
+    - HWND_TOPMOST/HWND_NOTOPMOST trick bringing window to front on incoming call
+    - Troubleshooting: add checking for Windows private IP
+    - more convenient network interface selection - interfaces list
+    - stopping wav playback (e.g. busy.wav) on Hangup button
+    - added winwave2 module - thread-based
+    - added simple AGC for RX direction
+    - added portaudio suggestedLatency settings
+    - FIXED: problem with tray notifier not closing when application was minimized
+    - FIXED: wrong call history entry on outgoing unanswered call if PAI was used
+    - added very basic support for call messaging
 */
 
