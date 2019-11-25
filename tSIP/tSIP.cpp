@@ -58,7 +58,8 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
         Paths::SetProfileDir(CommandLine::GetProfileDir());
 
-		if (chdir(Paths::GetProfileDir().c_str()) != 0)
+		AnsiString profileDir = Paths::GetProfileDir();
+		if (chdir(profileDir.c_str()) != 0)
 		{
 			ShowMessage("Failed to set path for current directory");
 		}
