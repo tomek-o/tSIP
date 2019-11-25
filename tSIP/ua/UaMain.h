@@ -24,6 +24,7 @@ public:
 	void Restart(void);
 	void Quit(void);
 	int GetAudioCodecList(std::vector<AnsiString> &codecs);
+	unsigned int GetAudioRxSignalLevel(void);
 };
 
 #endif

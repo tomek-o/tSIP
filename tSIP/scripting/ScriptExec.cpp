@@ -13,6 +13,7 @@
 #include "ButtonConf.h"
 #include "Call.h"
 #include "UaCustomRequests.h"
+#include "UaMain.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -614,6 +615,13 @@ static int l_GetStreamingState(lua_State* L)
 	return 1;
 }
 
+static int l_GetAudioErrorCount(lua_State* L)
+{
+	unsigned int count = GetContext(L)->onGetAudioErrorCount();
+	lua_pushinteger( L, count );
+	return 1;
+}
+
 static int l_GetRegistrationState(lua_State* L)
 {
 	int state = GetContext(L)->onGetRegistrationState();
@@ -1178,6 +1186,13 @@ static int l_GetCustomRequestReplyText(lua_State* L)
 	return 1;
 }
 
+static int l_GetAudioRxSignalLevel(lua_State* L)
+{
+	unsigned int level = Ua::Instance().GetAudioRxSignalLevel();
+	lua_pushinteger(L, level);
+	return 1;
+}
+
 };	// ScriptImp
 
 
@@ -1198,6 +1213,7 @@ ScriptExec::ScriptExec(
 	CallbackGetCall onGetCall,
 	CallbackGetContactName onGetContactName,
 	CallbackGetStreamingState onGetStreamingState,
+	CallbackGetAudioErrorCount onGetAudioErrorCount,
 	CallbackSetTrayIcon onSetTrayIcon,
 	CallbackGetRegistrationState onGetRegistrationState,
 	CallbackSetButtonCaption onSetButtonCaption,
@@ -1253,6 +1269,7 @@ ScriptExec::ScriptExec(
 	onGetButtonConf(onGetButtonConf),
 	onMainMenuShow(onMainMenuShow),
 	onApplicationClose(onApplicationClose),
+	onGetAudioErrorCount(onGetAudioErrorCount),
 
 	running(false)
 {
@@ -1274,7 +1291,8 @@ ScriptExec::ScriptExec(
 		onUpdateSettings &&
 		onGetButtonConf &&
 		onMainMenuShow &&
-		onApplicationClose
+		onApplicationClose &&
+		onGetAudioErrorCount
 		);
 }
 
@@ -1317,6 +1335,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetCallCodecName", ScriptImp::l_GetCallCodecName);
 	lua_register(L, "GetContactName", ScriptImp::l_GetContactName);
 	lua_register(L, "GetStreamingState", ScriptImp::l_GetStreamingState);
+	lua_register(L, "GetAudioErrorCount", ScriptImp::l_GetAudioErrorCount);
 
 	lua_register(L, "SetVariable", ScriptImp::l_SetVariable);
 	lua_register(L, "GetVariable", ScriptImp::l_GetVariable);
@@ -1377,6 +1396,8 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetCustomRequest", ScriptImp::l_GetCustomRequest);
 	lua_register(L, "GetCustomRequestReply", ScriptImp::l_GetCustomRequestReply);
 	lua_register(L, "GetCustomRequestReplyText", ScriptImp::l_GetCustomRequestReplyText);
+
+	lua_register(L, "GetAudioRxSignalLevel", ScriptImp::l_GetAudioRxSignalLevel);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);

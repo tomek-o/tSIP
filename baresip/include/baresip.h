@@ -378,6 +378,11 @@ enum recorder_side
 int recorder_start(const char* const filename, unsigned int rec_channels, enum recorder_side rec_side);
 
 /*
+ * Received signal level - provided by softvol module; maximum from last 100 ms
+ */
+unsigned int softvol_get_rx_level(void);
+
+/*
  * Audio Filter
  */
 

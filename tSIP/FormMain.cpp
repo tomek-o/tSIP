@@ -64,6 +64,7 @@ namespace {
 	ProgrammableButtons buttons;
 	AnsiString asTransferHint = "Transfer to ... [Enter]";
 	bool useOwnTrayIcon = false;
+	unsigned int audioErrorCount;
 
 	Call call;
 	struct PagingTx {
@@ -754,6 +755,11 @@ int TfrmMain::OnGetBlfState(int contactId, std::string &number)
 int TfrmMain::OnGetStreamingState(void)
 {
 	return pagingTx.state;
+}
+
+unsigned int TfrmMain::OnGetAudioErrorCount(void)
+{
+	return audioErrorCount;
 }
 
 int TfrmMain::OnGetRegistrationState(void)
@@ -1605,6 +1611,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 		case Callback::AUDIO_ERROR:
 		{
+            audioErrorCount++;
 			if (appSettings.Scripts.onAudioDeviceError != "")
 			{
 				AnsiString asScriptFile;
@@ -2185,6 +2192,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetCall,
 		&OnGetContactName,
 		&OnGetStreamingState,
+		&OnGetAudioErrorCount,
 		&OnSetTrayIcon,
 		&OnGetRegistrationState,
 		&OnSetButtonCaption, &OnSetButtonCaption2, &OnSetButtonDown, &OnGetButtonDown, &OnSetButtonImage,
@@ -2411,6 +2419,10 @@ void TfrmMain::CallNumberBackspace(void)
 void __fastcall TfrmMain::tmrBackspaceTimer(TObject *Sender)
 {
 	CallNumberBackspace();
+#if 0
+	// debug
+	LOG("RX signal level = %u\n", Ua::Instance().GetAudioRxSignalLevel());
+#endif
 }
 
 //---------------------------------------------------------------------------

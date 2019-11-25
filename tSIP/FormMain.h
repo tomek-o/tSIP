@@ -179,6 +179,7 @@ private:	// User declarations
 	Call* OnGetCall(void);
 	int OnGetBlfState(int contactId, std::string &number);
 	int OnGetStreamingState(void);
+	unsigned int OnGetAudioErrorCount(void);
 	int OnGetRegistrationState(void);
 	void OnSetTrayIcon(const char* file);
 	void OnSetButtonCaption(int id, std::string text);

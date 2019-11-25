@@ -12,8 +12,12 @@
 
 #define SOFTVOL_BASE 128
 
+static unsigned int rx_level = 0;	/* maximum from 100 ms interval; ugly: global */
+
 struct softvol_st {
-	int dummy;
+	int samples_per_measurement;
+	int sample_counter;
+	unsigned int rx_level_max;
 };
 
 struct enc_st {
@@ -71,9 +75,7 @@ static int softvol_alloc(struct softvol_st **stp, void **ctx, struct aufilt_prm 
 	if (!st)
 		return ENOMEM;
 
-//	st->skew = cfg->webrtc.skew;
-
-
+	st->samples_per_measurement = prm->srate / 10;
 
 out:
 	if (err) {
@@ -108,6 +110,8 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 		mem_deref(st);
 	else
 		*stp = (struct aufilt_enc_st *)st;
+
+	rx_level = 0;
 
 	return err;
 }
@@ -175,7 +179,7 @@ static int encode(struct aufilt_enc_st *st, int16_t *sampv, size_t *sampc)
 static int decode(struct aufilt_dec_st *st, int16_t *sampv, size_t *sampc)
 {
 	struct dec_st *dst = (struct dec_st *)st;
-	struct softvol_st *wr = dst->st;
+	struct softvol_st *softvol = dst->st;
 	int status = 0;
 	unsigned int i;
 	
@@ -186,7 +190,21 @@ static int decode(struct aufilt_dec_st *st, int16_t *sampv, size_t *sampc)
 	float attack_rate = conf_config()->audio.agc_rx.attack_rate;
 	float release_rate = conf_config()->audio.agc_rx.release_rate;
 
-	(void)wr;
+	/* Looking for peak values in 100 ms intervals */
+	for (i=0; i<*sampc; i++) {
+		int val = sampv[i];
+		if (val < 0)
+			val = -val;
+		if (val > softvol->rx_level_max) {
+			softvol->rx_level_max = val;
+		}
+		softvol->sample_counter++;
+		if (softvol->sample_counter > softvol->samples_per_measurement) {
+			rx_level = softvol->rx_level_max;
+			softvol->rx_level_max = 0;
+			softvol->sample_counter = 0;
+		}
+	}
 
 	if (agc_enabled && agc_target != 0) {
     	agc_process(&dst->agc_state, sampv, *sampc, agc_target, max_gain, attack_rate, release_rate);
@@ -211,7 +229,11 @@ static int module_init(void) {
 static int module_close(void) {
 	aufilt_unregister(&softvol);
 	return 0;
-}  
+}
+
+unsigned int softvol_get_rx_level(void) {
+	return rx_level;
+}
 
 EXPORT_SYM const struct mod_export DECL_EXPORTS(softvol) = {
 	"softvol",

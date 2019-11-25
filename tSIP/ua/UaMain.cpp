@@ -1077,5 +1077,11 @@ int Ua::GetAudioCodecList(std::vector<AnsiString> &codecs)
 	return 0;
 }
 
+unsigned int Ua::GetAudioRxSignalLevel(void)
+{
+	return softvol_get_rx_level();
+}
+
+
 
 

@@ -53,6 +53,7 @@ private:
 	typedef const ButtonConf* (__closure *CallbackGetButtonConf)(int id);
 	typedef void (__closure *CallbackMainMenuShow)(bool state);
 	typedef void (__closure *CallbackApplicationClose)(void);
+	typedef unsigned int (__closure *CallbackGetAudioErrorCount)(void);
 
 	CallbackAddOutputText onAddOutputText;
 	CallbackCall onCall;
@@ -66,6 +67,7 @@ private:
 	CallbackGetCall onGetCall;
 	CallbackGetContactName onGetContactName;
 	CallbackGetStreamingState onGetStreamingState;
+	CallbackGetAudioErrorCount onGetAudioErrorCount;
 	CallbackSetTrayIcon onSetTrayIcon;
 	CallbackGetRegistrationState onGetRegistrationState;
 	CallbackSetButtonCaption onSetButtonCaption;
@@ -116,6 +118,7 @@ public:
 		CallbackGetCall onGetCall,
 		CallbackGetContactName onGetContactName,
 		CallbackGetStreamingState onGetStreamingState,
+		CallbackGetAudioErrorCount onGetAudioErrorCount,
 		CallbackSetTrayIcon onSetTrayIcon,
 		CallbackGetRegistrationState onGetRegistrationState,
 		CallbackSetButtonCaption onSetButtonCaption,
