@@ -330,6 +330,38 @@ const LuaExample luaExamples [] =
 	}
 	,
 	{
+	"Determining current call state",
+
+	"-- Determining call state\n"
+	"-- see: enum Callback::ua_state_e\n"
+	"local callState = GetCallState()\n"
+	"print(\"Call state: \")\n"
+	"if callState == 0 then\n"
+	"\tprint(\"CLOSED\")\n"
+	"elseif callState == 1 then\n"
+	"\tprint(\"INCOMING\")\n"
+	"elseif callState == 2 then\n"
+	"\tprint(\"OUTGOING\")\n"
+	"elseif callState == 3 then\n"
+	"\tprint(\"TRYING\")\n"
+	"elseif callState == 4 then\n"
+	"\tprint(\"RINGING\")\n"
+	"elseif callState == 5 then\n"
+	"\tprint(\"PROGRESS\")\n"
+	"elseif callState == 6 then\n"
+	"\tprint(\"ESTABLISHED\")\n"
+	"elseif callState == 7 then\n"
+	"\tprint(\"TRANSFER\")\n"
+	"elseif callState == 8 then\n"
+	"\tprint(\"TRANSFER_OOD\")\n"
+	"else\n"
+	"\tprint(string.format(\"type = %d, missing description\", callState))\n"
+	"end\n"
+	"local execSourceId = GetExecSourceId()\n"
+	"print(string.format(\", numeric value = %d\\n\", callState))"
+	}
+	,
+	{
 	"Scan local network (192.168.0.*:5060) with OPTIONS",
 
 	"function string.starts(String, Start)\n"
