@@ -90,7 +90,7 @@ object frmLuaScript: TfrmLuaScript
     Filter = 
       'Lua files (*.lua)|*.lua|Text files (*.txt)|*.txt|All files (*.*)' +
       '|*.*'
-    Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
+    Options = [ofNoChangeDir, ofEnableSizing]
     Left = 40
     Top = 208
   end
