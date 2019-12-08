@@ -113,6 +113,7 @@ int message_send(struct ua *ua, const char *peer, const char *msg)
 	char *uri = NULL;
 	int err = 0;
 	struct mbuf *dialbuf;
+	struct pl pl_dialbuf;
 	size_t len;
 	struct account *acc;
 
@@ -158,7 +159,9 @@ int message_send(struct ua *ua, const char *peer, const char *msg)
 	if (err)
 		goto out;
 
-	err = sip_addr_decode(&addr, dialbuf);
+	pl_dialbuf.p = dialbuf->buf;
+	pl_dialbuf.l = dialbuf->size;
+	err = sip_addr_decode(&addr, &pl_dialbuf);
 	if (err)
 		goto out;
 
