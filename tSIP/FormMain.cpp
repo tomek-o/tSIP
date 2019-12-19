@@ -1254,14 +1254,15 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 					if (entry.incoming && !call.disconnecting)
 					{
 			            SetNotificationIcon(true);
-                    }
+					}
 				}
 				if (entry.incoming)
 				{
 					entry.uri = ExtractNumberFromUri(entry.uri.c_str()).c_str();
-					entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
 				}
-				
+				// trying to extract number from PAI URI for any call
+				entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
+
 				history.AddEntry(entry);
 				UpdateCallHistory();
 			#if 0
