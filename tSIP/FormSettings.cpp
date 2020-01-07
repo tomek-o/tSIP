@@ -50,6 +50,7 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	tabs.push_back(tsCalls);
 	tabs.push_back(tsDisplay);
 	tabs.push_back(tsLocking);
+	tabs.push_back(tsBranding);
 	tabs.push_back(tsRing);
 	tabs.push_back(tsAudioIO);
 	tabs.push_back(tsAudioProcessing);

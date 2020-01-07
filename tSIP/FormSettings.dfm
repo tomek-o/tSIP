@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsAudioIO
+    ActivePage = tsBranding
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -72,41 +72,6 @@ object frmSettings: TfrmSettings
         Width = 11
         Height = 13
         Caption = '%'
-      end
-      object lblDialpadBackgroundImage: TLabel
-        Left = 3
-        Top = 232
-        Width = 125
-        Height = 13
-        Caption = 'Dialpad background image'
-      end
-      object lblMainIconFile: TLabel
-        Left = 3
-        Top = 256
-        Width = 128
-        Height = 13
-        Caption = 'Custom main icon file (.ico)'
-      end
-      object lblTrayNotificationIcon: TLabel
-        Left = 3
-        Top = 280
-        Width = 168
-        Height = 13
-        Caption = 'Custom tray icon notification image'
-      end
-      object lblRestartRequired1: TLabel
-        Left = 340
-        Top = 256
-        Width = 84
-        Height = 13
-        Caption = '(restart required)'
-      end
-      object lblRestartRequired2: TLabel
-        Left = 340
-        Top = 280
-        Width = 84
-        Height = 13
-        Caption = '(restart required)'
       end
       object lblMainWindowHeight: TLabel
         Left = 3
@@ -164,22 +129,6 @@ object frmSettings: TfrmSettings
           'ning)'
         TabOrder = 5
       end
-      object edDialpadBackgroundImage: TEdit
-        Left = 178
-        Top = 229
-        Width = 121
-        Height = 21
-        TabOrder = 6
-      end
-      object btnSelectDialpadBackgroundImage: TButton
-        Left = 305
-        Top = 229
-        Width = 22
-        Height = 21
-        Caption = '...'
-        TabOrder = 7
-        OnClick = btnSelectImageClick
-      end
       object chbNoBeepOnEnterKey: TCheckBox
         Left = 3
         Top = 209
@@ -188,54 +137,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not beep when using [Enter] in main window to dial or transfe' +
           'r call'
-        TabOrder = 8
-      end
-      object edMainIconFile: TEdit
-        Left = 178
-        Top = 253
-        Width = 121
-        Height = 21
-        TabOrder = 9
-      end
-      object btnSelectMainIconFile: TButton
-        Left = 305
-        Top = 253
-        Width = 22
-        Height = 21
-        Caption = '...'
-        TabOrder = 10
-        OnClick = btnSelectImageClick
-      end
-      object edTrayNotificationImage: TEdit
-        Left = 178
-        Top = 277
-        Width = 121
-        Height = 21
-        TabOrder = 11
-      end
-      object btnSelectTrayNotificationImage: TButton
-        Left = 305
-        Top = 277
-        Width = 22
-        Height = 21
-        Caption = '...'
-        TabOrder = 12
-        OnClick = btnSelectImageClick
-      end
-      object chbCustomUserAgent: TCheckBox
-        Left = 3
-        Top = 304
-        Width = 157
-        Height = 17
-        Caption = 'Custom User-Agent value'
-        TabOrder = 13
-      end
-      object edUserAgent: TEdit
-        Left = 178
-        Top = 302
-        Width = 121
-        Height = 21
-        TabOrder = 14
+        TabOrder = 6
       end
       object chbFrmMainShowWhenAnsweringCall: TCheckBox
         Left = 3
@@ -245,44 +147,14 @@ object frmSettings: TfrmSettings
         Caption = 
           'Show main form when answering call (using tray notifier, shortcu' +
           't, script, ...)'
-        TabOrder = 15
-      end
-      object chbFrmMainUseCustomApplicationTitle: TCheckBox
-        Left = 3
-        Top = 327
-        Width = 223
-        Height = 17
-        Caption = 'Custom application title (text in taskbar)'
-        TabOrder = 16
-      end
-      object chbFrmMainUseCustomCaption: TCheckBox
-        Left = 3
-        Top = 351
-        Width = 191
-        Height = 17
-        Caption = 'Custom caption for main window'
-        TabOrder = 17
-      end
-      object edFrmMainCustomApplicationTitle: TEdit
-        Left = 232
-        Top = 325
-        Width = 193
-        Height = 21
-        TabOrder = 18
-      end
-      object edFrmMainCustomCaption: TEdit
-        Left = 232
-        Top = 349
-        Width = 193
-        Height = 21
-        TabOrder = 19
+        TabOrder = 7
       end
       object edMainWindowHeight: TEdit
         Left = 178
         Top = 164
         Width = 42
         Height = 21
-        TabOrder = 20
+        TabOrder = 8
       end
       object chbFrmMainShowWhenMakingCall: TCheckBox
         Left = 3
@@ -292,7 +164,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Show main form when making call (using shortcut, script, command' +
           ' line / protocol handler...)'
-        TabOrder = 21
+        TabOrder = 9
       end
     end
     object tsNetwork: TTabSheet
@@ -842,6 +714,140 @@ object frmSettings: TfrmSettings
         TabOrder = 8
       end
     end
+    object tsBranding: TTabSheet
+      Caption = 'Branding'
+      ImageIndex = 20
+      ExplicitLeft = 6
+      ExplicitTop = 20
+      object lblDialpadBackgroundImage: TLabel
+        Left = 2
+        Top = 5
+        Width = 125
+        Height = 13
+        Caption = 'Dialpad background image'
+      end
+      object lblMainIconFile: TLabel
+        Left = 3
+        Top = 29
+        Width = 128
+        Height = 13
+        Caption = 'Custom main icon file (.ico)'
+      end
+      object lblRestartRequired1: TLabel
+        Left = 340
+        Top = 29
+        Width = 84
+        Height = 13
+        Caption = '(restart required)'
+      end
+      object lblRestartRequired2: TLabel
+        Left = 340
+        Top = 53
+        Width = 84
+        Height = 13
+        Caption = '(restart required)'
+      end
+      object lblTrayNotificationIcon: TLabel
+        Left = 3
+        Top = 53
+        Width = 168
+        Height = 13
+        Caption = 'Custom tray icon notification image'
+      end
+      object edDialpadBackgroundImage: TEdit
+        Left = 178
+        Top = 2
+        Width = 121
+        Height = 21
+        TabOrder = 0
+      end
+      object btnSelectDialpadBackgroundImage: TButton
+        Left = 305
+        Top = 2
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 1
+        OnClick = btnSelectImageClick
+      end
+      object edMainIconFile: TEdit
+        Left = 178
+        Top = 26
+        Width = 121
+        Height = 21
+        TabOrder = 2
+      end
+      object btnSelectMainIconFile: TButton
+        Left = 305
+        Top = 26
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 3
+        OnClick = btnSelectImageClick
+      end
+      object btnSelectTrayNotificationImage: TButton
+        Left = 305
+        Top = 50
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 4
+        OnClick = btnSelectImageClick
+      end
+      object edTrayNotificationImage: TEdit
+        Left = 178
+        Top = 50
+        Width = 121
+        Height = 21
+        TabOrder = 5
+      end
+      object chbCustomUserAgent: TCheckBox
+        Left = 3
+        Top = 77
+        Width = 157
+        Height = 17
+        Caption = 'Custom User-Agent value'
+        TabOrder = 6
+      end
+      object chbFrmMainUseCustomApplicationTitle: TCheckBox
+        Left = 3
+        Top = 100
+        Width = 223
+        Height = 17
+        Caption = 'Custom application title (text in taskbar)'
+        TabOrder = 7
+      end
+      object chbFrmMainUseCustomCaption: TCheckBox
+        Left = 3
+        Top = 124
+        Width = 191
+        Height = 17
+        Caption = 'Custom caption for main window'
+        TabOrder = 8
+      end
+      object edUserAgent: TEdit
+        Left = 178
+        Top = 75
+        Width = 121
+        Height = 21
+        TabOrder = 9
+      end
+      object edFrmMainCustomApplicationTitle: TEdit
+        Left = 232
+        Top = 98
+        Width = 193
+        Height = 21
+        TabOrder = 10
+      end
+      object edFrmMainCustomCaption: TEdit
+        Left = 232
+        Top = 122
+        Width = 193
+        Height = 21
+        TabOrder = 11
+      end
+    end
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
@@ -1056,8 +1062,6 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
-      ExplicitLeft = 6
-      ExplicitTop = 14
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -1166,7 +1170,7 @@ object frmSettings: TfrmSettings
       object lblPortaudio: TLabel
         Left = 3
         Top = 344
-        Width = 141
+        Width = 138
         Height = 13
         Caption = 'PortAudio suggested latency'
       end
@@ -2919,7 +2923,7 @@ object frmSettings: TfrmSettings
     TabOrder = 0
     OnChange = tvSelectorChange
     Items.NodeData = {
-      0114000000270000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      0115000000270000000000000000000000FFFFFFFFFFFFFFFF00000000000000
       0007470065006E006500720061006C00270000000000000000000000FFFFFFFF
       FFFFFFFF0000000000000000074E006500740077006F0072006B002F00000000
       00000000000000FFFFFFFFFFFFFFFF00000000000000000B5300490050002000
@@ -2928,27 +2932,29 @@ object frmSettings: TfrmSettings
       0000000000000000000000FFFFFFFFFFFFFFFF00000000000000000543006100
       6C006C007300270000000000000000000000FFFFFFFFFFFFFFFF000000000000
       00000744006900730070006C0061007900270000000000000000000000FFFFFF
-      FFFFFFFFFF0000000000000000074C006F0063006B0069006E00670021000000
-      0000000000000000FFFFFFFFFFFFFFFF000000000000000004520069006E0067
-      002B0000000000000000000000FFFFFFFFFFFFFFFF0000000000000000094100
-      7500640069006F00200049002F004F00390000000000000000000000FFFFFFFF
-      FFFFFFFF00000000000000001041007500640069006F002000500072006F0063
-      0065007300730069006E0067002B0000000000000000000000FFFFFFFFFFFFFF
-      FF0000000000000000095200650063006F007200640069006E00670025000000
-      0000000000000000FFFFFFFFFFFFFFFF00000000000000000643006F00640065
-      00630073002F0000000000000000000000FFFFFFFFFFFFFFFF00000000000000
-      000B49006E0074006500670072006100740069006F006E002700000000000000
-      00000000FFFFFFFFFFFFFFFF00000000000000000748006F0074006B00650079
-      007300290000000000000000000000FFFFFFFFFFFFFFFF000000000000000008
-      43006F006E0074006100630074007300270000000000000000000000FFFFFFFF
-      FFFFFFFF00000000000000000748006900730074006F00720079003900000000
-      00000000000000FFFFFFFFFFFFFFFF000000000000000010500068006F006E00
-      650073002000280070006C007500670069006E00730029003300000000000000
-      00000000FFFFFFFFFFFFFFFF00000000000000000D540072006100790020004E
-      006F00740069006600690065007200270000000000000000000000FFFFFFFFFF
-      FFFFFF0000000000000000075300630072006900700074007300270000000000
-      000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F006700670069
-      006E006700}
+      FFFFFFFFFF0000000000000000074C006F0063006B0069006E00670029000000
+      0000000000000000FFFFFFFFFFFFFFFF0000000000000000084200720061006E
+      00640069006E006700210000000000000000000000FFFFFFFFFFFFFFFF000000
+      000000000004520069006E0067002B0000000000000000000000FFFFFFFFFFFF
+      FFFF00000000000000000941007500640069006F00200049002F004F00390000
+      000000000000000000FFFFFFFFFFFFFFFF000000000000000010410075006400
+      69006F002000500072006F00630065007300730069006E0067002B0000000000
+      000000000000FFFFFFFFFFFFFFFF0000000000000000095200650063006F0072
+      00640069006E006700250000000000000000000000FFFFFFFFFFFFFFFF000000
+      00000000000643006F0064006500630073002F0000000000000000000000FFFF
+      FFFFFFFFFFFF00000000000000000B49006E0074006500670072006100740069
+      006F006E00270000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      000748006F0074006B00650079007300290000000000000000000000FFFFFFFF
+      FFFFFFFF00000000000000000843006F006E0074006100630074007300270000
+      000000000000000000FFFFFFFFFFFFFFFF000000000000000007480069007300
+      74006F0072007900390000000000000000000000FFFFFFFFFFFFFFFF00000000
+      0000000010500068006F006E00650073002000280070006C007500670069006E
+      0073002900330000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      000D540072006100790020004E006F0074006900660069006500720027000000
+      0000000000000000FFFFFFFFFFFFFFFF00000000000000000753006300720069
+      00700074007300270000000000000000000000FFFFFFFFFFFFFFFF0000000000
+      000000074C006F006700670069006E006700}
+    ExplicitLeft = 1
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'
