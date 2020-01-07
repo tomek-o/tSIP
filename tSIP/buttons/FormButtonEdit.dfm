@@ -110,7 +110,7 @@ object frmButtonEdit: TfrmButtonEdit
     Height = 21
     Style = csDropDownList
     DropDownCount = 12
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 3
     OnChange = cbTypeChange
   end
@@ -134,10 +134,6 @@ object frmButtonEdit: TfrmButtonEdit
     TabOrder = 5
     object tsVisual: TTabSheet
       Caption = 'Visual'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblHeight: TLabel
         Left = 3
         Top = 9
@@ -301,7 +297,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 140
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 4
         OnChange = cbBackgroundColorChange
       end
@@ -318,25 +314,17 @@ object frmButtonEdit: TfrmButtonEdit
     object tsBehavior: TTabSheet
       Caption = 'Behavior'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pcBehavior: TPageControl
         Left = 0
         Top = 0
         Width = 385
         Height = 277
-        ActivePage = tsBehaviorSwitchAudioSource
+        ActivePage = tsBehaviorScript
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
         object tsBehaviorBlf: TTabSheet
           Caption = 'tsBehaviorBlf'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblBlfInCallAction: TLabel
             Left = 3
             Top = 125
@@ -445,10 +433,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorPaging: TTabSheet
           Caption = 'tsBehaviorPaging'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblPagingTxWaveFile: TLabel
             Left = 3
             Top = 3
@@ -519,25 +503,23 @@ object frmButtonEdit: TfrmButtonEdit
           Caption = 'tsBehaviorScript'
           ImageIndex = 2
           ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitTop = 29
           object lblScriptFile: TLabel
             Left = 3
             Top = 3
-            Width = 148
+            Width = 117
             Height = 13
-            Caption = 'Script file (\script subdirectory)'
+            Caption = 'Script file (\script subdir)'
           end
           object edScriptFile: TEdit
-            Left = 162
+            Left = 130
             Top = 0
-            Width = 191
+            Width = 194
             Height = 21
             TabOrder = 0
           end
           object btnSelectScript: TButton
-            Left = 354
+            Left = 330
             Top = 0
             Width = 22
             Height = 21
@@ -545,14 +527,45 @@ object frmButtonEdit: TfrmButtonEdit
             TabOrder = 1
             OnClick = btnSelectScriptClick
           end
+          object btnSelectedScriptOnButtonEdit: TBitBtn
+            Left = 355
+            Top = 0
+            Width = 22
+            Height = 21
+            TabOrder = 2
+            OnClick = btnSelectedScriptOnButtonEditClick
+            Glyph.Data = {
+              36030000424D3603000000000000360000002800000010000000100000000100
+              18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+              000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
+              D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8
+              FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
+          end
         end
         object tsBehaviorExecute: TTabSheet
           Caption = 'tsBehaviorExecute'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblArg1: TLabel
             Left = 3
             Top = 3
@@ -571,10 +584,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioSource: TTabSheet
           Caption = 'tsBehaviorSwitchAudioSource'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblSoundInputModule: TLabel
             Left = 3
             Top = 3
@@ -595,7 +604,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = cbSoundInputModChange
           end
@@ -621,17 +630,13 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
           end
         end
         object tsBehaviorSwitchAudioPlayer: TTabSheet
           Caption = 'tsBehaviorSwitchAudioPlayer'
           ImageIndex = 5
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label3: TLabel
             Left = 3
             Top = 3
@@ -652,7 +657,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = cbSoundOutputModChange
           end
@@ -662,7 +667,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 1
           end
         end

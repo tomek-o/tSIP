@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FormButtonEdit.h"
+#include "FormLuaScript.h"
 #include "ButtonType.h"
 #include "ButtonConf.h"
 #include "Paths.h"
@@ -11,6 +12,7 @@
 #include "AudioDevicesList.h"
 #include "AudioModules.h"
 #include "UaConf.h"
+#include <stdio.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -469,6 +471,54 @@ void __fastcall TfrmButtonEdit::cbSoundOutputModChange(TObject *Sender)
 	{
 		assert(!"Unhandled cbSoundOutputMod index!");
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonEdit::btnSelectedScriptOnButtonEditClick(
+      TObject *Sender)
+{
+	TEdit *edit = NULL;
+	AnsiString eventName;
+	if (Sender == btnSelectedScriptOnButtonEdit)
+	{
+		edit = edScriptFile;
+		eventName = "on_btn";
+	}
+	else
+	{
+		assert(0);
+		return;
+	}
+	AnsiString dir = Paths::GetProfileDir() + "\\scripts";
+	ForceDirectories(dir);
+	AnsiString file = dir + "\\";
+	if (edit->Text != "")
+	{
+		file += edit->Text;
+	}
+	else
+	{
+		AnsiString name = eventName + "_" + FormatDateTime("yyyymmdd_hhnnss_zzz", Now()) + ".lua";
+		file += name;
+		edit->Text = name;
+	}
+	if (!FileExists(file))
+	{
+		FILE *fp = fopen(file.c_str(), "wb");
+		if (fp)
+		{
+			fclose(fp);
+		}
+		else
+		{
+			MessageBox(this->Handle, "Could not create file in \"script\" subdirectory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+			return;
+		}
+	}
+
+	TfrmLuaScript *frmLuaScript = new TfrmLuaScript(NULL);
+	frmLuaScript->Show();
+	frmLuaScript->OpenFile(file);
 }
 //---------------------------------------------------------------------------
 

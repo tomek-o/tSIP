@@ -13,6 +13,7 @@
 #include "ButtonType.h"
 #include <Dialogs.hpp>
 #include <ComCtrls.hpp>
+#include <Buttons.hpp>
 class ButtonConf;
 
 class TfrmButtonEdit : public TForm
@@ -104,6 +105,7 @@ __published:	// IDE-managed Components
 	TEdit *edDescription2;
 	TComboBox *cbCaptionLines;
 	TLabel *lblCaptionLines;
+	TBitBtn *btnSelectedScriptOnButtonEdit;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
@@ -118,6 +120,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnSelectWaveFileClick(TObject *Sender);
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
 	void __fastcall cbSoundOutputModChange(TObject *Sender);
+	void __fastcall btnSelectedScriptOnButtonEditClick(TObject *Sender);
 private:	// User declarations
 	bool confirmed;
 	bool refreshAudioDevList;
