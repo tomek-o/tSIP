@@ -201,6 +201,24 @@ namespace {
 		return false;
 	}
 
+	bool CheckPcmuPcmaPtime(void)
+	{
+		if (appSettings.uaConf.accounts.size())
+		{
+			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
+			for (unsigned int i=0; i<acc.audio_codecs.size(); i++)
+			{
+				const std::string& codec = acc.audio_codecs[i];
+				if (codec == "PCMU/8000/1" || codec == "PCMA/8000/1")
+				{
+					if (acc.ptime != 20)
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	struct ItemTypeData itemTypeData[ItemTypeLimiter] =
 	{
 		{ LevelWarning, "No audio input device", "", CheckAudioInputDevice },
@@ -223,7 +241,7 @@ namespace {
 		{ LevelWarning, "Invalid frame ptime", "Selected RTP ptime may not work well with specified codec(s), exceeding network MTU.", NULL },
 		{ LevelHint, "Selected ptime is different then commonly used 20ms.", "Ptime other than 20ms with commonly used codecs may cause interoperability problems.", CheckUncommonFrameLength },
 		{ LevelHint, "Popular codecs are disabled", "Note: popular/commonly used codecs (G.711a, G.711u) are not enabled.", CheckCommonCodecs },
-        { LevelHint, "No registration", "Note: registration is not enabled (registration expires value is set to zero in account configuration).", CheckNoRegistration },
+		{ LevelHint, "No registration", "Note: registration is not enabled (registration expires value is set to zero in account configuration).", CheckNoRegistration },
 		{ LevelHint, "No local port assigned",
 			"Softphone is configured without registration but local port is not assigned.\n"
 			"You most likely won't be able to receive calls with this configuration."
@@ -234,6 +252,10 @@ namespace {
 		{ LevelWarning, "List of enabled codecs might be too long",
 			"Having too many codecs activated might cause problems with UDP message fragmentation.",
 			CheckTooManyCodecs
+			},
+		{ LevelWarning, "Packetization time (ptime) other than 20 ms for PCMU/PCMA",
+            "For PCMU/PCMA (G.711u/a) codecs 20 ms packetization time is recommended for compatibility reasons.",
+			CheckPcmuPcmaPtime
 			},
 	};
 

@@ -34,6 +34,7 @@ namespace Troubleshooting {
 		SpeexPreprocessingEnabled,
 		NoCodecsEnabled,
 		TooManyCodecsEnabled,
+		PcmuPcmaPtime,
 
 		ItemTypeLimiter
 	};
