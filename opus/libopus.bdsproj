@@ -1,0 +1,454 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+			<Option Name="ProjectType">CppStaticLibrary</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{07D681DA-66F5-4E3E-95AC-A35B804F0EFC}</Option>
+		</Option>
+	</PersonalityInfo>
+	<CPlusPlusBuilder.Personality>
+		<Source>
+			<Source Name="MainSource">libopus.cpp</Source>
+		</Source>
+		<BCBPROJECT>
+      <project version="10.0">
+        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="count" value="1"/>
+        <property category="build.config" name="excludedefaultforzero" value="0"/>
+        <property category="build.config.0" name="builddir" value="Debug"/>
+        <property category="build.config.0" name="key" value="Debug_Build"/>
+        <property category="build.config.0" name="name" value="Debug Build"/>
+        <property category="build.config.0" name="settings.win32b" value="default"/>
+        <property category="build.config.0" name="type" value="Toolset"/>
+        <property category="build.config.0" name="win32.win32b.builddir" value="Debug_Build"/>
+        <property category="build.config.1" name="key" value="Release_Build"/>
+        <property category="build.config.1" name="name" value="Release Build"/>
+        <property category="build.config.1" name="settings.win32b" value="default"/>
+        <property category="build.config.1" name="type" value="Toolset"/>
+        <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
+        <property category="build.node" name="name" value="libopus.lib"/>
+        <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;adortl;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;soaprtl;dsnap;bdertl;vcldbx"/>
+        <property category="build.node" name="sparelibs" value="rtl.lib vcl.lib"/>
+        <property category="build.node" name="use_packages" value="0"/>
+        <property category="build.platform" name="active" value="win32"/>
+        <property category="build.platform" name="win32.Debug_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.Release_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.default" value="win32b"/>
+        <property category="build.platform" name="win32.enabled" value="1"/>
+        <property category="build.platform" name="win32.win32b.enabled" value="1"/>
+        <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.listfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.objfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.xreffile.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.1" value="_DEBUG"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$O.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.1" value="DEBUG"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.V.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.Gn.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\debug"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.1" value="NDEBUG"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.k.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.r.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.vi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$D.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$O.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.V.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\release"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.z.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zn.enabled" value="1"/>
+        <optionset name="all_configurations">
+          <property category="node" name="displayname" value="All Configurations"/>
+          <property category="win32.*.win32b.bcc32" name="option.3.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.4.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.5.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.6.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.1" value="HAVE_CONFIG_H"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.2" value="WIN32"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.D.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="silk\float"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="win32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="silk\x86"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="silk"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="celt\x86"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="celt"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="src"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\opus"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Q.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.infomsgs.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.2" value="NO_STRICT"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tW.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWC.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWD.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWM.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="silk\float"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="silk\x86"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="silk"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="celt\x86"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="celt"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="src"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\opus"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="silk\float"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="silk\x86"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="silk"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="celt\x86"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="celt"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="src"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\opus"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="silk\float"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="silk\x86"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="silk"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="celt\x86"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="celt"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="src"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\opus"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="silk\float"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="silk\x86"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="silk"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="celt\x86"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="celt"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="src"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\opus"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="C:\Users\Tomasz\Documents\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="silk\float"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="silk\x86"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="silk"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="celt\x86"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="celt"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="src"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\opus"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpe.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpp.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg" value="128"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg.merge" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.dynamicrtl.enabled" value="0"/>
+        </optionset>
+      </project>
+      <FILELIST>
+        <FILE FILENAME="libopus.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="libopus" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\analysis.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="analysis" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\mlp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mlp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\mlp_data.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mlp_data" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\opus.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\opus_decoder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus_decoder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\opus_encoder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus_encoder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\opus_multistream.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus_multistream" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\opus_multistream_decoder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus_multistream_decoder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\opus_multistream_encoder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus_multistream_encoder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="src\repacketizer.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="repacketizer" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\opus.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\opus_custom.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\opus_defines.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\opus_multistream.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="include\opus_types.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\_kiss_fft_guts.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\arch.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\bands.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bands" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\bands.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\celt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="celt" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\celt.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\celt_decoder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="celt_decoder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\celt_encoder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="celt_encoder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\celt_lpc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="celt_lpc" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\celt_lpc.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\cpu_support.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\cwrs.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="cwrs" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\cwrs.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\ecintrin.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\entcode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="entcode" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\entcode.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\entdec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="entdec" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\entdec.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\entenc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="entenc" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\entenc.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\fixed_debug.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\fixed_generic.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\float_cast.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\kiss_fft.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="kiss_fft" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\kiss_fft.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\laplace.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="laplace" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\laplace.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\mathops.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mathops" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\mathops.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\mdct.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mdct" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\mdct.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\mfrngcod.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\modes.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="modes" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\modes.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\os_support.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\pitch.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pitch" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\pitch.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\quant_bands.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="quant_bands" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\quant_bands.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\rate.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rate" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\rate.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\stack_alloc.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\static_modes_fixed.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\static_modes_fixed_arm_ne10.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\static_modes_float.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\static_modes_float_arm_ne10.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\vq.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="vq" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\vq.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\x86\x86cpu.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="x86cpu" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\x86\x86cpu.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\A2NLSF.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="A2NLSF" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\ana_filt_bank_1.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ana_filt_bank_1" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\API.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\biquad_alt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="biquad_alt" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\bwexpander.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bwexpander" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\bwexpander_32.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bwexpander_32" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\check_control_input.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="check_control_input" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\CNG.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CNG" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\code_signs.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="code_signs" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\control.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\control_audio_bandwidth.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="control_audio_bandwidth" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\control_codec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="control_codec" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\control_SNR.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="control_SNR" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\debug.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="debug" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\debug.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\dec_API.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dec_API" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\decode_core.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="decode_core" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\decode_frame.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="decode_frame" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\decode_indices.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="decode_indices" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\decode_parameters.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="decode_parameters" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\decode_pitch.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="decode_pitch" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\decode_pulses.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="decode_pulses" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\decoder_set_fs.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="decoder_set_fs" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\define.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\enc_API.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="enc_API" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\encode_indices.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="encode_indices" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\encode_pulses.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="encode_pulses" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\errors.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\gain_quant.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gain_quant" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\HP_variable_cutoff.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="HP_variable_cutoff" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\init_decoder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="init_decoder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\init_encoder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="init_encoder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\Inlines.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\inner_prod_aligned.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="inner_prod_aligned" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\interpolate.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="interpolate" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\lin2log.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="lin2log" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\log2lin.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="log2lin" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\LP_variable_cutoff.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LP_variable_cutoff" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\LPC_analysis_filter.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LPC_analysis_filter" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\LPC_inv_pred_gain.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LPC_inv_pred_gain" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\MacroCount.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\MacroDebug.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\macros.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\main.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NLSF_decode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NLSF_decode" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NLSF_del_dec_quant.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NLSF_del_dec_quant" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NLSF_encode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NLSF_encode" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NLSF_stabilize.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NLSF_stabilize" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NLSF_unpack.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NLSF_unpack" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NLSF_VQ.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NLSF_VQ" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NLSF_VQ_weights_laroia.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NLSF_VQ_weights_laroia" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NLSF2A.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NLSF2A" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NSQ.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NSQ" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NSQ.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\NSQ_del_dec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NSQ_del_dec" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\pitch_est_defines.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\pitch_est_tables.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pitch_est_tables" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\PLC.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PLC" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\PLC.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\process_NLSFs.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="process_NLSFs" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\quant_LTP_gains.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="quant_LTP_gains" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="resampler" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_down2.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="resampler_down2" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_down2_3.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="resampler_down2_3" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_private.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_private_AR2.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="resampler_private_AR2" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_private_down_FIR.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="resampler_private_down_FIR" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_private_IIR_FIR.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="resampler_private_IIR_FIR" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_private_up2_HQ.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="resampler_private_up2_HQ" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_rom.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="resampler_rom" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_rom.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\resampler_structs.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\shell_coder.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="shell_coder" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\sigm_Q15.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sigm_Q15" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\SigProc_FIX.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\sort.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sort" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\stereo_decode_pred.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stereo_decode_pred" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\stereo_encode_pred.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stereo_encode_pred" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\stereo_find_predictor.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stereo_find_predictor" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\stereo_LR_to_MS.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stereo_LR_to_MS" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\stereo_MS_to_LR.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stereo_MS_to_LR" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\stereo_quant_pred.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stereo_quant_pred" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\structs.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\sum_sqr_shift.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sum_sqr_shift" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\table_LSF_cos.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="table_LSF_cos" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tables.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tables_gain.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tables_gain" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tables_LTP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tables_LTP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tables_NLSF_CB_NB_MB.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tables_NLSF_CB_NB_MB" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tables_NLSF_CB_WB.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tables_NLSF_CB_WB" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tables_other.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tables_other" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tables_pitch_lag.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tables_pitch_lag" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tables_pulses_per_block.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tables_pulses_per_block" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\tuning_parameters.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\typedef.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\VAD.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VAD" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\VQ_WMat_EC.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VQ_WMat_EC" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\x86\main_sse.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\x86\SigProc_FIX_sse.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\apply_sine_window_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="apply_sine_window_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\autocorrelation_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="autocorrelation_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\burg_modified_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="burg_modified_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\bwexpander_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bwexpander_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\corrMatrix_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="corrMatrix_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\encode_frame_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="encode_frame_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\energy_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="energy_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\find_LPC_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="find_LPC_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\find_LTP_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="find_LTP_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\find_pitch_lags_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="find_pitch_lags_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\find_pred_coefs_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="find_pred_coefs_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\inner_product_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="inner_product_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\k2a_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="k2a_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\levinsondurbin_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="levinsondurbin_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\LPC_analysis_filter_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LPC_analysis_filter_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\LPC_inv_pred_gain_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LPC_inv_pred_gain_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\LTP_analysis_filter_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LTP_analysis_filter_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\LTP_scale_ctrl_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LTP_scale_ctrl_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\main_FLP.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\noise_shape_analysis_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="noise_shape_analysis_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\pitch_analysis_core_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pitch_analysis_core_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\prefilter_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="prefilter_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\process_gains_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="process_gains_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\regularize_correlations_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="regularize_correlations_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\residual_energy_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="residual_energy_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\scale_copy_vector_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="scale_copy_vector_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\scale_vector_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="scale_vector_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\schur_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="schur_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\SigProc_FLP.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\solve_LS_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="solve_LS_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\sort_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sort_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\structs_FLP.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\warped_autocorrelation_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="warped_autocorrelation_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\float\wrappers_FLP.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wrappers_FLP" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="celt\x86\x86_celt_map.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="x86_celt_map" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="silk\x86\x86_silk_map.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="x86_silk_map" FORMNAME="" DESIGNCLASS=""/>
+      </FILELIST>
+      <IDEOPTIONS>
+        <VersionInfo>
+          <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+          <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+          <VersionInfo Name="MajorVer">1</VersionInfo>
+          <VersionInfo Name="MinorVer">0</VersionInfo>
+          <VersionInfo Name="Release">0</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Debug">False</VersionInfo>
+          <VersionInfo Name="PreRelease">False</VersionInfo>
+          <VersionInfo Name="Special">False</VersionInfo>
+          <VersionInfo Name="Private">False</VersionInfo>
+          <VersionInfo Name="DLL">False</VersionInfo>
+          <VersionInfo Name="Locale">1045</VersionInfo>
+          <VersionInfo Name="CodePage">1250</VersionInfo>
+        </VersionInfo>
+        <VersionInfoKeys>
+          <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+          <VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="Comments"></VersionInfoKeys>
+        </VersionInfoKeys>
+        <Debugging>
+          <Debugging Name="DebugSourceDirs"></Debugging>
+        </Debugging>
+        <Parameters>
+          <Parameters Name="RunParams"></Parameters>
+          <Parameters Name="Launcher"></Parameters>
+          <Parameters Name="UseLauncher">False</Parameters>
+          <Parameters Name="DebugCWD"></Parameters>
+          <Parameters Name="HostApplication"></Parameters>
+          <Parameters Name="RemoteHost"></Parameters>
+          <Parameters Name="RemotePath"></Parameters>
+          <Parameters Name="RemoteParams"></Parameters>
+          <Parameters Name="RemoteLauncher"></Parameters>
+          <Parameters Name="UseRemoteLauncher">False</Parameters>
+          <Parameters Name="RemoteCWD"></Parameters>
+          <Parameters Name="RemoteDebug">False</Parameters>
+          <Parameters Name="Debug Symbols Search Path"></Parameters>
+          <Parameters Name="LoadAllSymbols">True</Parameters>
+          <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+        </Parameters>
+        <Linker>
+          <Linker Name="LibPrefix"></Linker>
+          <Linker Name="LibSuffix"></Linker>
+          <Linker Name="LibVersion"></Linker>
+        </Linker>
+      </IDEOPTIONS>
+    </BCBPROJECT>
+		<Folders/>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
+</BorlandProject>

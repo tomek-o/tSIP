@@ -15,7 +15,7 @@ extern const struct mod_export exports_gsm;
 extern const struct mod_export exports_g722;
 extern const struct mod_export exports_g726_32;
 extern const struct mod_export exports_l16;
-//extern const struct mod_export exports_opus;
+extern const struct mod_export exports_opus;
 extern const struct mod_export exports_presence;
 extern const struct mod_export exports_dialog_info;
 extern const struct mod_export exports_recorder;
@@ -39,7 +39,7 @@ const struct mod_export *mod_table[] = {
 	&exports_g722,
 	&exports_g726_32,
 	&exports_l16,
-	//&exports_opus,
+	&exports_opus,
 	&exports_presence,
 	&exports_dialog_info,
 	&exports_recorder,

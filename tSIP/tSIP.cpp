@@ -34,7 +34,7 @@ USEFORM("FormMessage.cpp", frmMessage);
 #pragma link "webrtc_tc.lib"
 #pragma link "jsoncpp.lib"
 #pragma link "lua_static.lib"
-//#pragma link "libopus.lib"
+#pragma link "libopus.lib"
 #pragma link "scintilla.lib"
 #pragma link "common.lib"
 

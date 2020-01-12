@@ -8,9 +8,7 @@
 			<Option Name="GUID">{F0C559FB-00A4-4848-B2B0-DA5D99B5E4BE}</Option>
 		</Option>
 	</PersonalityInfo>
-	<Default.Personality>  
-    
-    <Projects>
+	<Default.Personality>  <Projects>
       <Projects Name="re.lib">re\mk\win32-tc\re.bdsproj</Projects>
       <Projects Name="rem.lib">rem\mk\win32-tc\rem.bdsproj</Projects>
       <Projects Name="baresip.lib">baresip\mk\win32-tc\baresip.bdsproj</Projects>
@@ -18,13 +16,14 @@
       <Projects Name="libspeex.lib">speex\build\libspeex.bdsproj</Projects>
       <Projects Name="g722.lib">g722\g722.bdsproj</Projects>
       <Projects Name="gsm.lib">gsm\build\gsm.bdsproj</Projects>
+      <Projects Name="libopus.lib">opus\libopus.bdsproj</Projects>
       <Projects Name="jsoncpp.lib">jsoncpp\jsoncpp.bdsproj</Projects>
       <Projects Name="lua_static.lib">lua\turbo_cpp\lua_static.bdsproj</Projects>
       <Projects Name="webrtc_tc.lib">webrtc\webrtc_tc.bdsproj</Projects>
       <Projects Name="scintilla.lib">scintilla\scintilla.bdsproj</Projects>
       <Projects Name="common.lib">common\common.bdsproj</Projects>
       <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
-      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib jsoncpp.lib lua_static.lib webrtc_tc.lib scintilla.lib common.lib tSIP.exe</Projects>
+      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib libopus.lib jsoncpp.lib lua_static.lib webrtc_tc.lib scintilla.lib common.lib tSIP.exe</Projects>
     </Projects>
     <Dependencies>
       <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">

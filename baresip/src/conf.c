@@ -139,8 +139,8 @@ int configure(void)
 	load_module2(NULL, &modname);
 	pl_set_str(&modname, "l16");
 	load_module2(NULL, &modname);
-	//pl_set_str(&modname, "opus");
-	//load_module2(NULL, &modname);
+	pl_set_str(&modname, "opus");
+	load_module2(NULL, &modname);
 
 	// load all audio I/O modules
 	pl_set_str(&modname, "portaudio");
