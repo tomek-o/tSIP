@@ -135,8 +135,6 @@ One more flaw is that full URI from REFER is stored in call history.
 
 - RTP stats: call quality testing
 
-- list of network interfaces in settings for binding (GUIDs)
-
 
 
 DEBUG_INFO: w³¹cznik
@@ -162,7 +160,7 @@ luaopen_io(lua);
 
 plugin interface: showsettings
 
-tSIP plugin: logout from group in inactivity (mouse, keyboard)
+tSIP plugin: logout from group on inactivity (mouse, keyboard)
 
 tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(), 
 tSIP scripting: file I/O example (report call quality after each call)
@@ -179,7 +177,6 @@ update Lua to 5.3.x, remove CVS tags from Lua source
 - wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
 (=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)
 
-+ separate some settings from General into Branding
 */
 
 
