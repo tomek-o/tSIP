@@ -27,7 +27,7 @@
     </Projects>
     <Dependencies>
       <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">
-        <Dependency GUID="{690A683A-7576-4D98-9293-8AA35B0903D5}"/>
+        <Dependency GUID="{07D681DA-66F5-4E3E-95AC-A35B804F0EFC}"/>
         <Dependency GUID="{2D189B4A-4FE9-49A2-9586-2D657EE0EA61}"/>
         <Dependency GUID="{2F20C27F-EE96-4AC2-83B0-B3997AEB97ED}"/>
         <Dependency GUID="{EE04A80D-3549-4554-880A-FDA45DFA6797}"/>
@@ -39,6 +39,7 @@
         <Dependency GUID="{B21E9321-F647-47E1-9D72-0B26697B924C}"/>
         <Dependency GUID="{64FF34CD-EFA7-429C-BD55-D07FFB325ECA}"/>
         <Dependency GUID="{4258E16B-9C27-41A8-B67D-851E9C968BC4}"/>
+        <Dependency GUID="{690A683A-7576-4D98-9293-8AA35B0903D5}"/>
       </Dependency>
     </Dependencies>
   </Default.Personality>
