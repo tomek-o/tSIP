@@ -90,6 +90,21 @@ static struct config core_config = {
 		0
 	},
 
+	/* Opus */
+	{
+		true,
+		true,
+		false, 64000,	/* bitrate */
+		false, 48000,	/* samplerate */
+		false, false,	/* cbr */
+		false, false,	/* inband_fec */
+		false, false,	/* dtx */
+		false,	/* mirror */
+		10,		/* complexity */
+		false, OPUS_APP_AUDIO,
+		false, 10		/* packet_loss */
+	},
+
 	/* Network */
 	{
 		""

@@ -469,6 +469,7 @@
         <FILE FILENAME="NetInterfaces.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NetInterfaces" FORMNAME="" DESIGNCLASS="" ADDITIONAL="NetInterfaces.h"/>
         <FILE FILENAME="FormMessage.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormMessage" FORMNAME="frmMessage" DESIGNCLASS="" ADDITIONAL="FormMessage.h"/>
         <FILE FILENAME="SIMPLE_Messages.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="SIMPLE_Messages" FORMNAME="" DESIGNCLASS="" ADDITIONAL="SIMPLE_Messages.h"/>
+        <FILE FILENAME="ua\FormUaConfOpus.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormUaConfOpus" FORMNAME="frmUaConfOpus" DESIGNCLASS="" ADDITIONAL="ua\FormUaConfOpus.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -477,7 +478,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">70</VersionInfo>
-          <VersionInfo Name="Build">4</VersionInfo>
+          <VersionInfo Name="Build">5</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -489,7 +490,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.70.4</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.70.5</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

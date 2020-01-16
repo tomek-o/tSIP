@@ -151,6 +151,11 @@ enum audio_mode {
 	AUDIO_MODE_TMR               /**< Use timer                     */
 };
 
+enum e_opus_application {
+	OPUS_APP_AUDIO = 0,
+	OPUS_APP_VOIP
+};
+
 /** Core configuration */
 struct config {
 	/** SIP User-Agent */
@@ -238,6 +243,35 @@ struct config {
 		int msInSndCardBuf;
 		int skew;
 	} webrtc;
+
+	struct {
+		bool stereo;
+		bool sprop_stereo;
+
+		bool set_bitrate;
+		uint32_t bitrate;
+
+		bool set_samplerate;
+		uint32_t samplerate;
+
+		bool set_cbr;
+		bool cbr;
+
+		bool set_inband_fec;
+		bool inband_fec;
+
+		bool set_dtx;
+		bool dtx;
+		
+		bool mirror;
+		uint32_t complexity;
+
+		bool set_application;
+		enum e_opus_application application;
+
+		bool set_packet_loss;
+		uint32_t packet_loss;
+	} opus;
 
 	/* Network */
 	struct config_net {

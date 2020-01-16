@@ -20,10 +20,15 @@
  * Configuration options:
  *
  \verbatim
+  opus_stereo        yes     # Request peer to send stereo
+  opus_sprop_stereo  yes     # Sending stereo
   opus_bitrate    128000     # Average bitrate in [bps]
   opus_cbr        {yes,no}   # Constant Bitrate (inverse of VBR)
   opus_inbandfec  {yes,no}   # Enable inband Forward Error Correction (FEC)
   opus_dtx        {yes,no}   # Enable Discontinuous Transmission (DTX)
+  opus_complexity {0-10}     # Encoder's computational complexity (10 max)
+  opus_application {audio, voip} # Encoder's intended application
+  opus_packet_loss {0-100}   # Expected packet loss for FEC
  \endverbatim
  *
  * References:
@@ -39,8 +44,12 @@
 #include <re_dbg.h>
 
 static bool opus_mirror;
-static char fmtp[256] = "stereo=1;sprop-stereo=1";
+static char fmtp[256] = "";
 static char fmtp_mirror[256];
+
+uint32_t opus_complexity = 10;
+opus_int32 opus_application = OPUS_APPLICATION_AUDIO;
+opus_int32 opus_packet_loss = 0;
 
 
 static int opus_fmtp_enc(struct mbuf *mb, const struct sdp_format *fmt,
@@ -66,23 +75,23 @@ static struct aucodec opus = {
 	.srate     = 48000,
 	.crate     = 48000,
 	.ch        = 2,
-	.fmtp      = NULL,
+	.fmtp      = fmtp,
 	.encupdh   = opus_encode_update,
 	.ench      = opus_encode_frm,
 	.decupdh   = opus_decode_update,
 	.dech      = opus_decode_frm,
 	.plch      = opus_decode_pkloss,
-	.fmtp_ench = opus_fmtp_enc,
+	.fmtp_ench = NULL, //opus_fmtp_enc,
 #else
 	// BC does not accept initialization form as above
 	LE_INIT,
 	0,
 	"opus", 48000, 2,
-	NULL,	// fmtp
+	fmtp,
 	opus_encode_update, opus_encode_frm,
 	opus_decode_update, opus_decode_frm,
 	opus_decode_pkloss,
-	opus_fmtp_enc,
+	NULL, //opus_fmtp_enc,
 	NULL
 #endif
 };
@@ -101,55 +110,106 @@ void opus_mirror_params(const char *x)
 
 static int module_init(void)
 {
-	struct conf *conf = conf_cur();
+	//struct conf *conf = conf_cur();
+	const struct config *cfg = conf_config();
 	uint32_t value;
-	char *p = fmtp + str_len(fmtp);
+
+	char *p;
 	bool b;
+	struct pl pl;
 	int n = 0;
-	(void)n;
 
-	if (0 == conf_get_u32(conf, "opus_bitrate", &value)) {
+	memset(fmtp, 0, sizeof(fmtp));
+	memset(fmtp_mirror, 0, sizeof(fmtp_mirror));	
+	p = fmtp + str_len(fmtp);
 
-		n = re_snprintf(p, sizeof(fmtp) - str_len(p),
-				";maxaveragebitrate=%d", value);
+	if (!cfg->opus.stereo || !cfg->opus.sprop_stereo)
+		opus.ch = 1;
+
+	/* always set stereo parameter first */
+	n = re_snprintf(p, sizeof(fmtp) - str_len(p),
+			"stereo=%d;sprop-stereo=%d", cfg->opus.stereo, cfg->opus.sprop_stereo);
+	if (n <= 0)
+		return ENOMEM;
+
+	p += n;
+
+	if (cfg->opus.set_bitrate) {
+		n = re_snprintf(p, sizeof(fmtp) - str_len(p), ";maxaveragebitrate=%d", cfg->opus.bitrate);
+		if (n <= 0)
+			return ENOMEM;
+		p += n;
+	}
+	if (cfg->opus.set_samplerate) {
+        value = cfg->opus.samplerate;
+		if ((value != 8000) && (value != 12000) && (value != 16000) &&
+		    (value != 24000) && (value != 48000)) {
+			DEBUG_WARNING("opus: invalid samplerate: %d\n", value);
+			return EINVAL;
+		}
+		opus.srate = value;
+	}
+
+	if (cfg->opus.set_cbr) {
+
+		n = re_snprintf(p, sizeof(fmtp) - str_len(p), ";cbr=%d", cfg->opus.cbr);
 		if (n <= 0)
 			return ENOMEM;
 
 		p += n;
 	}
 
-	if (0 == conf_get_bool(conf, "opus_cbr", &b)) {
+	if (cfg->opus.set_inband_fec) {
 
 		n = re_snprintf(p, sizeof(fmtp) - str_len(p),
-				";cbr=%d", b);
+				";useinbandfec=%d", (int)cfg->opus.inband_fec);
 		if (n <= 0)
 			return ENOMEM;
 
 		p += n;
 	}
 
-	if (0 == conf_get_bool(conf, "opus_inbandfec", &b)) {
+	if (cfg->opus.set_dtx) {
 
 		n = re_snprintf(p, sizeof(fmtp) - str_len(p),
-				";useinbandfec=%d", b);
+				";usedtx=%d", (int)cfg->opus.dtx);
 		if (n <= 0)
 			return ENOMEM;
 
 		p += n;
 	}
 
-	if (0 == conf_get_bool(conf, "opus_dtx", &b)) {
+	opus_mirror = cfg->opus.mirror;
 
-		n = re_snprintf(p, sizeof(fmtp) - str_len(p),
-				";usedtx=%d", b);
-		if (n <= 0)
-			return ENOMEM;
-
-		p += n;
+	if (opus_mirror) {
+		opus.fmtp = NULL;
+		opus.fmtp_ench = opus_fmtp_enc;
 	}
-    (void)p;
 
-	(void)conf_get_bool(conf, "opus_mirror", &opus_mirror);
+	opus_complexity = cfg->opus.complexity;
+
+	if (opus_complexity > 10)
+		opus_complexity = 10;
+
+	if (cfg->opus.set_application) {
+		if (cfg->opus.application == OPUS_APP_AUDIO)
+			opus_application = OPUS_APPLICATION_AUDIO;
+		else if (cfg->opus.application == OPUS_APP_VOIP)
+			opus_application = OPUS_APPLICATION_VOIP;
+		else {
+			DEBUG_WARNING("opus: unknown encoder application: %r\n",
+					&pl);
+			return EINVAL;
+		}
+	}
+
+	if (cfg->opus.set_packet_loss) {
+        value = cfg->opus.packet_loss;
+		if (value > 100)
+			opus_packet_loss = 100;
+		else
+			opus_packet_loss = value;
+	}
 
 	DEBUG_INFO("opus: fmtp=\"%s\"\n", fmtp);
 

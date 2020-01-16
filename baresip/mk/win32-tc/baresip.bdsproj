@@ -388,7 +388,7 @@
         <FILE FILENAME="..\..\modules\opus\opus.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\opus\opus_decode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus_decode" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\opus\opus_encode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus_encode" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\modules\opus\opus_priv.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="..\..\modules\opus\opus_priv.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\opus\opus_sdp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="opus_sdp" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\softvol\softvol.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="softvol" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\nullaudio\nullaudio.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="nullaudio" FORMNAME="" DESIGNCLASS=""/>

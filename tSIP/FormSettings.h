@@ -22,6 +22,7 @@
 class TfrmAccount;
 class TfrmHotkeys;
 class TfrmPhones;
+class TfrmUaConfOpus;
 
 class TfrmSettings : public TForm
 {
@@ -353,6 +354,7 @@ __published:	// IDE-managed Components
 	TEdit *edUserAgent;
 	TEdit *edFrmMainCustomApplicationTitle;
 	TEdit *edFrmMainCustomCaption;
+	TTabSheet *tsUaConfOpus;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -393,7 +395,8 @@ private:	// User declarations
 	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, int moduleIndex, AnsiString selected);
 	TfrmHotkeys *frmHotkeys;
 	TfrmPhones *frmPhones;
-	std::vector<TTabSheet*> tabs;
+	TfrmUaConfOpus *frmConfOpus;
+	std::vector<TTabSheet*> tabs;	// first level of tabs
 	TTabSheet *lastTab;
 	void AudioCodecEnableSelected(void);
 	void AudioCodecDisableSelected(void);

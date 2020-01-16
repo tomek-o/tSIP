@@ -7,6 +7,7 @@
 #include "FormAccount.h"
 #include "FormHotkeys.h"
 #include "FormPhones.h"
+#include "FormUaConfOpus.h"
 #include "AudioDevicesList.h"
 #include "AudioModules.h"
 #include "ProgrammableButtons.h"
@@ -76,6 +77,10 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	frmPhones = new TfrmPhones(tsPhones);
 	frmPhones->Parent = tsPhones;
 	frmPhones->Visible = true;
+
+	frmUaConfOpus = new TfrmUaConfOpus(tsUaConfOpus);
+	frmUaConfOpus->Parent = tsUaConfOpus;
+	frmUaConfOpus->Visible = true;
 
 	// fill number of columns combobox and widths vleditor according to limit in settings
 	cbSpeedDialSize->Items->Clear();
@@ -389,6 +394,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	frmHotkeys->SetCfg(&tmpSettings.hotKeyConf);
 
 	frmPhones->SetCfg(&tmpSettings.phoneConf);
+
+	frmUaConfOpus->SetCfg(&tmpSettings.uaConf.opus);
 }
 
 void TfrmSettings::UpdateNetworkInterface(void)
@@ -656,6 +663,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onCustomRequestReply = edScriptOnCustomRequestReplyFile->Text;
 
 	tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden = chbShowSettingsIfAnyAccountSettingsIsHidden->Checked;
+
+    frmUaConfOpus->Apply();
 
 	appSettings = tmpSettings;
 	this->Close();	
@@ -984,11 +993,22 @@ void __fastcall TfrmSettings::tvSelectorChange(TObject *Sender, TTreeNode *Node)
 	}
 	if (Node->Selected)
 	{
-		int id = Node->Index;
-		assert(id < tabs.size());
-		lastTab = tabs[id];
-		lastTab->Visible = true;
-    }	
+		if (Node->Parent == NULL)
+		{
+			int id = Node->Index;
+			assert(id < tabs.size());
+			lastTab = tabs[id];
+			lastTab->Visible = true;
+		}
+		else if (Node->Parent->Text == "Codecs")
+		{
+			if (Node->Text == "Opus")
+			{
+				lastTab = tsUaConfOpus;
+				lastTab->Visible = true;
+			}
+		}
+	}
 }
 //---------------------------------------------------------------------------
 

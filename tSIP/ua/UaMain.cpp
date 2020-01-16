@@ -449,6 +449,27 @@ static int app_init(void)
 	cfg->webrtc.msInSndCardBuf = appSettings.uaConf.webrtcAec.msInSndCardBuf;
 	cfg->webrtc.skew = appSettings.uaConf.webrtcAec.skew;
 
+	{
+		const UaConf::Opus &opus = appSettings.uaConf.opus;
+		cfg->opus.stereo = opus.stereo;
+		cfg->opus.sprop_stereo = opus.spropStereo;
+		cfg->opus.set_bitrate = opus.setBitrate;
+		cfg->opus.bitrate = opus.bitrate;
+		cfg->opus.set_samplerate = opus.samplerate;
+		cfg->opus.set_cbr = opus.setCbr;
+		cfg->opus.cbr = opus.cbr;
+		cfg->opus.set_inband_fec = opus.setInbandFec;
+		cfg->opus.inband_fec = opus.inbandFec;
+		cfg->opus.set_dtx = opus.setDtx;
+		cfg->opus.dtx = opus.dtx;
+		cfg->opus.mirror = opus.mirror;
+		cfg->opus.complexity = opus.complexity;
+		cfg->opus.set_application = opus.setApplication;
+		cfg->opus.application = static_cast<e_opus_application>(opus.application);
+		cfg->opus.set_packet_loss = opus.setPacketLoss;
+		cfg->opus.packet_loss = opus.packetLoss;
+	}
+
 	strncpyz(cfg->sip.local, appSettings.uaConf.local.c_str(), sizeof(cfg->sip.local));
 	strncpyz(cfg->net.ifname, appSettings.uaConf.ifname.c_str(), sizeof(cfg->net.ifname));
 

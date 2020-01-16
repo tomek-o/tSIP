@@ -92,7 +92,7 @@ int opus_encode_update(struct auenc_state **aesp, const struct aucodec *ac,
 	aes = *aesp;
 
 	if (!aes) {
-		const opus_int32 complex = 10;
+		const opus_int32 complex = opus_complexity;
 		int opuserr;
 
 		aes = mem_zalloc(sizeof(*aes), destructor);
@@ -102,8 +102,7 @@ int opus_encode_update(struct auenc_state **aesp, const struct aucodec *ac,
 		aes->ch = ac->ch;
 
 		aes->enc = opus_encoder_create(ac->srate, ac->ch,
-					       /* this has big impact on cpu */
-					       OPUS_APPLICATION_AUDIO,
+					       opus_application,
 					       &opuserr);
 		if (!aes->enc) {
 			DEBUG_WARNING("opus: encoder create: %s\n",
@@ -136,7 +135,11 @@ int opus_encode_update(struct auenc_state **aesp, const struct aucodec *ac,
 
 	fch = prm.stereo ? OPUS_AUTO : 1;
 	vbr = prm.cbr ? 0 : 1;
-
+#if 0
+	/* override local bitrate */
+	if (param && param->bitrate)
+		prm.bitrate = param->bitrate;
+#endif
 	(void)opus_encoder_ctl(aes->enc,
 			       OPUS_SET_MAX_BANDWIDTH(srate2bw(prm.srate)));
 	(void)opus_encoder_ctl(aes->enc, OPUS_SET_BITRATE(prm.bitrate));
@@ -145,6 +148,10 @@ int opus_encode_update(struct auenc_state **aesp, const struct aucodec *ac,
 	(void)opus_encoder_ctl(aes->enc, OPUS_SET_INBAND_FEC(prm.inband_fec));
 	(void)opus_encoder_ctl(aes->enc, OPUS_SET_DTX(prm.dtx));
 
+	if (opus_packet_loss) {
+		opus_encoder_ctl(aes->enc,
+				 OPUS_SET_PACKET_LOSS_PERC(opus_packet_loss));
+	}
 
 #if 0
 	{

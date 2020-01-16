@@ -48,17 +48,18 @@ object frmSettings: TfrmSettings
     end
   end
   object pcGeneral: TPageControl
-    Left = 117
+    Left = 118
     Top = 0
-    Width = 548
+    Width = 547
     Height = 392
-    ActivePage = tsBranding
+    ActivePage = tsUaConfOpus
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
     object tsGeneral: TTabSheet
       Caption = 'General'
+      ExplicitWidth = 540
       object lblGuiScaling: TLabel
         Left = 3
         Top = 143
@@ -170,6 +171,7 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
+      ExplicitWidth = 540
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -324,14 +326,16 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
+      ExplicitWidth = 540
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 341
-        Width = 540
+        Width = 539
         Height = 31
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 540
         object btnAddAccount: TButton
           Left = 464
           Top = 4
@@ -354,15 +358,17 @@ object frmSettings: TfrmSettings
       object scrbAccounts: TScrollBox
         Left = 0
         Top = 0
-        Width = 540
+        Width = 539
         Height = 341
         Align = alClient
         TabOrder = 1
+        ExplicitWidth = 540
       end
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
+      ExplicitWidth = 540
       object lblSpeedDial: TLabel
         Left = 3
         Top = 3
@@ -479,6 +485,7 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
+      ExplicitWidth = 540
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -611,6 +618,7 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
+      ExplicitWidth = 540
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -639,6 +647,7 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
+      ExplicitWidth = 540
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -717,8 +726,7 @@ object frmSettings: TfrmSettings
     object tsBranding: TTabSheet
       Caption = 'Branding'
       ImageIndex = 20
-      ExplicitLeft = 6
-      ExplicitTop = 20
+      ExplicitWidth = 540
       object lblDialpadBackgroundImage: TLabel
         Left = 2
         Top = 5
@@ -851,6 +859,7 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
+      ExplicitWidth = 540
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1062,6 +1071,7 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
+      ExplicitWidth = 540
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -1317,6 +1327,7 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
+      ExplicitWidth = 540
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -1499,6 +1510,7 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
+      ExplicitWidth = 540
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -1632,6 +1644,7 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
+      ExplicitWidth = 540
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -1692,6 +1705,7 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
+      ExplicitWidth = 540
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -1806,10 +1820,12 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
+      ExplicitWidth = 540
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
+      ExplicitWidth = 540
       object lblContactPopup: TLabel
         Left = 7
         Top = 7
@@ -1884,6 +1900,7 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
+      ExplicitWidth = 540
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -1940,10 +1957,12 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Phones'
       ImageIndex = 13
+      ExplicitWidth = 540
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
+      ExplicitWidth = 540
       object lblTrayNotifierBackgroundImage: TLabel
         Left = 3
         Top = 72
@@ -2034,6 +2053,7 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
+      ExplicitWidth = 540
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -2783,6 +2803,7 @@ object frmSettings: TfrmSettings
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
+      ExplicitWidth = 540
       object lblUiCapacity: TLabel
         Left = 5
         Top = 122
@@ -2902,11 +2923,15 @@ object frmSettings: TfrmSettings
         OnClick = btnLoggingConsoleFontSelectClick
       end
     end
+    object tsUaConfOpus: TTabSheet
+      Caption = 'Opus'
+      ImageIndex = 21
+    end
   end
   object tvSelector: TTreeView
     Left = 0
     Top = 0
-    Width = 117
+    Width = 118
     Height = 392
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
@@ -2919,7 +2944,6 @@ object frmSettings: TfrmSettings
     ParentFont = False
     ReadOnly = True
     RowSelect = True
-    ShowRoot = False
     TabOrder = 0
     OnChange = tvSelectorChange
     Items.NodeData = {
@@ -2941,20 +2965,20 @@ object frmSettings: TfrmSettings
       69006F002000500072006F00630065007300730069006E0067002B0000000000
       000000000000FFFFFFFFFFFFFFFF0000000000000000095200650063006F0072
       00640069006E006700250000000000000000000000FFFFFFFFFFFFFFFF000000
-      00000000000643006F0064006500630073002F0000000000000000000000FFFF
-      FFFFFFFFFFFF00000000000000000B49006E0074006500670072006100740069
-      006F006E00270000000000000000000000FFFFFFFFFFFFFFFF00000000000000
-      000748006F0074006B00650079007300290000000000000000000000FFFFFFFF
-      FFFFFFFF00000000000000000843006F006E0074006100630074007300270000
-      000000000000000000FFFFFFFFFFFFFFFF000000000000000007480069007300
-      74006F0072007900390000000000000000000000FFFFFFFFFFFFFFFF00000000
-      0000000010500068006F006E00650073002000280070006C007500670069006E
-      0073002900330000000000000000000000FFFFFFFFFFFFFFFF00000000000000
-      000D540072006100790020004E006F0074006900660069006500720027000000
-      0000000000000000FFFFFFFFFFFFFFFF00000000000000000753006300720069
-      00700074007300270000000000000000000000FFFFFFFFFFFFFFFF0000000000
-      000000074C006F006700670069006E006700}
-    ExplicitLeft = 1
+      00010000000643006F006400650063007300210000000000000000000000FFFF
+      FFFFFFFFFFFF0000000000000000044F007000750073002F0000000000000000
+      000000FFFFFFFFFFFFFFFF00000000000000000B49006E007400650067007200
+      6100740069006F006E00270000000000000000000000FFFFFFFFFFFFFFFF0000
+      0000000000000748006F0074006B006500790073002900000000000000000000
+      00FFFFFFFFFFFFFFFF00000000000000000843006F006E007400610063007400
+      7300270000000000000000000000FFFFFFFFFFFFFFFF00000000000000000748
+      006900730074006F0072007900390000000000000000000000FFFFFFFFFFFFFF
+      FF000000000000000010500068006F006E00650073002000280070006C007500
+      670069006E0073002900330000000000000000000000FFFFFFFFFFFFFFFF0000
+      0000000000000D540072006100790020004E006F007400690066006900650072
+      00270000000000000000000000FFFFFFFFFFFFFFFF0000000000000000075300
+      630072006900700074007300270000000000000000000000FFFFFFFFFFFFFFFF
+      0000000000000000074C006F006700670069006E006700}
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

@@ -12,6 +12,8 @@
 
 #include "AudioModules.h"
 
+#include <stdint.h>
+
 class UaConf
 {
 public:
@@ -313,6 +315,85 @@ public:
 		}
 	} webrtcAec;
 
+	struct Opus {
+		bool stereo;
+		bool spropStereo;
+
+		bool setBitrate;
+		uint32_t bitrate;
+
+		bool setSamplerate;
+		uint32_t samplerate;
+
+		bool setCbr;
+		bool cbr;
+
+		bool setInbandFec;
+		bool inbandFec;
+
+		bool setDtx;
+		bool dtx;
+
+		bool mirror;
+		uint32_t complexity;
+
+		bool setApplication;
+		int application;
+
+		bool setPacketLoss;
+		uint32_t packetLoss;
+
+		bool operator==(const UaConf::Opus& right) const {
+			if (
+				stereo == right.stereo &&
+				spropStereo == right.spropStereo &&
+				setBitrate == right.setBitrate &&
+				bitrate == right.bitrate &&
+				setSamplerate == right.setSamplerate &&
+				samplerate == right.samplerate &&
+				setCbr == right.setCbr &&
+				cbr == right.cbr &&
+				setInbandFec == right.setInbandFec &&
+				inbandFec == right.inbandFec &&
+				setDtx == right.setDtx &&
+				dtx == right.dtx &&
+				mirror == right.mirror &&
+				complexity == right.complexity &&
+				setApplication == right.setApplication &&
+				application == right.application &&
+				setPacketLoss == right.setPacketLoss &&
+				packetLoss == right.packetLoss
+				)
+				return true;
+			return false;
+		}
+		bool operator!=(const UaConf::Opus& right) const {
+			return !(*this == right);
+		}
+		Opus(void):
+			stereo(true),
+			spropStereo(true),
+			setBitrate(false),
+			bitrate(64000),
+			setSamplerate(false),
+			samplerate(48000),
+			setCbr(false),
+			cbr(false),
+			setInbandFec(false),
+			inbandFec(false),
+			setDtx(false),
+			dtx(false),
+			mirror(false),
+			complexity(10),
+			setApplication(false),
+			application(0),
+			setPacketLoss(false),
+			packetLoss(10)
+		{
+		}
+	} opus;
+
+
 	std::string local;
 	std::string ifname;	///< baresip config_net.ifname
 
@@ -452,6 +533,10 @@ public:
 		if (audioPreprocTx != right.audioPreprocTx)
 			return false;
 		if (aec != right.aec)
+			return false;
+		if (webrtcAec != right.webrtcAec)
+			return false;
+		if (opus != right.opus)
 			return false;
 		if (local != right.local)
 			return false;

@@ -348,6 +348,29 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			uaConf.webrtcAec.skew = webrtcAec.get("skew", uaConf.webrtcAec.skew).asInt();
 		}
 
+		{
+			const Json::Value &jv = uaConfJson["opus"];
+			UaConf::Opus &opus = uaConf.opus;
+			jv.getBool("stereo", opus.stereo);
+			jv.getBool("spropStereo", opus.spropStereo);
+			jv.getBool("setBitrate", opus.setBitrate);
+			jv.getUInt("bitrate", opus.bitrate);
+			jv.getBool("setSamplerate", opus.setSamplerate);
+			jv.getUInt("samplerate", opus.samplerate);
+			jv.getBool("setCbr", opus.setCbr);
+			jv.getBool("cbr", opus.cbr);
+			jv.getBool("setInbandFec", opus.setInbandFec);
+			jv.getBool("inbandFec", opus.inbandFec);
+			jv.getBool("setDtx", opus.setDtx);
+			jv.getBool("dtx", opus.dtx);
+			jv.getBool("mirror", opus.mirror);
+			jv.getUInt("complexity", opus.complexity);
+			jv.getBool("setApplication", opus.setApplication);
+			jv.getInt("application", opus.application);
+			jv.getBool("setPacketLoss", opus.setPacketLoss);
+			jv.getUInt("packetLoss", opus.packetLoss);
+		}
+
 		uaConf.logMessages = uaConfJson.get("logMessages", uaConf.logMessages).asBool();
 		uaConf.local = uaConfJson.get("localAddress", uaConf.local).asString();
 		uaConf.ifname = uaConfJson.get("ifName", uaConf.ifname).asString();
@@ -1047,6 +1070,29 @@ int Settings::Write(AnsiString asFileName)
 
 	root["uaConf"]["webrtcAec"]["msInSndCardBuf"] = uaConf.webrtcAec.msInSndCardBuf;
 	root["uaConf"]["webrtcAec"]["skew"] = uaConf.webrtcAec.skew;
+
+	{
+		Json::Value &jv = root["uaConf"]["opus"];
+		const UaConf::Opus &opus = uaConf.opus;
+		jv["stereo"] = opus.stereo;
+		jv["spropStereo"] =  opus.spropStereo;
+		jv["setBitrate"] = opus.setBitrate;
+		jv["bitrate"] = opus.bitrate;
+		jv["setSamplerate"] = opus.setSamplerate;
+		jv["samplerate"] = opus.samplerate;
+		jv["setCbr"] = opus.setCbr;
+		jv["cbr"] = opus.cbr;
+		jv["setInbandFec"] = opus.setInbandFec;
+		jv["inbandFec"] = opus.inbandFec;
+		jv["setDtx"] = opus.setDtx;
+		jv["dtx"] = opus.dtx;
+		jv["mirror"] = opus.mirror;
+		jv["complexity"] = opus.complexity;
+		jv["setApplication"] = opus.setApplication;
+		jv["application"] = opus.application;
+		jv["setPacketLoss"] = opus.setPacketLoss;
+		jv["packetLoss"] = opus.packetLoss;
+	}
 
 	// write accounts
 	for (unsigned int i=0; i<uaConf.accounts.size(); i++)
