@@ -183,6 +183,7 @@ void aubuf_read(struct aubuf *ab, uint8_t *p, size_t sz)
 
 	lock_write_get(ab->lock);
 
+
 	if (ab->cur_sz < (ab->filling ? ab->wish_sz : sz)) {
 #if AUBUF_DEBUG
 		if (!ab->filling) {
@@ -341,6 +342,16 @@ size_t aubuf_cur_size(const struct aubuf *ab)
 	lock_rel(ab->lock);
 
 	return sz;
+}
+
+void aubuf_stop_buffering(struct aubuf *ab)
+{
+	if (!ab)
+		return;
+	lock_write_get(ab->lock);
+	ab->filling = false;
+	ab->wish_sz = 0;
+	lock_rel(ab->lock);
 }
 
 int aubuf_get_samp(struct aubuf *ab, uint32_t ptime,

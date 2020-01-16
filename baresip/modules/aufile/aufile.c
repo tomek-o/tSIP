@@ -233,6 +233,7 @@ static int read_file(struct ausrc_st *st)
 
 		if (mb->end == 0) {
 			DEBUG_INFO("aufile: end of file\n");
+			aubuf_stop_buffering(st->aubuf);
 			break;
 		}
 
@@ -313,7 +314,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	     prm->srate * prm->ch * 40);
 
 	/* 1 - inf seconds of audio */
-	err = aubuf_alloc(&st->aubuf, prm->srate * prm->ch * 2, 0);
+	err = aubuf_alloc(&st->aubuf, fprm.srate * prm->ch * 2, 0);
 	if (err)
 		goto out;
 

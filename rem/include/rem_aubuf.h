@@ -14,6 +14,10 @@ int  aubuf_get(struct aubuf *ab, uint32_t ptime, uint8_t *p, size_t sz);
 void aubuf_flush(struct aubuf *ab);
 int  aubuf_debug(struct re_printf *pf, const struct aubuf *ab);
 size_t aubuf_cur_size(const struct aubuf *ab);
+/** \brief Notify aubuf that buffering should stop, resetting min_sz
+*/
+void aubuf_stop_buffering(struct aubuf *ab);
+
 
 
 static inline int aubuf_write_samp(struct aubuf *ab, const int16_t *sampv,
