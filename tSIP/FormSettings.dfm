@@ -48,18 +48,20 @@ object frmSettings: TfrmSettings
     end
   end
   object pcGeneral: TPageControl
-    Left = 118
+    Left = 121
     Top = 0
-    Width = 547
+    Width = 544
     Height = 392
-    ActivePage = tsUaConfOpus
+    ActivePage = tsScripts
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
+    ExplicitLeft = 118
+    ExplicitWidth = 547
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblGuiScaling: TLabel
         Left = 3
         Top = 143
@@ -171,7 +173,7 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -326,16 +328,16 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 341
-        Width = 539
+        Width = 536
         Height = 31
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 540
+        ExplicitWidth = 539
         object btnAddAccount: TButton
           Left = 464
           Top = 4
@@ -358,17 +360,17 @@ object frmSettings: TfrmSettings
       object scrbAccounts: TScrollBox
         Left = 0
         Top = 0
-        Width = 539
+        Width = 536
         Height = 341
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 540
+        ExplicitWidth = 539
       end
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblSpeedDial: TLabel
         Left = 3
         Top = 3
@@ -485,7 +487,7 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -618,7 +620,7 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -647,7 +649,7 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -726,7 +728,7 @@ object frmSettings: TfrmSettings
     object tsBranding: TTabSheet
       Caption = 'Branding'
       ImageIndex = 20
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblDialpadBackgroundImage: TLabel
         Left = 2
         Top = 5
@@ -859,7 +861,7 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1071,7 +1073,7 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -1327,7 +1329,7 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -1510,7 +1512,7 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -1644,7 +1646,7 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -1705,7 +1707,7 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -1820,12 +1822,12 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
-      ExplicitWidth = 540
+      ExplicitWidth = 539
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblContactPopup: TLabel
         Left = 7
         Top = 7
@@ -1900,7 +1902,7 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -1957,12 +1959,12 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Phones'
       ImageIndex = 13
-      ExplicitWidth = 540
+      ExplicitWidth = 539
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblTrayNotifierBackgroundImage: TLabel
         Left = 3
         Top = 72
@@ -2053,7 +2055,7 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -2803,7 +2805,7 @@ object frmSettings: TfrmSettings
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitWidth = 540
+      ExplicitWidth = 539
       object lblUiCapacity: TLabel
         Left = 5
         Top = 122
@@ -2926,12 +2928,13 @@ object frmSettings: TfrmSettings
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'
       ImageIndex = 21
+      ExplicitWidth = 539
     end
   end
   object tvSelector: TTreeView
     Left = 0
     Top = 0
-    Width = 118
+    Width = 121
     Height = 392
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
