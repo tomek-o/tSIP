@@ -15,7 +15,11 @@
 #include <re_uri.h>
 #include <re_udp.h>
 #include <re_sip.h>
+
+#define DEBUG_MODULE "sip_msg"
+#define DEBUG_LEVEL 5
 #include <re_dbg.h>
+
 #include "sip.h"
 
 
