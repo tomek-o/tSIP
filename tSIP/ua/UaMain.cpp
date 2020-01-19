@@ -541,7 +541,40 @@ static int app_init(void)
 
 static int app_start(void)
 {
-    int n;
+	int n;
+	struct pl modname;
+
+	AnsiString dllPath;
+	dllPath.sprintf("%s\\modules", Paths::GetProfileDir().c_str());
+	struct pl plDllPath;
+	pl_set_str(&plDllPath, dllPath.c_str());	
+	LOG("Loading module dlls...\n");
+	WIN32_FIND_DATA file;
+	AnsiString asSrchPath = dllPath + "\\*.dll";
+	HANDLE hFind = FindFirstFile(asSrchPath.c_str(), &file);
+	int hasfiles = (hFind != INVALID_HANDLE_VALUE);
+
+	while (hasfiles)
+	{
+		LOG("Loading %s\n", file.cFileName);
+		AnsiString name = ExtractFileName(file.cFileName);
+	#if 0
+		AnsiString filename = /*dir + */ file.cFileName;
+		if(VerifyDll(filename, &dllinfo) == E_OK)
+		{
+			AddDll(dllinfo);
+		}
+		else
+		{
+			LOG("Library %s not loaded\n", filename.c_str());
+		}
+	#endif		
+		pl_set_str(&modname, name.c_str());
+		load_module_dynamic(NULL, &plDllPath, &modname);
+		hasfiles = FindNextFile(hFind, &file);
+	}
+	FindClose(hFind);
+
 	app.n_uas = 0;
 	for (int i=0; i<appSettings.uaConf.accounts.size(); i++)
 	{
@@ -655,47 +688,12 @@ static int app_start(void)
 	}
 
 	// contact list must be initialized here
-	struct pl modname;
 	pl_set_str(&modname, "dialog-info");
 	load_module2(NULL, &modname);
 
 	// contact list must be initialized here
 	pl_set_str(&modname, "presence");
 	load_module2(NULL, &modname);
-
-
-	AnsiString dllPath;
-	dllPath.sprintf("%s\\modules", Paths::GetProfileDir().c_str());
-	struct pl plDllPath;
-	pl_set_str(&plDllPath, dllPath.c_str());
-
-	LOG("Loading module dlls...\n");
-	WIN32_FIND_DATA file;
-	AnsiString asSrchPath = dllPath + "\\*.dll";
-	HANDLE hFind = FindFirstFile(asSrchPath.c_str(), &file);
-	int hasfiles = (hFind != INVALID_HANDLE_VALUE);
-
-	while (hasfiles)
-	{
-		LOG("Loading %s\n", file.cFileName);
-		AnsiString name = ExtractFileName(file.cFileName);
-	#if 0
-		AnsiString filename = /*dir + */ file.cFileName;
-		if(VerifyDll(filename, &dllinfo) == E_OK)
-		{
-			AddDll(dllinfo);
-		}
-		else
-		{
-			LOG("Library %s not loaded\n", filename.c_str());
-		}
-	#endif		
-		pl_set_str(&modname, name.c_str());
-		load_module_dynamic(NULL, &plDllPath, &modname);
-		hasfiles = FindNextFile(hFind, &file);
-	}
-	FindClose(hFind);
-
 
 	n = list_count(aucodec_list());
 	LOG("Populated %u audio codec%s\n", n, 1==n?"":"s");
