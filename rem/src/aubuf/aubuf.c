@@ -8,7 +8,7 @@
 #include <rem_aubuf.h>
 
 
-#define AUBUF_DEBUG 0
+#define AUBUF_DEBUG 1
 
 
 /** Locked audio-buffer with almost zero-copy */
@@ -352,6 +352,19 @@ void aubuf_stop_buffering(struct aubuf *ab)
 	ab->filling = false;
 	ab->wish_sz = 0;
 	lock_rel(ab->lock);
+}
+
+int aubuf_write_samp(struct aubuf *ab, const int16_t *sampv,
+				   size_t sampc)
+{
+	return aubuf_write(ab, (const uint8_t *)sampv, sampc * 2);
+}
+
+
+void aubuf_read_samp(struct aubuf *ab, int16_t *sampv,
+				   size_t sampc)
+{
+	aubuf_read(ab, (uint8_t *)sampv, sampc * 2);
 }
 
 int aubuf_get_samp(struct aubuf *ab, uint32_t ptime,

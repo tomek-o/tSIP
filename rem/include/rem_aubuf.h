@@ -20,18 +20,13 @@ void aubuf_stop_buffering(struct aubuf *ab);
 
 
 
-static inline int aubuf_write_samp(struct aubuf *ab, const int16_t *sampv,
-				   size_t sampc)
-{
-	return aubuf_write(ab, (const uint8_t *)sampv, sampc * 2);
-}
+// changed to non-inline to fight with TC++ bugs
+int aubuf_write_samp(struct aubuf *ab, const int16_t *sampv,
+				   size_t sampc);
 
-
-static inline void aubuf_read_samp(struct aubuf *ab, int16_t *sampv,
-				   size_t sampc)
-{
-	aubuf_read(ab, (uint8_t *)sampv, sampc * 2);
-}
+// changed to non-inline to fight with TC++ bugs
+void aubuf_read_samp(struct aubuf *ab, int16_t *sampv,
+				   size_t sampc);
 
 // changed to non-inline to fight with TC++ bugs
 int aubuf_get_samp(struct aubuf *ab, uint32_t ptime,
