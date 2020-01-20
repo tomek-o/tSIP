@@ -120,7 +120,7 @@ DWORD WINAPI play_thread(LPVOID arg)
 		Sleep(4);	// too imprecise under Windows on low-end PC (Atom N270, Windows Embedded, 10ms frame time, 3 calls at once)
 	#else
 		/* Set timer properties */
-		li.QuadPart = -40000;	/* negative value = relative time; unit = 100 ns */
+		li.QuadPart = -20000;	/* negative value = relative time; unit = 100 ns */
 		if(!SetWaitableTimer(timer, &li, 0, NULL, NULL, FALSE)){
 			DEBUG_WARNING("Error setting waitable timer!\n");
 			break;
