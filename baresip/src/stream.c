@@ -115,10 +115,6 @@ static void check_rtp_handler(void *arg)
 
 			stream_close(strm, ETIMEDOUT);
 		}
-
-
-
-
 	}
 	else {
 		re_printf("check_rtp: not checking (dir=%s)\n",
@@ -179,6 +175,14 @@ static void rtp_recv(const struct sa *src, const struct rtp_header *hdr,
 
 	if (!(sdp_media_ldir(s->sdp) & SDP_RECVONLY))
 		return;
+
+#if 0
+	{
+		char buf[64];
+		/* debugging exact timing of read handler calls */
+		(void)re_printf("[%s] rtp_recv\n", sys_time(buf, sizeof(buf)));
+	}
+#endif
 
 	++s->stats.n_rx;
 	s->stats.b_rx += mbuf_get_left(mb);

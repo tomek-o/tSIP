@@ -392,6 +392,14 @@ static bool auplay_write_handler(uint8_t *buf, size_t sz, void *arg)
 	struct audio *a = arg;
 	struct aurx *rx = &a->rx;
 
+#if 0
+	{
+		char buf[64];
+		/* debugging exact timing of read handler calls */
+		(void)re_printf("[%s] auplay %u\n", sys_time(buf, sizeof(buf)), sz);
+	}
+#endif
+
 	aubuf_read(rx->ab, buf, sz);
 
 	return true;
