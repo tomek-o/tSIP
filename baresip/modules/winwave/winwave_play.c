@@ -158,7 +158,7 @@ static unsigned int find_dev(const char* dev) {
 }
 
 static int write_stream_open(unsigned int dev, struct auplay_st *st,
-			     const struct auplay_prm *prm)
+				 const struct auplay_prm *prm)
 {
 	WAVEFORMATEX wfmt;
 	MMRESULT res;
@@ -171,8 +171,15 @@ static int write_stream_open(unsigned int dev, struct auplay_st *st,
 	st->closed = false;
 
 	for (i = 0; i < WRITE_BUFFERS; i++) {
+		uint32_t size = prm->frame_size;
+		/* Keep audio buffer size more or less consistent regardless of frame size */
+		if (prm->srate / size >= 200) {
+			size *= 4;
+		} else if (prm->srate / size >= 100) {
+			size *= 2;
+		}
 		memset(&st->bufs[i].wh, 0, sizeof(WAVEHDR));
-		st->bufs[i].mb = mbuf_alloc(2 * prm->frame_size);
+		st->bufs[i].mb = mbuf_alloc(2 * size);
 	}
 
 	wfmt.wFormatTag      = WAVE_FORMAT_PCM;
@@ -224,7 +231,7 @@ int winwave_play_alloc(struct auplay_st **stp, struct auplay *ap,
 	/* The write runs at 100ms intervals
 	 * prepare enough buffers to suite its needs
 	 */
-	for (i = 0; i < 5; i++)
+	for (i = 0; i < WRITE_BUFFERS; i++)
 		dsp_write(st);
 
  out:
