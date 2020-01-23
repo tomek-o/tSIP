@@ -45,6 +45,7 @@
 #include "Troubleshooting.h"
 #include "FormTroubleshooting.h"
 #include "SIMPLE_Messages.h"
+#include "Globals.h"
 #include "common\Utilities.h"
 #include "common\ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -58,10 +59,6 @@
 TfrmMain *frmMain;
 
 namespace {
-	History history;
-	Contacts contacts;
-	HotKeys hotKeys;
-	ProgrammableButtons buttons;
 	AnsiString asTransferHint = "Transfer to ... [Enter]";
 	bool useOwnTrayIcon = false;
 	unsigned int audioErrorCount;
