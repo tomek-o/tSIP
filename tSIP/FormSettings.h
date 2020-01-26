@@ -355,6 +355,7 @@ __published:	// IDE-managed Components
 	TEdit *edFrmMainCustomApplicationTitle;
 	TEdit *edFrmMainCustomCaption;
 	TTabSheet *tsUaConfOpus;
+	TCheckBox *chbLogAubuf;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

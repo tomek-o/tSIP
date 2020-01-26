@@ -7,8 +7,7 @@
 #include <string.h>
 #include <rem_aubuf.h>
 
-
-#define AUBUF_DEBUG 1
+static bool debug_enabled = false;
 
 
 /** Locked audio-buffer with almost zero-copy */
@@ -21,12 +20,10 @@ struct aubuf {
 	bool filling;
 	uint64_t ts;
 
-#if AUBUF_DEBUG
 	struct {
 		size_t or;
 		size_t ur;
 	} stats;
-#endif
 };
 
 
@@ -120,11 +117,11 @@ int aubuf_append(struct aubuf *ab, struct mbuf *mb)
 	ab->cur_sz += mbuf_get_left(mb);
 
 	if (ab->max_sz && ab->cur_sz > ab->max_sz) {
-#if AUBUF_DEBUG
-		++ab->stats.or;
-		(void)re_printf("aubuf: %p overrun (cur=%zu)\n",
+		if (debug_enabled) {
+			++ab->stats.or;
+			(void)re_printf("aubuf: %p overrun (cur=%zu)\n",
 				ab, ab->cur_sz);
-#endif
+		}
 		af = list_ledata(ab->afl.head);
 		if (af) {
 			ab->cur_sz -= mbuf_get_left(af->mb);
@@ -185,13 +182,13 @@ void aubuf_read(struct aubuf *ab, uint8_t *p, size_t sz)
 
 
 	if (ab->cur_sz < (ab->filling ? ab->wish_sz : sz)) {
-#if AUBUF_DEBUG
-		if (!ab->filling) {
-			++ab->stats.ur;
-			(void)re_printf("aubuf: %p underrun (cur=%zu)\n",
-					ab, ab->cur_sz);
+		if (debug_enabled) {
+			if (!ab->filling) {
+				++ab->stats.ur;
+				(void)re_printf("aubuf: %p underrun (cur=%zu)\n",
+						ab, ab->cur_sz);
+			}
 		}
-#endif
 		ab->filling = true;
 		memset(p, 0, sz);
 		goto out;
@@ -312,10 +309,10 @@ int aubuf_debug(struct re_printf *pf, const struct aubuf *ab)
 	err = re_hprintf(pf, "wish_sz=%zu cur_sz=%zu filling=%d",
 			 ab->wish_sz, ab->cur_sz, ab->filling);
 
-#if AUBUF_DEBUG
-	err |= re_hprintf(pf, " [overrun=%zu underrun=%zu]",
+	if (debug_enabled) {
+		err |= re_hprintf(pf, " [overrun=%zu underrun=%zu]",
 			  ab->stats.or, ab->stats.ur);
-#endif
+	}
 
 	lock_rel(ab->lock);
 
@@ -353,6 +350,12 @@ void aubuf_stop_buffering(struct aubuf *ab)
 	ab->wish_sz = 0;
 	lock_rel(ab->lock);
 }
+
+void aubuf_debug_enable(bool state)
+{
+	debug_enabled = state;
+}
+
 
 int aubuf_write_samp(struct aubuf *ab, const int16_t *sampv,
 				   size_t sampc)

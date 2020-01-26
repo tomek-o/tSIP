@@ -152,6 +152,7 @@ public:
 	std::vector<Contact> contacts;
 
 	bool logMessages;
+	bool logAubuf;
 
 	struct AudioCfg {
 		enum { MAX_MOD_LENGTH = 32 };
@@ -483,6 +484,7 @@ public:
 	UaConf() {
 		aec = AEC_NONE;
 		logMessages = false;
+		logAubuf = false;
 		autoAnswer = false;
 		autoAnswerCode = 200;
 		autoAnswerDelayMin = 0;

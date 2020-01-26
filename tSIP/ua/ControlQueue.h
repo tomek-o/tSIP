@@ -25,6 +25,7 @@ public:
 	void Mute(int callId, bool state);
 	void Hangup(int callId, int code=0);
 	void SetMsgLogging(bool enabled);
+	void SetAubufLogging(bool enabled);	
 	void ReRegister(int accountId);
 	void UnRegister(int accountId);
 	void StartRing(AnsiString wavFile);

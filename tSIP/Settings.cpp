@@ -372,6 +372,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		}
 
 		uaConf.logMessages = uaConfJson.get("logMessages", uaConf.logMessages).asBool();
+        uaConfJson.getBool("logAubuf", uaConf.logAubuf);
 		uaConf.local = uaConfJson.get("localAddress", uaConf.local).asString();
 		uaConf.ifname = uaConfJson.get("ifName", uaConf.ifname).asString();
 
@@ -1045,6 +1046,7 @@ int Settings::Write(AnsiString asFileName)
 
 	root["uaConf"]["aec"] = uaConf.aec;
 	root["uaConf"]["logMessages"] = uaConf.logMessages;
+	root["uaConf"]["logAubuf"] = uaConf.logAubuf;	
 	
 	root["uaConf"]["localAddress"] = uaConf.local;
 	root["uaConf"]["ifName"] = uaConf.ifname;

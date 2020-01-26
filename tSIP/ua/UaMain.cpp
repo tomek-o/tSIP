@@ -12,6 +12,7 @@
 #include "Settings.h"
 #include "Paths.h"
 #include <re.h>
+#include <rem.h>
 #include "baresip.h"
 #include "Log.h"
 #include "common\Utilities.h"
@@ -514,6 +515,8 @@ static int app_init(void)
 	if (err)
 		return err;
 
+	aubuf_debug_enable(appSettings.uaConf.logAubuf);
+
 	uag_event_register(ua_event_handler, NULL);
 
 	sipevent_reset_unsolicited_handlers();
@@ -849,6 +852,9 @@ extern "C" void control_handler(void)
 		break;
 	case Command::SET_MSG_LOGGING:
 		ua_log_messages(cmd.bEnabled);
+		break;
+	case Command::SET_AUBUF_LOGGING:
+		aubuf_debug_enable(cmd.bEnabled);
 		break;
 	case Command::REREGISTER: {
 		struct ua* ua = ua_cur();

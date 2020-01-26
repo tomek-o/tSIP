@@ -160,6 +160,17 @@ void ControlQueue::SetMsgLogging(bool enabled)
 	fifo.push();
 }
 
+void ControlQueue::SetAubufLogging(bool enabled)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::SET_AUBUF_LOGGING;
+	cmd->bEnabled = enabled;
+	fifo.push();
+}
+
 void ControlQueue::Hangup(int callId, int code)
 {
 	ScopedLock<Mutex> lock(mutex);

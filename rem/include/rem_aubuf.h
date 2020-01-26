@@ -17,6 +17,9 @@ size_t aubuf_cur_size(const struct aubuf *ab);
 /** \brief Notify aubuf that buffering should stop, resetting min_sz
 */
 void aubuf_stop_buffering(struct aubuf *ab);
+/** \brief Enable/disable additional debug logs
+*/
+void aubuf_debug_enable(bool state);
 
 
 

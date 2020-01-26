@@ -417,6 +417,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	{
 		UA->SetMsgLogging(appSettings.uaConf.logMessages);
 	}
+	if (appSettings.uaConf.logAubuf != prev.uaConf.logAubuf)
+	{
+    	UA->SetAubufLogging(appSettings.uaConf.logAubuf);
+	}
 	if (appSettings.frmMain.bKioskMode != prev.frmMain.bKioskMode)
 	{
 		SetKioskMode(appSettings.frmMain.bKioskMode);
