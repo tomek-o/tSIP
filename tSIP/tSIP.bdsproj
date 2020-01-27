@@ -478,8 +478,8 @@
           <VersionInfo Name="AutoIncBuild">False</VersionInfo>
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
-          <VersionInfo Name="Release">70</VersionInfo>
-          <VersionInfo Name="Build">6</VersionInfo>
+          <VersionInfo Name="Release">71</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -491,7 +491,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.70.6</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.71.0</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

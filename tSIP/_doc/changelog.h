@@ -758,6 +758,21 @@ Version 0.1.69
     - added portaudio suggestedLatency settings
     - FIXED: problem with tray notifier not closing when application was minimized
     - FIXED: wrong call history entry on outgoing unanswered call if PAI was used
-    - added very basic support for call messaging
+	- added very basic support for call messaging
+
+ Version 0.1.71
+	- using ofNoChangeDir for open/save dialogs, disabled ofHideReadOnly for open dialogs
+	- Lua: added GetAudioErrorCount() function, returning counter incremented when audio file ends
+	- Lua: added GetAudioRxSignalLevel() function
+	- added "Lenny" example
+	- extracting number from PAI also on outgoing calls
+	- added button opening script editor for programmable button edit window
+	- settings window: separed few items from "General" to "Branding" tab
+	- added Opus codec
+	- FIXED: no playback for short aufile files
+	- winwave play: trying to keep audio frame size more consistent
+	- moved dynamic modules loading before account initialization (fixing problem with G729.dll)
+	- added option enabling additional aubuf debugging logs
+	- Lua: added ReadContacts() functions, re-reading whole phonebook from JSON file
 */
 
