@@ -572,10 +572,13 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		return;
 	}
 
-	tmpSettings.uaConf.accounts[0].audio_codecs.clear();
-	for (int i=0; i<lboxAudioCodecsEnabled->Items->Count; i++)
+	if (lboxAudioCodecsAvailable->Items->Count > 0 || lboxAudioCodecsEnabled->Items->Count > 0)	// both lists may be empty if UA failed to initialize
 	{
-		tmpSettings.uaConf.accounts[0].audio_codecs.push_back(lboxAudioCodecsEnabled->Items->Strings[i].c_str());
+		tmpSettings.uaConf.accounts[0].audio_codecs.clear();
+		for (int i=0; i<lboxAudioCodecsEnabled->Items->Count; i++)
+		{
+			tmpSettings.uaConf.accounts[0].audio_codecs.push_back(lboxAudioCodecsEnabled->Items->Strings[i].c_str());
+		}
 	}
 
 	tmpSettings.uaConf.recording.enabled = chbRecordingEnabled->Checked;
