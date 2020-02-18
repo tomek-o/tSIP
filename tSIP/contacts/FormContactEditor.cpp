@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmContactEditor *frmContactEditor;
+TfrmContactEditor *frmContactEditor = NULL;
 //---------------------------------------------------------------------------
 __fastcall TfrmContactEditor::TfrmContactEditor(TComponent* Owner)
 	: TForm(Owner)

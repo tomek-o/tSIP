@@ -368,6 +368,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edContactHttpQuery->Text = tmpSettings.HttpQuery.url;
 	cbHttpQueryOpenMode->ItemIndex = tmpSettings.HttpQuery.openMode;
 
+	edContactsFile->Text = tmpSettings.Contacts.file;
+	chbContactsCheckIfFileUpdated->Checked = tmpSettings.Contacts.checkIfFileUpdated;
+	edContactsCheckIfFileUpdated->Text = tmpSettings.Contacts.checkIfFileUpdatedPeriod;
 	chbContactFilterUsingNote->Checked = tmpSettings.Contacts.filterUsingNote;
 
 	chbHistoryNoStoreToFile->Checked = tmpSettings.History.bNoStoreToFile;
@@ -643,6 +646,9 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.HttpQuery.url = edContactHttpQuery->Text;
 	tmpSettings.HttpQuery.openMode = static_cast<Settings::_HttpQuery::OpenMode>(cbHttpQueryOpenMode->ItemIndex);
 
+	tmpSettings.Contacts.file = edContactsFile->Text.Trim();
+	tmpSettings.Contacts.checkIfFileUpdated = chbContactsCheckIfFileUpdated->Checked;
+	tmpSettings.Contacts.checkIfFileUpdatedPeriod = StrToIntDef(edContactsCheckIfFileUpdated->Text, tmpSettings.Contacts.checkIfFileUpdatedPeriod);
 	tmpSettings.Contacts.filterUsingNote = chbContactFilterUsingNote->Checked;
 
 	tmpSettings.History.bNoStoreToFile = chbHistoryNoStoreToFile->Checked;
@@ -1399,6 +1405,22 @@ void __fastcall TfrmSettings::btnOpenRecordingFolderClick(TObject *Sender)
 void __fastcall TfrmSettings::cbNetworkInterfacesChange(TObject *Sender)
 {
 	UpdateNetworkInterface();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::btnSelectContactsFileClick(TObject *Sender)
+{
+	TEdit *edit = edContactsFile;
+	openDialog->Filter = "JSON files (*.json)|*.json|All files|*.*";
+	AnsiString fileName = edit->Text;
+	if (FileExists(fileName))
+		openDialog->FileName = fileName;
+	else
+		openDialog->FileName = "";
+	if (openDialog->Execute())
+	{
+		edit->Text = openDialog->FileName;
+	}
 }
 //---------------------------------------------------------------------------
 

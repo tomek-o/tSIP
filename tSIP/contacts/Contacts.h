@@ -44,7 +44,9 @@ public:
 private:
 	std::vector<Entry> entries;
 	AnsiString filename;
+	FILETIME ft;
 public:
+	Contacts(void);
 	std::vector<Entry>& GetEntries(void)
 	{
 		return entries;
@@ -61,6 +63,10 @@ public:
 	}
 	void Sort(void);
 	Entry* GetEntry(AnsiString uri);
+	FILETIME getFiletime(void)
+	{
+    	return ft;
+	}
 };
 
 /** \brief Class of object passed to registered observers

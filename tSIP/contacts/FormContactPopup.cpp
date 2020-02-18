@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmContactPopup *frmContactPopup;
+TfrmContactPopup *frmContactPopup = NULL;
 //---------------------------------------------------------------------------
 __fastcall TfrmContactPopup::TfrmContactPopup(TComponent* Owner)
 	: TForm(Owner),

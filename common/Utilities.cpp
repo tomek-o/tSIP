@@ -80,3 +80,20 @@ char* urlencode(char* buf, size_t blen, const char* s)
     return buf;
 }
 
+int GetFileWriteTime(AnsiString name, FILETIME *ftWrite)
+{
+	int status = -1;
+	memset(ftWrite, 0, sizeof(*ftWrite));
+	HANDLE hFile = CreateFile(name.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	// Retrieve the file times for the file.
+	if (hFile != INVALID_HANDLE_VALUE)
+	{
+		if (GetFileTime(hFile, NULL, NULL, ftWrite))
+		{
+			status = 0;
+		}
+		CloseHandle(hFile);
+	}
+	return status;
+}
+

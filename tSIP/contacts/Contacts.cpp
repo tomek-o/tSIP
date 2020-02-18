@@ -5,6 +5,7 @@
 
 #include "Contacts.h"
 #include "common/Utils.h"
+#include "common/Utilities.h"
 #include <assert.h>
 #include <algorithm>
 #include <fstream> 
@@ -14,11 +15,20 @@
 
 #pragma package(smart_init)
 
+Contacts::Contacts(void)
+{
+	memset(&ft, 0, sizeof(ft));
+}
+
 int Contacts::Read(void)
 {
 	assert(filename != "");
 	Json::Value root;   // will contains the root value after parsing.
 	Json::Reader reader;
+
+	entries.clear();
+
+	GetFileWriteTime(filename, &ft);
 
 	try
 	{
@@ -28,11 +38,13 @@ int Contacts::Read(void)
 		bool parsingSuccessful = reader.parse( strConfig, root );
 		if ( !parsingSuccessful )
 		{
+			notifyObservers();		
 			return 2;
 		}
 	}
 	catch(...)
 	{
+		notifyObservers();
 		return 1;
 	}
 
@@ -85,6 +97,7 @@ int Contacts::Write(void)
 		std::ofstream ofs(filename.c_str());
 		ofs << outputConfig;
 		ofs.close();
+		GetFileWriteTime(filename, &ft);		
 	}
 	catch(...)
 	{

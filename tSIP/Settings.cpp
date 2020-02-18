@@ -759,6 +759,9 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 
 	{
 		const Json::Value &jv = root["Contacts"];
+		jv.getAString("File", Contacts.file);
+		jv.getBool("CheckIfFileUpdated", Contacts.checkIfFileUpdated);
+		jv.getUInt("CheckIfFileUpdatedPeriod", Contacts.checkIfFileUpdatedPeriod);
 		Contacts.filterUsingNote = jv.get("FilterUsingNote", Contacts.filterUsingNote).asBool();
 		jv.getBool("OpenFileOnIncoming", Contacts.openFileOnIncoming);
 		jv.getBool("OpenFileOnOutgoing", Contacts.openFileOnOutgoing);
@@ -961,6 +964,9 @@ int Settings::Write(AnsiString asFileName)
 
 	{
 		Json::Value &jv = root["Contacts"];
+		jv["File"] = Contacts.file;
+		jv["CheckIfFileUpdated"] = Contacts.checkIfFileUpdated;
+		jv["CheckIfFileUpdatedPeriod"] = Contacts.checkIfFileUpdatedPeriod;
 		jv["FilterUsingNote"] = Contacts.filterUsingNote;
 		jv["OpenFileOnIncoming"] = Contacts.openFileOnIncoming;
 		jv["OpenFileOnOutgoing"] = Contacts.openFileOnOutgoing;

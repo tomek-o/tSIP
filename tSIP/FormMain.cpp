@@ -129,6 +129,38 @@ namespace {
 		}
 		return call.peerName;
 	}
+
+	AnsiString GetContactsFileName(void)
+	{
+		AnsiString asContactsFile;
+		if (appSettings.Contacts.file != "")
+		{
+			asContactsFile = appSettings.Contacts.file;
+		}
+		else
+		{
+			asContactsFile.sprintf("%s\\%s_contacts.json", Paths::GetProfileDir().c_str(),
+				ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
+		}
+		return asContactsFile;
+	}
+
+	void UpdateContactsFile(void)
+	{
+		AnsiString asContactsFile = GetContactsFileName();
+
+		contacts.SetFilename(asContactsFile);
+		contacts.Read();
+		if (frmContactPopup)
+		{
+			frmContactPopup->Close();
+		}
+		if (frmContactEditor)
+		{
+        	frmContactEditor->Close();
+		}
+		
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -247,11 +279,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 		Screen->Cursor = crNone;
 	}
 
-	AnsiString asContactsFile;
-	asContactsFile.sprintf("%s\\%s_contacts.json", Paths::GetProfileDir().c_str(),
-		ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
-	contacts.SetFilename(asContactsFile);
-	contacts.Read();
+	UpdateContactsFile();
 
 	contacts.addObserver(*this);
 
@@ -474,6 +502,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	if (prev.hotKeyConf != appSettings.hotKeyConf)
 	{
 		RegisterGlobalHotKeys();
+	}
+	if (prev.Contacts.file != appSettings.Contacts.file)
+	{
+		UpdateContactsFile();
 	}
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
 
@@ -1028,7 +1060,27 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 	}
 
-    PollScriptQueue();
+	if (appSettings.Contacts.checkIfFileUpdated)
+	{
+		static int pollCnt = 0;
+		pollCnt++;
+		unsigned int period = appSettings.Contacts.checkIfFileUpdatedPeriod * 1000 / tmrCallbackPoll->Interval;
+		if (period < 100)
+			period = 100;
+		if (pollCnt > period)
+		{
+			pollCnt = 0;
+			FILETIME ft;
+			GetFileWriteTime(GetContactsFileName(), &ft);
+			if (memcmp(&ft, &contacts.getFiletime(), sizeof(ft)))
+			{
+				LOG("Contacts file time stamp changed - reloading...\n");
+				contacts.Read();
+			}
+		}
+	}
+
+	PollScriptQueue();
 
 	Callback cb;
 	bool answered = false;

@@ -244,10 +244,15 @@ public:
 	} SipAccessUrl;
 	struct _Contacts
 	{
+		AnsiString file;
+		bool checkIfFileUpdated;
+		unsigned int checkIfFileUpdatedPeriod;
 		bool filterUsingNote;
 		bool openFileOnIncoming;
 		bool openFileOnOutgoing;
 		_Contacts(void):
+			checkIfFileUpdated(false),
+			checkIfFileUpdatedPeriod(60),
 			filterUsingNote(false),
 			openFileOnIncoming(false),
 			openFileOnOutgoing(false)

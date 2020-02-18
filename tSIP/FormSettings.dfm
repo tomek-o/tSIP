@@ -1808,18 +1808,16 @@ object frmSettings: TfrmSettings
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
-      ExplicitLeft = 6
-      ExplicitTop = 20
       object lblContactPopup: TLabel
-        Left = 7
-        Top = 7
+        Left = 2
+        Top = 87
         Width = 233
         Height = 13
         Caption = 'Show contact popup if contact note is not empty'
       end
       object lblContactHttpQuery: TLabel
-        Left = 7
-        Top = 143
+        Left = 2
+        Top = 223
         Width = 490
         Height = 13
         Caption = 
@@ -1827,54 +1825,70 @@ object frmSettings: TfrmSettings
           ' as parameter on action execute)'
       end
       object lblHttpQueryStartMode: TLabel
-        Left = 7
-        Top = 192
+        Left = 2
+        Top = 272
         Width = 82
         Height = 13
         Caption = 'HTTP query start'
       end
       object lblContactOpenFile: TLabel
-        Left = 7
-        Top = 73
-        Width = 109
+        Left = 2
+        Top = 153
+        Width = 186
         Height = 13
-        Caption = 'Open contact file if set'
+        Caption = 'Open file associated with contact if set'
+      end
+      object Label7: TLabel
+        Left = 3
+        Top = 3
+        Width = 378
+        Height = 13
+        Caption = 
+          'Contacts/phonebook JSON file (if empty: file from application di' +
+          'rectory is used)'
+      end
+      object lblContactsCheckIfFileUpdated: TLabel
+        Left = 231
+        Top = 48
+        Width = 47
+        Height = 13
+        Caption = 'second(s)'
       end
       object chbContactPopupShowOnIncoming: TCheckBox
-        Left = 18
-        Top = 24
+        Left = 13
+        Top = 104
         Width = 438
         Height = 17
         Caption = 'on incoming call'
         TabOrder = 0
       end
       object chbContactPopupShowOnOutgoing: TCheckBox
-        Left = 18
-        Top = 44
+        Left = 13
+        Top = 124
         Width = 325
         Height = 17
         Caption = 'on outgoing call'
         TabOrder = 1
       end
       object edContactHttpQuery: TEdit
-        Left = 114
-        Top = 162
+        Left = 109
+        Top = 242
         Width = 385
         Height = 21
         TabOrder = 2
         Text = 'https://www.google.com/search?q=[number]'
       end
       object chbContactFilterUsingNote: TCheckBox
-        Left = 7
-        Top = 234
+        Left = 2
+        Top = 314
         Width = 325
         Height = 17
         Caption = 'Include "Note" field when filtering contacts'
         TabOrder = 3
       end
       object cbHttpQueryOpenMode: TComboBox
-        Left = 114
-        Top = 189
+        Left = 109
+        Top = 269
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1888,20 +1902,52 @@ object frmSettings: TfrmSettings
           'Automatic: on accepting incoming call')
       end
       object chbContactOpenFileOnIncoming: TCheckBox
-        Left = 18
-        Top = 89
+        Left = 13
+        Top = 169
         Width = 438
         Height = 17
         Caption = 'on incoming call'
         TabOrder = 5
       end
       object chbContactOpenFileOnOutgoing: TCheckBox
-        Left = 18
-        Top = 109
+        Left = 13
+        Top = 189
         Width = 325
         Height = 17
         Caption = 'on outgoing call'
         TabOrder = 6
+      end
+      object edContactsFile: TEdit
+        Left = 13
+        Top = 20
+        Width = 454
+        Height = 21
+        TabOrder = 7
+      end
+      object btnSelectContactsFile: TButton
+        Left = 473
+        Top = 20
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 8
+        OnClick = btnSelectContactsFileClick
+      end
+      object chbContactsCheckIfFileUpdated: TCheckBox
+        Left = 13
+        Top = 47
+        Width = 164
+        Height = 17
+        Caption = 'Check if file is updated every'
+        TabOrder = 9
+      end
+      object edContactsCheckIfFileUpdated: TEdit
+        Left = 183
+        Top = 45
+        Width = 42
+        Height = 21
+        TabOrder = 10
+        Text = '60'
       end
     end
     object tsHistory: TTabSheet
