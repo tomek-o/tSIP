@@ -94,6 +94,14 @@ namespace {
 		//SetWindowPos(frmContactPopup->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	}
 
+	void OpenContactFile(Contacts::Entry *entry)
+	{
+		if (entry->file != "")
+		{
+			ShellExecute(NULL, "open", entry->file.c_str(), NULL, NULL, SW_SHOWNORMAL); 
+		}
+	}
+
 	AnsiString GetPeerName(AnsiString displayName)
 	{
 		if (appSettings.Display.bDecodeUtfDisplayToAnsi)
@@ -1113,6 +1121,10 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 							ShowContactPopup(lastContactEntry);
 						}
 					}
+					if (appSettings.Contacts.openFileOnIncoming)
+					{
+						OpenContactFile(lastContactEntry);
+					}
 				}
 				else
 				{
@@ -1145,6 +1157,10 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 						{
 							ShowContactPopup(lastContactEntry);
 						}
+					}
+					if (appSettings.Contacts.openFileOnOutgoing)
+					{
+						OpenContactFile(lastContactEntry);
 					}
 				}
 				else
@@ -2096,6 +2112,12 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		if (lastContactEntry)
 		{
         	ShowContactPopup(lastContactEntry);
+		}
+		break;
+	case Button::CONTACT_FILE:
+		if (lastContactEntry)
+		{
+			OpenContactFile(lastContactEntry);
 		}
 		break;
 	case Button::HTTP_QUERY:

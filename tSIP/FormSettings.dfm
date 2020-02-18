@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 544
     Height = 392
-    ActivePage = tsLogging
+    ActivePage = tsContacts
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1808,6 +1808,8 @@ object frmSettings: TfrmSettings
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
+      ExplicitLeft = 6
+      ExplicitTop = 20
       object lblContactPopup: TLabel
         Left = 7
         Top = 7
@@ -1817,7 +1819,7 @@ object frmSettings: TfrmSettings
       end
       object lblContactHttpQuery: TLabel
         Left = 7
-        Top = 95
+        Top = 143
         Width = 490
         Height = 13
         Caption = 
@@ -1826,14 +1828,21 @@ object frmSettings: TfrmSettings
       end
       object lblHttpQueryStartMode: TLabel
         Left = 7
-        Top = 144
+        Top = 192
         Width = 82
         Height = 13
         Caption = 'HTTP query start'
       end
+      object lblContactOpenFile: TLabel
+        Left = 7
+        Top = 73
+        Width = 109
+        Height = 13
+        Caption = 'Open contact file if set'
+      end
       object chbContactPopupShowOnIncoming: TCheckBox
         Left = 18
-        Top = 27
+        Top = 24
         Width = 438
         Height = 17
         Caption = 'on incoming call'
@@ -1841,7 +1850,7 @@ object frmSettings: TfrmSettings
       end
       object chbContactPopupShowOnOutgoing: TCheckBox
         Left = 18
-        Top = 50
+        Top = 44
         Width = 325
         Height = 17
         Caption = 'on outgoing call'
@@ -1849,7 +1858,7 @@ object frmSettings: TfrmSettings
       end
       object edContactHttpQuery: TEdit
         Left = 114
-        Top = 114
+        Top = 162
         Width = 385
         Height = 21
         TabOrder = 2
@@ -1857,7 +1866,7 @@ object frmSettings: TfrmSettings
       end
       object chbContactFilterUsingNote: TCheckBox
         Left = 7
-        Top = 186
+        Top = 234
         Width = 325
         Height = 17
         Caption = 'Include "Note" field when filtering contacts'
@@ -1865,7 +1874,7 @@ object frmSettings: TfrmSettings
       end
       object cbHttpQueryOpenMode: TComboBox
         Left = 114
-        Top = 141
+        Top = 189
         Width = 240
         Height = 21
         Style = csDropDownList
@@ -1877,6 +1886,22 @@ object frmSettings: TfrmSettings
           'Manual only (HTTP query button)'
           'Automatic: on incoming call'
           'Automatic: on accepting incoming call')
+      end
+      object chbContactOpenFileOnIncoming: TCheckBox
+        Left = 18
+        Top = 89
+        Width = 438
+        Height = 17
+        Caption = 'on incoming call'
+        TabOrder = 5
+      end
+      object chbContactOpenFileOnOutgoing: TCheckBox
+        Left = 18
+        Top = 109
+        Width = 325
+        Height = 17
+        Caption = 'on outgoing call'
+        TabOrder = 6
       end
     end
     object tsHistory: TTabSheet

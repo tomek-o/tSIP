@@ -133,7 +133,6 @@ Settings::Settings(void)
 
 	HttpQuery.url = "https://www.google.com/search?q=[number]";
 	HttpQuery.openMode = _HttpQuery::openManualOnly;
-	Contacts.filterUsingNote = false;
 
 	SipAccessUrl.accessMode = _SipAccessUrl::accessModeAlwaysPassive;
 
@@ -759,8 +758,10 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 	}
 
 	{
-		const Json::Value &ContactsJson = root["Contacts"];
-		Contacts.filterUsingNote = ContactsJson.get("FilterUsingNote", Contacts.filterUsingNote).asBool();
+		const Json::Value &jv = root["Contacts"];
+		Contacts.filterUsingNote = jv.get("FilterUsingNote", Contacts.filterUsingNote).asBool();
+		jv.getBool("OpenFileOnIncoming", Contacts.openFileOnIncoming);
+		jv.getBool("OpenFileOnOutgoing", Contacts.openFileOnOutgoing);
 	}
 
 	{
@@ -958,7 +959,12 @@ int Settings::Write(AnsiString asFileName)
 
 	root["SipAccessUrl"]["AccessMode"] = SipAccessUrl.accessMode;
 
-	root["Contacts"]["FilterUsingNote"] = Contacts.filterUsingNote;
+	{
+		Json::Value &jv = root["Contacts"];
+		jv["FilterUsingNote"] = Contacts.filterUsingNote;
+		jv["OpenFileOnIncoming"] = Contacts.openFileOnIncoming;
+		jv["OpenFileOnOutgoing"] = Contacts.openFileOnOutgoing;
+	}
 
 	{
 		Json::Value &jv = root["History"];

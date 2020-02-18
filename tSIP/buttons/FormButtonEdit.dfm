@@ -110,7 +110,7 @@ object frmButtonEdit: TfrmButtonEdit
     Height = 21
     Style = csDropDownList
     DropDownCount = 12
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 3
     OnChange = cbTypeChange
   end
@@ -134,6 +134,10 @@ object frmButtonEdit: TfrmButtonEdit
     TabOrder = 5
     object tsVisual: TTabSheet
       Caption = 'Visual'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblHeight: TLabel
         Left = 3
         Top = 9
@@ -297,7 +301,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 140
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 4
         OnChange = cbBackgroundColorChange
       end
@@ -314,6 +318,10 @@ object frmButtonEdit: TfrmButtonEdit
     object tsBehavior: TTabSheet
       Caption = 'Behavior'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object pcBehavior: TPageControl
         Left = 0
         Top = 0
@@ -325,6 +333,10 @@ object frmButtonEdit: TfrmButtonEdit
         TabOrder = 0
         object tsBehaviorBlf: TTabSheet
           Caption = 'tsBehaviorBlf'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblBlfInCallAction: TLabel
             Left = 3
             Top = 125
@@ -433,6 +445,10 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorPaging: TTabSheet
           Caption = 'tsBehaviorPaging'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblPagingTxWaveFile: TLabel
             Left = 3
             Top = 3
@@ -503,7 +519,9 @@ object frmButtonEdit: TfrmButtonEdit
           Caption = 'tsBehaviorScript'
           ImageIndex = 2
           ExplicitLeft = 0
-          ExplicitTop = 29
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblScriptFile: TLabel
             Left = 3
             Top = 3
@@ -566,6 +584,10 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorExecute: TTabSheet
           Caption = 'tsBehaviorExecute'
           ImageIndex = 3
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblArg1: TLabel
             Left = 3
             Top = 3
@@ -584,6 +606,10 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioSource: TTabSheet
           Caption = 'tsBehaviorSwitchAudioSource'
           ImageIndex = 4
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object lblSoundInputModule: TLabel
             Left = 3
             Top = 3
@@ -604,7 +630,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 0
             OnChange = cbSoundInputModChange
           end
@@ -630,13 +656,17 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 3
           end
         end
         object tsBehaviorSwitchAudioPlayer: TTabSheet
           Caption = 'tsBehaviorSwitchAudioPlayer'
           ImageIndex = 5
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Label3: TLabel
             Left = 3
             Top = 3
@@ -657,7 +687,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 0
             OnChange = cbSoundOutputModChange
           end
@@ -667,7 +697,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 1
           end
         end

@@ -49,6 +49,7 @@ int Contacts::Read(void)
 		entry.uri2 = contact.get("uri2", "").asString().c_str();
 		entry.uri3 = contact.get("uri3", "").asString().c_str();
 		entry.note = contact.get("note", "").asString().c_str();
+		entry.file = contact.get("file", entry.file.c_str()).asString().c_str();
 
 		entries.push_back(entry);
 	}
@@ -63,15 +64,18 @@ int Contacts::Write(void)
 	assert(filename != "");
     Json::Value root;
 	Json::StyledWriter writer;
+	Json::Value &jvContacts = root["Contacts"];
 	for (unsigned int i=0; i<entries.size(); i++)
 	{
 		Entry &entry = entries[i];
-		root["Contacts"][i]["uri"] = entry.uri1.c_str();
-		root["Contacts"][i]["uri2"] = entry.uri2.c_str();
-		root["Contacts"][i]["uri3"] = entry.uri3.c_str();
-		root["Contacts"][i]["description"] = entry.description.c_str();
-		root["Contacts"][i]["company"] = entry.company.c_str();
-		root["Contacts"][i]["note"] = entry.note.c_str();
+		Json::Value &jv = jvContacts[i];
+		jv["uri"] = entry.uri1.c_str();
+		jv["uri2"] = entry.uri2.c_str();
+		jv["uri3"] = entry.uri3.c_str();
+		jv["description"] = entry.description.c_str();
+		jv["company"] = entry.company.c_str();
+		jv["note"] = entry.note.c_str();
+		jv["file"] = entry.file.c_str();
 	}
 
 	std::string outputConfig = writer.write( root );

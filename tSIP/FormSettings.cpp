@@ -362,6 +362,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	chbContactPopupShowOnIncoming->Checked = tmpSettings.frmContactPopup.showOnIncoming;
 	chbContactPopupShowOnOutgoing->Checked = tmpSettings.frmContactPopup.showOnOutgoing;
+	chbContactOpenFileOnIncoming->Checked = tmpSettings.Contacts.openFileOnIncoming;
+	chbContactOpenFileOnOutgoing->Checked = tmpSettings.Contacts.openFileOnOutgoing;
 
 	edContactHttpQuery->Text = tmpSettings.HttpQuery.url;
 	cbHttpQueryOpenMode->ItemIndex = tmpSettings.HttpQuery.openMode;
@@ -635,6 +637,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.frmContactPopup.showOnIncoming = chbContactPopupShowOnIncoming->Checked;
 	tmpSettings.frmContactPopup.showOnOutgoing = chbContactPopupShowOnOutgoing->Checked;
+	tmpSettings.Contacts.openFileOnIncoming = chbContactOpenFileOnIncoming->Checked;
+	tmpSettings.Contacts.openFileOnOutgoing = chbContactOpenFileOnOutgoing->Checked;
 
 	tmpSettings.HttpQuery.url = edContactHttpQuery->Text;
 	tmpSettings.HttpQuery.openMode = static_cast<Settings::_HttpQuery::OpenMode>(cbHttpQueryOpenMode->ItemIndex);

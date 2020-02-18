@@ -67,6 +67,8 @@ const char* Button::TypeName(enum Type type)
 		return "Show log";
 	case EXIT:
 		return "Exit";
+	case CONTACT_FILE:
+		return "Contact file";
 	default:
 		return "???";
 	}
@@ -127,6 +129,8 @@ const char* Button::TypeDescription(enum Type type)
 		return "Show application log.";
 	case EXIT:
 		return "Close application.";
+	case CONTACT_FILE:
+		return "Open file associated with contact / phonebook entry.";
 	default:
 		return "???";
 	}

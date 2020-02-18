@@ -32,6 +32,7 @@ void __fastcall TfrmContactEditor::btnApplyClick(TObject *Sender)
 	entry->uri2 = edNumber2->Text;
 	entry->uri3 = edNumber3->Text;
 	entry->note = memoNote->Text;
+	entry->file = edFile->Text.Trim();
 	confirmed = true;
 	Close();	
 }
@@ -53,6 +54,7 @@ int __fastcall TfrmContactEditor::Start(Contacts::Entry *entry)
 	edNumber2->Text = entry->uri2;
 	edNumber3->Text = entry->uri3;
 	memoNote->Text = entry->note;
+	edFile->Text = entry->file;
 
 	return ShowModal();
 }
@@ -81,6 +83,40 @@ void __fastcall TfrmContactEditor::FormKeyPress(TObject *Sender, char &Key)
 	{
 		this->Close();
 	}	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmContactEditor::btnFileOpenClick(
+      TObject *Sender)
+{
+	ShellExecute(Handle, "open", edFile->Text.c_str(), 0, 0, SW_SHOWNORMAL);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmContactEditor::btnFileSelectClick(TObject *Sender)
+{
+	openDialog->Filter = "";	
+	if (FileExists(edFile->Text))
+	{
+		openDialog->FileName = edFile->Text;
+	}
+	else
+	{
+		openDialog->FileName = "";
+		if (edFile->Text != "")
+		{
+			AnsiString dir = ExtractFileDir(edFile->Text);
+			if (DirectoryExists(dir))
+			{
+            	openDialog->InitialDir = dir;
+			}
+		}
+	}
+
+	if (openDialog->Execute())
+	{
+    	edFile->Text = openDialog->FileName;
+	}
 }
 //---------------------------------------------------------------------------
 

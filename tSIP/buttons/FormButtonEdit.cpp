@@ -205,6 +205,8 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	switch (type)
 	{
 	case Button::DISABLED:
+	case Button::CONTACT_NOTE:
+	case Button::CONTACT_FILE:
 		edNumber->Visible = false;
 		lblNumber->Visible = false;
 		break;

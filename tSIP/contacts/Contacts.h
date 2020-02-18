@@ -20,6 +20,7 @@ public:
 		AnsiString uri2;
 		AnsiString uri3;
 		AnsiString note;
+		AnsiString file;
 
 		bool operator==(const Entry& right) const {
 			return (description == right.description &&
@@ -27,7 +28,8 @@ public:
 					uri1 == right.uri1 &&
 					uri2 == right.uri2 &&
 					uri3 == right.uri3 &&
-					note == right.note
+					note == right.note &&
+					file == right.file
 					);
 		}
 

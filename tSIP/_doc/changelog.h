@@ -774,5 +774,10 @@ Version 0.1.69
 	- moved dynamic modules loading before account initialization (fixing problem with G729.dll)
 	- added option enabling additional aubuf debugging logs
 	- Lua: added ReadContacts() functions, re-reading whole phonebook from JSON file
+
+ Version 0.1.72
+	- file (path) can be assigned to each contact / phonebook entry
+	- new button type: "Contact file" - opening (using ShellExecute "open") file associated with last contact entry on request
+	- options to automatically open file associated with contact on incoming / outgoing call 
 */
 

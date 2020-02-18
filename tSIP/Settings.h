@@ -245,6 +245,13 @@ public:
 	struct _Contacts
 	{
 		bool filterUsingNote;
+		bool openFileOnIncoming;
+		bool openFileOnOutgoing;
+		_Contacts(void):
+			filterUsingNote(false),
+			openFileOnIncoming(false),
+			openFileOnOutgoing(false)
+		{}
 	} Contacts;
 	struct _History
 	{

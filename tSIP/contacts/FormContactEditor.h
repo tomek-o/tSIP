@@ -12,6 +12,8 @@
 
 #include "Contacts.h"
 #include <ComCtrls.hpp>
+#include <Dialogs.hpp>
+#include <Buttons.hpp>
 
 class TfrmContactEditor : public TForm
 {
@@ -31,10 +33,17 @@ __published:	// IDE-managed Components
 	TEdit *edNumber3;
 	TLabel *lblCompany;
 	TEdit *edCompany;
+	TLabel *lblContactFile;
+	TEdit *edFile;
+	TOpenDialog *openDialog;
+	TButton *btnFileSelect;
+	TBitBtn *btnFileOpen;
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
+	void __fastcall btnFileOpenClick(TObject *Sender);
+	void __fastcall btnFileSelectClick(TObject *Sender);
 private:	// User declarations
 	bool confirmed;
 	Contacts::Entry *entry;

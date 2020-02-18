@@ -32,7 +32,8 @@ namespace Button
 		SHOW_SETTINGS,
 		MINIMIZE,
 		SHOW_LOG,
-		EXIT,		
+		EXIT,
+		CONTACT_FILE,	// open file associated with contact / phonebook entry		
 
 		TYPE_LIMITER
 	};
