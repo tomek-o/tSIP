@@ -366,6 +366,10 @@ __published:	// IDE-managed Components
 	TEdit *edContactsCheckIfFileUpdated;
 	TLabel *lblContactsCheckIfFileUpdated;
 	TCheckBox *chbContactStoreNoteInSeparateFile;
+	TLabel *lblOnContactNoteOpen;
+	TEdit *edScriptOnContactNoteOpenFile;
+	TButton *btnSelectedScriptOnContactNoteOpenChange;
+	TBitBtn *btnSelectedScriptOnContactNoteOpenEdit;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

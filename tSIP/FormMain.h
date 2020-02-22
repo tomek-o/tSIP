@@ -235,7 +235,6 @@ private:	// User declarations
 	void ToggleSpeedDial(void);
 	void RegisterGlobalHotKeys(void);
 	void ExecAction(const struct Action& action);
-	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
 	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
 	std::deque<AnsiString> enqueuedScripts;
 	enum { MAX_SCRIPT_QUEUE_SIZE = 1000 };
@@ -263,6 +262,7 @@ public:		// User declarations
 	AnsiString OnGetContactName(AnsiString uri);	
 	void OnProgrammableBtnClick(int id, TProgrammableButton* btn);
 	void obsUpdate(Observable* o, Argument * arg);
+	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
 
 	BEGIN_MESSAGE_MAP
 		MESSAGE_HANDLER(WM_COPYDATA, TWMCopyData, WMCopyData)

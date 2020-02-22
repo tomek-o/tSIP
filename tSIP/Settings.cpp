@@ -808,6 +808,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		Scripts.onProgrammableButton = ScriptsJson.get("OnProgrammableButton", Scripts.onProgrammableButton.c_str()).asString().c_str();
 		Scripts.onAudioDeviceError = ScriptsJson.get("OnAudioDeviceError", Scripts.onAudioDeviceError.c_str()).asString().c_str();
 		ScriptsJson.getAString("OnCustomRequestReply", Scripts.onCustomRequestReply);
+		ScriptsJson.getAString("OnContactNoteOpen", Scripts.onContactNoteOpen);
 	}
 
 	{
@@ -1007,6 +1008,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["OnProgrammableButton"] = Scripts.onProgrammableButton.c_str();
 		jv["OnAudioDeviceError"] = Scripts.onAudioDeviceError.c_str();
 		jv["OnCustomRequestReply"] = Scripts.onCustomRequestReply;
+		jv["OnContactNoteOpen"] = Scripts.onContactNoteOpen;
 	}
 
 	root["uaConf"]["audioCfgSrc"]["mod"] = uaConf.audioCfgSrc.mod;

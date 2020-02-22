@@ -395,6 +395,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edScriptOnProgrammableButtonFile->Text = tmpSettings.Scripts.onProgrammableButton;
 	edScriptOnAudioErrorFile->Text = tmpSettings.Scripts.onAudioDeviceError;
 	edScriptOnCustomRequestReplyFile->Text = tmpSettings.Scripts.onCustomRequestReply;
+	edScriptOnContactNoteOpenFile->Text = tmpSettings.Scripts.onContactNoteOpen;
 
 	chbShowSettingsIfAnyAccountSettingsIsHidden->Checked = tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden;
 
@@ -678,6 +679,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onProgrammableButton = edScriptOnProgrammableButtonFile->Text;
 	tmpSettings.Scripts.onAudioDeviceError = edScriptOnAudioErrorFile->Text;
 	tmpSettings.Scripts.onCustomRequestReply = edScriptOnCustomRequestReplyFile->Text;
+	tmpSettings.Scripts.onContactNoteOpen = edScriptOnContactNoteOpenFile->Text;
 
 	tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden = chbShowSettingsIfAnyAccountSettingsIsHidden->Checked;
 
@@ -1217,6 +1219,10 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 	{
 		edit = edScriptOnCustomRequestReplyFile;
 	}
+	else if (Sender == btnSelectedScriptOnContactNoteOpenChange)
+	{
+    	edit = edScriptOnContactNoteOpenFile;
+	}
 	else
 	{
 		assert(0);
@@ -1308,6 +1314,11 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	{
 		edit = edScriptOnCustomRequestReplyFile;
 		eventName = "on_custom_request_reply";
+	}
+	else if (Sender == btnSelectedScriptOnContactNoteOpenEdit)
+	{
+		edit = edScriptOnContactNoteOpenFile;
+		eventName = "on_contact_note_open";
 	}
 	else
 	{

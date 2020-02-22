@@ -30,6 +30,7 @@ public:		// User declarations
 	__fastcall TfrmContactPopup(TComponent* Owner);
 	bool isNoteModified(void);
 	void InvalidateData(void);
+	void AppendNoteText(AnsiString text);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmContactPopup *frmContactPopup;

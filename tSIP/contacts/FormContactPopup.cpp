@@ -137,3 +137,11 @@ void __fastcall TfrmContactPopup::WndProc(Messages::TMessage &Message)
 	TForm::WndProc(Message);
 }
 
+void TfrmContactPopup::AppendNoteText(AnsiString text)
+{
+	note->Text = note->Text + text;
+	note->SelStart = note->Text.Length();
+	note->Perform(EM_SCROLLCARET, 0, 0);
+}
+
+

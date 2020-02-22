@@ -92,6 +92,13 @@ namespace {
 		frmContactPopup->Visible = true;	// steals focus
 		//ShowWindow(frmContactPopup->Handle,SW_SHOWNOACTIVATE);
 		//SetWindowPos(frmContactPopup->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		if (appSettings.Scripts.onContactNoteOpen != "")
+		{
+			AnsiString asScriptFile;
+			bool handled = true;
+			asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onContactNoteOpen.c_str());
+			frmMain->RunScriptFile(SCRIPT_SRC_ON_CONTACT_NOTE_OPEN, -1, asScriptFile.c_str(), handled);
+		}
 	}
 
 	void OpenContactFile(Contacts::Entry *entry)
@@ -2163,9 +2170,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		break;
 	case Button::CONTACT_NOTE:
-		if (lastContactEntry)
+		if (lastContactEntry && !(appSettings.Contacts.storeNoteInSeparateFile && lastContactEntry->file == ""))
 		{
-        	ShowContactPopup(lastContactEntry);
+			ShowContactPopup(lastContactEntry);
 		}
 		else
 		{

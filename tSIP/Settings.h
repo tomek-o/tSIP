@@ -287,6 +287,7 @@ public:
 		AnsiString onProgrammableButton;
 		AnsiString onAudioDeviceError;
 		AnsiString onCustomRequestReply;
+		AnsiString onContactNoteOpen;	///< after contact note window is opened
 
 		AnsiString lastScriptWindowDir;
 	} Scripts;

@@ -16,6 +16,7 @@
 #include "UaMain.h"
 #include "Globals.h"
 #include "Contacts.h"
+#include "FormContactPopup.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -1201,6 +1202,16 @@ static int l_ReadContacts(lua_State* L)
 	return 0;
 }
 
+static int l_AppendContactNoteText(lua_State* L)
+{
+	const char* text = lua_tostring(L, 1);
+	if (frmContactPopup)
+	{
+		frmContactPopup->AppendNoteText(text);
+	}
+	return 0;
+}
+
 };	// ScriptImp
 
 
@@ -1408,6 +1419,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetAudioRxSignalLevel", ScriptImp::l_GetAudioRxSignalLevel);
 
 	lua_register(L, "ReadContacts", ScriptImp::l_ReadContacts);
+	lua_register(L, "AppendContactNoteText", ScriptImp::l_AppendContactNoteText);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);
