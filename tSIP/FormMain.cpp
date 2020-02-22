@@ -82,13 +82,13 @@ namespace {
 	Contacts::Entry *lastContactEntry = NULL;
 	void ShowContactPopup(Contacts::Entry *entry)
 	{
-		if (frmContactPopup->isNoteModified())
+		if (frmContactPopup->isNoteModified() && !appSettings.Contacts.storeNoteInSeparateFile)
 		{
 			/** \todo Limit write frequency
 			*/
 			contacts.Write();
 		}
-		frmContactPopup->SetData(entry);
+		frmContactPopup->SetData(entry, appSettings.Contacts.storeNoteInSeparateFile);
 		frmContactPopup->Visible = true;	// steals focus
 		//ShowWindow(frmContactPopup->Handle,SW_SHOWNOACTIVATE);
 		//SetWindowPos(frmContactPopup->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
@@ -215,6 +215,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmContacts->Parent = tsContacts;
 	frmContacts->Visible = true;
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
+	frmContacts->StoreNoteInSeparateFile(appSettings.Contacts.storeNoteInSeparateFile);
 	edTransfer->Text = asTransferHint;
 
 	trIcon = new TrayIcon(this);
@@ -378,7 +379,7 @@ void TfrmMain::Finalize(void)
     }
 
 	frmContactPopup->Close();
-	if (frmContactPopup->isNoteModified())
+	if (frmContactPopup->isNoteModified() && !appSettings.Contacts.storeNoteInSeparateFile)
 	{
 		contacts.Write();
 	}
@@ -508,6 +509,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		UpdateContactsFile();
 	}
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
+	frmContacts->StoreNoteInSeparateFile(appSettings.Contacts.storeNoteInSeparateFile);
 
 	UpdateHistoryConfig();
 
@@ -2017,7 +2019,7 @@ void TfrmMain::OnPhonebookEdit(AnsiString uri)
 		entry = &newEntry;
 		entry->uri1 = uri;
 	}
-	frmContactEditor->Start(entry);
+	frmContactEditor->Start(entry, appSettings.Contacts.storeNoteInSeparateFile);
 	if (frmContactEditor->isConfirmed())
 	{
 		if (adding)
@@ -2164,6 +2166,14 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		if (lastContactEntry)
 		{
         	ShowContactPopup(lastContactEntry);
+		}
+		else
+		{
+			AnsiString num = GetCallPeerUri();
+			if (num != "")
+			{
+            	OnPhonebookEdit(num);
+			}
 		}
 		break;
 	case Button::CONTACT_FILE:

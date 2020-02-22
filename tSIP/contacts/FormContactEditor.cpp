@@ -31,10 +31,38 @@ void __fastcall TfrmContactEditor::btnApplyClick(TObject *Sender)
 	entry->uri1 = edNumber1->Text;
 	entry->uri2 = edNumber2->Text;
 	entry->uri3 = edNumber3->Text;
-	entry->note = memoNote->Text;
 	entry->file = edFile->Text.Trim();
+
+	if (storeNoteInSeparateFile == false)
+	{
+		entry->note = memoNote->Text;
+	}
+	else
+	{
+		if (noteChanged)
+		{
+			if (entry->file == "")
+			{
+				AnsiString msg;
+				msg.sprintf("File for the note must be selected");
+				MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
+				return;
+			}
+			try
+			{
+				memoNote->Lines->SaveToFile(entry->file);
+			}
+			catch(...)
+			{
+				AnsiString msg;
+				msg.sprintf("Could not save note to selected file");
+				MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
+				return;
+			}
+		}
+	}
 	confirmed = true;
-	Close();	
+	Close();
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmContactEditor::FormShow(TObject *Sender)
@@ -44,7 +72,7 @@ void __fastcall TfrmContactEditor::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-int __fastcall TfrmContactEditor::Start(Contacts::Entry *entry)
+int __fastcall TfrmContactEditor::Start(Contacts::Entry *entry, bool storeNoteInSeparateFile)
 {
 	this->entry = entry;
 
@@ -53,7 +81,29 @@ int __fastcall TfrmContactEditor::Start(Contacts::Entry *entry)
 	edNumber1->Text = entry->uri1;
 	edNumber2->Text = entry->uri2;
 	edNumber3->Text = entry->uri3;
-	memoNote->Text = entry->note;
+	this->storeNoteInSeparateFile = storeNoteInSeparateFile;
+	if (storeNoteInSeparateFile == false)
+	{
+		memoNote->Text = entry->note;
+	}
+	else
+	{
+		memoNote->Text = "";
+		if (entry->file != "")
+		{
+			try
+			{
+				memoNote->Lines->LoadFromFile(entry->file);
+			}
+			catch(...)
+			{
+				AnsiString msg;
+				msg.sprintf("Could not load note from file associated with contact");
+				MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
+			}
+		}
+	}
+	noteChanged = false;
 	edFile->Text = entry->file;
 
 	return ShowModal();
@@ -117,6 +167,12 @@ void __fastcall TfrmContactEditor::btnFileSelectClick(TObject *Sender)
 	{
     	edFile->Text = openDialog->FileName;
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmContactEditor::memoNoteChange(TObject *Sender)
+{
+	noteChanged = true;	
 }
 //---------------------------------------------------------------------------
 

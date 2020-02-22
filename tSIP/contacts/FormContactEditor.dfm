@@ -74,8 +74,6 @@ object frmContactEditor: TfrmContactEditor
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 6
-    ExplicitTop = 282
-    ExplicitWidth = 423
     object btnCancel: TButton
       Left = 348
       Top = 6
@@ -114,7 +112,9 @@ object frmContactEditor: TfrmContactEditor
     Top = 125
     Width = 375
     Height = 158
+    PlainText = True
     TabOrder = 5
+    OnChange = memoNoteChange
   end
   object edNumber2: TEdit
     Left = 96
@@ -189,7 +189,7 @@ object frmContactEditor: TfrmContactEditor
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
   end
   object openDialog: TOpenDialog
-    Options = [ofHideReadOnly, ofNoChangeDir, ofFileMustExist, ofEnableSizing]
+    Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
     Left = 280
   end
 end

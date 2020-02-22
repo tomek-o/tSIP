@@ -250,12 +250,14 @@ public:
 		bool filterUsingNote;
 		bool openFileOnIncoming;
 		bool openFileOnOutgoing;
+		bool storeNoteInSeparateFile;	// use file associated with contact to store note
 		_Contacts(void):
 			checkIfFileUpdated(false),
 			checkIfFileUpdatedPeriod(60),
 			filterUsingNote(false),
 			openFileOnIncoming(false),
-			openFileOnOutgoing(false)
+			openFileOnOutgoing(false),
+			storeNoteInSeparateFile(false)
 		{}
 	} Contacts;
 	struct _History

@@ -44,13 +44,16 @@ __published:	// IDE-managed Components
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
 	void __fastcall btnFileOpenClick(TObject *Sender);
 	void __fastcall btnFileSelectClick(TObject *Sender);
+	void __fastcall memoNoteChange(TObject *Sender);
 private:	// User declarations
 	bool confirmed;
 	Contacts::Entry *entry;
+	bool storeNoteInSeparateFile;
+	bool noteChanged;
 	void __fastcall WndProc(Messages::TMessage &Message);	
 public:		// User declarations
 	__fastcall TfrmContactEditor(TComponent* Owner);
-	int __fastcall Start(Contacts::Entry *entry);
+	int __fastcall Start(Contacts::Entry *entry, bool storeNoteInSeparateFile);
 	bool isConfirmed(void) {
 		return confirmed;
 	}

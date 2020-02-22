@@ -765,6 +765,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		Contacts.filterUsingNote = jv.get("FilterUsingNote", Contacts.filterUsingNote).asBool();
 		jv.getBool("OpenFileOnIncoming", Contacts.openFileOnIncoming);
 		jv.getBool("OpenFileOnOutgoing", Contacts.openFileOnOutgoing);
+		jv.getBool("StoreNoteInSeparateFile", Contacts.storeNoteInSeparateFile);
 	}
 
 	{
@@ -970,6 +971,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["FilterUsingNote"] = Contacts.filterUsingNote;
 		jv["OpenFileOnIncoming"] = Contacts.openFileOnIncoming;
 		jv["OpenFileOnOutgoing"] = Contacts.openFileOnOutgoing;
+		jv["StoreNoteInSeparateFile"] = Contacts.storeNoteInSeparateFile;
 	}
 
 	{

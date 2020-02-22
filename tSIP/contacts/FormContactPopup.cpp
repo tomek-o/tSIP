@@ -11,7 +11,8 @@ TfrmContactPopup *frmContactPopup = NULL;
 //---------------------------------------------------------------------------
 __fastcall TfrmContactPopup::TfrmContactPopup(TComponent* Owner)
 	: TForm(Owner),
-	entry(NULL)
+	entry(NULL),
+	storeNoteInSeparateFile(false)
 {
 	//RichEdit: URL highlighting and OnClick event
 	HANDLE handle = note->Handle;
@@ -21,8 +22,9 @@ __fastcall TfrmContactPopup::TfrmContactPopup(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 
-void TfrmContactPopup::SetData(Contacts::Entry *entry)
+void TfrmContactPopup::SetData(Contacts::Entry *entry, bool storeNoteInSeparateFile)
 {
+    this->storeNoteInSeparateFile = storeNoteInSeparateFile;
 	if (Visible && entry)
 	{
 		entry->note = note->Text;
@@ -31,7 +33,32 @@ void TfrmContactPopup::SetData(Contacts::Entry *entry)
 	AnsiString text;
 	text.sprintf("%s, %s", entry->description.c_str(), entry->GetMainUri().c_str());
 	this->Caption = text;
-	note->Text = initialNote = entry->note;
+
+	if (storeNoteInSeparateFile == false)
+	{
+		note->Text = entry->note;
+	}
+	else
+	{
+		note->Text = "";
+		if (entry->file != "")
+		{
+			try
+			{
+				note->Lines->LoadFromFile(entry->file);
+			}
+			catch(...)
+			{
+				AnsiString msg;
+				msg.sprintf("Could not load note from file associated with contact");
+				MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
+			}
+		}
+	}
+
+	note->SelStart = note->Text.Length();
+	note->Perform(EM_SCROLLCARET, 0, 0);
+	initialNote = note->Text;
 }
 
 bool TfrmContactPopup::isNoteModified(void)
@@ -47,7 +74,36 @@ void __fastcall TfrmContactPopup::FormClose(TObject *Sender,
 {
 	if (entry)
 	{
-		entry->note = note->Text;
+		if (storeNoteInSeparateFile == false)
+		{
+			entry->note = note->Text;
+		}
+		else
+		{
+
+			if (isNoteModified())
+			{
+				if (entry->file == "")
+				{
+					AnsiString msg;
+					msg.sprintf("File for the note must be selected");
+					MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
+					return;
+				}
+				try
+				{
+					note->Lines->SaveToFile(entry->file);
+				}
+				catch(...)
+				{
+					AnsiString msg;
+					msg.sprintf("Could not save note to selected file");
+					MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
+					return;
+				}
+			}
+
+		}
 	}
 }
 //---------------------------------------------------------------------------

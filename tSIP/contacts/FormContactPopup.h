@@ -23,9 +23,10 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	Contacts::Entry *entry;
 	AnsiString initialNote;
+	bool storeNoteInSeparateFile;
 	void __fastcall WndProc(Messages::TMessage &Message);
 public:		// User declarations
-	void SetData(Contacts::Entry *entry);
+	void SetData(Contacts::Entry *entry, bool storeNoteInSeparateFile);
 	__fastcall TfrmContactPopup(TComponent* Owner);
 	bool isNoteModified(void);
 	void InvalidateData(void);

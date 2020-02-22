@@ -50,12 +50,16 @@ private:	// User declarations
 	std::vector<FilteredEntry> filteredContacts;
 	void FilterContacts(void);
 	bool filterUsingNote;
+	bool storeNoteInSeparateFile;
 	TMenuItem *CreateCallItem(AnsiString uri, TPopupMenu *Owner);
 public:		// User declarations
 	__fastcall TfrmContacts(TComponent* Owner, Contacts *contacts, CallbackCall callbackCall);
 	void obsUpdate(Observable* o, Argument * arg);
 	void FilterUsingNote(bool state) {
 		filterUsingNote = state;
+	}
+	void StoreNoteInSeparateFile(bool state) {
+		storeNoteInSeparateFile = state;
 	}
 	void Scale(int percentage);
 };

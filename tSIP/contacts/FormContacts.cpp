@@ -159,7 +159,7 @@ void __fastcall TfrmContacts::pupupContactListPopup(TObject *Sender)
 void __fastcall TfrmContacts::miAddClick(TObject *Sender)
 {
     Contacts::Entry entry;
-	frmContactEditor->Start(&entry);
+	frmContactEditor->Start(&entry, storeNoteInSeparateFile);
 	if (frmContactEditor->isConfirmed())
 	{
 		contacts->GetEntries().push_back(entry);
@@ -179,7 +179,7 @@ void __fastcall TfrmContacts::miEditClick(TObject *Sender)
 	}
 	int id = filteredContacts[item->Index].id;
 	Contacts::Entry &entry = contacts->GetEntries()[id];
-	frmContactEditor->Start(&entry);
+	frmContactEditor->Start(&entry, storeNoteInSeparateFile);
 	if (frmContactEditor->isConfirmed())
 	{
 		contacts->Sort();

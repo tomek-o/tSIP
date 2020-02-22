@@ -1949,6 +1949,14 @@ object frmSettings: TfrmSettings
         TabOrder = 10
         Text = '60'
       end
+      object chbContactStoreNoteInSeparateFile: TCheckBox
+        Left = 3
+        Top = 337
+        Width = 502
+        Height = 17
+        Caption = 'Store contact note in file associated with contact entry'
+        TabOrder = 11
+      end
     end
     object tsHistory: TTabSheet
       Caption = 'History'

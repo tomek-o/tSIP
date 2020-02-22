@@ -21,6 +21,8 @@ object frmContactPopup: TfrmContactPopup
     Width = 392
     Height = 113
     Align = alClient
+    PlainText = True
+    ScrollBars = ssVertical
     TabOrder = 0
   end
   object PopupMenu: TPopupMenu
