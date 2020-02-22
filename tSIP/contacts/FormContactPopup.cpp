@@ -41,7 +41,7 @@ void TfrmContactPopup::SetData(Contacts::Entry *entry, bool storeNoteInSeparateF
 	else
 	{
 		note->Text = "";
-		if (entry->file != "")
+		if (entry->file != "" && FileExists(entry->file))
 		{
 			try
 			{
