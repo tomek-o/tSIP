@@ -29,6 +29,30 @@ inline void strncpyz(char* dst, const char* src, int dstsize) {
 namespace {
 	std::vector<AnsiString> audioCodecs;
 	volatile bool audioCodecsAvailable = false;
+
+	/** Escaping text to be added as display name
+		Rules:
+		\ -> \\
+		" -> \"
+	*/
+	AnsiString EscapeDisplayName(AnsiString dn)
+	{
+		AnsiString ret;
+		for (int i=1; i<=dn.Length(); i++)
+		{
+			char c = dn[i];
+			if (c == '\\')
+			{
+				ret += '\\';
+			}
+			else if (c == '"')
+			{
+				ret += '\\';
+			}
+			ret += c;
+		}
+		return ret;
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -583,7 +607,14 @@ static int app_start(void)
 	{
 		AnsiString addr;
 		UaConf::Account &acc = appSettings.uaConf.accounts[i];
-		addr.sprintf("<sip:%s@%s;transport=%s>;regint=%d", //;sipnat=outbound",
+
+		if (acc.display_name != "")
+		{
+			AnsiString escapedDisplayName = EscapeDisplayName(acc.display_name.c_str());
+			addr.cat_printf("\"%s\" ", escapedDisplayName.c_str());
+		}
+
+		addr.cat_printf("<sip:%s@%s;transport=%s>;regint=%d", //;sipnat=outbound",
 			acc.user.c_str(), acc.reg_server.c_str(),
 			acc.getTransportStr(),
 			acc.reg_expires

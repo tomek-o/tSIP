@@ -421,6 +421,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 
 			new_acc.reg_server = acc.get("reg_server", new_acc.reg_server).asString();
 			new_acc.user = acc.get("user", new_acc.user).asString();
+			new_acc.display_name = acc.get("display_name", new_acc.display_name).asString();
 			new_acc.auth_user = acc.get("auth_user", new_acc.auth_user).asString();
 			new_acc.pwd = acc.get("pwd", new_acc.pwd).asString();
 			new_acc.cuser = acc.get("cuser", new_acc.cuser).asString();
@@ -1121,6 +1122,8 @@ int Settings::Write(AnsiString asFileName)
 			cfgAcc["reg_server"] = acc.reg_server;
 		if (!acc.hide_user)
 			cfgAcc["user"] = acc.user;
+		if (!acc.hide_display_name)
+			cfgAcc["display_name"] = acc.display_name;
 		if (!acc.hide_auth_user)
 			cfgAcc["auth_user"] = acc.auth_user;
 		if (!acc.hide_pwd)
@@ -1135,6 +1138,7 @@ int Settings::Write(AnsiString asFileName)
 
 		cfgAcc["hide_reg_server"] = acc.hide_reg_server;
 		cfgAcc["hide_user"] = acc.hide_user;
+		cfgAcc["hide_display_name"] = acc.hide_display_name;
 		cfgAcc["hide_auth_user"] = acc.hide_auth_user;
 		cfgAcc["hide_pwd"] = acc.hide_pwd;
 		cfgAcc["hide_cuser"] = acc.hide_cuser;

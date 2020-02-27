@@ -19,6 +19,7 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 
 	chbHideRegServer->Checked = acc.hide_reg_server;
 	chbHideUser->Checked = acc.hide_user;
+	chbHideDisplayName->Checked = acc.hide_display_name;
 	chbHideAuthUser->Checked = acc.hide_auth_user;
 	chbHideCuser->Checked = acc.hide_cuser;
 	chbHidePassword->Checked = acc.hide_pwd;
@@ -27,6 +28,8 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 		edRegServer->Text = acc.reg_server.c_str();
 	if (!acc.hide_user)
 		edUser->Text = acc.user.c_str();
+	if (!acc.hide_display_name)
+		edDisplayName->Text = acc.display_name.c_str();
 	if (!acc.hide_auth_user)
 		edAuthUser->Text = acc.auth_user.c_str();
 	if (!acc.hide_cuser)
@@ -84,6 +87,12 @@ void __fastcall TfrmAccount::edExpiresChange(TObject *Sender)
 void __fastcall TfrmAccount::edStunServerChange(TObject *Sender)
 {
 	acc.stun_server = edStunServer->Text.c_str();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::edDisplayNameChange(TObject *Sender)
+{
+	acc.display_name = edDisplayName->Text.c_str();
 }
 //---------------------------------------------------------------------------
 
@@ -151,6 +160,14 @@ void __fastcall TfrmAccount::chbHidePasswordClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmAccount::chbHideDisplayNameClick(TObject *Sender)
+{
+	acc.hide_display_name = chbHideDisplayName->Checked;
+	if (!chbHideDisplayName->Checked)
+		acc.display_name = "";
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TfrmAccount::chbHideAuthUserClick(TObject *Sender)
 {
 	acc.hide_auth_user = chbHideAuthUser->Checked;
@@ -163,13 +180,15 @@ void __fastcall TfrmAccount::chbHideCuserClick(TObject *Sender)
 {
 	acc.hide_cuser = chbHideCuser->Checked;
 	if (!chbHideCuser->Checked)
-		acc.cuser = "";	
+		acc.cuser = "";
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmAccount::cbDtmfTxFormatChange(TObject *Sender)
 {
-	acc.dtmf_tx_format = cbDtmfTxFormat->ItemIndex;	
+	acc.dtmf_tx_format = cbDtmfTxFormat->ItemIndex;
 }
 //---------------------------------------------------------------------------
+
+
 

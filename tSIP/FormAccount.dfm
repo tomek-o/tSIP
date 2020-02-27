@@ -4,7 +4,7 @@ object frmAccount: TfrmAccount
   Align = alTop
   BorderStyle = bsNone
   Caption = 'Account'
-  ClientHeight = 294
+  ClientHeight = 326
   ClientWidth = 532
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -52,7 +52,7 @@ object frmAccount: TfrmAccount
   end
   object lblExtra: TLabel
     Left = 9
-    Top = 117
+    Top = 122
     Width = 311
     Height = 13
     Caption = 
@@ -60,43 +60,43 @@ object frmAccount: TfrmAccount
       'es)'
   end
   object lblAuthUser: TLabel
-    Left = 9
-    Top = 139
+    Left = 8
+    Top = 172
     Width = 94
     Height = 13
     Caption = 'Authentication user'
   end
   object lblAuthUserInfo: TLabel
-    Left = 233
-    Top = 139
+    Left = 232
+    Top = 172
     Width = 122
     Height = 13
     Caption = '(fill if different than User)'
   end
   object lblStunServer: TLabel
-    Left = 9
-    Top = 186
+    Left = 8
+    Top = 218
     Width = 60
     Height = 13
     Caption = 'STUN server'
   end
   object lblOutbound1: TLabel
-    Left = 9
-    Top = 209
+    Left = 8
+    Top = 241
     Width = 79
     Height = 13
     Caption = 'Outbound proxy'
   end
   object lblPtime: TLabel
     Left = 8
-    Top = 270
+    Top = 302
     Width = 26
     Height = 13
     Caption = 'ptime'
   end
   object lblContactUser: TLabel
-    Left = 8
-    Top = 163
+    Left = 7
+    Top = 195
     Width = 70
     Height = 13
     Caption = '"Contact" user'
@@ -115,16 +115,23 @@ object frmAccount: TfrmAccount
     ParentFont = False
   end
   object lblDtmfTxFormat: TLabel
-    Left = 8
-    Top = 232
+    Left = 7
+    Top = 264
     Width = 81
     Height = 13
     Caption = 'DTMF TX method'
   end
+  object lblDisplayName: TLabel
+    Left = 8
+    Top = 149
+    Width = 63
+    Height = 13
+    Caption = 'Display name'
+  end
   object grboxAccount: TGroupBox
-    Left = 192
-    Top = 265
-    Width = 95
+    Left = 379
+    Top = 293
+    Width = 86
     Height = 25
     Align = alCustom
     Caption = 'Account #xxx'
@@ -206,7 +213,7 @@ object frmAccount: TfrmAccount
   end
   object edAuthUser: TEdit
     Left = 126
-    Top = 136
+    Top = 169
     Width = 98
     Height = 22
     Font.Charset = DEFAULT_CHARSET
@@ -220,7 +227,7 @@ object frmAccount: TfrmAccount
   end
   object edStunServer: TEdit
     Left = 126
-    Top = 183
+    Top = 215
     Width = 162
     Height = 22
     Font.Charset = DEFAULT_CHARSET
@@ -234,7 +241,7 @@ object frmAccount: TfrmAccount
   end
   object edOutbound1: TEdit
     Left = 126
-    Top = 206
+    Top = 238
     Width = 162
     Height = 22
     Font.Charset = DEFAULT_CHARSET
@@ -247,8 +254,8 @@ object frmAccount: TfrmAccount
     OnChange = edOutbound1Change
   end
   object chbAnswerAny: TCheckBox
-    Left = 8
-    Top = 250
+    Left = 7
+    Top = 282
     Width = 346
     Height = 17
     Caption = 
@@ -260,7 +267,7 @@ object frmAccount: TfrmAccount
   end
   object edPtime: TEdit
     Left = 126
-    Top = 267
+    Top = 299
     Width = 50
     Height = 22
     Font.Charset = DEFAULT_CHARSET
@@ -275,7 +282,7 @@ object frmAccount: TfrmAccount
   end
   object edCuser: TEdit
     Left = 126
-    Top = 160
+    Top = 192
     Width = 98
     Height = 22
     Font.Charset = DEFAULT_CHARSET
@@ -315,8 +322,8 @@ object frmAccount: TfrmAccount
     OnClick = chbHidePasswordClick
   end
   object chbHideAuthUser: TCheckBox
-    Left = 380
-    Top = 138
+    Left = 379
+    Top = 171
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
@@ -324,8 +331,8 @@ object frmAccount: TfrmAccount
     OnClick = chbHideAuthUserClick
   end
   object chbHideCuser: TCheckBox
-    Left = 380
-    Top = 162
+    Left = 379
+    Top = 194
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
@@ -334,7 +341,7 @@ object frmAccount: TfrmAccount
   end
   object cbDtmfTxFormat: TComboBox
     Left = 126
-    Top = 229
+    Top = 261
     Width = 131
     Height = 21
     Style = csDropDownList
@@ -346,5 +353,28 @@ object frmAccount: TfrmAccount
     Items.Strings = (
       'RFC2833'
       'SIP INFO / dtmf-relay')
+  end
+  object edDisplayName: TEdit
+    Left = 126
+    Top = 146
+    Width = 160
+    Height = 22
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Courier New'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 18
+    OnChange = edDisplayNameChange
+  end
+  object chbHideDisplayName: TCheckBox
+    Left = 379
+    Top = 148
+    Width = 145
+    Height = 17
+    Caption = 'Hide/do not store in file'
+    TabOrder = 19
+    OnClick = chbHideDisplayNameClick
   end
 end

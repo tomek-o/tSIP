@@ -27,6 +27,7 @@ public:
 		} transport;
 		std::string reg_server;
 		std::string user;
+		std::string display_name;
 		std::string auth_user;
 		std::string pwd;
 		std::string cuser;
@@ -37,6 +38,7 @@ public:
 
 		bool hide_reg_server;	// hide in settings and not store in settings file
 		bool hide_user;
+		bool hide_display_name;
 		bool hide_auth_user;
 		bool hide_pwd;
 		bool hide_cuser;
@@ -55,6 +57,7 @@ public:
 		bool operator==(const Account& right) const {
 			return (reg_server == right.reg_server &&
 				user == right.user &&
+				display_name == right.display_name &&
 				auth_user == right.auth_user &&
 				pwd == right.pwd &&
 				cuser == right.cuser &&
@@ -65,6 +68,7 @@ public:
 
 				hide_reg_server == right.hide_reg_server &&
 				hide_user == right.hide_user &&
+				hide_display_name == right.hide_display_name &&
 				hide_auth_user == right.hide_auth_user &&
 				hide_pwd == right.hide_pwd &&
 				hide_cuser == right.hide_cuser &&
@@ -91,6 +95,7 @@ public:
 
 			hide_reg_server(false),
 			hide_user(false),
+			hide_display_name(false),
 			hide_auth_user(false),
 			hide_pwd(false),
 			hide_cuser(false),
