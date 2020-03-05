@@ -524,27 +524,42 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.SipAccessUrl.accessMode = static_cast<Settings::_SipAccessUrl::AccessMode>(cbSipAccessUrlMode->ItemIndex);
 
 	const char* ptr = NULL;
-	ptr = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
 
+	ptr = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgSrc.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgSrc.mod));
-	strncpyz(tmpSettings.uaConf.audioCfgSrc.dev, cbSoundInputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgSrc.dev));
+	if (cbSoundInputDev->Tag == 0 || cbSoundInputDev->ItemIndex != cbSoundInputDev->Items->Count - 1)
+	{
+		strncpyz(tmpSettings.uaConf.audioCfgSrc.dev, cbSoundInputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgSrc.dev));
+	}
 	strncpyz(tmpSettings.uaConf.audioCfgSrc.wavefile, edSoundInputWave->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgSrc.wavefile));
 
 	ptr = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgPlay.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgPlay.mod));
-	strncpyz(tmpSettings.uaConf.audioCfgPlay.dev, cbSoundOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgPlay.dev));
+	if (cbSoundOutputDev->Tag == 0 || cbSoundOutputDev->ItemIndex != cbSoundOutputDev->Items->Count - 1)
+	{
+		strncpyz(tmpSettings.uaConf.audioCfgPlay.dev, cbSoundOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgPlay.dev));
+	}
 
 	ptr = AudioModules::GetOutputModuleFromCbIndex(cbSoundAlertOutputMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgAlert.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgAlert.mod));
-	strncpyz(tmpSettings.uaConf.audioCfgAlert.dev, cbSoundAlertOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgAlert.dev));
+	if (cbSoundAlertOutputDev->Tag == 0 || cbSoundAlertOutputDev->ItemIndex != cbSoundAlertOutputDev->Items->Count - 1)
+	{
+		strncpyz(tmpSettings.uaConf.audioCfgAlert.dev, cbSoundAlertOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgAlert.dev));
+	}
 
 	ptr = AudioModules::GetOutputModuleFromCbIndex(cbSoundRingOutputMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgRing.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgRing.mod));
-	strncpyz(tmpSettings.uaConf.audioCfgRing.dev, cbSoundRingOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgRing.dev));
+	if (cbSoundRingOutputDev->Tag == 0 || cbSoundRingOutputDev->ItemIndex != cbSoundRingOutputDev->Items->Count - 1)
+	{
+		strncpyz(tmpSettings.uaConf.audioCfgRing.dev, cbSoundRingOutputDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgRing.dev));
+	}
 
 	ptr = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputIntercomMod->ItemIndex);
 	strncpyz(tmpSettings.uaConf.audioCfgPlayIntercom.mod, ptr, sizeof(tmpSettings.uaConf.audioCfgPlayIntercom.mod));
-	strncpyz(tmpSettings.uaConf.audioCfgPlayIntercom.dev, cbSoundOutputIntercomDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgPlayIntercom.dev));
+	if (cbSoundOutputIntercomDev->Tag == 0 || cbSoundOutputIntercomDev->ItemIndex != cbSoundOutputIntercomDev->Items->Count - 1)
+	{
+		strncpyz(tmpSettings.uaConf.audioCfgPlayIntercom.dev, cbSoundOutputIntercomDev->Text.c_str(), sizeof(tmpSettings.uaConf.audioCfgPlayIntercom.dev));
+	}
 
 
 	tmpSettings.uaConf.aec = (UaConf::Aec)cbAec->ItemIndex;

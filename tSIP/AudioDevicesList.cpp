@@ -81,6 +81,7 @@ void AudioDevicesList::Refresh(void)
 
 void AudioDevicesList::FillComboBox(Stdctrls::TComboBox *target, AnsiString module, bool out, AnsiString selected)
 {
+    target->Tag = 0;
 	target->Items->Clear();
 	std::vector<AnsiString> *v = NULL;
 	if (module == AudioModules::portaudio)
@@ -108,7 +109,16 @@ void AudioDevicesList::FillComboBox(Stdctrls::TComboBox *target, AnsiString modu
 		target->Items->Add(dev);
 		if (dev == selected)
 		{
-        	target->ItemIndex = i;
+			target->ItemIndex = i;
 		}
+	}
+	// convention: if selected device is not found - add it at last item with [NOT FOUND] text and set non-zero Tag
+	if (target->ItemIndex < 0 && target->Items->Count > 0 && selected != "")
+	{
+		AnsiString text;
+		text.sprintf("[NOT FOUND] %s", selected.c_str());
+		target->Items->Add(text);
+		target->ItemIndex = target->Items->Count - 1;
+		target->Tag = 1;
 	}
 }

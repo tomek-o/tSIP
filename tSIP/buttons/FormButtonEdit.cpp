@@ -163,7 +163,10 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->audioRxMod = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
 	if (cbSoundInputDev->Visible)
 	{
-		cfg->audioRxDev = cbSoundInputDev->Text.c_str();
+		if (cbSoundInputDev->Tag == 0 || cbSoundInputDev->ItemIndex != cbSoundInputDev->Items->Count - 1)
+		{
+			cfg->audioRxDev = cbSoundInputDev->Text.c_str();
+		}
 	}
 	else if (edSoundInputWave->Visible)
 	{
@@ -171,7 +174,10 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	}
 
 	cfg->audioTxMod = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputMod->ItemIndex);
-	cfg->audioTxDev = cbSoundOutputDev->Text.c_str();
+	if (cbSoundOutputDev->Tag == 0 || cbSoundOutputDev->ItemIndex != cbSoundOutputDev->Items->Count - 1)
+	{
+		cfg->audioTxDev = cbSoundOutputDev->Text.c_str();
+	}
 
 	Close();
 }
