@@ -671,7 +671,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		Logging.bLogToFile = LoggingJson.get("LogToFile", Logging.bLogToFile).asBool();
 		Logging.bFlush = LoggingJson.get("Flush", Logging.bFlush).asBool();
 		int iMaxFileSize = LoggingJson.get("MaxFileSize", Logging.iMaxFileSize).asInt();
-		if (iMaxFileSize >= Settings::_Logging::MIN_MAX_FILE_SIZE && Logging.iMaxFileSize <= Settings::_Logging::MIN_MAX_FILE_SIZE)
+		if (iMaxFileSize >= Settings::_Logging::MIN_MAX_FILE_SIZE && Logging.iMaxFileSize <= Settings::_Logging::MAX_MAX_FILE_SIZE)
 		{
 			Logging.iMaxFileSize = iMaxFileSize;
 		}

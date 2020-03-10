@@ -491,7 +491,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Logging.bLogToFile = chbLogToFile->Checked;
 	tmpSettings.Logging.bFlush = chbLogFlush->Checked;
 	tmpSettings.Logging.iMaxFileSize = StrToIntDef(cbLogMaxFileSize->Text, tmpSettings.Logging.iMaxFileSize);
-	if (tmpSettings.Logging.iMaxFileSize < Settings::_Logging::MIN_MAX_FILE_SIZE || tmpSettings.Logging.iMaxFileSize > Settings::_Logging::MIN_MAX_FILE_SIZE)
+	if (tmpSettings.Logging.iMaxFileSize < Settings::_Logging::MIN_MAX_FILE_SIZE || tmpSettings.Logging.iMaxFileSize > Settings::_Logging::MAX_MAX_FILE_SIZE)
 	{
 		tmpSettings.Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
 	}

@@ -3000,6 +3000,8 @@ object frmSettings: TfrmSettings
         TabOrder = 4
         Items.Strings = (
           '1048576'
+          '2097152'
+          '5242880'
           '10485760'
           '104857600')
       end
