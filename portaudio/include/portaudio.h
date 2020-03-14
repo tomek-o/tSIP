@@ -109,7 +109,6 @@ typedef enum PaErrorCode
 */
 const char *Pa_GetErrorText( PaError errorCode );
 
-
 /** Library initialization function - call this before using PortAudio.
  This function initializes internal data structures and prepares underlying
  host APIs for use.  With the exception of Pa_GetVersion(), Pa_GetVersionText(),
@@ -1165,6 +1164,11 @@ PaError Pa_GetSampleSize( PaSampleFormat format );
  musical timing.
 */
 void Pa_Sleep( long msec );
+
+typedef void (*Pa_Lock_Callback)(void);
+typedef void (*Pa_Unlock_Callback)(void);
+
+void Pa_SetLocks(Pa_Lock_Callback lock, Pa_Unlock_Callback unlock);
 
 
 

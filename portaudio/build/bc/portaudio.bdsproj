@@ -196,6 +196,15 @@
         <FILE FILENAME="..\..\src\os\win\pa_win_util.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pa_win_util" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\os\win\pa_win_waveformat.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pa_win_waveformat" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\os\win\pa_win_wdmks_utils.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="pa_win_wdmks_utils" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\pa_asio.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\pa_jack.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\pa_linux_alsa.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\pa_mac_core.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\pa_win_ds.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\pa_win_wasapi.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\pa_win_waveformat.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\pa_win_wmme.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\portaudio.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -253,5 +262,6 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents/>
+		<Folders/>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

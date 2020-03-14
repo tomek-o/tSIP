@@ -46,6 +46,7 @@
 #include "FormTroubleshooting.h"
 #include "SIMPLE_Messages.h"
 #include "Globals.h"
+#include "PortaudioLock.h"
 #include "common\Utilities.h"
 #include "common\ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -257,6 +258,7 @@ __fastcall TfrmMain::~TfrmMain()
 {
 	delete trIcon;
 	trIcon = NULL;
+	PortaudioLockShutdown();
 }
 
 //---------------------------------------------------------------------------
@@ -594,6 +596,8 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 			}
 		}
 	}
+
+    PortaudioLockInit();
 
 	Ua::Instance().Start();
 	SetStatus("Initializing...");

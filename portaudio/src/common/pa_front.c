@@ -81,6 +81,8 @@
 #define PA_VERSION_TEXT_ "PortAudio V19-devel (built " __DATE__  " " __TIME__ ")"
 
 
+static Pa_Lock_Callback lock_cb = NULL;
+static Pa_Unlock_Callback unlock_cb = NULL;
 
 
 int Pa_GetVersion( void )
@@ -192,9 +194,9 @@ static PaError InitializeHostApis( void )
 
         if( hostApis_[hostApisCount_] )
         {
-            PaUtilHostApiRepresentation* hostApi = hostApis_[hostApisCount_];
-            assert( hostApi->info.defaultInputDevice < hostApi->info.deviceCount );
-            assert( hostApi->info.defaultOutputDevice < hostApi->info.deviceCount );
+			PaUtilHostApiRepresentation* hostApi = hostApis_[hostApisCount_];
+			assert( hostApi->info.defaultInputDevice < hostApi->info.deviceCount );
+			assert( hostApi->info.defaultOutputDevice < hostApi->info.deviceCount );
 
             /* the first successfully initialized host API with a default input *or* 
                output device is used as the default host API.
@@ -290,7 +292,7 @@ static void RemoveOpenStream( PaStream* stream )
             }
             else
             {
-                previous->nextOpenStream = current->nextOpenStream;
+				previous->nextOpenStream = current->nextOpenStream;
             }
             return;
         }
@@ -317,6 +319,11 @@ PaError Pa_Initialize( void )
 {
     PaError result;
 
+	if (lock_cb)
+	{
+		lock_cb();
+	}
+
     PA_LOGAPI_ENTER( "Pa_Initialize" );
 
     if( PA_IS_INITIALISED_ )
@@ -339,6 +346,11 @@ PaError Pa_Initialize( void )
 
     PA_LOGAPI_EXIT_PAERROR( "Pa_Initialize", result );
 
+	if (unlock_cb)
+	{
+		unlock_cb();
+	}
+
     return result;
 }
 
@@ -346,6 +358,11 @@ PaError Pa_Initialize( void )
 PaError Pa_Terminate( void )
 {
     PaError result;
+
+	if (lock_cb)
+	{
+		lock_cb();
+	}
 
     PA_LOGAPI_ENTER( "Pa_Terminate" );
 
@@ -367,6 +384,11 @@ PaError Pa_Terminate( void )
     }
 
     PA_LOGAPI_EXIT_PAERROR( "Pa_Terminate", result );
+
+	if (unlock_cb)
+	{
+		unlock_cb();
+	}
 
     return result;
 }
@@ -1767,4 +1789,11 @@ PaError Pa_GetSampleSize( PaSampleFormat format )
 
     return (PaError) result;
 }
+
+void Pa_SetLocks(Pa_Lock_Callback lock, Pa_Unlock_Callback unlock)
+{
+	lock_cb = lock;
+	unlock_cb = unlock;
+}
+
 
