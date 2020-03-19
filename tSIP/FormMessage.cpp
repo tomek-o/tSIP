@@ -50,7 +50,8 @@ void __fastcall TfrmMessage::memoInputKeyDown(TObject *Sender, WORD &Key,
 //---------------------------------------------------------------------------
 void TfrmMessage::_SendMsg()
 {
-    edTarget->Enabled = false;
+	targetSet = true;
+	edTarget->Enabled = false;
 	AnsiString target = edTarget->Text;
 	AnsiString msg = memoInput->Lines->Text;
 
@@ -95,7 +96,6 @@ void __fastcall TfrmMessage::btnSendClick(TObject *Sender)
 {
 	if (memoInput->Lines->Text != "")
 	{
-		targetSet = true;
 		_SendMsg();
 	}
 }
@@ -110,8 +110,8 @@ void __fastcall TfrmMessage::FormClose(TObject *Sender, TCloseAction &Action)
 
 void TfrmMessage::SetTarget(AnsiString target)
 {
-    targetSet = true;
-	this->target = target;
+	UpdateTarget(target);
+	targetSet = true;
 	edTarget->Text = target;
 	edTarget->Enabled = false;
 }
@@ -155,10 +155,17 @@ void TfrmMessage::AddIncomingMessage(AnsiString contentType, AnsiString body)
 
 void __fastcall TfrmMessage::edTargetChange(TObject *Sender)
 {
-	if (!targetSet)
-	{
-		this->target = edTarget->Text;
-	}
+	UpdateTarget(edTarget->Text);
 }
 //---------------------------------------------------------------------------
 
+void TfrmMessage::UpdateTarget(AnsiString val)
+{
+	if (!targetSet)
+	{
+		target = val;
+		AnsiString caption;
+		caption.sprintf("Text: %s", target.c_str());
+		this->Caption = caption;
+	}
+}

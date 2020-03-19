@@ -92,9 +92,9 @@ void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString bod
 	if (frm == NULL)
 	{
 		frm = new TfrmMessage(NULL);
+		frm->SetIncoming();
+		frm->SetTarget(caller);
 	}
-	frm->SetIncoming();
-	frm->SetTarget(caller);
 	frm->AddIncomingMessage(contentType, body);
 	frm->Show();
 }

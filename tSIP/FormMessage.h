@@ -32,6 +32,7 @@ private:	// User declarations
 	AnsiString target;
 	bool targetSet;
 	bool incoming;
+	void UpdateTarget(AnsiString val);
 public:		// User declarations
 	__fastcall TfrmMessage(TComponent* Owner);
 	void __fastcall MyWndProc (Messages::TMessage &Msg);
