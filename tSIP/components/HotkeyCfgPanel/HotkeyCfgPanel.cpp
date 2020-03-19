@@ -123,7 +123,20 @@ void __fastcall THotkeyCfgPanel::UpdateCfg(TObject *Sender)
 	}
 	cfg.global = chbGlobal->Checked;
 	cfg.action.type = static_cast<Action::Type>(cbAction->ItemIndex);
+	UpdateActionTypeView();
 	cfg.action.id = cbId->ItemIndex;
+}
+
+void THotkeyCfgPanel::UpdateActionTypeView(void)
+{
+	if (cbAction->ItemIndex == Action::TYPE_BUTTON)
+	{
+		cbId->Visible = true;
+	}
+	else
+	{
+    	cbId->Visible = false;
+	}
 }
 
 void THotkeyCfgPanel::Start(void)
@@ -154,6 +167,7 @@ void THotkeyCfgPanel::Start(void)
 	chbAlt->Checked = cfg.modifiers & HotKeyConf::ALT;
 	cbKey->ItemIndex = vkey_find(cfg.keyCode.c_str());	// can't do this in constructor
 	cbAction->ItemIndex = cfg.action.type;
+	UpdateActionTypeView();
 	cbId->ItemIndex = cfg.action.id;
 	chbGlobal->Checked = cfg.global;
 

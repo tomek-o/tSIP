@@ -15,7 +15,8 @@ class PACKAGE THotkeyCfgPanel : public TPanel
 {
 private:
 	HotKeyConf &cfg;
-	void __fastcall UpdateCfg(TObject *Sender);	
+	void __fastcall UpdateCfg(TObject *Sender);
+	void UpdateActionTypeView(void);
 protected:
 public:
 	__fastcall THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg);
