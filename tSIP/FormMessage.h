@@ -27,8 +27,10 @@ __published:	// IDE-managed Components
     void __fastcall btnSendOnEnterClick(TObject *Sender);
     void __fastcall btnSendClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall edTargetChange(TObject *Sender);
 private:	// User declarations
 	AnsiString target;
+	bool targetSet;
 	bool incoming;
 public:		// User declarations
 	__fastcall TfrmMessage(TComponent* Owner);

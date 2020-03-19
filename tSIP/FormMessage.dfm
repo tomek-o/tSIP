@@ -149,6 +149,7 @@ object frmMessage: TfrmMessage
       Font.Style = []
       ParentFont = False
       TabOrder = 0
+      OnChange = edTargetChange
     end
   end
 end

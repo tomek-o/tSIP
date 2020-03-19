@@ -16,6 +16,7 @@ TfrmMessage *frmMessage;
 //---------------------------------------------------------------------------
 __fastcall TfrmMessage::TfrmMessage(TComponent* Owner)
 	: TForm(Owner),
+	targetSet(false),
 	incoming(false)
 {
 	SIMPLE_Messages::RegisterWindow(this);
@@ -94,6 +95,7 @@ void __fastcall TfrmMessage::btnSendClick(TObject *Sender)
 {
 	if (memoInput->Lines->Text != "")
 	{
+		targetSet = true;
 		_SendMsg();
 	}
 }
@@ -108,6 +110,7 @@ void __fastcall TfrmMessage::FormClose(TObject *Sender, TCloseAction &Action)
 
 void TfrmMessage::SetTarget(AnsiString target)
 {
+    targetSet = true;
 	this->target = target;
 	edTarget->Text = target;
 	edTarget->Enabled = false;
@@ -115,6 +118,7 @@ void TfrmMessage::SetTarget(AnsiString target)
 
 void TfrmMessage::AddIncomingMessage(AnsiString contentType, AnsiString body)
 {
+    targetSet = true;
 	if (contentType == "text/plain")
 	{
     	body = ::Utf8ToAnsi(body);
@@ -148,4 +152,13 @@ void TfrmMessage::AddIncomingMessage(AnsiString contentType, AnsiString body)
 //            PlaySound(..., NULL, SND_ASYNC | SND_FILENAME);
 	}
 }
+
+void __fastcall TfrmMessage::edTargetChange(TObject *Sender)
+{
+	if (!targetSet)
+	{
+		this->target = edTarget->Text;
+	}
+}
+//---------------------------------------------------------------------------
 

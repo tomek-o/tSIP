@@ -6,6 +6,7 @@
 #include "SIMPLE_Messages.h"
 #include "FormMessage.h"
 #include "Log.h"
+#include "Settings.h"
 #include <set>
 
 //---------------------------------------------------------------------------
@@ -42,6 +43,28 @@ void CloseAllWindows(void)
 	}
 }
 
+bool IsTargetMatching(AnsiString remote, AnsiString target)
+{
+	if (remote == target)
+	{
+		return true;
+	}
+
+	if (target.Pos("sip:") != 1)
+	{
+		if (appSettings.uaConf.accounts.size() > 0)
+		{
+			target = (AnsiString)"sip:" + target + "@" + appSettings.uaConf.accounts[0].reg_server.c_str();
+			if (remote == target)
+			{
+            	return true;
+			}
+		}
+	}
+
+	return false;
+}
+
 void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body)
 {
 	LOG("Received message from %s: ContentType %s, body [%s]\n", caller.c_str(), contentType.c_str(), body.c_str());
@@ -55,7 +78,7 @@ void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString bod
 		{
 			incomingCount++;
 		}
-		if (caller == frmIter->GetTarget())
+		if (IsTargetMatching(caller, frmIter->GetTarget()))
 		{
 			frm = frmIter;
 			break;
