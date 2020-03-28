@@ -31,7 +31,8 @@ struct ua {
 	struct account *acc;         /**< Account Parameters                 */
 	struct list regl;            /**< List of Register clients           */
 	struct list calls;           /**< List of active calls (struct call) */
-	struct play *play;           /**< Playback of ringtones etc.         */
+	struct play *play;           /**< Playback of ringtones etc. (basic) */
+	struct play *play2;          /**< Playback of ringtones etc. #2 (incoming MESSAGE)     */
 	struct pl extensionv[8];     /**< Vector of SIP extensions           */
 	size_t    extensionc;        /**< Number of SIP extensions           */
 	char *cuser;                 /**< SIP Contact username               */
@@ -270,6 +271,14 @@ int ua_play_stop(struct ua *ua)
 	ua->play = mem_deref(ua->play);
 	return 0;
 }
+
+int ua_play_file2(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename)
+{
+	if (!ua)
+		return EINVAL;
+	return play_file(&ua->play2, audio_mod, audio_dev, filename, 0);
+}
+
 
 static const char *translate_errorcode(uint16_t scode)
 {
@@ -540,6 +549,7 @@ static void ua_destructor(void *arg)
 	list_flush(&ua->calls);
 	list_flush(&ua->regl);
 	mem_deref(ua->play);
+	mem_deref(ua->play2);
 	mem_deref(ua->cuser);
 	mem_deref(ua->acc);
 }

@@ -143,6 +143,8 @@ Settings::Settings(void)
 	History.bFormatCallDurationAsHourMinSec = true;
 	History.bShowCodecNameInHint = true;
 
+    Messages.ring = "pluck.wav";
+
 	Scripts.timer = 1000;
 	Scripts.timer2 = 1000;
 
@@ -790,6 +792,11 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 	}
 
 	{
+		const Json::Value &MessagesJson = root["Messages"];
+		MessagesJson.getAString("Ring", Messages.ring);
+	}
+
+	{
 		const Json::Value &ScriptsJson = root["Scripts"];
 		Scripts.onMakeCall = ScriptsJson.get("OnMakeCall", Scripts.onMakeCall.c_str()).asString().c_str();
 		Scripts.onCallState = ScriptsJson.get("OnCallState", Scripts.onCallState.c_str()).asString().c_str();
@@ -991,6 +998,11 @@ int Settings::Write(AnsiString asFileName)
 		{
 			jlcw.append(History.listColumnWidths[i]);
 		}
+	}
+
+	{
+		Json::Value &MessagesJson = root["Messages"];
+		MessagesJson["Ring"] = Messages.ring;
 	}
 
 	{

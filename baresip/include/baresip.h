@@ -593,6 +593,8 @@ unsigned int ua_regint(const struct ua *ua);
 int	ua_reregister(struct ua *ua);
 int ua_play_file(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, int repeat);
 int ua_play_stop(struct ua *ua);
+/** Start playing another, separate "ring", with no options to repeat/cancel */
+int ua_play_file2(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename);
 const char     *ua_aor(const struct ua *ua);
 const char     *ua_cuser(const struct ua *ua);
 const char     *ua_outbound(const struct ua *ua);

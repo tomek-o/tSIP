@@ -1727,6 +1727,20 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		case Callback::SIMPLE_MESSAGE:
 		{
 			SIMPLE_Messages::OnIncomingMessage(cb.caller, cb.contentType, cb.body);
+			AnsiString file = appSettings.Messages.ring;
+			if (file != "")
+			{
+				AnsiString fileFull;
+				fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), file.c_str());
+				if (FileExists(fileFull))
+				{
+					UA->StartRing2(file);
+				}
+				else
+				{
+					LOG("Ring file (%s) for MESSAGE not found\n", file.c_str());
+				}
+			}
 			break;
 		}
 		default:

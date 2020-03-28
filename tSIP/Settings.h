@@ -270,6 +270,10 @@ public:
 		bool bShowCodecNameInHint;
 		std::vector<int> listColumnWidths;
 	} History;
+	struct _Messages
+	{
+    	AnsiString ring;
+	} Messages;
 	struct _Scripts
 	{
 		AnsiString onMakeCall;		///< running when outgoing call is initiated

@@ -910,6 +910,13 @@ extern "C" void control_handler(void)
 		ua_play_stop(ua);
 		break;
 	}
+	case Command::START_RING2: {
+		struct ua* ua = ua_cur();
+		struct config * cfg = conf_config();
+		//LOG("UaMain: START_RING2\n");
+		(void)ua_play_file2(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str());
+		break;
+	}
 	case Command::RECORD: {
         recorder_start(cmd.target.c_str(), cmd.channels, static_cast<enum recorder_side>(cmd.recSide));
 		break;

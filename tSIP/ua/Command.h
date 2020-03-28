@@ -24,6 +24,7 @@ public:
 		MUTE,
 		START_RING,			///< start playing ring tone / wave file
 		PLAY_STOP,			///< stop playing currently played wave file
+		START_RING2,		///< secondary ring (incoming MESSAGE)
 		RECORD,
 		PAGING_TX,
 		SWITCH_AUDIO_SOURCE,///< change source audio device for current call (audioMod/audioDev)

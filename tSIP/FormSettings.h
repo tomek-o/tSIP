@@ -370,6 +370,10 @@ __published:	// IDE-managed Components
 	TEdit *edScriptOnContactNoteOpenFile;
 	TButton *btnSelectedScriptOnContactNoteOpenChange;
 	TBitBtn *btnSelectedScriptOnContactNoteOpenEdit;
+	TTabSheet *tsMessages;
+	TLabel *lblMessagesRing;
+	TEdit *edMessagesRing;
+	TButton *btnMessagesSelectRing;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -406,6 +410,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnOpenRecordingFolderClick(TObject *Sender);
 	void __fastcall cbNetworkInterfacesChange(TObject *Sender);
 	void __fastcall btnSelectContactsFileClick(TObject *Sender);
+	void __fastcall btnMessagesSelectRingClick(TObject *Sender);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
 	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, int moduleIndex, AnsiString selected);
