@@ -72,7 +72,7 @@ static void resp_handler(int err, const struct sip_msg *msg, void *arg)
 	}
 
 	if (msg->scode >= 300) {
-		DEBUG_WARNING("MESSAGE response: code %u, reason: %r", msg->scode, &msg->reason);
+		DEBUG_WARNING("MESSAGE response: code %u, reason: %r\n", msg->scode, &msg->reason);
 	}
 }
 
