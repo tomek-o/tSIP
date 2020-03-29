@@ -658,6 +658,18 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.audioPortaudio.inSuggestedLatency = StrToFloatDef(edPortaudioInSuggestedLatency->Text, tmpSettings.uaConf.audioPortaudio.inSuggestedLatency);
 	tmpSettings.uaConf.audioPortaudio.outSuggestedLatency = StrToFloatDef(edPortaudioOutSuggestedLatency->Text, tmpSettings.uaConf.audioPortaudio.outSuggestedLatency);
 
+	tmpSettings.Ring.defaultRing = edRingDefault->Text;
+	tmpSettings.Ring.bellcore[0] = edRingBellcoreDr1->Text;
+	tmpSettings.Ring.bellcore[1] = edRingBellcoreDr2->Text;
+	tmpSettings.Ring.bellcore[2] = edRingBellcoreDr3->Text;
+	tmpSettings.Ring.bellcore[3] = edRingBellcoreDr4->Text;
+	tmpSettings.Ring.bellcore[4] = edRingBellcoreDr5->Text;
+	tmpSettings.Ring.bellcore[5] = edRingBellcoreDr6->Text;
+	tmpSettings.Ring.bellcore[6] = edRingBellcoreDr7->Text;
+	tmpSettings.Ring.bellcore[7] = edRingBellcoreDr8->Text;
+
+	tmpSettings.Messages.ring = edMessagesRing->Text;
+
 	tmpSettings.frmContactPopup.showOnIncoming = chbContactPopupShowOnIncoming->Checked;
 	tmpSettings.frmContactPopup.showOnOutgoing = chbContactPopupShowOnOutgoing->Checked;
 	tmpSettings.Contacts.openFileOnIncoming = chbContactOpenFileOnIncoming->Checked;
