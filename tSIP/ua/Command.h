@@ -53,7 +53,7 @@ public:
 	unsigned int recSide;
 	unsigned int softvol;
 
-	int requestId;
+	int requestId;					///< sending custom messages and sending MESSAGE messages
 	AnsiString method;				///< SEND_CUSTOM_REQUEST
 	AnsiString text;				///< SEND_MESSAGE
 

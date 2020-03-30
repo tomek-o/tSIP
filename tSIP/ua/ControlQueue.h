@@ -46,7 +46,7 @@ public:
 	void UpdateSoftvolTx(unsigned int val);
 	void UpdateSoftvolRx(unsigned int val);
 	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines);
-	int SendMessage(int accountId, AnsiString target, AnsiString text);
+	int SendMessage(int requestId, int accountId, AnsiString target, AnsiString text);
 };
 
 #define UA ControlQueue::Instance()

@@ -199,7 +199,7 @@ void CallbackQueue::NotifyCustomRequestStatus(int requestUid, int requestError, 
 	Callback *cb = fifo.getWriteable();
 	if (!cb)
 		return;
-		
+
 	cb->type = Callback::CUSTOM_REQUEST_STATUS;
 	cb->requestUid = requestUid;
 	cb->requestError = requestError;
@@ -223,6 +223,22 @@ void CallbackQueue::OnMessageReceived(AnsiString caller, AnsiString contentType,
 
 	fifo.push();
 }
+
+void CallbackQueue::OnMessageStatus(int requestUid, int requestError, int sipStatusCode)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Callback *cb = fifo.getWriteable();
+	if (!cb)
+		return;
+
+	cb->type = Callback::SIMPLE_MESSAGE_STATUS;
+	cb->requestUid = requestUid;
+	cb->requestError = requestError;
+	cb->scode = sipStatusCode;
+
+	fifo.push();
+}
+
 
 
 

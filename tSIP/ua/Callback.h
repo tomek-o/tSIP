@@ -26,7 +26,8 @@ public:
 		SET_CALL_DATA,
 		AUDIO_ERROR,
 		CUSTOM_REQUEST_STATUS,
-		SIMPLE_MESSAGE
+		SIMPLE_MESSAGE,
+		SIMPLE_MESSAGE_STATUS,		///< status for sent MESSAGE; using requestUid, requestError, scode
 	} type;
 
 	enum ua_state_e

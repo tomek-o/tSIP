@@ -409,7 +409,7 @@ static int print_handler_log(const char *p, size_t size, void *arg)
 	return 0;
 }
 
-static void message_recv_handler(const struct pl *peer, const struct pl *ctype, struct mbuf *body, void *arg)
+static void simple_message_recv_handler(const struct pl *peer, const struct pl *ctype, struct mbuf *body, void *arg)
 {
 	LOG("message received\n");
 	AnsiString caller, contentType, asBody;
@@ -425,6 +425,21 @@ static void message_recv_handler(const struct pl *peer, const struct pl *ctype, 
 	memcpy(&asBody[1], ptr, length);
 
 	UA_CB->OnMessageReceived(caller, contentType, asBody);
+}
+
+static void simple_message_response_handler(int err, const struct sip_msg *msg, void *resp_callback_arg)
+{
+	int requestId = reinterpret_cast<int>(resp_callback_arg);
+#if 0
+	if (err) {
+		DEBUG_WARNING("MESSAGE %d response handler: error = %d\n", requestId, err);
+	} else {
+		if (msg->scode >= 300) {
+			DEBUG_WARNING("MESSAGE %d response: code %u, reason: %r\n", requestId, msg->scode, &msg->reason);
+		}
+	}
+#endif
+	UA_CB->OnMessageStatus(requestId, err, msg?msg->scode:0);
 }
 
 static int app_init(void)
@@ -557,7 +572,7 @@ static int app_init(void)
     	LOG("Failed to register paging TX handler!\n");
 	}
 
-	err = message_init(message_recv_handler, NULL);
+	err = message_init(simple_message_recv_handler, simple_message_response_handler, NULL);
 	if (err != 0) {
     	LOG("Failed to register handler for MESSAGE RX (err = %d)!\n", err);
 	}
@@ -1026,7 +1041,7 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::SEND_MESSAGE: {
-		err = message_send(ua_cur(), cmd.target.c_str(), cmd.text.c_str());
+		err = message_send(ua_cur(), cmd.target.c_str(), cmd.text.c_str(), (void*)cmd.requestId);
 		DEBUG_WARNING("Sending message to %s: status = %d\n", cmd.target.c_str(), err);
 		break;
 	}

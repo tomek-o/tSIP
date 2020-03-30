@@ -320,13 +320,14 @@ int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString
 	return 0;
 }
 
-int ControlQueue::SendMessage(int accountId, AnsiString target, AnsiString text)
+int ControlQueue::SendMessage(int requestId, int accountId, AnsiString target, AnsiString text)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
 	if (!cmd)
 		return -1;
 	cmd->type = Command::SEND_MESSAGE;
+	cmd->requestId = requestId;
 	cmd->accountId = accountId;
 	cmd->target = target;
 	cmd->text = text;

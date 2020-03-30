@@ -14,6 +14,7 @@
 static struct sip_lsnr *lsnr;
 static message_recv_h *recvh;
 static void *recvarg;
+static sip_resp_h *response_user_handler;
 
 
 static void handle_message(struct ua *ua, const struct sip_msg *msg)
@@ -60,24 +61,22 @@ static bool request_handler(const struct sip_msg *msg, void *arg)
 }
 
 
-static void resp_handler(int err, const struct sip_msg *msg, void *arg)
+static void resp_handler(int err, const struct sip_msg *msg, void *resp_callback_arg)
 {
-	struct ua *ua = arg;
-
-	(void)ua;
-
 	if (err) {
 		DEBUG_WARNING("MESSAGE response handler: error = %d\n", err);
-		return;
+	} else {
+		if (msg->scode >= 300) {
+			DEBUG_WARNING("MESSAGE response: code %u, reason: %r\n", msg->scode, &msg->reason);
+		}
 	}
-
-	if (msg->scode >= 300) {
-		DEBUG_WARNING("MESSAGE response: code %u, reason: %r\n", msg->scode, &msg->reason);
+	if (response_user_handler) {
+    	response_user_handler(err, msg, resp_callback_arg);
 	}
 }
 
 
-int message_init(message_recv_h *h, void *arg)
+int message_init(message_recv_h *h, sip_resp_h *resph, void *arg)
 {
 	int err;
 
@@ -87,6 +86,7 @@ int message_init(message_recv_h *h, void *arg)
 
 	recvh   = h;
 	recvarg = arg;
+	response_user_handler = resph;
 
 	return 0;
 }
@@ -107,7 +107,7 @@ void message_close(void)
  *
  * @return 0 if success, otherwise errorcode
  */
-int message_send(struct ua *ua, const char *peer, const char *msg)
+int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_callback_arg)
 {
 	struct sip_addr addr;
 	char *uri = NULL;
@@ -169,7 +169,7 @@ int message_send(struct ua *ua, const char *peer, const char *msg)
 	if (err)
 		goto out;
 
-	err = sip_req_send(ua, "MESSAGE", uri, resp_handler, ua,
+	err = sip_req_send(ua, "MESSAGE", uri, resp_handler, resp_callback_arg,
 			   "Accept: text/plain\r\n"
 			   "Content-Type: text/plain\r\n"
 			   "Content-Length: %zu\r\n"

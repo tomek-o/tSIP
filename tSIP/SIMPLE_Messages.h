@@ -17,6 +17,7 @@ namespace SIMPLE_Messages
 	void UnregisterWindow(TfrmMessage *frmMessage);
 	void CloseAllWindows(void);
 	void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body);
+	void OnMessageStatus(int requestUid, int requestError, int sipCode);
 }
 
 #endif

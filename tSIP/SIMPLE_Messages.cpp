@@ -99,6 +99,10 @@ void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString bod
 	frm->Show();
 }
 
+void OnMessageStatus(int requestUid, int requestError, int sipCode)
+{
+	LOG("MessageStatus: requestUid = %d, requestError = %d, sipCode = %d", requestUid, requestError, sipCode);
+}
 
 }
 

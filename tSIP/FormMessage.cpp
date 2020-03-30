@@ -13,6 +13,11 @@
 #pragma resource "*.dfm"
 TfrmMessage *frmMessage;
 
+namespace
+{
+	int nextRequestId = 0;
+}
+
 //---------------------------------------------------------------------------
 __fastcall TfrmMessage::TfrmMessage(TComponent* Owner)
 	: TForm(Owner),
@@ -55,7 +60,9 @@ void TfrmMessage::_SendMsg()
 	AnsiString target = edTarget->Text;
 	AnsiString msg = memoInput->Lines->Text;
 
-	UA->SendMessage(0, target, ::AnsiToUtf8(msg));
+	int requestId = nextRequestId;
+	nextRequestId++;
+	UA->SendMessage(requestId, 0, target, ::AnsiToUtf8(msg));
 
     memoMain->SelStart = memoMain->Lines->Text.Length();
 

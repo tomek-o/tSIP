@@ -329,9 +329,9 @@ struct media_ctx {
 typedef void (message_recv_h)(const struct pl *peer, const struct pl *ctype,
 			      struct mbuf *body, void *arg);
 
-int  message_init(message_recv_h *recvh, void *arg);
+int  message_init(message_recv_h *recvh, sip_resp_h *resph, void *arg);
 void message_close(void);
-int  message_send(struct ua *ua, const char *peer, const char *msg);
+int  message_send(struct ua *ua, const char *peer, const char *msg, void *resp_callback_arg);
 
 /*
  * Custom requests

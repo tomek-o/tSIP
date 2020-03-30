@@ -1743,6 +1743,11 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			}
 			break;
 		}
+		case Callback::SIMPLE_MESSAGE_STATUS:
+		{
+			SIMPLE_Messages::OnMessageStatus(cb.requestUid, cb.requestError, cb.scode);
+			break;
+		}
 		default:
 		{
 			assert(!"Unhandled callback type");
