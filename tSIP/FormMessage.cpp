@@ -62,6 +62,8 @@ void TfrmMessage::_SendMsg()
 
 	int requestId = nextRequestId;
 	nextRequestId++;
+
+	requestIds.insert(requestId);
 	UA->SendMessage(requestId, 0, target, ::AnsiToUtf8(msg));
 
     memoMain->SelStart = memoMain->Lines->Text.Length();
@@ -176,3 +178,36 @@ void TfrmMessage::UpdateTarget(AnsiString val)
 		this->Caption = caption;
 	}
 }
+
+int TfrmMessage::HandleMessageStatus(int requestUid, int requestError, int sipCode)
+{
+	std::set<int>::iterator iter;
+	iter = requestIds.find(requestUid);
+	if (iter == requestIds.end())
+		return -1;
+
+	AnsiString statusText;
+	if (requestError != 0)
+	{
+		statusText.sprintf("Error %d sending request", requestError);
+	}
+	else
+	{
+		if (sipCode != 200)
+		{
+			statusText.sprintf("Received SIP/%d answer", sipCode);
+		}
+	}
+
+    memoMain->SelStart = memoMain->Lines->Text.Length();
+    memoMain->SelAttributes->Size = 8;
+	memoMain->SelAttributes->Style = TFontStyles() << fsItalic;
+	memoMain->SelAttributes->Color = clGray;
+	memoMain->Paragraph->FirstIndent = 0;
+	memoMain->Lines->Add (statusText);
+
+	requestIds.erase(iter);
+	return 0;
+}
+	
+

@@ -9,6 +9,8 @@
 #include <ExtCtrls.hpp>
 #include <Menus.hpp>
 #include <Buttons.hpp>
+
+#include <set>
 //---------------------------------------------------------------------------
 class TfrmMessage : public TForm
 {
@@ -33,6 +35,7 @@ private:	// User declarations
 	bool targetSet;
 	bool incoming;
 	void UpdateTarget(AnsiString val);
+	std::set<int> requestIds;
 public:		// User declarations
 	__fastcall TfrmMessage(TComponent* Owner);
 	void __fastcall MyWndProc (Messages::TMessage &Msg);
@@ -48,6 +51,7 @@ public:		// User declarations
     	return incoming;
 	}
 	void AddIncomingMessage(AnsiString contentType, AnsiString body);
+	int HandleMessageStatus(int requestUid, int requestError, int sipCode);	
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmMessage *frmMessage;
