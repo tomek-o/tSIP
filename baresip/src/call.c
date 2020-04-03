@@ -317,10 +317,18 @@ static int update_media(struct call *call)
 	if (sc) {
 		struct aucodec *ac = sc->data;
 		if (ac) {
+			int err2;
 			err  = audio_decoder_set(call->audio, sc->data,
 						 sc->pt, sc->params);
-			err |= audio_encoder_set(call->audio, sc->data,
+			if (err) {
+				DEBUG_WARNING("call: update_media: audio_decoder_set error: %m\n", err);
+			}
+			err2 = audio_encoder_set(call->audio, sc->data,
 						 sc->pt, sc->params);
+			if (err2) {
+				DEBUG_WARNING("call: update_media: audio_encoder_set error: %m\n", err2);
+			}
+			err |= err2;
 		}
 		else {
 			(void)re_printf("no common audio-codecs..\n");

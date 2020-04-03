@@ -866,6 +866,7 @@ int ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const cha
 		return EINVAL;
 
 	if (!call) {
+		DEBUG_WARNING("ua_answer: no call param, using ua default\n");
 		call = ua_call(ua);
 		if (!call) {
 			DEBUG_NOTICE("answer: no incoming calls found\n");

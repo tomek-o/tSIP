@@ -52,17 +52,13 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 544
     Height = 392
-    ActivePage = tsRing
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblGuiScaling: TLabel
         Left = 3
         Top = 143
@@ -406,7 +402,7 @@ object frmSettings: TfrmSettings
         Width = 121
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 0
         Items.Strings = (
           'single column'
@@ -912,10 +908,6 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1459,7 +1451,7 @@ object frmSettings: TfrmSettings
         Width = 206
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 2
         TabOrder = 0
         Text = 'WebRTC'
@@ -1625,7 +1617,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 1
         Text = '\recordings\ subdirectory (relative)'
@@ -1656,7 +1648,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 4
         Text = 'mono (both sides mixed or one side only)'
@@ -1671,7 +1663,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 1
         TabOrder = 5
         Text = 'automatic - call confirmed state'
@@ -1686,7 +1678,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 6
         Text = 'both local and remote (mixed)'
@@ -1858,7 +1850,7 @@ object frmSettings: TfrmSettings
         Width = 322
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 3
         Text = 'always passive (only using "Access-URL" button)'
@@ -1987,7 +1979,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 4
         Text = 'Manual only (HTTP query button)'
@@ -3069,7 +3061,7 @@ object frmSettings: TfrmSettings
         Width = 111
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 0
         Items.Strings = (
           '100'
@@ -3109,7 +3101,7 @@ object frmSettings: TfrmSettings
         Top = 45
         Width = 111
         Height = 21
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 4
         Items.Strings = (
           '1048576'
@@ -3124,7 +3116,7 @@ object frmSettings: TfrmSettings
         Width = 111
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 1
         TabOrder = 5
         Text = '1'
@@ -3224,8 +3216,6 @@ object frmSettings: TfrmSettings
       FFFF000000000000000007530063007200690070007400730027000000000000
       0000000000FFFFFFFFFFFFFFFF0000000000000000074C006F00670067006900
       6E006700}
-    ExplicitLeft = -2
-    ExplicitTop = -6
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

@@ -767,6 +767,10 @@ void TfrmMain::Answer(void)
 			frmTrayNotifier->HideWindow();
         }
 	}
+	else
+	{
+    	LOG("Answer: no incoming call, current call.state = %d\n", call.state);
+	}
 }
 
 std::string TfrmMain::OnGetDial(void)
@@ -2604,6 +2608,7 @@ void TfrmMain::AutoAnswer(void)
 {
 	if (autoAnswerCode == 200) {
 		if (autoAnswerIntercom) {
+			LOG("Answering with module %s, device %s\n", appSettings.uaConf.audioCfgPlayIntercom.mod, appSettings.uaConf.audioCfgPlayIntercom.dev);
 			UA->Answer(0, appSettings.uaConf.audioCfgPlayIntercom.mod, appSettings.uaConf.audioCfgPlayIntercom.dev);
 		} else {
 			Answer();

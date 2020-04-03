@@ -1244,14 +1244,21 @@ int audio_decoder_set(struct audio *a, const struct aucodec *ac,
 		rx->pt = pt_rx;
 		rx->ac = ac;
 		rx->dec = mem_deref(rx->dec);
+	} else {
+		(void)re_printf("Set audio decoder: %s %uHz %dch (not changed)\n",
+				 ac->name, get_srate(ac), ac->ch);
 	}
 
 	if (ac->decupdh) {
+		DEBUG_WARNING("ac: decupdh\n");
 		err = ac->decupdh(&rx->dec, ac, params);
+		DEBUG_WARNING("ac: decupdh done\n");
 		if (err) {
 			DEBUG_WARNING("alloc decoder: %m\n", err);
 			return err;
 		}
+	} else {
+		DEBUG_WARNING("ac: no decupdh\n");
 	}
 
 	stream_set_srate(a->strm, get_srate(ac), get_srate(ac));
@@ -1263,9 +1270,11 @@ int audio_decoder_set(struct audio *a, const struct aucodec *ac,
 		/* Reset audio filter chain */
 		list_flush(&rx->filtl);
 
+		DEBUG_WARNING("audio_decoder_set: audio_start\n");
 		err |= audio_start(a);
 	}
 
+	DEBUG_WARNING("audio_decoder_set: status = %d\n", err);
 	return err;
 }
 

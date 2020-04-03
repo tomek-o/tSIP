@@ -851,7 +851,16 @@ extern "C" void control_handler(void)
 		}
 		break;
 	case Command::ANSWER:
-		ua_answer(ua_cur(), app.callp, cmd.audioMod.c_str(), cmd.audioDev.c_str());
+        LOG("Answering...\n");
+		err = ua_answer(ua_cur(), app.callp, cmd.audioMod.c_str(), cmd.audioDev.c_str());
+		if (err)
+		{
+        	DEBUG_WARNING("ua_answer failed: %m\n", err);
+		}
+		else
+		{
+        	DEBUG_WARNING("Answered\n");
+		}
 		break;
 	case Command::TRANSFER:
 		if (app.callp)

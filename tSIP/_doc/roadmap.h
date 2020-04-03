@@ -10,14 +10,10 @@ Bunch of things to do in future releases. No particular order:
 	- UDP transport keepalive
 	- context help
 	- SIP message graphs
-	- send/receive SIP MESSAGE (IM)
-	- new function: send custom message
 
 	- some things from baresip
-		- #      Send OPTIONS
 		- audio_loop_test
 		- call_debug
-		- contact_send_options_to_all
 
 	- misleading "Failed to start application" status when no valid account is configured
 
@@ -39,7 +35,6 @@ Call recording:
 - hotkeys: move focus to transfer textbox
 
 - example: link handling from mail client
-- Wideband Opus codec
 - ICE
 - select reject code: 486 Busy (other devices keep ringing) or 603 Decline (all devices stop ringing)
 - hotkeys or speed dial: volume
@@ -105,9 +100,6 @@ button: mouse down event
 
 > I was wondering if it is possible to pause or stop the recording while still on the call?
 
-
-new type of input audio device: wave player with wav queue (for IVR); silence if no file is queued
-
 Lua: get BLF button state => route incoming call to selected (idle) extension
 
 - audible DTMF keypad tones during the call and while dialing: as opt-in options, PlaySound, resources, ASYNC?
@@ -121,12 +113,6 @@ Lua: get BLF button state => route incoming call to selected (idle) extension
 TXPManifest
 
 ping plugin: add context menu to history
-
-
-
-out-of-dialog REFER:
-I've cut some corners with skipping subscription creation but I would expect ANVEO is no better (not passing transfer status to the user) so it might work.
-One more flaw is that full URI from REFER is stored in call history.
 
 
 - ua_init: add option to disable udp/tcp transport (now both UDP/TCP are always enabled)
@@ -176,6 +162,8 @@ update Lua to 5.3.x, remove CVS tags from Lua source
 
 - wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
 (=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)
+
+hosting tray plugins (move from FreeGG)
 
 */
 
