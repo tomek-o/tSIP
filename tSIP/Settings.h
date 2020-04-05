@@ -130,6 +130,15 @@ public:
 		AnsiString customApplicationTitle;	///< custom title for application (taskbar text)
         bool bShowSettingsIfAccountSettingIsHidden;
 
+		struct _bitmaps
+		{
+			AnsiString bmpBtnResetMicVolume;
+			AnsiString bmpBtnResetSpeakerVolume;
+			AnsiString bmpBtnBackspace;
+			AnsiString bmpConsoleHide;
+			AnsiString bmpConsoleShow;
+		} bitmaps;
+		
 		_frmMain(void);
 	} frmMain;
 	struct _frmTrayNotifier

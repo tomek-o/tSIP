@@ -5,7 +5,7 @@ object frmSettings: TfrmSettings
   BorderStyle = bsSingle
   Caption = 'Settings'
   ClientHeight = 429
-  ClientWidth = 665
+  ClientWidth = 673
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -23,13 +23,14 @@ object frmSettings: TfrmSettings
   object pnlBottom: TPanel
     Left = 0
     Top = 392
-    Width = 665
+    Width = 673
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitWidth = 665
     object btnCancel: TButton
-      Left = 584
+      Left = 593
       Top = 6
       Width = 75
       Height = 25
@@ -38,7 +39,7 @@ object frmSettings: TfrmSettings
       OnClick = btnCancelClick
     end
     object btnApply: TButton
-      Left = 503
+      Left = 512
       Top = 6
       Width = 75
       Height = 25
@@ -48,17 +49,18 @@ object frmSettings: TfrmSettings
     end
   end
   object pcGeneral: TPageControl
-    Left = 121
+    Left = 125
     Top = 0
-    Width = 544
+    Width = 548
     Height = 392
-    ActivePage = tsGeneral
+    ActivePage = tsBranding
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
     object tsGeneral: TTabSheet
       Caption = 'General'
+      ExplicitWidth = 536
       object lblGuiScaling: TLabel
         Left = 3
         Top = 143
@@ -170,10 +172,7 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -320,7 +319,7 @@ object frmSettings: TfrmSettings
         Width = 433
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 7
         OnChange = cbNetworkInterfacesChange
       end
@@ -328,18 +327,16 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 341
-        Width = 536
+        Width = 540
         Height = 31
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
+        ExplicitWidth = 536
         object btnAddAccount: TButton
           Left = 464
           Top = 4
@@ -362,19 +359,17 @@ object frmSettings: TfrmSettings
       object scrbAccounts: TScrollBox
         Left = 0
         Top = 0
-        Width = 536
+        Width = 540
         Height = 341
         Align = alClient
         TabOrder = 1
+        ExplicitWidth = 536
       end
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblSpeedDial: TLabel
         Left = 3
         Top = 3
@@ -402,7 +397,7 @@ object frmSettings: TfrmSettings
         Width = 121
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 0
         Items.Strings = (
           'single column'
@@ -491,10 +486,7 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -627,10 +619,7 @@ object frmSettings: TfrmSettings
     object tsMessages: TTabSheet
       Caption = 'Messages'
       ImageIndex = 22
-      ExplicitLeft = 6
-      ExplicitTop = 14
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblMessagesRing: TLabel
         Left = 5
         Top = 3
@@ -658,10 +647,7 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -690,10 +676,7 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -770,12 +753,10 @@ object frmSettings: TfrmSettings
       end
     end
     object tsBranding: TTabSheet
-      Caption = 'Branding'
+      Caption = 'Branding, bitmaps'
       ImageIndex = 20
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object lblDialpadBackgroundImage: TLabel
         Left = 2
         Top = 5
@@ -791,14 +772,14 @@ object frmSettings: TfrmSettings
         Caption = 'Custom main icon file (.ico)'
       end
       object lblRestartRequired1: TLabel
-        Left = 340
+        Left = 393
         Top = 29
         Width = 84
         Height = 13
         Caption = '(restart required)'
       end
       object lblRestartRequired2: TLabel
-        Left = 340
+        Left = 393
         Top = 53
         Width = 84
         Height = 13
@@ -811,15 +792,50 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Custom tray icon notification image'
       end
+      object lblBmpBtnBackspace: TLabel
+        Left = 3
+        Top = 151
+        Width = 128
+        Height = 13
+        Caption = '"Backspace" button bitmap'
+      end
+      object lblBmpConsoleHide: TLabel
+        Left = 3
+        Top = 201
+        Width = 131
+        Height = 13
+        Caption = 'Console hide button bitmap'
+      end
+      object lblBmpConsoleShow: TLabel
+        Left = 3
+        Top = 176
+        Width = 136
+        Height = 13
+        Caption = 'Console show button bitmap'
+      end
+      object lblBmpBtnResetMicVolume: TLabel
+        Left = 3
+        Top = 227
+        Width = 153
+        Height = 13
+        Caption = 'Reset mic volume button bitmap'
+      end
+      object lblBmpBtnResetSpeakerVolume: TLabel
+        Left = 3
+        Top = 253
+        Width = 176
+        Height = 13
+        Caption = 'Reset speaker volume button bitmap'
+      end
       object edDialpadBackgroundImage: TEdit
-        Left = 178
+        Left = 231
         Top = 2
         Width = 121
         Height = 21
         TabOrder = 0
       end
       object btnSelectDialpadBackgroundImage: TButton
-        Left = 305
+        Left = 358
         Top = 2
         Width = 22
         Height = 21
@@ -828,14 +844,14 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectImageClick
       end
       object edMainIconFile: TEdit
-        Left = 178
+        Left = 231
         Top = 26
         Width = 121
         Height = 21
         TabOrder = 2
       end
       object btnSelectMainIconFile: TButton
-        Left = 305
+        Left = 358
         Top = 26
         Width = 22
         Height = 21
@@ -844,7 +860,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectImageClick
       end
       object btnSelectTrayNotificationImage: TButton
-        Left = 305
+        Left = 358
         Top = 50
         Width = 22
         Height = 21
@@ -853,7 +869,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectImageClick
       end
       object edTrayNotificationImage: TEdit
-        Left = 178
+        Left = 231
         Top = 50
         Width = 121
         Height = 21
@@ -884,30 +900,111 @@ object frmSettings: TfrmSettings
         TabOrder = 8
       end
       object edUserAgent: TEdit
-        Left = 178
+        Left = 231
         Top = 75
         Width = 121
         Height = 21
         TabOrder = 9
       end
       object edFrmMainCustomApplicationTitle: TEdit
-        Left = 232
+        Left = 231
         Top = 98
         Width = 193
         Height = 21
         TabOrder = 10
       end
       object edFrmMainCustomCaption: TEdit
-        Left = 232
+        Left = 231
         Top = 122
         Width = 193
         Height = 21
         TabOrder = 11
       end
+      object edBmpBtnBackspace: TEdit
+        Left = 231
+        Top = 148
+        Width = 121
+        Height = 21
+        TabOrder = 12
+      end
+      object btnSelectBmpBtnBackspace: TButton
+        Left = 358
+        Top = 148
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 13
+        OnClick = btnSelectImageClick
+      end
+      object edBmpBtnConsoleHide: TEdit
+        Left = 231
+        Top = 198
+        Width = 121
+        Height = 21
+        TabOrder = 14
+      end
+      object btnSelectBmpBtnConsoleHide: TButton
+        Left = 358
+        Top = 198
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 15
+        OnClick = btnSelectImageClick
+      end
+      object edBmpBtnConsoleShow: TEdit
+        Left = 231
+        Top = 173
+        Width = 121
+        Height = 21
+        TabOrder = 16
+      end
+      object btnSelectBmpBtnConsoleShow: TButton
+        Left = 358
+        Top = 173
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 17
+        OnClick = btnSelectImageClick
+      end
+      object edBmpBtnResetMicVolume: TEdit
+        Left = 231
+        Top = 224
+        Width = 121
+        Height = 21
+        TabOrder = 18
+      end
+      object btnSelectBmpBtnResetMicVolume: TButton
+        Left = 358
+        Top = 224
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 19
+        OnClick = btnSelectImageClick
+      end
+      object edBmpBtnResetSpeakerVolume: TEdit
+        Left = 231
+        Top = 250
+        Width = 121
+        Height = 21
+        TabOrder = 20
+      end
+      object btnSelectBmpBtnResetSpeakerVolume: TButton
+        Left = 358
+        Top = 250
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 21
+        OnClick = btnSelectImageClick
+      end
     end
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
+      ExplicitWidth = 536
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1119,10 +1216,7 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -1255,7 +1349,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 0
         OnChange = cbSoundInputModChange
       end
@@ -1265,7 +1359,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 1
       end
       object cbSoundOutputMod: TComboBox
@@ -1274,7 +1368,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 2
         OnChange = cbSoundOutputModChange
       end
@@ -1284,7 +1378,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 3
       end
       object cbSoundAlertOutputMod: TComboBox
@@ -1293,7 +1387,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 4
         OnChange = cbSoundAlertOutputModChange
       end
@@ -1303,7 +1397,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 5
       end
       object cbSoundOutputIntercomMod: TComboBox
@@ -1312,7 +1406,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 6
         OnChange = cbSoundOutputIntercomModChange
       end
@@ -1322,7 +1416,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 7
       end
       object btnSelectWaveFile: TButton
@@ -1347,7 +1441,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 10
       end
       object cbSoundRingOutputMod: TComboBox
@@ -1356,7 +1450,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 11
         OnChange = cbSoundRingOutputModChange
       end
@@ -1378,10 +1472,7 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -1451,7 +1542,7 @@ object frmSettings: TfrmSettings
         Width = 206
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 2
         TabOrder = 0
         Text = 'WebRTC'
@@ -1564,10 +1655,7 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -1617,7 +1705,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 0
         TabOrder = 1
         Text = '\recordings\ subdirectory (relative)'
@@ -1648,7 +1736,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 0
         TabOrder = 4
         Text = 'mono (both sides mixed or one side only)'
@@ -1663,7 +1751,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 1
         TabOrder = 5
         Text = 'automatic - call confirmed state'
@@ -1678,7 +1766,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 0
         TabOrder = 6
         Text = 'both local and remote (mixed)'
@@ -1701,10 +1789,7 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -1765,10 +1850,7 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -1850,7 +1932,7 @@ object frmSettings: TfrmSettings
         Width = 322
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 0
         TabOrder = 3
         Text = 'always passive (only using "Access-URL" button)'
@@ -1883,18 +1965,12 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblContactPopup: TLabel
         Left = 2
         Top = 87
@@ -1979,7 +2055,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 0
         TabOrder = 4
         Text = 'Manual only (HTTP query button)'
@@ -2048,10 +2124,7 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -2108,18 +2181,12 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Phones'
       ImageIndex = 13
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblTrayNotifierBackgroundImage: TLabel
         Left = 3
         Top = 72
@@ -2210,10 +2277,7 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -3021,10 +3085,7 @@ object frmSettings: TfrmSettings
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
       object lblUiCapacity: TLabel
         Left = 5
         Top = 148
@@ -3061,7 +3122,7 @@ object frmSettings: TfrmSettings
         Width = 111
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 0
         Items.Strings = (
           '100'
@@ -3101,7 +3162,7 @@ object frmSettings: TfrmSettings
         Top = 45
         Width = 111
         Height = 21
-        ItemHeight = 0
+        ItemHeight = 13
         TabOrder = 4
         Items.Strings = (
           '1048576'
@@ -3116,7 +3177,7 @@ object frmSettings: TfrmSettings
         Width = 111
         Height = 21
         Style = csDropDownList
-        ItemHeight = 0
+        ItemHeight = 13
         ItemIndex = 1
         TabOrder = 5
         Text = '1'
@@ -3157,16 +3218,13 @@ object frmSettings: TfrmSettings
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'
       ImageIndex = 21
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 536
     end
   end
   object tvSelector: TTreeView
     Left = 0
     Top = 0
-    Width = 121
+    Width = 125
     Height = 392
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
@@ -3193,29 +3251,29 @@ object frmSettings: TfrmSettings
       0000084D006500730073006100670065007300270000000000000000000000FF
       FFFFFFFFFFFFFF00000000000000000744006900730070006C00610079002700
       00000000000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F0063
-      006B0069006E006700290000000000000000000000FFFFFFFFFFFFFFFF000000
-      0000000000084200720061006E00640069006E00670021000000000000000000
-      0000FFFFFFFFFFFFFFFF000000000000000004520069006E0067002B00000000
-      00000000000000FFFFFFFFFFFFFFFF0000000000000000094100750064006900
-      6F00200049002F004F00390000000000000000000000FFFFFFFFFFFFFFFF0000
-      0000000000001041007500640069006F002000500072006F0063006500730073
-      0069006E0067002B0000000000000000000000FFFFFFFFFFFFFFFF0000000000
-      000000095200650063006F007200640069006E00670025000000000000000000
-      0000FFFFFFFFFFFFFFFF00000000010000000643006F00640065006300730021
-      0000000000000000000000FFFFFFFFFFFFFFFF0000000000000000044F007000
-      750073002F0000000000000000000000FFFFFFFFFFFFFFFF0000000000000000
-      0B49006E0074006500670072006100740069006F006E00270000000000000000
-      000000FFFFFFFFFFFFFFFF00000000000000000748006F0074006B0065007900
-      7300290000000000000000000000FFFFFFFFFFFFFFFF00000000000000000843
-      006F006E0074006100630074007300270000000000000000000000FFFFFFFFFF
-      FFFFFF00000000000000000748006900730074006F0072007900390000000000
-      000000000000FFFFFFFFFFFFFFFF000000000000000010500068006F006E0065
-      0073002000280070006C007500670069006E0073002900330000000000000000
-      000000FFFFFFFFFFFFFFFF00000000000000000D540072006100790020004E00
-      6F00740069006600690065007200270000000000000000000000FFFFFFFFFFFF
-      FFFF000000000000000007530063007200690070007400730027000000000000
-      0000000000FFFFFFFFFFFFFFFF0000000000000000074C006F00670067006900
-      6E006700}
+      006B0069006E0067003B0000000000000000000000FFFFFFFFFFFFFFFF000000
+      0000000000114200720061006E00640069006E0067002C002000620069007400
+      6D00610070007300210000000000000000000000FFFFFFFFFFFFFFFF00000000
+      0000000004520069006E0067002B0000000000000000000000FFFFFFFFFFFFFF
+      FF00000000000000000941007500640069006F00200049002F004F0039000000
+      0000000000000000FFFFFFFFFFFFFFFF00000000000000001041007500640069
+      006F002000500072006F00630065007300730069006E0067002B000000000000
+      0000000000FFFFFFFFFFFFFFFF0000000000000000095200650063006F007200
+      640069006E006700250000000000000000000000FFFFFFFFFFFFFFFF00000000
+      010000000643006F006400650063007300210000000000000000000000FFFFFF
+      FFFFFFFFFF0000000000000000044F007000750073002F000000000000000000
+      0000FFFFFFFFFFFFFFFF00000000000000000B49006E00740065006700720061
+      00740069006F006E00270000000000000000000000FFFFFFFFFFFFFFFF000000
+      00000000000748006F0074006B00650079007300290000000000000000000000
+      FFFFFFFFFFFFFFFF00000000000000000843006F006E00740061006300740073
+      00270000000000000000000000FFFFFFFFFFFFFFFF0000000000000000074800
+      6900730074006F0072007900390000000000000000000000FFFFFFFFFFFFFFFF
+      000000000000000010500068006F006E00650073002000280070006C00750067
+      0069006E0073002900330000000000000000000000FFFFFFFFFFFFFFFF000000
+      00000000000D540072006100790020004E006F00740069006600690065007200
+      270000000000000000000000FFFFFFFFFFFFFFFF000000000000000007530063
+      0072006900700074007300270000000000000000000000FFFFFFFFFFFFFFFF00
+      00000000000000074C006F006700670069006E006700}
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

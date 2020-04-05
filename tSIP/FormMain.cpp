@@ -7,6 +7,7 @@
 #include "CommandLine.h"
 #include "Paths.h"
 #include "TrayIcon.h"
+#include "Bitmaps.h"
 #include "FormAbout.h"
 #include "FormSettings.h"
 #include "FormAccount.h"
@@ -259,6 +260,7 @@ __fastcall TfrmMain::~TfrmMain()
 	delete trIcon;
 	trIcon = NULL;
 	PortaudioLockShutdown();
+	FreeBitmapResources();	
 }
 
 //---------------------------------------------------------------------------
@@ -324,7 +326,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	{
 		SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);
 	}
-	UpdateDialpadBackgroundImage();
+	UpdateBitmaps();
 	miSettings->Visible = !appSettings.frmMain.bHideSettings;
 	miView->Visible = !appSettings.frmMain.bHideView;
 	miTools->Visible = !appSettings.frmMain.bHideTools;
@@ -522,7 +524,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 
 	UpdateHistoryConfig();
 
-	UpdateDialpadBackgroundImage();
+	UpdateBitmaps();
 	frmTrayNotifier->UpdateBackgroundImage();
 	/** \todo bug? use prev settings */
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
@@ -2446,7 +2448,7 @@ void TfrmMain::SetSpeedDial(bool visible)
             }
 		}
 		pnlSpeedDial->Visible = true;
-		btnSpeedDialPanel->Caption = "<<";
+		UpdateBtnConsole();
 	}
 	else
 	{
@@ -2455,7 +2457,7 @@ void TfrmMain::SetSpeedDial(bool visible)
 		{
 			this->Width -= pnlSpeedDial->Width;
         }
-		btnSpeedDialPanel->Caption = ">>";				
+		UpdateBtnConsole();
 	}
 }
 
@@ -3083,25 +3085,6 @@ void __fastcall TfrmMain::FormMouseActivate(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::UpdateDialpadBackgroundImage(void)
-{
-	AnsiString asDialpadBackgroundFile;
-	try
-	{
-		static AnsiString lastImage;
-		if (appSettings.frmMain.dialpadBackgroundImage != "" && appSettings.frmMain.dialpadBackgroundImage != lastImage)
-		{
-			asDialpadBackgroundFile = Paths::GetFullImgName(appSettings.frmMain.dialpadBackgroundImage);
-			imgDialpadBackground->Picture->Bitmap->PixelFormat = pf24bit;
-			imgDialpadBackground->Picture->LoadFromFile(asDialpadBackgroundFile);
-			lastImage = appSettings.frmMain.dialpadBackgroundImage;
-		}
-	}
-	catch (...)
-	{
-		LOG("Failed to load dialpad background (%s)\n", asDialpadBackgroundFile.c_str());
-	}
-}
 
 void __fastcall TfrmMain::tmrScriptTimer(TObject *Sender)
 {

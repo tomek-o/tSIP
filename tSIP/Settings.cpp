@@ -631,6 +631,16 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bUseCustomCaption = frmMainJson.get("UseCustomCaption", frmMain.bUseCustomCaption).asBool();
 		frmMain.customCaption = frmMainJson.get("CustomCaption", frmMain.customCaption.c_str()).asString().c_str();
 		frmMain.bShowSettingsIfAccountSettingIsHidden = frmMainJson.get("ShowSettingsIfAccountSettingIsHidden", frmMain.bShowSettingsIfAccountSettingIsHidden).asBool();
+
+		{
+			const Json::Value &bitmapsJson = frmMainJson["bitmaps"];
+			struct _frmMain::_bitmaps &bitmaps = frmMain.bitmaps;
+			bitmapsJson.getAString("bmpBtnResetMicVolume", bitmaps.bmpBtnResetMicVolume);
+			bitmapsJson.getAString("bmpBtnResetSpeakerVolume", bitmaps.bmpBtnResetSpeakerVolume);
+			bitmapsJson.getAString("bmpBtnBackspace", bitmaps.bmpBtnBackspace);
+			bitmapsJson.getAString("bmpConsoleHide", bitmaps.bmpConsoleHide);
+			bitmapsJson.getAString("bmpConsoleShow", bitmaps.bmpConsoleShow);
+		}
 	}
 
 	{
@@ -908,6 +918,16 @@ int Settings::Write(AnsiString asFileName)
 		jv["UseCustomCaption"] = frmMain.bUseCustomCaption;
 		jv["CustomCaption"] = frmMain.customCaption.c_str();
 		jv["ShowSettingsIfAccountSettingIsHidden"] = frmMain.bShowSettingsIfAccountSettingIsHidden;
+
+		{
+			Json::Value &bitmapsJson = jv["bitmaps"];
+			const struct _frmMain::_bitmaps &bitmaps = frmMain.bitmaps;
+			bitmapsJson["bmpBtnResetMicVolume"] = bitmaps.bmpBtnResetMicVolume;
+			bitmapsJson["bmpBtnResetSpeakerVolume"] = bitmaps.bmpBtnResetSpeakerVolume;
+			bitmapsJson["bmpBtnBackspace"] = bitmaps.bmpBtnBackspace;
+			bitmapsJson["bmpConsoleHide"] = bitmaps.bmpConsoleHide;
+			bitmapsJson["bmpConsoleShow"] = bitmaps.bmpConsoleShow;
+		}
 	}
 
     {

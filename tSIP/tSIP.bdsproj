@@ -472,6 +472,7 @@
         <FILE FILENAME="ua\FormUaConfOpus.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormUaConfOpus" FORMNAME="frmUaConfOpus" DESIGNCLASS="" ADDITIONAL="ua\FormUaConfOpus.h"/>
         <FILE FILENAME="Globals.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Globals" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Globals.h"/>
         <FILE FILENAME="PortaudioLock.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PortaudioLock" FORMNAME="" DESIGNCLASS="" ADDITIONAL="PortaudioLock.h"/>
+        <FILE FILENAME="Bitmaps.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Bitmaps" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Bitmaps.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

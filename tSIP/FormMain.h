@@ -163,7 +163,6 @@ private:	// User declarations
 	void UpdateLogConfig(void);
 	void UpdateHistoryConfig(void);
 	void SetSpeedDial(bool visible);
-	void UpdateDialpadBackgroundImage(void);
 	void UpdateCallHistory(void);
 	void ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming);
 	AnsiString CleanUri(AnsiString uri);

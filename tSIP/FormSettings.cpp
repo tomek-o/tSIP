@@ -259,6 +259,12 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edDialpadBackgroundImage->Text = tmpSettings.frmMain.dialpadBackgroundImage;
 	edMainIconFile->Text = tmpSettings.frmMain.mainIcon;
 	edTrayNotificationImage->Text = tmpSettings.frmMain.trayNotificationImage;
+	edBmpBtnBackspace->Text = tmpSettings.frmMain.bitmaps.bmpBtnBackspace;
+	edBmpBtnConsoleShow->Text = tmpSettings.frmMain.bitmaps.bmpConsoleShow;
+	edBmpBtnConsoleHide->Text = tmpSettings.frmMain.bitmaps.bmpConsoleHide;
+	edBmpBtnResetMicVolume->Text = tmpSettings.frmMain.bitmaps.bmpBtnResetMicVolume;
+	edBmpBtnResetSpeakerVolume->Text = tmpSettings.frmMain.bitmaps.bmpBtnResetSpeakerVolume;
+
 	chbNoBeepOnEnterKey->Checked = tmpSettings.frmMain.bNoBeepOnEnterKey;
 	chbHideSettings->Checked = tmpSettings.frmMain.bHideSettings;
 	chbHideViewMenu->Checked = tmpSettings.frmMain.bHideView;
@@ -510,6 +516,12 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.dialpadBackgroundImage = edDialpadBackgroundImage->Text;
 	tmpSettings.frmMain.mainIcon = edMainIconFile->Text;
 	tmpSettings.frmMain.trayNotificationImage = edTrayNotificationImage->Text;
+	tmpSettings.frmMain.bitmaps.bmpBtnBackspace = edBmpBtnBackspace->Text;
+	tmpSettings.frmMain.bitmaps.bmpConsoleShow = edBmpBtnConsoleShow->Text;
+	tmpSettings.frmMain.bitmaps.bmpConsoleHide = edBmpBtnConsoleHide->Text;
+	tmpSettings.frmMain.bitmaps.bmpBtnResetMicVolume = edBmpBtnResetMicVolume->Text;
+	tmpSettings.frmMain.bitmaps.bmpBtnResetSpeakerVolume = edBmpBtnResetSpeakerVolume->Text;
+
 	tmpSettings.frmMain.bNoBeepOnEnterKey = chbNoBeepOnEnterKey->Checked;
 	tmpSettings.frmMain.bHideSettings = chbHideSettings->Checked;
 	tmpSettings.frmMain.bHideView = chbHideViewMenu->Checked;
@@ -1066,10 +1078,10 @@ void __fastcall TfrmSettings::btnSelectImageClick(
       TObject *Sender)
 {
 	TEdit *edit;
+	openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";	// default filter
 	if (Sender == btnSelectDialpadBackgroundImage)
 	{
 		edit = edDialpadBackgroundImage;
-		openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";
 	}
 	else if (Sender == btnSelectMainIconFile)
 	{
@@ -1079,13 +1091,31 @@ void __fastcall TfrmSettings::btnSelectImageClick(
 	else if (Sender == btnSelectTrayNotificationImage)
 	{
 		edit = edTrayNotificationImage;
-		openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";
 	}
 	else if (Sender == btnTrayNotifierBackgroundImage)
 	{
 		edit = edTrayNotifierBackgroundImage;
-		openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";
-    }
+	}
+	else if (Sender == btnSelectBmpBtnBackspace)
+	{
+		edit = edBmpBtnBackspace;
+	}
+	else if (Sender == btnSelectBmpBtnConsoleShow)
+	{
+		edit = edBmpBtnConsoleShow;
+	}
+	else if (Sender == btnSelectBmpBtnConsoleHide)
+	{
+		edit = edBmpBtnConsoleHide;
+	}
+	else if (Sender == btnSelectBmpBtnResetMicVolume)
+	{
+		edit = edBmpBtnResetMicVolume;
+	}
+	else if (Sender == btnSelectBmpBtnResetSpeakerVolume)
+	{
+		edit = edBmpBtnResetSpeakerVolume;
+	}
 	else
 	{
         assert(!"Unhandler sender!");
