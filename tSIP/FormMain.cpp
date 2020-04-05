@@ -10,6 +10,7 @@
 #include "Bitmaps.h"
 #include "FormAbout.h"
 #include "FormSettings.h"
+#include "FormSettingsPatch.h"
 #include "FormAccount.h"
 #include "FormHistory.h"
 #include "FormButtonContainer.h"
@@ -3237,6 +3238,13 @@ void __fastcall TfrmMain::miMessagesClick(TObject *Sender)
 {
 	TfrmMessage *frmMessage = new TfrmMessage(NULL);
 	frmMessage->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miSettingsPatchClick(TObject *Sender)
+{
+	frmSettingsPatch->onUpdateSettings = UpdateSettingsFromJson;
+	frmSettingsPatch->ShowModal();
 }
 //---------------------------------------------------------------------------
 

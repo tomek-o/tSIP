@@ -473,6 +473,7 @@
         <FILE FILENAME="Globals.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Globals" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Globals.h"/>
         <FILE FILENAME="PortaudioLock.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PortaudioLock" FORMNAME="" DESIGNCLASS="" ADDITIONAL="PortaudioLock.h"/>
         <FILE FILENAME="Bitmaps.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Bitmaps" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Bitmaps.h"/>
+        <FILE FILENAME="FormSettingsPatch.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormSettingsPatch" FORMNAME="frmSettingsPatch" DESIGNCLASS="" ADDITIONAL="FormSettingsPatch.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -481,7 +482,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">71</VersionInfo>
-          <VersionInfo Name="Build">4</VersionInfo>
+          <VersionInfo Name="Build">5</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -493,7 +494,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.71.4</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.71.5</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
