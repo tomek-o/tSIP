@@ -59,23 +59,19 @@ static void paging_tx_stream_stop(struct paging_tx *tx)
 	}
 }
 
-static void print_summary(const struct paging_tx *tx)
-{
-	(void)re_printf("Paging TX terminated\n");
-}
-
 
 static void paging_tx_destructor(void *arg)
 {
 	struct paging_tx *tx = arg;
 
-	print_summary(tx);
+	re_printf("Terminating paging TX...\n");
 
 	paging_tx_stream_stop(tx);
 	mem_deref(tx->str);
 	mem_deref(tx->audio);
 	mem_deref(tx->media);
 	mem_deref(tx->codec_name);
+	(void)re_printf("Paging TX terminated\n");
 }
 
 
