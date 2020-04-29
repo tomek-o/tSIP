@@ -33,7 +33,8 @@ namespace Button
 		MINIMIZE,
 		SHOW_LOG,
 		EXIT,
-		CONTACT_FILE,	// open file associated with contact / phonebook entry		
+		CONTACT_FILE,	// open file associated with contact / phonebook entry
+		UA_RESTART,		// restart user agent		
 
 		TYPE_LIMITER
 	};

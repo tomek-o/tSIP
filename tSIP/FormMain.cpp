@@ -2267,6 +2267,11 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::EXIT:
 		actExitExecute(NULL);	
 		break;
+	case Button::UA_RESTART:
+		SetStatus("Restarting UA (manual restart)...");
+		miSettings->Enabled = false;
+		Ua::Instance().Restart();
+		break;
 	default:
 		LOG("Unhandled BTN type = %d\n", static_cast<int>(cfg.type));
 		break;
