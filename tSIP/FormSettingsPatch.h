@@ -21,9 +21,13 @@ __published:	// IDE-managed Components
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 private:	// User declarations
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
+	void __fastcall WmDropFiles(TWMDropFiles& Message);
 public:		// User declarations
 	__fastcall TfrmSettingsPatch(TComponent* Owner);
 	CallbackUpdateSettings onUpdateSettings;
+BEGIN_MESSAGE_MAP
+	MESSAGE_HANDLER(WM_DROPFILES, TWMDropFiles, WmDropFiles)
+END_MESSAGE_MAP(TForm)
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmSettingsPatch *frmSettingsPatch;
