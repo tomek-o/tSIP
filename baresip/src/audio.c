@@ -929,6 +929,8 @@ static int start_player(struct aurx *rx, struct audio *a)
 	uint32_t srate_dsp = get_srate(ac);
 	int err;
 
+	DEBUG_WARNING("start_player\n");
+
 	if (!ac)
 		return 0;
 
@@ -970,10 +972,12 @@ static int start_player(struct aurx *rx, struct audio *a)
 				return err;
 		}
 
+		DEBUG_WARNING("auplay_alloc\n");
 		err = auplay_alloc(&rx->auplay,
 					rx->mod[0]?rx->mod:a->cfg.play_mod,
 				   &prm, rx->device,
 				   auplay_write_handler, a);
+		DEBUG_WARNING("auplay_alloc status = %d\n", err);
 		if (err) {
 			DEBUG_WARNING("start_player failed (%s.%s): %m\n",
 				      a->cfg.play_mod, rx->device, err);
@@ -981,6 +985,8 @@ static int start_player(struct aurx *rx, struct audio *a)
 		}
 		rx->auplay_prm = prm;
 	}
+
+	DEBUG_WARNING("start_player: end\n");
 
 	return 0;
 }
@@ -991,6 +997,8 @@ static int start_source(struct autx *tx, struct audio *a)
 	const struct aucodec *ac = tx->ac;
 	uint32_t srate_dsp = get_srate(tx->ac);
 	int err;
+
+	DEBUG_WARNING("start_source\n");
 
 	if (!ac)
 		return 0;
@@ -1034,9 +1042,11 @@ static int start_source(struct autx *tx, struct audio *a)
 				return err;
 		}
 
+		DEBUG_WARNING("ausrc_alloc\n");
 		err = ausrc_alloc(&tx->ausrc, NULL, a->cfg.src_mod,
 				  &prm, tx->device,
 				  ausrc_read_handler, ausrc_error_handler, a);
+		DEBUG_WARNING("ausrc_alloc status = %d\n", err);
 		if (err) {
 			DEBUG_WARNING("start_source failed: %m\n", err);
 			return err;
@@ -1069,6 +1079,8 @@ static int start_source(struct autx *tx, struct audio *a)
 		tx->ausrc_prm = prm;
 	}
 
+	DEBUG_WARNING("start_source: end\n");
+
 	return 0;
 }
 
@@ -1088,23 +1100,37 @@ int audio_start(struct audio *a)
 		return EINVAL;
 
 	err = stream_start(a->strm);
-	if (err)
+	if (err) {
+		DEBUG_WARNING("stream_start failed: %m\n", err);
 		return err;
+	}
 
 	/* Audio filter */
 	if (!list_isempty(aufilt_list())) {
 		err = aufilt_setup(a);
-		if (err)
+		if (err) {
+			DEBUG_WARNING("aufilt_setup failed: %m\n", err);
 			return err;
+		}
 	}
 
 	/* configurable order of play/src start */
 	if (a->cfg.src_first) {
+		DEBUG_WARNING("starting source...\n");
 		err  = start_source(&a->tx, a);
+		if (err) {
+			DEBUG_WARNING("start_source failed: %m\n", err);
+		}
+		DEBUG_WARNING("starting player...\n");
 		err |= start_player(&a->rx, a);
 	}
 	else {
+		DEBUG_WARNING("starting player...\n");
 		err  = start_player(&a->rx, a);
+		if (err) {
+			DEBUG_WARNING("start_player failed: %m\n", err);
+		}
+		DEBUG_WARNING("starting source...\n");
 		err |= start_source(&a->tx, a);
 	}
 	if (err)
