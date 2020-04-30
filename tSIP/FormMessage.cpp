@@ -199,12 +199,15 @@ int TfrmMessage::HandleMessageStatus(int requestUid, int requestError, int sipCo
 		}
 	}
 
-    memoMain->SelStart = memoMain->Lines->Text.Length();
-    memoMain->SelAttributes->Size = 8;
-	memoMain->SelAttributes->Style = TFontStyles() << fsItalic;
-	memoMain->SelAttributes->Color = clGray;
-	memoMain->Paragraph->FirstIndent = 0;
-	memoMain->Lines->Add (statusText);
+	if (statusText != "")
+	{
+		memoMain->SelStart = memoMain->Lines->Text.Length();
+		memoMain->SelAttributes->Size = 8;
+		memoMain->SelAttributes->Style = TFontStyles() << fsItalic;
+		memoMain->SelAttributes->Color = clGray;
+		memoMain->Paragraph->FirstIndent = 0;
+		memoMain->Lines->Add (statusText);
+	}
 
 	requestIds.erase(iter);
 	return 0;
