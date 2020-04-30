@@ -34,7 +34,8 @@ namespace Button
 		SHOW_LOG,
 		EXIT,
 		CONTACT_FILE,	// open file associated with contact / phonebook entry
-		UA_RESTART,		// restart user agent		
+		UA_RESTART,		// restart user agent
+		SEND_TEXT_MESSAGE,	// send SIMPLE text message to recipient from button or from main URI "dial"		
 
 		TYPE_LIMITER
 	};

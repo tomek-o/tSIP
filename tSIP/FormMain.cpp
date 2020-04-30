@@ -2252,6 +2252,15 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::HANGUP:
 		Hangup();
 		break;
+	case Button::SEND_TEXT_MESSAGE: {
+		AnsiString target = cfg.number.c_str();
+		if (target == "")
+		{
+			target = cbCallURI->Text;
+		}
+		SIMPLE_Messages::Send(target);
+		break;
+	}
 	case Button::SHOW_SETTINGS:
 		if (appSettings.frmMain.bHideSettings == false)
 		{

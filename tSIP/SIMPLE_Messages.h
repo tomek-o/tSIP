@@ -18,6 +18,7 @@ namespace SIMPLE_Messages
 	void CloseAllWindows(void);
 	void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body);
 	void OnMessageStatus(int requestUid, int requestError, int sipCode);
+	void Send(AnsiString target);
 }
 
 #endif

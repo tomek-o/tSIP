@@ -15,13 +15,11 @@
 
 using namespace SIMPLE_Messages;
 
-namespace
-{
-	std::set<TfrmMessage*> messageWindows;
-}	// namespace
 
 namespace SIMPLE_Messages
 {
+
+std::set<TfrmMessage*> messageWindows;
 
 void RegisterWindow(TfrmMessage *frmMessage)
 {
@@ -55,22 +53,42 @@ bool IsTargetMatching(AnsiString remote, AnsiString target)
 		if (appSettings.uaConf.accounts.size() > 0)
 		{
 			target = (AnsiString)"sip:" + target + "@" + appSettings.uaConf.accounts[0].reg_server.c_str();
-			if (remote == target)
-			{
-            	return true;
-			}
 		}
+	}
+	if (remote.Pos("sip:") != 1)
+	{
+		if (appSettings.uaConf.accounts.size() > 0)
+		{
+			remote = (AnsiString)"sip:" + remote + "@" + appSettings.uaConf.accounts[0].reg_server.c_str();
+		}
+	}
+
+	if (remote == target)
+	{
+		return true;
 	}
 
 	return false;
 }
 
-void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body)
+TfrmMessage* FindForm(AnsiString target)
 {
-	LOG("Received message from %s: ContentType %s, body [%s]\n", caller.c_str(), contentType.c_str(), body.c_str());
 	std::set<TfrmMessage*>::iterator iter;
-	TfrmMessage *frm = NULL;
-	int incomingCount = 0;
+	for (iter = messageWindows.begin(); iter != messageWindows.end(); ++iter)
+	{
+		TfrmMessage *frmIter = *(iter);
+		if (IsTargetMatching(target, frmIter->GetTarget()))
+		{
+			return frmIter;
+		}
+	}
+	return NULL;
+}
+
+unsigned int CountIncomingForms(void)
+{
+	std::set<TfrmMessage*>::iterator iter;
+	unsigned int incomingCount = 0;
 	for (iter = messageWindows.begin(); iter != messageWindows.end(); ++iter)
 	{
 		TfrmMessage *frmIter = *(iter);
@@ -78,13 +96,16 @@ void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString bod
 		{
 			incomingCount++;
 		}
-		if (IsTargetMatching(caller, frmIter->GetTarget()))
-		{
-			frm = frmIter;
-			break;
-		}
 	}
-	if (frm == NULL && incomingCount > 25)
+	return incomingCount;
+}
+
+void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body)
+{
+	LOG("Received message from %s: ContentType %s, body [%s]\n", caller.c_str(), contentType.c_str(), body.c_str());
+	std::set<TfrmMessage*>::iterator iter;
+	TfrmMessage *frm = FindForm(caller);
+	if (frm == NULL && CountIncomingForms() > 25)
 	{
 		LOG("Limit for MESSAGE windows for incoming transactions exceeded, ignoring incoming message\n");
 		return;
@@ -113,5 +134,16 @@ void OnMessageStatus(int requestUid, int requestError, int sipCode)
 	}
 }
 
+void Send(AnsiString target)
+{
+	TfrmMessage *frm = FindForm(target);
+	if (frm == NULL)
+	{
+		frm = new TfrmMessage(NULL);
+		frm->SetTarget(target);
+	}
+	frm->Show();
 }
+
+}	// namespace SIMPLE_Messages
 

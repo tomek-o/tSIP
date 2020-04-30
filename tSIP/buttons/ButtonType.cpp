@@ -71,6 +71,8 @@ const char* Button::TypeName(enum Type type)
 		return "Contact file";
 	case UA_RESTART:
 		return "Restart user agent";
+	case SEND_TEXT_MESSAGE:
+		return "Send text message";
 	default:
 		return "???";
 	}
@@ -135,6 +137,8 @@ const char* Button::TypeDescription(enum Type type)
 		return "Open file associated with contact / phonebook entry.";
 	case UA_RESTART:
 		return "Restart user agent (core part of the softphone, working thread) to e.g. speed up BLF refreshing if PABX was restarted.";
+	case SEND_TEXT_MESSAGE:
+		return "Send text message (Instant Messaging, SIMPLE) to number/URI defined with button or (if button URI is empty) - number/URI from main window dial edit.";
 	default:
 		return "???";
 	}
