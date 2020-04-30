@@ -77,6 +77,7 @@ object frmMessage: TfrmMessage
         AllowAllUp = True
         Anchors = [akTop, akRight]
         GroupIndex = 1
+        Down = True
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
           1800000000000003000000000000000000000000000000000000FFFFFFFFFFFF
