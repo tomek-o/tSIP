@@ -2258,7 +2258,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		{
 			target = cbCallURI->Text;
 		}
-		SIMPLE_Messages::Send(target);
+		SIMPLE_Messages::Send(target, "", false);
 		break;
 	}
 	case Button::SHOW_SETTINGS:

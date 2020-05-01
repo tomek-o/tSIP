@@ -212,5 +212,11 @@ int TfrmMessage::HandleMessageStatus(int requestUid, int requestError, int sipCo
 	requestIds.erase(iter);
 	return 0;
 }
+
+void TfrmMessage::SetText(AnsiString text)
+{
+	memoInput->Text = text;
+}
+
 	
 

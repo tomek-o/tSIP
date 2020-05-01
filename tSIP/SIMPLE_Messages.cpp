@@ -134,7 +134,7 @@ void OnMessageStatus(int requestUid, int requestError, int sipCode)
 	}
 }
 
-void Send(AnsiString target)
+void Send(AnsiString target, AnsiString text, bool sendImmediately)
 {
 	TfrmMessage *frm = FindForm(target);
 	if (frm == NULL)
@@ -142,7 +142,15 @@ void Send(AnsiString target)
 		frm = new TfrmMessage(NULL);
 		frm->SetTarget(target);
 	}
+	if (text != "")
+	{
+		frm->SetText(text);
+	}
 	frm->Show();
+	if (sendImmediately)
+	{
+    	frm->_SendMsg();
+	}
 }
 
 }	// namespace SIMPLE_Messages

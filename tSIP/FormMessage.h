@@ -51,7 +51,8 @@ public:		// User declarations
     	return incoming;
 	}
 	void AddIncomingMessage(AnsiString contentType, AnsiString body);
-	int HandleMessageStatus(int requestUid, int requestError, int sipCode);	
+	int HandleMessageStatus(int requestUid, int requestError, int sipCode);
+	void SetText(AnsiString text);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmMessage *frmMessage;

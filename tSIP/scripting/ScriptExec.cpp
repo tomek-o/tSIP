@@ -17,6 +17,7 @@
 #include "Globals.h"
 #include "Contacts.h"
 #include "FormContactPopup.h"
+#include "SIMPLE_Messages.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -1212,6 +1213,15 @@ static int l_AppendContactNoteText(lua_State* L)
 	return 0;
 }
 
+static int l_SendTextMessage(lua_State* L)
+{
+	const char* target = lua_tostring( L, 1 );
+	const char* text = lua_tostring( L, 2 );
+	int sendImmediately = lua_tointeger(L, 3);
+	SIMPLE_Messages::Send(target, text, sendImmediately);
+	return 0;
+}
+
 };	// ScriptImp
 
 
@@ -1420,6 +1430,8 @@ void ScriptExec::Run(const char* script)
 
 	lua_register(L, "ReadContacts", ScriptImp::l_ReadContacts);
 	lua_register(L, "AppendContactNoteText", ScriptImp::l_AppendContactNoteText);
+
+	lua_register(L, "SendTextMessage", ScriptImp::l_SendTextMessage);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);
