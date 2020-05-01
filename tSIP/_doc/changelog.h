@@ -779,5 +779,23 @@ Version 0.1.69
 	- file (path) can be assigned to each contact / phonebook entry
 	- new button type: "Contact file" - opening (using ShellExecute "open") file associated with last contact entry on request
 	- options to automatically open file associated with contact on incoming / outgoing call 
+	- added "on contact note open" script event and AppendContactNoteText Lua function
+	- added display name configuration for account
+	- selected but not found audio device (e.g. detached USB device) is shown on the lists with [NOT FOUND] text
+	- FIXED: log file size setting
+	- added Portaudio locking (possible crash if audio devices are enumerated in script e.g. on startup)
+	- hotkey editor: hidden ID selection if not applicable for particular action type
+	- FIXED/improved: MESSAGE to window matching for incoming text messages (IM)
+	- added target display to text message window caption
+	- added sound played on incoming MESSAGE
+	- passing back status for sent MESSAGE, displaying in windows if status is other than SIP/200
+	- FIXED: ringtone files not being updated if edited manually
+	- added bitmaps/icons from Andi Topp (/img subdirectory, opt-in)
+	- bitmaps for buttons from main window (backspace, microphone, speaker) are now configurable
+	- added window for patching settings with JSON - paste part of configuration or drop JSON file to change configuration without looking through settings window
+	- added new button type: user agent restart
+	- added new button type: send text message (IM)
+	- Lua scripting: added SendTextMessage(uri, text, sendImmediately) function
+    
 */
 

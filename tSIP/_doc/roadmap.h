@@ -53,8 +53,6 @@ Call recording:
 
 - settings: time for hotkey anti-repeat timer
 
-- prepare some extra icons for programmable keys
-
 - separate icon for recorviewer
 
 - BLF list
@@ -106,7 +104,7 @@ Lua: get BLF button state => route incoming call to selected (idle) extension
 
 - sine wave audio input device
 
-- provisioning for main config, buttons and phonebook
+- provisioning for buttons and phonebook
 
 - more command-line control: show/hide, dtmf, hold/unhold, start recording
 
