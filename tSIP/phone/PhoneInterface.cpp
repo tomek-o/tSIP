@@ -6,6 +6,8 @@
 #include "common\Utilities.h"
 #include "Log.h"
 #include <SysUtils.hpp>
+#include <assert.h>
+#include <map>
 
 //---------------------------------------------------------------------------
 
@@ -29,6 +31,50 @@ PhoneInterface::CallbackQueuePop PhoneInterface::callbackQueuePop = NULL;
 PhoneInterface::CallbackQueueClear PhoneInterface::callbackQueueClear = NULL;
 PhoneInterface::CallbackQueueGetSize PhoneInterface::callbackQueueGetSize = NULL;
 PhoneInterface::CallbackRunScriptAsync PhoneInterface::callbackRunScriptAsync = NULL;
+TPopupMenu* PhoneInterface::trayPopupMenu = NULL;
+
+namespace
+{
+
+struct TrayMenuItemEntry
+{
+	CALLBACK_MENU_ITEM_CLICK callback;
+	void *cookie;
+	TrayMenuItemEntry(void):
+		callback(NULL),
+		cookie(NULL)
+	{}
+};
+
+std::map<TMenuItem*, struct TrayMenuItemEntry> trayMenuItemsMap;
+
+class EventsHandler
+{
+public:
+	// A VCL event handler is expected to be a non-static member of a class.
+	// https://stackoverflow.com/questions/49040803/assigning-events-to-a-vcl-control-created-dynamically-at-runtime
+	void __fastcall TrayMenuItemClick(TObject *Sender)
+	{
+		std::map<TMenuItem*, struct TrayMenuItemEntry>::iterator iter;
+		TMenuItem *item = dynamic_cast<TMenuItem*>(Sender);
+		if (item == NULL)
+		{
+        	return;
+		}
+		iter = trayMenuItemsMap.find(item);
+		if (iter != trayMenuItemsMap.end())
+		{
+			const struct TrayMenuItemEntry& entry = iter->second;
+			if (entry.callback)
+			{
+            	entry.callback(entry.cookie);
+			}
+		}
+	}
+} eventsHandler;
+
+}	// namespace
+
 
 void PhoneInterface::EnumerateDlls(AnsiString dir)
 {
@@ -249,7 +295,7 @@ enum PhoneInterface::E_LIB_STATUS PhoneInterface::VerifyDll(AnsiString filename,
 		(pfGetPhoneInterfaceDescription)GetProcAddress(hInstance, "GetPhoneInterfaceDescription");
 	if (!gmid)
 	{
-		LOG("Library %s DOES NOT look like a compatible plugin\n",
+		LOG("Library %s DOES NOT look like a compatible plugin (GetPhoneInterfaceDescription() not found)\n",
 			filename.c_str());
 		FreeLibrary(hInstance);
 		return E_NOTVALID;
@@ -475,6 +521,48 @@ int __stdcall PhoneInterface::OnRunScriptAsync(void *cookie, const char* script)
 	return -2;
 }
 
+void* __stdcall PhoneInterface::OnAddTrayMenuItem(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie)
+{
+	class PhoneInterface *dev;
+	dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	{
+		return NULL;
+	}
+	if (GetCurrentThreadId() != MainThreadID)
+	{
+		LOG("Plugin [%s] error: AddTrayMenuItem must be called from GUI/main thread, e.g. inside of Connect()!\n", dev->filename.c_str());
+		return NULL;
+	}
+
+	if (parent == NULL)
+	{
+		int count = trayPopupMenu->Items->Count;
+		assert(count > 0);	// expecting at least default "Exit" item, inserting new items before
+		TMenuItem *item = new TMenuItem(trayPopupMenu);
+		item->AutoHotkeys = maManual;
+		item->Caption = caption;
+		item->OnClick = &eventsHandler.TrayMenuItemClick;
+		trayPopupMenu->Items->Insert(count - 1, item);
+
+		struct TrayMenuItemEntry entry;
+		entry.callback = lpMenuItemClickFn;
+		entry.cookie = menuItemClickCookie;
+
+		trayMenuItemsMap[item] = entry;
+		dev->trayMenuItems.push_back(item);
+
+		return item;
+	}
+	else
+	{
+		/** \todo Cascaded tray menu for plugins */
+		LOG("Cascaded menu is not implemented yet!\n");
+	}
+	
+	return NULL;
+}
+
 PhoneInterface::PhoneInterface(AnsiString asDllName):
 	hInstance(NULL),
 	filename(asDllName),
@@ -503,12 +591,33 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetQueueGetSizeCallback(NULL),
 	dllSetAudioError(NULL),
 	dllSetProfileDir(NULL),
-	dllSetRunScriptAsyncCallback(NULL)
+	dllSetRunScriptAsyncCallback(NULL),
+	dllSetAddTrayMenuItemCallback(NULL)
 {
 	LOG("Creating object using %s\n", asDllName.c_str());
 	connInfo.state = DEVICE_DISCONNECTED;
 	connInfo.msg = "Not connected";
 	instances[LowerCase(asDllName)] = this;
+}
+
+int PhoneInterface::Connect(void) {
+	if (dllConnect)
+		return dllConnect();
+	return 0;
+}
+
+int PhoneInterface::Disconnect(void) {
+	std::list<TMenuItem*>::iterator iter;
+	for (iter = trayMenuItems.begin(); iter != trayMenuItems.end(); ++iter)
+	{
+		TMenuItem* item = *iter;
+		trayPopupMenu->Items->Remove(item);
+	}
+	trayMenuItems.clear();
+
+	if (dllDisconnect)
+		return dllDisconnect();
+	return 0;
 }
 
 PhoneInterface::~PhoneInterface()
@@ -558,6 +667,8 @@ int PhoneInterface::Load(void)
     dllSetProfileDir = (pfSetProfileDir)GetProcAddress(hInstance, "SetProfileDir");
 
 	dllSetRunScriptAsyncCallback = (pfSetRunScriptAsyncCallback)GetProcAddress(hInstance, "SetRunScriptAsyncCallback");
+
+    dllSetAddTrayMenuItemCallback = (pfSetAddTrayMenuItemCallback)GetProcAddress(hInstance, "SetAddTrayMenuItemCallback");
 
 	if ((dllSetCallbacks && dllShowSettings &&
 		dllGetPhoneCapabilities && dllConnect &&
@@ -618,6 +729,11 @@ int PhoneInterface::Load(void)
 	if (dllSetRunScriptAsyncCallback)
 	{
     	dllSetRunScriptAsyncCallback(&OnRunScriptAsync);
+	}
+
+	if (dllSetAddTrayMenuItemCallback)
+	{
+    	dllSetAddTrayMenuItemCallback(&OnAddTrayMenuItem);
 	}
 
 	GetSettings(&settings);

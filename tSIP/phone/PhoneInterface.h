@@ -5,6 +5,7 @@
 #include "Phone.h"
 #include "PhoneSettings.h"
 #include <System.hpp>
+#include <Menus.hpp>
 #include <vector>
 #include <map>
 #include <list>
@@ -87,11 +88,14 @@ private:
 
 	pfSetProfileDir dllSetProfileDir;
 
-    pfSetRunScriptAsyncCallback dllSetRunScriptAsyncCallback;
+	pfSetRunScriptAsyncCallback dllSetRunScriptAsyncCallback;
+
+	pfSetAddTrayMenuItemCallback dllSetAddTrayMenuItemCallback;
 
 	struct ConnectionInfo connInfo;
 
-	S_PHONE_SETTINGS settings;	
+	S_PHONE_SETTINGS settings;
+	std::list<TMenuItem*> trayMenuItems;	
 
 	// CALLBACKS DEFINITIONS
 	typedef void (__closure *CallbackConnect)(int state, const char *szMsgText);
@@ -111,7 +115,6 @@ private:
 	static PhoneConf& FindCfg(AnsiString dllName);
 
 	static AnsiString profileDir;
-
 
 public:
 	/** \brief Make list of valid dlls in supplied location
@@ -163,6 +166,7 @@ public:
 	static CallbackQueueClear callbackQueueClear;
 	static CallbackQueueGetSize callbackQueueGetSize;
 	static CallbackRunScriptAsync callbackRunScriptAsync;
+	static TPopupMenu *trayPopupMenu;
 
 	// dll callbacks
 	static void __stdcall OnLog(void *cookie, const char *szText);                   ///< called to generate log in parent application
@@ -178,6 +182,8 @@ public:
 	static int __stdcall OnQueueClear(void *cookie, const char* name);
 	static int __stdcall OnQueueGetSize(void *cookie, const char* name);
 	static int __stdcall OnRunScriptAsync(void *cookie, const char* script);
+	static void* __stdcall OnAddTrayMenuItem(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie);
+
 
     /** \brief Show device settings window.
      *
@@ -190,18 +196,10 @@ public:
 	}
 	/** \brief Connect device
 	*/
-	int Connect(void) {
-		if (dllConnect)
-			return dllConnect();
-		return 0;
-	}
+	int Connect(void);
 	/** \brief Disconnect device
 	*/
-	int Disconnect(void) {
-		if (dllDisconnect)
-			return dllDisconnect();
-		return 0;
-	}
+	int Disconnect(void);
 	/** \brief Get default or saved in configuration settings for device
 	*/
 	int GetSettings(struct S_PHONE_SETTINGS* settings)

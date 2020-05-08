@@ -157,6 +157,17 @@ typedef int (__stdcall *CALLBACK_QUEUE_GET_SIZE)(void *cookie, const char* name)
 	\return 0 on success (script enqueued)
 */
 typedef int (__stdcall *CALLBACK_RUN_SCRIPT_ASYNC)(void *cookie, const char* script);
+/** \brief Application -> plugin (NOT plugin -> app like others!) callback declaration for function to be called when registered menu item is clicked
+*/
+typedef void (__stdcall *CALLBACK_MENU_ITEM_CLICK)(void *menuItemClickCookie);
+/** \brief Add new item to tray menu from plugin
+	\param parent opaque handle to menu item parent; NULL to add to root menu, can also used previously added menu item handle to create cascade menu
+	\param caption text to put on new menu item
+	\param lpMenuItemClickFn function to be called when menu item is clicked; NULL can be used when creating cascade menu structure
+	\param menuItemClickCookie cookie to be passed back when menuItemClickCookie is called
+	\return handle to new menu item
+*/
+typedef void* (__stdcall *CALLBACK_ADD_TRAY_MENU_ITEM)(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie);
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXPORTED/IMPORTED FUNCTION SET
@@ -227,6 +238,10 @@ DECLARE_FN(void, SetQueueClearCallback, CALLBACK_QUEUE_CLEAR lpFn);
 DECLARE_FN(void, SetQueueGetSizeCallback, CALLBACK_QUEUE_GET_SIZE lpFn);
 
 DECLARE_FN(void, SetRunScriptAsyncCallback, CALLBACK_RUN_SCRIPT_ASYNC lpFn);
+
+/** \note Tray menu items may be added only from GUI thread context, e.g. from Connect() function
+*/
+DECLARE_FN(void, SetAddTrayMenuItemCallback, CALLBACK_ADD_TRAY_MENU_ITEM lpFn);
 
 /** \brief Called on audio device error (e.g. end of wave file)
 */

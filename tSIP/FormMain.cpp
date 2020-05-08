@@ -624,6 +624,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackQueueClear = OnQueueClear;
 	PhoneInterface::callbackQueueGetSize = OnQueueGetSize;
 	PhoneInterface::callbackRunScriptAsync = OnRunScriptAsync;
+	PhoneInterface::trayPopupMenu = popupTray;
 
 	PhoneInterface::EnumerateDlls(dir + "\\phone");
 	PhoneInterface::UpdateProfileDir(dir);
