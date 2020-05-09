@@ -352,7 +352,8 @@ object frmAccount: TfrmAccount
     OnChange = cbDtmfTxFormatChange
     Items.Strings = (
       'RFC2833'
-      'SIP INFO / dtmf-relay')
+      'SIP INFO / dtmf-relay'
+      'inband')
   end
   object edDisplayName: TEdit
     Left = 126

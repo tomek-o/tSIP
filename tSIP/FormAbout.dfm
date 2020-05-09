@@ -1063,7 +1063,62 @@ object frmAbout: TfrmAbout
         'https://datatracker.ietf.org/ipr/1914/'
         ''
         'Broadcom Corporation:'
-        'https://datatracker.ietf.org/ipr/1526/   ')
+        'https://datatracker.ietf.org/ipr/1526/'
+        ''
+        ''
+        
+          '================================================================' +
+          '============='
+        'inband DTMF generation for baresip:'
+        
+          '================================================================' +
+          '============='
+        ''
+        'Copyright (c) 2019 Hans Petter Selasky. All rights reserved.'
+        ''
+        
+          'Redistribution and use in source and binary forms, with or witho' +
+          'ut modification, are permitted provided that '
+        'the following conditions are met:'
+        
+          '1. Redistributions of source code must retain the above copyrigh' +
+          't notice, this list of conditions and the '
+        'following disclaimer.'
+        
+          '2. Redistributions in binary form must reproduce the above copyr' +
+          'ight notice, this list of conditions and the '
+        
+          'following disclaimer in the documentation and/or other materials' +
+          ' provided with the distribution.'
+        ''
+        
+          'THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS' +
+          #39#39' AND ANY '
+        
+          'EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, TH' +
+          'E IMPLIED '
+        
+          'WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPO' +
+          'SE ARE '
+        
+          'DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIA' +
+          'BLE FOR ANY '
+        
+          'DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTI' +
+          'AL DAMAGES '
+        
+          '(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS ' +
+          'OR SERVICES; '
+        
+          'LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER' +
+          ' CAUSED AND ON '
+        
+          'ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, ' +
+          'OR TORT (INCLUDING '
+        
+          'NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF TH' +
+          'IS SOFTWARE, '
+        'EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.')
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0

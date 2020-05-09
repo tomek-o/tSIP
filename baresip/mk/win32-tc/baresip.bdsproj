@@ -400,6 +400,8 @@
         <FILE FILENAME="..\..\include\baresip_presence_status.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\softvol\agc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="agc" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\softvol\agc.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dtmf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dtmf" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\dtmf.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

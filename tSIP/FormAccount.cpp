@@ -44,7 +44,14 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 	edStunServer->Text = acc.stun_server.c_str();
 	edOutbound1->Text = acc.outbound1.c_str();
 	//edOutbound2->Text = acc.outbound2.c_str();
-	cbDtmfTxFormat->ItemIndex = acc.dtmf_tx_format;
+	if (acc.dtmf_tx_format < cbDtmfTxFormat->Items->Count)
+	{
+		cbDtmfTxFormat->ItemIndex = acc.dtmf_tx_format;
+	}
+	else
+	{
+		cbDtmfTxFormat->ItemIndex = 0;
+	}
 }
 //---------------------------------------------------------------------------
 

@@ -1056,9 +1056,14 @@ int call_send_digit(struct call *call, char key)
 		err = sipsess_info(call->sess, "application/dtmf-relay", body, NULL, NULL);
 		mem_deref(body);
 		return err;
-	} else {
+	} else if (call->acc->dtmf_tx_format == DTMF_FMT_RFC2833) {
 		// RFC2833
-		return audio_send_digit(call->audio, key);
+		return audio_send_digit_rfc2833(call->audio, key);
+	} else if (call->acc->dtmf_tx_format == DTMF_FMT_INBAND) {
+		return audio_send_digit_inband(call->audio, key);
+	} else {
+		DEBUG_WARNING("Unhandled DTMF format configured!\n");
+		return EINVAL;
 	}
 }
 

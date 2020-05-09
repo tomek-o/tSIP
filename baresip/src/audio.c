@@ -68,11 +68,11 @@ enum {
 
  Processing encoder pipeline:
 
- .    .-------.   .-------.   .--------.   .--------.   .--------.
- |    |       |   |       |   |        |   |        |   |        |
- |O-->| ausrc |-->| aubuf |-->| resamp |-->| aufilt |-->| encode |---> RTP
- |    |       |   |       |   |        |   |        |   |        |
- '    '-------'   '-------'   '--------'   '--------'   '--------'
+ .    .-------.   .-------.   .--------.   .------.   .--------.   .--------.
+ |    |       |   |       |   |        |   |      |   |        |   |        |
+ |O-->| ausrc |-->| aubuf |-->| resamp |-->| DTMF |-->| aufilt |-->| encode |---> RTP
+ |    |       |   |       |   |        |   | ins. |   |        |   |        |
+ '    '-------'   '-------'   '--------'   '------'   '--------'   '--------'
 
  	clocked by: ausrc
  \endverbatim
@@ -109,6 +109,7 @@ struct autx {
 		} thr;
 #endif
 	} u;
+	struct dtmf_generator dtmfgen;	/**< DTMF generator state	    */
 };
 
 
@@ -333,6 +334,16 @@ static void poll_aubuf_tx(struct audio *a)
 
 		sampv = tx->sampv_rs;
 		sampc = sampc_rs;
+	}
+
+	/* check if we should generate DTMF audio */
+	if (!dtmf_is_empty(&tx->dtmfgen)) {
+		size_t x;
+
+		for (x = 0; x != sampc; x++) {
+			if (dtmf_get_sample(&tx->dtmfgen, (int16_t *)sampv + x))
+				break;
+		}
 	}
 
 	/* Process exactly one audio-frame in list order */
@@ -1333,7 +1344,7 @@ struct stream *audio_strm(const struct audio *a)
 }
 
 
-int audio_send_digit(struct audio *a, char key)
+int audio_send_digit_rfc2833(struct audio *a, char key)
 {
 	int err = 0;
 
@@ -1349,6 +1360,27 @@ int audio_send_digit(struct audio *a, char key)
 		(void)re_printf("send DTMF digit end: '%c'\n", a->tx.cur_key);
 		err = telev_send(a->telev,
 				 telev_digit2code(a->tx.cur_key), true);
+	}
+
+	a->tx.cur_key = key;
+
+	return err;
+}
+
+
+int audio_send_digit_inband(struct audio *a, char key)
+{
+	int err = 0;
+
+	if (!a)
+		return EINVAL;
+
+	if (key > 0) {
+		(void)re_printf("send DTMF digit (inband): '%c'\n", key);
+		err = dtmf_queue_digit(&a->tx.dtmfgen, key, a->tx.ac->srate, 0, 0);
+		if (err) {
+			DEBUG_WARNING("audio: invalid DTMF digit (0x%02x)\n", (int)key);
+		}
 	}
 
 	a->tx.cur_key = key;

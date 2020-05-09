@@ -39,7 +39,8 @@ enum answermode {
 
 enum dtmf_fmt {
 	DTMF_FMT_RFC2833 = 0,
-	DTMF_FMT_SIP_INFO
+	DTMF_FMT_SIP_INFO,
+	DTMF_FMT_INBAND
 };
 
 struct account {
@@ -138,7 +139,8 @@ int  audio_encoder_set(struct audio *a, const struct aucodec *ac,
 int  audio_decoder_set(struct audio *a, const struct aucodec *ac,
 		       int pt_rx, const char *params);
 struct stream *audio_strm(const struct audio *a);
-int  audio_send_digit(struct audio *a, char key);
+int  audio_send_digit_rfc2833(struct audio *a, char key);
+int  audio_send_digit_inband(struct audio *a, char key);
 void audio_sdp_attr_decode(struct audio *a);
 
 /*
@@ -386,3 +388,36 @@ struct stream *video_strm(const struct video *v);
 void video_update_picture(struct video *v);
 void video_sdp_attr_decode(struct video *v);
 int  video_print(struct re_printf *pf, const struct video *v);
+
+
+/* DTMF inband transmitter */
+#define	DTMF_MAX_DIGITS 128
+
+struct dtmf_to_freq {
+	uint16_t f0;			/* Hz */
+	uint16_t f1;			/* Hz */
+	uint8_t	key;
+};
+
+struct dtmf_state {
+	float	kx[2];
+	float	ky[2];
+	uint32_t duration;
+};
+
+struct dtmf_generator {
+	struct dtmf_state state[DTMF_MAX_DIGITS];
+	volatile uint16_t input_pos;
+	volatile uint16_t output_pos;
+
+	float	x[2];
+	float	y[2];
+	uint32_t duration;
+};
+
+int dtmf_is_empty(struct dtmf_generator *pg);
+
+int	dtmf_queue_digit(struct dtmf_generator *, uint8_t digit,
+			 uint32_t sample_rate, uint16_t tone_duration,
+			 uint16_t gap_duration);
+int	dtmf_get_sample(struct dtmf_generator *pg, int16_t *psamp);
