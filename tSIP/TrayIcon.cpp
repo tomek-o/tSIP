@@ -2,6 +2,7 @@
 #pragma hdrstop
 
 #include "TrayIcon.h"
+#include "Log.h"
 #pragma package(smart_init)
 
 #define WM_TRAYICON WM_USER + 1
@@ -9,7 +10,12 @@
 __fastcall TrayIcon::TrayIcon(TComponent* Owner)
         : TComponent(Owner)
 {
-    IconHandle = AllocateHWnd(NotifyMessage);
+	memset(&IconData, 0, sizeof(IconData));
+	IconData.cbSize = sizeof(IconData);
+	IconData.uVersion = NOTIFYICON_VERSION;	// NOTIFYICON_VERSION Use the Windows 2000 behavior.
+											// Use this value for applications designed for Windows 2000 and later.
+
+	IconHandle = AllocateHWnd(NotifyMessage);
 	Timer = new TTimer(NULL);
 	Timer->OnTimer = Animate;
 	Icon = new TIcon();
@@ -70,7 +76,10 @@ void __fastcall TrayIcon::NotifyMessage(TMessage &Msg)
 	else if (Msg.Msg == WM_TASKBARCREATE)
 	{
 		if (bShowInTray)
+		{
 			TrayMessage(NIM_ADD);
+			TrayMessage(NIM_SETVERSION);
+		}
 	}
 	if (Msg.Result != 1)
 		Msg.Result = DefWindowProc(IconHandle, Msg.Msg, Msg.WParam,Msg.LParam);
@@ -166,11 +175,13 @@ void TrayIcon::PopMenu()
 
 bool __fastcall TrayIcon::TrayMessage(DWORD dwMessage)
 {
+	//LOG("TrayIcon::TrayMessage _WIN32_IE = %08X\n", _WIN32_IE);
 	assert(Icon);
     IconData.hIcon = Icon->Handle;
     IconData.hWnd = IconHandle;
     IconData.uFlags = NIF_MESSAGE | NIF_ICON | NIF_TIP;
-    strcpy(IconData.szTip, asHint.c_str());
+	strncpy(IconData.szTip, asHint.c_str(), sizeof(IconData.szTip));
+	IconData.szTip[sizeof(IconData.szTip)-1] = '\0';
     IconData.uCallbackMessage = WM_TRAYICON;
     return Shell_NotifyIcon(dwMessage, &IconData);
 }
@@ -181,9 +192,14 @@ void TrayIcon::ShowInTray(bool bShow)
 	if (bShowInTray == bShow)
 		return;
 	if (bShow)
+	{
 		TrayMessage(NIM_ADD);
+		TrayMessage(NIM_SETVERSION);		
+	}
 	else
+	{
 		TrayMessage(NIM_DELETE);
+	}
 	bShowInTray = bShow;
 }
 //---------------------------------------------------------------------------

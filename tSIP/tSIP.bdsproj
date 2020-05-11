@@ -474,6 +474,7 @@
         <FILE FILENAME="PortaudioLock.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PortaudioLock" FORMNAME="" DESIGNCLASS="" ADDITIONAL="PortaudioLock.h"/>
         <FILE FILENAME="Bitmaps.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Bitmaps" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Bitmaps.h"/>
         <FILE FILENAME="FormSettingsPatch.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormSettingsPatch" FORMNAME="frmSettingsPatch" DESIGNCLASS="" ADDITIONAL="FormSettingsPatch.h"/>
+        <FILE FILENAME="AppStatus.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AppStatus" FORMNAME="" DESIGNCLASS="" ADDITIONAL="AppStatus.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

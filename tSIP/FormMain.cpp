@@ -8,6 +8,7 @@
 #include "Paths.h"
 #include "TrayIcon.h"
 #include "Bitmaps.h"
+#include "AppStatus.h"
 #include "FormAbout.h"
 #include "FormSettings.h"
 #include "FormSettingsPatch.h"
@@ -169,7 +170,11 @@ namespace {
 		{
         	frmContactEditor->Close();
 		}
-		
+	}
+
+	void SetStatus(AnsiString text)
+	{
+		SetAppStatus("FormMain", 0, text);
 	}
 }
 
@@ -2604,12 +2609,8 @@ void TfrmMain::ToggleVisibility(void)
 	}
 }
 
-void TfrmMain::SetStatus(AnsiString text)
+void TfrmMain::SetTrayIconHint(AnsiString text)
 {
-	if (StatusBar)
-	{
-		StatusBar->SimpleText = text;
-	}
 	trIcon->SetHint(text);
 }
 

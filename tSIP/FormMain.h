@@ -231,7 +231,6 @@ private:	// User declarations
 	void OnAddOutputText(const char* text);
 	int OnRunScriptAsync(const char* script);
 
-	void SetStatus(AnsiString text);
 	void ToggleVisibility(void);
 	void ToggleSpeedDial(void);
 	void RegisterGlobalHotKeys(void);
@@ -264,6 +263,7 @@ public:		// User declarations
 	void OnProgrammableBtnClick(int id, TProgrammableButton* btn);
 	void obsUpdate(Observable* o, Argument * arg);
 	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
+	void SetTrayIconHint(AnsiString text);	
 
 	BEGIN_MESSAGE_MAP
 		MESSAGE_HANDLER(WM_COPYDATA, TWMCopyData, WMCopyData)

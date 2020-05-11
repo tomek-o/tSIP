@@ -14,6 +14,7 @@
 #include "Call.h"
 #include "UaCustomRequests.h"
 #include "UaMain.h"
+#include "AppStatus.h"
 #include "Globals.h"
 #include "Contacts.h"
 #include "FormContactPopup.h"
@@ -1222,6 +1223,15 @@ static int l_SendTextMessage(lua_State* L)
 	return 0;
 }
 
+static int l_SetAppStatus(lua_State* L)
+{
+	const char* id = lua_tostring( L, 1 );
+	int priority = lua_tointeger(L, 2);
+	const char* text = lua_tostring( L, 3 );
+	SetAppStatus(id, priority, text);
+	return 0;
+}
+
 };	// ScriptImp
 
 
@@ -1432,6 +1442,8 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "AppendContactNoteText", ScriptImp::l_AppendContactNoteText);
 
 	lua_register(L, "SendTextMessage", ScriptImp::l_SendTextMessage);
+
+	lua_register(L, "SetAppStatus", ScriptImp::l_SetAppStatus);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);
