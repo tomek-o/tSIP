@@ -3,11 +3,16 @@
 #include "PhoneInterface.h"
 #include "Phone.h"
 #include "PhoneConf.h"
-#include "common\Utilities.h"
+#include "ScriptSource.h"
+#include "AppStatus.h"
+#include "common/Utilities.h"
+#include "common/Mutex.h"
+#include "common/ScopedLock.h"
 #include "Log.h"
 #include <SysUtils.hpp>
 #include <assert.h>
 #include <map>
+#include <deque>
 
 //---------------------------------------------------------------------------
 
@@ -30,7 +35,6 @@ PhoneInterface::CallbackQueuePush PhoneInterface::callbackQueuePush = NULL;
 PhoneInterface::CallbackQueuePop PhoneInterface::callbackQueuePop = NULL;
 PhoneInterface::CallbackQueueClear PhoneInterface::callbackQueueClear = NULL;
 PhoneInterface::CallbackQueueGetSize PhoneInterface::callbackQueueGetSize = NULL;
-PhoneInterface::CallbackRunScriptAsync PhoneInterface::callbackRunScriptAsync = NULL;
 TPopupMenu* PhoneInterface::trayPopupMenu = NULL;
 
 namespace
@@ -72,6 +76,77 @@ public:
 		}
 	}
 } eventsHandler;
+
+Mutex mutexScriptQueue;
+std::deque<AnsiString> enqueuedScripts;
+enum { MAX_SCRIPT_QUEUE_SIZE = 1000 };
+PhoneInterface::CallbackRunScript cbRunScript = NULL;
+
+int EnqueueScript(AnsiString script)
+{
+	ScopedLock<Mutex> lock(mutexScriptQueue);
+
+	if (enqueuedScripts.size() < MAX_SCRIPT_QUEUE_SIZE)
+	{
+		enqueuedScripts.push_back(script);
+		return 0;
+	}
+	return -1;
+}
+
+void PollScriptQueue(void)
+{
+	ScopedLock<Mutex> lock(mutexScriptQueue);
+	if (enqueuedScripts.empty())
+	{
+		return;
+	}
+	AnsiString script = enqueuedScripts.front();
+	enqueuedScripts.pop_front();
+
+	/** \todo Global break request */
+	bool breakRequest = false;
+	bool handled = true;
+	assert(cbRunScript);
+	cbRunScript(SCRIPT_SRC_PLUGIN_QUEUE, -1, script, breakRequest, handled);
+}
+
+
+Mutex mutexAppStatus;
+struct AppStatusEntry
+{
+	AnsiString id;
+	int priority;
+	AnsiString text;
+};
+std::deque<struct AppStatusEntry> enqueuedAppStatus;
+enum { MAX_APP_STATUS_QUEUE_SIZE = 1000 };
+int EnqueueAppStatus(const char* id, int priority, const char* text)
+{
+	ScopedLock<Mutex> lock(mutexAppStatus);
+	if (enqueuedAppStatus.size() < MAX_APP_STATUS_QUEUE_SIZE)
+	{
+		struct AppStatusEntry entry;
+		entry.id = id;
+		entry.priority = priority;
+		entry.text = text;	
+		enqueuedAppStatus.push_back(entry);
+		return 0;
+	}
+	return -1;
+}
+
+void PollAppStatusQueue(void)
+{
+	ScopedLock<Mutex> lock(mutexAppStatus);
+	if (enqueuedAppStatus.empty())
+	{
+		return;
+	}
+	const struct AppStatusEntry entry = enqueuedAppStatus.front();
+	enqueuedAppStatus.pop_front();
+	SetAppStatus(entry.id, entry.priority, entry.text);
+}
 
 }	// namespace
 
@@ -516,9 +591,23 @@ int __stdcall PhoneInterface::OnRunScriptAsync(void *cookie, const char* script)
 	{
 		return -1;
 	}
-	if (dev->callbackRunScriptAsync)
-		return dev->callbackRunScriptAsync(script);
-	return -2;
+	return EnqueueScript(script);
+}
+
+int __stdcall PhoneInterface::OnSetAppStatus(void *cookie, const char* id, int priority, const char* text)
+{
+	class PhoneInterface *dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	{
+		return -1;
+	}
+	return EnqueueAppStatus(id, priority, text);
+}
+
+void PhoneInterface::SetCallbackRunScript(CallbackRunScript cb)
+{
+	assert(cb);
+	cbRunScript = cb;	
 }
 
 void* __stdcall PhoneInterface::OnAddTrayMenuItem(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie)
@@ -736,9 +825,21 @@ int PhoneInterface::Load(void)
     	dllSetAddTrayMenuItemCallback(&OnAddTrayMenuItem);
 	}
 
+	pfSetCallbackSetAppStatus dllSetCallbackSetAppStatus = (pfSetCallbackSetAppStatus)GetProcAddress(hInstance, "SetCallbackSetAppStatus");
+	if (dllSetCallbackSetAppStatus)
+	{
+	    dllSetCallbackSetAppStatus(&OnSetAppStatus);
+	}
+
 	GetSettings(&settings);
 
 	return 0;
+}
+
+void PhoneInterface::Poll(void)
+{
+	PollScriptQueue();
+	PollAppStatusQueue();
 }
 
 

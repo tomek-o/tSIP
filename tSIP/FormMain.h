@@ -24,7 +24,6 @@
 #include <Dialogs.hpp>
 #include <list>
 #include <string>
-#include <deque>
 
 class TrayIcon;
 class TfrmButtonContainer;
@@ -229,18 +228,13 @@ private:	// User declarations
 	int OnQueueClear(const char* name);
 	int OnQueueGetSize(const char* name);
 	void OnAddOutputText(const char* text);
-	int OnRunScriptAsync(const char* script);
 
 	void ToggleVisibility(void);
 	void ToggleSpeedDial(void);
 	void RegisterGlobalHotKeys(void);
 	void ExecAction(const struct Action& action);
 	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
-	std::deque<AnsiString> enqueuedScripts;
-	enum { MAX_SCRIPT_QUEUE_SIZE = 1000 };
-	Mutex mutexScriptQueue;
-	int EnqueueScript(AnsiString script);
-	void PollScriptQueue(void);
+
 	bool notificationIconState;
 	void SetNotificationIcon(bool state);
 	void SetKioskMode(bool state);

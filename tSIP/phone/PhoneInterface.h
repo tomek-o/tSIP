@@ -109,7 +109,6 @@ private:
 	typedef int (__closure *CallbackQueuePop)(const char* name, AnsiString &value);
 	typedef int (__closure *CallbackQueueClear)(const char* name);
 	typedef int (__closure *CallbackQueueGetSize)(const char* name);
-	typedef int (__closure *CallbackRunScriptAsync)(const char* script);
 
 	static std::list<PhoneConf> cfg;
 	static PhoneConf& FindCfg(AnsiString dllName);
@@ -165,7 +164,6 @@ public:
 	static CallbackQueuePop callbackQueuePop;
 	static CallbackQueueClear callbackQueueClear;
 	static CallbackQueueGetSize callbackQueueGetSize;
-	static CallbackRunScriptAsync callbackRunScriptAsync;
 	static TPopupMenu *trayPopupMenu;
 
 	// dll callbacks
@@ -181,9 +179,13 @@ public:
 	static int __stdcall OnQueuePop(void *cookie, const char* name, char* value, unsigned int valueSize);
 	static int __stdcall OnQueueClear(void *cookie, const char* name);
 	static int __stdcall OnQueueGetSize(void *cookie, const char* name);
-	static int __stdcall OnRunScriptAsync(void *cookie, const char* script);
 	static void* __stdcall OnAddTrayMenuItem(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie);
-
+	static int __stdcall OnRunScriptAsync(void *cookie, const char* script);
+	static int __stdcall OnSetAppStatus(void *cookie, const char* id, int priority, const char* text);
+	
+	static void Poll(void);
+	typedef int (__closure *CallbackRunScript)(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
+	static void SetCallbackRunScript(CallbackRunScript cb);
 
     /** \brief Show device settings window.
      *

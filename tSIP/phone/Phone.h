@@ -168,7 +168,13 @@ typedef void (__stdcall *CALLBACK_MENU_ITEM_CLICK)(void *menuItemClickCookie);
 	\return handle to new menu item
 */
 typedef void* (__stdcall *CALLBACK_ADD_TRAY_MENU_ITEM)(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie);
-
+/** \brief Set application status
+	\param id status id to add or replace
+	\param priority lower value -> higher priority
+	\param text text to set
+	\return 0 on success
+*/
+typedef int (__stdcall *CALLBACK_SET_APP_STATUS)(void *cookie, const char* id, int priority, const char* text);
 ///////////////////////////////////////////////////////////////////////////////
 // EXPORTED/IMPORTED FUNCTION SET
 ///////////////////////////////////////////////////////////////////////////////
@@ -242,6 +248,8 @@ DECLARE_FN(void, SetRunScriptAsyncCallback, CALLBACK_RUN_SCRIPT_ASYNC lpFn);
 /** \note Tray menu items may be added only from GUI thread context, e.g. from Connect() function
 */
 DECLARE_FN(void, SetAddTrayMenuItemCallback, CALLBACK_ADD_TRAY_MENU_ITEM lpFn);
+
+DECLARE_FN(void, SetCallbackSetAppStatus, CALLBACK_SET_APP_STATUS lpFn);
 
 /** \brief Called on audio device error (e.g. end of wave file)
 */
