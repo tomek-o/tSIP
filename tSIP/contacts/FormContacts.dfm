@@ -13,8 +13,6 @@ object frmContacts: TfrmContacts
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object lvContacts: TListView
@@ -31,7 +29,7 @@ object frmContacts: TfrmContacts
     OwnerData = True
     ReadOnly = True
     RowSelect = True
-    PopupMenu = pupupContactList
+    PopupMenu = popupContactList
     ShowColumnHeaders = False
     TabOrder = 0
     ViewStyle = vsReport
@@ -99,13 +97,16 @@ object frmContacts: TfrmContacts
       OnKeyPress = edFilterKeyPress
     end
   end
-  object pupupContactList: TPopupMenu
+  object popupContactList: TPopupMenu
     AutoHotkeys = maManual
-    OnPopup = pupupContactListPopup
+    OnPopup = popupContactListPopup
     Left = 168
     Top = 127
     object miCall: TMenuItem
       Caption = 'Call...'
+    end
+    object miMessage: TMenuItem
+      Caption = 'Message...'
     end
     object miAdd: TMenuItem
       Caption = 'Add'

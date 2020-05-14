@@ -6,6 +6,7 @@
 #include "FormContacts.h"
 #include "FormContactEditor.h"
 #include "Contacts.h"
+#include "SIMPLE_Messages.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -112,6 +113,15 @@ TMenuItem* TfrmContacts::CreateCallItem(AnsiString uri, TPopupMenu *Owner)
 	return item;
 }
 
+TMenuItem* TfrmContacts::CreateMessageItem(AnsiString uri, TPopupMenu *Owner)
+{
+	TMenuItem *item = new TMenuItem(Owner);
+	item->Caption = uri;
+	item->AutoHotkeys = maManual;
+	item->OnClick = miMessageItemClick;
+	return item;
+}
+
 void __fastcall TfrmContacts::miCallItemClick(TObject *Sender)
 {
 	TMenuItem *item = dynamic_cast<TMenuItem*>(Sender);
@@ -120,35 +130,43 @@ void __fastcall TfrmContacts::miCallItemClick(TObject *Sender)
 	callbackCall(item->Caption.c_str());
 }
 
-void __fastcall TfrmContacts::pupupContactListPopup(TObject *Sender)
+void __fastcall TfrmContacts::miMessageItemClick(TObject *Sender)
+{
+	TMenuItem *item = dynamic_cast<TMenuItem*>(Sender);
+	if (item == NULL)
+		return;
+	SIMPLE_Messages::Send(item->Caption, "", false);
+}
+
+void __fastcall TfrmContacts::popupContactListPopup(TObject *Sender)
 {
 	TListItem *item = lvContacts->Selected;
-	miCall->Clear();	
+	miCall->Clear();
+	miMessage->Clear();	
 	if (item == NULL)
 	{
 		miCall->Enabled = false;
+		miMessage->Enabled = false;
 		miEdit->Enabled = false;
 		miDelete->Enabled = false;
 	}
 	else
 	{
 		miCall->Enabled = true;
+		miMessage->Enabled = true;
 		int id = filteredContacts[item->Index].id;		
 		const Contacts::Entry &entry = contacts->GetEntries()[id];
-		if (entry.uri1 != "")
+		AnsiString uris[] = {entry.uri1, entry.uri2, entry.uri3};
+		for (unsigned int i=0; i<sizeof(uris)/sizeof(uris[0]); i++)
 		{
-			TMenuItem *callItem = CreateCallItem(entry.uri1, pupupContactList);
-			miCall->Add(callItem);
-		}
-		if (entry.uri2 != "")
-		{
-			TMenuItem *callItem = CreateCallItem(entry.uri2, pupupContactList);
-			miCall->Add(callItem);
-		}
-		if (entry.uri3 != "")
-		{
-			TMenuItem *callItem = CreateCallItem(entry.uri3, pupupContactList);
-			miCall->Add(callItem);
+			AnsiString uri = uris[i];
+			if (uri != "")
+			{
+				TMenuItem *callItem = CreateCallItem(uri, popupContactList);
+				miCall->Add(callItem);
+				TMenuItem *messageItem = CreateMessageItem(uri, popupContactList);
+				miMessage->Add(messageItem);
+			}
 		}
 		miEdit->Enabled = true;
 		miDelete->Enabled = true;

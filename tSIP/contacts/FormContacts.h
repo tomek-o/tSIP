@@ -23,16 +23,18 @@ __published:	// IDE-managed Components
 	TPanel *pnlBottom;
 	TEdit *edFilter;
 	TImage *imgFilter;
-	TPopupMenu *pupupContactList;
+	TPopupMenu *popupContactList;
 	TMenuItem *miAdd;
 	TMenuItem *miEdit;
 	TMenuItem *miDelete;
 	TMenuItem *miCall;
+	TMenuItem *miMessage;
 	void __fastcall lvContactsData(TObject *Sender, TListItem *Item);
 	void __fastcall lvContactsDblClick(TObject *Sender);
-	void __fastcall pupupContactListPopup(TObject *Sender);
+	void __fastcall popupContactListPopup(TObject *Sender);
 	void __fastcall miAddClick(TObject *Sender);
 	void __fastcall miCallItemClick(TObject *Sender);
+	void __fastcall miMessageItemClick(TObject *Sender);
 	void __fastcall miEditClick(TObject *Sender);
 	void __fastcall miDeleteClick(TObject *Sender);
 	void __fastcall edFilterChange(TObject *Sender);
@@ -52,6 +54,7 @@ private:	// User declarations
 	bool filterUsingNote;
 	bool storeNoteInSeparateFile;
 	TMenuItem *CreateCallItem(AnsiString uri, TPopupMenu *Owner);
+	TMenuItem *CreateMessageItem(AnsiString uri, TPopupMenu *Owner);
 public:		// User declarations
 	__fastcall TfrmContacts(TComponent* Owner, Contacts *contacts, CallbackCall callbackCall);
 	void obsUpdate(Observable* o, Argument * arg);
