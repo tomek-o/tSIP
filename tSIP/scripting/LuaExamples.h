@@ -628,5 +628,23 @@ const LuaExample luaExamples [] =
 	"Hangup()\n"
 	"--]]"
 	}
-
+    ,
+    {
+	"Send text messages (SIP SIMPLE, instant messanging)"
+	,    
+    "local target = \"209\"\t-- can use full SIP URI also\n"
+    "for i = 1, 10 do\n"
+    "\tlocal text = string.format(\"tSIP message #%d\", i)\n"
+    "\tSendTextMessage(target, text, 1)\n"
+    "\t-- random pause between messages: 200...2000 ms\n"
+    "\tSleep(math.random(200, 2000))\n"
+    "\tret = CheckBreak()\n"
+    "\t-- break on user request\n"
+    "\tif ret ~= 0 then\n"
+    "\t\tprint ('User break\\n')\n"
+    "\t\tbreak\n"
+    "\tend\t\n"
+    "end\n"
+    "print(\"Done\\n\");"    
+    }
 };
