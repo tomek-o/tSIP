@@ -9,12 +9,14 @@
 #include <Forms.hpp>
 #include <ExtCtrls.hpp>
 //---------------------------------------------------------------------------
+
+class TfrmTextEditor;
+
 class TfrmSettingsPatch : public TForm
 {
 __published:	// IDE-managed Components
 	TPanel *pnlBottom;
 	TButton *btnApply;
-	TMemo *edJson;
 	TPanel *pnlTop;
 	TLabel *lblInfo;
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -22,6 +24,7 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
 	void __fastcall WmDropFiles(TWMDropFiles& Message);
+	TfrmTextEditor *frmEditor;
 public:		// User declarations
 	__fastcall TfrmSettingsPatch(TComponent* Owner);
 	CallbackUpdateSettings onUpdateSettings;

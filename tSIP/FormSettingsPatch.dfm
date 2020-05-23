@@ -2,8 +2,8 @@ object frmSettingsPatch: TfrmSettingsPatch
   Left = 0
   Top = 0
   Caption = 'Patch/update settings'
-  ClientHeight = 262
-  ClientWidth = 358
+  ClientHeight = 282
+  ClientWidth = 430
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,17 +18,19 @@ object frmSettingsPatch: TfrmSettingsPatch
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 224
-    Width = 358
+    Top = 244
+    Width = 430
     Height = 38
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 224
+    ExplicitWidth = 358
     DesignSize = (
-      358
+      430
       38)
     object btnApply: TButton
-      Left = 278
+      Left = 350
       Top = 9
       Width = 75
       Height = 25
@@ -36,28 +38,18 @@ object frmSettingsPatch: TfrmSettingsPatch
       Caption = 'Apply'
       TabOrder = 0
       OnClick = btnApplyClick
+      ExplicitLeft = 278
     end
-  end
-  object edJson: TMemo
-    Left = 0
-    Top = 25
-    Width = 358
-    Height = 199
-    Align = alClient
-    TabOrder = 1
-    ExplicitLeft = 80
-    ExplicitTop = 80
-    ExplicitWidth = 185
-    ExplicitHeight = 89
   end
   object pnlTop: TPanel
     Left = 0
     Top = 0
-    Width = 358
+    Width = 430
     Height = 25
     Align = alTop
     BevelOuter = bvNone
-    TabOrder = 2
+    TabOrder = 1
+    ExplicitWidth = 358
     object lblInfo: TLabel
       Left = 8
       Top = 6
