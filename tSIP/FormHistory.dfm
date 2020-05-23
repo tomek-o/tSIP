@@ -13,8 +13,6 @@ object frmHistory: TfrmHistory
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object lvHistory: TListView
@@ -528,6 +526,10 @@ object frmHistory: TfrmHistory
     object miHttpQuery: TMenuItem
       Caption = 'HTTP query'
       OnClick = miHttpQueryClick
+    end
+    object miMessage: TMenuItem
+      Caption = 'Message'
+      OnClick = miMessageClick
     end
   end
 end

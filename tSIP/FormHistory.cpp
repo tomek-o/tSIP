@@ -6,6 +6,7 @@
 #include "Clipbrd.hpp"
 #include "FormHistory.h"
 #include "History.h"
+#include "SIMPLE_Messages.h"
 #include <assert.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -420,4 +421,18 @@ void TfrmHistory::SetColumnWidths(const std::vector<int>& widths)
 		lvHistory->Columns->Items[i]->Width = widths[i];
 	}
 }
+
+void __fastcall TfrmHistory::miMessageClick(TObject *Sender)
+{
+	History::Entry* entry = getSelectedEntry();
+	if (entry == NULL)
+	{
+		return;
+	}
+
+	AnsiString uri = getDefaultUri(entry);
+
+	SIMPLE_Messages::Send(uri, "", false);	
+}
+//---------------------------------------------------------------------------
 
