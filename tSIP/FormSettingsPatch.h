@@ -19,6 +19,7 @@ __published:	// IDE-managed Components
 	TButton *btnApply;
 	TPanel *pnlTop;
 	TLabel *lblInfo;
+	TLabel *Label1;
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 private:	// User declarations
