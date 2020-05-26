@@ -116,6 +116,11 @@ static struct config core_config = {
 		""
 	},
 #endif
+
+	/* messages */
+	{
+		200, "OK"
+	},
 };
 
 static int dns_server_handler(const struct pl *pl, void *arg)

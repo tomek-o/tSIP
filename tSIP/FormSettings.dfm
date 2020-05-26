@@ -28,7 +28,6 @@ object frmSettings: TfrmSettings
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 665
     object btnCancel: TButton
       Left = 593
       Top = 6
@@ -53,14 +52,13 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 392
-    ActivePage = tsBranding
+    ActivePage = tsMessages
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitWidth = 536
       object lblGuiScaling: TLabel
         Left = 3
         Top = 143
@@ -172,7 +170,6 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
-      ExplicitWidth = 536
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -327,7 +324,6 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
-      ExplicitWidth = 536
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 341
@@ -336,7 +332,6 @@ object frmSettings: TfrmSettings
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 536
         object btnAddAccount: TButton
           Left = 464
           Top = 4
@@ -363,13 +358,11 @@ object frmSettings: TfrmSettings
         Height = 341
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 536
       end
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
-      ExplicitWidth = 536
       object lblSpeedDial: TLabel
         Left = 3
         Top = 3
@@ -486,7 +479,6 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
-      ExplicitWidth = 536
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -619,13 +611,26 @@ object frmSettings: TfrmSettings
     object tsMessages: TTabSheet
       Caption = 'Messages'
       ImageIndex = 22
-      ExplicitWidth = 536
       object lblMessagesRing: TLabel
         Left = 5
         Top = 3
         Width = 136
         Height = 13
         Caption = 'Sound for incoming message'
+      end
+      object lbMessagesReply: TLabel
+        Left = 5
+        Top = 35
+        Width = 202
+        Height = 13
+        Caption = 'Reply to incoming messages with SIP code'
+      end
+      object lblMessagesReply2: TLabel
+        Left = 263
+        Top = 35
+        Width = 85
+        Height = 13
+        Caption = 'and reason (text)'
       end
       object edMessagesRing: TEdit
         Left = 160
@@ -643,11 +648,24 @@ object frmSettings: TfrmSettings
         TabOrder = 1
         OnClick = btnMessagesSelectRingClick
       end
+      object edMessagesReplyCode: TEdit
+        Left = 213
+        Top = 32
+        Width = 44
+        Height = 21
+        TabOrder = 2
+      end
+      object edMessagesReplyReason: TEdit
+        Left = 354
+        Top = 32
+        Width = 175
+        Height = 21
+        TabOrder = 3
+      end
     end
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
-      ExplicitWidth = 536
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -676,7 +694,6 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
-      ExplicitWidth = 536
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -755,8 +772,6 @@ object frmSettings: TfrmSettings
     object tsBranding: TTabSheet
       Caption = 'Branding, bitmaps'
       ImageIndex = 20
-      ExplicitLeft = 6
-      ExplicitTop = 14
       object lblDialpadBackgroundImage: TLabel
         Left = 2
         Top = 5
@@ -1004,7 +1019,6 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
-      ExplicitWidth = 536
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1216,7 +1230,6 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
-      ExplicitWidth = 536
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -1472,7 +1485,6 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
-      ExplicitWidth = 536
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -1655,7 +1667,6 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
-      ExplicitWidth = 536
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -1789,7 +1800,6 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
-      ExplicitWidth = 536
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -1850,7 +1860,6 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
-      ExplicitWidth = 536
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -1965,12 +1974,10 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
-      ExplicitWidth = 536
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
-      ExplicitWidth = 536
       object lblContactPopup: TLabel
         Left = 2
         Top = 87
@@ -2124,7 +2131,6 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
-      ExplicitWidth = 536
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -2181,12 +2187,10 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Phones'
       ImageIndex = 13
-      ExplicitWidth = 536
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      ExplicitWidth = 536
       object lblTrayNotifierBackgroundImage: TLabel
         Left = 3
         Top = 72
@@ -2277,7 +2281,6 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
-      ExplicitWidth = 536
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -3085,7 +3088,6 @@ object frmSettings: TfrmSettings
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitWidth = 536
       object lblUiCapacity: TLabel
         Left = 5
         Top = 148
@@ -3218,7 +3220,6 @@ object frmSettings: TfrmSettings
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'
       ImageIndex = 21
-      ExplicitWidth = 536
     end
   end
   object tvSelector: TTreeView

@@ -471,6 +471,26 @@ public:
 		}
 	} avt;	// audio/video transport
 
+	struct Messages {
+		int replyCode;
+		std::string replyReason;
+		Messages(void):
+			replyCode(200),
+			replyReason("OK")
+		{}
+		bool operator==(const UaConf::Messages& right) const {
+			if (replyCode == right.replyCode &&
+				replyReason == right.replyReason)
+			{
+				return true;
+			}
+			return false;
+		}
+		bool operator!=(const UaConf::Messages& right) const {
+        	return !(*this == right);
+		}
+	} messages;
+
 	bool autoAnswer;
 	int autoAnswerCode;
 	unsigned int autoAnswerDelayMin;
@@ -550,6 +570,8 @@ public:
 		if (ifname != right.ifname)
 			return false;
 		if (avt != right.avt)
+			return false;
+		if (messages != right.messages)
 			return false;
 		if (customUserAgent != right.customUserAgent)
 			return false;

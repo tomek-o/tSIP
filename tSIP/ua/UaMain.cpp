@@ -409,7 +409,9 @@ static int print_handler_log(const char *p, size_t size, void *arg)
 	return 0;
 }
 
-static void simple_message_recv_handler(const struct pl *peer, const struct pl *ctype, struct mbuf *body, void *arg)
+static void simple_message_recv_handler(const struct pl *peer,
+	const struct pl *ctype, struct mbuf *body, void *arg,
+    int *reply_code, const char** reply_reason)
 {
 	LOG("message received\n");
 	AnsiString caller, contentType, asBody;
@@ -423,6 +425,10 @@ static void simple_message_recv_handler(const struct pl *peer, const struct pl *
 	char *ptr = (char*)mbuf_buf(body);
 	asBody.SetLength(length);
 	memcpy(&asBody[1], ptr, length);
+
+	struct config * cfg = conf_config();
+	*reply_code = cfg->messages.reply_code;
+	*reply_reason = cfg->messages.reply_reason;
 
 	UA_CB->OnMessageReceived(caller, contentType, asBody);
 }
@@ -519,7 +525,10 @@ static int app_init(void)
 	cfg->avt.rtp_ports.max = appSettings.uaConf.avt.portMax;
 	cfg->avt.jbuf_del.min = appSettings.uaConf.avt.jbufDelayMin;
 	cfg->avt.jbuf_del.max = appSettings.uaConf.avt.jbufDelayMax;
-    cfg->avt.rtp_timeout = appSettings.uaConf.avt.rtpTimeout;
+	cfg->avt.rtp_timeout = appSettings.uaConf.avt.rtpTimeout;
+
+	cfg->messages.reply_code = appSettings.uaConf.messages.replyCode;
+	strncpyz(cfg->messages.reply_reason, appSettings.uaConf.messages.replyReason.c_str(), sizeof(cfg->messages.reply_reason));
 
 	cfg->recording.enabled = appSettings.uaConf.recording.enabled;
 

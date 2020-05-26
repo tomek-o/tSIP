@@ -391,6 +391,12 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			}
 		}
 
+		{
+			const Json::Value &uaMessagesJson = uaConfJson["messages"];
+			uaMessagesJson.getInt("replyCode", uaConf.messages.replyCode);
+			uaMessagesJson.getString("replyReason", uaConf.messages.replyReason);
+		}
+
 		uaConf.autoAnswer = uaConfJson.get("autoAnswer", uaConf.autoAnswer).asBool();
 		uaConf.autoAnswerCode = uaConfJson.get("autoAnswerCode", uaConf.autoAnswerCode).asInt();
 		unsigned int prevAutoAnswerDelayMin = uaConf.autoAnswerDelayMin;
@@ -1104,6 +1110,12 @@ int Settings::Write(AnsiString asFileName)
 	root["uaConf"]["avt"]["jbufDelayMin"] = uaConf.avt.jbufDelayMin;
 	root["uaConf"]["avt"]["jbufDelayMax"] = uaConf.avt.jbufDelayMax;
 	root["uaConf"]["avt"]["rtpTimeout"] = uaConf.avt.rtpTimeout;
+
+	{
+		Json::Value &jv = root["uaConf"]["messages"];
+		jv["replyCode"] = uaConf.messages.replyCode;
+		jv["replyReason"] = uaConf.messages.replyReason;
+	}
 
 	root["uaConf"]["autoAnswer"] = uaConf.autoAnswer;
 	root["uaConf"]["autoAnswerCode"] = uaConf.autoAnswerCode;

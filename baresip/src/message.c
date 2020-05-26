@@ -27,8 +27,12 @@ static void handle_message(struct ua *ua, const struct sip_msg *msg)
 		mtype = msg->ctype;
 
 	if (0==pl_strcasecmp(&mtype, ctype_text) && recvh) {
-		recvh(&msg->from.auri, &msg->ctype, msg->mb, recvarg);
-		(void)sip_reply(uag_sip(), msg, 200, "OK");
+		int reply_code = 200;
+		const char* reply_reason = "OK";
+		if (recvh) {
+			recvh(&msg->from.auri, &msg->ctype, msg->mb, recvarg, &reply_code, &reply_reason);
+		}
+		(void)sip_reply(uag_sip(), msg, reply_code, reply_reason);
 	}
 	else {
 		(void)sip_replyf(uag_sip(), msg, 415, "Unsupported Media Type",

@@ -284,6 +284,11 @@ struct config {
 		char proto[16];         /**< BFCP Transport (optional)      */
 	} bfcp;
 #endif
+
+	struct {
+		int reply_code;			/**< SIP code used when replying to incoming MESSAGE */
+		char reply_reason[64];	/**< Text sent in reply for incoming MESSAGE */
+	} messages;
 };
 
 int config_parse_conf(struct config *cfg, const struct conf *conf);
@@ -327,7 +332,7 @@ struct media_ctx {
  */
 
 typedef void (message_recv_h)(const struct pl *peer, const struct pl *ctype,
-			      struct mbuf *body, void *arg);
+			      struct mbuf *body, void *arg, int *reply_code, const char** reply_reason);
 
 int  message_init(message_recv_h *recvh, sip_resp_h *resph, void *arg);
 void message_close(void);
