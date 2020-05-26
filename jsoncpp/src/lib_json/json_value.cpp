@@ -1184,6 +1184,11 @@ void Value::getAString(const char* key, AnsiString &val) const
 }
 #endif
 
+void Value::getString(const char* key, std::string &val) const
+{
+	val = get(key, val).asString();
+}
+
 void Value::getInt(const char* key, int &val) const
 {
 	val = get(key, val).asInt();

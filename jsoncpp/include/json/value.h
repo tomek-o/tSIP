@@ -341,6 +341,7 @@ namespace Json {
 #ifdef __BORLANDC__
 	  void getAString(const char* key, AnsiString &val) const;
 #endif
+	  void getString(const char* key, std::string &val) const;
 	  void getInt(const char* key, int &val) const;
 	  void getUInt(const char* key, unsigned int &val) const;
 	  void getBool(const char* key, bool &val) const;
