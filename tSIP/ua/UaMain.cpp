@@ -411,7 +411,7 @@ static int print_handler_log(const char *p, size_t size, void *arg)
 
 static void simple_message_recv_handler(const struct pl *peer,
 	const struct pl *ctype, struct mbuf *body, void *arg,
-    int *reply_code, const char** reply_reason)
+    int *reply_code, const char** reply_reason, int *do_not_reply)
 {
 	LOG("message received\n");
 	AnsiString caller, contentType, asBody;
@@ -429,6 +429,7 @@ static void simple_message_recv_handler(const struct pl *peer,
 	struct config * cfg = conf_config();
 	*reply_code = cfg->messages.reply_code;
 	*reply_reason = cfg->messages.reply_reason;
+	*do_not_reply = cfg->messages.do_not_reply;
 
 	UA_CB->OnMessageReceived(caller, contentType, asBody);
 }
@@ -529,6 +530,7 @@ static int app_init(void)
 
 	cfg->messages.reply_code = appSettings.uaConf.messages.replyCode;
 	strncpyz(cfg->messages.reply_reason, appSettings.uaConf.messages.replyReason.c_str(), sizeof(cfg->messages.reply_reason));
+	cfg->messages.do_not_reply = appSettings.uaConf.messages.doNotReply;
 
 	cfg->recording.enabled = appSettings.uaConf.recording.enabled;
 

@@ -662,6 +662,16 @@ object frmSettings: TfrmSettings
         Height = 21
         TabOrder = 3
       end
+      object chbMessagesDoNotReply: TCheckBox
+        Left = 5
+        Top = 64
+        Width = 524
+        Height = 17
+        Caption = 
+          'Do not reply to incoming messages  (ONLY for SIP testing purpose' +
+          's)'
+        TabOrder = 4
+      end
     end
     object tsDisplay: TTabSheet
       Caption = 'Display'

@@ -177,6 +177,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	edMessagesReplyCode->Text = tmpSettings.uaConf.messages.replyCode;
 	edMessagesReplyReason->Text = tmpSettings.uaConf.messages.replyReason.c_str();
+	chbMessagesDoNotReply->Checked = tmpSettings.uaConf.messages.doNotReply;
 
 	for (int i=0; i<tmpSettings.uaConf.accounts.size(); i++)
 	{
@@ -613,6 +614,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.uaConf.messages.replyCode = StrToIntDef(edMessagesReplyCode->Text, tmpSettings.uaConf.messages.replyCode);
 	tmpSettings.uaConf.messages.replyReason = edMessagesReplyReason->Text.c_str();
+	tmpSettings.uaConf.messages.doNotReply = chbMessagesDoNotReply->Checked;
 
 	if (lboxAudioCodecsAvailable->Items->Count > 0 || lboxAudioCodecsEnabled->Items->Count > 0)	// both lists may be empty if UA failed to initialize
 	{

@@ -288,6 +288,7 @@ struct config {
 	struct {
 		int reply_code;			/**< SIP code used when replying to incoming MESSAGE */
 		char reply_reason[64];	/**< Text sent in reply for incoming MESSAGE */
+		int do_not_reply;
 	} messages;
 };
 
@@ -332,7 +333,7 @@ struct media_ctx {
  */
 
 typedef void (message_recv_h)(const struct pl *peer, const struct pl *ctype,
-			      struct mbuf *body, void *arg, int *reply_code, const char** reply_reason);
+			      struct mbuf *body, void *arg, int *reply_code, const char** reply_reason, int *do_not_reply);
 
 int  message_init(message_recv_h *recvh, sip_resp_h *resph, void *arg);
 void message_close(void);

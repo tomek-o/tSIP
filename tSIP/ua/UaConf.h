@@ -474,13 +474,17 @@ public:
 	struct Messages {
 		int replyCode;
 		std::string replyReason;
+		bool doNotReply;
 		Messages(void):
 			replyCode(200),
-			replyReason("OK")
+			replyReason("OK"),
+			doNotReply(false)
 		{}
 		bool operator==(const UaConf::Messages& right) const {
 			if (replyCode == right.replyCode &&
-				replyReason == right.replyReason)
+				replyReason == right.replyReason &&
+                doNotReply == right.doNotReply
+				)
 			{
 				return true;
 			}

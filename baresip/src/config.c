@@ -119,7 +119,8 @@ static struct config core_config = {
 
 	/* messages */
 	{
-		200, "OK"
+		200, "OK",
+		0 /* do_not_reply */
 	},
 };
 

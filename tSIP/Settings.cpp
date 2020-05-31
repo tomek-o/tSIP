@@ -395,6 +395,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			const Json::Value &uaMessagesJson = uaConfJson["messages"];
 			uaMessagesJson.getInt("replyCode", uaConf.messages.replyCode);
 			uaMessagesJson.getString("replyReason", uaConf.messages.replyReason);
+			uaMessagesJson.getBool("doNotReply", uaConf.messages.doNotReply);
 		}
 
 		uaConf.autoAnswer = uaConfJson.get("autoAnswer", uaConf.autoAnswer).asBool();
@@ -1115,6 +1116,7 @@ int Settings::Write(AnsiString asFileName)
 		Json::Value &jv = root["uaConf"]["messages"];
 		jv["replyCode"] = uaConf.messages.replyCode;
 		jv["replyReason"] = uaConf.messages.replyReason;
+		jv["doNotReply"] = uaConf.messages.doNotReply;
 	}
 
 	root["uaConf"]["autoAnswer"] = uaConf.autoAnswer;
