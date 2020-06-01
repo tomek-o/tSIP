@@ -22,7 +22,7 @@ void __fastcall TScEdit::CreateParams(Controls::TCreateParams &Params)
 
 void __fastcall TScEdit::WndProc(Messages::TMessage &Message)
 {
-	//LOG("Msg = %d", Message.Msg);
+	//LOG("TScEdit Msg = %d\n", Message.Msg);
 	TWinControl::WndProc(Message);
 	if(Message.Msg == WM_GETDLGCODE)
 	{

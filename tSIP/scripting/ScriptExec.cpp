@@ -387,7 +387,7 @@ static int l_FindWindowByCaptionAndExeName(lua_State* L)
 	findWindowData.exeName = lua_tostring(L, 2);
 	if (findWindowData.windowName == NULL && findWindowData.exeName == NULL)
 	{
-		LOG("Lua: either window name or exe name is required");
+		LOG("Lua: either window name or exe name is required\n");
 		lua_pushnumber(L, 0);
 		return 1;
 	}

@@ -422,7 +422,7 @@ void __stdcall PhoneInterface::OnConnect(void *cookie, int state, const char *sz
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
 	{
-		//LOG(E_LOG_TRACE, "OnConnect called with unknown cookie %p. No matching object.", dev);
+		//LOG(E_LOG_TRACE, "OnConnect called with unknown cookie %p. No matching object.\n", dev);
 		return;
 	}
 	dev->connInfo.state = static_cast<enum E_CONNECTION_STATE>(state);
@@ -438,7 +438,7 @@ void __stdcall PhoneInterface::OnKey(void *cookie, int keyCode, int state)
 	LOG("Phone: key %d, state %d\n", keyCode, state);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
 	{
-		//LOG(E_LOG_TRACE, "OnKey called with unknown cookie %p. No matching object.", dev);
+		//LOG(E_LOG_TRACE, "OnKey called with unknown cookie %p. No matching object.\n", dev);
 		return;
 	}
 	if (dev->callbackKey)
@@ -457,7 +457,7 @@ int __stdcall PhoneInterface::OnPagingTx(void *cookie, const char* target, const
 	LOG("Phone: pagingTx, target = %s, filename = %s, codecname = %s\n", target, filename, codecname);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
 	{
-		//LOG(E_LOG_TRACE, "OnPagingTx called with unknown cookie %p. No matching object.", dev);
+		//LOG(E_LOG_TRACE, "OnPagingTx called with unknown cookie %p. No matching object.\n", dev);
 		return -2;
 	}
 	if (dev->callbackPagingTx)
@@ -477,7 +477,7 @@ void __stdcall PhoneInterface::OnClearDial(void *cookie)
 	LOG("Phone: ClearDial\n");
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
 	{
-		//LOG(E_LOG_TRACE, "OnKey called with unknown cookie %p. No matching object.", dev);
+		//LOG(E_LOG_TRACE, "OnKey called with unknown cookie %p. No matching object.\n", dev);
 		return;
 	}
 	if (dev->callbackClearDial)

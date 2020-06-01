@@ -122,7 +122,7 @@ void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString bod
 
 void OnMessageStatus(int requestUid, int requestError, int sipCode)
 {
-	LOG("MessageStatus: requestUid = %d, requestError = %d, sipCode = %d", requestUid, requestError, sipCode);
+	LOG("MessageStatus: requestUid = %d, requestError = %d, sipCode = %d\n", requestUid, requestError, sipCode);
 	std::set<TfrmMessage*>::iterator iter;
 	for (iter = messageWindows.begin(); iter != messageWindows.end(); ++iter)
 	{
