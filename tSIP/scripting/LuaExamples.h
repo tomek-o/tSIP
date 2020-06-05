@@ -415,6 +415,7 @@ const LuaExample luaExamples [] =
 	"\t\tend\n"
 	"\n"
 	"\t\tDeleteCustomRequest(requestUid)\n"
+	"\t\tbreak\n"
 	"\tend\n"
 	"end\n"
 	"\n"
