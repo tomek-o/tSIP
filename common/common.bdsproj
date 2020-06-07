@@ -174,6 +174,7 @@
         <FILE FILENAME="Utils.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Utils" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Utils.h"/>
         <FILE FILENAME="WindowsMessageFilter.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="WindowsMessageFilter" FORMNAME="" DESIGNCLASS="" ADDITIONAL="WindowsMessageFilter.h"/>
         <FILE FILENAME="MathUtils.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="MathUtils" FORMNAME="" DESIGNCLASS="" ADDITIONAL="MathUtils.h"/>
+        <FILE FILENAME="StaticCheck.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
