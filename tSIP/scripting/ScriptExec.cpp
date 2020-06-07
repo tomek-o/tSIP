@@ -12,6 +12,7 @@
 #include "common/Utils.h"
 #include "ButtonConf.h"
 #include "Call.h"
+#include "Recorder.h"
 #include "UaCustomRequests.h"
 #include "UaMain.h"
 #include "AppStatus.h"
@@ -543,6 +544,18 @@ static int l_GetCallState(lua_State* L)
 	if (call)
 	{
 		lua_pushinteger( L, call->state );
+		return 1;
+	}
+	return 0;
+}
+
+static int l_GetRecorderState(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	Recorder *recorder = GetContext(L)->onGetRecorder(id);
+	if (recorder)
+	{
+		lua_pushinteger( L, recorder->state );
 		return 1;
 	}
 	return 0;
@@ -1250,6 +1263,7 @@ ScriptExec::ScriptExec(
 	CallbackSendDtmf onSendDtmf,
 	CallbackBlindTransfer onBlindTransfer,
 	CallbackGetCall onGetCall,
+	CallbackGetRecorder onGetRecorder,
 	CallbackGetContactName onGetContactName,
 	CallbackGetStreamingState onGetStreamingState,
 	CallbackGetAudioErrorCount onGetAudioErrorCount,
@@ -1287,6 +1301,7 @@ ScriptExec::ScriptExec(
 	onSendDtmf(onSendDtmf),
 	onBlindTransfer(onBlindTransfer),
 	onGetCall(onGetCall),
+	onGetRecorder(onGetRecorder),
 	onGetContactName(onGetContactName),
 	onGetStreamingState(onGetStreamingState),
 	onSetTrayIcon(onSetTrayIcon),
@@ -1315,6 +1330,7 @@ ScriptExec::ScriptExec(
 	assert(onAddOutputText && onCall && onHangup && onAnswer && onGetDial && onSetDial &&
 		onSwitchAudioSource && onSendDtmf && onBlindTransfer &&
 		onGetCall &&
+		onGetRecorder &&
 		onGetContactName &&
 		onGetStreamingState &&
 		onSetTrayIcon &&
@@ -1368,6 +1384,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "SendDtmf", ScriptImp::l_SendDtmf);
 	lua_register(L, "BlindTransfer", ScriptImp::l_BlindTransfer);
 	lua_register(L, "GetCallState", ScriptImp::l_GetCallState);
+	lua_register(L, "GetRecorderState", ScriptImp::l_GetRecorderState);
 	lua_register(L, "IsCallIncoming", ScriptImp::l_IsCallIncoming);
 	lua_register(L, "GetCallPeer", ScriptImp::l_GetCallPeer);
 	lua_register(L, "GetCallInitialRxInvite", ScriptImp::l_GetCallInitialRxInvite);

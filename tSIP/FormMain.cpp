@@ -24,6 +24,8 @@
 #include "LogUnit.h"
 #include "Log.h"
 #include "UaMain.h"
+#include "Call.h"
+#include "Recorder.h"
 #include "UaCustomRequests.h"
 #include "ControlQueue.h"
 #include "Callback.h"
@@ -82,6 +84,7 @@ namespace {
 			state(0)
 		{}
 	} registration;
+	Recorder recorder;
 
 	Contacts::Entry *lastContactEntry = NULL;
 	void ShowContactPopup(Contacts::Entry *entry)
@@ -805,6 +808,15 @@ void TfrmMain::OnBlindTransfer(const std::string& target)
 Call* TfrmMain::OnGetCall(void)
 {
 	return &call;
+}
+
+Recorder* TfrmMain::OnGetRecorder(int id)
+{
+	if (id == recorder.id)
+	{
+		return &recorder;
+	}
+	return NULL;
 }
 
 int TfrmMain::OnGetBlfState(int contactId, std::string &number)
@@ -1537,6 +1549,20 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 
 			break;
 		}
+		case Callback::RECORDER_STATE:
+		{
+			recorder.id = cb.recorderId;
+			recorder.state = cb.rec_state;
+
+			if (appSettings.Scripts.onRecorderState != "")
+			{
+				AnsiString asScriptFile;
+				bool handled = true;
+				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onRecorderState.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_RECORDER_STATE, recorder.id, asScriptFile.c_str(), handled);
+			}
+			break;        	
+		}
 		case Callback::APP_STATE:
 		{
 			AnsiString text;
@@ -1874,6 +1900,12 @@ void TfrmMain::DialString(const std::string& digits)
 
 void TfrmMain::StartRecording(void)
 {
+	if (appSettings.uaConf.recording.enabled == false)
+	{
+        LOG("Call recording is not enabled in configuration!\n");
+		return;
+	}
+
 	try
 	{
 		AnsiString file;
@@ -1907,7 +1939,10 @@ void TfrmMain::StartRecording(void)
 			std::string b64uri = base64_encode((unsigned char*)uri.c_str(), uri.Length(), BASE64_ALPHABET_FSAFE);
 			file += b64uri.c_str();
 			file += ".wav";
-			LOG("Record file: %s\n", file.c_str());
+			if (call.recording == false)
+			{
+				LOG("Record file: %s\n", file.c_str());
+			}
 			UA->Record(file, appSettings.uaConf.recording.channels, appSettings.uaConf.recording.side);
 			call.recordFile = file;
 			call.recording = true;
@@ -2274,6 +2309,20 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		SIMPLE_Messages::Send(target, "", false);
 		break;
 	}
+	case Button::RECORD:
+		StartRecording();
+		break;
+	case Button::RECORD_PAUSE:
+		if (call.recording)
+		{
+            LOG("Pause recording\n");
+			UA->RecordPause();
+		}
+		else
+		{
+			LOG("RECORD_PAUSE: not recording\n");
+		}
+		break;
 	case Button::SHOW_SETTINGS:
 		if (appSettings.frmMain.bHideSettings == false)
 		{
@@ -2340,6 +2389,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnAddOutputText, &OnCall2, &Hangup, &Answer, &OnGetDial, &OnSetDial,
 		&OnSwitchAudioSource, &DialString, &OnBlindTransfer,
 		&OnGetCall,
+		&OnGetRecorder,
 		&OnGetContactName,
 		&OnGetStreamingState,
 		&OnGetAudioErrorCount,

@@ -18,7 +18,6 @@
 #include <StdActns.hpp>
 #include <Buttons.hpp>
 #include "ButtonType.h"
-#include "Call.h"
 #include "common/Observer.h"
 #include "common/Mutex.h"
 #include <Dialogs.hpp>
@@ -32,6 +31,8 @@ class ButtonConf;
 class PhoneInterface;
 struct HotKeyConf;
 struct Action;
+struct Call;
+struct Recorder;
 
 //---------------------------------------------------------------------------
 class TfrmMain : public TForm, Observer
@@ -177,6 +178,7 @@ private:	// User declarations
 	void OnSwitchAudioSource(std::string mod, std::string dev);
 	void OnBlindTransfer(const std::string& target);
 	Call* OnGetCall(void);
+	Recorder* OnGetRecorder(int id);
 	int OnGetBlfState(int contactId, std::string &number);
 	int OnGetStreamingState(void);
 	unsigned int OnGetAudioErrorCount(void);

@@ -16,6 +16,8 @@ class ButtonConf;
 
 struct Call;
 
+struct Recorder;
+
 class ScriptExec
 {
 private:
@@ -31,6 +33,7 @@ private:
 	typedef void (__closure *CallbackSendDtmf)(const std::string& digits);
 	typedef void (__closure *CallbackBlindTransfer)(const std::string& target);
 	typedef Call* (__closure *CallbackGetCall)(void);
+	typedef Recorder* (__closure *CallbackGetRecorder)(int id);
 	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString number);	///< get name for number/uri
 	typedef int (__closure *CallbackGetStreamingState)(void);	///< get current streaming (paging) state, values as in Callback::paging_tx_state_e
 	typedef void (__closure *CallbackSetTrayIcon)(const char* file);
@@ -65,6 +68,7 @@ private:
 	CallbackSendDtmf onSendDtmf;
 	CallbackBlindTransfer onBlindTransfer;
 	CallbackGetCall onGetCall;
+	CallbackGetRecorder onGetRecorder;
 	CallbackGetContactName onGetContactName;
 	CallbackGetStreamingState onGetStreamingState;
 	CallbackGetAudioErrorCount onGetAudioErrorCount;
@@ -116,6 +120,7 @@ public:
 		CallbackSendDtmf onSendDtmf,
 		CallbackBlindTransfer onBlindTransfer,
 		CallbackGetCall onGetCall,
+		CallbackGetRecorder onGetRecorder,
 		CallbackGetContactName onGetContactName,
 		CallbackGetStreamingState onGetStreamingState,
 		CallbackGetAudioErrorCount onGetAudioErrorCount,

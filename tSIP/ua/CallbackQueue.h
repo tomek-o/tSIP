@@ -22,6 +22,7 @@ public:
 	void ChangeCallState(Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name);
 	void OnReinviteReceived(AnsiString caller, AnsiString caller_name, AnsiString pai_peer_uri, AnsiString pai_peer_name);
 	void ChangeCallDtmfState(AnsiString dtmf, bool active);
+	void ChangeRecorderState(int id, Callback::rec_state_e state);
 	void ChangeRegState(int acc_id, Callback::reg_state_e state, const char *prm);
 	void ChangeAppState(Callback::app_state_e state);
 	void ChangeDlgInfoState(int id, int state, int direction, const char *remote_identity, const char *remote_identity_display);

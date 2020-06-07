@@ -73,6 +73,10 @@ const char* Button::TypeName(enum Type type)
 		return "Restart user agent";
 	case SEND_TEXT_MESSAGE:
 		return "Send text message";
+	case RECORD:
+		return "Start/resume recording";
+	case RECORD_PAUSE:
+		return "Pause recording";
 	default:
 		return "???";
 	}
@@ -139,6 +143,10 @@ const char* Button::TypeDescription(enum Type type)
 		return "Restart user agent (core part of the softphone, working thread) to e.g. speed up BLF refreshing if PABX was restarted.";
 	case SEND_TEXT_MESSAGE:
 		return "Send text message (Instant Messaging, SIMPLE) to number/URI defined with button or (if button URI is empty) - number/URI from main window dial edit.";
+	case RECORD:
+		return "Start recording with default settings (if recording is set to manual) or resume paused recording.";
+	case RECORD_PAUSE:
+		return "Pause current recording.";
 	default:
 		return "???";
 	}

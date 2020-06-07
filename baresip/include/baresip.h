@@ -18,6 +18,7 @@ extern "C" {
 #include "baresip_dialog_info_status.h"
 #include "baresip_dialog_info_direction.h"
 #include "baresip_presence_status.h"
+#include "baresip_recorder.h"
 
 /* forward declarations */
 struct sa;
@@ -404,18 +405,6 @@ const struct auplay *auplay_find(const char *name);
 int auplay_alloc(struct auplay_st **stp, const char *name,
 		 struct auplay_prm *prm, const char *device,
 		 auplay_write_h *wh, void *arg);
-
-/*
- * Audio recorder
- */
-
-enum recorder_side
-{
-	RECORDER_SIDE_BOTH = 0,	// record both parties (mixed)
-	RECORDER_SIDE_LOCAL,	// record only local party (i.e. what comes from microphone)
-	RECORDER_SIDE_REMOTE	// record only remote party
-};
-int recorder_start(const char* const filename, unsigned int rec_channels, enum recorder_side rec_side);
 
 /*
  * Received signal level - provided by softvol module; maximum from last 100 ms

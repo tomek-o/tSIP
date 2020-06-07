@@ -7,12 +7,14 @@
 #include <baresip.h>
 #include <stdio.h>
 #include <assert.h>
-#include "recorder.h"
+#include "baresip_recorder.h"
 #include "wavfile.h"
 
 #define DEBUG_MODULE "recorder"
 #define DEBUG_LEVEL 5
 #include <re_dbg.h>
+
+/** \todo Handle multiple calls */
 
 static DWORD WINAPI ThreadRecWrite(LPVOID data);
 
@@ -21,24 +23,22 @@ static bool filename_set = false;
 static char filename[512];
 static unsigned int channels = 1;
 static enum recorder_side side = RECORDER_SIDE_BOTH;
+static bool pause = false;
+static recorder_state_h *recorder_state_handler = NULL;
 
+void recorder_init(recorder_state_h *state_h) {
+	recorder_state_handler = state_h;
+}
 
-int recorder_start(const char* const file, unsigned int rec_channels, enum recorder_side rec_side) {
-	if (rec_lock == NULL)
-		return -1;
-	lock_write_get(rec_lock);
-	filename_set = false;
-	channels = rec_channels;
-	side = rec_side;
-	strncpy(filename, file, sizeof(filename));
-	filename[sizeof(filename)-1] = '\0';
-	filename_set = true;
-	lock_rel(rec_lock);
-	return 0;
+static void notify_state(struct recorder_st *recorder, enum recorder_state state) {
+	if (recorder_state_handler) {
+		recorder_state_handler(recorder, state);
+	}
 }
 
 struct recorder_st {
 	bool active;
+	bool paused;
 	bool terminated;
 	FILE *pFile;
 	HANDLE thread;
@@ -48,6 +48,30 @@ struct recorder_st {
 	struct aubuf *abrx;
 	struct aubuf *abtx;
 };
+
+int recorder_start(const char* const file, unsigned int rec_channels, enum recorder_side rec_side) {
+	if (rec_lock == NULL)
+		return -1;
+	lock_write_get(rec_lock);
+	if (filename_set == false) {
+		channels = rec_channels;
+		side = rec_side;
+		strncpy(filename, file, sizeof(filename));
+		filename[sizeof(filename)-1] = '\0';
+		filename_set = true;
+	}
+	lock_rel(rec_lock);
+	pause = false;	
+	return 0;
+}
+
+void recorder_pause_resume(void) {
+	pause = !pause;
+}
+
+void recorder_pause(void) {
+	pause = true;
+}
 
 struct enc_st {
 	struct aufilt_enc_st af;  /* base class */
@@ -83,9 +107,10 @@ static void recorder_destructor(void *arg)
 
 	st->active = false;
 	while (!st->terminated) {
-    	Sleep(10);
+		Sleep(10);
 	}
-   	Sleep(10);	
+	st->paused = false;
+	Sleep(10);
 	CloseHandle(st->thread);
 
 	mem_deref(st->abrx);
@@ -95,6 +120,7 @@ static void recorder_destructor(void *arg)
 		wavfile_close(st->pFile);
 		st->pFile = NULL;
 	}
+	filename_set = false;
 }
 
 
@@ -284,6 +310,7 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 					lock_rel(rec_lock);
 					break;
 				}
+				notify_state(rec, RECORDER_STATE_ACTIVE);				
 			}
 			lock_rel(rec_lock);
 			Sleep(50);
@@ -317,38 +344,50 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		sizetx = aubuf_cur_size(rec->abrx);
 		//DEBUG_WARNING("AFTER: sizerx=%d, sizetx=%d\n", (int)sizerx, (int)sizetx);
 
-		if (channels == 1) {
-			//DEBUG_WARNING("write %d\n", cnt);
-        	// single channel: either one of the sides or both sides mixed (sum)
-			short *dst = (short*)bufrx;
-			short *src = (short*)buftx;
-			if (side == RECORDER_SIDE_LOCAL) {
-				fwrite(bufrx, cnt, 1, rec->pFile);
-			} else if (side == RECORDER_SIDE_REMOTE) {
-				fwrite(buftx, cnt, 1, rec->pFile);
+		if (rec->paused != pause) {
+			rec->paused = pause;
+			if (rec->paused) {
+				notify_state(rec, RECORDER_STATE_PAUSED);
 			} else {
-				// default: both parties mixed
-				for (i=0; i<cnt/sizeof(short); i++) {
-					dst[i] += src[i];
-				}
-				fwrite(bufrx, cnt, 1, rec->pFile);
+            	notify_state(rec, RECORDER_STATE_ACTIVE);
 			}
-		} else if (channels == 2) {
-			short bufstereo[8000];
-			short *srcA = (short*)bufrx;
-			short *srcB = (short*)buftx;
-			for (i=0; i<cnt/sizeof(short)*channels; i += channels) {
-				bufstereo[i]     = *srcA++;
-				bufstereo[i + 1] = *srcB++;
-			}
-			fwrite(bufstereo, cnt * sizeof(short), 1, rec->pFile);
-		} else {
-			assert(!"Unhandled channel count");
 		}
 
+		if (pause == false) {
+			if (channels == 1) {
+				//DEBUG_WARNING("write %d\n", cnt);
+				// single channel: either one of the sides or both sides mixed (sum)
+				short *dst = (short*)bufrx;
+				short *src = (short*)buftx;
+				if (side == RECORDER_SIDE_LOCAL) {
+					fwrite(bufrx, cnt, 1, rec->pFile);
+				} else if (side == RECORDER_SIDE_REMOTE) {
+					fwrite(buftx, cnt, 1, rec->pFile);
+				} else {
+					// default: both parties mixed
+					for (i=0; i<cnt/sizeof(short); i++) {
+						dst[i] += src[i];
+					}
+					fwrite(bufrx, cnt, 1, rec->pFile);
+				}
+			} else if (channels == 2) {
+				short bufstereo[8000];
+				short *srcA = (short*)bufrx;
+				short *srcB = (short*)buftx;
+				for (i=0; i<cnt/sizeof(short)*channels; i += channels) {
+					bufstereo[i]     = *srcA++;
+					bufstereo[i + 1] = *srcB++;
+				}
+				fwrite(bufstereo, cnt * sizeof(short), 1, rec->pFile);
+			} else {
+				assert(!"Unhandled channel count");
+			}
+		}
 		Sleep(50);
 	}
 	rec->terminated = true;
+	filename_set = false;
+	notify_state(rec, RECORDER_STATE_IDLE);
 	return 0;
 }
 

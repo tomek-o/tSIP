@@ -4,7 +4,7 @@ object frmSettings: TfrmSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Settings'
-  ClientHeight = 429
+  ClientHeight = 450
   ClientWidth = 673
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,12 +22,13 @@ object frmSettings: TfrmSettings
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 392
+    Top = 413
     Width = 673
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 392
     object btnCancel: TButton
       Left = 593
       Top = 6
@@ -51,12 +52,13 @@ object frmSettings: TfrmSettings
     Left = 125
     Top = 0
     Width = 548
-    Height = 392
-    ActivePage = tsMessages
+    Height = 413
+    ActivePage = tsScripts
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
+    ExplicitHeight = 392
     object tsGeneral: TTabSheet
       Caption = 'General'
       object lblGuiScaling: TLabel
@@ -326,7 +328,7 @@ object frmSettings: TfrmSettings
       ImageIndex = 2
       object pnlAccountsBottom: TPanel
         Left = 0
-        Top = 341
+        Top = 362
         Width = 540
         Height = 31
         Align = alBottom
@@ -355,7 +357,7 @@ object frmSettings: TfrmSettings
         Left = 0
         Top = 0
         Width = 540
-        Height = 341
+        Height = 362
         Align = alClient
         TabOrder = 1
       end
@@ -1777,7 +1779,7 @@ object frmSettings: TfrmSettings
         TabOrder = 5
         Text = 'automatic - call confirmed state'
         Items.Strings = (
-          'manual (Lua script)'
+          'manual (Lua script or button)'
           'automatic - call confirmed state'
           'automatic - call early media or call confirmed')
       end
@@ -2291,6 +2293,7 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
+      ExplicitHeight = 372
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -2416,6 +2419,13 @@ object frmSettings: TfrmSettings
         Width = 103
         Height = 13
         Caption = 'on contact note open'
+      end
+      object lblOnRecorderState: TLabel
+        Left = 5
+        Top = 373
+        Width = 84
+        Height = 13
+        Caption = 'on recorder state'
       end
       object edScriptOnCallStateChangeFile: TEdit
         Left = 145
@@ -3094,6 +3104,57 @@ object frmSettings: TfrmSettings
           FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
+      object edScriptOnRecorderStateFile: TEdit
+        Left = 145
+        Top = 370
+        Width = 212
+        Height = 21
+        TabOrder = 41
+      end
+      object btnSelectedScriptOnRecorderStateChange: TButton
+        Left = 363
+        Top = 370
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 42
+        OnClick = btnSelectedScriptClick
+      end
+      object btnSelectedScriptOnRecorderStateEdit: TBitBtn
+        Left = 390
+        Top = 370
+        Width = 22
+        Height = 21
+        TabOrder = 43
+        OnClick = btnSelectedScriptEditClick
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+          000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
+          D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8
+          FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
+      end
     end
     object tsLogging: TTabSheet
       Caption = 'Logging'
@@ -3236,7 +3297,7 @@ object frmSettings: TfrmSettings
     Left = 0
     Top = 0
     Width = 125
-    Height = 392
+    Height = 413
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -3285,6 +3346,7 @@ object frmSettings: TfrmSettings
       270000000000000000000000FFFFFFFFFFFFFFFF000000000000000007530063
       0072006900700074007300270000000000000000000000FFFFFFFFFFFFFFFF00
       00000000000000074C006F006700670069006E006700}
+    ExplicitHeight = 392
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

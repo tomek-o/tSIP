@@ -28,6 +28,7 @@ public:
 		CUSTOM_REQUEST_STATUS,
 		SIMPLE_MESSAGE,
 		SIMPLE_MESSAGE_STATUS,		///< status for sent MESSAGE; using requestUid, requestError, scode
+		RECORDER_STATE,
 	} type;
 
 	enum ua_state_e
@@ -67,6 +68,13 @@ public:
 		APP_START_FAILED
 	} app_state;
 
+	enum rec_state_e
+	{
+		RECORDER_STATE_IDLE = 0,
+		RECORDER_STATE_ACTIVE,
+		RECORDER_STATE_PAUSED
+	} rec_state;
+
 	AnsiString caller;
 	AnsiString callerName;
 	int scode;	// SIP code
@@ -101,6 +109,8 @@ public:
 	int requestUid;
 	int requestError;	
 	AnsiString requestReplyText;
+
+	int recorderId;
 
 	AnsiString contentType;		// MESSAGE
 	AnsiString body;			// MESSAGE

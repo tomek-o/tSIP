@@ -401,7 +401,8 @@
         <FILE FILENAME="..\..\modules\softvol\agc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="agc" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\softvol\agc.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\dtmf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dtmf" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\dtmf.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="..\..\src\dtmf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\baresip_recorder.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

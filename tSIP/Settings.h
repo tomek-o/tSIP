@@ -289,6 +289,7 @@ public:
 		AnsiString onCallState;
 		AnsiString onStreamingState;
 		AnsiString onRegistrationState;
+		AnsiString onRecorderState;
 		AnsiString onStartup;
 		AnsiString onTimer;
 		int timer;					///< ms

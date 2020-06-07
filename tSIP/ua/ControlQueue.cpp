@@ -228,6 +228,16 @@ void ControlQueue::Record(AnsiString wavFile, unsigned int channels, unsigned in
 	fifo.push();
 }
 
+void ControlQueue::RecordPause(void)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::RECORD_PAUSE;
+	fifo.push();
+}
+
 void ControlQueue::PagingTx(AnsiString target, AnsiString pagingTxWaveFile, AnsiString codec, unsigned int ptime)
 {
 	ScopedLock<Mutex> lock(mutex);

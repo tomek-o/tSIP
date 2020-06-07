@@ -394,6 +394,10 @@ __published:	// IDE-managed Components
 	TLabel *lblMessagesReply2;
 	TEdit *edMessagesReplyReason;
 	TCheckBox *chbMessagesDoNotReply;
+	TLabel *lblOnRecorderState;
+	TEdit *edScriptOnRecorderStateFile;
+	TButton *btnSelectedScriptOnRecorderStateChange;
+	TBitBtn *btnSelectedScriptOnRecorderStateEdit;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

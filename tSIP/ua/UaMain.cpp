@@ -15,7 +15,8 @@
 #include <rem.h>
 #include "baresip.h"
 #include "Log.h"
-#include "common\Utilities.h"
+#include "common/Utilities.h"
+#include "common/StaticCheck.h"
 #include "Branding.h"
 #include <assert.h>
 
@@ -449,6 +450,14 @@ static void simple_message_response_handler(int err, const struct sip_msg *msg, 
 	UA_CB->OnMessageStatus(requestId, err, msg?msg->scode:0);
 }
 
+static void recorder_state_handler(struct recorder_st *recorder, enum recorder_state state) {
+	DEBUG_WARNING("recorder %p state changed to %d\n", recorder, static_cast<int>(state));
+	STATIC_CHECK(RECORDER_STATE_IDLE == Callback::RECORDER_STATE_IDLE, EnumMismatch);
+	STATIC_CHECK(RECORDER_STATE_ACTIVE == Callback::RECORDER_STATE_ACTIVE, EnumMismatch);
+	STATIC_CHECK(RECORDER_STATE_PAUSED == Callback::RECORDER_STATE_PAUSED, EnumMismatch);
+	UA_CB->ChangeRecorderState(0, static_cast<Callback::rec_state_e>(state));	
+}
+
 static int app_init(void)
 {
 	int err;
@@ -587,6 +596,8 @@ static int app_init(void)
 	if (err != 0) {
     	LOG("Failed to register handler for MESSAGE RX (err = %d)!\n", err);
 	}
+
+	recorder_init(recorder_state_handler);
 
 	return 0;
 }
@@ -954,6 +965,10 @@ extern "C" void control_handler(void)
 	}
 	case Command::RECORD: {
         recorder_start(cmd.target.c_str(), cmd.channels, static_cast<enum recorder_side>(cmd.recSide));
+		break;
+	}
+	case Command::RECORD_PAUSE: {
+        recorder_pause();
 		break;
 	}
 	case Command::PAGING_TX: {
