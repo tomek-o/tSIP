@@ -1245,6 +1245,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				asStateText = "Calling...";
 				lbl2ndParty->Caption = GetClip(cb.caller);
 				lastContactEntry = contacts.GetEntry(CleanUri(cb.caller));
+				call.recordFile = "";				
 				if (lastContactEntry)
 				{
 					lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -1379,18 +1380,11 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 
 				history.AddEntry(entry);
 				UpdateCallHistory();
-			#if 0
-				call.incoming = false;
-				call.progress = false;
-				call.connected = false;
-				call.disconnecting = false;
-				call.recording = false;
-				call.uri = "";
-				call.last_scode = cb.scode;
-				call.codecName = "";
-			#else
+
+				AnsiString recordFile = call.recordFile;
 				call.reset();
-			#endif
+				call.recordFile = recordFile;	// should be preserved after the call to be used in script
+
 				UpdateBtnState(Button::HOLD, false);
 				UpdateBtnState(Button::MUTE, false);
 				tmrAutoAnswer->Enabled = false;
