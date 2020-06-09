@@ -119,6 +119,7 @@ static void recorder_destructor(void *arg)
 	if (st->pFile) {
 		wavfile_close(st->pFile);
 		st->pFile = NULL;
+		notify_state(st, RECORDER_STATE_IDLE);		
 	}
 	filename_set = false;
 }
@@ -387,7 +388,6 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 	}
 	rec->terminated = true;
 	filename_set = false;
-	notify_state(rec, RECORDER_STATE_IDLE);
 	return 0;
 }
 
