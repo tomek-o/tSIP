@@ -66,7 +66,8 @@ Settings::_frmMain::_frmMain(void):
 	customCaption(Branding::appName),
 	bUseCustomApplicationTitle(false),
 	customApplicationTitle(Branding::appName),
-	bShowSettingsIfAccountSettingIsHidden(false)
+	bShowSettingsIfAccountSettingIsHidden(false),
+	bNoTaskbarButtonRestore(false)
 {
 	speedDialWidth.clear();
 	for (unsigned int i=0; i<ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
@@ -638,6 +639,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bUseCustomCaption = frmMainJson.get("UseCustomCaption", frmMain.bUseCustomCaption).asBool();
 		frmMain.customCaption = frmMainJson.get("CustomCaption", frmMain.customCaption.c_str()).asString().c_str();
 		frmMain.bShowSettingsIfAccountSettingIsHidden = frmMainJson.get("ShowSettingsIfAccountSettingIsHidden", frmMain.bShowSettingsIfAccountSettingIsHidden).asBool();
+		frmMainJson.getBool("NoTaskbarButtonRestore", frmMain.bNoTaskbarButtonRestore);
 
 		{
 			const Json::Value &bitmapsJson = frmMainJson["bitmaps"];
@@ -926,6 +928,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["UseCustomCaption"] = frmMain.bUseCustomCaption;
 		jv["CustomCaption"] = frmMain.customCaption.c_str();
 		jv["ShowSettingsIfAccountSettingIsHidden"] = frmMain.bShowSettingsIfAccountSettingIsHidden;
+		jv["NoTaskbarButtonRestore"] = frmMain.bNoTaskbarButtonRestore;
 
 		{
 			Json::Value &bitmapsJson = jv["bitmaps"];

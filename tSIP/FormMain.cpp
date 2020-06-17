@@ -2614,7 +2614,10 @@ void TfrmMain::ToggleVisibility(void)
 	if (Visible)
 	{
 		Application->Restore();
-		ShowWindow(Application->Handle, SW_SHOW);	// show taskbar button
+		if (appSettings.frmMain.bNoTaskbarButtonRestore == false)
+		{
+			ShowWindow(Application->Handle, SW_SHOW);	// show taskbar button
+		}
 		SetActiveWindow (Handle);
 		SetForegroundWindow (Handle);
 		SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);

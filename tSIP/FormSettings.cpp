@@ -412,6 +412,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	chbShowSettingsIfAnyAccountSettingsIsHidden->Checked = tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden;
 
+	chbNoTaskbarButtonRestore->Checked = tmpSettings.frmMain.bNoTaskbarButtonRestore;
+
 	frmHotkeys->SetCfg(&tmpSettings.hotKeyConf);
 
 	frmPhones->SetCfg(&tmpSettings.phoneConf);
@@ -733,6 +735,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onContactNoteOpen = edScriptOnContactNoteOpenFile->Text;
 
 	tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden = chbShowSettingsIfAnyAccountSettingsIsHidden->Checked;
+
+	tmpSettings.frmMain.bNoTaskbarButtonRestore = chbNoTaskbarButtonRestore->Checked;
 
     frmUaConfOpus->Apply();
 

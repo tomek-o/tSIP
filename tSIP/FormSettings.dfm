@@ -168,6 +168,16 @@ object frmSettings: TfrmSettings
           ' line / protocol handler...)'
         TabOrder = 9
       end
+      object chbNoTaskbarButtonRestore: TCheckBox
+        Left = 3
+        Top = 234
+        Width = 526
+        Height = 17
+        Caption = 
+          'Do not restore taskbar button when restoring application from tr' +
+          'ay'
+        TabOrder = 10
+      end
     end
     object tsNetwork: TTabSheet
       Caption = 'Network'

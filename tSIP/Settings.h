@@ -128,7 +128,8 @@ public:
 		AnsiString customCaption;			///< custom caption for main window
 		bool bUseCustomApplicationTitle;       ///< use customApplicationTitle
 		AnsiString customApplicationTitle;	///< custom title for application (taskbar text)
-        bool bShowSettingsIfAccountSettingIsHidden;
+		bool bShowSettingsIfAccountSettingIsHidden;
+		bool bNoTaskbarButtonRestore;		///< do not restore/show taskbar button when toggling visibility (apparently restoring button may show wrong taskbar when using Windows RDP)
 
 		struct _bitmaps
 		{

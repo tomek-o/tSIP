@@ -398,6 +398,7 @@ __published:	// IDE-managed Components
 	TEdit *edScriptOnRecorderStateFile;
 	TButton *btnSelectedScriptOnRecorderStateChange;
 	TBitBtn *btnSelectedScriptOnRecorderStateEdit;
+	TCheckBox *chbNoTaskbarButtonRestore;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
