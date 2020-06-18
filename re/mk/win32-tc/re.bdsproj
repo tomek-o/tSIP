@@ -237,7 +237,6 @@
           <property category="win32.*.win32b.dcc32" name="option.I.arg.40" value="..\..\src\conf"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.41" value="..\..\src\bfcp"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.42" value="..\..\src\base64"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.43" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\..\src\udp"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\..\src\tmr"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\..\src\telev"/>
@@ -282,7 +281,6 @@
           <property category="win32.*.win32b.dcc32" name="option.O.arg.40" value="..\..\src\conf"/>
           <property category="win32.*.win32b.dcc32" name="option.O.arg.41" value="..\..\src\bfcp"/>
           <property category="win32.*.win32b.dcc32" name="option.O.arg.42" value="..\..\src\base64"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.43" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
           <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\..\src\udp"/>
           <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\..\src\tmr"/>
           <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\..\src\telev"/>
@@ -327,7 +325,6 @@
           <property category="win32.*.win32b.dcc32" name="option.R.arg.40" value="..\..\src\conf"/>
           <property category="win32.*.win32b.dcc32" name="option.R.arg.41" value="..\..\src\bfcp"/>
           <property category="win32.*.win32b.dcc32" name="option.R.arg.42" value="..\..\src\base64"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.43" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
           <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\..\src\udp"/>
           <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\..\src\tmr"/>
           <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\..\src\telev"/>
@@ -372,7 +369,6 @@
           <property category="win32.*.win32b.dcc32" name="option.U.arg.40" value="..\..\src\conf"/>
           <property category="win32.*.win32b.dcc32" name="option.U.arg.41" value="..\..\src\bfcp"/>
           <property category="win32.*.win32b.dcc32" name="option.U.arg.42" value="..\..\src\base64"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.43" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
           <property category="win32.*.win32b.dcc32" name="option.U.arg.44" value="..\..\..\..\..\Borland Studio Projects"/>
           <property category="win32.*.win32b.dcc32" name="option.U.arg.45" value="$(BDS)\lib"/>
           <property category="win32.*.win32b.dcc32" name="option.U.arg.46" value="$(BDS)\lib\obj"/>
@@ -421,7 +417,6 @@
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.40" value="..\..\src\conf"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.41" value="..\..\src\bfcp"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.42" value="..\..\src\base64"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.43" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\..\src\udp"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\..\src\tmr"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\..\src\telev"/>
