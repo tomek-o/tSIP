@@ -28,7 +28,6 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
-        <property category="build.node" name="lastconfig" value="Release_Build"/>
         <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="re.lib"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;adortl;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;soaprtl;dsnap;bdertl;vcldbx"/>
@@ -171,10 +170,9 @@
           <property category="win32.*.win32b.bcc32" name="option.I.arg.41" value="..\..\src\conf"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.42" value="..\..\src\bfcp"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.43" value="..\..\src\base64"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.44" value="..\_PROJEKTY\libre\re-0.3.0\mk\win32-tc"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.45" value="$(BDS)\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.46" value="$(BDS)\include\dinkumware"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.47" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.44" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.45" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.46" value="$(BDS)\include\vcl"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\..\src\udp"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\src\tmr"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\src\telev"/>
