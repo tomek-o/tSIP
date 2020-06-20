@@ -49,7 +49,6 @@
         <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
-        <property category="win32.Debug_Build.win32b.bcc32" name="option.Q.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
@@ -148,6 +147,7 @@
           <property category="win32.*.win32b.bcc32" name="option.O1.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.O2.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.Od.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.Q.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.disablewarns.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>
