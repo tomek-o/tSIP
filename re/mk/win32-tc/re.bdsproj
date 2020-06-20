@@ -562,7 +562,6 @@
         <FILE FILENAME="..\..\src\stun\stun_rep.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_rep" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\stun\stun_req.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun_req" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\sys\sys.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sys" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\sys\daemon.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="daemon" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\sys\endian.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="endian" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\sys\rand.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rand" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\tcp\tcp_high.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tcp_high" FORMNAME="" DESIGNCLASS=""/>
