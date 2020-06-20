@@ -6,7 +6,16 @@
 #if defined(WIN32) || defined(__WIN32__)
 
 #include <winsock2.h>
+
+#ifdef __BORLANDC__
+#pragma warn -8004
+#endif
+
 #include <ws2tcpip.h>
+
+#ifdef __BORLANDC__
+#pragma warn .8008
+#endif
 
 #else
 
