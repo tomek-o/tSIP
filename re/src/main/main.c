@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h>
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
@@ -13,7 +12,7 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 #include <winsock.h>
 #elif defined(__SYMBIAN32__)
 #define bzero(b,len) memset(b,0,len)
@@ -30,6 +29,7 @@
 #ifdef HAVE_EPOLL
 #include <sys/epoll.h>
 #endif
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_mem.h>
 #include <re_mbuf.h>
@@ -70,7 +70,7 @@
 
 enum {
 	MAX_BLOCKING = 100,    /**< Maximum time spent in handler in [ms] */
-#if defined (WIN32) || defined (CYGWIN)
+#if defined(WIN32) || defined(__WIN32__) || defined (CYGWIN)
 	DEFAULT_MAXFDS = 8192
 #else
 	DEFAULT_MAXFDS = 128
@@ -597,7 +597,7 @@ static int fd_poll(struct re *re)
 				FD_SET(i, &efds);
 		}
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 		tv.tv_sec  = (long) to / 1000;
 #else
 		tv.tv_sec  = (time_t) to / 1000;

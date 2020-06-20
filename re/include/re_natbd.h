@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** NAT Mapping/Filtering types - See RFC 4787 for definitions */
 enum nat_type {
@@ -126,3 +129,7 @@ int nat_genalg_alloc(struct nat_genalg **ngp, const struct sa *srv, int proto,
 		     const struct stun_conf *conf,
 		     nat_genalg_h *gh, void *arg);
 int nat_genalg_start(struct nat_genalg *ng);
+
+#ifdef __cplusplus
+}
+#endif

@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum {
 	SIP_PORT     = 5060,
@@ -393,3 +396,7 @@ int sip_access_url_decode(const struct pl *name, struct sip_access_url *access_u
 int sip_keepalive_start(struct sip_keepalive **kap, struct sip *sip,
 			const struct sip_msg *msg, uint32_t interval,
 			sip_keepalive_h *kah, void *arg);
+
+#ifdef __cplusplus
+}
+#endif

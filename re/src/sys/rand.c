@@ -3,13 +3,13 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h> 
 #include <ctype.h>
 #include <stdlib.h>
 #ifdef USE_OPENSSL
 #include <openssl/rand.h>
 #include <openssl/err.h>
 #endif
+#include <re_types.h>
 #include <re_mbuf.h>
 #include <re_list.h>
 #include <re_tmr.h>
@@ -84,7 +84,7 @@ uint32_t rand_u32(void)
 	if (RAND_bytes((unsigned char *)&v, sizeof(v)) <= 0) {
 		DEBUG_WARNING("RAND_bytes() error: %u\n", ERR_get_error());
 	}
-#elif defined(WIN32)
+#el#if defined(WIN32) || defined(__WIN32__)
 	v = (rand() << 16) + rand(); /* note: 16-bit rand */
 #else
 	v = rand();

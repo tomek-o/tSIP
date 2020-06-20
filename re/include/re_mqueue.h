@@ -4,9 +4,17 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct mqueue;
 
 typedef void (mqueue_h)(int id, void *data, void *arg);
 
 int mqueue_alloc(struct mqueue **mqp, mqueue_h *h, void *arg);
 int mqueue_push(struct mqueue *mq, int id, void *data);
+
+#ifdef __cplusplus
+}
+#endif

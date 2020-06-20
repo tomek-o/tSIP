@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct hash;
 struct pl;
@@ -29,3 +32,7 @@ uint32_t hash_joaat_str(const char *str);
 uint32_t hash_joaat_str_ci(const char *str);
 uint32_t hash_joaat_pl(const struct pl *pl);
 uint32_t hash_joaat_pl_ci(const struct pl *pl);
+
+#ifdef __cplusplus
+}
+#endif

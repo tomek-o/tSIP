@@ -3,13 +3,13 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h>
 #ifdef HAVE_GETIFADDRS
 #include <sys/types.h>
 #include <sys/socket.h>
 #define __USE_MISC 1   /**< Use MISC code */
 #include <net/if.h>
 #endif
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_sa.h>
 

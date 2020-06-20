@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum {
 	DNS_PORT = 53,
@@ -216,3 +219,7 @@ int  dnsc_notify(struct dns_query **qp, struct dnsc *dnsc, const char *name,
 
 /* DNS System functions */
 int dns_srv_get(char *domain, size_t dsize, struct sa *srvv, uint32_t *n);
+
+#ifdef __cplusplus
+}
+#endif

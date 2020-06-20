@@ -3,6 +3,11 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct jbuf;
 struct rtp_header;
 
@@ -26,3 +31,7 @@ int  jbuf_get(struct jbuf *jb, struct rtp_header *hdr, void **mem);
 void jbuf_flush(struct jbuf *jb);
 int  jbuf_stats(const struct jbuf *jb, struct jbuf_stat *jstat);
 int  jbuf_debug(struct re_printf *pf, const struct jbuf *jb);
+
+#ifdef __cplusplus
+}
+#endif

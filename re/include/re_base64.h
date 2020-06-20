@@ -4,7 +4,14 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 int base64_encode(const uint8_t *in, size_t ilen, char *out, size_t *olen);
 int base64_print(struct re_printf *pf, const uint8_t *ptr, size_t len);
 int base64_decode(const char *in, size_t ilen, uint8_t *out, size_t *olen);
+
+#ifdef __cplusplus
+}
+#endif

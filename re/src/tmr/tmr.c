@@ -3,12 +3,12 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h> 
 #include <string.h>
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #else
 #include <time.h>
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #endif
+#include <re_types.h>
 #include <re_list.h>
 #include <re_fmt.h>
 #include <re_mem.h>
@@ -125,7 +126,7 @@ uint64_t tmr_jiffies(void)
 {
 	uint64_t jfs;
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(__WIN32__)
 	FILETIME ft;
 	ULARGE_INTEGER li;
 	GetSystemTimeAsFileTime(&ft);

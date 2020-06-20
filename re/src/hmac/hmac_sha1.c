@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re.h>
 #include <string.h>
+#include <re_types.h>
 #ifdef USE_OPENSSL
 #include <openssl/sha.h>
 #include <openssl/hmac.h>

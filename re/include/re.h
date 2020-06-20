@@ -7,22 +7,6 @@
 #ifndef RE_H__
 #define RE_H__
 
-#if defined(WIN32)
-#include <winsock2.h>
-#if defined(__BORLANDC__)
-#pragma option push
-#pragma warn -8004
-#endif
-#include <ws2tcpip.h>
-#if defined(__BORLANDC__)
-#pragma option pop
-#endif
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /* Basic types */
 #include "re_types.h"
 #include "re_fmt.h"
@@ -64,9 +48,5 @@ extern "C" {
 #include "re_tls.h"
 #include "re_turn.h"
 #include "re_udp.h"
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif

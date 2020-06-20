@@ -3,8 +3,9 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re.h>
 #include <time.h>
+#include <re_types.h>
+#include <re_fmt.h>
 
 
 static const char *dayv[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};

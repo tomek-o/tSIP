@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h> 
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifdef HAVE_UNISTD_H
@@ -12,6 +11,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <stdio.h>
+#include <re_types.h>
 #include <re_mbuf.h>
 #include <re_sys.h>
 

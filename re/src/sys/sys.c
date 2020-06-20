@@ -3,8 +3,9 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h>
+#include <stdlib.h>
 #include <string.h>
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_sys.h>
 #ifdef HAVE_UNAME
@@ -96,7 +97,7 @@ int sys_kernel_get(struct re_printf *pf, void *unused)
 
 #if defined (__SYMBIAN32__)
 	str = "Symbian OS";
-#elif defined(WIN32)
+#el#if defined(WIN32) || defined(__WIN32__)
 	str = "Win32";
 #else
 	str = "?";

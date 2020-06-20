@@ -3,13 +3,13 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h> 
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
 #endif
+#include <re_types.h>
 #include <re_list.h>
 #include <re_fmt.h>
 #include <re_mbuf.h>

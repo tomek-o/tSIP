@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h> 
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -11,7 +10,7 @@
 #ifdef HAVE_IO_H
 #include <io.h>
 #endif
-#if !defined(WIN32) && !defined (CYGWIN)
+#if !defined(WIN32) && !defined(__WIN32__) && !defined (CYGWIN)
 #define __USE_POSIX 1  /**< Use POSIX flag */
 #include <netdb.h>
 #endif
@@ -22,6 +21,7 @@
 #ifdef __APPLE__
 #include "TargetConditionals.h"
 #endif
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_mem.h>
 #include <re_mbuf.h>
@@ -38,7 +38,7 @@
 
 
 /** Platform independent buffer type cast */
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 #define BUF_CAST (char *)
 #define SOK_CAST (int)
 #define SIZ_CAST (int)
@@ -301,7 +301,7 @@ int udp_listen(struct udp_sock **usp, const struct sa *local,
 
 	error = getaddrinfo(local ? addr : NULL, serv, &hints, &res);
 	if (error) {
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 		DEBUG_WARNING("listen: getaddrinfo: wsaerr=%d\n",
 			      WSAGetLastError());
 #endif

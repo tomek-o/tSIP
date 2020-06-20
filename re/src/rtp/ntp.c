@@ -3,12 +3,12 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h>
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #else
 #include <time.h>
 #endif
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_list.h>
 #include <re_sa.h>
@@ -45,7 +45,7 @@ void ntp2unix(struct timeval *tv, const struct ntp_time *ntp)
 int ntp_time_get(struct ntp_time *ntp)
 {
 	struct timeval tv;
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 	union {
 		long long ns100;
 		FILETIME ft;

@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h> 
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -11,7 +10,7 @@
 #ifdef HAVE_IO_H
 #include <io.h>
 #endif
-#if !defined(WIN32) && !defined (CYGWIN)
+#if !defined(WIN32) && !defined(__WIN32__) && !defined (CYGWIN)
 #define __USE_POSIX 1  /**< Use POSIX flag */
 #define __USE_MISC 1
 #include <netdb.h>
@@ -20,6 +19,7 @@
 #include "TargetConditionals.h"
 #endif
 #include <string.h>
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_mem.h>
 #include <re_mbuf.h>
@@ -36,7 +36,7 @@
 
 
 /** Platform independent buffer type cast */
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 #define BUF_CAST (char *)
 #define SOK_CAST (int)
 #define SIZ_CAST (int)
@@ -236,7 +236,7 @@ static int dequeue(struct tcp_conn *tc)
 	if (n < 0) {
 		if (EAGAIN == errno)
 			return 0;
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 		if (WSAEWOULDBLOCK == WSAGetLastError())
 			return 0;
 #endif
@@ -604,7 +604,7 @@ int tcp_sock_alloc(struct tcp_sock **tsp, const struct sa *local,
 
 	error = getaddrinfo(addr[0] ? addr : NULL, serv, &hints, &res);
 	if (error) {
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 		DEBUG_WARNING("listen: getaddrinfo: wsaerr=%d\n",
 			      WSAGetLastError());
 #endif
@@ -695,7 +695,7 @@ int tcp_sock_bind(struct tcp_sock *ts, const struct sa *local)
 
 	error = getaddrinfo(addr[0] ? addr : NULL, serv, &hints, &res);
 	if (error) {
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 		DEBUG_WARNING("sock_bind: getaddrinfo: wsaerr=%d\n",
 			      WSAGetLastError());
 #endif
@@ -1025,7 +1025,7 @@ int tcp_conn_connect(struct tcp_conn *tc, const struct sa *peer)
 			goto out;
 		}
 		else {
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 			/* Special error handling for Windows */
 			if (WSAEWOULDBLOCK == WSAGetLastError()) {
 				err = 0;
@@ -1100,7 +1100,7 @@ static int tcp_send_internal(struct tcp_conn *tc, struct mbuf *mb,
 		if (EAGAIN == errno)
 			return enqueue(tc, mb);
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 		if (WSAEWOULDBLOCK == WSAGetLastError())
 			return enqueue(tc, mb);
 #endif
@@ -1108,7 +1108,7 @@ static int tcp_send_internal(struct tcp_conn *tc, struct mbuf *mb,
 
 		DEBUG_WARNING("send: write(): %m (fdc=%d)\n", err, tc->fdc);
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 		DEBUG_WARNING("WIN32 error: %d\n", WSAGetLastError());
 #endif
 

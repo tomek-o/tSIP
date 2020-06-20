@@ -7,6 +7,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * Defines the memory destructor handler, which is called when the reference
@@ -38,6 +41,10 @@ void     mem_threshold_set(ssize_t n);
 struct re_printf;
 int      mem_status(struct re_printf *pf, void *unused);
 int      mem_get_stat(struct memstat *mstat);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

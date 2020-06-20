@@ -7,6 +7,7 @@
 #include "HotKeyConf.h"
 #include "Log.h"
 #include "common/OS.h"
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 //---------------------------------------------------------------------------

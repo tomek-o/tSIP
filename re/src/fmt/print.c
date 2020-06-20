@@ -1,10 +1,13 @@
 /**
- * @file print.c Formatted printing
+ * @file fmt/print.c Formatted printing
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re.h>
 #include <string.h>
+#include <re_types.h>
+#include <re_sa.h>
+#include <re_fmt.h>
+#include <re_mem.h>
 #include <math.h>
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 #include <float.h>

@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 struct tls;
 struct tls_conn;
@@ -37,4 +40,8 @@ int tls_start_tcp(struct tls_conn **ptc, struct tls *tls,
 int tls_start_udp(struct tls_sock **tsp, struct tls *tls,
 		  struct udp_sock *us, int layer, uint32_t bsize);
 struct tls_conn *tls_udp_conn(const struct tls_sock *ts,
-			      const struct sa *peer);
+				  const struct sa *peer);
+
+#ifdef __cplusplus
+}
+#endif

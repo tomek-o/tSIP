@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum {
 	STUN_PORT        = 3478,   /**< STUN Port number */
@@ -281,3 +284,7 @@ extern const char *stun_reason_443;
 extern const char *stun_reason_486;
 extern const char *stun_reason_500;
 extern const char *stun_reason_508;
+
+#ifdef __cplusplus
+}
+#endif

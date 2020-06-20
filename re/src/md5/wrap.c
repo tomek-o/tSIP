@@ -3,13 +3,13 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h>
 #ifdef USE_OPENSSL
 #include <stddef.h>
 #include <openssl/md5.h>
 #else
 #include "md5.h"
 #endif
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_mem.h>
 #include <re_mbuf.h>

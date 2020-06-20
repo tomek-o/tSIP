@@ -3,14 +3,14 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h>
 #include <stdlib.h>
 #include <string.h>
-#if !defined(WIN32) && !defined(CYGWIN)
+#if !defined(WIN32) && !defined(__WIN32__) && !defined(CYGWIN)
 #define __USE_BSD 1  /**< Use BSD code */
 #include <unistd.h>
 #include <netdb.h>
 #endif
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_mbuf.h>
 #include <re_sa.h>
@@ -64,7 +64,7 @@ int net_hostaddr(int af, struct sa *ip)
  */
 int net_default_source_addr_get(int af, struct sa *ip)
 {
-#if defined(WIN32) || defined(CYGWIN)
+#if defined(WIN32) || defined(__WIN32__) || defined(CYGWIN)
 	return net_hostaddr(af, ip);
 #else
 	char ifname[64] = "";

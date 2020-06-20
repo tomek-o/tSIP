@@ -24,7 +24,7 @@
 #include <re_dbg.h>
 
 
-#if defined (WIN32) || defined (__SYMBIAN32__)
+#if defined(WIN32) || defined(__WIN32__) || defined (__SYMBIAN32__)
 #define DIR_SEP "\\"
 #else
 #define DIR_SEP "/"

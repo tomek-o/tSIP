@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** HTTP Header ID (perfect hash value) */
 enum http_hdrid {
@@ -146,4 +149,8 @@ bool http_auth_check(const struct pl *hval, const struct pl *method,
 		     struct http_auth *auth, http_auth_h *authh, void *arg);
 bool http_auth_check_request(const struct http_msg *msg,
 			     struct http_auth *auth,
-			     http_auth_h *authh, void *arg);
+				 http_auth_h *authh, void *arg);
+
+#ifdef __cplusplus
+}
+#endif

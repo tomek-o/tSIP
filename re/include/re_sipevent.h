@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* Message Components */
 
@@ -129,5 +132,9 @@ int sipevent_reset_unsolicited_handlers(void);
 int sipevent_register_unsolicited_handler(const char *event, sipevent_unsolicited_notify_h *notifyh);
 
 struct sip;
-struct sip * sipevent_sock_sip(struct sipevent_sock *sock); 
+struct sip * sipevent_sock_sip(struct sipevent_sock *sock);
+
+#ifdef __cplusplus
+}
+#endif
 

@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** Defines a URI - Uniform Resource Identifier */
 struct uri {
@@ -41,3 +44,7 @@ int uri_param_escape(struct re_printf *pf, const struct pl *pl);
 int uri_param_unescape(struct re_printf *pf, const struct pl *pl);
 int uri_header_escape(struct re_printf *pf, const struct pl *pl);
 int uri_header_unescape(struct re_printf *pf, const struct pl *pl);
+
+#ifdef __cplusplus
+}
+#endif

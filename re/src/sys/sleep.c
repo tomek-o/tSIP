@@ -6,7 +6,8 @@
 #include <re_types.h>
 #include <re_fmt.h>
 #include <re_sys.h>
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #endif
 #ifdef HAVE_UNISTD_H
@@ -28,7 +29,7 @@ void sys_usleep(unsigned int us)
 	if (!us)
 		return;
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 	Sleep(us / 1000);
 #elif defined(HAVE_SELECT)
 	do {

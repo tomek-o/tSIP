@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#define _DEFAULT_SOURCE 1
 #define __USE_UNIX98 1
 #include <pthread.h>
 #include <re_types.h>

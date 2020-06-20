@@ -17,7 +17,7 @@
 static bool inited = false;
 
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 static int wsa_init(void)
 {
 	WORD wVersionRequested = MAKEWORD(2, 2);
@@ -63,7 +63,7 @@ int net_sock_init(void)
 	if (inited)
 		return 0;
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 	err = wsa_init();
 #endif
 
@@ -78,7 +78,7 @@ int net_sock_init(void)
  */
 void net_sock_close(void)
 {
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 	const int err = WSACleanup();
 	if (0 != err) {
 		DEBUG_WARNING("sock close: WSACleanup (%d)\n", err);

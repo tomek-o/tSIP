@@ -9,6 +9,9 @@
 
 #include <stdarg.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef RELEASE
 #define MBUF_DEBUG 0  /**< Mbuf debugging (0 or 1) */
@@ -159,6 +162,10 @@ static inline void mbuf_skip_to_end(struct mbuf *mb)
 {
 	mb->pos = mb->end;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

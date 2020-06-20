@@ -3,11 +3,11 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #include <fcntl.h>
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_net.h>
 
@@ -18,7 +18,7 @@
 
 
 /** Platform independent buffer type cast */
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 #define BUF_CAST (char *)
 #elif defined (__SYMBIAN32__)
 #define BUF_CAST (void *)
@@ -37,7 +37,7 @@
  */
 int net_sockopt_blocking_set(int fd, bool blocking)
 {
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 	unsigned long noblock = !blocking;
 	int err = 0;
 

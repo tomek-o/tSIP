@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum {
 	MD5_SIZE     = 16,             /**< Number of bytes in MD5 hash   */
@@ -12,3 +15,7 @@ enum {
 
 void md5(const uint8_t *d, size_t n, uint8_t *md);
 int  md5_printf(uint8_t *md, const char *fmt, ...);
+
+#ifdef __cplusplus
+}
+#endif

@@ -3,9 +3,9 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h> 
 #include <winsock2.h>
 #include <iphlpapi.h>
+#include <re_types.h>
 #include <re_fmt.h>
 #include <re_net.h>
 #include <re_sa.h>

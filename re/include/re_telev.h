@@ -4,6 +4,10 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
 	TELEV_PTIME = 50,
 	TELEV_SRATE = 8000
@@ -20,3 +24,7 @@ int telev_poll(struct telev *tel, bool *marker, struct mbuf *mb);
 
 int telev_digit2code(int digit);
 int telev_code2digit(int code);
+
+#ifdef __cplusplus
+}
+#endif

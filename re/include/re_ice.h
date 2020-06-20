@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** ICE mode */
 enum ice_mode {
@@ -87,3 +90,7 @@ extern const char ice_attr_mismatch[];
 extern const char ice_attr_pwd[];
 extern const char ice_attr_remote_cand[];
 extern const char ice_attr_ufrag[];
+
+#ifdef __cplusplus
+}
+#endif

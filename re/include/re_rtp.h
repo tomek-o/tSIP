@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum {
 	RTP_VERSION     =  2,  /**< Defines the RTP version we support */
@@ -233,3 +236,7 @@ int   rtcp_msg_print(struct re_printf *pf, const struct rtcp_msg *msg);
 int   rtcp_sdes_encode(struct mbuf *mb, uint32_t src, uint32_t itemc, ...);
 const char *rtcp_type_name(enum rtcp_type type);
 const char *rtcp_sdes_name(enum rtcp_sdes_type sdes);
+
+#ifdef __cplusplus
+}
+#endif

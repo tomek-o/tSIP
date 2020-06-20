@@ -3,20 +3,19 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h>
-#include <re.h> 
 #include <stdio.h>
-#include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #ifdef HAVE_PTHREAD
+#include <stdlib.h>
 #include <pthread.h>
 #endif
 #include <time.h>
-//#include <re_fmt.h>
-//#include <re_list.h>
-//#include <re_tmr.h>
+#include <re_types.h>
+#include <re_fmt.h>
+#include <re_list.h>
+#include <re_tmr.h>
 
 
 #define DEBUG_MODULE "dbg"

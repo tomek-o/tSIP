@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @def MOD_PRE
@@ -14,7 +17,7 @@
  *
  * Module Extension
  */
-#if defined (WIN32)
+#if defined(WIN32) || defined(__WIN32__)
 #define MOD_PRE ""
 #define MOD_EXT ".dll"
 #elif defined (__SYMBIAN32__)
@@ -27,7 +30,7 @@
 
 
 /** Symbol to enable exporting of functions from a module */
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 #define EXPORT_SYM __declspec(dllexport)
 #else
 #define EXPORT_SYM
@@ -79,3 +82,7 @@ int         mod_debug(struct re_printf *pf, void *unused);
 // for DLL modules only
 int mod_call_init(struct mod *m);
 void *mod_sym(struct mod *m, const char *symbol);
+
+#ifdef __cplusplus
+}
+#endif

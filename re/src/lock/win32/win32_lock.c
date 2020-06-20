@@ -6,6 +6,7 @@
 #undef  _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #include <re_types.h>
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <re_mem.h>
 #include <re_lock.h>

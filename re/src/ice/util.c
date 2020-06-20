@@ -3,14 +3,23 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re.h>
 #include <string.h>
 #ifdef HAVE_SYS_TIME_H
 #include <sys/time.h>
 #endif
-#ifndef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 #include <time.h>
 #endif
+#include <re_types.h>
+#include <re_fmt.h>
+#include <re_mem.h>
+#include <re_mbuf.h>
+#include <re_list.h>
+#include <re_tmr.h>
+#include <re_sa.h>
+#include <re_stun.h>
+#include <re_sys.h>
+#include <re_ice.h>
 #include "ice.h"
 
 
@@ -138,7 +147,7 @@ uint64_t ice_get_usec(void)
 {
 	uint64_t jfs;
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(__WIN32__)
 	FILETIME ft;
 	ULARGE_INTEGER li;
 	GetSystemTimeAsFileTime(&ft);

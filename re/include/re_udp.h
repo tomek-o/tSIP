@@ -4,6 +4,10 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 struct sa;
 struct udp_sock;
@@ -60,4 +64,8 @@ int udp_send_helper(struct udp_sock *us, const struct sa *dst,
 struct RConnection;
 struct RSocketServ;
 void udp_rconn_set(struct RSocketServ *sockSrv, struct RConnection *rconn);
+#endif
+
+#ifdef __cplusplus
+}
 #endif

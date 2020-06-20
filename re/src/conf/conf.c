@@ -3,7 +3,6 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -13,9 +12,14 @@
 #ifdef HAVE_IO_H
 #include <io.h>
 #endif
+#include <re_types.h>
+#include <re_fmt.h>
+#include <re_mem.h>
+#include <re_mbuf.h>
+#include <re_conf.h>
 
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 #define open _open
 #define read _read
 #define close _close

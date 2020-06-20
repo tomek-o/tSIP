@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** BFCP Versions */
 enum {
@@ -284,3 +287,7 @@ int bfcp_edreply(struct bfcp_conn *bc, const struct bfcp_msg *req,
 		 enum bfcp_err code, const uint8_t *details, size_t len);
 int bfcp_ereply(struct bfcp_conn *bc, const struct bfcp_msg *req,
 		enum bfcp_err code);
+
+#ifdef __cplusplus
+}
+#endif

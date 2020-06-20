@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * Defines the timeout handler
@@ -44,3 +47,7 @@ static inline bool tmr_isrunning(const struct tmr *tmr)
 {
 	return tmr ? NULL != tmr->th : false;
 }
+
+#ifdef __cplusplus
+}
+#endif

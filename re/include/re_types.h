@@ -10,8 +10,6 @@
 #if defined(__BORLANDC__)
 #include <stddef.h>	// ssize_t
 #define inline __inline
-#define WIN32
-#define HAVE_IO_H
 #define ENOSYS 38
 #endif
 #include <stdlib.h>
@@ -63,9 +61,6 @@ typedef long     ssize_t;
 #endif
 
 
-#ifndef WIN32
-typedef uint32_t socklen_t;
-#endif
 #endif
 
 

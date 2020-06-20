@@ -3,8 +3,13 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re.h>
 #include <string.h>
+#include <re_types.h>
+#include <re_fmt.h>
+#include <re_mbuf.h>
+#include <re_md5.h>
+#include <re_sys.h>
+#include <re_httpauth.h>
 
 
 typedef void (digest_decode_h)(const struct pl *name, const struct pl *val,

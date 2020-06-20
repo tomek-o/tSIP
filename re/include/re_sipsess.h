@@ -4,6 +4,10 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct sipsess_sock;
 struct sipsess;
 
@@ -57,3 +61,7 @@ int  sipsess_info(struct sipsess *sess, const char *ctype, struct mbuf *body,
 		  sip_resp_h *resph, void *arg);
 void sipsess_close_all(struct sipsess_sock *sock);
 struct sip_dialog *sipsess_dialog(const struct sipsess *sess);
+
+#ifdef __cplusplus
+}
+#endif

@@ -3,13 +3,17 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#if defined(WIN32)
+#if defined(WIN32) || defined(__WIN32__)
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
+
 #else
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+
 #endif
 
 

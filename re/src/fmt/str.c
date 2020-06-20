@@ -4,11 +4,13 @@
  * Copyright (C) 2010 Creytiv.com
  */
 #undef __STRICT_ANSI__ /* for mingw32 */
-#include <re.h>
 #include <string.h>
 #ifdef HAVE_STRINGS_H
 #include <strings.h>
 #endif
+#include <re_types.h>
+#include <re_mem.h>
+#include <re_fmt.h>
 
 
 /**

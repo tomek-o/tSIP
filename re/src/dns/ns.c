@@ -3,9 +3,13 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re.h>
 #include <stdio.h>
-#include <string.h>
+#include <re_types.h>
+#include <re_fmt.h>
+#include <re_mbuf.h>
+#include <re_list.h>
+#include <re_sa.h>
+#include <re_dns.h>
 #include "dns.h"
 
 
@@ -115,7 +119,7 @@ int dns_srv_get(char *domain, size_t dsize, struct sa *srvv, uint32_t *n)
 	}
 #endif
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 	err = get_windns(domain, dsize, srvv, n);
 #endif
 

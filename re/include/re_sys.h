@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #ifndef VERSION
 #define VERSION "?"
@@ -40,7 +43,7 @@
 #ifndef OS
 #ifdef __SYMBIAN32__
 #define OS "Symbian"
-#elif defined (WIN32)
+#elif defined(WIN32) || defined(__WIN32__)
 #define OS "win32"
 #else
 #define OS "?"
@@ -86,4 +89,8 @@ void     rand_bytes(uint8_t *p, size_t size);
 
 /** \brief Get time string with miliseconds */
 char* sys_time(char* buf, int size);
+
+#ifdef __cplusplus
+}
+#endif
 

@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /** HTTP Digest Challenge */
 struct httpauth_digest_chall {
@@ -38,3 +41,7 @@ int httpauth_digest_response_decode(struct httpauth_digest_resp *resp,
 				    const struct pl *hval);
 int httpauth_digest_response_auth(const struct httpauth_digest_resp *resp,
 				  const struct pl *method, const uint8_t *ha1);
+
+#ifdef __cplusplus
+}
+#endif

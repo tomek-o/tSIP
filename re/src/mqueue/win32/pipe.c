@@ -3,8 +3,8 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re_types.h> 
 #include <winsock2.h>
+#include <re_types.h>
 #include "../mqueue.h"
 
 

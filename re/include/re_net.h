@@ -6,7 +6,7 @@
 #ifdef CYGWIN
 #include <ws2tcpip.h>
 #include <winsock2.h>
-#elif defined(WIN32)
+#elif defined(WIN32) || defined(__WIN32__)
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #else

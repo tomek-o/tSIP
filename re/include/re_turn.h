@@ -4,6 +4,10 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 enum {
 	TURN_DEFAULT_LIFETIME = 600,  /**< Default lifetime is 10 minutes */
 	TURN_MAX_LIFETIME     = 3600  /**< Maximum lifetime is 1 hour     */
@@ -29,3 +33,7 @@ int turnc_add_perm(struct turnc *turnc, const struct sa *peer,
 		   turnc_perm_h *ph, void *arg);
 int turnc_add_chan(struct turnc *turnc, const struct sa *peer,
 		   turnc_chan_h *ch, void *arg);
+
+#ifdef __cplusplus
+}
+#endif

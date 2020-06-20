@@ -81,13 +81,13 @@ A million repetitions of "a"
 
 #define SHA1HANDSOFF 1
 
-#include <re_types.h>
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdio.h>
 #include <string.h>
+#include <re_types.h>
 #include <re_sha.h>
 
 void SHA1_Transform(uint32_t state[5], const uint8_t buffer[64]);

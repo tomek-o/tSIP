@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 enum {
 	SDP_VERSION = 0
@@ -166,3 +169,7 @@ extern const char sdp_media_text[];
 
 extern const char sdp_proto_rtpavp[];
 extern const char sdp_proto_rtpsavp[];
+
+#ifdef __cplusplus
+}
+#endif
