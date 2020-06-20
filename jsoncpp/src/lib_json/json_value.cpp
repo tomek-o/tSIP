@@ -223,7 +223,7 @@ bool
 Value::CZString::operator<( const CZString &other ) const 
 {
    if ( cstr_ )
-      return strcmp( cstr_, other.cstr_ ) < 0;
+      return ::strcmp( cstr_, other.cstr_ ) < 0;
    return index_ < other.index_;
 }
 
@@ -231,7 +231,7 @@ bool
 Value::CZString::operator==( const CZString &other ) const 
 {
    if ( cstr_ )
-      return strcmp( cstr_, other.cstr_ ) == 0;
+      return ::strcmp( cstr_, other.cstr_ ) == 0;
    return index_ == other.index_;
 }
 
@@ -588,7 +588,7 @@ Value::operator <( const Value &other ) const
       return ( value_.string_ == 0  &&  other.value_.string_ )
              || ( other.value_.string_  
                   &&  value_.string_  
-                  && strcmp( value_.string_, other.value_.string_ ) < 0 );
+                  && ::strcmp( value_.string_, other.value_.string_ ) < 0 );
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    case arrayValue:
    case objectValue:
@@ -654,7 +654,7 @@ Value::operator ==( const Value &other ) const
       return ( value_.string_ == other.value_.string_ )
              || ( other.value_.string_  
                   &&  value_.string_  
-                  && strcmp( value_.string_, other.value_.string_ ) == 0 );
+				  && ::strcmp( value_.string_, other.value_.string_ ) == 0 );
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    case arrayValue:
    case objectValue:
