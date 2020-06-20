@@ -9,12 +9,12 @@
 
 #if defined(WIN32)
 #include <winsock2.h>
-#if defined(__BORLANDC__) || defined(BORLANDC)
+#if defined(__BORLANDC__)
 #pragma option push
 #pragma warn -8004
 #endif
 #include <ws2tcpip.h>
-#if defined(__BORLANDC__) || defined(BORLANDC)
+#if defined(__BORLANDC__)
 #pragma option pop
 #endif
 #endif

@@ -6,12 +6,9 @@
 
 #include <sys/types.h>
 
-#if defined(_MSC_VER) || defined(__BORLANDC__) || defined(BORLANDC)
-#if defined(__BORLANDC__) || defined(BORLANDC)
-//typedef long     ssize_t;
-#define __ssize_t_defined
-//#define _SSIZE_T_DEFINED	// differences between Turbo C++ installations/fixes?
-#include <stddef.h>
+#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(__BORLANDC__)
+#include <stddef.h>	// ssize_t
 #define inline __inline
 #define WIN32
 #define HAVE_IO_H
@@ -57,9 +54,12 @@ typedef unsigned long long int    uint64_t;
 #endif /* __BIT_TYPES_DEFINED__ */
 
 #endif /* __int8_t_defined */
+
+#ifndef __BORLANDC__
 #ifndef __ssize_t_defined
 typedef long     ssize_t;
 #define __ssize_t_defined
+#endif
 #endif
 
 
