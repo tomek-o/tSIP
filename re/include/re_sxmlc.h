@@ -57,7 +57,7 @@ extern "C" {
 	#define sx_fgetc fgetwc
 	#define sx_fputc fputwc
 	#define sx_isspace iswspace
-	#if defined(WIN32) || defined(WIN64)
+	#if defined(WIN32) || || defined(__WIN32__) || defined(WIN64)
 		#define sx_fopen _wfopen
 	#else
 		#define sx_fopen fopen

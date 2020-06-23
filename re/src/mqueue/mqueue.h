@@ -5,7 +5,7 @@
  */
 
 
-#ifdef WIN32
+#if defined(WIN32) || defined(__WIN32__)
 int pipe(int fds[2]);
 ssize_t pipe_read(int s, void *buf, size_t len);
 ssize_t pipe_write(int s, const void *buf, size_t len);

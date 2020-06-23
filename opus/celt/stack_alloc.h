@@ -40,7 +40,7 @@
 #endif
 
 #ifdef USE_ALLOCA
-# ifdef WIN32
+# if defined(WIN32) || defined(__WIN32__)
 #  include <malloc.h>
 # else
 #  ifdef HAVE_ALLOCA_H
