@@ -51,7 +51,7 @@ public:		// User declarations
     	return incoming;
 	}
 	void AddIncomingMessage(AnsiString contentType, AnsiString body);
-	int HandleMessageStatus(int requestUid, int requestError, int sipCode);
+	int HandleMessageStatus(int requestUid, int requestError, int sipCode, AnsiString reason);
 	void SetText(AnsiString text);
 };
 //---------------------------------------------------------------------------

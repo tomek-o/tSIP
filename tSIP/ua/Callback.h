@@ -77,7 +77,8 @@ public:
 
 	AnsiString caller;
 	AnsiString callerName;
-	int scode;	// SIP code
+	int scode;			// SIP code
+	AnsiString reason;	// text from 1st line of the SIP reply
 	AnsiString alertInfo;
 	AnsiString accessUrl;
 	int accessUrlMode;

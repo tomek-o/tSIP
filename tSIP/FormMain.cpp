@@ -1785,7 +1785,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 		case Callback::SIMPLE_MESSAGE_STATUS:
 		{
-			SIMPLE_Messages::OnMessageStatus(cb.requestUid, cb.requestError, cb.scode);
+			SIMPLE_Messages::OnMessageStatus(cb.requestUid, cb.requestError, cb.scode, cb.reason);
 			break;
 		}
 		default:

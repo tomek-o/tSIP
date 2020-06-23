@@ -120,14 +120,14 @@ void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString bod
 	frm->Show();
 }
 
-void OnMessageStatus(int requestUid, int requestError, int sipCode)
+void OnMessageStatus(int requestUid, int requestError, int sipCode, AnsiString reason)
 {
-	LOG("MessageStatus: requestUid = %d, requestError = %d, sipCode = %d\n", requestUid, requestError, sipCode);
+	LOG("MessageStatus: requestUid = %d, requestError = %d, sipCode = %d, reason = %s\n", requestUid, requestError, sipCode, reason.c_str());
 	std::set<TfrmMessage*>::iterator iter;
 	for (iter = messageWindows.begin(); iter != messageWindows.end(); ++iter)
 	{
 		TfrmMessage *frmIter = *(iter);
-		if (frmIter->HandleMessageStatus(requestUid, requestError, sipCode) == 0)
+		if (frmIter->HandleMessageStatus(requestUid, requestError, sipCode, reason) == 0)
 		{
 			return;
 		}

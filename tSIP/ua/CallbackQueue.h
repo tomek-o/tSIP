@@ -34,7 +34,7 @@ public:
 	void NotifyAudioError(void);
 	void NotifyCustomRequestStatus(int requestUid, int requestError, int sipStatusCode, AnsiString requestReplyText);
 	void OnMessageReceived(AnsiString caller, AnsiString contentType, AnsiString body);
-	void OnMessageStatus(int requestUid, int requestError, int sipStatusCode);
+	void OnMessageStatus(int requestUid, int requestError, int sipStatusCode, AnsiString reason);
 };
 
 #define UA_CB CallbackQueue::Instance()

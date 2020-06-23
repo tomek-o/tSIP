@@ -179,7 +179,7 @@ void TfrmMessage::UpdateTarget(AnsiString val)
 	}
 }
 
-int TfrmMessage::HandleMessageStatus(int requestUid, int requestError, int sipCode)
+int TfrmMessage::HandleMessageStatus(int requestUid, int requestError, int sipCode, AnsiString reason)
 {
 	std::set<int>::iterator iter;
 	iter = requestIds.find(requestUid);
@@ -195,7 +195,14 @@ int TfrmMessage::HandleMessageStatus(int requestUid, int requestError, int sipCo
 	{
 		if (sipCode != 200)
 		{
-			statusText.sprintf("Received SIP/%d answer", sipCode);
+			if (reason.Length() == 0)
+			{
+				statusText.sprintf("Received SIP/%d answer", sipCode);
+			}
+			else
+			{
+				statusText.sprintf("Received SIP/%d answer, %s", sipCode, reason.c_str());
+			}
 		}
 	}
 

@@ -447,7 +447,15 @@ static void simple_message_response_handler(int err, const struct sip_msg *msg, 
 		}
 	}
 #endif
-	UA_CB->OnMessageStatus(requestId, err, msg?msg->scode:0);
+	AnsiString reason;
+	if (msg && (msg->reason.l > 0))
+	{
+		//reason.sprintf("%.*s", msg->reason.l, msg->reason.p);
+		reason.SetLength(msg->reason.l + 1);
+		memcpy(&reason[1], msg->reason.p, msg->reason.l);
+		reason[msg->reason.l + 1] = '\0';
+	}
+	UA_CB->OnMessageStatus(requestId, err, msg?msg->scode:0, reason);
 }
 
 static void recorder_state_handler(struct recorder_st *recorder, enum recorder_state state) {

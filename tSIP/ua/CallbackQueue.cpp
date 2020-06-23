@@ -237,7 +237,7 @@ void CallbackQueue::OnMessageReceived(AnsiString caller, AnsiString contentType,
 	fifo.push();
 }
 
-void CallbackQueue::OnMessageStatus(int requestUid, int requestError, int sipStatusCode)
+void CallbackQueue::OnMessageStatus(int requestUid, int requestError, int sipStatusCode, AnsiString reason)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -248,6 +248,7 @@ void CallbackQueue::OnMessageStatus(int requestUid, int requestError, int sipSta
 	cb->requestUid = requestUid;
 	cb->requestError = requestError;
 	cb->scode = sipStatusCode;
+	cb->reason = reason;
 
 	fifo.push();
 }
