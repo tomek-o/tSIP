@@ -30,7 +30,7 @@
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
         <property category="build.node" name="libraries" value="vclx.lib vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="tSIP.exe"/>
-        <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;dsnap;soaprtl;bdertl;vcldbx"/>
+        <property category="build.node" name="packages" value="vclx;vcl;rtl;xmlrtl;vclie;inet;inetdbbde;inetdbxpress"/>
         <property category="build.node" name="sparelibs" value="rtl.lib vcl.lib vclx.lib"/>
         <property category="build.node" name="use_packages" value="0"/>
         <property category="build.platform" name="active" value="win32"/>
@@ -132,7 +132,6 @@
           <property category="win32.*.win32b.bcc32" name="option.AK.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.AU.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.D.arg.1" value="STATIC"/>
-          <property category="win32.*.win32b.bcc32" name="option.D.arg.2" value="WIN32"/>
           <property category="win32.*.win32b.bcc32" name="option.D.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.D.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.H.enabled" value="0"/>
@@ -143,28 +142,26 @@
           <property category="win32.*.win32b.bcc32" name="option.He.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Hs.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="ua\"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\jsoncpp\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\baresip\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="..\re\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="..\rem\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="$(BDS)\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="$(BDS)\include\dinkumware"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="$(BDS)\include\vcl"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\portaudio\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value="..\speex\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\baresip\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\re\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\rem\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="..\portaudio\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\speex\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\gsm\inc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value="..\lua\src"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="buttons"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.20" value="..\gsm\inc"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.21" value="..\lua\src"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.22" value="..\scintilla\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.23" value=".."/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.20" value="..\scintilla\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.21" value=".."/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="contacts"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="scripting"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="phone"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="components\HotkeyCfgPanel"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="resources"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="resources"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="..\jsoncpp\include"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Jgi.enabled" value="0"/>
@@ -342,20 +339,17 @@
           <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.Gpd.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.Gpr.enabled" value="0"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="ua\"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.10" value="components\SpeedDialPanel"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.11" value="jsoncpp\src\lib_json"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.12" value="$(BDS)\lib"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.13" value="$(BDS)\lib\obj"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.14" value="$(BDS)\lib\psdk"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="buttons"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="contacts"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.4" value="scripting"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.5" value="phone"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.6" value="components\HotkeyCfgPanel"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.7" value="components\ProgrammableButton"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.8" value="..\..\tSIP\tSIP\components\ProgrammableButton"/>
-          <property category="win32.*.win32b.ilink32" name="option.L.arg.9" value="resources"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="components\ProgrammableButton"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.10" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.11" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="scripting"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="phone"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.4" value="contacts"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.5" value="buttons"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.6" value="ua\"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.7" value="components\HotkeyCfgPanel"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.8" value="resources"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.9" value="$(BDS)\lib"/>
           <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
           <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
           <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
@@ -526,13 +520,20 @@
           <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
         </Parameters>
         <Excluded_Packages>
-          <Excluded_Packages Name="d:\progs\bds2007\Bin\dclib100.bpl">Borland InterBase Express Components</Excluded_Packages>
-          <Excluded_Packages Name="d:\progs\bds2007\Bin\dclIntraweb_80_100.bpl">Intraweb 8.0 Design Package for Borland Development Studio 2006</Excluded_Packages>
-          <Excluded_Packages Name="d:\progs\bds2007\Bin\dclindy100.bpl">Internet Direct Version 9 (Indy) Property and Component Editors</Excluded_Packages>
-          <Excluded_Packages Name="d:\progs\bds2007\Bin\bcbofficexp100.bpl">Borland C++Builder Office XP Servers Package</Excluded_Packages>
-          <Excluded_Packages Name="d:\progs\bds2007\Bin\dclbcbsmp100.bpl">Borland Sample Controls Design Time Package</Excluded_Packages>
-          <Excluded_Packages Name="d:\progs\bds2007\Bin\bcbie100.bpl">Borland C++Builder Internet Explorer 5 Components Package</Excluded_Packages>
-          <Excluded_Packages Name="d:\progs\bds2007\Bin\dcltee100.bpl">TeeChart Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dcldb100.bpl">Borland Database Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\bin\dclado100.bpl">Borland ADO DB Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dcldbx100.bpl">Borland dbExpress Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dclsoap100.bpl">Borland SOAP Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dclmid100.bpl">Borland MyBase DataAccess Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dcldbxcds100.bpl">Borland SimpleDataset Component (DBX)</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\bin\dclbde100.bpl">Borland BDE DB Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dclib100.bpl">Borland InterBase Express Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dclIntraweb_80_100.bpl">Intraweb 8.0 Design Package for Borland Development Studio 2006</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dclindy100.bpl">Internet Direct Version 9 (Indy) Property and Component Editors</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\bcbofficexp100.bpl">Borland C++Builder Office XP Servers Package</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dclbcbsmp100.bpl">Borland Sample Controls Design Time Package</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\bcbie100.bpl">Borland C++Builder Internet Explorer 5 Components Package</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dcltee100.bpl">TeeChart Components</Excluded_Packages>
         </Excluded_Packages>
         <Linker>
           <Linker Name="LibPrefix"></Linker>
@@ -542,10 +543,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>
