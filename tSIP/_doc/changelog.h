@@ -797,5 +797,28 @@ Version 0.1.69
 	- added new button type: send text message (IM)
 	- Lua scripting: added SendTextMessage(uri, text, sendImmediately) function
     
+Version 0.1.73
+	- plugin interface: added function allowing adding tray context menu item from plugin, making tSIP suitable to work as host for general purpose plugins
+	- plugin interface: added function setting application status
+	- new plugin: https://github.com/tomek-o/tSIP-plugin-HTTPstatus - showing temperature/humidity/pressure from my sensor as tray hint
+	- new plugin: https://github.com/tomek-o/tSIP-plugin-SystemShutdown - suspending (S3/S4) or turning off PC at specified time
+	- added Lua SetAppStatus function
+	- added inband DTMF generation option
+	- contact hist and call history: added options to send MESSAGEs
+	- added Lua example for SendTextMessage
+	- text editor in JSON configuration patching window changed to Scrintilla
+	- increased size of account audio codec list to 16
+	- jsoncpp: added Value::getString()
+	- handling incoming MESSAGEs: reply code and reason can be specified, softphone can be configured to not reply for incoming MESSAGE, generating timeout
+	- added Lua example sending single SIP request
+	- added StaticCheck.h / C++ STATIC_CHECK
+	- added pause function for recording
+	- new button types: recording start (starting with default parameters or resuming), recording pause
+	- new script event: on recording state
+	- Lua: added GetRecordingState(id) function
+	- added option to not restore taskbar button (hopefully helping with Windows RDP taskbar mess)
+	- show received reply status reason text for sent MESSAGE to the user
+	- minor changes for compatibility with early BDS2006 release, some cleanup, changed the way re compatibility with TC++ is achieved
+
 */
 

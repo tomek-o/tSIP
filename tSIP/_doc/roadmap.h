@@ -6,16 +6,16 @@
 
 Bunch of things to do in future releases. No particular order:
 
-	- multiple accounts, even if only single active at the time
-	- UDP transport keepalive
-	- context help
-	- SIP message graphs
+- multiple accounts, even if only single active at the time
+- UDP transport keepalive
+- context help
+- SIP message graphs
 
-	- some things from baresip
-		- audio_loop_test
-		- call_debug
+- some things from baresip
+	- audio_loop_test
+	- call_debug
 
-	- misleading "Failed to start application" status when no valid account is configured
+- misleading "Failed to start application" status when no valid account is configured
 
 
 - DTMF local playback
@@ -25,7 +25,6 @@ Call recording:
 - fixme: possible hazards when starting recording
 - other output formats, compression
 - settings: record incoming/outgoing
-- manual record + recording state info
 - semi-automatic record mode: record call by default, delete file if not "saved" by user
 - UID for file names to avoid conflicts with very short (<1 s) recordings
 
@@ -91,8 +90,6 @@ and whether it can be addressed?
 - aufile: accept mp3 files
 
 - "BLF" p2p: subscription server
-
-- Lua: receive DTMF from queue; IVR
 
 button: mouse down event
 
@@ -160,8 +157,6 @@ update Lua to 5.3.x, remove CVS tags from Lua source
 
 - wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
 (=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)
-
-hosting tray plugins (move from FreeGG)
 
 */
 
