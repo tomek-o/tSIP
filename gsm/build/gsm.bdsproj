@@ -152,10 +152,8 @@
       </project>
       <FILELIST>
         <FILE FILENAME="gsm.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\src\toast_ulaw.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="toast_ulaw" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\add.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="add" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\code.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="code" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\src\debug.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="debug" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\decode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="decode" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\gsm_create.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm_create" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\gsm_decode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm_decode" FORMNAME="" DESIGNCLASS=""/>
@@ -163,24 +161,17 @@
         <FILE FILENAME="..\src\gsm_encode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm_encode" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\gsm_explode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm_explode" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\gsm_implode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm_implode" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\src\gsm_option.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm_option" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\src\gsm_print.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gsm_print" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\long_term.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="long_term" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\lpc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="lpc" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\preprocess.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="preprocess" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\rpe.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="rpe" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\short_term.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="short_term" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\src\table.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="table" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\src\toast.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="toast" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\src\toast_alaw.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="toast_alaw" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\src\toast_audio.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="toast_audio" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\src\toast_lin.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="toast_lin" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\inc\unproto.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\inc\config.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\inc\gsm.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\inc\private.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\inc\proto.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\inc\toast.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
