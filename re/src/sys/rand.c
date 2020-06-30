@@ -84,7 +84,7 @@ uint32_t rand_u32(void)
 	if (RAND_bytes((unsigned char *)&v, sizeof(v)) <= 0) {
 		DEBUG_WARNING("RAND_bytes() error: %u\n", ERR_get_error());
 	}
-#el#if defined(WIN32) || defined(__WIN32__)
+#elif defined(WIN32) || defined(__WIN32__)
 	v = (rand() << 16) + rand(); /* note: 16-bit rand */
 #else
 	v = rand();

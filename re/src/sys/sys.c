@@ -97,7 +97,7 @@ int sys_kernel_get(struct re_printf *pf, void *unused)
 
 #if defined (__SYMBIAN32__)
 	str = "Symbian OS";
-#el#if defined(WIN32) || defined(__WIN32__)
+#elif defined(WIN32) || defined(__WIN32__)
 	str = "Win32";
 #else
 	str = "?";
