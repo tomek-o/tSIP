@@ -1,5 +1,5 @@
 /**
- * @file message.c  SIP MESSAGE -- RFC 3428
+ * @file src/message.c  SIP MESSAGE -- RFC 3428
  *
  * Copyright (C) 2010 Creytiv.com
  */
@@ -19,19 +19,17 @@ static sip_resp_h *response_user_handler;
 
 static void handle_message(struct ua *ua, const struct sip_msg *msg)
 {
-	static const char *ctype_text = "text/plain";
-	struct pl mtype;
+	static const char ctype_text[] = "text/plain";
+	struct pl ctype_pl = {ctype_text, sizeof(ctype_text)-1};
 	(void)ua;
 
-	if (re_regex(msg->ctype.p, msg->ctype.l, "[^;]+", &mtype))
-		mtype = msg->ctype;
+	if (msg_ctype_cmp(&msg->ctyp, "text", "plain")) {
 
-	if (0==pl_strcasecmp(&mtype, ctype_text) && recvh) {
 		int do_not_reply = 0;
 		int reply_code = 200;
 		const char* reply_reason = "OK";
 		if (recvh) {
-			recvh(&msg->from.auri, &msg->ctype, msg->mb, recvarg, &reply_code, &reply_reason, &do_not_reply);
+			recvh(&msg->from.auri, &ctype_pl, msg->mb, recvarg, &reply_code, &reply_reason, &do_not_reply);
 		}
 		if (do_not_reply == 0) {
 			(void)sip_reply(uag_sip(), msg, reply_code, reply_reason);

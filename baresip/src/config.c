@@ -145,6 +145,11 @@ static int dns_server_handler(const struct pl *pl, void *arg)
 	return err;
 }
 
+/**
+ * Get the baresip core config
+ *
+ * @return Core config
+ */
 struct config *conf_config(void)
 {
 	return &core_config;

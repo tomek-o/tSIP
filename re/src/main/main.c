@@ -14,8 +14,6 @@
 #endif
 #if defined(WIN32) || defined(__WIN32__)
 #include <winsock.h>
-#elif defined(__SYMBIAN32__)
-#define bzero(b,len) memset(b,0,len)
 #endif
 #ifdef HAVE_SIGNAL
 #include <signal.h>
@@ -811,13 +809,6 @@ int re_main(re_signal_h *signalh, control_poll_callback_h *controlh)
 
 	re->polling = true;
 
-#ifdef HAVE_ACTSCHED
-	if (METHOD_ACTSCHED == re->method) {
-		err = actsched_start();
-		goto out;
-	}
-#endif
-
 	re_lock(re);
 	for (;;) {
 
@@ -870,12 +861,6 @@ void re_cancel(void)
 	struct re *re = re_get();
 
 	re->polling = false;
-
-#ifdef HAVE_ACTSCHED
-	if (METHOD_ACTSCHED == re->method) {
-		actsched_stop();
-	}
-#endif
 }
 
 
@@ -931,10 +916,6 @@ int poll_method_set(enum poll_method method)
 	case METHOD_EPOLL:
 		if (!epoll_check())
 			return EINVAL;
-		break;
-#endif
-#ifdef HAVE_ACTSCHED
-	case METHOD_ACTSCHED:
 		break;
 #endif
 	default:

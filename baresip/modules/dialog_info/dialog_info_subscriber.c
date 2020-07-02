@@ -415,7 +415,7 @@ int dialog_info_subscriber_init(void)
 		struct sip_addr *addr = contact_addr(c);
 		struct pl val;
 
-		if (0 == sip_param_decode(&addr->params, "dlginfo", &val) &&
+		if (0 == msg_param_decode(&addr->params, "dlginfo", &val) &&
 		    0 == pl_strcasecmp(&val, "p2p")) {
 
 			err |= dialog_info_alloc(le->data);

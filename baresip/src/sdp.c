@@ -37,7 +37,18 @@ const char *sdp_rattr(const struct sdp_session *s, const struct sdp_media *m,
 }
 
 
-/* RFC 4572 */
+/**
+ * Decode an SDP fingerprint value
+ *
+ * @param attr SDP attribute value
+ * @param hash Returned hash method
+ * @param md   Returned message digest
+ * @param sz   Message digest size, set on return
+ *
+ * @return 0 if success, otherwise errorcode
+ *
+ * Reference: RFC 4572
+ */
 int sdp_fingerprint_decode(const char *attr, struct pl *hash,
 			   uint8_t *md, size_t *sz)
 {
@@ -67,6 +78,14 @@ int sdp_fingerprint_decode(const char *attr, struct pl *hash,
 }
 
 
+/**
+ * Check if an SDP media object has valid media. It is considered
+ * valid if it has one or more codecs, and the port number is set.
+ *
+ * @param m SDP Media object
+ *
+ * @return True if it has media, false if not
+ */
 bool sdp_media_has_media(const struct sdp_media *m)
 {
 	bool has;
@@ -144,19 +163,24 @@ static void decode_part(const struct pl *part, struct mbuf *mb)
 
 /**
  * Decode a multipart/mixed message and find the part with application/sdp
+ *
+ * @param ctype_prm  Content type parameter
+ * @param mb         Mbuffer containing the SDP
+ *
+ * @return 0 if success, otherwise errorcode
  */
-int sdp_decode_multipart(const struct pl *ctype, struct mbuf *mb)
+int sdp_decode_multipart(const struct pl *ctype_prm, struct mbuf *mb)
 {
 	struct pl bnd, s, e, p;
 	char expr[64];
 	int err;
 
-	if (!ctype || !mb)
+	if (!ctype_prm || !mb)
 		return EINVAL;
 
 	/* fetch the boundary tag, excluding quotes */
-	err = re_regex(ctype->p, ctype->l,
-		       "multipart/mixed;[ \t]*boundary=[~]+", NULL, &bnd);
+	err = re_regex(ctype_prm->p, ctype_prm->l,
+		       "boundary=[~]+", &bnd);
 	if (err)
 		return err;
 

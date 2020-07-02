@@ -10,6 +10,7 @@
 #include <re_list.h>
 #include <re_hash.h>
 #include <re_fmt.h>
+#include <re_msg.h>
 #include <re_http.h>
 
 
@@ -31,6 +32,7 @@ static void destructor(void *arg)
 	struct http_msg *msg = arg;
 
 	list_flush(&msg->hdrl);
+	mem_deref(msg->_mb);
 	mem_deref(msg->mb);
 }
 
@@ -94,6 +96,7 @@ static inline int hdr_add(struct http_msg *msg, const struct pl *name,
 			  enum http_hdrid id, const char *p, ssize_t l)
 {
 	struct http_hdr *hdr;
+	int err = 0;
 
 	hdr = mem_zalloc(sizeof(*hdr), hdr_destructor);
 	if (!hdr)
@@ -110,7 +113,7 @@ static inline int hdr_add(struct http_msg *msg, const struct pl *name,
 	switch (id) {
 
 	case HTTP_HDR_CONTENT_TYPE:
-		msg->ctype = hdr->val;
+		err = msg_ctype_decode(&msg->ctyp, &hdr->val);
 		break;
 
 	case HTTP_HDR_CONTENT_LENGTH:
@@ -121,7 +124,10 @@ static inline int hdr_add(struct http_msg *msg, const struct pl *name,
 		break;
 	}
 
-	return 0;
+	if (err)
+		mem_deref(hdr);
+
+	return err;
 }
 
 
@@ -158,7 +164,13 @@ int http_msg_decode(struct http_msg **msgp, struct mbuf *mb, bool req)
 	if (!msg)
 		return ENOMEM;
 
-	msg->mb = mem_ref(mb);
+	msg->_mb = mem_ref(mb);
+
+	msg->mb = mbuf_alloc(8192);
+	if (!msg->mb) {
+		err = ENOMEM;
+		goto out;
+	}
 
 	if (req) {
 		if (re_regex(s.p, s.l, "[a-z]+ [^? ]+[^ ]* HTTP/[0-9.]+",
@@ -169,8 +181,8 @@ int http_msg_decode(struct http_msg **msgp, struct mbuf *mb, bool req)
 		}
 	}
 	else {
-		if (re_regex(s.p, s.l, "HTTP/[0-9.]+ [0-9]+ [^]*",
-			     &msg->ver, &scode, &msg->reason) ||
+		if (re_regex(s.p, s.l, "HTTP/[0-9.]+ [0-9]+[ ]*[^]*",
+			     &msg->ver, &scode, NULL, &msg->reason) ||
 		    msg->ver.p != s.p + 5) {
 			err = EBADMSG;
 			goto out;

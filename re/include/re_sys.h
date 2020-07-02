@@ -18,21 +18,7 @@ extern "C" {
  * Architecture
  */
 #ifndef ARCH
-#ifdef __SYMBIAN32__
-#if defined(__WINS__)
-#define ARCH "WINS"
-#elif defined(__MARM__)
-#define ARCH "ARM"
-#elif defined(__MARM_ARMI__)
-#define ARCH "ARMI"
-#elif defined(EKA2)
-#define ARCH "EKA2"
-#else
-#define ARCH "Symbian Arch"
-#endif
-#else
-#define ARCH "?"
-#endif
+#define ARCH "x86"
 #endif
 
 /**
@@ -41,9 +27,7 @@ extern "C" {
  * Operating System
  */
 #ifndef OS
-#ifdef __SYMBIAN32__
-#define OS "Symbian"
-#elif defined(WIN32) || defined(__WIN32__)
+#if defined(WIN32) || defined(__WIN32__)
 #define OS "win32"
 #else
 #define OS "?"

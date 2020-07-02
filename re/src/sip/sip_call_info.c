@@ -4,6 +4,7 @@
 #include <re_uri.h>
 #include <re_list.h>
 #include <re_sa.h>
+#include <re_msg.h>
 #include <re_sip.h>
 
 static int sip_answer_after_decode(const struct pl *pl, const char *name, struct pl *val)
@@ -42,7 +43,7 @@ int sip_call_info_decode(struct sip_call_info *call_info, const struct pl *pl)
 
 	call_info->answer_after = -1;
 
-	if (!sip_param_decode(pl, "answer-after", &pval)) {
+	if (!msg_param_decode(pl, "answer-after", &pval)) {
 		// "Snom and others": <uri>;answer-after=X
 		call_info->answer_after = pl_u32(&pval);
 		if (call_info->answer_after < 0)

@@ -4,6 +4,7 @@
 #include <re_uri.h>
 #include <re_list.h>
 #include <re_sa.h>
+#include <re_msg.h>
 #include <re_sip.h>
 
 static const char* HEADER_NAME = "Access-URL";
@@ -58,7 +59,7 @@ int sip_access_url_decode(const struct pl *name, struct sip_access_url *access_u
 	access_url->expires = -1;
 	access_url->mode = SIP_ACCESS_URL_MODE_UNKNOWN;
 
-	if (!sip_param_decode(pl, "mode", &pval)) {
+	if (!msg_param_decode(pl, "mode", &pval)) {
 		if (pl_strcasecmp(&pval, "active") == 0) {
 			access_url->mode = SIP_ACCESS_URL_MODE_ACTIVE;
 		} else if (pl_strcasecmp(&pval, "passive") == 0) {

@@ -20,8 +20,6 @@
 /** Platform independent buffer type cast */
 #if defined(WIN32) || defined(__WIN32__)
 #define BUF_CAST (char *)
-#elif defined (__SYMBIAN32__)
-#define BUF_CAST (void *)
 #else
 #define BUF_CAST
 #endif

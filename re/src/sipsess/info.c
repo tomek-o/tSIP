@@ -12,6 +12,7 @@
 #include <re_fmt.h>
 #include <re_uri.h>
 #include <re_tmr.h>
+#include <re_msg.h>
 #include <re_sip.h>
 #include <re_sipsess.h>
 #include "sipsess.h"
@@ -106,6 +107,9 @@ int sipsess_info(struct sipsess *sess, const char *ctype, struct mbuf *body,
 
 	if (!sess || sess->terminated || !ctype || !body)
 		return EINVAL;
+
+	if (!sip_dialog_established(sess->dlg))
+		return ENOTCONN;
 
 	err = sipsess_request_alloc(&req, sess, ctype, body, resph, arg);
 	if (err)

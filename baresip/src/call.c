@@ -1,5 +1,5 @@
 /**
- * @file call.c  Call Control
+ * @file src/call.c  Call Control
  *
  * Copyright (C) 2010 Creytiv.com
  */
@@ -866,16 +866,33 @@ int call_hold(struct call *call, bool hold)
 
 int call_sdp_get(const struct call *call, struct mbuf **descp, bool offer)
 {
+	if (!call)
+		return EINVAL;
+
 	return sdp_encode(descp, call->sdp, offer);
 }
 
 
+/**
+ * Get the URI of the peer
+ *
+ * @param call  Call object
+ *
+ * @return Peer URI
+ */
 const char *call_peeruri(const struct call *call)
 {
 	return call ? call->peer_uri : NULL;
 }
 
 
+/**
+ * Get the local URI of the call
+ *
+ * @param call  Call object
+ *
+ * @return Local URI
+ */
 const char *call_localuri(const struct call *call)
 {
 	return call ? call->local_uri : NULL;
@@ -961,6 +978,14 @@ static int print_duration(struct re_printf *pf, const struct call *call)
 }
 
 
+/**
+ * Print the call status
+ *
+ * @param pf   Print function
+ * @param call Call object
+ *
+ * @return 0 if success, otherwise errorcode
+ */
 int call_status(struct re_printf *pf, const struct call *call)
 {
 	struct le *le;
@@ -1123,7 +1148,8 @@ static int sipsess_answer_handler(const struct sip_msg *msg, void *arg)
 
 	MAGIC_CHECK(call);
 
-	(void)sdp_decode_multipart(&msg->ctype, msg->mb);
+	if (msg_ctype_cmp(&msg->ctyp, "multipart", "mixed"))
+		(void)sdp_decode_multipart(&msg->ctyp.params, msg->mb);
 
 	err = sdp_decode(call->sdp, msg->mb, false);
 	if (err) {
@@ -1212,7 +1238,7 @@ static void sipsess_info_handler(struct sip *sip, const struct sip_msg *msg,
 {
 	struct call *call = arg;
 
-	if (!pl_strcasecmp(&msg->ctype, "application/dtmf-relay")) {
+	if (msg_ctype_cmp(&msg->ctyp, "application", "dtmf-relay")) {
 
 		struct pl body, sig, dur;
 		int err;
@@ -1443,8 +1469,8 @@ static void sipsess_progr_handler(const struct sip_msg *msg, void *arg)
 
 	MAGIC_CHECK(call);
 
-	(void)re_printf("SIP Progress: %u %r (%r)\n",
-			msg->scode, &msg->reason, &msg->ctype);
+	(void)re_printf("call: SIP Progress: %u %r (%r/%r)\n",
+	     msg->scode, &msg->reason, &msg->ctyp.type, &msg->ctyp.subtype);
 
 	if (msg->scode == 100) {
 		call_event_handler(call, CALL_EVENT_TRYING, call->peer_uri);
@@ -1461,12 +1487,13 @@ static void sipsess_progr_handler(const struct sip_msg *msg, void *arg)
 	 * we must also handle changes to/from 180 and 183,
 	 * so we reset the media-stream/ringback each time.
 	 */
-	if (!pl_strcasecmp(&msg->ctype, "application/sdp")
+	if (msg_ctype_cmp(&msg->ctyp, "application", "sdp")
 	    && mbuf_get_left(msg->mb)
 	    && !sdp_decode(call->sdp, msg->mb, false)) {
 		media = true;
 	}
-	else if (!sdp_decode_multipart(&msg->ctype, msg->mb) &&
+	else if (msg_ctype_cmp(&msg->ctyp, "multipart", "mixed") &&
+		 !sdp_decode_multipart(&msg->ctyp.params, msg->mb) &&
 		 !sdp_decode(call->sdp, msg->mb, false)) {
 		media = true;
 	}
@@ -1762,6 +1789,13 @@ int call_af(const struct call *call)
 }
 
 
+/**
+ * Get the SIP status code for the outgoing call
+ *
+ * @param call Call object
+ *
+ * @return SIP Status code
+ */
 uint16_t call_scode(const struct call *call)
 {
 	return call ? call->scode : 0;
@@ -1772,6 +1806,14 @@ int call_answer_after(const struct call *call)
 	return call ? call->answer_after : -1;
 }
 
+/**
+ * Set the callback handlers for a call object
+ *
+ * @param call  Call object
+ * @param eh    Event handler
+ * @param dtmfh DTMF handler
+ * @param arg   Handler argument
+ */
 void call_set_handlers(struct call *call, call_event_h *eh,
 		       call_dtmf_h *dtmfh, void *arg)
 {
@@ -1788,6 +1830,12 @@ void call_set_handlers(struct call *call, call_event_h *eh,
 		call->arg   = arg;
 }
 
+/**
+ * Enable RTP timeout for a call
+ *
+ * @param call       Call object
+ * @param timeout_ms RTP Timeout in [milliseconds]
+ */
 void call_enable_rtp_timeout(struct call *call, uint32_t timeout_ms)
 {
 	if (!call)

@@ -5,23 +5,19 @@
  */
 #include <re_types.h>
 #include <re_fmt.h>
-#include <re_mbuf.h>
-#include <re_list.h>
-#include <re_uri.h>
-#include <re_sa.h>
-#include <re_sip.h>
+#include <re_msg.h>
 
 
 /**
- * Check if a SIP parameter exists
+ * Check if a parameter exists
  *
  * @param pl   Pointer-length string
- * @param name SIP Parameter name
+ * @param name Parameter name
  * @param val  Returned parameter value
  *
  * @return 0 for success, otherwise errorcode
  */
-int sip_param_exists(const struct pl *pl, const char *name, struct pl *val)
+int msg_param_exists(const struct pl *pl, const char *name, struct pl *val)
 {
 	struct pl v1, v2;
 	char xpr[128];
@@ -45,15 +41,15 @@ int sip_param_exists(const struct pl *pl, const char *name, struct pl *val)
 
 
 /**
- * Decode a SIP Parameter
+ * Decode a Parameter
  *
  * @param pl   Pointer-length string
- * @param name SIP Parameter name
+ * @param name Parameter name
  * @param val  Returned parameter value
  *
  * @return 0 for success, otherwise errorcode
  */
-int sip_param_decode(const struct pl *pl, const char *name, struct pl *val)
+int msg_param_decode(const struct pl *pl, const char *name, struct pl *val)
 {
 	char expr[128];
 	struct pl v;

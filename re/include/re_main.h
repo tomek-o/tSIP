@@ -63,7 +63,6 @@ enum poll_method {
 	METHOD_POLL,
 	METHOD_SELECT,
 	METHOD_EPOLL,
-	METHOD_ACTSCHED,
 	/* sep */
 	METHOD_MAX
 };

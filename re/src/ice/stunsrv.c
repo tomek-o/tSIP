@@ -22,7 +22,7 @@
 #include <re_dbg.h>
 
 
-static const char *sw = "ice stunsrv v" VERSION " (" ARCH "/" OS ")";
+static const char *sw = "ice stunsrv v" VERSION;// (" ARCH "/" OS ")";
 
 
 static void triggered_check(struct icem *icem, struct cand *lcand,

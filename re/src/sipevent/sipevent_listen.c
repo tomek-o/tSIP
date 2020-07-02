@@ -12,6 +12,7 @@
 #include <re_fmt.h>
 #include <re_uri.h>
 #include <re_tmr.h>
+#include <re_msg.h>
 #include <re_sip.h>
 #include <re_sipevent.h>
 #include "sipevent.h"
@@ -80,7 +81,6 @@ static bool sub_cmp_handler(struct le *le, void *arg)
 	return sip_dialog_cmp(sub->dlg, cmp->msg) &&
 		(!cmp->evt || event_cmp(cmp->evt, sub->event, sub->id,
 					sub->refer_cseq));
-//	return true;
 }
 
 

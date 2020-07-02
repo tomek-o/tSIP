@@ -25,13 +25,6 @@ extern "C" {
 #endif
 
 
-#ifndef HAVE_GAI_STRERROR
-/** stub */
-#ifndef gai_strerror
-#define gai_strerror(err) "?"
-#endif
-#endif
-
 /** Length of IPv4 address string */
 #ifndef INET_ADDRSTRLEN
 #define INET_ADDRSTRLEN 16
@@ -116,29 +109,9 @@ int net_rt_default_get(int af, char *ifname, size_t size);
 int net_rt_debug(struct re_printf *pf, void *unused);
 
 
-/* Network connection */
-
-/**
- * Defines the network connection handler
- *
- * @param err  Error code
- * @param id   Associated ID
- */
-typedef void (net_conn_h)(int err, uint32_t id);
-
-int  net_conn_start(net_conn_h *ch, uint32_t id, bool prompt);
-void net_conn_stop(void);
-
-
 /* Net strings */
 const char *net_proto2name(int proto);
 const char *net_af2name(int af);
-
-
-/* todo: this does not really belong here.. */
-#ifdef __SYMBIAN32__
-int kerr2errno(int kerr);
-#endif
 
 
 #ifdef __cplusplus

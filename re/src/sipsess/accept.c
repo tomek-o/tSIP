@@ -12,6 +12,7 @@
 #include <re_fmt.h>
 #include <re_uri.h>
 #include <re_tmr.h>
+#include <re_msg.h>
 #include <re_sip.h>
 #include <re_sipsess.h>
 #include "sipsess.h"
@@ -41,7 +42,7 @@ static void cancel_handler(void *arg)
  * @param msg       Incoming SIP message
  * @param scode     Response status code
  * @param reason    Response reason phrase
- * @param cuser     Contact username
+ * @param cuser     Contact username or URI
  * @param ctype     Session content-type
  * @param desc      Content description (e.g. SDP)
  * @param authh     SIP Authentication handler

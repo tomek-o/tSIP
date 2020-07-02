@@ -205,28 +205,29 @@ struct sip_access_url {
 
 /** SIP Header */
 struct sip_hdr {
-	struct le le;
-	struct le he;
-	struct pl name;
-	struct pl val;
-	enum sip_hdrid id;
+	struct le le;          /**< Linked-list element    */
+	struct le he;          /**< Hash-table element     */
+	struct pl name;        /**< SIP Header name        */
+	struct pl val;         /**< SIP Header value       */
+	enum sip_hdrid id;     /**< SIP Header id (unique) */
 };
 
 /** SIP Message */
 struct sip_msg {
-	struct sa src;
-	struct sa dst;
-	struct pl ver;
-	struct pl met;
-	struct pl ruri;
-	struct uri uri;
-	uint16_t scode;
-	struct pl reason;
-	struct list hdrl;
-	struct sip_via via;
-	struct sip_taddr to;
-	struct sip_taddr from;
-	struct sip_cseq cseq;
+	struct sa src;         /**< Source network address               */
+	struct sa dst;         /**< Destination network address          */
+	struct pl ver;         /**< SIP Version number                   */
+	struct pl met;         /**< Request method                       */
+	struct pl ruri;        /**< Raw request URI                      */
+	struct uri uri;        /**< Parsed request URI                   */
+	uint16_t scode;        /**< Response status code                 */
+	struct pl reason;      /**< Response reason phrase               */
+	struct list hdrl;      /**< List of SIP Headers (struct sip_hdr) */
+	struct sip_via via;    /**< Parsed first Via header              */
+	struct sip_taddr to;   /**< Parsed To header                     */
+	struct sip_taddr from; /**< Parsed From header                   */
+	struct sip_cseq cseq;  /**< Parsed CSeq header                   */
+	struct msg_ctype ctyp; /**< Content Type                         */
 	struct sip_call_info call_info;
 	struct sip_alert_info alert_info;
 	struct sip_access_url access_url;
@@ -235,7 +236,6 @@ struct sip_msg {
 	struct pl callid;
 	struct pl maxfwd;
 	struct pl expires;
-	struct pl ctype;
 	struct pl clen;
 	struct hash *hdrht;
 	struct mbuf mb_msg;
@@ -297,12 +297,14 @@ bool sip_transp_isladdr(const struct sip *sip, enum sip_transp tp,
 const char *sip_transp_name(enum sip_transp tp);
 const char *sip_transp_param(enum sip_transp tp);
 uint16_t sip_transp_port(enum sip_transp tp, uint16_t port);
+int  sip_transp_laddr(struct sip *sip, struct sa *laddr, enum sip_transp tp,
+		      const struct sa *dst);
 
 
 /* request */
 int sip_request(struct sip_request **reqp, struct sip *sip, bool stateful,
 		const char *met, int metl, const char *uri, int uril,
-		const struct uri *route, struct mbuf *mb,
+		const struct uri *route, struct mbuf *mb, size_t sortkey,
 		sip_send_h *sendh, sip_resp_h *resph, void *arg);
 int sip_requestf(struct sip_request **reqp, struct sip *sip, bool stateful,
 		 const char *met, const char *uri, const struct uri *route,
@@ -386,8 +388,6 @@ void sip_msg_dump(const struct sip_msg *msg);
 int sip_addr_decode(struct sip_addr *addr, const struct pl *pl);
 int sip_via_decode(struct sip_via *via, const struct pl *pl);
 int sip_cseq_decode(struct sip_cseq *cseq, const struct pl *pl);
-int sip_param_decode(const struct pl *pl, const char *name, struct pl *val);
-int sip_param_exists(const struct pl *pl, const char *name, struct pl *end);
 int sip_call_info_decode(struct sip_call_info *call_info, const struct pl *pl);
 int sip_alert_info_decode(struct sip_alert_info *alert_info, const struct pl *pl);
 int sip_access_url_decode(const struct pl *name, struct sip_access_url *access_url, const struct pl *pl);

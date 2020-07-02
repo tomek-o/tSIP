@@ -19,9 +19,6 @@
  */
 int libre_init(void)
 {
-#ifdef HAVE_ACTSCHED
-	actsched_init();
-#endif
 	rand_init();
 
 	return net_sock_init();

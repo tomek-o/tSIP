@@ -8,6 +8,7 @@
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #define __USE_POSIX 1  /**< Use POSIX code */
+#define __USE_XOPEN2K 1/**< Use POSIX.1:2001 code */
 #include <netdb.h>
 #define __USE_MISC 1   /**< Use MISC code */
 #include <net/if.h>
@@ -107,8 +108,7 @@ int net_if_list(net_ifaddr_h *ifh, void *arg)
 
 	if (0 > (sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP))) {
 		err = errno;
-		DEBUG_WARNING("interface list: socket(): (%s)\n",
-			      strerror(err));
+		DEBUG_WARNING("interface list: socket(): (%m)\n", err);
 		goto out;
 	}
 
@@ -117,13 +117,12 @@ int net_if_list(net_ifaddr_h *ifh, void *arg)
 
 	if (0 != ioctl(sockfd, SIOCGIFCONF, &ifc)) {
 		err = errno;
-		DEBUG_WARNING("interface list: ioctl SIOCFIFCONF: %s\n",
-			      strerror(err));
+		DEBUG_WARNING("interface list: ioctl SIOCFIFCONF: %m\n", err);
 		goto out;
 	}
 
 	for (ifr = ifc.ifc_req;
-	     (char *)ifr < (ifc.ifc_buf + ifc.ifc_len);
+	     (char *)ifr < ((char *)ifc.ifc_buf + ifc.ifc_len);
 	     ++ifr) {
 		struct ifreq ifrr;
 		struct sa sa;
@@ -152,8 +151,7 @@ int net_if_list(net_ifaddr_h *ifh, void *arg)
 
 		err = sa_set_sa(&sa, &ifrr.ifr_ifru.ifru_addr);
 		if (err) {
-			DEBUG_WARNING("if_list: sa_set_sa %s\n",
-				      strerror(err));
+			DEBUG_WARNING("if_list: sa_set_sa %m\n", err);
 			break;
 		}
 

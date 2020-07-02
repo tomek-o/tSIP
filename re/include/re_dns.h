@@ -43,6 +43,7 @@ enum {
 	DNS_TYPE_SOA   = 0x0006,
 	DNS_TYPE_PTR   = 0x000c,
 	DNS_TYPE_MX    = 0x000f,
+	DNS_TYPE_TXT   = 0x0010,
 	DNS_TYPE_AAAA  = 0x001c,
 	DNS_TYPE_SRV   = 0x0021,
 	DNS_TYPE_NAPTR = 0x0023,
@@ -113,6 +114,9 @@ struct dnsrr {
 			char *exchange;
 		} mx;
 		struct {
+			char *data;
+		} txt;
+		struct {
 			uint8_t addr[16];
 		} aaaa;
 		struct {
@@ -175,7 +179,8 @@ int  dns_dname_encode(struct mbuf *mb, const char *name,
 int  dns_dname_decode(struct mbuf *mb, char **name, size_t start);
 int  dns_cstr_encode(struct mbuf *mb, const char *str);
 int  dns_cstr_decode(struct mbuf *mb, char **str);
-void dns_rrlist_sort(struct list *rrl, uint16_t type);
+void dns_rrlist_sort(struct list *rrl, uint16_t type, size_t key);
+void dns_rrlist_sort_addr(struct list *rrl, size_t key);
 struct dnsrr *dns_rrlist_apply(struct list *rrl, const char *name,
 			       uint16_t type, uint16_t dnsclass,
 			       bool recurse, dns_rrlist_h *rrlh, void *arg);
@@ -198,7 +203,6 @@ struct dnsc_conf {
 	uint32_t tcp_hash_size;
 	uint32_t conn_timeout;  /* in [ms] */
 	uint32_t idle_timeout;  /* in [ms] */
-	bool udp_conn;
 };
 
 int  dnsc_alloc(struct dnsc **dcpp, const struct dnsc_conf *conf,

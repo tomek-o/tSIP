@@ -110,6 +110,15 @@ void ua_printf(const struct ua *ua, const char *fmt, ...)
 }
 
 
+/**
+ * Send a User-Agent event to all UA event handlers
+ *
+ * @param ua   User-Agent object (optional)
+ * @param ev   User-agent event
+ * @param call Call object (optional)
+ * @param fmt  Formatted arguments
+ * @param ...  Variable arguments
+ */
 void ua_event(struct ua *ua, enum ua_event ev, struct call *call,
 	      const char *fmt, ...)
 {
@@ -882,6 +891,14 @@ int ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const cha
 }
 
 
+/**
+ * Print the user-agent registration status
+ *
+ * @param pf  Print function
+ * @param ua  User-Agent object
+ *
+ * @return 0 if success, otherwise errorcode
+ */
 int ua_print_status(struct re_printf *pf, const struct ua *ua)
 {
 	struct le *le;
@@ -991,6 +1008,14 @@ struct call *ua_call(const struct ua *ua)
 }
 
 
+/**
+ * Print the user-agent debug information
+ *
+ * @param pf  Print function
+ * @param ua  User-Agent object
+ *
+ * @return 0 if success, otherwise errorcode
+ */
 int ua_debug(struct re_printf *pf, const struct ua *ua)
 {
 	struct le *le;
@@ -1657,12 +1682,22 @@ static void eh_destructor(void *arg)
 }
 
 
+/**
+ * Register a User-Agent event handler
+ *
+ * @param h   Event handler
+ * @param arg Handler argument
+ *
+ * @return 0 if success, otherwise errorcode
+ */
 int uag_event_register(ua_event_h *h, void *arg)
 {
 	struct ua_eh *eh;
 
 	if (!h)
 		return EINVAL;
+
+	uag_event_unregister(h);
 
 	eh = mem_zalloc(sizeof(*eh), eh_destructor);
 	if (!eh)
@@ -1677,6 +1712,11 @@ int uag_event_register(ua_event_h *h, void *arg)
 }
 
 
+/**
+ * Unregister a User-Agent event handler
+ *
+ * @param h   Event handler
+ */
 void uag_event_unregister(ua_event_h *h)
 {
 	struct le *le;

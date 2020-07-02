@@ -24,7 +24,7 @@ struct ausrc_st {
 	PaStream *stream_rd;
 	ausrc_read_h *rh;
 	void *arg;
-	bool ready;
+	volatile bool ready;
 };
 
 struct auplay_st {
@@ -32,7 +32,7 @@ struct auplay_st {
 	PaStream *stream_wr;
 	auplay_write_h *wh;
 	void *arg;
-	bool ready;
+	volatile bool ready;
 };
 
 

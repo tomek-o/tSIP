@@ -49,7 +49,7 @@ static int param_dstr(char **dstr, const struct pl *params, const char *name)
 {
 	struct pl pl;
 
-	if (sip_param_decode(params, name, &pl))
+	if (msg_param_decode(params, name, &pl))
 		return 0;
 
 	return pl_strdup(dstr, &pl);
@@ -60,7 +60,7 @@ static int param_u32(uint32_t *v, const struct pl *params, const char *name)
 {
 	struct pl pl;
 
-	if (sip_param_decode(params, name, &pl))
+	if (msg_param_decode(params, name, &pl))
 		return 0;
 
 	*v = pl_u32(&pl);
@@ -88,7 +88,7 @@ static int stunsrv_decode(struct account *acc, const struct sip_addr *aor)
 
 	memset(&uri, 0, sizeof(uri));
 
-	if (0 == sip_param_decode(&aor->params, "stunserver", &srv)) {
+	if (0 == msg_param_decode(&aor->params, "stunserver", &srv)) {
 
 		DEBUG_NOTICE("got stunserver: '%r'\n", &srv);
 
@@ -148,7 +148,7 @@ static void answermode_decode(struct account *prm, const struct pl *pl)
 {
 	struct pl amode;
 
-	if (0 == sip_param_decode(pl, "answermode", &amode)) {
+	if (0 == msg_param_decode(pl, "answermode", &amode)) {
 
 		if (0 == pl_strcasecmp(&amode, "manual")) {
 			prm->answermode = ANSWERMODE_MANUAL;
@@ -194,12 +194,12 @@ static int audio_codecs_decode(struct account *acc, const struct pl *prm)
 
 	list_init(&acc->aucodecl);
 
-	if (0 == sip_param_exists(prm, "audio_codecs", &tmp)) {
+	if (0 == msg_param_exists(prm, "audio_codecs", &tmp)) {
 		struct pl acs;
 		char cname[64];
 		unsigned i = 0;
 
-		if (sip_param_decode(prm, "audio_codecs", &acs))
+		if (msg_param_decode(prm, "audio_codecs", &acs))
 			return 0;
 
 		while (0 == csl_parse(&acs, cname, sizeof(cname))) {
@@ -250,12 +250,12 @@ static int video_codecs_decode(struct account *acc, const struct pl *prm)
 
 	list_init(&acc->vidcodecl);
 
-	if (0 == sip_param_exists(prm, "video_codecs", &tmp)) {
+	if (0 == msg_param_exists(prm, "video_codecs", &tmp)) {
 		struct pl vcs;
 		char cname[64];
 		unsigned i = 0;
 
-		if (sip_param_decode(prm, "video_codecs", &vcs))
+		if (msg_param_decode(prm, "video_codecs", &vcs))
 			return 0;
 
 		while (0 == csl_parse(&vcs, cname, sizeof(cname))) {
@@ -318,7 +318,7 @@ static int sip_params_decode(struct account *acc, const struct sip_addr *aor)
 
 	err |= param_dstr(&acc->sipnat, &aor->params, "sipnat");
 
-	if (0 == sip_param_decode(&aor->params, "auth_user", &auth_user))
+	if (0 == msg_param_decode(&aor->params, "auth_user", &auth_user))
 		err |= pl_strdup(&acc->auth_user, &auth_user);
 	else
 		err |= pl_strdup(&acc->auth_user, &aor->uri.user);
@@ -371,6 +371,14 @@ static int password_prompt(struct account *acc)
 #endif
 
 
+/**
+ * Create a SIP account from a sip address string
+ *
+ * @param accp     Pointer to allocated SIP account object
+ * @param sipaddr  SIP address with parameters
+ *
+ * @return 0 if success, otherwise errorcode
+ */
 int account_alloc(struct account **accp, const char *sipaddr, const char *pwd)
 {
 	struct account *acc;
@@ -486,6 +494,13 @@ int account_auth(const struct account *acc, char **username, char **password,
 }
 
 
+/**
+ * Get the audio codecs of an account
+ *
+ * @param acc User-Agent account
+ *
+ * @return List of audio codecs (struct aucodec)
+ */
 struct list *account_aucodecl(const struct account *acc)
 {
 	return (acc && !list_isempty(&acc->aucodecl))
@@ -494,6 +509,13 @@ struct list *account_aucodecl(const struct account *acc)
 
 
 #ifdef USE_VIDEO
+/**
+ * Get the video codecs of an account
+ *
+ * @param acc User-Agent account
+ *
+ * @return List of video codecs (struct vidcodec)
+ */
 struct list *account_vidcodecl(const struct account *acc)
 {
 	return (acc && !list_isempty(&acc->vidcodecl))
@@ -514,6 +536,14 @@ static const char *answermode_str(enum answermode mode)
 }
 
 
+/**
+ * Print the account debug information
+ *
+ * @param pf  Print function
+ * @param acc User-Agent account
+ *
+ * @return 0 if success, otherwise errorcode
+ */
 int account_debug(struct re_printf *pf, const struct account *acc)
 {
 	struct le *le;

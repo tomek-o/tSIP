@@ -13,6 +13,7 @@
 #include <re_fmt.h>
 #include <re_uri.h>
 #include <re_tmr.h>
+#include <re_msg.h>
 #include <re_sip.h>
 #include <re_sipsess.h>
 #include "sipsess.h"
@@ -155,7 +156,7 @@ static int invite(struct sipsess *sess)
  * @param to_uri    To SIP uri
  * @param from_name From display name
  * @param from_uri  From SIP uri
- * @param cuser     Contact username
+ * @param cuser     Contact username or URI
  * @param routev    Outbound route vector
  * @param routec    Outbound route vector count
  * @param ctype     Session content-type

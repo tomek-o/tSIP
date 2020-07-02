@@ -78,15 +78,13 @@ int re_regex(const char *ptr, size_t len, const char *expr, ...)
 	eesc = false;
 	fm = false;
 	l  = len--;
-	ep = expr;
-	
-	if (!l)
-		goto out;
-
 	p  = ptr++;
-
+	ep = expr;
 
 	va_start(ap, expr);
+
+	if (!l)
+		goto out;
 
 	for (; *ep; ep++) {
 
@@ -240,6 +238,9 @@ int re_regex(const char *ptr, size_t len, const char *expr, ...)
 		}
 
 	chr:
+		if (n >= ARRAY_SIZE(chrv))
+			break;
+
 		chrv[n].max = tolower(*ep);
 
 		if (range)
@@ -247,8 +248,7 @@ int re_regex(const char *ptr, size_t len, const char *expr, ...)
 		else
 			chrv[n].min = tolower(*ep);
 
-		if (++n > ARRAY_SIZE(chrv))
-			break;
+		++n;
 	}
  out:
 	va_end(ap);

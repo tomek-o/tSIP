@@ -1,13 +1,15 @@
 /**
- * @file res.c  Get DNS Server IP using libresolv
+ * @file res.c  Get DNS Server IP using resolv
  *
  * Copyright (C) 2010 Creytiv.com
  */
 #define _BSD_SOURCE 1
+#define _DEFAULT_SOURCE 1
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/nameser.h>
 #include <resolv.h>
+#include <string.h>
 #include <re_types.h>
 #include <re_fmt.h>
 #include <re_mbuf.h>
@@ -17,41 +19,35 @@
 #include "dns.h"
 
 
-/**
- * Generic way of fetching Nameserver IP-addresses, using libresolv
- *
- * @param domain Returned domain name
- * @param dsize  Size of domain name buffer
- * @param nsv    Returned nameservers
- * @param n      Nameservers capacity, actual on return
- *
- * @note we could use res_getservers() but it is not available on Linux
- * @note only IPv4 is supported
- *
- * @return 0 if success, otherwise errorcode
- */
 int get_resolv_dns(char *domain, size_t dsize, struct sa *nsv, uint32_t *n)
 {
+	struct __res_state state;
 	uint32_t i;
 	int ret, err;
 
+#ifdef OPENBSD
 	ret = res_init();
+	state = _res;
+#else
+	memset(&state, 0, sizeof(state));
+	ret = res_ninit(&state);
+#endif
 	if (0 != ret)
 		return ENOENT;
 
-	if (_res.dnsrch[0])
-		str_ncpy(domain, _res.dnsrch[0], dsize);
-	else if (_res.defdname)
-		str_ncpy(domain, _res.defdname, dsize);
+	if (state.dnsrch[0])
+		str_ncpy(domain, state.dnsrch[0], dsize);
+	else if ((char *)state.defdname)
+		str_ncpy(domain, state.defdname, dsize);
 
-	if (!_res.nscount) {
+	if (!state.nscount) {
 		err = ENOENT;
 		goto out;
 	}
 
 	err = 0;
-	for (i=0; i<min(*n, (uint32_t)_res.nscount) && !err; i++) {
-		struct sockaddr_in *addr = &_res.nsaddr_list[i];
+	for (i=0; i<min(*n, (uint32_t)state.nscount) && !err; i++) {
+		struct sockaddr_in *addr = &state.nsaddr_list[i];
 		err |= sa_set_sa(&nsv[i], (struct sockaddr *)addr);
 	}
 	if (err)
@@ -60,7 +56,10 @@ int get_resolv_dns(char *domain, size_t dsize, struct sa *nsv, uint32_t *n)
 	*n = i;
 
  out:
-	res_close();
+#ifdef OPENBSD
+#else
+	res_nclose(&state);
+#endif
 
 	return err;
 }

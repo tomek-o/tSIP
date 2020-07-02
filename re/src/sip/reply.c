@@ -11,6 +11,7 @@
 #include <re_fmt.h>
 #include <re_uri.h>
 #include <re_udp.h>
+#include <re_msg.h>
 #include <re_sip.h>
 #include "sip.h"
 
@@ -55,7 +56,7 @@ static int vreplyf(struct sip_strans **stp, struct mbuf **mbp, bool trans,
 				break;
 			}
 
-			if (!sip_param_exists(&msg->via.params, "rport", &rp)){
+			if (!msg_param_exists(&msg->via.params, "rport", &rp)){
 				err |= mbuf_write_pl_skip(mb, &hdr->val, &rp);
 				err |= mbuf_printf(mb, ";rport=%u",
 						   sa_port(&msg->src));
@@ -144,7 +145,7 @@ static int vreplyf(struct sip_strans **stp, struct mbuf **mbp, bool trans,
  * @param rec_route True to copy Record-Route headers
  * @param scode     Response status code
  * @param reason    Response reason phrase
- * @param fmt       Formatted SIP message
+ * @param fmt       Additional formatted SIP headers and body, otherwise NULL
  *
  * @return 0 if success, otherwise errorcode
  */
@@ -189,7 +190,7 @@ int sip_treply(struct sip_strans **stp, struct sip *sip,
  * @param msg    Incoming SIP message
  * @param scode  Response status code
  * @param reason Response reason phrase
- * @param fmt    Formatted SIP message
+ * @param fmt    Additional formatted SIP headers and body, otherwise NULL
  *
  * @return 0 if success, otherwise errorcode
  */
@@ -246,7 +247,7 @@ void sip_reply_addr(struct sa *addr, const struct sip_msg *msg, bool rport)
 	switch (msg->tp) {
 
 	case SIP_TRANSP_UDP:
-		if (!sip_param_decode(&msg->via.params, "maddr", &pl)) {
+		if (!msg_param_decode(&msg->via.params, "maddr", &pl)) {
 			(void)sa_set(addr, &pl,sip_transp_port(msg->tp, port));
 			break;
 		}

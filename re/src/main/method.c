@@ -13,7 +13,6 @@
 static const char str_poll[]   = "poll";     /**< POSIX.1-2001 poll       */
 static const char str_select[] = "select";   /**< POSIX.1-2001 select     */
 static const char str_epoll[]  = "epoll";    /**< Linux epoll             */
-static const char str_as[]     = "actsched"; /**< Symbian ActiveScheduler */
 
 
 /**
@@ -42,11 +41,6 @@ enum poll_method poll_method_best(void)
 		m = METHOD_SELECT;
 	}
 #endif
-#ifdef HAVE_ACTSCHED
-	if (METHOD_NULL == m) {
-		m = METHOD_ACTSCHED;
-	}
-#endif
 
 	return m;
 }
@@ -66,7 +60,6 @@ const char *poll_method_name(enum poll_method method)
 	case METHOD_POLL:      return str_poll;
 	case METHOD_SELECT:    return str_select;
 	case METHOD_EPOLL:     return str_epoll;
-	case METHOD_ACTSCHED:  return str_as;
 	default:               return "???";
 	}
 }
@@ -91,8 +84,6 @@ int poll_method_type(enum poll_method *method, const struct pl *name)
 		*method = METHOD_SELECT;
 	else if (0 == pl_strcasecmp(name, str_epoll))
 		*method = METHOD_EPOLL;
-	else if (0 == pl_strcasecmp(name, str_as))
-		*method = METHOD_ACTSCHED;
 	else
 		return ENOENT;
 

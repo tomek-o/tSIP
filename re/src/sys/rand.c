@@ -61,8 +61,13 @@ uint16_t rand_u16(void)
 #pragma warn -8008	// disable "Condition is always false" warning
 	RAND_CHECK;
 #pragma warn .8008	// restore default warning setting
+
+#if defined(WIN32) || defined(__WIN32__)
+	return rand();
+#else
 	/* Use higher-order bits (see man 3 rand) */
 	return rand_u32() >> 16;
+#endif
 }
 
 

@@ -14,6 +14,8 @@
 #include <re_sa.h>
 #include <re_udp.h>
 #include <re_tcp.h>
+#include <re_srtp.h>
+#include <re_tls.h>
 #include <re_stun.h>
 #include <re_turn.h>
 #include "turnc.h"
@@ -24,6 +26,7 @@
 #include <re_dbg.h>
 
 
+/** TURN Client protocol values */
 enum {
 	PERM_HASH_SIZE = 16,
 	CHAN_HASH_SIZE = 16,
@@ -116,7 +119,8 @@ static void allocate_resp_handler(int err, uint16_t scode, const char *reason,
 		break;
 
 	case 300:
-		if (turnc->proto == IPPROTO_TCP)
+		if (turnc->proto == IPPROTO_TCP ||
+		    turnc->proto == STUN_TRANSP_DTLS)
 			break;
 
 		alt = stun_msg_attr(msg, STUN_ATTR_ALT_SERVER);
@@ -159,7 +163,7 @@ static void allocate_resp_handler(int err, uint16_t scode, const char *reason,
 
 static int allocate_request(struct turnc *t)
 {
-	const int proto = IPPROTO_UDP;
+	const uint8_t proto = IPPROTO_UDP;
 
 	return stun_request(&t->ct, t->stun, t->proto, t->sock, &t->srv, 0,
 			    STUN_METHOD_ALLOCATE,
@@ -533,6 +537,12 @@ int turnc_send(struct turnc *turnc, const struct sa *dst, struct mbuf *mb)
 	case IPPROTO_TCP:
 		err = tcp_send(turnc->sock, mb);
 		break;
+
+#ifdef USE_DTLS
+	case STUN_TRANSP_DTLS:
+		err = dtls_send(turnc->sock, mb);
+		break;
+#endif
 
 	default:
 		err = EPROTONOSUPPORT;
