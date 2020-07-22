@@ -1519,12 +1519,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			}
 
 			if (cb.reg_state == Callback::REG_STATE_REGISTER_OK) {
-				static bool once = false;
-				if (!once)
-				{
-					once = true;
-					HandleCommandLine();
-				}
+				HandleCommandLine();
 				PhoneInterface::UpdateRegistrationState(1);
 			}
 			else
@@ -1592,12 +1587,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				}
 				if (appSettings.uaConf.accounts[0].reg_expires == 0)
 				{
-					static bool once = false;
-					if (!once)
-					{
-						once = true;
-						HandleCommandLine();
-					}
+					HandleCommandLine();
 				}
 				SetStatus(text);
 				// update software volume
