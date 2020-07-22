@@ -239,6 +239,8 @@ private:	// User declarations
 
 	bool notificationIconState;
 	void SetNotificationIcon(bool state);
+	bool errorIconState;
+	void SetErrorIcon(bool state);
 	void SetKioskMode(bool state);
 	int UpdateSettingsFromJson(AnsiString json);
 	void UpdateSettings(const Settings &prev);

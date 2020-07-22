@@ -186,7 +186,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	: TForm(Owner),
 	initialScaling(1.0),
 	muteRing(false),
-	notificationIconState(false)
+	notificationIconState(false),
+	errorIconState(false)
 {
 	srand(time(0));
 	lbl2ndParty->Caption = "";
@@ -1566,11 +1567,13 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			case Callback::APP_INIT_FAILED:
 				miSettings->Enabled = true;
 				SetStatus("Failed to init application");
+				SetErrorIcon(true);
 				HandleCommandLine();				
 				break;
 			case Callback::APP_INITIALIZED:
 				miSettings->Enabled = true;
 				UaCustomRequests::Clear();
+				SetErrorIcon(false);				
 				text = "Initialized";
 				if (appSettings.uaConf.accounts.size())
 				{
@@ -1609,6 +1612,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				break;
 			case Callback::APP_START_FAILED:
 				SetStatus("Failed to start application");
+				SetErrorIcon(true);				
 				break;
 			default:
 				assert(!"Unhandled app state");
@@ -3091,7 +3095,7 @@ void __fastcall TfrmMain::pcMainChange(TObject *Sender)
 
 void TfrmMain::SetNotificationIcon(bool state)
 {
-	if (state == notificationIconState || useOwnTrayIcon)
+	if (state == notificationIconState || useOwnTrayIcon || errorIconState /* higher priority */)
 		return;
 	if (state)
 	{
@@ -3102,6 +3106,21 @@ void TfrmMain::SetNotificationIcon(bool state)
 		trIcon->SetIcon(Application->Icon);
 	}
 	notificationIconState = state;	
+}
+
+void TfrmMain::SetErrorIcon(bool state)
+{
+	if (state == errorIconState || useOwnTrayIcon)
+		return;
+	if (state)
+	{
+		trIcon->SetIcon(imgListIcons, 1);
+	}
+	else
+	{
+		trIcon->SetIcon(Application->Icon);
+	}
+	errorIconState = state;	
 }
 
 void __fastcall TfrmMain::FormShow(TObject *Sender)
