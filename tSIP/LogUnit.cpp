@@ -68,10 +68,17 @@ void __fastcall TfrmLog::tmrUpdateTimer(TObject *Sender)
 	}
 	queDisplay.clear();
 
+#if 0
 	while ((unsigned int)redMain->Lines->Count > iMaxUiLogLines)
 	{
+		// possibly causing memory leak (?)
 		redMain->Lines->Delete(0);
 	}
+#else
+	if ((unsigned int)redMain->Lines->Count > iMaxUiLogLines) {
+		redMain->Clear();
+	}
+#endif
 
 	// restore the caret location
 	redMain->SelStart = selStart;
