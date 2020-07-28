@@ -121,6 +121,8 @@ public:
 		return !(*this == right);
 	}
 
+	bool UaRestartNeeded(const ButtonConf& right) const;
+
 	void Reset(void);
 };
 

@@ -53,3 +53,15 @@ void ButtonConf::Reset(void)
 	audioRxMod = "winwave";
 	audioRxDev = "";
 }
+
+bool ButtonConf::UaRestartNeeded(const ButtonConf& right) const
+{
+	if (type == Button::BLF || right.type == Button::BLF ||
+		type == Button::PRESENCE || right.type == Button::PRESENCE
+		)
+	{
+		return true;
+	}
+	return false;
+}
+

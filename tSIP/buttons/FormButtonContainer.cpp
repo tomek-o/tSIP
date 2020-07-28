@@ -110,9 +110,8 @@ void TfrmButtonContainer::EditContact(int id)
 		if (cfg != buttons.btnConf[startBtnId + id])
 		{
 			bool restartUa = false;
-			if (cfg.type == Button::BLF || buttons.btnConf[startBtnId + id].type == Button::BLF ||
-                cfg.type == Button::PRESENCE || buttons.btnConf[startBtnId + id].type == Button::PRESENCE
-				) {
+			if (cfg.UaRestartNeeded(buttons.btnConf[startBtnId + id]))
+			{
             	restartUa = true;
 			}
 			
