@@ -1082,6 +1082,19 @@ static int l_UpdateSettings(lua_State* L)
 	return 1;
 }
 
+static int l_UpdateButtons(lua_State* L)
+{
+	const char* json = lua_tostring(L, 1);
+	if (json == NULL)
+	{
+		LOG("Lua error: missing parameter (json)\n");
+		return 0;
+	}
+	int status = GetContext(L)->onUpdateButtons(json);
+	lua_pushinteger(L, status);
+	return 1;
+}
+
 static int l_SetHandled(lua_State* L)
 {
 	bool handled = lua_tointeger( L, 1 );
@@ -1283,6 +1296,7 @@ ScriptExec::ScriptExec(
 	CallbackGetUserName onGetUserName,
 	CallbackProgrammableButtonClick onProgrammableButtonClick,
 	CallbackUpdateSettings onUpdateSettings,
+	CallbackUpdateButtons onUpdateButtons,
 	CallbackGetButtonConf onGetButtonConf,
 	CallbackMainMenuShow onMainMenuShow,
 	CallbackApplicationClose onApplicationClose
@@ -1320,6 +1334,7 @@ ScriptExec::ScriptExec(
 	onGetUserName(onGetUserName),
 	onProgrammableButtonClick(onProgrammableButtonClick),
 	onUpdateSettings(onUpdateSettings),
+	onUpdateButtons(onUpdateButtons),
 	onGetButtonConf(onGetButtonConf),
 	onMainMenuShow(onMainMenuShow),
 	onApplicationClose(onApplicationClose),
@@ -1344,6 +1359,7 @@ ScriptExec::ScriptExec(
 		onGetUserName &&
 		onProgrammableButtonClick &&
 		onUpdateSettings &&
+		onUpdateButtons &&
 		onGetButtonConf &&
 		onMainMenuShow &&
 		onApplicationClose &&
@@ -1433,7 +1449,8 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "ProgrammableButtonClick", ScriptImp::l_ProgrammableButtonClick);
 	lua_register(L, "RefreshAudioDevicesList", ScriptImp::l_RefreshAudioDevicesList);
 	lua_register(L, "GetAudioDevice", ScriptImp::l_GetAudioDevice);
-	lua_register(L, "UpdateSettings", ScriptImp::l_UpdateSettings);
+	lua_register(L, "UpdateSettings", ScriptImp::l_UpdateSettings); // example: UpdateButtons('{"btnConf":[{"caption":"    REDIAL"}]}')
+	lua_register(L, "UpdateButtons", ScriptImp::l_UpdateButtons);
 
 	lua_register(L, "SetHandled", ScriptImp::l_SetHandled);
 

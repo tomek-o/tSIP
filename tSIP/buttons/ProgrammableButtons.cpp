@@ -52,27 +52,8 @@ ProgrammableButtons::ProgrammableButtons(void)
 	cfg->marginBottom = 200;
 }
 
-int ProgrammableButtons::ReadFile(AnsiString name)
+int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 {
-	Json::Value root;   // will contains the root value after parsing.
-	Json::Reader reader;
-
-	try
-	{
-		std::ifstream ifs(name.c_str());
-		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-		ifs.close();
-		bool parsingSuccessful = reader.parse( strConfig, root );
-		if ( !parsingSuccessful )
-		{
-			return 2;
-		}
-	}
-	catch(...)
-	{
-		return 1;
-	}
-
 	const Json::Value &btnConfJson = root["btnConf"];
 	if (btnConfJson.type() == Json::arrayValue)
 	{
@@ -176,6 +157,43 @@ int ProgrammableButtons::ReadFile(AnsiString name)
 	return 0;
 }
 
+int ProgrammableButtons::ReadFromString(AnsiString json)
+{
+	Json::Value root;   // will contains the root value after parsing.
+	Json::Reader reader;
+
+	bool parsingSuccessful = reader.parse( json.c_str(), root );
+	if ( !parsingSuccessful )
+	{
+		return 2;
+	}
+    return LoadFromJsonValue(root);
+}
+
+
+int ProgrammableButtons::ReadFile(AnsiString name)
+{
+	Json::Value root;   // will contains the root value after parsing.
+	Json::Reader reader;
+
+	try
+	{
+		std::ifstream ifs(name.c_str());
+		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+		ifs.close();
+		bool parsingSuccessful = reader.parse( strConfig, root );
+		if ( !parsingSuccessful )
+		{
+			return 2;
+		}
+	}
+	catch(...)
+	{
+		return 1;
+	}
+	return LoadFromJsonValue(root);
+}
+
 int ProgrammableButtons::Read(void)
 {
 	assert(filename != "");
@@ -203,7 +221,7 @@ int ProgrammableButtons::Write(void)
 	assert(filename != "");
     Json::Value root;
 	Json::StyledWriter writer;
-	
+
 	// write buttons configuration
 	for (unsigned int i=0; i<btnConf.size(); i++)
 	{
@@ -218,7 +236,7 @@ int ProgrammableButtons::Write(void)
 		jsonBtn["height"] = cfg.height;
 		jsonBtn["marginTop"] = cfg.marginTop;
 		jsonBtn["marginBottom"] = cfg.marginBottom;
-		jsonBtn["backgroundColor"] = cfg.backgroundColor;		
+		jsonBtn["backgroundColor"] = cfg.backgroundColor;
 		jsonBtn["imgIdle"] = cfg.imgIdle;
 		jsonBtn["imgTerminated"] = cfg.imgTerminated;
 		jsonBtn["imgEarly"] = cfg.imgEarly;

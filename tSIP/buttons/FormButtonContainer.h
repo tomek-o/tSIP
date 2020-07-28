@@ -59,6 +59,12 @@ public:		// User declarations
 		return NULL;
 	}
 	void SetScaling(int percentage);
+	int GetStartBtnId(void) const {
+		return startBtnId;
+	}
+	int GetBtnCnt(void) const {
+    	return btnCnt;
+	}
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmButtonContainer *frmButtonContainer;

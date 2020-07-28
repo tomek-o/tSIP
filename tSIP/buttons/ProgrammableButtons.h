@@ -9,11 +9,17 @@
 #include <vector>
 #include <Classes.hpp>
 
+namespace Json
+{
+	class Value;
+}
+
 class ProgrammableButtons
 {
 private:
 	AnsiString filename;
 	int ReadFile(AnsiString name);
+	int LoadFromJsonValue(const Json::Value &root);	
 public:
 	ProgrammableButtons(void);
 	void SetFilename(AnsiString name)
@@ -21,6 +27,7 @@ public:
 		filename = name;
 	}
 	int Read(void);
+	int ReadFromString(AnsiString json);
 	int Write(void);
 
 	enum { EXT_CONSOLE_COLUMNS = 12 };

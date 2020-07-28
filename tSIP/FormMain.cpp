@@ -556,6 +556,34 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	appSettings.Write(Paths::GetConfig());
 }
 
+int TfrmMain::UpdateButtonsFromJson(AnsiString json)
+{
+	ProgrammableButtons prevButtons = buttons;
+	int status = buttons.ReadFromString(json);
+	if (status != 0)
+	{
+		return status;
+	}
+	for (int cid=0; cid<ARRAY_SIZE(frmButtonContainers); cid++)
+	{
+		TfrmButtonContainer *& container = frmButtonContainers[cid];
+		int btnId = container->GetStartBtnId();
+		for (int id=0; id<container->GetBtnCnt(); id++)
+		{
+			if (buttons.btnConf[btnId] != prevButtons.btnConf[btnId])
+			{
+				TProgrammableButton* btn = container->GetBtn(id);
+				if (btn)
+				{
+                	btn->SetConfig(buttons.btnConf[btnId]);
+				}
+			}
+			btnId++;
+		}
+	}
+	return 0;
+}
+
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
 	UA->Destroy();
@@ -2392,6 +2420,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetUserName,
 		&ProgrammableButtonClick,
 		&UpdateSettingsFromJson,
+		&UpdateButtonsFromJson,
 		&OnGetButtonConf,
 		&MainMenuShow,
 		&ApplicationClose
