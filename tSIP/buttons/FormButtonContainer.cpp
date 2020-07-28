@@ -137,7 +137,7 @@ void TfrmButtonContainer::EditContact(int id)
 		}
 		else
 		{
-			// assign anyway - some fields are intentionally omited from != operator
+			// assign anyway - some fields may be unintentionally omited from != operator
 			buttons.btnConf[startBtnId + id] = cfg;
 			buttons.Write();			
 		}

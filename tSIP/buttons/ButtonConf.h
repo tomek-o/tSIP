@@ -56,7 +56,13 @@ public:
 		{
 			active = false;
 			number = "";
-        }
+		}
+		bool operator==(const BlfOverride& right) const {
+			return (
+				active == right.active &&
+				number == right.number
+			);
+		}
 	} blfOverrideIdle, blfOverrideTerminated, blfOverrideEarly, blfOverrideConfirmed;
 
 	enum BlfActionDuringCall
@@ -95,10 +101,19 @@ public:
             pagingTxWaveFile == right.pagingTxWaveFile &&
 			pagingTxCodec == right.pagingTxCodec &&
 			pagingTxPtime == right.pagingTxPtime &&
+			script == right.script &&
 			audioTxMod == right.audioTxMod &&
 			audioTxDev == right.audioTxDev &&
 			audioRxMod == right.audioRxMod &&
-			audioRxDev == right.audioRxDev
+			audioRxDev == right.audioRxDev &&
+
+			blfOverrideIdle == right.blfOverrideIdle &&
+			blfOverrideTerminated == right.blfOverrideTerminated &&
+			blfOverrideEarly == right.blfOverrideEarly &&
+			blfOverrideConfirmed == right.blfOverrideConfirmed &&
+
+			blfActionDuringCall == right.blfActionDuringCall &&
+            blfDtmfPrefixDuringCall == right.blfDtmfPrefixDuringCall
 			);
 	}
 
