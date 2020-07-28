@@ -60,6 +60,7 @@ bool ButtonConf::UaRestartNeeded(const ButtonConf& right) const
 		type == Button::PRESENCE || right.type == Button::PRESENCE
 		)
 	{
+        /** \todo Make UA restart condition for button config more precise (no need to restart if e.g. button height changed) */
 		return true;
 	}
 	return false;
