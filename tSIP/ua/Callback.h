@@ -63,7 +63,8 @@ public:
 
 	enum app_state_e
 	{
-		APP_INITIALIZED = 0,
+		APP_STATE_UNKNOWN = 0,
+		APP_STARTED,
 		APP_INIT_FAILED,
 		APP_START_FAILED
 	} app_state;

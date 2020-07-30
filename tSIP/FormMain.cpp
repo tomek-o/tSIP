@@ -187,7 +187,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	initialScaling(1.0),
 	muteRing(false),
 	notificationIconState(false),
-	errorIconState(false)
+	errorIconState(false),
+	appState(Callback::APP_STATE_UNKNOWN)
 {
 	srand(time(0));
 	lbl2ndParty->Caption = "";
@@ -1156,6 +1157,31 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 	}
 
+	PollCallbackQueue();
+
+	{
+		static int pollCnt = 0;
+		if ((appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED) && !frmSettings->Visible)
+		{
+			pollCnt++;
+			if (pollCnt > 18000)
+			{
+				pollCnt = 0;
+				SetStatus("Restarting UA (after init error)...");
+				miSettings->Enabled = false;
+				Ua::Instance().Restart();
+			}
+		}
+		else
+		{
+        	pollCnt = 0;
+		}
+	}
+}
+//---------------------------------------------------------------------------
+
+void TfrmMain::PollCallbackQueue(void)
+{
 	Callback cb;
 	bool answered = false;
 	if (UA_CB->GetCallback(cb) != 0)
@@ -1274,7 +1300,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				asStateText = "Calling...";
 				lbl2ndParty->Caption = GetClip(cb.caller);
 				lastContactEntry = contacts.GetEntry(CleanUri(cb.caller));
-				call.recordFile = "";				
+				call.recordFile = "";
 				if (lastContactEntry)
 				{
 					lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -1299,7 +1325,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				{
 					ShowTrayNotifier(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call.incoming);
 				}
-				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(cb.caller).c_str()); // CleanUri(cb.caller).c_str());				
+				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(cb.caller).c_str()); // CleanUri(cb.caller).c_str());
 
 				break;
 			case Callback::CALL_STATE_TRYING:
@@ -1323,7 +1349,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				call.ringStarted = false;
 				call.paiPeerUri = cb.paiPeerUri;
 				call.paiPeerName = GetPeerName(cb.paiPeerName);
-                call.codecName = cb.codecName;
+				call.codecName = cb.codecName;
 
 				UpdateClip();
 
@@ -1349,7 +1375,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				{
 					if (call.uri == "" && call.incoming == false && !pagingTx.active)
 					{
-                        int TODO__EXTRACT_NUMBER_FROM_URI_IF_SERVER_IS_MATCHING;	// otherwise full URI goes into history
+						int TODO__EXTRACT_NUMBER_FROM_URI_IF_SERVER_IS_MATCHING;	// otherwise full URI goes into history
 						AnsiString target = cb.caller;
 						if (target != "")
 						{
@@ -1359,8 +1385,8 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				}
 				else
 				{
-                    LOG("Incoming REFER: ignoring out-of-dialog transfer, see configuration\n");
-                }
+					LOG("Incoming REFER: ignoring out-of-dialog transfer, see configuration\n");
+				}
 				break;
 			case Callback::CALL_STATE_CLOSED: {
 				//LOG("Callback::CALL_STATE_CLOSED\n");
@@ -1375,8 +1401,8 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				}
 				else
 				{
-                    asStateText = "";
-                }
+					asStateText = "";
+				}
 				History::Entry entry;
 				DecodeDateTime(call.timestamp,
 					entry.timestamp.year, entry.timestamp.month, entry.timestamp.day,
@@ -1397,7 +1423,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 					entry.time = 0;
 					if (entry.incoming && !call.disconnecting)
 					{
-			            SetNotificationIcon(true);
+						SetNotificationIcon(true);
 					}
 				}
 				if (entry.incoming)
@@ -1421,7 +1447,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				lbl2ndParty->Caption = "";
 				lbl2ndPartyDesc->Caption = "";
 				PhoneInterface::UpdateCallState(0, "");
-				PhoneInterface::UpdateRing(0);				
+				PhoneInterface::UpdateRing(0);
 				break;
 			}
 			default:
@@ -1430,7 +1456,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			}
 
 			call.state = cb.state;
-			
+
 			lblCallState->Caption = asStateText;
 
 			if (cb.state == Callback::CALL_STATE_INCOMING)
@@ -1449,7 +1475,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				{
 					if (IsIconic(Application->Handle))
 						Application->Restore();
-                    SetForegroundWindow( Application->Handle );
+					SetForegroundWindow( Application->Handle );
 					//this->BringToFront();
 					// https://stackoverflow.com/questions/19136365/win32-setforegroundwindow-not-working-all-the-time
 					SetWindowPos(this->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
@@ -1479,7 +1505,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 
 			UpdateClip();
 
-			frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);			
+			frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);
 
 			break;
 		}
@@ -1487,15 +1513,15 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		{
 			if (cb.dtmfActive == true)
 			{
-                call.dtmfRxQueue.push_back(cb.dtmf[1]);
-            }
+				call.dtmfRxQueue.push_back(cb.dtmf[1]);
+			}
 			break;
-        }
+		}
 		case Callback::SET_CALL_DATA:
 		{
 			call.initialRxInvite = cb.initialRxInvite;
 			break;
-        }
+		}
 		case Callback::REG_STATE:
 		{
 			AnsiString asRegText;
@@ -1579,11 +1605,12 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onRecorderState.c_str());
 				RunScriptFile(SCRIPT_SRC_ON_RECORDER_STATE, recorder.id, asScriptFile.c_str(), handled);
 			}
-			break;        	
+			break;
 		}
 		case Callback::APP_STATE:
 		{
 			AnsiString text;
+			this->appState = cb.app_state;
 			/** \note Settings menu is disabled while initializing app */
 			switch(cb.app_state)
 			{
@@ -1591,12 +1618,17 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 				miSettings->Enabled = true;
 				SetStatus("Failed to init application");
 				SetErrorIcon(true);
-				HandleCommandLine();				
+				HandleCommandLine();
 				break;
-			case Callback::APP_INITIALIZED:
+			case Callback::APP_START_FAILED:
+				SetStatus("Failed to start application");
+				SetErrorIcon(true);
+				HandleCommandLine();
+				break;
+			case Callback::APP_STARTED:
 				miSettings->Enabled = true;
 				UaCustomRequests::Clear();
-				SetErrorIcon(false);				
+				SetErrorIcon(false);
 				text = "Initialized";
 				if (appSettings.uaConf.accounts.size())
 				{
@@ -1627,10 +1659,6 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 					TTrackBar* tr = trbarSoftvolSpeaker;
 					UA->UpdateSoftvolRx(tr->Max - tr->Position + tr->Min);
 				}
-				break;
-			case Callback::APP_START_FAILED:
-				SetStatus("Failed to start application");
-				SetErrorIcon(true);				
 				break;
 			default:
 				assert(!"Unhandled app state");
@@ -1701,7 +1729,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 		case Callback::MWI_STATE:
 		{
-            SetNotificationIcon(cb.mwiNewMsg > 0);
+			SetNotificationIcon(cb.mwiNewMsg > 0);
 			for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 				TfrmButtonContainer *& container = frmButtonContainers[i];
 				container->UpdateMwiState(cb.mwiNewMsg, cb.mwiOldMsg);
@@ -1722,7 +1750,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			case Callback::PAGING_TX_ENDED:
 				asStateText = "";
 				pagingTx.active = false;
-				PhoneInterface::UpdatePagingTxState(0);				
+				PhoneInterface::UpdatePagingTxState(0);
 				break;
 			default:
 				assert(!"Unhandled paging TX state");
@@ -1756,7 +1784,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 		case Callback::AUDIO_ERROR:
 		{
-            audioErrorCount++;
+			audioErrorCount++;
 			if (appSettings.Scripts.onAudioDeviceError != "")
 			{
 				AnsiString asScriptFile;
@@ -1816,7 +1844,6 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 	}
 }
-//---------------------------------------------------------------------------
 
 void TfrmMain::UpdateBtnState(Button::Type type, bool state)
 {
@@ -3313,7 +3340,16 @@ void __fastcall TfrmMain::miMessagesClick(TObject *Sender)
 
 void __fastcall TfrmMain::miSettingsPatchClick(TObject *Sender)
 {
+	frmSettingsPatch->Caption = "Patch/update main settings";
 	frmSettingsPatch->onUpdateSettings = UpdateSettingsFromJson;
+	frmSettingsPatch->ShowModal();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miPatchButtonSettingsClick(TObject *Sender)
+{
+	frmSettingsPatch->Caption = "Patch/update button settings";
+	frmSettingsPatch->onUpdateSettings = UpdateButtonsFromJson;
 	frmSettingsPatch->ShowModal();
 }
 //---------------------------------------------------------------------------

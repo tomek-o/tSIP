@@ -4,7 +4,7 @@ object frmMain: TfrmMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'tSIP'
-  ClientHeight = 381
+  ClientHeight = 401
   ClientWidth = 479
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -27,20 +27,22 @@ object frmMain: TfrmMain
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 362
+    Top = 382
     Width = 479
     Height = 19
     Panels = <>
     SimplePanel = True
+    ExplicitTop = 362
   end
   object pnlMain: TPanel
     Left = 0
     Top = 0
     Width = 267
-    Height = 362
+    Height = 382
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 362
     object lblCallState: TLabel
       Left = 8
       Top = 71
@@ -504,7 +506,7 @@ object frmMain: TfrmMain
     Left = 265
     Top = 4
     Width = 214
-    Height = 358
+    Height = 378
     Margins.Left = 0
     Margins.Top = 4
     Margins.Right = 0
@@ -512,6 +514,7 @@ object frmMain: TfrmMain
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitHeight = 358
   end
   object MainMenu: TMainMenu
     Left = 283
@@ -539,8 +542,12 @@ object frmMain: TfrmMain
         Action = actShowSettings
       end
       object miSettingsPatch: TMenuItem
-        Caption = 'Patch / update settings with JSON'
+        Caption = 'Patch / update main settings with JSON'
         OnClick = miSettingsPatchClick
+      end
+      object miPatchButtonSettings: TMenuItem
+        Caption = 'Patch / update button settings with JSON'
+        OnClick = miPatchButtonSettingsClick
       end
       object ImportcontactsfromCSVfile1: TMenuItem
         Action = actContactsCsvImport

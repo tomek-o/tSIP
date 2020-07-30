@@ -110,6 +110,7 @@ __published:	// IDE-managed Components
 	TTimer *tmrScript2;
 	TMenuItem *miMessages;
 	TMenuItem *miSettingsPatch;
+	TMenuItem *miPatchButtonSettings;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -156,6 +157,7 @@ __published:	// IDE-managed Components
 	void __fastcall tmrScript2Timer(TObject *Sender);
 	void __fastcall miMessagesClick(TObject *Sender);
 	void __fastcall miSettingsPatchClick(TObject *Sender);
+	void __fastcall miPatchButtonSettingsClick(TObject *Sender);
 private:	// User declarations
 	double initialScaling;
 
@@ -212,6 +214,7 @@ private:	// User declarations
 	void Dial(char digit);
 	void DialString(const std::string& digits);
 	void StartRecording(void);
+	void PollCallbackQueue(void);
 	void UpdateBtnState(enum Button::Type type, bool state);
 	void HandleCommandLine(void);
 	void Finalize(void);
@@ -241,6 +244,7 @@ private:	// User declarations
 	void SetNotificationIcon(bool state);
 	bool errorIconState;
 	void SetErrorIcon(bool state);
+	int appState;
 	void SetKioskMode(bool state);
 	int UpdateSettingsFromJson(AnsiString json);
 	void UpdateSettings(const Settings &prev);

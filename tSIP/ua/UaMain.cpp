@@ -1114,7 +1114,6 @@ void __fastcall Worker::Execute()
    			UA_CB->ChangeAppState(Callback::APP_INIT_FAILED);
 			goto out;
 		}
-		UA_CB->ChangeAppState(Callback::APP_INITIALIZED);		
 
 		err = app_start();
 		if (err) {
@@ -1122,6 +1121,8 @@ void __fastcall Worker::Execute()
 			UA_CB->ChangeAppState(Callback::APP_START_FAILED);
 			goto out;
 		}
+
+		UA_CB->ChangeAppState(Callback::APP_STARTED);
 
 		/* Main loop */
 		//while (!app.terminating) {
