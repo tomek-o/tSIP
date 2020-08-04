@@ -1226,8 +1226,11 @@ int Settings::Write(AnsiString asFileName)
 		for (iter = phoneConf.begin(); iter != phoneConf.end(); ++iter)
 		{
 			PhoneConf &cfg = *iter;
-			Json::Value &cfgJson = jPhoneConf[i++];
-			cfgJson["dllName"] = cfg.dllName.c_str();
+			if (cfg.dllName != "")
+			{
+				Json::Value &cfgJson = jPhoneConf[i++];
+				cfgJson["dllName"] = cfg.dllName.c_str();
+			}
 		}
 	}
 
