@@ -2789,6 +2789,10 @@ void __fastcall TfrmMain::WMHotKey(TWMHotKey &Message)
 void TfrmMain::HandleCommandLine(void)
 {
 	CommandLine &cmd = CommandLine::Instance();
+	if (cmd.action == CommandLine::ACTION_NONE)
+	{
+		return;
+	}
 	LOG("Handling commnand line\n");
 	if (cmd.action == CommandLine::ACTION_HANGUP)
 	{
