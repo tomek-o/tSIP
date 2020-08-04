@@ -683,7 +683,7 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetRunScriptAsyncCallback(NULL),
 	dllSetAddTrayMenuItemCallback(NULL)
 {
-	LOG("Creating object using %s\n", asDllName.c_str());
+	LOG("Creating plugin object using %s\n", asDllName.c_str());
 	connInfo.state = DEVICE_DISCONNECTED;
 	connInfo.msg = "Not connected";
 	instances[LowerCase(asDllName)] = this;
@@ -722,9 +722,16 @@ PhoneInterface::~PhoneInterface()
 
 int PhoneInterface::Load(void)
 {
-	hInstance = LoadLibrary((asDllDir + filename).c_str());
+	AnsiString fullDllName = asDllDir + filename;
+	hInstance = LoadLibrary(fullDllName.c_str());
 	if (!hInstance)
+	{
+		if (!FileExists(fullDllName))
+		{
+			LOG("Plugin DLL file %s was not found\n", filename.c_str());
+		}
 		return 1;
+	}
 	dllSetCallbacks = (pfSetCallbacks)GetProcAddress(hInstance, "SetCallbacks");
 	dllShowSettings = (pfShowSettings)GetProcAddress(hInstance, "ShowSettings");
 	dllGetPhoneCapabilities = (pfGetPhoneCapabilities)GetProcAddress(hInstance, "GetPhoneCapabilities");
