@@ -1221,10 +1221,12 @@ int Settings::Write(AnsiString asFileName)
 	{
 		int i = 0;
 		std::list<PhoneConf>::iterator iter;
+		Json::Value &jPhoneConf = root["phoneConf"];
+		jPhoneConf.resize(0);
 		for (iter = phoneConf.begin(); iter != phoneConf.end(); ++iter)
 		{
 			PhoneConf &cfg = *iter;
-			Json::Value &cfgJson = root["phoneConf"][i++];
+			Json::Value &cfgJson = jPhoneConf[i++];
 			cfgJson["dllName"] = cfg.dllName.c_str();
 		}
 	}
