@@ -820,5 +820,14 @@ Version 0.1.73
 	- show received reply status reason text for sent MESSAGE to the user
 	- minor changes for compatibility with early BDS2006 release, some cleanup, changed the way re compatibility with TC++ is achieved
 
+Version 0.1.74
+	- fixed some __WIN32__ typos from 0.1.73
+	- merged some re/rem/baresip updates
+	- change tray icon if initialization fails
+	- logging: clearing whole TRichEdit instead of removing oldest content line by line
+	- added Lua UpdateButtons(json) function
+	- added window for patching buttons configuration
+	- automatic restart on initialization error (e.g. temporary problem with network card resulting in bind failure)
+	- few other minor fixes
 */
 

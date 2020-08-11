@@ -101,7 +101,7 @@ Lua: get BLF button state => route incoming call to selected (idle) extension
 
 - sine wave audio input device
 
-- provisioning for buttons and phonebook
+- provisioning for phonebook
 
 - more command-line control: show/hide, dtmf, hold/unhold, start recording
 
