@@ -35,6 +35,8 @@ __published:	// IDE-managed Components
 	void __fastcall miAddClick(TObject *Sender);
 	void __fastcall miCallItemClick(TObject *Sender);
 	void __fastcall miMessageItemClick(TObject *Sender);
+	void __fastcall miCallSingleItemClick(TObject *Sender);
+	void __fastcall miMessageSingleItemClick(TObject *Sender);
 	void __fastcall miEditClick(TObject *Sender);
 	void __fastcall miDeleteClick(TObject *Sender);
 	void __fastcall edFilterChange(TObject *Sender);

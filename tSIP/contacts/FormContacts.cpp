@@ -12,6 +12,14 @@
 #pragma resource "*.dfm"
 TfrmContacts *frmContacts;
 //---------------------------------------------------------------------------
+
+namespace {
+
+AnsiString singleItemCallText = "Call: ";
+AnsiString singleItemMessageText = "Message: ";
+
+}
+
 __fastcall TfrmContacts::TfrmContacts(TComponent* Owner, Contacts *contacts, CallbackCall callbackCall)
 	: TForm(Owner),
 	contacts(contacts),
@@ -138,38 +146,87 @@ void __fastcall TfrmContacts::miMessageItemClick(TObject *Sender)
 	SIMPLE_Messages::Send(item->Caption, "", false);
 }
 
+void __fastcall TfrmContacts::miCallSingleItemClick(TObject *Sender)
+{
+	TMenuItem *item = dynamic_cast<TMenuItem*>(Sender);
+	if (item == NULL)
+		return;
+	AnsiString text = item->Caption;
+	if (strncmp(text.c_str(), singleItemCallText.c_str(), singleItemCallText.Length()) == 0)
+	{
+		callbackCall(text.c_str() + singleItemCallText.Length());
+	}
+}
+
+void __fastcall TfrmContacts::miMessageSingleItemClick(TObject *Sender)
+{
+	TMenuItem *item = dynamic_cast<TMenuItem*>(Sender);
+	if (item == NULL)
+		return;
+	AnsiString text = item->Caption;
+	if (strncmp(text.c_str(), singleItemMessageText.c_str(), singleItemMessageText.Length()) == 0)
+	{
+		SIMPLE_Messages::Send(text.c_str() + singleItemMessageText.Length(), "", false);
+	}
+}
+
 void __fastcall TfrmContacts::popupContactListPopup(TObject *Sender)
 {
 	TListItem *item = lvContacts->Selected;
 	miCall->Clear();
-	miMessage->Clear();	
-	if (item == NULL)
+	miMessage->Clear();
+
+	miCall->Visible = (item != NULL);
+	miMessage->Visible = (item != NULL);
+	miEdit->Visible = (item != NULL);
+	miDelete->Visible = (item != NULL);
+
+	if (item != NULL)
 	{
-		miCall->Enabled = false;
-		miMessage->Enabled = false;
-		miEdit->Enabled = false;
-		miDelete->Enabled = false;
-	}
-	else
-	{
-		miCall->Enabled = true;
-		miMessage->Enabled = true;
 		int id = filteredContacts[item->Index].id;		
 		const Contacts::Entry &entry = contacts->GetEntries()[id];
 		AnsiString uris[] = {entry.uri1, entry.uri2, entry.uri3};
+		unsigned int validUriCount = 0;
+		AnsiString validUri;
 		for (unsigned int i=0; i<sizeof(uris)/sizeof(uris[0]); i++)
 		{
 			AnsiString uri = uris[i];
 			if (uri != "")
 			{
-				TMenuItem *callItem = CreateCallItem(uri, popupContactList);
-				miCall->Add(callItem);
-				TMenuItem *messageItem = CreateMessageItem(uri, popupContactList);
-				miMessage->Add(messageItem);
+				validUriCount++;
+				validUri = uri;
 			}
 		}
-		miEdit->Enabled = true;
-		miDelete->Enabled = true;
+		miCall->Enabled = validUriCount;
+		miMessage->Enabled = validUriCount;
+		if (validUriCount == 0)
+		{
+			miCall->Caption = "Call: no number/uri";
+			miMessage->Caption = "Message: no number/uri";
+		}
+		else if (validUriCount == 1)
+		{
+			miCall->Caption = singleItemCallText + validUri;
+			miCall->OnClick = miCallSingleItemClick;
+			miMessage->Caption = singleItemMessageText + validUri;
+			miMessage->OnClick = miMessageSingleItemClick;
+		}
+		else
+		{
+			miCall->OnClick = NULL;
+			miMessage->OnClick = NULL;
+			for (unsigned int i=0; i<sizeof(uris)/sizeof(uris[0]); i++)
+			{
+				AnsiString uri = uris[i];
+				if (uri != "")
+				{
+					TMenuItem *callItem = CreateCallItem(uri, popupContactList);
+					miCall->Add(callItem);
+					TMenuItem *messageItem = CreateMessageItem(uri, popupContactList);
+					miMessage->Add(messageItem);
+				}
+			}
+		}
 	}
 }
 //---------------------------------------------------------------------------
