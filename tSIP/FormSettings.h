@@ -399,6 +399,8 @@ __published:	// IDE-managed Components
 	TButton *btnSelectedScriptOnRecorderStateChange;
 	TBitBtn *btnSelectedScriptOnRecorderStateEdit;
 	TCheckBox *chbNoTaskbarButtonRestore;
+	TLabel *lblCodecsInfo;
+	TLabel *lblCodecsInfo2;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

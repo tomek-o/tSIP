@@ -28,7 +28,6 @@ object frmSettings: TfrmSettings
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 392
     object btnCancel: TButton
       Left = 593
       Top = 6
@@ -53,12 +52,11 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsScripts
+    ActivePage = tsCodecs
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
-    ExplicitHeight = 392
     object tsGeneral: TTabSheet
       Caption = 'General'
       object lblGuiScaling: TLabel
@@ -1836,11 +1834,27 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Enabled, in order of preference'
       end
+      object lblCodecsInfo: TLabel
+        Left = 15
+        Top = 352
+        Width = 218
+        Height = 13
+        Caption = 'Double-click codec to move between the lists.'
+      end
+      object lblCodecsInfo2: TLabel
+        Left = 15
+        Top = 371
+        Width = 307
+        Height = 13
+        Caption = 
+          'Drag-and-drop items on enabled codecs list to reorder priorities' +
+          '.'
+      end
       object lboxAudioCodecsAvailable: TListBox
         Left = 15
         Top = 24
         Width = 150
-        Height = 256
+        Height = 313
         ItemHeight = 13
         TabOrder = 0
         OnDblClick = lboxAudioCodecsAvailableDblClick
@@ -1849,7 +1863,7 @@ object frmSettings: TfrmSettings
         Left = 207
         Top = 24
         Width = 150
-        Height = 256
+        Height = 313
         DragMode = dmAutomatic
         ItemHeight = 13
         TabOrder = 1
@@ -1860,7 +1874,7 @@ object frmSettings: TfrmSettings
       end
       object btnAudioCodecEnable: TButton
         Left = 171
-        Top = 113
+        Top = 129
         Width = 30
         Height = 25
         Hint = 'Enable selected codec'
@@ -1870,7 +1884,7 @@ object frmSettings: TfrmSettings
       end
       object btnAudioCodecDisable: TButton
         Left = 171
-        Top = 160
+        Top = 192
         Width = 30
         Height = 25
         Hint = 'Disable selected codec'
@@ -2303,7 +2317,6 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
-      ExplicitHeight = 372
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -3356,7 +3369,6 @@ object frmSettings: TfrmSettings
       270000000000000000000000FFFFFFFFFFFFFFFF000000000000000007530063
       0072006900700074007300270000000000000000000000FFFFFFFFFFFFFFFF00
       00000000000000074C006F006700670069006E006700}
-    ExplicitHeight = 392
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'
