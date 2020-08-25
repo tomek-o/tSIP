@@ -152,9 +152,12 @@ void TrayIcon::SetIcon(TIcon *icon)
 
 void TrayIcon::SetHint(AnsiString hint)
 {
-	asHint = hint;
-	if (bShowInTray)
-		TrayMessage(NIM_MODIFY);
+	if (asHint != hint)
+	{
+		asHint = hint;
+		if (bShowInTray)
+			TrayMessage(NIM_MODIFY);
+	}
 }
 //---------------------------------------------------------------------------
 
