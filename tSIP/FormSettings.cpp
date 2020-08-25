@@ -413,6 +413,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbShowSettingsIfAnyAccountSettingsIsHidden->Checked = tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden;
 
 	chbNoTaskbarButtonRestore->Checked = tmpSettings.frmMain.bNoTaskbarButtonRestore;
+	chbNoTrayIcon->Checked = tmpSettings.frmMain.bNoTrayIcon;
 
 	frmHotkeys->SetCfg(&tmpSettings.hotKeyConf);
 
@@ -737,6 +738,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden = chbShowSettingsIfAnyAccountSettingsIsHidden->Checked;
 
 	tmpSettings.frmMain.bNoTaskbarButtonRestore = chbNoTaskbarButtonRestore->Checked;
+	tmpSettings.frmMain.bNoTrayIcon = chbNoTrayIcon->Checked;
 
     frmUaConfOpus->Apply();
 

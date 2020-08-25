@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsCodecs
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -168,13 +168,21 @@ object frmSettings: TfrmSettings
       end
       object chbNoTaskbarButtonRestore: TCheckBox
         Left = 3
-        Top = 234
+        Top = 232
         Width = 526
         Height = 17
         Caption = 
           'Do not restore taskbar button when restoring application from tr' +
           'ay'
         TabOrder = 10
+      end
+      object chbNoTrayIcon: TCheckBox
+        Left = 3
+        Top = 255
+        Width = 526
+        Height = 17
+        Caption = 'Do not create tray icon (restart required)'
+        TabOrder = 11
       end
     end
     object tsNetwork: TTabSheet

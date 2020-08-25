@@ -185,6 +185,7 @@ namespace {
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	: TForm(Owner),
 	initialScaling(1.0),
+	trIcon(NULL),
 	muteRing(false),
 	notificationIconState(false),
 	errorIconState(false),
@@ -238,12 +239,15 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmContacts->StoreNoteInSeparateFile(appSettings.Contacts.storeNoteInSeparateFile);
 	edTransfer->Text = asTransferHint;
 
-	trIcon = new TrayIcon(this);
-	trIcon->OnLeftBtnDown = OnTrayIconLeftBtnDown;
-	trIcon->OnRightBtnDown = OnTrayIconRightBtnDown;
-	trIcon->SetPopupMenu(popupTray);
-	trIcon->SetIcon(Application->Icon);
-	trIcon->ShowInTray(true);
+	if (appSettings.frmMain.bNoTrayIcon == false)
+	{
+		trIcon = new TrayIcon(this);
+		trIcon->OnLeftBtnDown = OnTrayIconLeftBtnDown;
+		trIcon->OnRightBtnDown = OnTrayIconRightBtnDown;
+		trIcon->SetPopupMenu(popupTray);
+		trIcon->SetIcon(Application->Icon);
+		trIcon->ShowInTray(true);
+	}
 
 	TfrmLuaScript::SetCallbackRunScript(&RunScript);
 	PhoneInterface::SetCallbackRunScript(&RunScript);
@@ -269,8 +273,11 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 
 __fastcall TfrmMain::~TfrmMain()
 {
-	delete trIcon;
-	trIcon = NULL;
+	if (trIcon)
+	{
+		delete trIcon;
+		trIcon = NULL;
+	}
 	PortaudioLockShutdown();
 	FreeBitmapResources();	
 }
@@ -878,7 +885,7 @@ int TfrmMain::OnGetRegistrationState(void)
 
 void TfrmMain::OnSetTrayIcon(const char* file)
 {
-	if (file != NULL && file[0] != '\0')
+	if (file != NULL && file[0] != '\0' && trIcon)
 	{
 		useOwnTrayIcon = true;
 		Graphics::TBitmap *bmp = new Graphics::TBitmap();
@@ -2010,8 +2017,11 @@ void __fastcall TfrmMain::FormClose(TObject *Sender, TCloseAction &Action)
 	}
 	if(!Application->Terminated)
     {
-        ShowWindow(Application->Handle, SW_HIDE);
-        Visible = false;
+		if (trIcon)
+		{
+			ShowWindow(Application->Handle, SW_HIDE);
+			Visible = false;
+		}
 		Action = caNone;
     }
 	else
@@ -2653,13 +2663,26 @@ void __fastcall TfrmMain::OnTrayIconRightBtnDown(TObject *Sender)
 
 void __fastcall TfrmMain::miMinimizeTrayClick(TObject *Sender)
 {
-	Visible = false;
-	ShowWindow(Application->Handle, SW_HIDE);	// hide taskbar button
+	if (trIcon)
+	{
+		Visible = false;
+		ShowWindow(Application->Handle, SW_HIDE);	// hide taskbar button
+	}
+	else
+	{
+		AnsiString msg = "Tray icon is disabled in configuration";
+		MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONINFORMATION);
+	}
 }
 //---------------------------------------------------------------------------
 
 void TfrmMain::ToggleVisibility(void)
 {
+	if (trIcon == NULL)
+	{
+    	return;
+	}
+
 	Visible = !Visible;
 	if (Visible)
 	{
@@ -2686,7 +2709,10 @@ void TfrmMain::ToggleVisibility(void)
 
 void TfrmMain::SetTrayIconHint(AnsiString text)
 {
-	trIcon->SetHint(text);
+	if (trIcon)
+	{
+		trIcon->SetHint(text);
+	}
 }
 
 void __fastcall TfrmMain::actExitExecute(TObject *Sender)
@@ -3145,6 +3171,8 @@ void __fastcall TfrmMain::pcMainChange(TObject *Sender)
 
 void TfrmMain::SetNotificationIcon(bool state)
 {
+	if (trIcon == NULL)
+		return;
 	if (state == notificationIconState || useOwnTrayIcon || errorIconState /* higher priority */)
 		return;
 	if (state)
@@ -3160,6 +3188,8 @@ void TfrmMain::SetNotificationIcon(bool state)
 
 void TfrmMain::SetErrorIcon(bool state)
 {
+	if (trIcon == NULL)
+		return;
 	if (state == errorIconState || useOwnTrayIcon)
 		return;
 	if (state)
