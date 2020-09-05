@@ -222,6 +222,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	chbHideStatusBar->Checked = tmpSettings.frmMain.bHideStatusBar;
 	chbHideMainMenu->Checked = tmpSettings.frmMain.bHideMainMenu;
+	chbHideDialpad->Checked = tmpSettings.frmMain.bHideDialpad;
 
 	chbFrmMainShowWhenAnsweringCall->Checked = tmpSettings.frmMain.bShowWhenAnsweringCall;
 	chbFrmMainShowWhenMakingCall->Checked = tmpSettings.frmMain.bShowWhenMakingCall;
@@ -489,6 +490,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.frmMain.bHideStatusBar = chbHideStatusBar->Checked;
 	tmpSettings.frmMain.bHideMainMenu = chbHideMainMenu->Checked;
+	tmpSettings.frmMain.bHideDialpad = chbHideDialpad->Checked;
 
 	tmpSettings.frmMain.bShowWhenAnsweringCall = chbFrmMainShowWhenAnsweringCall->Checked;
 	tmpSettings.frmMain.bShowWhenMakingCall = chbFrmMainShowWhenMakingCall->Checked;

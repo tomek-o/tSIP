@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsGeneral
+    ActivePage = tsLocking
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -790,11 +790,19 @@ object frmSettings: TfrmSettings
       end
       object chbHideMainMenu: TCheckBox
         Left = 3
-        Top = 169
+        Top = 168
         Width = 398
         Height = 17
         Caption = 'Hide main menu'
         TabOrder = 8
+      end
+      object chbHideDialpad: TCheckBox
+        Left = 3
+        Top = 190
+        Width = 398
+        Height = 17
+        Caption = 'Hide Dialpad'
+        TabOrder = 9
       end
     end
     object tsBranding: TTabSheet

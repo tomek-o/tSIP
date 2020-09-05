@@ -292,7 +292,9 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	else
 	{
 		this->Caption = Branding::appName;
-    }
+	}
+	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
+	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;	
 
 #if 0 // this MIGHT work for scaling scrollbar width - not working
 	TNonClientMetrics NCMet;
@@ -508,6 +510,8 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	{
 		this->Menu = NULL;
 	}
+	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
+	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
 	if ((appSettings.frmMain.iSpeedDialSize != prev.frmMain.iSpeedDialSize && (appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly)) ||
 		prev.frmMain.bSpeedDialOnly != appSettings.frmMain.bSpeedDialOnly
 		)

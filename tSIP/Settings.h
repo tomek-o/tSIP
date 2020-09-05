@@ -119,6 +119,7 @@ public:
 		bool bKioskMode;
 		bool bHideStatusBar;
 		bool bHideMainMenu;
+		bool bHideDialpad;
 
 		bool bHideSpeedDialToggleButton;///< hide "<<"/">>" button
 		bool bHideMouseCursor;

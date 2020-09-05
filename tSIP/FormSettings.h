@@ -402,6 +402,7 @@ __published:	// IDE-managed Components
 	TLabel *lblCodecsInfo;
 	TLabel *lblCodecsInfo2;
 	TCheckBox *chbNoTrayIcon;
+	TCheckBox *chbHideDialpad;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

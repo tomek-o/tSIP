@@ -58,6 +58,7 @@ Settings::_frmMain::_frmMain(void):
 	bKioskMode(false),
 	bHideStatusBar(false),
 	bHideMainMenu(false),
+	bHideDialpad(false),
 	bHideSpeedDialToggleButton(false),
 	bHideMouseCursor(false),
 	bShowWhenAnsweringCall(false),
@@ -630,6 +631,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bKioskMode = frmMainJson.get("KioskMode", frmMain.bKioskMode).asBool();
 		frmMain.bHideStatusBar = frmMainJson.get("HideStatusBar", frmMain.bHideStatusBar).asBool();
 		frmMain.bHideMainMenu = frmMainJson.get("HideMainMenu", frmMain.bHideMainMenu).asBool();
+		frmMainJson.getBool("HideDialpad", frmMain.bHideDialpad);
 
 		frmMain.bHideSpeedDialToggleButton = frmMainJson.get("HideSpeedDialToggleButton", frmMain.bHideSpeedDialToggleButton).asBool();
 		frmMain.bHideMouseCursor = frmMainJson.get("HideMouseCursor", frmMain.bHideMouseCursor).asBool();
@@ -920,6 +922,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["KioskMode"] = frmMain.bKioskMode;
 		jv["HideStatusBar"] = frmMain.bHideStatusBar;
 		jv["HideMainMenu"] = frmMain.bHideMainMenu;
+		jv["HideDialpad"] = frmMain.bHideDialpad;
 
 		jv["HideSpeedDialToggleButton"] = frmMain.bHideSpeedDialToggleButton;
 		jv["HideMouseCursor"] = frmMain.bHideMouseCursor;
