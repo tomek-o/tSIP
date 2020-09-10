@@ -1543,9 +1543,11 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			case Callback::REG_STATE_REGISTER_OK:
 				asRegText = "Registered";
+				SetErrorIcon(false);
 				break;
 			case Callback::REG_STATE_REGISTER_FAIL:
 				asRegText = "Error registering";
+				SetErrorIcon(true);
 				break;
 			case Callback::REG_STATE_UNREGISTERING:
 				asRegText = "Unregistering...";
