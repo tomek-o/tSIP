@@ -5,6 +5,8 @@ object frmContactEditor: TfrmContactEditor
   ClientHeight = 349
   ClientWidth = 434
   Color = clBtnFace
+  Constraints.MinHeight = 388
+  Constraints.MinWidth = 450
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -15,6 +17,9 @@ object frmContactEditor: TfrmContactEditor
   Position = poScreenCenter
   OnKeyPress = FormKeyPress
   OnShow = FormShow
+  DesignSize = (
+    434
+    349)
   PixelsPerInch = 96
   TextHeight = 13
   object lblDescription: TLabel
@@ -27,9 +32,9 @@ object frmContactEditor: TfrmContactEditor
   object lblNumber1: TLabel
     Left = 8
     Top = 55
-    Width = 46
+    Width = 54
     Height = 13
-    Caption = 'Number 1'
+    Caption = 'Number #1'
   end
   object lblNote: TLabel
     Left = 8
@@ -41,16 +46,16 @@ object frmContactEditor: TfrmContactEditor
   object lblNumber2: TLabel
     Left = 8
     Top = 78
-    Width = 46
+    Width = 54
     Height = 13
-    Caption = 'Number 2'
+    Caption = 'Number #2'
   end
   object lblNumber3: TLabel
     Left = 8
     Top = 101
-    Width = 46
+    Width = 54
     Height = 13
-    Caption = 'Number 3'
+    Caption = 'Number #3'
   end
   object lblCompany: TLabel
     Left = 8
@@ -64,6 +69,7 @@ object frmContactEditor: TfrmContactEditor
     Top = 288
     Width = 16
     Height = 13
+    Anchors = [akLeft, akBottom]
     Caption = 'File'
   end
   object pnlBottom: TPanel
@@ -74,11 +80,15 @@ object frmContactEditor: TfrmContactEditor
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 6
+    DesignSize = (
+      434
+      37)
     object btnCancel: TButton
       Left = 348
       Top = 6
       Width = 75
       Height = 25
+      Anchors = [akRight, akBottom]
       Caption = 'Cancel'
       TabOrder = 1
       OnClick = btnCancelClick
@@ -88,6 +98,7 @@ object frmContactEditor: TfrmContactEditor
       Top = 6
       Width = 75
       Height = 25
+      Anchors = [akRight, akBottom]
       Caption = 'Apply'
       TabOrder = 0
       OnClick = btnApplyClick
@@ -112,6 +123,7 @@ object frmContactEditor: TfrmContactEditor
     Top = 125
     Width = 375
     Height = 158
+    Anchors = [akLeft, akTop, akRight, akBottom]
     PlainText = True
     TabOrder = 5
     OnChange = memoNoteChange
@@ -142,6 +154,7 @@ object frmContactEditor: TfrmContactEditor
     Top = 285
     Width = 324
     Height = 21
+    Anchors = [akLeft, akRight, akBottom]
     TabOrder = 7
   end
   object btnFileSelect: TButton
@@ -149,6 +162,7 @@ object frmContactEditor: TfrmContactEditor
     Top = 285
     Width = 22
     Height = 21
+    Anchors = [akRight, akBottom]
     Caption = '...'
     TabOrder = 8
     OnClick = btnFileSelectClick
@@ -158,6 +172,7 @@ object frmContactEditor: TfrmContactEditor
     Top = 285
     Width = 22
     Height = 21
+    Anchors = [akRight, akBottom]
     TabOrder = 9
     OnClick = btnFileOpenClick
     Glyph.Data = {
