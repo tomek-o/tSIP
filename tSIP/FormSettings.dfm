@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsLocking
+    ActivePage = tsAccount
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2343,9 +2343,9 @@ object frmSettings: TfrmSettings
       object lblScriptEvents: TLabel
         Left = 5
         Top = 5
-        Width = 254
+        Width = 259
         Height = 13
-        Caption = 'Lua scripts executed on events (\script subdirectory)'
+        Caption = 'Lua scripts executed on events (\scripts subdirectory)'
       end
       object lblScriptOnStreamingStateFile: TLabel
         Left = 5
