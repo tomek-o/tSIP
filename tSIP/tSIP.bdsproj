@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -470,6 +470,7 @@
         <FILE FILENAME="FormSettingsPatch.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormSettingsPatch" FORMNAME="frmSettingsPatch" DESIGNCLASS="" ADDITIONAL="FormSettingsPatch.h"/>
         <FILE FILENAME="AppStatus.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="AppStatus" FORMNAME="" DESIGNCLASS="" ADDITIONAL="AppStatus.h"/>
         <FILE FILENAME="ua\Recorder.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Recorder" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\Recorder.h"/>
+        <FILE FILENAME="contacts\ContactsXmlImport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ContactsXmlImport" FORMNAME="" DESIGNCLASS="" ADDITIONAL="contacts\ContactsXmlImport.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -478,7 +479,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">74</VersionInfo>
-          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Build">3</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -490,7 +491,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.74.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.74.3</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -543,10 +544,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

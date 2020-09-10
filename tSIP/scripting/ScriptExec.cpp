@@ -1230,6 +1230,12 @@ static int l_ReadContacts(lua_State* L)
 	return 0;
 }
 
+static int l_ReadXmlContacts(lua_State* L)
+{
+	const char* filename = lua_tostring(L, 1);
+	return contacts.ReadXml(filename);
+}
+
 static int l_AppendContactNoteText(lua_State* L)
 {
 	const char* text = lua_tostring(L, 1);
@@ -1473,6 +1479,7 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "GetAudioRxSignalLevel", ScriptImp::l_GetAudioRxSignalLevel);
 
 	lua_register(L, "ReadContacts", ScriptImp::l_ReadContacts);
+	lua_register(L, "ReadXmlContacts", ScriptImp::l_ReadXmlContacts);
 	lua_register(L, "AppendContactNoteText", ScriptImp::l_AppendContactNoteText);
 
 	lua_register(L, "SendTextMessage", ScriptImp::l_SendTextMessage);

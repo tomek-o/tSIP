@@ -4,8 +4,10 @@
 #pragma hdrstop
 
 #include "Contacts.h"
+#include "ContactsXmlImport.h"
 #include "common/Utils.h"
 #include "common/Utilities.h"
+#include <SysUtils.hpp>
 #include <assert.h>
 #include <algorithm>
 #include <fstream> 
@@ -105,6 +107,17 @@ int Contacts::Write(void)
 	}
 		
 	return 0;
+}
+
+int Contacts::ReadXml(AnsiString name)
+{
+	int status = ContactsXmlImport(name, entries);
+	if (status == 0)
+	{
+        Sort();
+		Update();
+	}
+	return status;
 }
 
 #pragma warn -8091	// incorrectly issued by BDS2006
