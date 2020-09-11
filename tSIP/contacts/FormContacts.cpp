@@ -17,7 +17,8 @@ namespace {
 
 AnsiString singleItemCallText = "Call: ";
 AnsiString singleItemMessageText = "Message: ";
-
+AnsiString multiItemCallText = "Call...";
+AnsiString multiItemMessageText = "Message...";
 }
 
 __fastcall TfrmContacts::TfrmContacts(TComponent* Owner, Contacts *contacts, CallbackCall callbackCall)
@@ -202,7 +203,9 @@ void __fastcall TfrmContacts::popupContactListPopup(TObject *Sender)
 		if (validUriCount == 0)
 		{
 			miCall->Caption = "Call: no number/uri";
+			miCall->OnClick = NULL;
 			miMessage->Caption = "Message: no number/uri";
+			miMessage->OnClick = NULL;
 		}
 		else if (validUriCount == 1)
 		{
@@ -213,7 +216,9 @@ void __fastcall TfrmContacts::popupContactListPopup(TObject *Sender)
 		}
 		else
 		{
+			miCall->Caption = multiItemCallText;
 			miCall->OnClick = NULL;
+			miMessage->Caption = multiItemMessageText;
 			miMessage->OnClick = NULL;
 			for (unsigned int i=0; i<sizeof(uris)/sizeof(uris[0]); i++)
 			{
