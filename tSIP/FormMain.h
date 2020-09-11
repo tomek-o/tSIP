@@ -91,7 +91,7 @@ __published:	// IDE-managed Components
 	TPanel *pnlSpeedDial;
 	TAction *actContactsCsvImport;
 	TMenuItem *ImportcontactsfromCSVfile1;
-	TOpenDialog *openDialogCsv;
+	TOpenDialog *openDialog;
 	TImageList *imgListIcons;
 	TImage *imgDialpadBackground;
 	TSpeedButton *btnMakeCall;
@@ -111,6 +111,7 @@ __published:	// IDE-managed Components
 	TMenuItem *miMessages;
 	TMenuItem *miSettingsPatch;
 	TMenuItem *miPatchButtonSettings;
+	TMenuItem *miImportContactsFromXml;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -158,6 +159,7 @@ __published:	// IDE-managed Components
 	void __fastcall miMessagesClick(TObject *Sender);
 	void __fastcall miSettingsPatchClick(TObject *Sender);
 	void __fastcall miPatchButtonSettingsClick(TObject *Sender);
+	void __fastcall miImportContactsFromXmlClick(TObject *Sender);
 private:	// User declarations
 	double initialScaling;
 

@@ -32,7 +32,6 @@ object frmMain: TfrmMain
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitTop = 382
   end
   object pnlMain: TPanel
     Left = 0
@@ -42,7 +41,6 @@ object frmMain: TfrmMain
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 382
     object lblCallState: TLabel
       Left = 8
       Top = 71
@@ -514,7 +512,6 @@ object frmMain: TfrmMain
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitHeight = 378
   end
   object MainMenu: TMainMenu
     Left = 283
@@ -551,6 +548,10 @@ object frmMain: TfrmMain
       end
       object ImportcontactsfromCSVfile1: TMenuItem
         Action = actContactsCsvImport
+      end
+      object miImportContactsFromXml: TMenuItem
+        Caption = 'Import contacts from XML file'
+        OnClick = miImportContactsFromXmlClick
       end
       object miClearCallsHistory: TMenuItem
         Caption = 'Clear calls history'
@@ -1330,7 +1331,7 @@ object frmMain: TfrmMain
     Left = 352
     Top = 347
   end
-  object openDialogCsv: TOpenDialog
+  object openDialog: TOpenDialog
     Filter = 'CSV files (*.csv)|*.csv|All files (*.*)|*.*'
     Options = [ofNoChangeDir, ofEnableSizing]
     Title = 'Open CSV file'

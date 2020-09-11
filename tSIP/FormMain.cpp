@@ -3157,9 +3157,11 @@ void __fastcall TfrmMain::WMEndSession(TWMEndSession &Msg)
 void __fastcall TfrmMain::actContactsCsvImportExecute(TObject *Sender)
 {
 	//openDialogCsv->InitialDir = appSettings.Editor.asDefaultDir;
-	if (openDialogCsv->Execute())
+	openDialog->Filter = "CSV files (*.csv)|*.csv|All files (*.*)|*.*";
+	openDialog->Title = "Open CSV file";
+	if (openDialog->Execute())
 	{
-		frmContactsCsvImport->Load(openDialogCsv->FileName, &contacts);
+		frmContactsCsvImport->Load(openDialog->FileName, &contacts);
 		if (frmContactsCsvImport->ModalResult == mrOk)
 		{
 			contacts.Update();
@@ -3391,6 +3393,33 @@ void __fastcall TfrmMain::miPatchButtonSettingsClick(TObject *Sender)
 	frmSettingsPatch->Caption = "Patch/update button settings";
 	frmSettingsPatch->onUpdateSettings = UpdateButtonsFromJson;
 	frmSettingsPatch->ShowModal();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miImportContactsFromXmlClick(TObject *Sender)
+{
+	if (MessageBox(this->Handle,
+		"This function reads contacts from XML file with popular Yealink-like format.\r\n"
+        "Current contacts would be completely overwritten.\r\n"
+		"Continue?",
+		"XML import", MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION) != IDYES)
+	{
+		return;
+	}
+	openDialog->Filter = "XML files (*.xml)|*.xml|All files (*.*)|*.*";
+	openDialog->Title = "Open XML file";
+	if (openDialog->Execute())
+	{
+		if (contacts.ReadXml(openDialog->FileName) == 0)
+		{
+			contacts.Update();
+			contacts.Write();
+		}
+		else
+		{
+			Application->MessageBox("Failed to load contacts", "XML import", MB_ICONSTOP);
+		}
+	}
 }
 //---------------------------------------------------------------------------
 
