@@ -1233,7 +1233,13 @@ static int l_ReadContacts(lua_State* L)
 static int l_ReadXmlContacts(lua_State* L)
 {
 	const char* filename = lua_tostring(L, 1);
-	return contacts.ReadXml(filename);
+	int status = contacts.ReadXml(filename);
+	if (status == 0)
+	{
+		contacts.Write();
+	}
+	lua_pushinteger(L, status);
+	return 1;
 }
 
 static int l_AppendContactNoteText(lua_State* L)

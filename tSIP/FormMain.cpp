@@ -3412,7 +3412,6 @@ void __fastcall TfrmMain::miImportContactsFromXmlClick(TObject *Sender)
 	{
 		if (contacts.ReadXml(openDialog->FileName) == 0)
 		{
-			contacts.Update();
 			contacts.Write();
 		}
 		else
