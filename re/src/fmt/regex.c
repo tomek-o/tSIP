@@ -78,7 +78,9 @@ int re_regex(const char *ptr, size_t len, const char *expr, ...)
 	eesc = false;
 	fm = false;
 	l  = len--;
-	p  = ptr++;
+	if (l) {	// make CG happy
+		p  = ptr++;
+	}
 	ep = expr;
 
 	va_start(ap, expr);
