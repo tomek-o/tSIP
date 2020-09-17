@@ -85,7 +85,6 @@ static void lsnr_destructor(void *arg)
  */
 int sip_alloc(struct sip **sipp, struct dnsc *dnsc, uint32_t ctsz,
 	      uint32_t stsz, uint32_t tcsz, const char *software,
-		  bool log_messages,
 	      sip_exit_h *exith, void *arg)
 {
 	struct sip *sip;
@@ -124,7 +123,6 @@ int sip_alloc(struct sip **sipp, struct dnsc *dnsc, uint32_t ctsz,
 			goto out;
 	}
 
-	sip->log_messages = log_messages;
 	sip->dnsc  = mem_ref(dnsc);
 	sip->exith = exith;
 	sip->arg   = arg;

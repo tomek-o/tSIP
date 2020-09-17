@@ -577,10 +577,11 @@ static int app_init(void)
 		uaName = appSettings.uaConf.userAgent.c_str();
     }
 
-	err = ua_init(uaName.c_str(), appSettings.uaConf.logMessages,
-		true, true, true, false);
+	err = ua_init(uaName.c_str(), true, true, true, false);
 	if (err)
 		return err;
+
+	ua_log_messages(appSettings.uaConf.logMessages);
 
 	aubuf_debug_enable(appSettings.uaConf.logAubuf);
 

@@ -277,7 +277,6 @@ typedef void(sip_keepalive_h)(int err, void *arg);
 /* sip */
 int  sip_alloc(struct sip **sipp, struct dnsc *dnsc, uint32_t ctsz,
 		   uint32_t stsz, uint32_t tcsz, const char *software,
-		   bool log_messages,
 	       sip_exit_h *exith, void *arg);
 void sip_close(struct sip *sip, bool force);
 int  sip_listen(struct sip_lsnr **lsnrp, struct sip *sip, bool req,

@@ -53,7 +53,6 @@ static struct {
 	struct sip_lsnr *lsnr;         /**< SIP Listener                    */
 	struct sipsess_sock *sock;     /**< SIP Session socket              */
 	struct sipevent_sock *evsock;  /**< SIP Event socket                */
-	bool log_messages;
 	bool use_udp;                  /**< Use UDP transport               */
 	bool use_tcp;                  /**< Use TCP transport               */
 	bool use_tls;                  /**< Use TLS transport               */
@@ -69,7 +68,6 @@ static struct {
 	NULL,
 	NULL,
 	NULL,
-	true,
 	true,
 	true,
 	true,
@@ -1258,8 +1256,7 @@ static const struct cmd cmdv[] = {
  *
  * @return 0 if success, otherwise errorcode
  */
-int ua_init(const char *software, bool log_messages, bool udp, bool tcp, bool tls,
-	    bool prefer_ipv6)
+int ua_init(const char *software, bool udp, bool tcp, bool tls, bool prefer_ipv6)
 {
 	struct config *cfg = conf_config();
 	uint32_t bsize;
@@ -1277,7 +1274,6 @@ int ua_init(const char *software, bool log_messages, bool udp, bool tcp, bool tl
 		return err;
 	}
 
-	uag.log_messages = log_messages;
 	uag.use_udp = udp;
 	uag.use_tcp = tcp;
 	uag.use_tls = tls;
@@ -1286,7 +1282,7 @@ int ua_init(const char *software, bool log_messages, bool udp, bool tcp, bool tl
 	list_init(&uag.ual);
 
 	err = sip_alloc(&uag.sip, net_dnsc(), bsize, bsize, bsize,
-			software, uag.log_messages, exit_handler, NULL);
+			software, exit_handler, NULL);
 	if (err) {
 		DEBUG_WARNING("sip stack failed: %m\n", err);
 		goto out;

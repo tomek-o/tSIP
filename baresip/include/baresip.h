@@ -598,9 +598,7 @@ struct account *ua_prm(const struct ua *ua);
 
 
 /* One instance */
-int  ua_init(const char *software, bool log_messages,
-		 bool udp, bool tcp, bool tls,
-			bool prefer_ipv6);
+int  ua_init(const char *software, bool udp, bool tcp, bool tls, bool prefer_ipv6);
 void ua_log_messages(bool log);		 
 void ua_close(void);
 void ua_stop_all(bool forced);
