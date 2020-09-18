@@ -163,7 +163,7 @@ int net_if_debug(struct re_printf *pf, void *unused)
 
 	(void)unused;
 
-	err = re_hprintf(pf, "net interfaces:\n");
+	err = re_hprintf(pf, " Net interfaces:\n");
 
 #ifdef HAVE_GETIFADDRS
 	err |= net_getifaddrs(if_debug_handler, pf);

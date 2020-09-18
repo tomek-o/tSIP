@@ -133,7 +133,7 @@ static void register_handler(int err, const struct sip_msg *msg, void *arg)
 		reg->af    = sipmsg_af(msg);
 
 		if (msg->scode != reg->scode) {
-			ua_printf(reg->ua, "{%d/%s/%s} %u %r (%s)"
+			ua_printf(reg->ua, "Registration {%d/%s/%s} %u %r (%s)"
 				  " [%u binding%s]\n",
 				  reg->id, sip_transp_name(msg->tp),
 				  af_name(reg->af), msg->scode, &msg->reason,
@@ -148,7 +148,7 @@ static void register_handler(int err, const struct sip_msg *msg, void *arg)
 	}
 	else if (msg->scode >= 300) {
 
-		DEBUG_WARNING("%s: %u %r (%s)\n", ua_aor(reg->ua),
+		DEBUG_WARNING("Registration to %s: %u %r (%s)\n", ua_aor(reg->ua),
 			      msg->scode, &msg->reason, reg->srv);
 
 		reg->scode = msg->scode;
