@@ -157,6 +157,7 @@ public:
 	std::vector<Contact> contacts;
 
 	bool logMessages;
+	bool logMessagesOnlyFirstLine;
 	bool logAubuf;
 
 	struct AudioCfg {
@@ -513,6 +514,7 @@ public:
 	UaConf() {
 		aec = AEC_NONE;
 		logMessages = false;
+		logMessagesOnlyFirstLine = false;
 		logAubuf = false;
 		autoAnswer = false;
 		autoAnswerCode = 200;

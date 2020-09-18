@@ -238,10 +238,11 @@ int sip_debug(struct re_printf *pf, const struct sip *sip)
 }
 
 
-void sip_log_messages(struct sip *sip, bool log)
+void sip_log_messages(struct sip *sip, bool log, bool only_first_lines)
 {
 	if (!sip)
 		return;
-    sip->log_messages = log;
+	sip->log_messages = log;
+	sip->log_messages_only_first_lines = only_first_lines;
 }
 

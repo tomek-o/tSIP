@@ -24,7 +24,8 @@ TfrmLog *frmLog;
 //---------------------------------------------------------------------------
 __fastcall TfrmLog::TfrmLog(TComponent* Owner)
 	: TForm(Owner),
-	iMaxUiLogLines(1000)
+	iMaxUiLogLines(1000),
+	updatingUi(false)
 {
 	callbackClose = NULL;
 }
@@ -137,8 +138,11 @@ void __fastcall TfrmLog::miCopyClick(TObject *Sender)
 
 void __fastcall TfrmLog::chbLogMessagesClick(TObject *Sender)
 {
+	if (updatingUi)
+		return;
 	appSettings.uaConf.logMessages = chbLogMessages->Checked;
-	UA->SetMsgLogging(appSettings.uaConf.logMessages);
+	appSettings.uaConf.logMessagesOnlyFirstLine = chbLogMessagesOnlyFirstLines->Checked;
+	UA->SetMsgLogging(appSettings.uaConf.logMessages, appSettings.uaConf.logMessagesOnlyFirstLine);
 }
 //---------------------------------------------------------------------------
 
@@ -150,11 +154,14 @@ void __fastcall TfrmLog::FormShow(TObject *Sender)
 
 void TfrmLog::UpdateUi(void)
 {
+	updatingUi = true;
 	chbLogMessages->Checked = appSettings.uaConf.logMessages;
+	chbLogMessagesOnlyFirstLines->Checked = appSettings.uaConf.logMessagesOnlyFirstLine;
 	chbLogToFile->Checked = appSettings.Logging.bLogToFile;
 	redMain->Font->Name = appSettings.Logging.consoleFont.name;
 	redMain->Font->Size = appSettings.Logging.consoleFont.size;
-	redMain->Font->Style = appSettings.Logging.consoleFont.style;	
+	redMain->Font->Style = appSettings.Logging.consoleFont.style;
+	updatingUi = false;	
 }
 
 void __fastcall TfrmLog::miSaveToFileClick(TObject *Sender)

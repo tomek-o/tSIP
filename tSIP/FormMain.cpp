@@ -482,9 +482,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		miSettings->Enabled = false;		
 		Ua::Instance().Restart();
 	}
-	if (appSettings.uaConf.logMessages != prev.uaConf.logMessages)
+	if (appSettings.uaConf.logMessages != prev.uaConf.logMessages ||
+        appSettings.uaConf.logMessagesOnlyFirstLine != prev.uaConf.logMessagesOnlyFirstLine)
 	{
-		UA->SetMsgLogging(appSettings.uaConf.logMessages);
+		UA->SetMsgLogging(appSettings.uaConf.logMessages, appSettings.uaConf.logMessagesOnlyFirstLine);
 	}
 	if (appSettings.uaConf.logAubuf != prev.uaConf.logAubuf)
 	{

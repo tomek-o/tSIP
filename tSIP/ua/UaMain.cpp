@@ -581,7 +581,7 @@ static int app_init(void)
 	if (err)
 		return err;
 
-	ua_log_messages(appSettings.uaConf.logMessages);
+	ua_log_messages(appSettings.uaConf.logMessages, appSettings.uaConf.logMessagesOnlyFirstLine);
 
 	aubuf_debug_enable(appSettings.uaConf.logAubuf);
 
@@ -937,7 +937,7 @@ extern "C" void control_handler(void)
 		}
 		break;
 	case Command::SET_MSG_LOGGING:
-		ua_log_messages(cmd.bEnabled);
+		ua_log_messages(cmd.bEnabled, cmd.bParam);
 		break;
 	case Command::SET_AUBUF_LOGGING:
 		aubuf_debug_enable(cmd.bEnabled);

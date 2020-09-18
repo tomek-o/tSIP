@@ -45,6 +45,7 @@ public:
 	int code;
 	char key;
 	bool bEnabled;
+	bool bParam;
 	AnsiString audioMod;
 	AnsiString audioDev;
 	AnsiString pagingTxWaveFile;	///< source wave file for paging TX; default audio source is used if empty
@@ -65,6 +66,7 @@ public:
 		code(-1),
 		key('\0'),
 		bEnabled(false),
+		bParam(false),
 		pagingTxPtime(0),
 		channels(0),
 		recSide(0),

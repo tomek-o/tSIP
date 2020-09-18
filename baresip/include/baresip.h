@@ -599,7 +599,7 @@ struct account *ua_prm(const struct ua *ua);
 
 /* One instance */
 int  ua_init(const char *software, bool udp, bool tcp, bool tls, bool prefer_ipv6);
-void ua_log_messages(bool log);		 
+void ua_log_messages(bool log, bool only_first_lines);		 
 void ua_close(void);
 void ua_stop_all(bool forced);
 int  uag_reset_transp(bool reg, bool reinvite);

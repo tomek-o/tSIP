@@ -149,7 +149,7 @@ void ControlQueue::Mute(int callId, bool state)
 	fifo.push();
 }
 
-void ControlQueue::SetMsgLogging(bool enabled)
+void ControlQueue::SetMsgLogging(bool enabled, bool onlyFirstLines)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
@@ -157,6 +157,7 @@ void ControlQueue::SetMsgLogging(bool enabled)
 		return;
 	cmd->type = Command::SET_MSG_LOGGING;
 	cmd->bEnabled = enabled;
+	cmd->bParam = onlyFirstLines;
 	fifo.push();
 }
 

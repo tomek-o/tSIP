@@ -1319,9 +1319,9 @@ int ua_init(const char *software, bool udp, bool tcp, bool tls, bool prefer_ipv6
 	return err;
 }
 
-void ua_log_messages(bool log)
+void ua_log_messages(bool log, bool only_first_lines)
 {
-	sip_log_messages(uag.sip, log);
+	sip_log_messages(uag.sip, log, only_first_lines);
 }
 
 /**

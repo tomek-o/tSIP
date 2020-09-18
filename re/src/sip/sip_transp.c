@@ -238,7 +238,21 @@ static void sip_recv(struct sip *sip, const struct sip_msg *msg)
 
 	if (sip->log_messages) {
 		char buf[128];
-		(void)re_printf("[%s] RX from %J:\n%b\n", sys_time(buf, sizeof(buf)), &msg->src, mbuf_buf(&msg->mb_msg), msg->mb_msg.size);
+		if (sip->log_messages_only_first_lines == false) {
+			(void)re_printf("[%s] RX from %J:\n%b\n", sys_time(buf, sizeof(buf)), &msg->src, mbuf_buf(&msg->mb_msg), msg->mb_msg.size);
+		} else {
+			unsigned int size = msg->mb_msg.size;
+			unsigned int i;
+			uint8_t* ptr = mbuf_buf(&msg->mb_msg);
+			for (i=0; i<size; i++) {
+				char c = ptr[i];
+				if (c == '\r' || c == '\n') {
+					size = i;
+					break;
+				}
+			}
+			(void)re_printf("[%s] RX from %J:    %b\n", sys_time(buf, sizeof(buf)), &msg->src, mbuf_buf(&msg->mb_msg), size);
+		}
 	}
 
 	while (le) {
@@ -735,7 +749,21 @@ int sip_transp_send(struct sip_connqent **qentp, struct sip *sip, void *sock,
 
 	if (sip->log_messages) {
 		char buf[128];
-		(void)re_printf("[%s] TX to %J:\n%b\n", sys_time(buf, sizeof(buf)), dst, mbuf_buf(mb), mbuf_get_left(mb));
+		if (sip->log_messages_only_first_lines == false) {
+			(void)re_printf("[%s] TX to %J:\n%b\n", sys_time(buf, sizeof(buf)), dst, mbuf_buf(mb), mbuf_get_left(mb));
+		} else {
+			unsigned int size = mbuf_get_left(mb);
+			unsigned int i;
+			uint8_t* ptr = mbuf_buf(mb);
+			for (i=0; i<size; i++) {
+				char c = ptr[i];
+				if (c == '\r' || c == '\n') {
+					size = i;
+					break;
+				}
+			}
+			(void)re_printf("[%s] TX to %J:    %b\n", sys_time(buf, sizeof(buf)), dst, mbuf_buf(mb), size);
+		}
 	}
 
 	switch (tp) {

@@ -26,18 +26,19 @@ object frmLog: TfrmLog
     Left = 0
     Top = 0
     Width = 635
-    Height = 264
+    Height = 248
     Align = alClient
     PopupMenu = pmenuRichEdit
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
+    ExplicitHeight = 264
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 264
+    Top = 248
     Width = 635
-    Height = 30
+    Height = 46
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
@@ -45,7 +46,7 @@ object frmLog: TfrmLog
       Left = 8
       Top = 6
       Width = 73
-      Height = 20
+      Height = 35
       Caption = 'Clear'
       TabOrder = 0
       OnClick = btnClearClick
@@ -61,7 +62,7 @@ object frmLog: TfrmLog
       TabOrder = 1
     end
     object chbLogMessages: TCheckBox
-      Left = 206
+      Left = 222
       Top = 6
       Width = 251
       Height = 17
@@ -70,13 +71,22 @@ object frmLog: TfrmLog
       OnClick = chbLogMessagesClick
     end
     object chbLogToFile: TCheckBox
-      Left = 463
-      Top = 6
-      Width = 251
+      Left = 103
+      Top = 22
+      Width = 89
       Height = 17
       Caption = 'Log to file'
       TabOrder = 3
       OnClick = chbLogToFileClick
+    end
+    object chbLogMessagesOnlyFirstLines: TCheckBox
+      Left = 238
+      Top = 22
+      Width = 235
+      Height = 17
+      Caption = 'only first lines (Request-Line/Status-Line)'
+      TabOrder = 4
+      OnClick = chbLogMessagesClick
     end
   end
   object tmrUpdate: TTimer

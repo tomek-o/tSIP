@@ -42,6 +42,7 @@ __published:	// IDE-managed Components
 	TMenuItem *miSaveToFile;
 	TSaveDialog *saveDialog;
 	TCheckBox *chbLogToFile;
+	TCheckBox *chbLogMessagesOnlyFirstLines;
 	void __fastcall tmrUpdateTimer(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormResize(TObject *Sender);
@@ -65,6 +66,7 @@ private:	// User declarations
 	void AddTextToLog(bool bUseTimestamp, TColor color, AnsiString asText);
 
 	unsigned int iMaxUiLogLines;
+	bool updatingUi;
 		
 public:		// User declarations
 	__fastcall TfrmLog(TComponent* Owner);

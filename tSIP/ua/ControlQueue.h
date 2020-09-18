@@ -24,7 +24,7 @@ public:
 	void Hold(int callId, bool state);
 	void Mute(int callId, bool state);
 	void Hangup(int callId, int code=0);
-	void SetMsgLogging(bool enabled);
+	void SetMsgLogging(bool enabled, bool onlyFirstLines);
 	void SetAubufLogging(bool enabled);	
 	void ReRegister(int accountId);
 	void UnRegister(int accountId);

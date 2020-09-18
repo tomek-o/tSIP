@@ -20,7 +20,8 @@ struct sip {
 	sip_exit_h *exith;
 	void *arg;
 	bool closing;
-	bool log_messages;	
+	bool log_messages;
+	bool log_messages_only_first_lines;	
 };
 
 
