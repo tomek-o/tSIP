@@ -364,9 +364,9 @@ int net_debug(struct re_printf *pf, void *unused)
 #endif
 
 	err |= net_if_debug(pf, NULL);
-
+#ifdef HAVE_ROUTE_LIST
 	err |= net_rt_debug(pf, NULL);
-
+#endif
 	err |= dns_debug(pf, NULL);
 
 	return err;
