@@ -52,6 +52,7 @@
 #include "SIMPLE_Messages.h"
 #include "Globals.h"
 #include "PortaudioLock.h"
+#include "Translate.h"
 #include "common\Utilities.h"
 #include "common\ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -181,6 +182,36 @@ namespace {
 	}
 }
 
+void TfrmMain::TranslateForm(void* obj)
+{
+	TfrmMain *frm = reinterpret_cast<TfrmMain*>(obj);
+	assert(frm);
+	TRANSLATE_TMP("TfrmMain.btnMakeCall", frm->btnMakeCall->Caption);
+	TRANSLATE_TMP("TfrmMain.btnHangup", frm->btnHangup->Caption);
+	TRANSLATE_TMP("TfrmMain.tsDialpad", frm->tsDialpad->Caption);
+	TRANSLATE_TMP("TfrmMain.tsContacts", frm->tsContacts->Caption);
+	TRANSLATE_TMP("TfrmMain.tsHistory", frm->tsHistory->Caption);
+	TRANSLATE_TMP("TfrmMain.miFile", frm->miFile->Caption);
+	TRANSLATE_TMP("TfrmMain.miView", frm->miView->Caption);
+	TRANSLATE_TMP("TfrmMain.miSettings", frm->miSettings->Caption);
+	TRANSLATE_TMP("TfrmMain.miTools", frm->miTools->Caption);
+	TRANSLATE_TMP("TfrmMain.miHelp", frm->miHelp->Caption);
+	TRANSLATE_TMP("TfrmMain.miMinimizeTray", frm->miMinimizeTray->Caption);
+	TRANSLATE_TMP("TfrmMain.miExit", frm->miExit->Caption);
+	TRANSLATE_TMP("TfrmMain.miViewLog", frm->miViewLog->Caption);
+	TRANSLATE_TMP("TfrmMain.miCommonSettings", frm->miCommonSettings->Caption);
+	TRANSLATE_TMP("TfrmMain.miSettingsPatch", frm->miSettingsPatch->Caption);
+	TRANSLATE_TMP("TfrmMain.miPatchButtonSettings", frm->miPatchButtonSettings->Caption);
+	TRANSLATE_TMP("TfrmMain.miImportContactsFromCsv", frm->miImportContactsFromCsv->Caption);
+	TRANSLATE_TMP("TfrmMain.miImportContactsFromXml", frm->miImportContactsFromXml->Caption);
+	TRANSLATE_TMP("TfrmMain.miClearCallsHistory", frm->miClearCallsHistory->Caption);
+	TRANSLATE_TMP("TfrmMain.miRefreshTranslationFromFile", frm->miRefreshTranslationFromFile->Caption);
+	TRANSLATE_TMP("TfrmMain.miScripting", frm->miScripting->Caption);
+	TRANSLATE_TMP("TfrmMain.miMessages", frm->miMessages->Caption);
+	TRANSLATE_TMP("TfrmMain.miTroubleshooting", frm->miTroubleshooting->Caption);
+	TRANSLATE_TMP("TfrmMain.miAbout", frm->miAbout->Caption);
+}
+
 //---------------------------------------------------------------------------
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	: TForm(Owner),
@@ -192,6 +223,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	appState(Callback::APP_STATE_UNKNOWN)
 {
 	srand(time(0));
+	RegisterTranslationCb(this, TranslateForm);
 	lbl2ndParty->Caption = "";
 	lbl2ndPartyDesc->Caption = "";
 	lblCallState->Caption = "";
@@ -273,6 +305,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 
 __fastcall TfrmMain::~TfrmMain()
 {
+	UnregisterTranslationCb(this);
 	if (trIcon)
 	{
 		delete trIcon;
@@ -448,6 +481,11 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 {
 	this->Height = floor(appSettings.frmMain.iHeight * initialScaling + 0.5);
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
+
+	if (prev.Translation.language != appSettings.Translation.language)
+	{
+		LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
+	}
 
 	// modify application title and main window caption only if config changes,
 	// allowing to keep text set by Lua API or other methods
@@ -3420,6 +3458,12 @@ void __fastcall TfrmMain::miImportContactsFromXmlClick(TObject *Sender)
 			Application->MessageBox("Failed to load contacts", "XML import", MB_ICONSTOP);
 		}
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miRefreshTranslationFromFileClick(TObject *Sender)
+{
+	LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
 }
 //---------------------------------------------------------------------------
 

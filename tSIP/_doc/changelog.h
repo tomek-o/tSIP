@@ -829,5 +829,14 @@ Version 0.1.74
 	- added window for patching buttons configuration
 	- automatic restart on initialization error (e.g. temporary problem with network card resulting in bind failure)
 	- few other minor fixes
+
+Version 0.1.75
+	- changing tray icon on registration error
+	- fixed resizing of contact editor window: added constraints, changed anchors, changed labels text
+	- translation mechanism (only for few base controls at the moment)
+		- JSON translation files (structure: key -> text) in translations subdirectory
+		- UTF8 to ANSI conversion - depends on current code page for non-Unicode applications
+		- translation file selection: "General" settings tab
+
 */
 

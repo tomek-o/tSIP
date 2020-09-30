@@ -313,6 +313,15 @@ public:
 
 	UaConf uaConf;
 
+	struct _Translation
+	{
+		AnsiString language;
+		bool logMissingKeys;
+		_Translation(void):
+			logMissingKeys(false)
+		{}
+	} Translation;
+
 	struct _ScriptWindow
 	{
         AnsiString lastDir;

@@ -4,7 +4,8 @@
 
 /** \page roadmap Roadmap
 
-Bunch of things to do in future releases. No particular order:
+Bunch of things to do in future releases.
+No particular order. Might be outdated.
 
 - multiple accounts, even if only single active at the time
 - UDP transport keepalive
@@ -17,9 +18,7 @@ Bunch of things to do in future releases. No particular order:
 
 - misleading "Failed to start application" status when no valid account is configured
 
-
 - DTMF local playback
-
 
 Call recording:
 - fixme: possible hazards when starting recording
@@ -27,7 +26,6 @@ Call recording:
 - settings: record incoming/outgoing
 - semi-automatic record mode: record call by default, delete file if not "saved" by user
 - UID for file names to avoid conflicts with very short (<1 s) recordings
-
 
 - new button type: auto answer / DND with specified answer code
 
@@ -37,7 +35,7 @@ Call recording:
 - ICE
 - select reject code: 486 Busy (other devices keep ringing) or 603 Decline (all devices stop ringing)
 - hotkeys or speed dial: volume
-- encrypt password / password prompt
+- encrypt password
 - contacts: master/detail view
 - contact groups
 - different ringtones for different contacts
@@ -46,7 +44,7 @@ Call recording:
 - call history: master/detail view, copying number to clipboard, adding to phonebook
 - number processing / "LCR" / dialplan
 
-- user definable Call/Hangup buttons (horizontal configurable button container?)
+- user definable Call/Hangup buttons (horizontal configurable button container? buttons from basic container used?)
 - buttons: Dialpad/Contacts/History and equivalent hotkey actions replacing existing tab row
 - combine regular number edit and transfer number edit into one 
 
@@ -65,8 +63,6 @@ Call recording:
 - warn user if wave file source is selected but source file does not exist
 
 - translation mechanism
-
-- remote phonebook (XML)
 
 - supporting animated GIFs or frame-by-frame animations in BLFs
 
@@ -93,19 +89,13 @@ and whether it can be addressed?
 
 button: mouse down event
 
-> I was wondering if it is possible to pause or stop the recording while still on the call?
-
 Lua: get BLF button state => route incoming call to selected (idle) extension
 
 - audible DTMF keypad tones during the call and while dialing: as opt-in options, PlaySound, resources, ASYNC?
 
 - sine wave audio input device
 
-- provisioning for phonebook
-
 - more command-line control: show/hide, dtmf, hold/unhold, start recording
-
-TXPManifest
 
 ping plugin: add context menu to history
 
@@ -115,7 +105,6 @@ ping plugin: add context menu to history
 - 1000 BLFs (or BLFlist?), column paging
 
 - RTP stats: call quality testing
-
 
 
 DEBUG_INFO: w³¹cznik
@@ -133,11 +122,10 @@ tSIP: RecordViewer: play multiple files one by one (multiple selection list)
 multiple accounts; disable / set as default for outgoing
 lepsze informowanie o problemach: brak kompatybilnego kodeka, brak urz¹dzenia audio
 RecordViewer: keep sorting column/dir after restart
+RecordViewer: recompress using opusenc?
 
 tSIP scripting: help for commands (factory pattern)
 tSIP scripting: Unregister, Reregister
-luaopen_io(lua);
-
 
 plugin interface: showsettings
 
@@ -146,7 +134,7 @@ tSIP plugin: logout from group on inactivity (mouse, keyboard)
 tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(), 
 tSIP scripting: file I/O example (report call quality after each call)
 
-BUG: halt if audio device (mic with autosensing) is detached during call - winwave
+BUG: halt if audio device (mic with autosensing) is detached during call - winwave => winwave2
 
 
 FIXME: btn reregister not always working correctly, depending on current registration state (?)
@@ -157,6 +145,8 @@ update Lua to 5.3.x, remove CVS tags from Lua source
 
 - wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
 (=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)
+
+integrate RecordViewer.exe?
 
 */
 

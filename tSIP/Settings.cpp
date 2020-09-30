@@ -866,6 +866,12 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		}
 	}
 
+	{
+		const Json::Value &jv = root["Translation"];
+		jv.getAString("language", Translation.language);
+		jv.getBool("logMissingKeys", Translation.logMissingKeys);
+	}
+
 	return 0;
 }
 
@@ -1253,6 +1259,12 @@ int Settings::Write(AnsiString asFileName)
 				jMRU.append(Json::Value(ScriptWindow.MRU[i].c_str()));
 			}
 		}
+	}
+
+	{
+		Json::Value &jv = root["Translation"];
+		jv["language"] = Translation.language;
+		jv["logMissingKeys"] = Translation.logMissingKeys;
 	}
 
 

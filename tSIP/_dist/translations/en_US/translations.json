@@ -1,0 +1,8 @@
+{
+  "TfrmMain.btnHangup": "Hangup",
+  "TfrmMain.btnMakeCall": "Call/Answer",
+  "TfrmMain.miAbout": "About...",
+  "TfrmMain.miClearCallsHistory": "Clear calls history",
+  "TfrmMain.miExit": "Exit",
+  "TfrmMain.miTroubleshooting": "Troubleshooting"
+}

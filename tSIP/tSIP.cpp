@@ -49,6 +49,7 @@ USEFORM("FormSettingsPatch.cpp", frmSettingsPatch);
 #include "LogUnit.h"
 #include "Log.h"
 #include "Branding.h"
+#include "Translate.h"
 
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -75,7 +76,9 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		else
 		{
 			Application->Title = Branding::appName;
-        }
+		}
+
+		LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
 
 		if (appSettings.frmMain.mainIcon != "")
 		{

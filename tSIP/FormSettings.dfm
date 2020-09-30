@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsLogging
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -61,28 +61,42 @@ object frmSettings: TfrmSettings
       Caption = 'General'
       object lblGuiScaling: TLabel
         Left = 3
-        Top = 143
+        Top = 191
         Width = 140
         Height = 13
         Caption = 'GUI scaling (restart required)'
       end
       object lblGuiScalingPct: TLabel
         Left = 226
-        Top = 143
+        Top = 191
         Width = 11
         Height = 13
         Caption = '%'
       end
       object lblMainWindowHeight: TLabel
         Left = 3
-        Top = 167
+        Top = 215
         Width = 94
         Height = 13
         Caption = 'Main window height'
       end
+      object lblTranslation: TLabel
+        Left = 3
+        Top = 7
+        Width = 53
+        Height = 13
+        Caption = 'Translation'
+      end
+      object lblTranslateInfo: TLabel
+        Left = 320
+        Top = 7
+        Width = 101
+        Height = 13
+        Caption = '(may require restart)'
+      end
       object chbAlwaysOnTop: TCheckBox
         Left = 3
-        Top = 3
+        Top = 51
         Width = 325
         Height = 17
         Caption = 'Window always on top'
@@ -90,7 +104,7 @@ object frmSettings: TfrmSettings
       end
       object chbStartMinimizedToTray: TCheckBox
         Left = 3
-        Top = 26
+        Top = 74
         Width = 325
         Height = 17
         Caption = 'Start minimized to tray'
@@ -98,14 +112,14 @@ object frmSettings: TfrmSettings
       end
       object edGuiScaling: TEdit
         Left = 178
-        Top = 140
+        Top = 188
         Width = 42
         Height = 21
         TabOrder = 2
       end
       object chbXBtnMinimize: TCheckBox
         Left = 3
-        Top = 48
+        Top = 96
         Width = 325
         Height = 17
         Caption = 'Minimize to tray when "X" button is pressed'
@@ -113,7 +127,7 @@ object frmSettings: TfrmSettings
       end
       object chbRestoreMainWindowOnIncomingCall: TCheckBox
         Left = 3
-        Top = 71
+        Top = 119
         Width = 382
         Height = 17
         Caption = 'Restore minimized or bring to front main window on incoming call'
@@ -121,7 +135,7 @@ object frmSettings: TfrmSettings
       end
       object chbSingleInstance: TCheckBox
         Left = 3
-        Top = 188
+        Top = 236
         Width = 382
         Height = 17
         Caption = 
@@ -131,7 +145,7 @@ object frmSettings: TfrmSettings
       end
       object chbNoBeepOnEnterKey: TCheckBox
         Left = 3
-        Top = 209
+        Top = 257
         Width = 382
         Height = 17
         Caption = 
@@ -141,7 +155,7 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainShowWhenAnsweringCall: TCheckBox
         Left = 3
-        Top = 94
+        Top = 142
         Width = 446
         Height = 17
         Caption = 
@@ -151,14 +165,14 @@ object frmSettings: TfrmSettings
       end
       object edMainWindowHeight: TEdit
         Left = 178
-        Top = 164
+        Top = 212
         Width = 42
         Height = 21
         TabOrder = 8
       end
       object chbFrmMainShowWhenMakingCall: TCheckBox
         Left = 3
-        Top = 117
+        Top = 165
         Width = 478
         Height = 17
         Caption = 
@@ -168,7 +182,7 @@ object frmSettings: TfrmSettings
       end
       object chbNoTaskbarButtonRestore: TCheckBox
         Left = 3
-        Top = 232
+        Top = 280
         Width = 526
         Height = 17
         Caption = 
@@ -178,11 +192,27 @@ object frmSettings: TfrmSettings
       end
       object chbNoTrayIcon: TCheckBox
         Left = 3
-        Top = 255
+        Top = 303
         Width = 526
         Height = 17
         Caption = 'Do not create tray icon (restart required)'
         TabOrder = 11
+      end
+      object cbTranslation: TComboBox
+        Left = 75
+        Top = 4
+        Width = 230
+        Height = 21
+        ItemHeight = 13
+        TabOrder = 12
+      end
+      object chbTranslationLogMissingKeys: TCheckBox
+        Left = 75
+        Top = 31
+        Width = 325
+        Height = 17
+        Caption = 'Log keys missing in translation file'
+        TabOrder = 13
       end
     end
     object tsNetwork: TTabSheet

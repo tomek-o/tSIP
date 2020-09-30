@@ -90,7 +90,7 @@ __published:	// IDE-managed Components
 	TTimer *tmrAntirepeat;
 	TPanel *pnlSpeedDial;
 	TAction *actContactsCsvImport;
-	TMenuItem *ImportcontactsfromCSVfile1;
+	TMenuItem *miImportContactsFromCsv;
 	TOpenDialog *openDialog;
 	TImageList *imgListIcons;
 	TImage *imgDialpadBackground;
@@ -112,6 +112,7 @@ __published:	// IDE-managed Components
 	TMenuItem *miSettingsPatch;
 	TMenuItem *miPatchButtonSettings;
 	TMenuItem *miImportContactsFromXml;
+	TMenuItem *miRefreshTranslationFromFile;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -160,7 +161,10 @@ __published:	// IDE-managed Components
 	void __fastcall miSettingsPatchClick(TObject *Sender);
 	void __fastcall miPatchButtonSettingsClick(TObject *Sender);
 	void __fastcall miImportContactsFromXmlClick(TObject *Sender);
+	void __fastcall miRefreshTranslationFromFileClick(TObject *Sender);
 private:	// User declarations
+	static void TranslateForm(void* obj);
+
 	double initialScaling;
 
 	TrayIcon *trIcon;

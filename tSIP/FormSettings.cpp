@@ -17,6 +17,7 @@
 #include "Paths.h"
 #include "Registry.hpp"
 #include "Branding.h"
+#include "Translate.h"
 #include <FileCtrl.hpp>
 #include <assert.h>
 #include <stdio.h>
@@ -36,6 +37,8 @@ namespace
 	}
 
 	std::vector<NetInterface> networkInterfaces;
+
+	const char* EMPTY_TRANSLATION_NAME = "- NONE (default, English) -";
 }	// namespace
 
 
@@ -193,6 +196,20 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edGuiScaling->Text = tmpSettings.gui.scalingPct;
 
 	edMainWindowHeight->Text = tmpSettings.frmMain.iHeight;
+
+	std::vector<AnsiString> translations = EnumerateTranslations();
+	cbTranslation->Clear();
+	cbTranslation->Items->Add(EMPTY_TRANSLATION_NAME);
+	for (unsigned int i=0; i<translations.size(); i++)
+	{
+    	cbTranslation->Items->Add(translations[i]);
+	}
+	cbTranslation->Text = tmpSettings.Translation.language;
+	if (tmpSettings.Translation.language == "")
+	{
+    	cbTranslation->Text = EMPTY_TRANSLATION_NAME;
+	}
+	chbTranslationLogMissingKeys->Checked = tmpSettings.Translation.logMissingKeys;	
 
 	chbAlwaysOnTop->Checked = tmpSettings.frmMain.bAlwaysOnTop;
 	chbStartMinimizedToTray->Checked = tmpSettings.frmMain.bStartMinimizedToTray;
@@ -458,6 +475,16 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	{
 		tmpSettings.frmMain.iHeight = iHeight;
 	}
+
+	if (cbTranslation->ItemIndex == 0)
+	{
+		tmpSettings.Translation.language = "";
+	}
+	else
+	{
+		tmpSettings.Translation.language = cbTranslation->Text;
+	}
+	tmpSettings.Translation.logMissingKeys = chbTranslationLogMissingKeys->Checked;	
 
 	tmpSettings.frmMain.bAlwaysOnTop = chbAlwaysOnTop->Checked;
 	tmpSettings.frmMain.bStartMinimizedToTray = chbStartMinimizedToTray->Checked;

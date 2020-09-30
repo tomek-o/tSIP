@@ -32,6 +32,7 @@ object frmMain: TfrmMain
     Height = 19
     Panels = <>
     SimplePanel = True
+    ExplicitTop = 381
   end
   object pnlMain: TPanel
     Left = 0
@@ -41,6 +42,7 @@ object frmMain: TfrmMain
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitHeight = 381
     object lblCallState: TLabel
       Left = 8
       Top = 71
@@ -122,7 +124,7 @@ object frmMain: TfrmMain
     object btnMakeCall: TSpeedButton
       Left = 8
       Top = 90
-      Width = 90
+      Width = 120
       Height = 25
       Caption = 'Call/Answer'
       Font.Charset = DEFAULT_CHARSET
@@ -134,9 +136,9 @@ object frmMain: TfrmMain
       OnClick = btnMakeCallClick
     end
     object btnHangup: TSpeedButton
-      Left = 170
+      Left = 140
       Top = 90
-      Width = 90
+      Width = 120
       Height = 25
       Caption = 'Hangup'
       Font.Charset = DEFAULT_CHARSET
@@ -512,6 +514,7 @@ object frmMain: TfrmMain
     Align = alRight
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitHeight = 377
   end
   object MainMenu: TMainMenu
     Left = 283
@@ -546,7 +549,7 @@ object frmMain: TfrmMain
         Caption = 'Patch / update button settings with JSON'
         OnClick = miPatchButtonSettingsClick
       end
-      object ImportcontactsfromCSVfile1: TMenuItem
+      object miImportContactsFromCsv: TMenuItem
         Action = actContactsCsvImport
       end
       object miImportContactsFromXml: TMenuItem
@@ -556,6 +559,10 @@ object frmMain: TfrmMain
       object miClearCallsHistory: TMenuItem
         Caption = 'Clear calls history'
         OnClick = miClearCallsHistoryClick
+      end
+      object miRefreshTranslationFromFile: TMenuItem
+        Caption = 'Refresh translation from file'
+        OnClick = miRefreshTranslationFromFileClick
       end
     end
     object miTools: TMenuItem
