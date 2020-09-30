@@ -85,8 +85,12 @@ int LoadTranslations(AnsiString name, bool logMissingKeys)
 				for ( Json::Value::Members::iterator it = members.begin(); it != members.end(); ++it )
 				{
 					const char* name = (*it).c_str();
-					AnsiString text = ::Utf8ToAnsi(root[name].asCString());
-					translations[name] = text;
+					Json::Value &jv = root[name];
+					if (jv.type() == Json::stringValue)
+					{
+						AnsiString text = ::Utf8ToAnsi(jv.asCString());
+						translations[name] = text;
+					}
 				}
 			}
 			std::map<void*, TranslationCb>::iterator iter;
