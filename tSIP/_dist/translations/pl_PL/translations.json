@@ -6,7 +6,7 @@
   "TfrmMain.miCommonSettings": "Konfiguracja ogólna",
   "TfrmMain.miExit": "Zakończ",
   "TfrmMain.miFile": "Plik",
-  "TfrmMain.miHelp1": "Pomoc",
+  "TfrmMain.miHelp": "Pomoc",
   "TfrmMain.miImportContactsFromCsv": "Importuj kontakty z pliku CSV",
   "TfrmMain.miImportContactsFromXml": "Importuj kontakty z pliku XML (jak Yealink)",
   "TfrmMain.miMessages": "Wiadomości tekstowe",
