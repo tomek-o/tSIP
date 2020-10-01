@@ -15,6 +15,29 @@ namespace
 	std::map<void*, TranslationCb> translationCallbacks;
 	AnsiString asDir;
 	bool logMissingKeysFlag = false;
+
+	/** Handle nested i18n translations recursively.
+		When tested i18n-editor was converting existing keys with dot notation to nested objects.
+		Other editor, i18n Manager was keeping existing dot notation in key names.
+	*/
+	void CollectTranslations(const Json::Value &jvalue, AnsiString prefix)
+	{
+		Json::Value::Members members( jvalue.getMemberNames() );
+		for ( Json::Value::Members::iterator it = members.begin(); it != members.end(); ++it )
+		{
+			const char* name = (*it).c_str();
+			const Json::Value &jv = jvalue[name];
+			if (jv.type() == Json::stringValue)
+			{
+				AnsiString text = ::Utf8ToAnsi(jv.asCString());
+				translations[prefix + name] = text;
+			}
+			else if (jv.type() == Json::objectValue)
+			{
+				CollectTranslations(jv, prefix + name + ".");
+			}
+		}
+	}
 }
 
 std::vector<AnsiString> EnumerateTranslations(void)
@@ -81,17 +104,7 @@ int LoadTranslations(AnsiString name, bool logMissingKeys)
 		{
 			if (root.type() == Json::objectValue)
 			{
-				Json::Value::Members members( root.getMemberNames() );
-				for ( Json::Value::Members::iterator it = members.begin(); it != members.end(); ++it )
-				{
-					const char* name = (*it).c_str();
-					Json::Value &jv = root[name];
-					if (jv.type() == Json::stringValue)
-					{
-						AnsiString text = ::Utf8ToAnsi(jv.asCString());
-						translations[name] = text;
-					}
-				}
+				CollectTranslations(root, "");
 			}
 			std::map<void*, TranslationCb>::iterator iter;
 			for (iter = translationCallbacks.begin(); iter != translationCallbacks.end(); ++iter)
