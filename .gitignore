@@ -8,3 +8,4 @@
 *.obj
 *.depend
 tSIP.todo
+.i18n-editor-metadata
