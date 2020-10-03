@@ -1,8 +1,28 @@
 {
-  "TfrmMain.btnHangup": "Hangup",
-  "TfrmMain.btnMakeCall": "Call/Answer",
-  "TfrmMain.miAbout": "About...",
-  "TfrmMain.miClearCallsHistory": "Clear calls history",
-  "TfrmMain.miExit": "Exit",
-  "TfrmMain.miTroubleshooting": "Troubleshooting"
+  "TfrmMain": {
+    "btnHangup": "Hangup",
+    "btnMakeCall": "Call/Answer",
+    "miAbout": "About...",
+    "miClearCallsHistory": "Clear calls history",
+    "miCommonSettings": "Settings",
+    "miExit": "Exit",
+    "miFile": "File",
+    "miHelp": "Help",
+    "miImportContactsFromCsv": "Import contacts from CSV file",
+    "miImportContactsFromXml": "Import contacts from XML file",
+    "miMessages": "Messages",
+    "miMinimizeTray": "Minimize to tray",
+    "miPatchButtonSettings": "Patch / update button settings with JSON",
+    "miRefreshTranslationFromFile": "Refresh translations from file",
+    "miScripting": "Script window",
+    "miSettings": "Configuration",
+    "miSettingsPatch": "Patch / update main settings with JSON",
+    "miTools": "Tools",
+    "miTroubleshooting": "Troubleshooting",
+    "miView": "View",
+    "miViewLog": "Log",
+    "tsContacts": "Contacts",
+    "tsDialpad": "Dialpad",
+    "tsHistory": "History"
+  }
 }

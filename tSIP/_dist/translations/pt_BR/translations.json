@@ -1,5 +1,28 @@
 {
-  "TfrmMain.btnHangup": "Desligar",
-  "TfrmMain.btnMakeCall": "Ligar / Atender",
-  "TfrmMain.miFile": "Arquivo"
+  "TfrmMain": {
+    "btnHangup": "Desligar",
+    "btnMakeCall": "Ligar / Atender",
+    "miAbout": "Sobre o programa...",
+    "miClearCallsHistory": "Limpar histórico de chamadas",
+    "miCommonSettings": "Configurações",
+    "miExit": "Sair",
+    "miFile": "Arquivo",
+    "miHelp": "Socorro",
+    "miImportContactsFromCsv": "Importar contatos do arquivo CSV",
+    "miImportContactsFromXml": "Importar contatos do arquivo XML",
+    "miMessages": "Mensagens",
+    "miMinimizeTray": "Minimize para a bandeja",
+    "miPatchButtonSettings": "Configurações de patch / atualização do botão com JSON",
+    "miRefreshTranslationFromFile": "Atualizar as traduções do arquivo",
+    "miScripting": "Janela de script - Lua",
+    "miSettings": "Configuração",
+    "miSettingsPatch": "Corrigir / atualizar as configurações principais com JSON",
+    "miTools": "Ferramentas",
+    "miTroubleshooting": "Solução de problemas",
+    "miView": "Visão",
+    "miViewLog": "Registro",
+    "tsContacts": "Contatos",
+    "tsDialpad": "Teclado",
+    "tsHistory": "História"
+  }
 }
