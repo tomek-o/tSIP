@@ -95,7 +95,7 @@ Lua: get BLF button state => route incoming call to selected (idle) extension
 
 - sine wave audio input device
 
-- more command-line control: show/hide, dtmf, hold/unhold, start recording
+- more command-line control: show/hide, dtmf, hold/unhold
 
 ping plugin: add context menu to history
 

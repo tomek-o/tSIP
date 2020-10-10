@@ -28,6 +28,7 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="lastconfig" value="Debug_Build"/>
         <property category="build.node" name="libraries" value="vclx.lib vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="tSIP.exe"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;xmlrtl;vclie;inet;inetdbbde;inetdbxpress"/>
@@ -49,7 +50,7 @@
         <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.arg.1" value="debug_build\precompiled.csm"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.arg.merge" value="0"/>
-        <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.H=.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.Hc.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.He.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
@@ -480,7 +481,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">74</VersionInfo>
-          <VersionInfo Name="Build">5</VersionInfo>
+          <VersionInfo Name="Build">7</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -492,7 +493,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.74.5</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.74.7</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -545,10 +546,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

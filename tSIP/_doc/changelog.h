@@ -837,6 +837,8 @@ Version 0.1.75
 		- JSON translation files (structure: key -> text) in translations subdirectory
 		- UTF8 to ANSI conversion - depends on current code page for non-Unicode applications
 		- translation file selection: "General" settings tab
-
+		- added translation to TfrmTrayNotifier
+	- tray notifier: hide "Answer" button if call is confirmed
+	- option to start/pause recording from command line (or browser)
 */
 
