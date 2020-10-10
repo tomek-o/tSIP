@@ -9,6 +9,9 @@
 #include <Forms.hpp>
 #include <ExtCtrls.hpp>
 //---------------------------------------------------------------------------
+
+#include "Callback.h"
+
 class TfrmTrayNotifier : public TForm
 {
 __published:	// IDE-managed Components
@@ -22,6 +25,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnAnswerClick(TObject *Sender);
 	void __fastcall FormCreate(TObject *Sender);
 private:	// User declarations
+	static void TranslateForm(void* obj);
 	typedef void(__closure *CallbackHangup)(void);
 	typedef void(__closure *CallbackAnswer)(void);
 	void __fastcall Close(void);
@@ -34,6 +38,7 @@ public:		// User declarations
 	void UpdateBackgroundImage(void);
 	CallbackHangup OnHangup;
 	CallbackAnswer OnAnswer;
+	void SetCallState(Callback::ua_state_e state);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmTrayNotifier *frmTrayNotifier;

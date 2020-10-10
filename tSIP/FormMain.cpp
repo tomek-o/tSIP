@@ -1536,6 +1536,11 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 			}
 
+			if (frmTrayNotifier)
+			{
+            	frmTrayNotifier->SetCallState(cb.state);
+			}
+
 			if (appSettings.Scripts.onCallState != "")
 			{
 				AnsiString asScriptFile;
@@ -2908,6 +2913,22 @@ void TfrmMain::HandleCommandLine(void)
 	{
 		LOG("action = PROGRAMMABLE_BTN\n");	
 		ProgrammableButtonClick(cmd.programmableBtnId);
+	}
+	else if (cmd.action == CommandLine::ACTION_RECORD_START)
+	{
+		StartRecording();
+	}
+	else if (cmd.action == CommandLine::ACTION_RECORD_PAUSE)
+	{
+		if (call.recording)
+		{
+			LOG("Pause recording\n");
+			UA->RecordPause();
+		}
+		else
+		{
+			LOG("RECORD_PAUSE: not recording\n");
+		}
 	}
 	cmd.action = CommandLine::ACTION_NONE;
 }

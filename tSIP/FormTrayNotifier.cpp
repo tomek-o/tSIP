@@ -7,16 +7,28 @@
 #include "Settings.h"
 #include "Paths.h"
 #include "Log.h"
+#include "Translate.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TfrmTrayNotifier *frmTrayNotifier;
 //---------------------------------------------------------------------------
+
+void TfrmTrayNotifier::TranslateForm(void* obj)
+{
+	TfrmTrayNotifier *frm = reinterpret_cast<TfrmTrayNotifier*>(obj);
+	assert(frm);
+	TRANSLATE_TMP("TfrmTrayNotifier.btnAnswer", frm->btnAnswer->Caption);
+	TRANSLATE_TMP("TfrmTrayNotifier.btnHangup", frm->btnHangup->Caption);
+}
+
+
 __fastcall TfrmTrayNotifier::TfrmTrayNotifier(TComponent* Owner)
 	: TForm(Owner),
 	OnHangup(NULL),
 	OnAnswer(NULL)
 {
+	RegisterTranslationCb(this, TranslateForm);
 	Width = appSettings.frmTrayNotifier.iWidth;
 	Height = appSettings.frmTrayNotifier.iHeight;
 	UpdateBackgroundImage();
@@ -100,4 +112,11 @@ void __fastcall TfrmTrayNotifier::CreateParams(TCreateParams &Params)
 	Params.WndParent = GetDesktopWindow();
 }
 
+void TfrmTrayNotifier::SetCallState(Callback::ua_state_e state)
+{
+	if (state == Callback::CALL_STATE_ESTABLISHED)
+	{
+    	btnAnswer->Visible = false;
+	}
+}
 
