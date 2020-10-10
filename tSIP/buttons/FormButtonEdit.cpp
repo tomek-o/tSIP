@@ -213,21 +213,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::DISABLED:
 	case Button::CONTACT_NOTE:
 	case Button::CONTACT_FILE:
-		edNumber->Visible = false;
-		lblNumber->Visible = false;
-		break;
-	case Button::SPEED_DIAL:
-		tsBehaviorBlf->Visible = true;
-		break;
-	case Button::BLF:
-		chbNoIcon->Checked = false;
-		chbNoIcon->Enabled = false;
-		tsBehaviorBlf->Visible = true;
-		break;
 	case Button::REDIAL:
-		edNumber->Visible = false;
-		lblNumber->Visible = false;
-		break;
 	case Button::TRANSFER:
 	case Button::HOLD:
 	case Button::HTTP_QUERY:
@@ -237,11 +223,29 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::MINIMIZE:
 	case Button::SHOW_LOG:
 	case Button::EXIT:
+	case Button::UA_RESTART:
+	case Button::RECORD:
+	case Button::RECORD_PAUSE:
+	case Button::UNREGISTER:
+	case Button::REREGISTER:
+	case Button::MUTE_RING:
+	case Button::MUTE:
 		edNumber->Visible = false;
 		lblNumber->Visible = false;
 		break;
+
+	case Button::SPEED_DIAL:
+		tsBehaviorBlf->Visible = true;
+		break;
+	case Button::BLF:
+		chbNoIcon->Checked = false;
+		chbNoIcon->Enabled = false;
+		tsBehaviorBlf->Visible = true;
+		break;
 	case Button::MWI:
 		tsBehaviorBlf->Visible = true;
+		edNumber->Visible = false;
+		lblNumber->Visible = false;			
 		break;
 	case Button::PRESENCE:
 		tsBehaviorBlf->Visible = true;
