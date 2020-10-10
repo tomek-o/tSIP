@@ -30,7 +30,9 @@ public:
 		ACTION_ANSWER,
 		ACTION_SHOWWINDOW,	///< bring application window to front (possibly from tray)
 		ACTION_APP_QUIT,
-		ACTION_PROGRAMMABLE_BTN	///< simulating pressing one of the programmable buttons
+		ACTION_PROGRAMMABLE_BTN,	///< simulating pressing one of the programmable buttons
+		ACTION_RECORD_START,
+		ACTION_RECORD_PAUSE,
 	} action;
 	AnsiString asTarget;
 	int programmableBtnId;

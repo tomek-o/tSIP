@@ -171,7 +171,15 @@ void CommandLine::Execute(char* buf, int paramcnt)
 				{
                     action = ACTION_PROGRAMMABLE_BTN;
                 }
-            }
+			}
+			else if (asCommandPart == "RECORD_START")
+			{
+				action = ACTION_RECORD_START;
+			}
+			else if (asCommandPart == "RECORD_PAUSE")
+			{
+            	action = ACTION_RECORD_PAUSE;
+			}
 			else
 			{
 				if (asCallTo.Pos("sip:") == 1 && (appSettings.Integration.bDoNotUseSipPrefixForDirectIpCalls == false))
