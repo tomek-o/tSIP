@@ -24,5 +24,9 @@
     "tsContacts": "Książka tel.",
     "tsDialpad": "Klawiatura",
     "tsHistory": "Historia"
+  },
+  "TfrmTrayNotifier": {
+    "btnAnswer": "Odbierz",
+    "btnHangup": "Zakończ"
   }
 }

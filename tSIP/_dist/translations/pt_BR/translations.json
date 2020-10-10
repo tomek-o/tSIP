@@ -24,5 +24,9 @@
     "tsContacts": "Contatos",
     "tsDialpad": "Teclado",
     "tsHistory": "História"
+  },
+  "TfrmTrayNotifier": {
+    "btnAnswer": "Atender",
+    "btnHangup": "Desligar"
   }
 }
