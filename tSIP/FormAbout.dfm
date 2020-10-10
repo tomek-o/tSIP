@@ -386,10 +386,10 @@ object frmAbout: TfrmAbout
     object Label2: TLabel
       Left = 344
       Top = 86
-      Width = 112
+      Width = 127
       Height = 13
       Cursor = crHandPoint
-      Caption = 'http://www.creytiv.com'
+      Caption = 'https://github.com/baresip'
       Color = clBtnFace
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlue
@@ -513,7 +513,8 @@ object frmAbout: TfrmAbout
           'OR PROFITS; OR '
         
           'BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABI' +
-          'LITY, WHETHER '
+          'LITY, '
+        'WHETHER '
         
           'IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR ' +
           'OTHERWISE) '
@@ -575,7 +576,8 @@ object frmAbout: TfrmAbout
         'the following non-binding requests: '
         
           'Any person wishing to distribute modifications to the Software i' +
-          's requested to send the modifications to the '
+          's requested to send the modifications to '
+        'the '
         
           'original developer so that they can be incorporated into the can' +
           'onical version. It is also requested that '
@@ -841,7 +843,8 @@ object frmAbout: TfrmAbout
           'IABILITY, '
         
           'WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FRO' +
-          'M, OUT OF OR IN '
+          'M, OUT OF OR '
+        'IN '
         
           'CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE' +
           ' SOFTWARE. '
