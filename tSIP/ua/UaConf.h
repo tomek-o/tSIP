@@ -244,12 +244,14 @@ public:
 
 			RecStartLimiter
 		} recStart;
+		bool noNumberB64Encoding;		///< do not encode number/URI with filesystem-safe base64
 		RecordingCfg(void):
 			enabled(false),
 			recDir(RecDirRelative),
 			channels(1),
 			side(0),
-			recStart(RecStartCallConfirmed)
+			recStart(RecStartCallConfirmed),
+			noNumberB64Encoding(false)
 		{}
 		bool operator==(const RecordingCfg& right) const {
 			return enabled == right.enabled &&
@@ -257,7 +259,8 @@ public:
 				customRecDir == right.customRecDir &&
 				channels == right.channels &&
 				side == right.side &&
-				recStart == right.recStart
+				recStart == right.recStart &&
+				noNumberB64Encoding == right.noNumberB64Encoding
 				;
 		}
 		bool operator!=(const RecordingCfg& right) const {

@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsGeneral
+    ActivePage = tsRecording
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1861,6 +1861,16 @@ object frmSettings: TfrmSettings
         Caption = 'Open'
         TabOrder = 7
         OnClick = btnOpenRecordingFolderClick
+      end
+      object chbRecordingNoNumberB64Encoding: TCheckBox
+        Left = 3
+        Top = 176
+        Width = 534
+        Height = 17
+        Caption = 
+          'Do not encode number/URI with filesystem-safe base64; not compat' +
+          'ible with RecordViewer.exe'
+        TabOrder = 8
       end
     end
     object tsCodecs: TTabSheet

@@ -342,6 +342,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		cbRecordedSide->ItemIndex = tmpSettings.uaConf.recording.side;
     }
 	cbRecordingStart->ItemIndex = tmpSettings.uaConf.recording.recStart;
+	chbRecordingNoNumberB64Encoding->Checked = tmpSettings.uaConf.recording.noNumberB64Encoding;
 
 	chbAutoAnswer->Checked = tmpSettings.uaConf.autoAnswer;
 	edAutoAnswerCode->Text = tmpSettings.uaConf.autoAnswerCode;
@@ -666,6 +667,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.recording.channels = cbRecordingChannels->ItemIndex + 1;
 	tmpSettings.uaConf.recording.side = cbRecordedSide->ItemIndex;
 	tmpSettings.uaConf.recording.recStart = static_cast<UaConf::RecordingCfg::RecStart>(cbRecordingStart->ItemIndex);
+	tmpSettings.uaConf.recording.noNumberB64Encoding = chbRecordingNoNumberB64Encoding->Checked;
 
    	tmpSettings.uaConf.autoAnswer = chbAutoAnswer->Checked;
 	tmpSettings.uaConf.autoAnswerCode = StrToIntDef(edAutoAnswerCode->Text, 200);

@@ -322,6 +322,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			if (recStart >= 0 && recStart < UaConf::RecordingCfg::RecStartLimiter) {
 				uaConf.recording.recStart = recStart;
 			}
+			uaConfRecordingJson.getBool("noNumberB64Encoding", uaConf.recording.noNumberB64Encoding);
 		}
 		else
 		{
@@ -1105,6 +1106,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["channels"] = uaConf.recording.channels;
 		jv["side"] = uaConf.recording.side;
 		jv["recStart"] = uaConf.recording.recStart;
+		jv["noNumberB64Encoding"] = uaConf.recording.noNumberB64Encoding;
 	}
 
 	{
