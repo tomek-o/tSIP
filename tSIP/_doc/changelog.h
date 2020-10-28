@@ -831,6 +831,9 @@ Version 0.1.74
 	- few other minor fixes
 
 Version 0.1.75
+	- contacts: differentiate popup menu depending on contact number/uri count
+	- added option to not create tray icon
+	- added option to hide dialpad
 	- changing tray icon on registration error
 	- fixed resizing of contact editor window: added constraints, changed anchors, changed labels text
 	- translation mechanism (only for few base controls at the moment)
@@ -840,5 +843,10 @@ Version 0.1.75
 		- added translation to TfrmTrayNotifier
 	- tray notifier: hide "Answer" button if call is confirmed
 	- option to start/pause recording from command line (or browser)
+	- added import of Yealink-like XML phonebook
+	- added Lua example fetching with curl and loading XML phonebook
+	- added option to log only first lines of SIP messages
+	- added option to skip encoding number in recording file with base64
+	- few other minor fixes and changes
 */
 
