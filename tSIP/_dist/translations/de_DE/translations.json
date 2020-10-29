@@ -1,0 +1,32 @@
+{
+  "TfrmMain": {
+    "btnHangup": "Auflegen",
+    "btnMakeCall": "Wahl und Annahme",
+    "miAbout": "Über...",
+    "miClearCallsHistory": "Historie leeren",
+    "miCommonSettings": "Einstellungen.",
+    "miExit": "Beenden",
+    "miFile": "Datei",
+    "miHelp": "Hilfe",
+    "miImportContactsFromCsv": "Importiere Kontakte aus CSV-Datei",
+    "miImportContactsFromXml": "Importiere Kontakte aus XML-Datei",
+    "miMessages": "Nachrichten",
+    "miMinimizeTray": "In Systray minimieren",
+    "miPatchButtonSettings": "Button-Einstellung aus JSON-Datei neu laden",
+    "miRefreshTranslationFromFile": "Übersetzung aus Datei neu laden",
+    "miScripting": "Script-Fenster",
+    "miSettings": "Konfig",
+    "miSettingsPatch": "Einstellungen aus JSON-Datei neu laden",
+    "miTools": "Werkzeuge",
+    "miTroubleshooting": "Fehlerbehandlung",
+    "miView": "Ansicht",
+    "miViewLog": "Log",
+    "tsContacts": "Kontakte",
+    "tsDialpad": "Wählfeld",
+    "tsHistory": "Historie"
+  },
+  "TfrmTrayNotifier": {
+    "btnAnswer": "Antworten",
+    "btnHangup": "Ablehnen"
+  }
+}
