@@ -1,6 +1,6 @@
 # tSIP
 Small, portable SIP softphone for Windows.  
-Based on re/rem/baresip (http://www.creytiv.com/baresip.html).
+Based on re/rem/baresip (https://github.com/baresip/).
 
 ![tSIP screenshot with console](http://tomeko.net/software/SIPclient/tSIP_sidecar.png)
 
