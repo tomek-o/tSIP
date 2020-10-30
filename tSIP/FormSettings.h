@@ -409,6 +409,8 @@ __published:	// IDE-managed Components
 	TLabel *lblTranslateInfo;
 	TCheckBox *chbTranslationLogMissingKeys;
 	TCheckBox *chbRecordingNoNumberB64Encoding;
+	TLabel *lblFrmMainLayout;
+	TComboBox *cbFrmMainLayout;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

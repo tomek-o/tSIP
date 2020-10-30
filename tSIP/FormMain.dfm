@@ -1,11 +1,12 @@
 object frmMain: TfrmMain
   Left = 0
   Top = 0
+  Margins.Left = 0
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'tSIP'
   ClientHeight = 381
-  ClientWidth = 479
+  ClientWidth = 485
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -28,7 +29,7 @@ object frmMain: TfrmMain
   object StatusBar: TStatusBar
     Left = 0
     Top = 362
-    Width = 479
+    Width = 485
     Height = 19
     Panels = <>
     SimplePanel = True
@@ -36,18 +37,382 @@ object frmMain: TfrmMain
   object pnlMain: TPanel
     Left = 0
     Top = 0
-    Width = 267
+    Width = 271
     Height = 362
     Align = alLeft
     BevelOuter = bvNone
     TabOrder = 1
-    object lblCallState: TLabel
+    object pcMain: TPageControl
+      Left = 0
+      Top = 124
+      Width = 267
+      Height = 236
+      ActivePage = tsDialpad
+      Align = alCustom
+      TabOrder = 0
+      TabStop = False
+      OnChange = pcMainChange
+      object tsDialpad: TTabSheet
+        Caption = 'Dialpad'
+        object pnlDialpad: TPanel
+          Left = 0
+          Top = -1
+          Width = 259
+          Height = 209
+          Align = alBottom
+          BevelOuter = bvNone
+          Caption = 'pnlDialpad'
+          TabOrder = 0
+          object imgDialpadBackground: TImage
+            Left = 0
+            Top = 0
+            Width = 259
+            Height = 209
+            Align = alClient
+            Transparent = True
+            ExplicitLeft = 64
+            ExplicitTop = 8
+            ExplicitWidth = 185
+            ExplicitHeight = 137
+          end
+          object btnDial1: TSpeedButton
+            Tag = 1
+            Left = 4
+            Top = 3
+            Width = 40
+            Height = 40
+            Caption = '1'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial2: TSpeedButton
+            Tag = 2
+            AlignWithMargins = True
+            Left = 51
+            Top = 3
+            Width = 40
+            Height = 40
+            Caption = '2'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial3: TSpeedButton
+            Tag = 3
+            Left = 99
+            Top = 3
+            Width = 40
+            Height = 40
+            Caption = '3'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial4: TSpeedButton
+            Tag = 4
+            Left = 4
+            Top = 46
+            Width = 40
+            Height = 40
+            Caption = '4'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial5: TSpeedButton
+            Tag = 5
+            Left = 51
+            Top = 46
+            Width = 40
+            Height = 40
+            Caption = '5'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial6: TSpeedButton
+            Tag = 6
+            Left = 99
+            Top = 46
+            Width = 40
+            Height = 40
+            Caption = '6'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial7: TSpeedButton
+            Tag = 7
+            Left = 4
+            Top = 90
+            Width = 40
+            Height = 40
+            Caption = '7'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial8: TSpeedButton
+            Tag = 8
+            Left = 51
+            Top = 90
+            Width = 40
+            Height = 40
+            Caption = '8'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial9: TSpeedButton
+            Tag = 9
+            Left = 99
+            Top = 90
+            Width = 40
+            Height = 40
+            Caption = '9'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDialStar: TSpeedButton
+            Tag = 10
+            Left = 4
+            Top = 134
+            Width = 40
+            Height = 40
+            Caption = '*'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDial0: TSpeedButton
+            Left = 51
+            Top = 134
+            Width = 40
+            Height = 40
+            Caption = '0'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnDialHash: TSpeedButton
+            Tag = 11
+            Left = 99
+            Top = 134
+            Width = 40
+            Height = 40
+            Caption = '#'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -29
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            OnClick = btnDialClick
+          end
+          object btnResetMicVolume: TSpeedButton
+            Left = 143
+            Top = 181
+            Width = 18
+            Height = 24
+            Hint = 'Reset audio input volume'
+            Glyph.Data = {
+              E6010000424DE60100000000000036000000280000000C0000000C0000000100
+              180000000000B0010000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FF000000FFFFFFFFFFFF000000000000000000000000FFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFF000000FFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF
+              FFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000
+              000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
+              FF000000FFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFF
+              FFFFFFFFFF000000FFFFFFFFFFFF000000000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF}
+            OnClick = btnResetMicVolumeClick
+          end
+          object btnResetSpeakerVolume: TSpeedButton
+            Left = 165
+            Top = 181
+            Width = 18
+            Height = 24
+            Hint = 'Reset audio output volume'
+            Glyph.Data = {
+              E6010000424DE60100000000000036000000280000000C0000000C0000000100
+              180000000000B0010000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFF
+              FFFFFFFFFFFFFFFFFF000000000000000000000000000000FFFFFFFFFFFF0000
+              00FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFF
+              FFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF000000
+              FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
+              FF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFF
+              FFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000
+              000000000000000000000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+              00FFFFFFFFFFFFFFFFFF}
+            OnClick = btnResetSpeakerVolumeClick
+          end
+          object edTransfer: TEdit
+            Left = 3
+            Top = 181
+            Width = 136
+            Height = 24
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 0
+            Text = 'Transfer to ...'
+            OnEnter = edTransferEnter
+            OnKeyPress = edTransferKeyPress
+          end
+          object trbarSoftvolMic: TTrackBar
+            Left = 140
+            Top = 0
+            Width = 20
+            Height = 180
+            Max = 512
+            Min = 10
+            Orientation = trVertical
+            Frequency = 20
+            Position = 384
+            TabOrder = 1
+            TabStop = False
+            TickMarks = tmBoth
+            OnChange = trbarSoftvolMicChange
+          end
+          object trbarSoftvolSpeaker: TTrackBar
+            Left = 160
+            Top = 0
+            Width = 20
+            Height = 180
+            Max = 512
+            Min = 10
+            Orientation = trVertical
+            Frequency = 20
+            Position = 384
+            TabOrder = 2
+            TabStop = False
+            TickMarks = tmBoth
+            OnChange = trbarSoftvolSpeakerChange
+          end
+          object pnlButtonsBasic: TPanel
+            Left = 183
+            Top = 3
+            Width = 76
+            Height = 205
+            Align = alCustom
+            BevelOuter = bvNone
+            TabOrder = 3
+          end
+        end
+      end
+      object tsContacts: TTabSheet
+        Caption = 'Contacts'
+        ImageIndex = 2
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 252
+        ExplicitHeight = 0
+      end
+      object tsHistory: TTabSheet
+        Caption = 'History'
+        ImageIndex = 1
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 252
+        ExplicitHeight = 0
+      end
+    end
+  end
+  object pnlSpeedDial: TPanel
+    AlignWithMargins = True
+    Left = 271
+    Top = 4
+    Width = 214
+    Height = 358
+    Margins.Left = 0
+    Margins.Top = 4
+    Margins.Right = 0
+    Margins.Bottom = 0
+    Align = alRight
+    BevelOuter = bvNone
+    TabOrder = 2
+  end
+  object pnlCallControls: TPanel
+    Left = 0
+    Top = -3
+    Width = 266
+    Height = 121
+    Margins.Left = 0
+    Margins.Top = 0
+    Margins.Right = 0
+    Margins.Bottom = 0
+    Align = alCustom
+    BevelOuter = bvNone
+    TabOrder = 3
+    object lbl2ndPartyDesc: TLabel
       Left = 8
-      Top = 71
+      Top = 39
       Width = 179
       Height = 13
       AutoSize = False
-      Caption = 'lblCallState'
+      Caption = 'lbl2ndPartyDesc'
     end
     object lbl2ndParty: TLabel
       Left = 8
@@ -56,6 +421,14 @@ object frmMain: TfrmMain
       Height = 13
       AutoSize = False
       Caption = 'lbl2ndParty'
+    end
+    object lblCallState: TLabel
+      Left = 8
+      Top = 71
+      Width = 179
+      Height = 13
+      AutoSize = False
+      Caption = 'lblCallState'
     end
     object btnBackspace: TSpeedButton
       Left = 234
@@ -111,27 +484,13 @@ object frmMain: TfrmMain
       OnMouseDown = btnBackspaceMouseDown
       OnMouseUp = btnBackspaceMouseUp
     end
-    object lbl2ndPartyDesc: TLabel
-      Left = 8
-      Top = 39
-      Width = 179
-      Height = 13
-      AutoSize = False
-      Caption = 'lbl2ndPartyDesc'
-    end
-    object btnMakeCall: TSpeedButton
-      Left = 8
-      Top = 90
-      Width = 120
-      Height = 25
-      Caption = 'Call/Answer'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = [fsBold]
-      ParentFont = False
-      OnClick = btnMakeCallClick
+    object btnSpeedDialPanel: TSpeedButton
+      Left = 234
+      Top = 38
+      Width = 26
+      Height = 27
+      Caption = '<<'
+      OnClick = btnSpeedDialPanelClick
     end
     object btnHangup: TSpeedButton
       Left = 140
@@ -147,13 +506,19 @@ object frmMain: TfrmMain
       ParentFont = False
       OnClick = btnHangupClick
     end
-    object btnSpeedDialPanel: TSpeedButton
-      Left = 234
-      Top = 38
-      Width = 26
-      Height = 27
-      Caption = '<<'
-      OnClick = btnSpeedDialPanelClick
+    object btnMakeCall: TSpeedButton
+      Left = 8
+      Top = 90
+      Width = 120
+      Height = 25
+      Caption = 'Call/Answer'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      OnClick = btnMakeCallClick
     end
     object cbCallURI: TComboBox
       Left = 8
@@ -171,347 +536,6 @@ object frmMain: TfrmMain
       Text = '3000'
       OnKeyPress = cbCallURIKeyPress
     end
-    object pcMain: TPageControl
-      Left = 0
-      Top = 124
-      Width = 260
-      Height = 236
-      ActivePage = tsDialpad
-      Align = alCustom
-      TabOrder = 1
-      TabStop = False
-      OnChange = pcMainChange
-      object tsDialpad: TTabSheet
-        Caption = 'Dialpad'
-        object imgDialpadBackground: TImage
-          Left = 0
-          Top = 0
-          Width = 252
-          Height = 208
-          Align = alClient
-          Transparent = True
-          ExplicitLeft = 64
-          ExplicitTop = 8
-          ExplicitWidth = 185
-          ExplicitHeight = 137
-        end
-        object btnDial1: TSpeedButton
-          Tag = 1
-          Left = 4
-          Top = 3
-          Width = 40
-          Height = 40
-          Caption = '1'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial2: TSpeedButton
-          Tag = 2
-          AlignWithMargins = True
-          Left = 51
-          Top = 3
-          Width = 40
-          Height = 40
-          Caption = '2'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial3: TSpeedButton
-          Tag = 3
-          Left = 99
-          Top = 3
-          Width = 40
-          Height = 40
-          Caption = '3'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial4: TSpeedButton
-          Tag = 4
-          Left = 4
-          Top = 46
-          Width = 40
-          Height = 40
-          Caption = '4'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial5: TSpeedButton
-          Tag = 5
-          Left = 51
-          Top = 46
-          Width = 40
-          Height = 40
-          Caption = '5'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial6: TSpeedButton
-          Tag = 6
-          Left = 99
-          Top = 46
-          Width = 40
-          Height = 40
-          Caption = '6'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial7: TSpeedButton
-          Tag = 7
-          Left = 4
-          Top = 90
-          Width = 40
-          Height = 40
-          Caption = '7'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial8: TSpeedButton
-          Tag = 8
-          Left = 51
-          Top = 90
-          Width = 40
-          Height = 40
-          Caption = '8'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial9: TSpeedButton
-          Tag = 9
-          Left = 99
-          Top = 90
-          Width = 40
-          Height = 40
-          Caption = '9'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDialStar: TSpeedButton
-          Tag = 10
-          Left = 4
-          Top = 134
-          Width = 40
-          Height = 40
-          Caption = '*'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDial0: TSpeedButton
-          Left = 51
-          Top = 134
-          Width = 40
-          Height = 40
-          Caption = '0'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnDialHash: TSpeedButton
-          Tag = 11
-          Left = 99
-          Top = 134
-          Width = 40
-          Height = 40
-          Caption = '#'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -29
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          OnClick = btnDialClick
-        end
-        object btnResetMicVolume: TSpeedButton
-          Left = 143
-          Top = 181
-          Width = 18
-          Height = 24
-          Hint = 'Reset audio input volume'
-          Glyph.Data = {
-            E6010000424DE60100000000000036000000280000000C0000000C0000000100
-            180000000000B0010000C40E0000C40E00000000000000000000FFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FF000000FFFFFFFFFFFF000000000000000000000000FFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFF000000FFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF
-            FFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000
-            000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
-            FF000000FFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFF
-            FFFFFFFFFF000000FFFFFFFFFFFF000000000000000000000000FFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFF}
-          OnClick = btnResetMicVolumeClick
-        end
-        object btnResetSpeakerVolume: TSpeedButton
-          Left = 165
-          Top = 181
-          Width = 18
-          Height = 24
-          Hint = 'Reset audio output volume'
-          Glyph.Data = {
-            E6010000424DE60100000000000036000000280000000C0000000C0000000100
-            180000000000B0010000C40E0000C40E00000000000000000000FFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFF
-            FFFFFFFFFFFFFFFFFF000000000000000000000000000000FFFFFFFFFFFF0000
-            00FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFF
-            FFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF000000
-            FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
-            FF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFF
-            FFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000
-            000000000000000000000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFFFFFFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFF
-            FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
-            00FFFFFFFFFFFFFFFFFF}
-          OnClick = btnResetSpeakerVolumeClick
-        end
-        object edTransfer: TEdit
-          Left = 3
-          Top = 181
-          Width = 136
-          Height = 24
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 0
-          Text = 'Transfer to ...'
-          OnEnter = edTransferEnter
-          OnKeyPress = edTransferKeyPress
-        end
-        object pnlButtonsBasic: TPanel
-          Left = 183
-          Top = 3
-          Width = 73
-          Height = 205
-          Align = alCustom
-          BevelOuter = bvNone
-          TabOrder = 1
-        end
-        object trbarSoftvolMic: TTrackBar
-          Left = 140
-          Top = 0
-          Width = 20
-          Height = 180
-          Max = 512
-          Min = 10
-          Orientation = trVertical
-          Frequency = 20
-          Position = 384
-          TabOrder = 2
-          TabStop = False
-          TickMarks = tmBoth
-          OnChange = trbarSoftvolMicChange
-        end
-        object trbarSoftvolSpeaker: TTrackBar
-          Left = 160
-          Top = 0
-          Width = 20
-          Height = 180
-          Max = 512
-          Min = 10
-          Orientation = trVertical
-          Frequency = 20
-          Position = 384
-          TabOrder = 3
-          TabStop = False
-          TickMarks = tmBoth
-          OnChange = trbarSoftvolSpeakerChange
-        end
-      end
-      object tsContacts: TTabSheet
-        Caption = 'Contacts'
-        ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
-      end
-      object tsHistory: TTabSheet
-        Caption = 'History'
-        ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
-      end
-    end
-  end
-  object pnlSpeedDial: TPanel
-    AlignWithMargins = True
-    Left = 265
-    Top = 4
-    Width = 214
-    Height = 358
-    Margins.Left = 0
-    Margins.Top = 4
-    Margins.Right = 0
-    Margins.Bottom = 0
-    Align = alRight
-    BevelOuter = bvNone
-    TabOrder = 2
   end
   object MainMenu: TMainMenu
     Left = 283

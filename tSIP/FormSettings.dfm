@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsRecording
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -93,6 +93,13 @@ object frmSettings: TfrmSettings
         Width = 101
         Height = 13
         Caption = '(may require restart)'
+      end
+      object lblFrmMainLayout: TLabel
+        Left = 3
+        Top = 326
+        Width = 94
+        Height = 13
+        Caption = 'Main window layout'
       end
       object chbAlwaysOnTop: TCheckBox
         Left = 3
@@ -213,6 +220,20 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Log keys missing in translation file'
         TabOrder = 13
+      end
+      object cbFrmMainLayout: TComboBox
+        Left = 112
+        Top = 323
+        Width = 233
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
+        TabOrder = 14
+        Text = 'default'
+        Items.Strings = (
+          'default'
+          'call controls inside Dialpad tab')
       end
     end
     object tsNetwork: TTabSheet

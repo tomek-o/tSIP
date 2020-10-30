@@ -435,6 +435,11 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbNoTaskbarButtonRestore->Checked = tmpSettings.frmMain.bNoTaskbarButtonRestore;
 	chbNoTrayIcon->Checked = tmpSettings.frmMain.bNoTrayIcon;
 
+	if (tmpSettings.frmMain.layout >= 0 && tmpSettings.frmMain.layout)
+	{
+		cbFrmMainLayout->ItemIndex = tmpSettings.frmMain.layout;
+	}
+
 	frmHotkeys->SetCfg(&tmpSettings.hotKeyConf);
 
 	frmPhones->SetCfg(&tmpSettings.phoneConf);
@@ -772,6 +777,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.frmMain.bNoTaskbarButtonRestore = chbNoTaskbarButtonRestore->Checked;
 	tmpSettings.frmMain.bNoTrayIcon = chbNoTrayIcon->Checked;
+
+	tmpSettings.frmMain.layout = cbFrmMainLayout->ItemIndex;
 
     frmUaConfOpus->Apply();
 

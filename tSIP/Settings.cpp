@@ -69,7 +69,8 @@ Settings::_frmMain::_frmMain(void):
 	customApplicationTitle(Branding::appName),
 	bShowSettingsIfAccountSettingIsHidden(false),
 	bNoTaskbarButtonRestore(false),
-	bNoTrayIcon(false)
+	bNoTrayIcon(false),
+	layout(0)
 {
 	speedDialWidth.clear();
 	for (unsigned int i=0; i<ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
@@ -646,7 +647,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bShowSettingsIfAccountSettingIsHidden = frmMainJson.get("ShowSettingsIfAccountSettingIsHidden", frmMain.bShowSettingsIfAccountSettingIsHidden).asBool();
 		frmMainJson.getBool("NoTaskbarButtonRestore", frmMain.bNoTaskbarButtonRestore);
 		frmMainJson.getBool("NoTrayIcon", frmMain.bNoTrayIcon);
-
+		frmMainJson.getInt("Layout", frmMain.layout);
+		
 		{
 			const Json::Value &bitmapsJson = frmMainJson["bitmaps"];
 			struct _frmMain::_bitmaps &bitmaps = frmMain.bitmaps;
@@ -943,6 +945,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["ShowSettingsIfAccountSettingIsHidden"] = frmMain.bShowSettingsIfAccountSettingIsHidden;
 		jv["NoTaskbarButtonRestore"] = frmMain.bNoTaskbarButtonRestore;
 		jv["NoTrayIcon"] = frmMain.bNoTrayIcon;
+		jv["Layout"] = frmMain.layout;
 
 		{
 			Json::Value &bitmapsJson = jv["bitmaps"];

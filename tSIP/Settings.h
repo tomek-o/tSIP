@@ -141,7 +141,9 @@ public:
 			AnsiString bmpConsoleHide;
 			AnsiString bmpConsoleShow;
 		} bitmaps;
-		
+
+        int layout;
+
 		_frmMain(void);
 	} frmMain;
 	struct _frmTrayNotifier

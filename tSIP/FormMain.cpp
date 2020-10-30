@@ -301,6 +301,10 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	}
 
 	pnlMain->DoubleBuffered = true;	// removes call timer label flickering on update
+	pnlCallControls->DoubleBuffered = true;
+	pnlDialpad->DoubleBuffered = true;
+
+	SetMainWindowLayout(appSettings.frmMain.layout);
 }
 
 __fastcall TfrmMain::~TfrmMain()
@@ -567,6 +571,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		this->FormStyle = fsStayOnTop;
 	else
 		this->FormStyle = fsNormal;
+	if (appSettings.frmMain.layout != prev.frmMain.layout)
+	{
+    	SetMainWindowLayout(appSettings.frmMain.layout);
+	}
 	UpdateLogConfig();
 	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
 	if (frmLog->Visible)
@@ -1157,6 +1165,23 @@ void TfrmMain::UpdateClip(void)
 	else
 	{
 		lbl2ndPartyDesc->Caption = GetCallPeerName();
+	}
+}
+
+void TfrmMain::SetMainWindowLayout(int id)
+{
+	if (id == 0)
+	{
+		pnlCallControls->Parent = this;
+		pcMain->Height = ClientHeight - StatusBar->Height - pnlCallControls->Height;
+		pcMain->Top = pnlCallControls->Height;
+	}
+	else if (id == 1)
+	{
+		pnlCallControls->Parent = tsDialpad;
+		pnlCallControls->Left = -3;
+		pcMain->Height = ClientHeight - StatusBar->Height;
+		pcMain->Top = 0;
 	}
 }
 
