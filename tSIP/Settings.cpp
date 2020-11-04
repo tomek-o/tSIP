@@ -70,7 +70,8 @@ Settings::_frmMain::_frmMain(void):
 	bShowSettingsIfAccountSettingIsHidden(false),
 	bNoTaskbarButtonRestore(false),
 	bNoTrayIcon(false),
-	layout(0)
+	layout(0),
+	dialComboboxOrder(DialComboboxOrderByNumber)
 {
 	speedDialWidth.clear();
 	for (unsigned int i=0; i<ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
@@ -648,7 +649,13 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMainJson.getBool("NoTaskbarButtonRestore", frmMain.bNoTaskbarButtonRestore);
 		frmMainJson.getBool("NoTrayIcon", frmMain.bNoTrayIcon);
 		frmMainJson.getInt("Layout", frmMain.layout);
-		
+		{
+			int tmp = frmMainJson.get("DialComboboxOrder", frmMain.dialComboboxOrder).asInt();
+			if (tmp >= 0 && tmp < _frmMain::DialComboboxOrder_Limiter)
+			{
+            	frmMain.dialComboboxOrder = static_cast<_frmMain::DialComboboxOrder>(tmp);
+			}
+		}
 		{
 			const Json::Value &bitmapsJson = frmMainJson["bitmaps"];
 			struct _frmMain::_bitmaps &bitmaps = frmMain.bitmaps;
@@ -946,6 +953,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["NoTaskbarButtonRestore"] = frmMain.bNoTaskbarButtonRestore;
 		jv["NoTrayIcon"] = frmMain.bNoTrayIcon;
 		jv["Layout"] = frmMain.layout;
+		jv["DialComboboxOrder"] = frmMain.dialComboboxOrder;
 
 		{
 			Json::Value &bitmapsJson = jv["bitmaps"];

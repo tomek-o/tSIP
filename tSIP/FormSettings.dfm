@@ -101,6 +101,13 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Main window layout'
       end
+      object lblDialComboboxSortOrder: TLabel
+        Left = 3
+        Top = 350
+        Width = 134
+        Height = 13
+        Caption = 'Dialing combobox sort order'
+      end
       object chbAlwaysOnTop: TCheckBox
         Left = 3
         Top = 51
@@ -222,7 +229,7 @@ object frmSettings: TfrmSettings
         TabOrder = 13
       end
       object cbFrmMainLayout: TComboBox
-        Left = 112
+        Left = 178
         Top = 323
         Width = 233
         Height = 21
@@ -234,6 +241,20 @@ object frmSettings: TfrmSettings
         Items.Strings = (
           'default'
           'call controls inside Dialpad tab')
+      end
+      object cbDialComboboxOrder: TComboBox
+        Left = 178
+        Top = 347
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
+        TabOrder = 15
+        Text = 'by number'
+        Items.Strings = (
+          'by number'
+          'by date/time')
       end
     end
     object tsNetwork: TTabSheet

@@ -435,10 +435,15 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbNoTaskbarButtonRestore->Checked = tmpSettings.frmMain.bNoTaskbarButtonRestore;
 	chbNoTrayIcon->Checked = tmpSettings.frmMain.bNoTrayIcon;
 
-	if (tmpSettings.frmMain.layout >= 0 && tmpSettings.frmMain.layout)
+	if (tmpSettings.frmMain.layout >= 0 && tmpSettings.frmMain.layout < cbFrmMainLayout->Items->Count)
 	{
 		cbFrmMainLayout->ItemIndex = tmpSettings.frmMain.layout;
 	}
+	if (tmpSettings.frmMain.dialComboboxOrder >= 0 && tmpSettings.frmMain.dialComboboxOrder < cbDialComboboxOrder->Items->Count)
+	{
+		cbDialComboboxOrder->ItemIndex = tmpSettings.frmMain.dialComboboxOrder;
+	}
+
 
 	frmHotkeys->SetCfg(&tmpSettings.hotKeyConf);
 
@@ -779,6 +784,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bNoTrayIcon = chbNoTrayIcon->Checked;
 
 	tmpSettings.frmMain.layout = cbFrmMainLayout->ItemIndex;
+	tmpSettings.frmMain.dialComboboxOrder = static_cast<Settings::_frmMain::DialComboboxOrder>(cbDialComboboxOrder->ItemIndex);
 
     frmUaConfOpus->Apply();
 

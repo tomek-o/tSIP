@@ -575,6 +575,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	{
     	SetMainWindowLayout(appSettings.frmMain.layout);
 	}
+	if (appSettings.frmMain.dialComboboxOrder != prev.frmMain.dialComboboxOrder)
+	{
+		UpdateCallHistory();
+	}
 	UpdateLogConfig();
 	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
 	if (frmLog->Visible)
@@ -761,19 +765,38 @@ void TfrmMain::UpdateCallHistory(void)
 	cbCallURI->Clear();
 	const std::deque<History::Entry>& entries = history.GetEntries();
 	std::set<std::string> numbers;
+	std::vector<std::string> numbersByDate;
 	for (unsigned int i=0; i<std::min(100u, entries.size()); i++)
 	{
 		const History::Entry &entry = entries[i];
 		// add only outgoing calls
 		if (entry.incoming == false)
 		{
-			numbers.insert(entry.uri.c_str());
+			if (numbers.find(entry.uri.c_str()) == numbers.end())
+			{
+				numbers.insert(entry.uri.c_str());
+				numbersByDate.push_back(entry.uri.c_str());
+			}
 		}
 	}
-	std::set<std::string>::iterator iter;
-	for (iter = numbers.begin(); iter != numbers.end(); ++iter)
+	if (appSettings.frmMain.dialComboboxOrder == Settings::_frmMain::DialComboboxOrderByNumber)
 	{
-		cbCallURI->Items->Add(iter->c_str());
+		std::set<std::string>::iterator iter;
+		for (iter = numbers.begin(); iter != numbers.end(); ++iter)
+		{
+			cbCallURI->Items->Add(iter->c_str());
+		}
+	}
+	else if (appSettings.frmMain.dialComboboxOrder == Settings::_frmMain::DialComboboxOrderByTime)
+	{
+		for (unsigned int i=0; i<numbersByDate.size(); i++)
+		{
+        	cbCallURI->Items->Add(numbersByDate[i].c_str());
+		}
+	}
+	else
+	{
+		assert(!"Unhandled dialCombobox sorting order!");
 	}
 }
 

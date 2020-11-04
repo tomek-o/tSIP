@@ -411,6 +411,8 @@ __published:	// IDE-managed Components
 	TCheckBox *chbRecordingNoNumberB64Encoding;
 	TLabel *lblFrmMainLayout;
 	TComboBox *cbFrmMainLayout;
+	TLabel *lblDialComboboxSortOrder;
+	TComboBox *cbDialComboboxOrder;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

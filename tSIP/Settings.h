@@ -142,7 +142,14 @@ public:
 			AnsiString bmpConsoleShow;
 		} bitmaps;
 
-        int layout;
+		int layout;
+
+		enum DialComboboxOrder {
+			DialComboboxOrderByNumber = 0,
+			DialComboboxOrderByTime,
+
+			DialComboboxOrder_Limiter
+		} dialComboboxOrder;
 
 		_frmMain(void);
 	} frmMain;
