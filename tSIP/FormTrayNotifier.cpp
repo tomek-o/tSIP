@@ -46,6 +46,8 @@ void TfrmTrayNotifier::SetData(AnsiString description, AnsiString uri, bool inco
 
 void TfrmTrayNotifier::ShowWithoutFocus(void)
 {
+	frmTrayNotifier->Left = appSettings.frmTrayNotifier.iPosX;
+	frmTrayNotifier->Top = appSettings.frmTrayNotifier.iPosY;
 #if 1
 	/** \todo frmTrayNotifier steals focus at first call */
 	Visible = true;
@@ -59,6 +61,11 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 
 void TfrmTrayNotifier::HideWindow(void)
 {
+	if (appSettings.frmTrayNotifier.doNotChangePosition == false)
+	{
+		appSettings.frmTrayNotifier.iPosX = frmTrayNotifier->Left;
+		appSettings.frmTrayNotifier.iPosY = frmTrayNotifier->Top;
+	}
 	Visible = false;
 }
 
@@ -119,4 +126,15 @@ void TfrmTrayNotifier::SetCallState(Callback::ua_state_e state)
     	btnAnswer->Visible = false;
 	}
 }
+
+void __fastcall TfrmTrayNotifier::FormClose(TObject *Sender,
+      TCloseAction &Action)
+{
+	if (appSettings.frmTrayNotifier.doNotChangePosition == false)
+	{
+		appSettings.frmTrayNotifier.iPosX = frmTrayNotifier->Left;
+		appSettings.frmTrayNotifier.iPosY = frmTrayNotifier->Top;
+	}
+}
+//---------------------------------------------------------------------------
 

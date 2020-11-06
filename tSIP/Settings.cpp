@@ -90,7 +90,8 @@ Settings::_frmTrayNotifier::_frmTrayNotifier(void):
 	showOnOutgoing(false),
 	hideWhenAnsweringCall(false),
 	hideWhenAnsweringCallAutomatically(false),
-	scalingPct(SCALING_DEF)
+	scalingPct(SCALING_DEF),
+	doNotChangePosition(false)
 {
 	int maxX = GetSystemMetrics(SM_CXSCREEN);
 	/** \todo Ugly fixed taskbar margin */
@@ -690,6 +691,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		if (scalingPct >= _frmTrayNotifier::SCALING_MIN && frmTrayNotifier.scalingPct <= _frmTrayNotifier::SCALING_MAX) {
 			frmTrayNotifier.scalingPct = scalingPct;
 		}
+		frmTrayNotifierJson.getBool("DoNotChangePosition", frmTrayNotifier.doNotChangePosition);
 	}
 
 	{
@@ -977,6 +979,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["HideWhenAnsweringCallAutomatically"] = frmTrayNotifier.hideWhenAnsweringCallAutomatically;
 		jv["BackgroundImage"] = frmTrayNotifier.backgroundImage.c_str();
 		jv["ScalingPct"] = frmTrayNotifier.scalingPct;
+		jv["DoNotChangePosition"] = frmTrayNotifier.doNotChangePosition;
 	}
 
 	root["frmContactPopup"]["ShowOnIncoming"] = frmContactPopup.showOnIncoming;

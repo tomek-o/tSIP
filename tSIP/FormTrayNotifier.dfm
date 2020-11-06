@@ -13,6 +13,7 @@ object frmTrayNotifier: TfrmTrayNotifier
   Font.Style = []
   OldCreateOrder = False
   ScreenSnap = True
+  OnClose = FormClose
   OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13

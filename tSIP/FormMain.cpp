@@ -431,8 +431,6 @@ void TfrmMain::Finalize(void)
 		appSettings.frmMain.iPosY = this->Top;
 		appSettings.frmMain.iPosX = this->Left;
 	}
-	appSettings.frmTrayNotifier.iPosX = frmTrayNotifier->Left;
-	appSettings.frmTrayNotifier.iPosY = frmTrayNotifier->Top;
 
 	appSettings.frmContactPopup.iPosX = frmContactPopup->Left;
 	appSettings.frmContactPopup.iPosY = frmContactPopup->Top;

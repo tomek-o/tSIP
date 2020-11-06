@@ -24,6 +24,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnHangupClick(TObject *Sender);
 	void __fastcall btnAnswerClick(TObject *Sender);
 	void __fastcall FormCreate(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 private:	// User declarations
 	static void TranslateForm(void* obj);
 	typedef void(__closure *CallbackHangup)(void);

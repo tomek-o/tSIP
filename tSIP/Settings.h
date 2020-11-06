@@ -167,6 +167,7 @@ public:
 		enum { SCALING_DEF = 100 };
 		enum { SCALING_MAX = 500 };
 		int scalingPct;					///< scaling (percentage)
+        bool doNotChangePosition;
 
 		_frmTrayNotifier(void);		
 	} frmTrayNotifier;

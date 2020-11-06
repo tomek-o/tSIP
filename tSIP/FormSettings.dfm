@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsGeneral
+    ActivePage = tsTrayNotifier
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2410,6 +2410,14 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Hide tray notifier when call is auto-answered'
         TabOrder = 7
+      end
+      object chbTrayNotifierDoNotChangePosition: TCheckBox
+        Left = 3
+        Top = 158
+        Width = 406
+        Height = 17
+        Caption = 'Do not change position (always show at same, current position)'
+        TabOrder = 8
       end
     end
     object tsScripts: TTabSheet
