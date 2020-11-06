@@ -394,6 +394,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	trbarSoftvolSpeaker->Position = trbarSoftvolSpeaker->Max + trbarSoftvolSpeaker->Min - appSettings.uaConf.audioSoftVol.rx;
 
 	UpdateCallHistory();
+	UpdateAutoAnswer();
 }
 //---------------------------------------------------------------------------
 
@@ -2501,6 +2502,20 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		miSettings->Enabled = false;
 		Ua::Instance().Restart();
 		break;
+	case Button::AUTO_ANSWER_DND:
+		if (down)
+		{
+			appSettings.uaConf.autoAnswer = false;
+			UpdateAutoAnswer();
+		}
+		else
+		{
+			appSettings.uaConf.autoAnswer = true;
+			appSettings.uaConf.autoAnswerCode = cfg.sipCode;
+			UpdateAutoAnswer();
+		}
+		appSettings.Write(Paths::GetConfig());		
+		break;
 	default:
 		LOG("Unhandled BTN type = %d\n", static_cast<int>(cfg.type));
 		break;
@@ -3542,4 +3557,12 @@ void __fastcall TfrmMain::miRefreshTranslationFromFileClick(TObject *Sender)
 	LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
 }
 //---------------------------------------------------------------------------
+
+void TfrmMain::UpdateAutoAnswer(void)
+{
+	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
+		TfrmButtonContainer *& container = frmButtonContainers[i];
+		container->UpdateAutoAnswer(appSettings.uaConf.autoAnswer, appSettings.uaConf.autoAnswerCode);
+	}
+}
 

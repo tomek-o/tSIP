@@ -319,7 +319,7 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 0
         Width = 385
         Height = 277
-        ActivePage = tsBehaviorScript
+        ActivePage = tsBehaviorAutoAnswer
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -667,6 +667,27 @@ object frmButtonEdit: TfrmButtonEdit
             Style = csDropDownList
             ItemHeight = 13
             TabOrder = 1
+          end
+        end
+        object tsBehaviorAutoAnswer: TTabSheet
+          Caption = 'tsBehaviorAutoAnswer'
+          ImageIndex = 6
+          ExplicitLeft = -12
+          ExplicitTop = 29
+          object lblAutoAnswerSipCode: TLabel
+            Left = 3
+            Top = 3
+            Width = 42
+            Height = 13
+            Caption = 'SIP code'
+          end
+          object edAutoAnswerSipCode: TEdit
+            Left = 64
+            Top = 0
+            Width = 65
+            Height = 21
+            TabOrder = 0
+            Text = '200'
           end
         end
       end

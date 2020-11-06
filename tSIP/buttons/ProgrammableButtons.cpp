@@ -142,6 +142,8 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 
 			cfg.arg1 = btnJson.get("arg1", cfg.arg1).asString();
 
+			btnJson.getInt("sipCode", cfg.sipCode);
+
 			cfg.pagingTxWaveFile = btnJson.get("pagingTxWaveFile", cfg.pagingTxWaveFile).asString();
 			cfg.pagingTxCodec = btnJson.get("pagingTxCodec", cfg.pagingTxCodec).asString();
 			cfg.pagingTxPtime = btnJson.get("pagingTxPtime", cfg.pagingTxPtime).asUInt();
@@ -252,6 +254,7 @@ int ProgrammableButtons::Write(void)
 		jsonBtn["blfActionDuringCall"] = cfg.blfActionDuringCall;
 		jsonBtn["blfDtmfPrefixDuringCall"] = cfg.blfDtmfPrefixDuringCall;
 		jsonBtn["arg1"] = cfg.arg1;
+		jsonBtn["sipCode"] = cfg.sipCode;
 		jsonBtn["pagingTxWaveFile"] = cfg.pagingTxWaveFile;
 		jsonBtn["pagingTxCodec"] = cfg.pagingTxCodec;
 		jsonBtn["pagingTxPtime"] = cfg.pagingTxPtime;

@@ -77,6 +77,8 @@ const char* Button::TypeName(enum Type type)
 		return "Start/resume recording";
 	case RECORD_PAUSE:
 		return "Pause recording";
+	case AUTO_ANSWER_DND:
+		return "Auto answer/DND";
 	default:
 		return "???";
 	}
@@ -147,6 +149,8 @@ const char* Button::TypeDescription(enum Type type)
 		return "Start recording with default settings (if recording is set to manual) or resume paused recording.";
 	case RECORD_PAUSE:
 		return "Pause current recording.";
+	case AUTO_ANSWER_DND:
+		return "Auto answer or DND. For auto answer use SIP code = 200, for DND = 486 or 603.";
 	default:
 		return "???";
 	}

@@ -38,6 +38,7 @@ namespace Button
 		SEND_TEXT_MESSAGE,	// send SIMPLE text message to recipient from button or from main URI "dial"		
 		RECORD,
 		RECORD_PAUSE,
+		AUTO_ANSWER_DND,
 		
 		TYPE_LIMITER
 	};

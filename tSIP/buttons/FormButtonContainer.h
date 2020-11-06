@@ -38,6 +38,7 @@ public:
 	void UpdateBtnDown(int id, bool state);
 	void UpdateBtnImage(int id, AnsiString file);
 	void UpdateMwiState(int newMsg, int oldMsg);
+	void UpdateAutoAnswer(bool enabled, int sipCode);
 	void UpdateSettings(void);
 private:	// User declarations
 	CallbackClick callbackClick;

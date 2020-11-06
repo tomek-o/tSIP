@@ -440,7 +440,6 @@
         <FILE FILENAME="Hotkeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Hotkeys" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Hotkeys.h"/>
         <FILE FILENAME="FormHotkeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormHotkeys" FORMNAME="frmHotkeys" DESIGNCLASS="" ADDITIONAL="FormHotkeys.h"/>
         <FILE FILENAME="HotKeyConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="components\HotkeyCfgPanel\HotkeyCfgPanel.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="HotkeyCfgPanel" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="Action.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Action" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Action.h"/>
         <FILE FILENAME="Branding.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Branding" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Branding.h"/>
         <FILE FILENAME="resource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
@@ -473,6 +472,7 @@
         <FILE FILENAME="ua\Recorder.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Recorder" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\Recorder.h"/>
         <FILE FILENAME="contacts\ContactsXmlImport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ContactsXmlImport" FORMNAME="" DESIGNCLASS="" ADDITIONAL="contacts\ContactsXmlImport.h"/>
         <FILE FILENAME="Translate.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Translate" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Translate.h"/>
+        <FILE FILENAME="components\HotkeyCfgPanel\HotkeyCfgPanel.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="HotkeyCfgPanel" FORMNAME="" DESIGNCLASS="" ADDITIONAL="components\HotkeyCfgPanel\HotkeyCfgPanel.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -481,7 +481,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">1</VersionInfo>
           <VersionInfo Name="Release">75</VersionInfo>
-          <VersionInfo Name="Build">1</VersionInfo>
+          <VersionInfo Name="Build">3</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -493,7 +493,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.1.75.1</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.1.75.3</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

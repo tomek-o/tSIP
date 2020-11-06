@@ -106,6 +106,9 @@ __published:	// IDE-managed Components
 	TComboBox *cbCaptionLines;
 	TLabel *lblCaptionLines;
 	TBitBtn *btnSelectedScriptOnButtonEdit;
+	TTabSheet *tsBehaviorAutoAnswer;
+	TLabel *lblAutoAnswerSipCode;
+	TEdit *edAutoAnswerSipCode;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);

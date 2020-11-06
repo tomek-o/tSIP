@@ -98,6 +98,8 @@ void TfrmButtonEdit::ApplyConf(void)
 
 	edArg1->Text = cfg->arg1.c_str();
 
+	edAutoAnswerSipCode->Text = cfg->sipCode;
+
 	edPagingTxWaveFile->Text = cfg->pagingTxWaveFile.c_str();
 	cbPagingTxCodec->Text = cfg->pagingTxCodec.c_str();
 	cbPagingTxPtime->Text = cfg->pagingTxPtime;
@@ -153,6 +155,12 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->blfDtmfPrefixDuringCall = edBlfDtmfPrefixDuringCall->Text.c_str();
 
 	cfg->arg1 = edArg1->Text.c_str();
+
+	{
+    	int tmp = StrToIntDef(edAutoAnswerSipCode->Text, cfg->sipCode);
+		if (tmp >= 100 && tmp <= 999)
+			cfg->sipCode = tmp;
+	}
 
 	cfg->pagingTxWaveFile = edPagingTxWaveFile->Text.c_str();
 	cfg->pagingTxCodec = cbPagingTxCodec->Text.c_str();
@@ -289,6 +297,13 @@ void TfrmButtonEdit::SetType(Button::Type type)
 		cbSoundOutputModChange(NULL);
 
 		break;
+		
+	case Button::AUTO_ANSWER_DND:
+		tsBehaviorAutoAnswer->Visible = true;
+		edNumber->Visible = false;
+		lblNumber->Visible = false;		
+		break;
+
 	default:
 		break;
 	}

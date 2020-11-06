@@ -34,6 +34,8 @@ void ButtonConf::Reset(void)
 
 	arg1 = "";
 
+	sipCode = 200;
+
 	pagingTxWaveFile = "";
 	pagingTxCodec = "PCMA";
 	pagingTxPtime = 20;

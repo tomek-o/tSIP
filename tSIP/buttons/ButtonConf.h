@@ -30,9 +30,11 @@ public:
 
 	std::string arg1;
 
+	int sipCode;	
+
 	std::string pagingTxWaveFile;
 	std::string pagingTxCodec;
-	unsigned int pagingTxPtime;	
+	unsigned int pagingTxPtime;
 
 	std::string script;
 
@@ -98,6 +100,7 @@ public:
 			imgEarly == right.imgEarly &&
 			imgConfirmed == right.imgConfirmed &&
 			arg1 == right.arg1 &&
+			sipCode == right.sipCode &&
             pagingTxWaveFile == right.pagingTxWaveFile &&
 			pagingTxCodec == right.pagingTxCodec &&
 			pagingTxPtime == right.pagingTxPtime &&

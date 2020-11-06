@@ -257,6 +257,7 @@ private:	// User declarations
 	int UpdateSettingsFromJson(AnsiString json);
 	void UpdateSettings(const Settings &prev);
 	int UpdateButtonsFromJson(AnsiString json);
+	void UpdateAutoAnswer(void);
 	void UpdateClip(void);
 	void SetMainWindowLayout(int id);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);

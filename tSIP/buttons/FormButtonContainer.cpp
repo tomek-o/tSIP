@@ -215,6 +215,25 @@ void TfrmButtonContainer::UpdateMwiState(int newMsg, int oldMsg)
 	}
 }
 
+void TfrmButtonContainer::UpdateAutoAnswer(bool enabled, int sipCode)
+{
+	for (unsigned int i=0; i<vpanels.size(); i++)
+	{
+		ButtonConf &cfg = buttons.btnConf[i + startBtnId];
+		if (cfg.type == Button::AUTO_ANSWER_DND)
+		{
+			if (cfg.sipCode == sipCode && enabled)
+			{
+				vpanels[i]->SetDown(true);
+			}
+			else
+			{
+				vpanels[i]->SetDown(false);
+			}
+		}
+	}
+}
+
 void TfrmButtonContainer::UpdateSettings(void)
 {
 	if (useContextMenu == appSettings.frmMain.bSpeedDialPopupMenu)
