@@ -205,7 +205,7 @@ static uint32_t hashlittle( const void *key, size_t length, uint32_t initval)
 			k += 3;
 		}
 
-#ifndef VALGRIND
+#if !defined(VALGRIND) && !defined(__CODEGUARD__)
 		switch (length) {
 
 		case 12: c+=k[2]; b+=k[1]; a+=k[0]; break;
@@ -223,26 +223,26 @@ static uint32_t hashlittle( const void *key, size_t length, uint32_t initval)
 		case 0 : return c;
 		}
 
-#else /* make valgrind happy */
+#else /* make valgrind and/or CodeGuard happy */
+		{
+			const uint8_t  *k8 = (const uint8_t *)k;
+			switch (length) {
 
-		const uint8_t  *k8 = (const uint8_t *)k;
-		switch (length) {
-
-		case 12: c+=k[2]; b+=k[1]; a+=k[0]; break;
-		case 11: c+=((uint32_t)k8[10])<<16;  /* fall through */
-		case 10: c+=((uint32_t)k8[9])<<8;    /* fall through */
-		case 9 : c+=k8[8];                   /* fall through */
-		case 8 : b+=k[1]; a+=k[0]; break;
-		case 7 : b+=((uint32_t)k8[6])<<16;   /* fall through */
-		case 6 : b+=((uint32_t)k8[5])<<8;    /* fall through */
-		case 5 : b+=k8[4];                   /* fall through */
-		case 4 : a+=k[0]; break;
-		case 3 : a+=((uint32_t)k8[2])<<16;   /* fall through */
-		case 2 : a+=((uint32_t)k8[1])<<8;    /* fall through */
-		case 1 : a+=k8[0]; break;
-		case 0 : return c;
+			case 12: c+=k[2]; b+=k[1]; a+=k[0]; break;
+			case 11: c+=((uint32_t)k8[10])<<16;  /* fall through */
+			case 10: c+=((uint32_t)k8[9])<<8;    /* fall through */
+			case 9 : c+=k8[8];                   /* fall through */
+			case 8 : b+=k[1]; a+=k[0]; break;
+			case 7 : b+=((uint32_t)k8[6])<<16;   /* fall through */
+			case 6 : b+=((uint32_t)k8[5])<<8;    /* fall through */
+			case 5 : b+=k8[4];                   /* fall through */
+			case 4 : a+=k[0]; break;
+			case 3 : a+=((uint32_t)k8[2])<<16;   /* fall through */
+			case 2 : a+=((uint32_t)k8[1])<<8;    /* fall through */
+			case 1 : a+=k8[0]; break;
+			case 0 : return c;
+			}
 		}
-
 #endif /* !valgrind */
 
 	}
