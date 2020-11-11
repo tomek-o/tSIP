@@ -572,7 +572,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		this->FormStyle = fsNormal;
 	if (appSettings.frmMain.layout != prev.frmMain.layout)
 	{
-    	SetMainWindowLayout(appSettings.frmMain.layout);
+		SetMainWindowLayout(appSettings.frmMain.layout);
 	}
 	if (appSettings.frmMain.dialComboboxOrder != prev.frmMain.dialComboboxOrder)
 	{
@@ -709,7 +709,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 
 	if (appSettings.frmMain.bSpeedDialOnly == false && Visible)
 	{
-		cbCallURI->SetFocus();
+		FocusCbCallUri();
 	}
 
 	AnsiString dir = Paths::GetProfileDir();
@@ -1205,6 +1205,15 @@ void TfrmMain::SetMainWindowLayout(int id)
 		pcMain->Height = ClientHeight - StatusBar->Height;
 		pcMain->Top = 0;
 	}
+}
+
+void TfrmMain::FocusCbCallUri(void)
+{
+	if (appSettings.frmMain.bSpeedDialOnly)
+		return;
+	if (appSettings.frmMain.layout != 0 && pcMain->ActivePage != tsDialpad)
+		return;
+	cbCallURI->SetFocus();
 }
 
 void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
@@ -2814,11 +2823,8 @@ void TfrmMain::ToggleVisibility(void)
 		SetActiveWindow (Handle);
 		SetForegroundWindow (Handle);
 		SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-		if (appSettings.frmMain.bSpeedDialOnly == false)
-		{
-			cbCallURI->SetFocus();
-		}
-		frmHistory->SetUpdating(pcMain->ActivePage == tsHistory);		
+		FocusCbCallUri();
+		frmHistory->SetUpdating(pcMain->ActivePage == tsHistory);
 	}
 	else
 	{
@@ -2970,7 +2976,7 @@ void TfrmMain::HandleCommandLine(void)
 		SetActiveWindow (Handle);
 		SetForegroundWindow (Handle);
 		SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-		cbCallURI->SetFocus();
+		FocusCbCallUri();
 		/** \todo Bring window to front */
 		//BringToFront();
 	}

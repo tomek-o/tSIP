@@ -260,6 +260,7 @@ private:	// User declarations
 	void UpdateAutoAnswer(void);
 	void UpdateClip(void);
 	void SetMainWindowLayout(int id);
+	void FocusCbCallUri(void);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall OnTrayIconRightBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);
