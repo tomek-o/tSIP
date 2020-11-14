@@ -112,6 +112,11 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 	return TRUE;
 }
 
+
+std::set<AnsiString> globalsSet;
+bool globalsSetComplete = false;
+#define lua_register2(L,n,f) if (!globalsSetComplete) globalsSet.insert(n); lua_register(L,n,f)
+
 }	// namespace
 
 int ScriptExec::SetVariable(const char* name, const char* value)
@@ -210,6 +215,11 @@ void ScriptExec::WaitWhileAnyRunning(unsigned int ms)
 		}
 		Sleep(sleepPerPoll);
 	}
+}
+
+const std::set<AnsiString>& ScriptExec::GetGlobals(void)
+{
+	return globalsSet;
 }
 
 /** Beep(frequency, time_ms)
@@ -1391,109 +1401,120 @@ void ScriptExec::Run(const char* script)
 	luaL_openlibs(L);
 	contexts[L] = this;
 
-	lua_register(L, "_ALERT", ScriptImp::LuaError );
-	lua_register(L, "print", ScriptImp::LuaPrint );
-	lua_register(L, "ShowMessage", ScriptImp::l_ShowMessage);
-	lua_register(L, "MessageBox", l_MessageBox);
-	lua_register(L, "InputQuery", ScriptImp::l_InputQuery);
-	lua_register(L, "Sleep", ScriptImp::l_Sleep);
-	lua_register(L, "Beep", l_Beep);
-	lua_register(L, "CheckBreak", ScriptImp::l_CheckBreak);
-	lua_register(L, "GetClipboardText", ScriptImp::l_GetClipboardText);
-	lua_register(L, "SetClipboardText", ScriptImp::l_SetClipboardText);
-	lua_register(L, "ForceDirectories", ScriptImp::l_ForceDirectories);
-	lua_register(L, "FindWindowByCaptionAndExeName", ScriptImp::l_FindWindowByCaptionAndExeName);
-	lua_register(L, "Call", ScriptImp::l_Call);
-	lua_register(L, "Hangup", ScriptImp::l_Hangup);
-	lua_register(L, "Answer", ScriptImp::l_Answer);
-	lua_register(L, "GetDial", ScriptImp::l_GetDial);
-	lua_register(L, "SetDial", ScriptImp::l_SetDial);
-	lua_register(L, "SwitchAudioSource", ScriptImp::l_SwitchAudioSource);
-	lua_register(L, "SendDtmf", ScriptImp::l_SendDtmf);
-	lua_register(L, "BlindTransfer", ScriptImp::l_BlindTransfer);
-	lua_register(L, "GetCallState", ScriptImp::l_GetCallState);
-	lua_register(L, "GetRecorderState", ScriptImp::l_GetRecorderState);
-	lua_register(L, "IsCallIncoming", ScriptImp::l_IsCallIncoming);
-	lua_register(L, "GetCallPeer", ScriptImp::l_GetCallPeer);
-	lua_register(L, "GetCallInitialRxInvite", ScriptImp::l_GetCallInitialRxInvite);
-	lua_register(L, "GetCallCodecName", ScriptImp::l_GetCallCodecName);
-	lua_register(L, "GetContactName", ScriptImp::l_GetContactName);
-	lua_register(L, "GetStreamingState", ScriptImp::l_GetStreamingState);
-	lua_register(L, "GetAudioErrorCount", ScriptImp::l_GetAudioErrorCount);
+	lua_register2(L, "_ALERT", ScriptImp::LuaError );
+	lua_register2(L, "print", ScriptImp::LuaPrint );
+	lua_register2(L, "ShowMessage", ScriptImp::l_ShowMessage);
+	lua_register2(L, "MessageBox", l_MessageBox);
+	lua_register2(L, "InputQuery", ScriptImp::l_InputQuery);
+	lua_register2(L, "Sleep", ScriptImp::l_Sleep);
+	lua_register2(L, "Beep", l_Beep);
+	lua_register2(L, "CheckBreak", ScriptImp::l_CheckBreak);
+	lua_register2(L, "GetClipboardText", ScriptImp::l_GetClipboardText);
+	lua_register2(L, "SetClipboardText", ScriptImp::l_SetClipboardText);
+	lua_register2(L, "ForceDirectories", ScriptImp::l_ForceDirectories);
+	lua_register2(L, "FindWindowByCaptionAndExeName", ScriptImp::l_FindWindowByCaptionAndExeName);
+	lua_register2(L, "Call", ScriptImp::l_Call);
+	lua_register2(L, "Hangup", ScriptImp::l_Hangup);
+	lua_register2(L, "Answer", ScriptImp::l_Answer);
+	lua_register2(L, "GetDial", ScriptImp::l_GetDial);
+	lua_register2(L, "SetDial", ScriptImp::l_SetDial);
+	lua_register2(L, "SwitchAudioSource", ScriptImp::l_SwitchAudioSource);
+	lua_register2(L, "SendDtmf", ScriptImp::l_SendDtmf);
+	lua_register2(L, "BlindTransfer", ScriptImp::l_BlindTransfer);
+	lua_register2(L, "GetCallState", ScriptImp::l_GetCallState);
+	lua_register2(L, "GetRecorderState", ScriptImp::l_GetRecorderState);
+	lua_register2(L, "IsCallIncoming", ScriptImp::l_IsCallIncoming);
+	lua_register2(L, "GetCallPeer", ScriptImp::l_GetCallPeer);
+	lua_register2(L, "GetCallInitialRxInvite", ScriptImp::l_GetCallInitialRxInvite);
+	lua_register2(L, "GetCallCodecName", ScriptImp::l_GetCallCodecName);
+	lua_register2(L, "GetContactName", ScriptImp::l_GetContactName);
+	lua_register2(L, "GetStreamingState", ScriptImp::l_GetStreamingState);
+	lua_register2(L, "GetAudioErrorCount", ScriptImp::l_GetAudioErrorCount);
 
-	lua_register(L, "SetVariable", ScriptImp::l_SetVariable);
-	lua_register(L, "GetVariable", ScriptImp::l_GetVariable);
-	lua_register(L, "ClearVariable", ScriptImp::l_ClearVariable);
-	lua_register(L, "ClearAllVariables", ScriptImp::l_ClearAllVariables);
+	lua_register2(L, "SetVariable", ScriptImp::l_SetVariable);
+	lua_register2(L, "GetVariable", ScriptImp::l_GetVariable);
+	lua_register2(L, "ClearVariable", ScriptImp::l_ClearVariable);
+	lua_register2(L, "ClearAllVariables", ScriptImp::l_ClearAllVariables);
 
 	// QueuePush(queueName, stringValue)
-	lua_register(L, "QueuePush", ScriptImp::l_QueuePush);
+	lua_register2(L, "QueuePush", ScriptImp::l_QueuePush);
 	// local value, isValid = QueuePop(queueName)
-	lua_register(L, "QueuePop", ScriptImp::l_QueuePop);
-	lua_register(L, "QueueClear", ScriptImp::l_QueueClear);
+	lua_register2(L, "QueuePop", ScriptImp::l_QueuePop);
+	lua_register2(L, "QueueClear", ScriptImp::l_QueueClear);
 	// local queue_size = QueueGetSize(queueName)
-	lua_register(L, "QueueGetSize", ScriptImp::l_QueueGetSize);
+	lua_register2(L, "QueueGetSize", ScriptImp::l_QueueGetSize);
 
-	lua_register(L, "GetInitialCallTarget", ScriptImp::l_GetInitialCallTarget);
-	lua_register(L, "SetInitialCallTarget", ScriptImp::l_SetInitialCallTarget);
-	lua_register(L, "SetCallTarget", ScriptImp::l_SetCallTarget);
-	lua_register(L, "ShellExecute", ScriptImp::l_ShellExecute);
-    lua_register(L, "SetTrayIcon", ScriptImp::l_SetTrayIcon);
-    lua_register(L, "GetRegistrationState", ScriptImp::l_GetRegistrationState);
-	lua_register(L, "SetButtonCaption", ScriptImp::l_SetButtonCaption);
-	lua_register(L, "SetButtonCaption2", ScriptImp::l_SetButtonCaption2);
-	lua_register(L, "SetButtonDown", ScriptImp::l_SetButtonDown);
-	lua_register(L, "GetButtonDown", ScriptImp::l_GetButtonDown);
-	lua_register(L, "SetButtonImage", ScriptImp::l_SetButtonImage);
-	lua_register(L, "PluginSendMessageText", ScriptImp::l_PluginSendMessageText);
-	lua_register(L, "PluginEnable", ScriptImp::l_PluginEnable);	// PluginEnable("TTS.dll", 0/1)
-	lua_register(L, "GetExecSourceType", ScriptImp::l_GetExecSourceType);
-	lua_register(L, "GetExecSourceId", ScriptImp::l_GetExecSourceId);
-	lua_register(L, "GetRecordFile", ScriptImp::l_GetRecordFile);
-	lua_register(L, "GetBlfState", ScriptImp::l_GetBlfState);
-	lua_register(L, "RecordStart", ScriptImp::l_RecordStart);
-	lua_register(L, "GetExeName", ScriptImp::l_GetExeName);
-	lua_register(L, "GetProfileDir", ScriptImp::l_GetProfileDir);
-	lua_register(L, "GetRecordingState", ScriptImp::l_GetRecordingState);
-	lua_register(L, "GetRxDtmf", ScriptImp::l_GetRxDtmf);
-	lua_register(L, "ShowTrayNotifier", ScriptImp::l_ShowTrayNotifier);
-	lua_register(L, "GetUserName", ScriptImp::l_GetUserName);	
-	lua_register(L, "ProgrammableButtonClick", ScriptImp::l_ProgrammableButtonClick);
-	lua_register(L, "RefreshAudioDevicesList", ScriptImp::l_RefreshAudioDevicesList);
-	lua_register(L, "GetAudioDevice", ScriptImp::l_GetAudioDevice);
-	lua_register(L, "UpdateSettings", ScriptImp::l_UpdateSettings); // example: UpdateButtons('{"btnConf":[{"caption":"    REDIAL"}]}')
-	lua_register(L, "UpdateButtons", ScriptImp::l_UpdateButtons);
+	lua_register2(L, "GetInitialCallTarget", ScriptImp::l_GetInitialCallTarget);
+	lua_register2(L, "SetInitialCallTarget", ScriptImp::l_SetInitialCallTarget);
+	lua_register2(L, "SetCallTarget", ScriptImp::l_SetCallTarget);
+	lua_register2(L, "ShellExecute", ScriptImp::l_ShellExecute);
+	lua_register2(L, "SetTrayIcon", ScriptImp::l_SetTrayIcon);
+	lua_register2(L, "GetRegistrationState", ScriptImp::l_GetRegistrationState);
+	lua_register2(L, "SetButtonCaption", ScriptImp::l_SetButtonCaption);
+	lua_register2(L, "SetButtonCaption2", ScriptImp::l_SetButtonCaption2);
+	lua_register2(L, "SetButtonDown", ScriptImp::l_SetButtonDown);
+	lua_register2(L, "GetButtonDown", ScriptImp::l_GetButtonDown);
+	lua_register2(L, "SetButtonImage", ScriptImp::l_SetButtonImage);
+	lua_register2(L, "PluginSendMessageText", ScriptImp::l_PluginSendMessageText);
+	lua_register2(L, "PluginEnable", ScriptImp::l_PluginEnable);	// PluginEnable("TTS.dll", 0/1)
+	lua_register2(L, "GetExecSourceType", ScriptImp::l_GetExecSourceType);
+	lua_register2(L, "GetExecSourceId", ScriptImp::l_GetExecSourceId);
+	lua_register2(L, "GetRecordFile", ScriptImp::l_GetRecordFile);
+	lua_register2(L, "GetBlfState", ScriptImp::l_GetBlfState);
+	lua_register2(L, "RecordStart", ScriptImp::l_RecordStart);
+	lua_register2(L, "GetExeName", ScriptImp::l_GetExeName);
+	lua_register2(L, "GetProfileDir", ScriptImp::l_GetProfileDir);
+	lua_register2(L, "GetRecordingState", ScriptImp::l_GetRecordingState);
+	lua_register2(L, "GetRxDtmf", ScriptImp::l_GetRxDtmf);
+	lua_register2(L, "ShowTrayNotifier", ScriptImp::l_ShowTrayNotifier);
+	lua_register2(L, "GetUserName", ScriptImp::l_GetUserName);
+	lua_register2(L, "ProgrammableButtonClick", ScriptImp::l_ProgrammableButtonClick);
+	lua_register2(L, "RefreshAudioDevicesList", ScriptImp::l_RefreshAudioDevicesList);
+	lua_register2(L, "GetAudioDevice", ScriptImp::l_GetAudioDevice);
+	lua_register2(L, "UpdateSettings", ScriptImp::l_UpdateSettings); // example: UpdateButtons('{"btnConf":[{"caption":"    REDIAL"}]}')
+	lua_register2(L, "UpdateButtons", ScriptImp::l_UpdateButtons);
 
-	lua_register(L, "SetHandled", ScriptImp::l_SetHandled);
+	lua_register2(L, "SetHandled", ScriptImp::l_SetHandled);
 
-	lua_register(L, "GetButtonType", ScriptImp::l_GetButtonType);
-	lua_register(L, "GetButtonNumber", ScriptImp::l_GetButtonNumber);
+	lua_register2(L, "GetButtonType", ScriptImp::l_GetButtonType);
+	lua_register2(L, "GetButtonNumber", ScriptImp::l_GetButtonNumber);
 
-	lua_register(L, "MainMenuShow", ScriptImp::l_MainMenuShow);
-	lua_register(L, "ApplicationClose", ScriptImp::l_ApplicationClose);
+	lua_register2(L, "MainMenuShow", ScriptImp::l_MainMenuShow);
+	lua_register2(L, "ApplicationClose", ScriptImp::l_ApplicationClose);
 
 	// requestUid = SendCustomRequest(uri, method, extraHeaderLines)
 	// requestUid is > 0 on success
 	// extraHeaderLines parameter is optional
-	lua_register(L, "SendCustomRequest", ScriptImp::l_SendCustomRequest);
-	lua_register(L, "ClearCustomRequests", ScriptImp::l_ClearCustomRequests);
-	lua_register(L, "DeleteCustomRequest", ScriptImp::l_DeleteCustomRequest);
-	lua_register(L, "GetCustomRequest", ScriptImp::l_GetCustomRequest);
-	lua_register(L, "GetCustomRequestReply", ScriptImp::l_GetCustomRequestReply);
-	lua_register(L, "GetCustomRequestReplyText", ScriptImp::l_GetCustomRequestReplyText);
+	lua_register2(L, "SendCustomRequest", ScriptImp::l_SendCustomRequest);
+	lua_register2(L, "ClearCustomRequests", ScriptImp::l_ClearCustomRequests);
+	lua_register2(L, "DeleteCustomRequest", ScriptImp::l_DeleteCustomRequest);
+	lua_register2(L, "GetCustomRequest", ScriptImp::l_GetCustomRequest);
+	lua_register2(L, "GetCustomRequestReply", ScriptImp::l_GetCustomRequestReply);
+	lua_register2(L, "GetCustomRequestReplyText", ScriptImp::l_GetCustomRequestReplyText);
 
-	lua_register(L, "GetAudioRxSignalLevel", ScriptImp::l_GetAudioRxSignalLevel);
+	lua_register2(L, "GetAudioRxSignalLevel", ScriptImp::l_GetAudioRxSignalLevel);
 
-	lua_register(L, "ReadContacts", ScriptImp::l_ReadContacts);
-	lua_register(L, "ReadXmlContacts", ScriptImp::l_ReadXmlContacts);
-	lua_register(L, "AppendContactNoteText", ScriptImp::l_AppendContactNoteText);
+	lua_register2(L, "ReadContacts", ScriptImp::l_ReadContacts);
+	lua_register2(L, "ReadXmlContacts", ScriptImp::l_ReadXmlContacts);
+	lua_register2(L, "AppendContactNoteText", ScriptImp::l_AppendContactNoteText);
 
-	lua_register(L, "SendTextMessage", ScriptImp::l_SendTextMessage);
+	lua_register2(L, "SendTextMessage", ScriptImp::l_SendTextMessage);
 
-	lua_register(L, "SetAppStatus", ScriptImp::l_SetAppStatus);
+	lua_register2(L, "SetAppStatus", ScriptImp::l_SetAppStatus);
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);
+
+	if (!globalsSetComplete)
+	{
+		globalsSet.insert("winapi.FindWindow");
+		globalsSet.insert("winapi.SendMessage");
+		globalsSet.insert("winapi.Beep");
+		globalsSet.insert("winapi.MessageBox");
+		globalsSet.insert("winapi.GetAsyncKeyState");
+		globalsSet.insert("winapi.PlaySound");
+	}
+	globalsSetComplete = true;
 
 	int res = luaL_dostring(L, script);
 	if(res != 0)

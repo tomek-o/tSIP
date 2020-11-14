@@ -8,6 +8,7 @@
 #include "LuaWinapi.h"
 
 #include <string>
+#include <set>
 #include <System.hpp>
 
 struct lua_State;
@@ -183,6 +184,8 @@ public:
 	/** \brief Try to wait while any of the script is running
 	*/
 	static void WaitWhileAnyRunning(unsigned int ms);
+
+	static const std::set<AnsiString>& GetGlobals(void);
 private:
 	enum ScriptSource srcType;
 	int srcId;

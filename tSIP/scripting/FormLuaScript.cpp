@@ -10,8 +10,11 @@
 #include "LuaExamples.h"
 #include "Settings.h"
 #include "ScriptSource.h"
+#include "Log.h"
+#include "Paths.h"
 #include <memory>
 #include <assert.h>
+#include <stdio.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -23,7 +26,55 @@ namespace
 
 TfrmLuaScript::CallbackRunScript callbackRunScript = NULL;
 
+bool GetNextLine(AnsiString &Line, AnsiString &buf, char &lastchar)
+{
+	AnsiString res;
+	int d, a;
+	d = buf.Pos((char)13);
+	a = buf.Pos((char)10);
+	if ((d == 0) && (a == 0)) return false;		// no line-ending
+
+	// Normal line ending: 13,10 (MingW) or 10 (CygWin)
+	// Status-line ending: 13 (MingW and CygWin)
+
+	// drawback: under MingW, every line has to be processed for statusline format,
+	// because line type cannot be determined correctly by line ending
+
+	if (a != 0) {
+		// there is a 10
+		if ((a == 1) && (lastchar == 13)) {
+			// if a 13,10 ending was split
+			// do not erase Line, which should contain previous line
+			buf.Delete(1,1);
+			lastchar = 10;
+			return true;
+		}
+		if (d == a-1) {
+			// line ending: 13,10
+			Line = buf.SubString(1, a-2);
+			buf.Delete(1, a);
+			lastchar = 10;
+			return true;
+		}
+		if ((d == 0) || (d > a)) {
+			// line ending: 10
+			Line = buf.SubString(1, a-1);
+			buf.Delete(1, a);
+			lastchar = 10;
+			return true;
+		}
+	}
+	if (d != 0) {
+		// line ending: 13
+		Line = buf.SubString(1, d-1);
+		buf.Delete(1, d);
+		lastchar = 13;
+		return true;
+	}
+	return false;
 }
+
+}	// namespace
 
 void TfrmLuaScript::SetCallbackRunScript(CallbackRunScript cb)
 {
@@ -271,6 +322,7 @@ void TfrmLuaScript::SetTitle(AnsiString filename, bool modified)
 	}
 	//Application->Title = title;
 	this->Caption = title;
+	this->modified = modified;
 	if (modified == false)
 	{
     	//frmJsonEditor->ClearFileChangedFlag();
@@ -427,6 +479,244 @@ void __fastcall TfrmLuaScript::WMDropFiles(TWMDropFiles &message)
 void __fastcall TfrmLuaScript::miCloseWindowClick(TObject *Sender)
 {
 	Close();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScript::btnLuacheckClick(TObject *Sender)
+{
+	AnsiString appName = ExtractFileDir(Application->ExeName) + "\\luacheck.exe";
+	if (!FileExists(appName))
+	{
+		MessageBox(this->Handle, "Luacheck.exe must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+		return;
+	}
+	AnsiString asFile = asCurrentFile;
+	bool tmpFile = false;
+	if (!FileExists(asFile) || modified)
+	{
+		asFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), "tmp_luacheck.lua");
+		TStrings *strings = new TStringList();
+		strings->Text = frmEditor->GetText();
+		try
+		{
+			strings->SaveToFile(asFile);
+			tmpFile = true;
+		}
+		catch(...)
+		{
+			MessageBox(this->Handle, "Failed to save temporary file for luacheck.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+			delete strings;
+			return;
+		}
+		delete strings;
+	}
+
+	BOOL ok = TRUE;
+	HANDLE hStdInPipeRead = NULL;
+	HANDLE hStdInPipeWrite = NULL;
+	HANDLE hStdOutPipeRead = NULL;
+	HANDLE hStdOutPipeWrite = NULL;
+
+	// Create two pipes.
+	SECURITY_ATTRIBUTES sa = { sizeof(SECURITY_ATTRIBUTES), NULL, TRUE };
+	ok = CreatePipe(&hStdInPipeRead, &hStdInPipeWrite, &sa, 0);
+	if (ok == FALSE)
+	{
+		MessageBox(this->Handle, "Failed to create pipe.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+		return;
+	}
+	ok = CreatePipe(&hStdOutPipeRead, &hStdOutPipeWrite, &sa, 0);
+	if (ok == FALSE)
+	{
+		MessageBox(this->Handle, "Failed to create pipe.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+		CloseHandle(hStdInPipeRead);
+		return;
+	}
+
+	AnsiString command = appName + " " + asFile + " --formatter plain ";
+
+	const std::set<AnsiString> &globalsSet = ScriptExec::GetGlobals();
+	if (globalsSet.empty())
+	{
+        // run once empty script to fill global function list
+		BtnController btnCtrl(dynamic_cast<TButton*>(Sender));
+		breakRequest = false;
+		running = true;
+		bool handled = true;
+		callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, "", breakRequest, handled);
+		running = false;
+	}
+	if (!globalsSet.empty())
+	{
+		command += "--globals";
+		for (std::set<AnsiString>::const_iterator iter = globalsSet.begin(); iter != globalsSet.end(); ++iter)
+		{
+			command += " ";
+			command += *iter;
+		}
+	}
+    // Create the process.
+    STARTUPINFO si = { 0 };
+    si.cb = sizeof(STARTUPINFO);
+    si.dwFlags = STARTF_USESTDHANDLES;
+    si.hStdError = hStdOutPipeWrite;
+    si.hStdOutput = hStdOutPipeWrite;
+    si.hStdInput = hStdInPipeRead;
+	PROCESS_INFORMATION pi = { 0 };
+    LPSECURITY_ATTRIBUTES lpProcessAttributes = NULL;
+    LPSECURITY_ATTRIBUTES lpThreadAttribute = NULL;
+    BOOL bInheritHandles = TRUE;
+    DWORD dwCreationFlags = CREATE_NO_WINDOW;
+    LPVOID lpEnvironment = NULL;
+    const char* lpCurrentDirectory = NULL;
+    ok = CreateProcess(
+        appName.c_str(),
+        command.c_str(),
+        lpProcessAttributes,
+        lpThreadAttribute,
+        bInheritHandles,
+        dwCreationFlags,
+        lpEnvironment,
+        lpCurrentDirectory,
+        &si,
+        &pi);
+	if (ok == FALSE)
+	{
+		MessageBox(this->Handle, "Failed to start luacheck.exe.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+		CloseHandle(hStdOutPipeRead);
+		CloseHandle(hStdInPipeWrite);
+		return;
+	}
+
+    // Close pipes we do not need.
+    CloseHandle(hStdOutPipeWrite);
+    CloseHandle(hStdInPipeRead);
+
+	AnsiString outputText;
+
+    // The main loop for reading output from the DIR command.
+    char buf[1024 + 1] = { 0 };
+    DWORD dwRead = 0;
+    DWORD dwAvail = 0;
+	ok = ReadFile(hStdOutPipeRead, buf, 1024, &dwRead, NULL);
+	LOG("Luacheck output:\n");
+    while (ok == TRUE)
+    {
+        buf[dwRead] = '\0';
+        LOG("%s", buf);
+		outputText += buf;
+        ok = ReadFile(hStdOutPipeRead, buf, 1024, &dwRead, NULL);
+    }
+	LOG("End of luacheck output\n");
+
+    // Clean up and exit.
+	CloseHandle(hStdOutPipeRead);
+	CloseHandle(hStdInPipeWrite);
+    DWORD dwExitCode = 0;
+	GetExitCodeProcess(pi.hProcess, &dwExitCode);
+
+	validationEntries.clear();
+
+	pnlBottom->Height = pnlBottom2->Height + lvValidation->Height;
+	lvValidation->Visible = true;
+
+	bool ok2;
+	AnsiString Line;
+	char lastChar = 0;
+	do
+	{
+		ok2 = GetNextLine(Line, outputText, lastChar);
+		if (ok2)
+		{
+			Line = Line.Trim();
+			if (Line == "")
+				continue;
+			char* line = Line.c_str();
+			if (
+				strncmp(line, "Checking ", strlen("Checking ")) == 0 ||
+				strncmp(line, "Total:", strlen("Total:")) == 0
+				)
+				continue;
+			// "    Example12.lua: couldn't read: No such file or directory"
+			// "    G:\\tools\\tSIP\\tSIP\\tSIP\\Debug_Build\\scripts\\Example12.lua:1:21: accessing undefined variable 'GetAudioErrorCount'"
+			ValidationEntry entry;
+			entry.message = Line;
+			char *p = strchr(Line.c_str(), ':');
+			if (p)
+			{
+				p = strchr(p+1, ':');
+			}
+			if (p)
+			{
+				*p = '\0';
+				entry.file = Line.c_str();
+				p++;
+				entry.message = p;
+				sscanf(p, "%d:%d:", &entry.line, &entry.position);
+				p = strchr(p, ' ');
+				if (p)
+				{
+					entry.message = p + 1;
+				}
+			}
+			validationEntries.push_back(entry);
+		}
+	} while (ok2);
+
+	lvValidation->Items->Count = validationEntries.size();
+	lvValidation->Invalidate();
+	if (tmpFile)
+	{
+		DeleteFile(asFile);
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScript::lvValidationData(TObject *Sender,
+      TListItem *Item)
+{
+	int id = Item->Index;
+	const ValidationEntry &entry = validationEntries[id];
+	Item->Caption = ExtractFileName(entry.file);
+	if (entry.line >= 0)
+	{
+		Item->SubItems->Add(entry.line);
+	}
+	else
+	{
+		Item->SubItems->Add("");
+	}
+	if (entry.position >= 0)
+	{
+		Item->SubItems->Add(entry.position);
+	}
+	else
+	{
+		Item->SubItems->Add("");
+	}
+	Item->SubItems->Add(entry.message);	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScript::FormShow(TObject *Sender)
+{
+	lvValidation->Visible = false;
+	pnlBottom->Height = pnlBottom2->Height;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScript::lvValidationDblClick(TObject *Sender)
+{
+	TListItem *item = lvValidation->Selected;
+	if (!item)
+		return;
+	int id = item->Index;
+	const ValidationEntry &entry = validationEntries[id];
+	if (entry.line > 0)
+	{
+		frmEditor->MarkError(entry.line, entry.position > 0 ? entry.position : 1);
+		frmEditor->SetSciFocus();
+	}
 }
 //---------------------------------------------------------------------------
 
