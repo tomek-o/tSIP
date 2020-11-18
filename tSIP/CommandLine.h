@@ -21,7 +21,7 @@ public:
 		\return non-zero if command-line was forwarded to another app instance
 	*/
 	int Process(void);
-	enum { MAX_CMD_PARAM_LEN = 256 };	
+	enum { MAX_CMD_PARAM_LEN = 1024 };	
 	void Execute(char* buf, int paramcnt);	
 	enum Action {
 		ACTION_NONE = 0,
@@ -33,9 +33,11 @@ public:
 		ACTION_PROGRAMMABLE_BTN,	///< simulating pressing one of the programmable buttons
 		ACTION_RECORD_START,
 		ACTION_RECORD_PAUSE,
+		ACTION_SCRIPT,
 	} action;
 	AnsiString asTarget;
 	int programmableBtnId;
+	AnsiString script;
 
 	static AnsiString GetProfileDir(void);
 };

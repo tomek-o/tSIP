@@ -34,6 +34,7 @@ namespace {
 
 	const char* PROGRAMMABLE_BTN_STR = "PROGRAMMABLE_BTN_";
 
+	const char* SCRIPT_STR = "SCRIPT=";
 }	// namespace
 
 
@@ -90,7 +91,8 @@ int CommandLine::Process(void)
 		buf = data;
 		for (int i=0; i<paramcnt; i++)
 		{
-			strncpy(buf + (MAX_CMD_PARAM_LEN*i), ParamStr(i).c_str(), MAX_CMD_PARAM_LEN);
+			AnsiString param = ParamStr(i);
+			strncpy(buf + (MAX_CMD_PARAM_LEN*i), param.c_str(), MAX_CMD_PARAM_LEN);
 			buf[MAX_CMD_PARAM_LEN*i + MAX_CMD_PARAM_LEN-1] = '\0';
 		}
 	}
@@ -179,6 +181,25 @@ void CommandLine::Execute(char* buf, int paramcnt)
 			else if (asCommandPart == "RECORD_PAUSE")
 			{
             	action = ACTION_RECORD_PAUSE;
+			}
+			else if (asCommandPart.Pos(SCRIPT_STR) == 1)
+			{
+				script = asCommandPart.SubString(strlen(SCRIPT_STR)+1, asCommandPart.Length() - strlen(SCRIPT_STR));
+			#if 0	// unnecessary? Windows removes single double quotes in parameters
+				if (script[1] == '"')
+				{
+					if (script.Length() < 2)
+						continue;
+					script = script.SubString(2, script.Length()-1);
+				}
+				if (script[script.Length()] == '"')
+				{
+					if (script.Length() < 2)
+						continue;
+					script = script.SubString(1, script.Length()-1);
+				}
+			#endif
+				action = ACTION_SCRIPT;
 			}
 			else
 			{

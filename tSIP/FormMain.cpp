@@ -3019,6 +3019,16 @@ void TfrmMain::HandleCommandLine(void)
 			LOG("RECORD_PAUSE: not recording\n");
 		}
 	}
+	else if (cmd.action == CommandLine::ACTION_SCRIPT)
+	{
+		bool breakReq = false;
+		bool handled = false;
+		RunScript(SCRIPT_SRC_COMMAND_LINE, 0, cmd.script, breakReq, handled);
+	}
+	else
+	{
+    	LOG("Unhandled action type!\n");
+	}
 	cmd.action = CommandLine::ACTION_NONE;
 }
 
