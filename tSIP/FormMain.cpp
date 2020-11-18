@@ -850,10 +850,12 @@ void TfrmMain::MakeCall(AnsiString target)
 	if (appSettings.Scripts.onMakeCall != "")
 	{
 		AnsiString asScriptFile;
-		bool handled = true;
+		bool handled = false;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onMakeCall.c_str());
 		// this script may change initial target implementing SIP originate function
 		RunScriptFile(SCRIPT_SRC_ON_MAKING_CALL, -1, asScriptFile.c_str(), handled);
+		if (handled)
+			return;
 	}
 
 	UA->Call(0, call.initialTarget, appSettings.Calls.extraHeaderLines);
