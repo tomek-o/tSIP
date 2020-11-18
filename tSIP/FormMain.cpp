@@ -2966,6 +2966,17 @@ void TfrmMain::HandleCommandLine(void)
 		{
 			MakeCall(target);
 		}
+		else
+		{
+			if (target == "")
+			{
+				LOG("Cannot make call - empty target\n");
+			}
+			else
+			{
+				LOG("Cannot make call - call is already active\n");
+			}
+		}
 	}
 	else if (cmd.action == CommandLine::ACTION_SHOWWINDOW)
 	{
