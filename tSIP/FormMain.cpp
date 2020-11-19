@@ -626,6 +626,7 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 	{
 		return status;
 	}
+	bool changed = false;
 	for (int cid=0; cid<ARRAY_SIZE(frmButtonContainers); cid++)
 	{
 		TfrmButtonContainer *& container = frmButtonContainers[cid];
@@ -634,13 +635,22 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 		{
 			if (buttons.btnConf[btnId] != prevButtons.btnConf[btnId])
 			{
+				changed = true;
 				TProgrammableButton* btn = container->GetBtn(id);
 				if (btn)
 				{
-                	btn->SetConfig(buttons.btnConf[btnId]);
+					btn->SetConfig(buttons.btnConf[btnId]);
 				}
 			}
 			btnId++;
+		}
+	}
+	if (changed)
+	{
+		int status = buttons.Write();
+		if (status != 0)
+		{
+        	LOG("Failed to write button configuration!\n");
 		}
 	}
 	return 0;
