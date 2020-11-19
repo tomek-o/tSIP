@@ -627,6 +627,7 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 		return status;
 	}
 	bool changed = false;
+	bool restartUa = false;
 	for (int cid=0; cid<ARRAY_SIZE(frmButtonContainers); cid++)
 	{
 		TfrmButtonContainer *& container = frmButtonContainers[cid];
@@ -636,6 +637,10 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 			if (buttons.btnConf[btnId] != prevButtons.btnConf[btnId])
 			{
 				changed = true;
+				if (buttons.btnConf[btnId].UaRestartNeeded(prevButtons.btnConf[btnId]))
+				{
+					restartUa = true;
+				}
 				TProgrammableButton* btn = container->GetBtn(id);
 				if (btn)
 				{
@@ -652,6 +657,11 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 		{
         	LOG("Failed to write button configuration!\n");
 		}
+	}
+	if (restartUa)
+	{
+		buttons.UpdateContacts(appSettings.uaConf.contacts);
+		Ua::Instance().Restart();
 	}
 	return 0;
 }
