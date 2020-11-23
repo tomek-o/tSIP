@@ -533,7 +533,7 @@ void __fastcall TfrmLuaScript::btnLuacheckClick(TObject *Sender)
 		return;
 	}
 
-	AnsiString command = appName + " " + asFile + " --formatter plain ";
+	AnsiString command = (AnsiString)"\"" + appName + "\" \"" + asFile + "\" --formatter plain ";
 
 	const std::set<AnsiString> &globalsSet = ScriptExec::GetGlobals();
 	if (globalsSet.empty())
