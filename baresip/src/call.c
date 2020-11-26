@@ -656,12 +656,25 @@ int call_connect(struct call *call, const struct pl *paddr, const struct pl *ext
 
 	(void)re_printf("connecting to '%r'..\n", paddr);
 
+	/* if the peer-address is a full SIP address then we need
+	 * to parse it and extract the SIP uri part.
+	 */
 	if (0 == sip_addr_decode(&addr, paddr)) {
-		err = pl_strdup(&call->peer_uri, &addr.auri);
+
+		if (pl_isset(&addr.params)) {
+			err = re_sdprintf(&call->peer_uri, "%r%r",
+					  &addr.auri, &addr.params);
+		}
+		else {
+			err = pl_strdup(&call->peer_uri, &addr.auri);
+		}
 	}
 	else {
 		err = pl_strdup(&call->peer_uri, paddr);
 	}
+	if (err)
+		return err;
+
 	if (err)
 		return err;
 		
