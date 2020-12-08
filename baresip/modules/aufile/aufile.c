@@ -200,7 +200,7 @@ static void timeout(void *arg)
 	/* check if audio buffer is empty */
 	if (aubuf_cur_size(st->aubuf) < (2 * st->in_samples_per_frame)) {
 
-		DEBUG_INFO("aufile: end of file, calling errh\n");
+		DEBUG_INFO("aufile: end of wave file, calling error handler\n");
 
 		/* error handler must be called from re_main thread */
 		if (st->errh) {
