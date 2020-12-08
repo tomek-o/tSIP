@@ -114,7 +114,8 @@ Settings::_Integration::_Integration(void):
 	bAddFilterWMCopyData(false),
 	asProtocol(Branding::appProto),
 	bDoNotUseSipPrefixForDirectIpCalls(false),
-	bDoNotPassParametersToPreviousInstance(false)
+	bDoNotPassParametersToPreviousInstance(false),
+	bAcceptCommandLineScript(false)
 {
 }
 
@@ -762,6 +763,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		Integration.asProtocol = IntegrationJson.get("Protocol", Integration.asProtocol.c_str()).asString().c_str();
 		Integration.bDoNotUseSipPrefixForDirectIpCalls = IntegrationJson.get("DoNotUseSipPrefixForDirectIpCalls", Integration.bDoNotUseSipPrefixForDirectIpCalls).asBool();
 		IntegrationJson.getBool("DoNotPassParametersToPreviousInstance", Integration.bDoNotPassParametersToPreviousInstance);
+		IntegrationJson.getBool("AcceptCommandLineScript", Integration.bAcceptCommandLineScript);
     }
 
 	{
@@ -1014,11 +1016,14 @@ int Settings::Write(AnsiString asFileName)
 	root["Display"]["DecodeUtfDisplayToAnsi"] = Display.bDecodeUtfDisplayToAnsi;
 	root["Display"]["UsePAssertedIdentity"] = Display.bUsePAssertedIdentity;
 
-	root["Integration"]["AddFilterWMCopyData"] = Integration.bAddFilterWMCopyData;
-	root["Integration"]["Protocol"] = Integration.asProtocol.c_str();
-	root["Integration"]["DoNotUseSipPrefixForDirectIpCalls"] = Integration.bDoNotUseSipPrefixForDirectIpCalls;
-	root["Integration"]["DoNotPassParametersToPreviousInstance"] = Integration.bDoNotPassParametersToPreviousInstance;
-
+	{
+		Json::Value &jIntegration = root["Integration"];
+		jIntegration["AddFilterWMCopyData"] = Integration.bAddFilterWMCopyData;
+		jIntegration["Protocol"] = Integration.asProtocol.c_str();
+		jIntegration["DoNotUseSipPrefixForDirectIpCalls"] = Integration.bDoNotUseSipPrefixForDirectIpCalls;
+		jIntegration["DoNotPassParametersToPreviousInstance"] = Integration.bDoNotPassParametersToPreviousInstance;
+		jIntegration["AcceptCommandLineScript"] = Integration.bAcceptCommandLineScript;
+	}
 
 	root["Ring"]["DefaultRing"] = Ring.defaultRing.c_str();
 	for (int i=0; i<sizeof(Ring.bellcore)/sizeof(Ring.bellcore[0]); i++)

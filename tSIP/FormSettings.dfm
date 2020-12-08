@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsTrayNotifier
+    ActivePage = tsIntegration
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2103,6 +2103,14 @@ object frmSettings: TfrmSettings
           'Do not pass parameters to previous instance (run new instance on' +
           ' each click / command line call)'
         TabOrder = 5
+      end
+      object chbAcceptCommandLineScript: TCheckBox
+        Left = 26
+        Top = 142
+        Width = 511
+        Height = 17
+        Caption = 'Accept scripts from command line'
+        TabOrder = 6
       end
     end
     object tsHotkeys: TTabSheet

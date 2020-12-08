@@ -234,6 +234,7 @@ public:
 		AnsiString asProtocol;
 		bool bDoNotUseSipPrefixForDirectIpCalls;
 		bool bDoNotPassParametersToPreviousInstance;
+		bool bAcceptCommandLineScript;
 		_Integration(void);
 	} Integration;
 	struct _Ring
