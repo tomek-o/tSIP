@@ -27,8 +27,6 @@ Call recording:
 - semi-automatic record mode: record call by default, delete file if not "saved" by user
 - UID for file names to avoid conflicts with very short (<1 s) recordings
 
-- new button type: auto answer / DND with specified answer code
-
 - hotkeys: move focus to transfer textbox
 
 - example: link handling from mail client

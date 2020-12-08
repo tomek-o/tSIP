@@ -848,5 +848,21 @@ Version 0.1.75
 	- added option to log only first lines of SIP messages
 	- added option to skip encoding number in recording file with base64
 	- few other minor fixes and changes
+
+Version 0.1.76
+	- added German translation - thanks to Andi Topp (www.comfine.de)
+	- added option changing main window layout - call controls in dialpad
+	- added dialing combobox sorting order setting: by number/time
+	- added option to do not change tray notifier position
+	- added new button type: auto answer/DND (depending on SIP code)
+	- added luacheck integration to scripting window
+	- made SetHandled(0|1) work for "on make call" script
+	- added logs with error reasons for calling from command line
+	- accepting/processing script from command line (/tsip=SCRIPT=xxx) [opt-in]
+	- FIXED: button configuration not being saved after Lua UpdateButtons()
+	- restarting UA if needed after updating button settings
+	- fixed some of the luacheck warnings from script examples
+	- FIXED: UDP transport being used instead of TCP for some calls
+	- measuring button configuration read (OutputDebugString at the start) and write times (log)
 */
 
