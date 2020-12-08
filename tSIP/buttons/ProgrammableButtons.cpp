@@ -6,6 +6,7 @@
 #pragma hdrstop
 
 #include "ProgrammableButtons.h"
+#include "common/TimeCounter.h" 
 #include <assert.h>
 #include <algorithm>
 #include <fstream> 
@@ -198,10 +199,17 @@ int ProgrammableButtons::ReadFile(AnsiString name)
 
 int ProgrammableButtons::Read(void)
 {
+	TimeCounter tc("Reading buttons configuration");
 	assert(filename != "");
 
 	if (ReadFile(filename) == 0)
 	{
+		{
+			// regular log might not work yet - use OutputDebugString
+			char s[100];
+			snprintf(s, sizeof(s), "%s  %.3f ms\n", tc.getName(), tc.getTimeMs());
+			OutputDebugString(s);
+		}
 		return 0;
 	}
 	else
@@ -220,6 +228,7 @@ int ProgrammableButtons::Read(void)
 
 int ProgrammableButtons::Write(void)
 {
+	TimeCounter tc("Writing buttons configuration");
 	assert(filename != "");
     Json::Value root;
 	Json::StyledWriter writer;
