@@ -2,7 +2,7 @@
 Small, portable SIP softphone for Windows.  
 Based on re/rem/baresip (https://github.com/baresip/).
 
-![tSIP screenshot with console](http://tomeko.net/software/SIPclient/tSIP_sidecar.png)
+![tSIP 0.1.76 screenshot with console](http://tomeko.net/software/SIPclient/tSIP_0_1_76.png)
 
 ## License
 
