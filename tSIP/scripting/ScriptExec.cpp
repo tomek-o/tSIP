@@ -505,6 +505,12 @@ static int l_GetInitialCallTarget(lua_State* L)
 	return 0;
 }
 
+static int l_ResetCall(lua_State* L)
+{
+	GetContext(L)->onResetCall();
+	return 0;
+}
+
 static int l_SwitchAudioSource(lua_State* L)
 {
 	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
@@ -1298,6 +1304,7 @@ ScriptExec::ScriptExec(
 	CallbackSendDtmf onSendDtmf,
 	CallbackBlindTransfer onBlindTransfer,
 	CallbackGetCall onGetCall,
+	CallbackResetCall onResetCall,
 	CallbackGetRecorder onGetRecorder,
 	CallbackGetContactName onGetContactName,
 	CallbackGetStreamingState onGetStreamingState,
@@ -1337,6 +1344,7 @@ ScriptExec::ScriptExec(
 	onSendDtmf(onSendDtmf),
 	onBlindTransfer(onBlindTransfer),
 	onGetCall(onGetCall),
+	onResetCall(onResetCall),
 	onGetRecorder(onGetRecorder),
 	onGetContactName(onGetContactName),
 	onGetStreamingState(onGetStreamingState),
@@ -1367,6 +1375,7 @@ ScriptExec::ScriptExec(
 	assert(onAddOutputText && onCall && onHangup && onAnswer && onGetDial && onSetDial &&
 		onSwitchAudioSource && onSendDtmf && onBlindTransfer &&
 		onGetCall &&
+		onResetCall &&
 		onGetRecorder &&
 		onGetContactName &&
 		onGetStreamingState &&
@@ -1447,6 +1456,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, "GetInitialCallTarget", ScriptImp::l_GetInitialCallTarget);
 	lua_register2(L, "SetInitialCallTarget", ScriptImp::l_SetInitialCallTarget);
 	lua_register2(L, "SetCallTarget", ScriptImp::l_SetCallTarget);
+	lua_register2(L, "ResetCall", ScriptImp::l_ResetCall);
 	lua_register2(L, "ShellExecute", ScriptImp::l_ShellExecute);
 	lua_register2(L, "SetTrayIcon", ScriptImp::l_SetTrayIcon);
 	lua_register2(L, "GetRegistrationState", ScriptImp::l_GetRegistrationState);

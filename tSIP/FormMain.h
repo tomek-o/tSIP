@@ -188,6 +188,7 @@ private:	// User declarations
 	void OnSwitchAudioSource(std::string mod, std::string dev);
 	void OnBlindTransfer(const std::string& target);
 	Call* OnGetCall(void);
+	void OnResetCall(void);
 	Recorder* OnGetRecorder(int id);
 	int OnGetBlfState(int contactId, std::string &number);
 	int OnGetStreamingState(void);

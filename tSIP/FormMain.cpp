@@ -875,7 +875,9 @@ void TfrmMain::MakeCall(AnsiString target)
 		// this script may change initial target implementing SIP originate function
 		RunScriptFile(SCRIPT_SRC_ON_MAKING_CALL, -1, asScriptFile.c_str(), handled);
 		if (handled)
+		{
 			return;
+		}
 	}
 
 	UA->Call(0, call.initialTarget, appSettings.Calls.extraHeaderLines);
@@ -940,6 +942,11 @@ void TfrmMain::OnBlindTransfer(const std::string& target)
 Call* TfrmMain::OnGetCall(void)
 {
 	return &call;
+}
+
+void TfrmMain::OnResetCall(void)
+{
+	call.reset();
 }
 
 Recorder* TfrmMain::OnGetRecorder(int id)
@@ -2593,6 +2600,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnAddOutputText, &OnCall2, &Hangup, &Answer, &OnGetDial, &OnSetDial,
 		&OnSwitchAudioSource, &DialString, &OnBlindTransfer,
 		&OnGetCall,
+		&OnResetCall,
 		&OnGetRecorder,
 		&OnGetContactName,
 		&OnGetStreamingState,
