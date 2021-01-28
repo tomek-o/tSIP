@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsSpeedDial
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -73,13 +73,6 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = '%'
       end
-      object lblMainWindowHeight: TLabel
-        Left = 3
-        Top = 215
-        Width = 94
-        Height = 13
-        Caption = 'Main window height'
-      end
       object lblTranslation: TLabel
         Left = 3
         Top = 7
@@ -97,9 +90,9 @@ object frmSettings: TfrmSettings
       object lblFrmMainLayout: TLabel
         Left = 3
         Top = 326
-        Width = 94
+        Width = 84
         Height = 13
-        Caption = 'Main window layout'
+        Caption = 'Main panel layout'
       end
       object lblDialComboboxSortOrder: TLabel
         Left = 3
@@ -177,13 +170,6 @@ object frmSettings: TfrmSettings
           't, script, ...)'
         TabOrder = 7
       end
-      object edMainWindowHeight: TEdit
-        Left = 178
-        Top = 212
-        Width = 42
-        Height = 21
-        TabOrder = 8
-      end
       object chbFrmMainShowWhenMakingCall: TCheckBox
         Left = 3
         Top = 165
@@ -192,7 +178,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Show main form when making call (using shortcut, script, command' +
           ' line / protocol handler...)'
-        TabOrder = 9
+        TabOrder = 8
       end
       object chbNoTaskbarButtonRestore: TCheckBox
         Left = 3
@@ -202,15 +188,15 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not restore taskbar button when restoring application from tr' +
           'ay'
-        TabOrder = 10
+        TabOrder = 9
       end
       object chbNoTrayIcon: TCheckBox
         Left = 3
-        Top = 303
+        Top = 213
         Width = 526
         Height = 17
         Caption = 'Do not create tray icon (restart required)'
-        TabOrder = 11
+        TabOrder = 10
       end
       object cbTranslation: TComboBox
         Left = 75
@@ -218,7 +204,7 @@ object frmSettings: TfrmSettings
         Width = 230
         Height = 21
         ItemHeight = 13
-        TabOrder = 12
+        TabOrder = 11
       end
       object chbTranslationLogMissingKeys: TCheckBox
         Left = 75
@@ -226,7 +212,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Log keys missing in translation file'
-        TabOrder = 13
+        TabOrder = 12
       end
       object cbFrmMainLayout: TComboBox
         Left = 178
@@ -236,7 +222,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 14
+        TabOrder = 13
         Text = 'default'
         Items.Strings = (
           'default'
@@ -250,7 +236,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 15
+        TabOrder = 14
         Text = 'by number'
         Items.Strings = (
           'by number'
@@ -453,20 +439,6 @@ object frmSettings: TfrmSettings
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
-      object lblSpeedDial: TLabel
-        Left = 3
-        Top = 323
-        Width = 78
-        Height = 13
-        Caption = 'Speed dial panel'
-      end
-      object lblSpeedDialColumnWidth: TLabel
-        Left = 3
-        Top = 348
-        Width = 220
-        Height = 13
-        Caption = 'Width of speed dial columns (restart required)'
-      end
       object lblSpeedDialBlfSettings: TLabel
         Left = 3
         Top = 132
@@ -505,7 +477,7 @@ object frmSettings: TfrmSettings
       object lblExpandedWidth: TLabel
         Left = 263
         Top = 47
-        Width = 27
+        Width = 26
         Height = 13
         Caption = 'width'
       end
@@ -516,31 +488,13 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'height'
       end
-      object cbSpeedDialSize: TComboBox
-        Left = 235
-        Top = 320
-        Width = 121
-        Height = 21
-        Style = csDropDownList
-        ItemHeight = 13
-        TabOrder = 0
-        Items.Strings = (
-          'single column'
-          '2 columns'
-          '3 columns'
-          '4 columns'
-          '5 columns'
-          '6 columns'
-          '7 columns'
-          '8 columns')
-      end
       object chbShowSpeedDialOnly: TCheckBox
         Left = 3
         Top = 3
         Width = 325
         Height = 17
         Caption = 'Show only speed dial (console-only mode)'
-        TabOrder = 1
+        TabOrder = 0
       end
       object chbSpeedDialPopupMenu: TCheckBox
         Left = 3
@@ -548,7 +502,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Enable popup menu (editing) for programmable keys'
-        TabOrder = 2
+        TabOrder = 1
       end
       object chbSpeedDialIgnorePresenceNote: TCheckBox
         Left = 3
@@ -558,7 +512,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Ignore presence note (do not show second line for presence butto' +
           'n)'
-        TabOrder = 3
+        TabOrder = 2
       end
       object chbSpeedDialIgnoreDialogInfoRemoteIdentity: TCheckBox
         Left = 19
@@ -568,7 +522,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Ignore remote identity info (2nd line with caller/callee and cal' +
           'l direction, if present in notifications)'
-        TabOrder = 4
+        TabOrder = 3
       end
       object chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing: TCheckBox
         Left = 19
@@ -578,7 +532,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Keep previous remote identity info if remote identity is missing' +
           ' in notification'
-        TabOrder = 5
+        TabOrder = 4
       end
       object chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated: TCheckBox
         Left = 19
@@ -588,24 +542,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Ignore or clear remote identity if call state is set to terminat' +
           'ed'
-        TabOrder = 6
-      end
-      object vleSpeedDialColWidths: TValueListEditor
-        Left = 235
-        Top = 343
-        Width = 142
-        Height = 86
-        DefaultColWidth = 50
-        ScrollBars = ssVertical
-        Strings.Strings = (
-          '=')
-        TabOrder = 7
-        TitleCaptions.Strings = (
-          'Column'
-          'Width')
-        ColWidths = (
-          50
-          86)
+        TabOrder = 5
       end
       object chbSpeedDialUseGrid: TCheckBox
         Left = 3
@@ -615,42 +552,42 @@ object frmSettings: TfrmSettings
         Caption = 
           'Snap to grid when moving/resizing buttons (hold Shift to overrid' +
           'e)     grid size:'
-        TabOrder = 8
+        TabOrder = 6
       end
       object edSpeedDialGridSize: TEdit
         Left = 400
         Top = 221
         Width = 31
         Height = 21
-        TabOrder = 9
+        TabOrder = 7
       end
       object edCollapsedWidth: TEdit
         Left = 293
         Top = 23
         Width = 35
         Height = 21
-        TabOrder = 10
+        TabOrder = 8
       end
       object edCollapsedHeight: TEdit
         Left = 372
         Top = 23
         Width = 35
         Height = 21
-        TabOrder = 11
+        TabOrder = 9
       end
       object edExpandedWidth: TEdit
         Left = 293
         Top = 44
         Width = 35
         Height = 21
-        TabOrder = 12
+        TabOrder = 10
       end
       object edExpandedHeight: TEdit
         Left = 372
         Top = 44
         Width = 35
         Height = 21
-        TabOrder = 13
+        TabOrder = 11
       end
     end
     object tsCalls: TTabSheet

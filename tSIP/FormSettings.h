@@ -133,9 +133,6 @@ __published:	// IDE-managed Components
 	TTabSheet *tsRecording;
 	TCheckBox *chbRecordingEnabled;
 	TTabSheet *tsSpeedDial;
-	TLabel *lblSpeedDial;
-	TComboBox *cbSpeedDialSize;
-	TLabel *lblSpeedDialColumnWidth;
 	TCheckBox *chbShowSpeedDialOnly;
 	TCheckBox *chbRestoreMainWindowOnIncomingCall;
 	TTabSheet *tsPhones;
@@ -283,9 +280,6 @@ __published:	// IDE-managed Components
 	TEdit *edScriptOnProgrammableButtonFile;
 	TButton *btnSelectedScriptOnProgrammableButtonChange;
 	TBitBtn *btnSelectedScriptOnProgrammableButtonEdit;
-	TValueListEditor *vleSpeedDialColWidths;
-	TLabel *lblMainWindowHeight;
-	TEdit *edMainWindowHeight;
 	TCheckBox *chbHideSpeedDialToggleButton;
 	TCheckBox *chbDisconnectCallOnAudioError;
 	TLabel *lblScriptOnAudioError;

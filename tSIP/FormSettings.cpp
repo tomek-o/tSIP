@@ -86,24 +86,6 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	frmUaConfOpus->Parent = tsUaConfOpus;
 	frmUaConfOpus->Visible = true;
 
-	// fill number of columns combobox and widths vleditor according to limit in settings
-	cbSpeedDialSize->Items->Clear();
-	//vleSpeedDialColWidths->RowCount = ProgrammableButtons::EXT_CONSOLE_COLUMNS
-	for (int i=1; i<=ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
-	{
-		AnsiString desc;
-		if (i == 1)
-		{
-			desc = "1 column";
-		}
-		else
-		{
-			desc.sprintf("%d columns", i);
-		}
-		cbSpeedDialSize->Items->Add(desc);
-		vleSpeedDialColWidths->Values[i] = 100 + i;
-	}
-
 	for (int i=0; i<pcGeneral->PageCount; i++)
 	{
 		pcGeneral->Pages[i]->TabVisible = false;
@@ -252,11 +234,6 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbFrmMainShowWhenAnsweringCall->Checked = tmpSettings.frmMain.bShowWhenAnsweringCall;
 	chbFrmMainShowWhenMakingCall->Checked = tmpSettings.frmMain.bShowWhenMakingCall;
 
-	cbSpeedDialSize->ItemIndex = tmpSettings.frmMain.iSpeedDialSize;
-	for (int i=0; i<tmpSettings.frmMain.speedDialWidth.size(); i++)
-	{
-		vleSpeedDialColWidths->Values[i+1] = tmpSettings.frmMain.speedDialWidth[i];
-	}
 	chbXBtnMinimize->Checked = tmpSettings.frmMain.bXBtnMinimize;
 	chbRestoreMainWindowOnIncomingCall->Checked = tmpSettings.frmMain.bRestoreOnIncomingCall;
     chbSingleInstance->Checked = tmpSettings.frmMain.bSingleInstance;
@@ -562,13 +539,6 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.frmMain.bShowWhenAnsweringCall = chbFrmMainShowWhenAnsweringCall->Checked;
 	tmpSettings.frmMain.bShowWhenMakingCall = chbFrmMainShowWhenMakingCall->Checked;
-
-	tmpSettings.frmMain.iSpeedDialSize = cbSpeedDialSize->ItemIndex;
-
-	for (int i=0; i<tmpSettings.frmMain.speedDialWidth.size(); i++)
-	{
-		tmpSettings.frmMain.speedDialWidth[i] = StrToIntDef(vleSpeedDialColWidths->Values[i+1], tmpSettings.frmMain.speedDialWidth[i]);
-	}
 
 	tmpSettings.frmMain.bXBtnMinimize = chbXBtnMinimize->Checked;
 	tmpSettings.frmMain.bRestoreOnIncomingCall = chbRestoreMainWindowOnIncomingCall->Checked;
