@@ -195,7 +195,10 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	edGuiScaling->Text = tmpSettings.gui.scalingPct;
 
-	edMainWindowHeight->Text = tmpSettings.frmMain.iHeight;
+	edCollapsedWidth->Text = tmpSettings.frmMain.collapsedWidth;
+	edCollapsedHeight->Text = tmpSettings.frmMain.collapsedHeight;
+	edExpandedWidth->Text = tmpSettings.frmMain.expandedWidth;
+	edExpandedHeight->Text = tmpSettings.frmMain.expandedHeight;
 
 	std::vector<AnsiString> translations = EnumerateTranslations();
 	cbTranslation->Clear();
@@ -234,6 +237,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked = tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
 	chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing->Checked = tmpSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 	chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked = tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
+
+	chbSpeedDialUseGrid->Checked = tmpSettings.frmSpeedDial.useGrid;
+	edSpeedDialGridSize->Text = tmpSettings.frmSpeedDial.gridSize;
 
 	chbKioskMode->Checked = tmpSettings.frmMain.bKioskMode;
 	chbHideSpeedDialToggleButton->Checked = tmpSettings.frmMain.bHideSpeedDialToggleButton;
@@ -484,10 +490,21 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		tmpSettings.gui.scalingPct = 100;
 	}
 
-	int iHeight = StrToIntDef(edMainWindowHeight->Text, tmpSettings.frmMain.iHeight);
-	if (iHeight >= Settings::_frmMain::MIN_HEIGHT)
 	{
-		tmpSettings.frmMain.iHeight = iHeight;
+		int tmp;
+		tmp = StrToIntDef(edCollapsedWidth->Text, tmpSettings.frmMain.collapsedWidth);
+		if (tmp >= Settings::_frmMain::MIN_WIDTH)
+			tmpSettings.frmMain.collapsedWidth = tmp;
+		tmp = StrToIntDef(edCollapsedHeight->Text, tmpSettings.frmMain.collapsedHeight);
+		if (tmp >= Settings::_frmMain::MIN_HEIGHT)
+			tmpSettings.frmMain.collapsedHeight = tmp;
+
+		tmp = StrToIntDef(edExpandedWidth->Text, tmpSettings.frmMain.expandedWidth);
+		if (tmp >= Settings::_frmMain::MIN_WIDTH)
+			tmpSettings.frmMain.expandedWidth = tmp;
+		tmp = StrToIntDef(edExpandedHeight->Text, tmpSettings.frmMain.expandedHeight);
+		if (tmp >= Settings::_frmMain::MIN_HEIGHT)
+			tmpSettings.frmMain.expandedHeight = tmp;
 	}
 
 	if (cbTranslation->ItemIndex == 0)
@@ -527,6 +544,13 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked;
 	tmpSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing = chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing->Checked;
 	tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated = chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked;
+
+	tmpSettings.frmSpeedDial.useGrid = chbSpeedDialUseGrid->Checked;
+	{
+		int tmp = StrToIntDef(edSpeedDialGridSize->Text, tmpSettings.frmSpeedDial.gridSize);
+		if (tmp >= Settings::_frmSpeedDial::MIN_GRID_SIZE && tmp <= Settings::_frmSpeedDial::MAX_GRID_SIZE)
+			tmpSettings.frmSpeedDial.gridSize = tmp;
+	}
 
 	tmpSettings.frmMain.bKioskMode = chbKioskMode->Checked;
 	tmpSettings.frmMain.bHideSpeedDialToggleButton = chbHideSpeedDialToggleButton->Checked;

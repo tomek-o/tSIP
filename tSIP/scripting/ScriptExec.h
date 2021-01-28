@@ -40,11 +40,6 @@ private:
 	typedef int (__closure *CallbackGetStreamingState)(void);	///< get current streaming (paging) state, values as in Callback::paging_tx_state_e
 	typedef void (__closure *CallbackSetTrayIcon)(const char* file);
 	typedef int (__closure *CallbackGetRegistrationState)(void);///< as in Callback::reg_state_e
-	typedef void (__closure *CallbackSetButtonCaption)(int id, std::string text);
-	typedef void (__closure *CallbackSetButtonCaption2)(int id, std::string text);
-	typedef void (__closure *CallbackSetButtonDown)(int id, bool state);
-	typedef bool (__closure *CallbackGetButtonDown)(int id);
-	typedef void (__closure *CallbackSetButtonImage)(int id, const char* file);
 	typedef int (__closure *CallbackPluginSendMessageText)(const char* dllName, const char* text);
 	typedef int (__closure *CallbackPluginEnable)(const char* dllName, bool state);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number);
@@ -78,11 +73,6 @@ private:
 	CallbackGetAudioErrorCount onGetAudioErrorCount;
 	CallbackSetTrayIcon onSetTrayIcon;
 	CallbackGetRegistrationState onGetRegistrationState;
-	CallbackSetButtonCaption onSetButtonCaption;
-	CallbackSetButtonCaption2 onSetButtonCaption2;
-	CallbackSetButtonDown onSetButtonDown;
-	CallbackGetButtonDown onGetButtonDown;
-	CallbackSetButtonImage onSetButtonImage;
 	CallbackPluginSendMessageText onPluginSendMessageText;
 	CallbackPluginEnable onPluginEnable;
 	CallbackGetBlfState onGetBlfState;
@@ -132,11 +122,6 @@ public:
 		CallbackGetAudioErrorCount onGetAudioErrorCount,
 		CallbackSetTrayIcon onSetTrayIcon,
 		CallbackGetRegistrationState onGetRegistrationState,
-		CallbackSetButtonCaption onSetButtonCaption,
-		CallbackSetButtonCaption2 onSetButtonCaption2,
-		CallbackSetButtonDown onSetButtonDown,
-		CallbackGetButtonDown onGetButtonDown,
-		CallbackSetButtonImage onSetButtonImage,
 		CallbackPluginSendMessageText onPluginSendMessageText,
 		CallbackPluginEnable onPluginEnable,
 		CallbackGetBlfState onGetBlfState,

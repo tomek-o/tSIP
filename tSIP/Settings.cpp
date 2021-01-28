@@ -5,7 +5,6 @@
 
 #include "Settings.h"
 #include "common\KeybKeys.h"
-#include "common\Utilities.h"
 #include "ProgrammableButtons.h"
 #include "AudioModules.h"
 #include "Branding.h"
@@ -34,8 +33,8 @@ Font::Font(void)
 Settings::_frmMain::_frmMain(void):
 	iPosX(30),
 	iPosY(30),
-	iWidth(273),
-	iHeight(425),
+	collapsedWidth(275), collapsedHeight(429),
+	expandedWidth(606), expandedHeight(429),
 	bWindowMaximized(false),
 	bAlwaysOnTop(false),
 	bStartMinimizedToTray(false),	
@@ -74,10 +73,19 @@ Settings::_frmMain::_frmMain(void):
 	dialComboboxOrder(DialComboboxOrderByNumber)
 {
 	speedDialWidth.clear();
-	for (unsigned int i=0; i<ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
+	for (unsigned int i=0; i<1+ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
 	{
-		speedDialWidth.push_back(105);
+		speedDialWidth.push_back(300);
 	}
+}
+
+Settings::_frmSpeedDial::_frmSpeedDial(void):
+	useGrid(true),
+	gridSize(_frmSpeedDial::DEFAULT_GRID_SIZE),
+	showStatus(false),
+	hideEmptyStatus(false),
+	statusPanelHeight(_frmSpeedDial::DEF_STATUS_PANEL_HEIGHT)
+{
 }
 
 Settings::_frmTrayNotifier::_frmTrayNotifier(void):
@@ -210,11 +218,7 @@ int Settings::Read(AnsiString asFileName)
 
 int Settings::UpdateFromJsonValue(const Json::Value &root)
 {
-	{
-		const Json::Value &jv = root["info"];
-		jv.getUInt("FileVersionMS", info.appVersion.FileVersionMS);
-		jv.getUInt("FileVersionLS", info.appVersion.FileVersionLS);
-	}
+	info.appVersion.FromJson(root["info"]);
 
 	{
 		const Json::Value &uaConfJson = root["uaConf"];
@@ -254,7 +258,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		}
 		
 		{
-			Settings::_info::_appVersion verCfgRingAdded;
+			SettingsAppVersion verCfgRingAdded;
 			verCfgRingAdded.FileVersionMS = 1;
 			verCfgRingAdded.FileVersionLS = 3866629;
 			if (info.appVersion < verCfgRingAdded)
@@ -555,36 +559,56 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 
 	{
 		const Json::Value &frmMainJson = root["frmMain"];
-		int iWidth = frmMainJson.get("AppWidth", frmMain.iWidth).asInt();
-		if (iWidth >= 250 && iWidth <= maxX + 20)
+		int iWidth = frmMainJson.get("AppCollapsedWidth", frmMain.collapsedWidth).asInt();
+		if (iWidth >= _frmMain::MIN_WIDTH && iWidth <= maxX + 50)
 		{
-			frmMain.iWidth = iWidth;
+			frmMain.collapsedWidth = iWidth;
 		}
-		int iHeight = frmMainJson.get("AppHeight", frmMain.iHeight).asInt();
-		if (iHeight >= _frmMain::MIN_HEIGHT && iHeight <= maxY + 20)
+		iWidth = frmMainJson.get("AppExpandedWidth", frmMain.expandedWidth).asInt();
+		if (iWidth >= _frmMain::MIN_WIDTH && iWidth <= maxX + 50)
 		{
-			frmMain.iHeight = iHeight;
+			frmMain.expandedWidth = iWidth;
+		}
+		int iHeight = frmMainJson.get("AppCollapsedHeight", frmMain.collapsedHeight).asInt();
+		if (iHeight >= _frmMain::MIN_HEIGHT && iHeight <= maxY + 50)
+		{
+			frmMain.collapsedHeight = iHeight;
+		}
+		iHeight = frmMainJson.get("AppExpandedHeight", frmMain.expandedHeight).asInt();
+		if (iHeight >= _frmMain::MIN_HEIGHT && iHeight <= maxY + 50)
+		{
+			frmMain.expandedHeight = iHeight;
+		}
+		frmMain.bSpeedDialVisible = frmMainJson.get("SpeedDialVisible", frmMain.bSpeedDialVisible).asBool();
+		if (frmMain.bSpeedDialVisible || frmMain.bSpeedDialOnly)
+		{
+			iWidth = frmMain.expandedWidth;
+			iHeight = frmMain.expandedHeight;
+		}
+		else
+		{
+			iWidth = frmMain.collapsedWidth;
+			iHeight = frmMain.collapsedHeight;
 		}
 		int iPosX = frmMainJson.get("AppPositionX", frmMain.iPosX).asInt();
-		if (iPosX >= 0 && iPosX + frmMain.iWidth <= maxX)
+		if (iPosX >= 0 && iPosX + iWidth <= maxX)
 		{
 			frmMain.iPosX = iPosX;
 		}
 		int iPosY = frmMainJson.get("AppPositionY", frmMain.iPosY).asInt();
-		if (iPosY >= 0 && frmMain.iPosY + frmMain.iHeight <= maxY)
+		if (iPosY >= 0 && frmMain.iPosY + iHeight <= maxY)
 		{
 			frmMain.iPosY = iPosY;
 		}
 		frmMain.bWindowMaximized = frmMainJson.get("Maximized", frmMain.bWindowMaximized).asBool();
 		frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", frmMain.bAlwaysOnTop).asBool();
-		frmMain.bSpeedDialVisible = frmMainJson.get("SpeedDialVisible", frmMain.bSpeedDialVisible).asBool();
 		frmMain.bSpeedDialOnly = frmMainJson.get("SpeedDialOnly", frmMain.bSpeedDialOnly).asBool();
 		frmMain.bSpeedDialPopupMenu = frmMainJson.get("SpeedDialPopupMenu", frmMain.bSpeedDialPopupMenu).asBool();
 		frmMain.bSpeedDialIgnorePresenceNote = frmMainJson.get("SpeedDialIgnorePresenceNote", frmMain.bSpeedDialIgnorePresenceNote).asBool();
 		frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();
 		frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing = frmMainJson.get("SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing", frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing).asBool();
 		frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated = frmMainJson.get("SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated", frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated).asBool();
-		int iSpeedDialSize = frmMainJson.get("SpeedDialSize", frmMain.iSpeedDialSize).asUInt();
+		int iSpeedDialSize = frmMainJson.get("SpeedDialSize", frmMain.iSpeedDialSize).asInt();
 		if (iSpeedDialSize >= 0 && iSpeedDialSize < ProgrammableButtons::EXT_CONSOLE_COLUMNS)
 		{
 			frmMain.iSpeedDialSize = iSpeedDialSize;
@@ -626,6 +650,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bRestoreOnIncomingCall = frmMainJson.get("RestoreOnIncomingCall", frmMain.bRestoreOnIncomingCall).asBool();
 		frmMain.bSingleInstance = frmMainJson.get("SingleInstance", frmMain.bSingleInstance).asBool();
 		frmMain.dialpadBackgroundImage = frmMainJson.get("DialpadBackgroundImage", frmMain.dialpadBackgroundImage.c_str()).asString().c_str();
+	frmMain.buttonContainerBackgroundImage = frmMainJson.get("ButtonContainerBackgroundImage", frmMain.buttonContainerBackgroundImage.c_str()).asString().c_str();
 		frmMain.mainIcon = frmMainJson.get("MainIcon", frmMain.mainIcon.c_str()).asString().c_str();
 		frmMain.trayNotificationImage = frmMainJson.get("TrayNotificationImage", frmMain.trayNotificationImage.c_str()).asString().c_str();
 
@@ -704,6 +729,17 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmContactPopup.iWidth = frmContactPopupJson.get("Width", frmContactPopup.iWidth).asInt();
 		frmContactPopup.iHeight = frmContactPopupJson.get("Height", frmContactPopup.iHeight).asInt();
 	}
+
+	const Json::Value &frmSpeedDialJson = root["frmSpeedDial"];
+	frmSpeedDial.useGrid = frmSpeedDialJson.get("UseGrid", frmSpeedDial.useGrid).asBool();
+	frmSpeedDial.gridSize = frmSpeedDialJson.get("GridSize", frmSpeedDial.gridSize).asInt();
+	if (frmSpeedDial.gridSize < _frmSpeedDial::MIN_GRID_SIZE || frmSpeedDial.gridSize > _frmSpeedDial::MAX_GRID_SIZE)
+		frmSpeedDial.gridSize = _frmSpeedDial::DEFAULT_GRID_SIZE;
+	frmSpeedDial.showStatus = frmSpeedDialJson.get("ShowStatus", frmSpeedDial.showStatus).asBool();
+	frmSpeedDial.hideEmptyStatus = frmSpeedDialJson.get("HideEmptyStatus", frmSpeedDial.hideEmptyStatus).asBool();
+	frmSpeedDial.statusPanelHeight = frmSpeedDialJson.get("StatusPanelHeight", frmSpeedDial.statusPanelHeight).asInt();
+	if (frmSpeedDial.statusPanelHeight < _frmSpeedDial::MIN_STATUS_PANEL_HEIGHT || frmSpeedDial.statusPanelHeight > _frmSpeedDial::MAX_STATUS_PANEL_HEIGHT)
+		frmSpeedDial.statusPanelHeight = _frmSpeedDial::DEF_STATUS_PANEL_HEIGHT;
 
 	{
 		const Json::Value &LoggingJson = root["Logging"];
@@ -895,21 +931,19 @@ int Settings::Write(AnsiString asFileName)
 	Json::StyledWriter writer;
 
 	{
-		Json::Value &jv = root["info"];
-
 		// update application version in settings
-		GetFileVer(Application->ExeName, info.appVersion.FileVersionMS, info.appVersion.FileVersionLS);
-
-		jv["FileVersionMS"] = info.appVersion.FileVersionMS;
-		jv["FileVersionLS"] = info.appVersion.FileVersionLS;
+		info.appVersion.FromAppExe();
+		info.appVersion.ToJson(root["info"]);
 	}
 
 	root["gui"]["scalingPct"] = gui.scalingPct;
 
 	{
 		Json::Value& jv = root["frmMain"];
-		jv["AppWidth"] = frmMain.iWidth;
-		jv["AppHeight"] = frmMain.iHeight;
+		jv["AppCollapsedWidth"] = frmMain.collapsedWidth;
+		jv["AppCollapsedHeight"] = frmMain.collapsedHeight;
+		jv["AppExpandedWidth"] = frmMain.expandedWidth;
+		jv["AppExpandedHeight"] = frmMain.expandedHeight;
 		jv["AppPositionX"] = frmMain.iPosX;
 		jv["AppPositionY"] = frmMain.iPosY;
 		jv["Maximized"] = frmMain.bWindowMaximized;
@@ -922,6 +956,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing"] = frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 		jv["SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated"] = frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
 		jv["SpeedDialSize"] = frmMain.iSpeedDialSize;
+		jv["ButtonContainerBackgroundImage"] = frmMain.buttonContainerBackgroundImage.c_str();
 		Json::Value& jvs = jv["SpeedDialWidth"];
 		jvs.resize(frmMain.speedDialWidth.size());
 		for (unsigned int i=0; i<frmMain.speedDialWidth.size(); i++)
@@ -991,6 +1026,11 @@ int Settings::Write(AnsiString asFileName)
 	root["frmContactPopup"]["Width"] = frmContactPopup.iWidth;
 	root["frmContactPopup"]["Height"] = frmContactPopup.iHeight;
 
+	root["frmSpeedDial"]["UseGrid"] = frmSpeedDial.useGrid;
+	root["frmSpeedDial"]["GridSize"] = frmSpeedDial.gridSize;
+	root["frmSpeedDial"]["ShowStatus"] = frmSpeedDial.showStatus;
+	root["frmSpeedDial"]["HideEmptyStatus"] = frmSpeedDial.hideEmptyStatus;
+	root["frmSpeedDial"]["StatusPanelHeight"] = frmSpeedDial.statusPanelHeight;
 	{
 		Json::Value &jLogging = root["Logging"];
 		jLogging["LogToFile"] = Logging.bLogToFile;

@@ -8,22 +8,21 @@
 #include "HotKeyConf.h"
 #include "common\KeybKeys.h"
 #include "Settings.h"
-#include "ProgrammableButtons.h"
 #pragma package(smart_init)
 //---------------------------------------------------------------------------
 // ValidCtrCheck is used to assure that the components created do not have
 // any pure virtual functions.
 //
-
 static inline void ValidCtrCheck(THotkeyCfgPanel *)
 {
 	static HotKeyConf cfg;
-	new THotkeyCfgPanel(NULL, cfg);
+	new THotkeyCfgPanel(NULL, cfg, 100);
 }
 //---------------------------------------------------------------------------
-__fastcall THotkeyCfgPanel::THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg)
+__fastcall THotkeyCfgPanel::THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg, int programmableButtonsCnt)
 	: TPanel(Owner),
-	cfg(cfg)
+	cfg(cfg),
+	programmableButtonsCnt(programmableButtonsCnt)
 {
 	Width = 540;
 	Height = 32;
@@ -157,7 +156,7 @@ void THotkeyCfgPanel::Start(void)
 	{
     	cbAction->Items->Add(Action::getTypeDescription(static_cast<Action::Type>(i)));
 	}
-	for (int i=0; i<(1+ProgrammableButtons::EXT_CONSOLE_COLUMNS)*(ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN); i++)
+	for (int i=0; i<programmableButtonsCnt; i++)
 	{
     	cbId->Items->Add(i);
 	}

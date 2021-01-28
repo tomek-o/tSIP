@@ -17,6 +17,8 @@
 class UaConf
 {
 public:
+	bool disableUa;
+
 	struct Account
 	{
 		enum TRANSPORT_TYPE
@@ -515,6 +517,7 @@ public:
 	std::string userAgent;
 
 	UaConf() {
+ 		disableUa = false;
 		aec = AEC_NONE;
 		logMessages = false;
 		logMessagesOnlyFirstLine = false;
@@ -532,6 +535,8 @@ public:
 	}
 
 	bool operator==(const UaConf& right) const {
+		if (disableUa != right.disableUa)
+			return false;
 		if (accounts.size() != right.accounts.size())
 			return false;
 		for (int i=0; i<accounts.size(); i++)

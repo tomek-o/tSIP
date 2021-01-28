@@ -7,6 +7,7 @@
 #include "FormLuaScript.h"
 #include "ButtonType.h"
 #include "ButtonConf.h"
+#include "ProgrammableButtons.h"
 #include "Paths.h"
 #include "common\Colors.h"
 #include "AudioDevicesList.h"
@@ -18,6 +19,9 @@
 #pragma resource "*.dfm"
 TfrmButtonEdit *frmButtonEdit;
 
+namespace {
+	ButtonConf::Color colors[ButtonConf::EL_LIMITER];
+}
 //---------------------------------------------------------------------------
 __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
 	: TForm(Owner)
@@ -27,11 +31,31 @@ __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
 	{
 		cbType->Items->Add(Button::TypeName((Button::Type)i));
 	}
-	cbBackgroundColor->Items->Clear();
+	cbInactiveColor->Items->Clear();
 	for (int i=0; i<Color::clLimiter; i++)
 	{
-        cbBackgroundColor->Items->Add(Color::IdToText(static_cast<Color::Id>(i)));
+		cbInactiveColor->Items->Add(Color::IdToText(static_cast<Color::Id>(i)));
 	}
+	cbInactiveDownColor->Items->Clear();
+	for (int i=0; i<Color::clLimiter; i++)
+	{
+		cbInactiveDownColor->Items->Add(Color::IdToText(static_cast<Color::Id>(i)));
+	}
+	cbIdleColor->Items->Clear();
+	for (int i=0; i<Color::clLimiter; i++)
+	{
+		cbIdleColor->Items->Add(Color::IdToText(static_cast<Color::Id>(i)));
+	}
+	cbDownColor->Items->Clear();
+	for (int i=0; i<Color::clLimiter; i++)
+	{
+		cbDownColor->Items->Add(Color::IdToText(static_cast<Color::Id>(i)));
+	}
+	cbDownPressedColor->Items->Clear();
+	for (int i=0; i<Color::clLimiter; i++)
+	{
+		cbDownPressedColor->Items->Add(Color::IdToText(static_cast<Color::Id>(i)));
+	}     
 	colorDialog->Color = clGray;
 
 	for (int i=0; i<pcBehavior->PageCount; i++)
@@ -49,9 +73,10 @@ void __fastcall TfrmButtonEdit::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmButtonEdit::ShowModal(ButtonConf *cfg)
+void __fastcall TfrmButtonEdit::ShowModal(ButtonConf *cfg, int btnId)
 {
 	this->cfg = cfg;
+	this->btnId = btnId;
 	refreshAudioDevList = true;	
 	ApplyConf();
 	TForm::ShowModal();
@@ -60,29 +85,47 @@ void __fastcall TfrmButtonEdit::ShowModal(ButtonConf *cfg)
 void TfrmButtonEdit::ApplyConf(void)
 {
 	cbType->ItemIndex = cfg->type;
-	edDescription->Text = cfg->caption.c_str();
-	edDescription2->Text = cfg->caption2.c_str();
-	cbCaptionLines->ItemIndex = cfg->captionLines - 1;
-	edNumber->Text = cfg->number.c_str();
-	chbNoIcon->Checked = cfg->noIcon;
-	edHeight->Text = cfg->height;
-	edMarginTop->Text = cfg->marginTop;
-	edMarginBottom->Text = cfg->marginBottom;
-	int colorId = Color::IntTColorToId(cfg->backgroundColor);
-	cbBackgroundColor->ItemIndex = colorId;
-	if (colorId != Color::clCustom)
+	if (cfg->captionLines > 0 && cfg->captionLines <= cbCaptionLines->Items->Count)
 	{
-		btnSelectBackgroundColor->Visible = false;
+		cbCaptionLines->ItemIndex = cfg->captionLines - 1;
 	}
-	else
-	{
-		btnSelectBackgroundColor->Visible = true;
-    }
+	edCaption->Text = cfg->caption.c_str();
+	edCaption2->Text = cfg->caption2.c_str();
+	edNumber->Text = cfg->number.c_str();
+	chbVisible->Checked = cfg->visible;
+	chbDown->Checked = cfg->down;
+	chbInactive->Checked = cfg->inactive;
+	chbCustomFrame->Checked = cfg->customFrame;
+	chbCenterTextHorizontally->Checked = cfg->centerTextHorizontally;
+	chbLabelCenterVertically->Checked = cfg->labelCenterVertically;
+	edLabelTop->Enabled = !chbLabelCenterVertically->Checked;
+	edLabelTop->Text = cfg->labelTop;
+
+	edLabel2Left->Text = cfg->label2Left;
+	edLabel2Top->Text = cfg->label2Top;
+	chbLabel2CenterHorizontally->Checked = cfg->centerLabel2Horizontally;
+	edLabel2Left->Enabled = !chbLabel2CenterHorizontally->Checked;
+
+	chbImageTransparent->Checked = cfg->imageTransparent;
+	chbNoIcon->Checked = cfg->noIcon;
+	edLeft->Text = cfg->left;
+	edTop->Text = cfg->top;
+	edWidth->Text = cfg->width;
+	edHeight->Text = cfg->height;
+	edBevelWidth->Text = cfg->bevelWidth;
+
+    memcpy(colors, cfg->colors, sizeof(cfg->colors));	
+	UpdateColorView();
 
 	edImgIdle->Text = cfg->imgIdle.c_str();
 	edImgConfirmed->Text = cfg->imgConfirmed.c_str();
 	edImgTerminated->Text = cfg->imgTerminated.c_str();
 	edImgEarly->Text = cfg->imgEarly.c_str();
+	edImageLeft->Text = cfg->imageLeft;
+	edImageTop->Text = cfg->imageTop;
+	chbImageCenterVertically->Checked = cfg->imageCenterVertically;
+	edImageTop->Enabled = !chbImageCenterVertically->Checked;
+
 
 	chbBlfOverrideIdle->Checked = cfg->blfOverrideIdle.active;
 	edBlfOverrideIdle->Text = cfg->blfOverrideIdle.number.c_str();
@@ -106,6 +149,24 @@ void TfrmButtonEdit::ApplyConf(void)
 
 	edScriptFile->Text = cfg->script.c_str();
 
+	edSpeedDialFont->Font->Name = cfg->font.name.c_str();
+	edSpeedDialFont->Font->Size = cfg->font.size;
+	if (cfg->font.bold)
+		edSpeedDialFont->Font->Style << fsBold;
+	if (cfg->font.italic)
+		edSpeedDialFont->Font->Style << fsItalic;
+	if (cfg->font.underline)
+		edSpeedDialFont->Font->Style << fsUnderline;
+
+	edCaption2Font->Font->Name = cfg->fontLabel2.name.c_str();
+	edCaption2Font->Font->Size = cfg->fontLabel2.size;
+	if (cfg->fontLabel2.bold)
+		edCaption2Font->Font->Style << fsBold;
+	if (cfg->fontLabel2.italic)
+		edCaption2Font->Font->Style << fsItalic;
+	if (cfg->fontLabel2.underline)
+		edCaption2Font->Font->Style << fsUnderline;
+
 	cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod.c_str());
 	cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod.c_str());
 
@@ -116,31 +177,45 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 {
 	confirmed = true;
 	cfg->type = static_cast<Button::Type>(cbType->ItemIndex);
-	cfg->caption = edDescription->Text.c_str();
-	cfg->caption2 = edDescription2->Text.c_str();
 	cfg->captionLines = cbCaptionLines->ItemIndex + 1;
+	cfg->caption = edCaption->Text.c_str();
+	cfg->caption2 = edCaption2->Text.c_str();
+
 	cfg->number = edNumber->Text.c_str();
+	cfg->visible = chbVisible->Checked;
+	cfg->down = chbDown->Checked;
+	cfg->inactive = chbInactive->Checked;
+	cfg->customFrame = chbCustomFrame->Checked;
+	cfg->centerTextHorizontally = chbCenterTextHorizontally->Checked;
+	cfg->labelCenterVertically = chbLabelCenterVertically->Checked;
+	cfg->labelTop = StrToIntDef(edLabelTop->Text, 0);
+
+	cfg->label2Left = StrToIntDef(edLabel2Left->Text, 0);
+	cfg->label2Top = StrToIntDef(edLabel2Top->Text, 0);
+	cfg->centerLabel2Horizontally = chbLabel2CenterHorizontally->Checked;	
+
+	cfg->imageTransparent = chbImageTransparent->Checked;
 	cfg->noIcon = chbNoIcon->Checked;
+	cfg->left = StrToIntDef(edLeft->Text, 0);
+	cfg->top = StrToIntDef(edTop->Text, 0);
+	cfg->width = StrToIntDef(edWidth->Text, 100);
 	cfg->height = StrToIntDef(edHeight->Text, 32);
-	cfg->marginTop = StrToIntDef(edMarginTop->Text, 0);
-	if (cfg->marginTop > 200)
-		cfg->marginTop = 0;
-	cfg->marginBottom = StrToIntDef(edMarginBottom->Text, 0);
-	if (cfg->marginBottom > 200)
-		cfg->marginBottom = 0;
-	if (cbBackgroundColor->ItemIndex != Color::clCustom)
+	cfg->bevelWidth = StrToIntDef(edBevelWidth->Text, cfg->bevelWidth);
+	if (static_cast<int>(cfg->bevelWidth) < 0)
 	{
-		cfg->backgroundColor = Color::IdToIntTColor(static_cast<Color::Id>(cbBackgroundColor->ItemIndex));
+		cfg->bevelWidth = 0;
 	}
-	else
-	{
-        cfg->backgroundColor = colorDialog->Color;
-	}
+
+	UpdateColors();
+    memcpy(cfg->colors, colors, sizeof(cfg->colors));
 
 	cfg->imgIdle = edImgIdle->Text.c_str();
 	cfg->imgConfirmed = edImgConfirmed->Text.c_str();
 	cfg->imgTerminated = edImgTerminated->Text.c_str();
 	cfg->imgEarly = edImgEarly->Text.c_str();
+	cfg->imageLeft = StrToIntDef(edImageLeft->Text, 0);
+	cfg->imageTop = StrToIntDef(edImageTop->Text, 0);
+	cfg->imageCenterVertically = chbImageCenterVertically->Checked;
 
 	cfg->blfOverrideIdle.active = chbBlfOverrideIdle->Checked;
 	cfg->blfOverrideIdle.number = edBlfOverrideIdle->Text.c_str();
@@ -341,6 +416,7 @@ void __fastcall TfrmButtonEdit::SelectImgClick(TObject *Sender)
 void __fastcall TfrmButtonEdit::btnClearClick(TObject *Sender)
 {
 	cfg->Reset();
+	ProgrammableButtons::SetDefaultsForBtnId(btnId, *cfg);
 	ApplyConf();
 	cbSoundInputDev->ItemIndex = -1;
 	cbSoundOutputDev->ItemIndex = -1;
@@ -349,21 +425,48 @@ void __fastcall TfrmButtonEdit::btnClearClick(TObject *Sender)
 
 void __fastcall TfrmButtonEdit::SelectColorClick(TObject *Sender)
 {
-	colorDialog->Color = static_cast<TColor>(cfg->backgroundColor);
-	colorDialog->Execute();
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmButtonEdit::cbBackgroundColorChange(TObject *Sender)
-{
-	if (cbBackgroundColor->ItemIndex == Color::clCustom)
+	int *col;
+	ButtonConf::Color &color = colors[cbColorElement->ItemIndex];
+	if (Sender == btnSelectInactiveColor)
 	{
-		btnSelectBackgroundColor->Visible = true;
+		col = &color.inactive;
+	}
+	else if (Sender == btnSelectInactiveDownColor)
+	{
+        col = &color.inactiveDown;
+    }
+	else if (Sender == btnSelectIdleColor)
+	{
+		col = &color.idle;
+	}
+	else if (Sender == btnSelectDownColor)
+	{
+		col = &color.down;
+	}
+	else if (Sender == btnSelectDownPressedColor)
+	{
+		col = &color.downPressed;
 	}
 	else
 	{
-        btnSelectBackgroundColor->Visible = false;
-    }
+		assert(!"Unhandled color type");
+		return;
+	}
+	colorDialog->Color = static_cast<TColor>(*col);
+	colorDialog->Execute();
+	*col = colorDialog->Color;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonEdit::cbColorChange(TObject *Sender)
+{
+	btnSelectInactiveColor->Visible = (cbInactiveColor->ItemIndex == Color::clCustom);
+    btnSelectInactiveDownColor->Visible = (cbInactiveDownColor->ItemIndex == Color::clCustom);
+	btnSelectIdleColor->Visible = (cbIdleColor->ItemIndex == Color::clCustom);
+	btnSelectDownColor->Visible = (cbDownColor->ItemIndex == Color::clCustom);
+	btnSelectDownPressedColor->Visible = (cbDownPressedColor->ItemIndex == Color::clCustom);
+
+	UpdateColors();
 }
 //---------------------------------------------------------------------------
 
@@ -500,6 +603,136 @@ void __fastcall TfrmButtonEdit::cbSoundOutputModChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonEdit::btnSpeedDialFontSelectClick(TObject *Sender)
+{
+	TButton *btn = dynamic_cast<TButton*>(Sender);
+	assert(btn);
+
+	ButtonConf::Font *font = NULL;
+	TEdit *ed = NULL;
+
+	if (btn == btnSpeedDialFontSelect)
+	{
+		font = &cfg->font;
+		ed = edSpeedDialFont;
+	}
+	else if (btn == btnCaption2FontSelect)
+	{
+		font = &cfg->fontLabel2;
+		ed = edCaption2Font;
+	}
+	else
+	{
+		ShowMessage("Unhandled button");
+	}
+
+	fontDialog->Font->Name = font->name.c_str();
+	fontDialog->Font->Size = font->size;
+	fontDialog->Font->Style = TFontStyles();
+	if (font->bold)
+		fontDialog->Font->Style << fsBold;
+	if (font->italic)
+		fontDialog->Font->Style << fsItalic;
+	if (font->underline)
+		fontDialog->Font->Style << fsUnderline;
+	if (fontDialog->Execute())
+	{
+		ed->Font = fontDialog->Font;
+		font->name = fontDialog->Font->Name.c_str();
+		font->size = fontDialog->Font->Size;
+		font->bold = fontDialog->Font->Style.Contains(fsBold);
+		font->italic = fontDialog->Font->Style.Contains(fsItalic);
+		font->underline = fontDialog->Font->Style.Contains(fsUnderline);
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonEdit::cbColorElementChange(TObject *Sender)
+{
+	UpdateColorView();
+}
+//---------------------------------------------------------------------------
+
+void TfrmButtonEdit::UpdateColorView(void)
+{
+	if (cbColorElement->ItemIndex < 0)
+		cbColorElement->ItemIndex = 0;
+	ButtonConf::Color &color = colors[cbColorElement->ItemIndex];
+	
+	int colorId;
+
+	colorId = Color::IntTColorToId(color.idle);
+	cbIdleColor->ItemIndex = colorId;
+	btnSelectIdleColor->Visible = (colorId == Color::clCustom);
+
+	colorId = Color::IntTColorToId(color.inactive);
+	cbInactiveColor->ItemIndex = colorId;
+	btnSelectInactiveColor->Visible = (colorId == Color::clCustom);
+
+	colorId = Color::IntTColorToId(color.inactiveDown);
+	cbInactiveDownColor->ItemIndex = colorId;
+	btnSelectInactiveDownColor->Visible = (colorId == Color::clCustom);
+
+	colorId = Color::IntTColorToId(color.down);
+	cbDownColor->ItemIndex = colorId;
+	btnSelectDownColor->Visible = (colorId == Color::clCustom);
+
+	colorId = Color::IntTColorToId(color.downPressed);
+	cbDownPressedColor->ItemIndex = colorId;
+	btnSelectDownPressedColor->Visible = (colorId == Color::clCustom);
+}
+
+void TfrmButtonEdit::UpdateColors(void)
+{
+	ButtonConf::Color &color = colors[cbColorElement->ItemIndex];
+
+	if (cbIdleColor->ItemIndex != Color::clCustom)
+	{
+		color.idle = Color::IdToIntTColor(static_cast<Color::Id>(cbIdleColor->ItemIndex));
+	}
+
+	if (cbInactiveColor->ItemIndex != Color::clCustom)
+	{
+		color.inactive = Color::IdToIntTColor(static_cast<Color::Id>(cbInactiveColor->ItemIndex));
+	}
+
+	if (cbInactiveDownColor->ItemIndex != Color::clCustom)
+	{
+		color.inactiveDown = Color::IdToIntTColor(static_cast<Color::Id>(cbInactiveDownColor->ItemIndex));
+	}
+
+	if (cbDownColor->ItemIndex != Color::clCustom)
+	{
+		color.down = Color::IdToIntTColor(static_cast<Color::Id>(cbDownColor->ItemIndex));
+	}
+
+	if (cbDownPressedColor->ItemIndex != Color::clCustom)
+	{
+		color.downPressed = Color::IdToIntTColor(static_cast<Color::Id>(cbDownPressedColor->ItemIndex));
+	}
+}
+
+void __fastcall TfrmButtonEdit::chbImageCenterVerticallyClick(TObject *Sender)
+{
+	edImageTop->Enabled = !chbImageCenterVertically->Checked;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonEdit::chbLabelCenterVerticallyClick(TObject *Sender)
+{
+	edLabelTop->Enabled = !chbLabelCenterVertically->Checked;	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonEdit::chbLabel2CenterHorizontallyClick(
+      TObject *Sender)
+{
+	edLabel2Left->Enabled = !chbLabel2CenterHorizontally->Checked;
+}
+//---------------------------------------------------------------------------
+
+
 
 void __fastcall TfrmButtonEdit::btnSelectedScriptOnButtonEditClick(
       TObject *Sender)

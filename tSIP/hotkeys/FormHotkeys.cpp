@@ -3,9 +3,10 @@
 #include <vcl.h>
 #pragma hdrstop
 
-#include "FormHotkeys.h"
-#include "HotKeyConf.h"
-#include "components/HotkeyCfgPanel/HotkeyCfgPanel.h"
+#include "hotkeys/FormHotkeys.h"
+#include "hotkeys/HotKeyConf.h"
+#include "hotkeys/HotkeyCfgPanel.h"
+#include "ProgrammableButtons.h"
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -30,7 +31,7 @@ void TfrmHotkeys::SetCfg(std::list<HotKeyConf> *hotkeyCfg)
 
 	for (std::list<HotKeyConf>::iterator iter2 = cfg->begin(); iter2 != cfg->end(); ++iter2)
 	{
-		THotkeyCfgPanel *cfgPanel = new THotkeyCfgPanel(panel, *iter2);
+		THotkeyCfgPanel *cfgPanel = new THotkeyCfgPanel(panel, *iter2, ProgrammableButtons::GetTotalCnt());
 		cfgPanel->btnRemove->OnClick = btnRemoveClick;
 		cfgPanel->Parent = panel;
 		//cfgPanel->Start();
@@ -50,7 +51,7 @@ void __fastcall TfrmHotkeys::btnAddHotkeyClick(TObject *Sender)
 	HotKeyConf cfgNew;
 	cfg->push_back(cfgNew);
 
-	THotkeyCfgPanel *cfgPanel = new THotkeyCfgPanel(panel, *(--cfg->end()));
+	THotkeyCfgPanel *cfgPanel = new THotkeyCfgPanel(panel, *(--cfg->end()), ProgrammableButtons::GetTotalCnt());
 	cfgPanel->btnRemove->OnClick = btnRemoveClick;
 	cfgPanel->Parent = panel;
 	cfgPanel->Visible = true;

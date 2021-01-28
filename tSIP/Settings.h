@@ -10,6 +10,7 @@
 #include "UaConf.h"
 #include "HotKeyConf.h"
 #include "PhoneConf.h"
+#include "SettingsAppVersion.h"
 #include <deque>
 #include <list>
 
@@ -56,38 +57,16 @@ public:
 	} gui;
 	struct _info
 	{
-		struct _appVersion
-		{
-			unsigned int FileVersionMS;
-			unsigned int FileVersionLS;
-			bool operator<(const _appVersion &other) const
-			{
-			   if (FileVersionMS < other.FileVersionMS)
-			   {
-				   return true;
-			   }
-			   else if (other.FileVersionMS == FileVersionMS && FileVersionLS < other.FileVersionLS)
-			   {
-				   return true;
-			   }
-			   else
-			   {
-                   return false;
-               }
-			}
-			_appVersion()
-			{
-				FileVersionMS = 0;
-				FileVersionLS = 0;
-			}
-		} appVersion;					///< main executable version (from resources)
+		SettingsAppVersion appVersion;	///< main executable version (from resources)
 	} info;
 	struct _frmMain
 	{
 		enum { MIN_HEIGHT = 200 };
+		enum { MIN_WIDTH = 100 };
 		int iPosX, iPosY;				///< main window coordinates
-		int iWidth, iHeight;			///< main window size
-		bool bWindowMaximized;			///< is main window maximize?
+		int collapsedWidth, collapsedHeight;	///< width, height when console is not visible
+		int expandedWidth, expandedHeight;		///< width, height with console visible
+		bool bWindowMaximized;			///< is main window maximized?
 		bool bAlwaysOnTop;
 		bool bStartMinimizedToTray;
 		bool bSpeedDialVisible;
@@ -109,6 +88,7 @@ public:
 		bool bRestoreOnIncomingCall;	///< restore minimized window on incoming call
 		bool bSingleInstance;			///< check if another instance is running if started without parameters and bring it to front
 		AnsiString dialpadBackgroundImage;
+		AnsiString buttonContainerBackgroundImage;
 		bool bNoBeepOnEnterKey;			///< do not beep when [Enter] is pressed in dial or transfer edit
 		AnsiString mainIcon;				///< .ico file replacing regular icon
 		AnsiString trayNotificationImage;	///< .bmp file to be shown in tray on missing call (replacing regular image)
@@ -153,6 +133,25 @@ public:
 
 		_frmMain(void);
 	} frmMain;
+	struct _frmSpeedDial
+	{
+		bool useGrid;
+        enum {
+			MIN_GRID_SIZE = 2,
+			DEFAULT_GRID_SIZE = 4,
+			MAX_GRID_SIZE = 64
+        };
+		int gridSize;
+		bool showStatus;
+		enum {
+			MIN_STATUS_PANEL_HEIGHT = 30,
+			DEF_STATUS_PANEL_HEIGHT = 80,
+			MAX_STATUS_PANEL_HEIGHT = 700
+		};
+		int statusPanelHeight;
+		bool hideEmptyStatus;
+		_frmSpeedDial(void);
+	} frmSpeedDial;	
 	struct _frmTrayNotifier
 	{
 		int iPosX, iPosY;				///< coordinates

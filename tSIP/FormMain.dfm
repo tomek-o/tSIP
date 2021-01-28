@@ -5,7 +5,7 @@ object frmMain: TfrmMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'tSIP'
-  ClientHeight = 381
+  ClientHeight = 380
   ClientWidth = 485
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -28,18 +28,20 @@ object frmMain: TfrmMain
   TextHeight = 13
   object StatusBar: TStatusBar
     Left = 0
-    Top = 362
+    Top = 361
     Width = 485
     Height = 19
     Panels = <>
     SimplePanel = True
+    ExplicitTop = 352
+    ExplicitWidth = 475
   end
   object pnlMain: TPanel
     Left = 0
     Top = 0
     Width = 271
-    Height = 362
-    Align = alLeft
+    Height = 363
+    Align = alCustom
     BevelOuter = bvNone
     TabOrder = 1
     object pcMain: TPageControl
@@ -365,34 +367,12 @@ object frmMain: TfrmMain
       object tsContacts: TTabSheet
         Caption = 'Contacts'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 252
-        ExplicitHeight = 0
       end
       object tsHistory: TTabSheet
         Caption = 'History'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 252
-        ExplicitHeight = 0
       end
     end
-  end
-  object pnlSpeedDial: TPanel
-    AlignWithMargins = True
-    Left = 271
-    Top = 4
-    Width = 214
-    Height = 358
-    Margins.Left = 0
-    Margins.Top = 4
-    Margins.Right = 0
-    Margins.Bottom = 0
-    Align = alRight
-    BevelOuter = bvNone
-    TabOrder = 2
   end
   object pnlCallControls: TPanel
     Left = 0
@@ -405,7 +385,7 @@ object frmMain: TfrmMain
     Margins.Bottom = 0
     Align = alCustom
     BevelOuter = bvNone
-    TabOrder = 3
+    TabOrder = 2
     object lbl2ndPartyDesc: TLabel
       Left = 8
       Top = 39

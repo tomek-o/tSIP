@@ -21,6 +21,8 @@ private:
 	int ReadFile(AnsiString name);
 	int LoadFromJsonValue(const Json::Value &root);	
 public:
+	static void SetDefaultsForBtnId(int id, ButtonConf& cfg);
+
 	ProgrammableButtons(void);
 	void SetFilename(AnsiString name)
 	{
@@ -30,8 +32,15 @@ public:
 	int ReadFromString(AnsiString json);
 	int Write(void);
 
-	enum { EXT_CONSOLE_COLUMNS = 12 };
-	enum { CONSOLE_BTNS_PER_COLUMN = 15 };
+	enum { EXT_CONSOLE_COLUMNS = 1 };
+	enum { BASIC_PANEL_CONSOLE_BTNS = 15 };
+	enum { CONSOLE_BTNS_PER_CONTAINER = 180 };
+
+	static int GetTotalCnt(void)
+	{
+		return BASIC_PANEL_CONSOLE_BTNS + (EXT_CONSOLE_COLUMNS * CONSOLE_BTNS_PER_CONTAINER);
+	}
+
 	std::vector<ButtonConf> btnConf;
 
 	void UpdateContacts(std::vector<UaConf::Contact> &contacts);	

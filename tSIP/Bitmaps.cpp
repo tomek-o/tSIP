@@ -147,7 +147,7 @@ void UpdateBitmaps(void)
 void UpdateBtnConsole(void)
 {
 	TSpeedButton *btn = frmMain->btnSpeedDialPanel;
-	if (frmMain->pnlSpeedDial->Visible)
+	if (appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly)
 	{
 		if (bmpConsoleHide)
 		{

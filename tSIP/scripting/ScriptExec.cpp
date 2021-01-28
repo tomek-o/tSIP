@@ -20,6 +20,8 @@
 #include "Contacts.h"
 #include "FormContactPopup.h"
 #include "SIMPLE_Messages.h"
+#include "buttons/ButtonContainers.h"
+#include "buttons/ProgrammableButton.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include <Clipbrd.hpp>
@@ -669,7 +671,11 @@ static int l_SetButtonCaption(lua_State* L)
 	const char* str = lua_tostring( L, 2 );
 	if (str == NULL)
 		str = "";
-	GetContext(L)->onSetButtonCaption(id, str);
+	TProgrammableButton *btn = FindButton(id);
+	if (btn)
+	{
+		btn->SetCaption(str);
+	}
 	return 0;
 }
 
@@ -679,7 +685,11 @@ static int l_SetButtonCaption2(lua_State* L)
 	const char* str = lua_tostring( L, 2 );
 	if (str == NULL)
 		str = "";
-	GetContext(L)->onSetButtonCaption2(id, str);
+	TProgrammableButton *btn = FindButton(id);
+	if (btn)
+	{
+		btn->SetCaption2(str);
+	}
 	return 0;
 }
 
@@ -687,23 +697,60 @@ static int l_SetButtonDown(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	int state = lua_tointeger( L, 2 );
-	GetContext(L)->onSetButtonDown(id, state);
+	TProgrammableButton *btn = FindButton(id);
+	if (btn)
+	{
+		btn->SetDown(state);
+	}
 	return 0;
 }
 
 static int l_GetButtonDown(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
-	bool down = GetContext(L)->onGetButtonDown(id);
+	bool down = false;
+	TProgrammableButton *btn = FindButton(id);
+	if (btn)
+	{
+		down = btn->GetDown();
+	}
 	lua_pushinteger( L, down?1:0 );
 	return 1;
+}
+
+static int l_SetButtonInactive(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	int state = lua_tointeger( L, 2 );
+	TProgrammableButton *btn = FindButton(id);
+	if (btn)
+	{
+		btn->SetInactive(state);
+	}
+	return 0;
+}
+
+static int l_SetButtonVisible(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	int state = lua_tointeger( L, 2 );
+	TProgrammableButton *btn = FindButton(id);
+	if (btn)
+	{
+		btn->SetVisible(state);
+	}
+	return 0;
 }
 
 static int l_SetButtonImage(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
-	GetContext(L)->onSetButtonImage(id, str);
+	TProgrammableButton *btn = FindButton(id);
+	if (btn)
+	{
+		btn->SetImage(str);
+	}
 	return 0;
 }
 
@@ -1311,11 +1358,6 @@ ScriptExec::ScriptExec(
 	CallbackGetAudioErrorCount onGetAudioErrorCount,
 	CallbackSetTrayIcon onSetTrayIcon,
 	CallbackGetRegistrationState onGetRegistrationState,
-	CallbackSetButtonCaption onSetButtonCaption,
-	CallbackSetButtonCaption2 onSetButtonCaption2,
-	CallbackSetButtonDown onSetButtonDown,
-	CallbackGetButtonDown onGetButtonDown,
-	CallbackSetButtonImage onSetButtonImage,
 	CallbackPluginSendMessageText onPluginSendMessageText,
 	CallbackPluginEnable onPluginEnable,
 	CallbackGetBlfState onGetBlfState,
@@ -1350,11 +1392,6 @@ ScriptExec::ScriptExec(
 	onGetStreamingState(onGetStreamingState),
 	onSetTrayIcon(onSetTrayIcon),
 	onGetRegistrationState(onGetRegistrationState),
-	onSetButtonCaption(onSetButtonCaption),
-	onSetButtonCaption2(onSetButtonCaption2),	
-	onSetButtonDown(onSetButtonDown),
-	onGetButtonDown(onGetButtonDown),
-	onSetButtonImage(onSetButtonImage),
 	onPluginSendMessageText(onPluginSendMessageText),
 	onPluginEnable(onPluginEnable),
 	onGetBlfState(onGetBlfState),
@@ -1381,7 +1418,6 @@ ScriptExec::ScriptExec(
 		onGetStreamingState &&
 		onSetTrayIcon &&
 		onGetRegistrationState &&
-		onSetButtonCaption && onSetButtonCaption2 && onSetButtonDown && onGetButtonDown && onSetButtonImage &&
 		onPluginSendMessageText && onPluginEnable &&
 		onGetBlfState &&
 		onRecordStart &&
@@ -1464,6 +1500,8 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, "SetButtonCaption2", ScriptImp::l_SetButtonCaption2);
 	lua_register2(L, "SetButtonDown", ScriptImp::l_SetButtonDown);
 	lua_register2(L, "GetButtonDown", ScriptImp::l_GetButtonDown);
+	lua_register2(L, "SetButtonInactive", ScriptImp::l_SetButtonInactive);
+	lua_register2(L, "SetButtonVisible", ScriptImp::l_SetButtonVisible);
 	lua_register2(L, "SetButtonImage", ScriptImp::l_SetButtonImage);
 	lua_register2(L, "PluginSendMessageText", ScriptImp::l_PluginSendMessageText);
 	lua_register2(L, "PluginEnable", ScriptImp::l_PluginEnable);	// PluginEnable("TTS.dll", 0/1)

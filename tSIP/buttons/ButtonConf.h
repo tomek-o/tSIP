@@ -6,6 +6,7 @@
 
 #include "ButtonType.h"
 #include <string>
+#include <mem.h>
 
 class ButtonConf
 {
@@ -18,10 +19,52 @@ public:
 	int captionLines;
 	std::string number;
 	bool noIcon;
-	int height;
-	int marginTop;
-	int marginBottom;
-	int backgroundColor;
+
+	bool visible;	// hide whole button
+	bool down;
+	bool inactive;
+	int left, top, width, height;
+	unsigned int bevelWidth;
+	bool customFrame;
+	bool centerTextHorizontally;
+	bool labelCenterVertically;
+	int labelTop;
+	bool imageTransparent;
+	int imageLeft;
+	bool imageCenterVertically;
+	int imageTop;					// used if imageCenterVertically == false;
+
+	int label2Left;
+	int label2Top;
+	bool centerLabel2Horizontally;
+
+	enum Element {
+		EL_BACKGROUND = 0,
+		EL_FONT,
+		EL_FRAME,
+
+		EL_LIMITER
+	};
+	struct Color {
+		int idle;
+		int down;
+		int downPressed;
+		int inactive;
+		int inactiveDown;
+		bool operator==(const Color& right) const {
+			return (
+				idle == right.idle &&
+				down == right.down &&
+				downPressed == right.downPressed &&
+				inactive == right.inactive &&
+				inactiveDown == right.inactiveDown
+			);
+		}
+		bool operator!=(const Color& right) const {
+			return !(*this == right);
+		}
+	} colors[EL_LIMITER];
+
 
 	std::string imgIdle;
 	std::string imgTerminated;
@@ -65,6 +108,9 @@ public:
 				number == right.number
 			);
 		}
+		bool operator!=(const BlfOverride& right) const {
+			return !(*this == right);
+		}
 	} blfOverrideIdle, blfOverrideTerminated, blfOverrideEarly, blfOverrideConfirmed;
 
 	enum BlfActionDuringCall
@@ -81,6 +127,32 @@ public:
 	*/
 	std::string blfDtmfPrefixDuringCall;
 
+	struct Font
+	{
+		std::string name;
+		int size;
+		bool bold, italic, underline;
+		Font(void):
+			name("Tahoma"),
+			size(8),
+			bold(false),
+			italic(false),
+			underline(false)
+		{}
+		bool operator==(const Font& right) const {
+			return (
+				name == right.name &&
+				size == right.size &&
+				bold == right.bold &&
+				italic == right.italic &&
+				underline == right.underline
+			);
+		}
+		bool operator!=(const Font& right) const {
+			return !(*this == right);
+		}
+	} font, fontLabel2;
+
 	ButtonConf(void);
 
 	bool operator==(const ButtonConf& right) const {
@@ -90,11 +162,26 @@ public:
 			caption == right.caption &&
 			caption2 == right.caption2 &&
 			captionLines == right.captionLines &&
+			visible == right.visible &&
+			down == right.down &&
+			inactive == right.inactive &&
 			noIcon == right.noIcon &&
+			left == right.left &&
+			top == right.top &&
+			width == right.width &&
 			height == right.height &&
-			marginTop == right.marginTop &&
-			marginBottom == right.marginBottom &&
-			backgroundColor == right.backgroundColor &&
+			bevelWidth == right.bevelWidth &&
+			customFrame == right.customFrame &&
+			centerTextHorizontally == right.centerTextHorizontally &&
+			labelCenterVertically == right.labelCenterVertically &&
+			labelTop == right.labelTop &&
+			label2Top == right.label2Top &&
+			centerLabel2Horizontally == right.centerLabel2Horizontally &&
+			imageTransparent == right.imageTransparent &&
+			imageLeft == right.imageLeft &&
+			imageCenterVertically == right.imageCenterVertically &&
+			imageTop == right.imageTop &&
+			memcmp(colors, right.colors, sizeof(colors)) == 0 &&
 			imgIdle == right.imgIdle &&
 			imgTerminated == right.imgTerminated &&
 			imgEarly == right.imgEarly &&
@@ -109,6 +196,8 @@ public:
 			audioTxDev == right.audioTxDev &&
 			audioRxMod == right.audioRxMod &&
 			audioRxDev == right.audioRxDev &&
+			font == right.font &&
+			fontLabel2 == right.fontLabel2 &&
 
 			blfOverrideIdle == right.blfOverrideIdle &&
 			blfOverrideTerminated == right.blfOverrideTerminated &&

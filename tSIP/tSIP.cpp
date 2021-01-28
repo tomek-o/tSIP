@@ -10,6 +10,7 @@ USEFORM("contacts\FormContactEditor.cpp", frmContactEditor);
 USEFORM("contacts\FormContactCsvImport.cpp", frmContactCsvImport);
 USEFORM("buttons\FormButtonEdit.cpp", frmButtonEdit);
 USEFORM("buttons\FormButtonContainer.cpp", frmButtonContainer);
+USEFORM("hotkeys\FormHotkeys.cpp", frmHotkeys);
 USEFORM("FormMain.cpp", frmMain);
 USEFORM("FormSettings.cpp", frmSettings);
 USEFORM("FormAbout.cpp", frmAbout);
@@ -17,7 +18,6 @@ USEFORM("LogUnit.cpp", frmLog);
 USEFORM("FormAccount.cpp", frmAccount);
 USEFORM("FormHistory.cpp", frmHistory);
 USEFORM("FormTrayNotifier.cpp", frmTrayNotifier);
-USEFORM("FormHotkeys.cpp", frmHotkeys);
 USEFORM("FormTextEditor.cpp", frmTextEditor);
 USEFORM("FormTroubleshooting.cpp", frmTroubleshooting);
 USEFORM("scripting\FormLuaScript.cpp", frmLuaScript);
@@ -25,6 +25,7 @@ USEFORM("phone\FormPhones.cpp", frmPhones);
 USEFORM("FormMessage.cpp", frmMessage);
 USEFORM("ua\FormUaConfOpus.cpp", frmUaConfOpus);
 USEFORM("FormSettingsPatch.cpp", frmSettingsPatch);
+USEFORM("buttons\FormButtonCopy.cpp", frmButtonCopy);
 //---------------------------------------------------------------------------
 #pragma link "re.lib"
 #pragma link "rem.lib"
@@ -118,6 +119,10 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
 		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
 		Application->CreateForm(__classid(TfrmSettingsPatch), &frmSettingsPatch);
+		Application->CreateForm(__classid(TfrmButtonCopy), &frmButtonCopy);
+		Application->CreateForm(__classid(TfrmHotkeys), &frmHotkeys);
+		Application->CreateForm(__classid(TfrmHotkeys), &frmHotkeys);
+		Application->CreateForm(__classid(TfrmHotkeys), &frmHotkeys);
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
 		frmContactPopup->Width = appSettings.frmContactPopup.iWidth;

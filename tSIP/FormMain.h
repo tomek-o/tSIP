@@ -25,7 +25,6 @@
 #include <string>
 
 class TrayIcon;
-class TfrmButtonContainer;
 class TProgrammableButton;
 class ButtonConf;
 class PhoneInterface;
@@ -69,7 +68,6 @@ __published:	// IDE-managed Components
 	TTimer *tmrAutoAnswer;
 	TImageList *imgListButtons;
 	TTimer *tmrAntirepeat;
-	TPanel *pnlSpeedDial;
 	TAction *actContactsCsvImport;
 	TMenuItem *miImportContactsFromCsv;
 	TOpenDialog *openDialog;
@@ -170,7 +168,6 @@ private:	// User declarations
 	double initialScaling;
 
 	TrayIcon *trIcon;
-	TfrmButtonContainer* frmButtonContainers[1 + ProgrammableButtons::EXT_CONSOLE_COLUMNS];
 
 	void UpdateLogConfig(void);
 	void UpdateHistoryConfig(void);
@@ -195,15 +192,15 @@ private:	// User declarations
 	unsigned int OnGetAudioErrorCount(void);
 	int OnGetRegistrationState(void);
 	void OnSetTrayIcon(const char* file);
-	void OnSetButtonCaption(int id, std::string text);
-	void OnSetButtonCaption2(int id, std::string text);
-	void OnSetButtonDown(int id, bool state);	
-	bool OnGetButtonDown(int id);	
-	void OnSetButtonImage(int id, const char* file);
 	int OnPluginSendMessageText(const char* dllName, const char* text);
 	int OnPluginEnable(const char* dllName, bool state);
 	int OnRecordStart(const char* file, int channels, int side);
 	std::string OnGetRxDtmf(void);
+	void OnShowBtnContainerStatusPanel(int id, bool state);
+	void OnSetBtnContainerBackground(int id, const char* file);
+	void OnUpdateAllBtnContainers(void);
+	void OnDisableBringToFront(bool state);
+	void OnSetKeepForeground(bool state);
 	std::string OnGetUserName(void);
 	const ButtonConf* OnGetButtonConf(int id);
 	void MainMenuShow(bool state);
@@ -261,6 +258,7 @@ private:	// User declarations
 	void UpdateAutoAnswer(void);
 	void UpdateClip(void);
 	void SetMainWindowLayout(int id);
+	void UpdateSize(void);
 	void FocusCbCallUri(void);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall OnTrayIconRightBtnDown(TObject *Sender);

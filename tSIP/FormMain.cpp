@@ -15,6 +15,8 @@
 #include "FormAccount.h"
 #include "FormHistory.h"
 #include "FormButtonContainer.h"
+#include "ButtonContainers.h"
+#include "FormButtonEdit.h"
 #include "History.h"
 #include "FormContacts.h"
 #include "Contacts.h"
@@ -244,21 +246,28 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		this->pnlButtonsBasic,
 		buttons,
 		this->pnlButtonsBasic->Width, this->pnlButtonsBasic->Height, appSettings.gui.scalingPct,
-		0, 8,
-		&OnProgrammableBtnClick);
+		0, ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS,
+		&OnProgrammableBtnClick,
+		&OnUpdateAllBtnContainers,
+		&OnSetKeepForeground,
+		appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
 	frmButtonContainerBasic->Parent = this->pnlButtonsBasic;
 	frmButtonContainerBasic->Visible = true;
 	frmButtonContainers[0] = frmButtonContainerBasic;
 
 	for (int i=1; i<ARRAY_SIZE(frmButtonContainers); i++) {
 		TfrmButtonContainer *& container = frmButtonContainers[i];
-		container = new TfrmButtonContainer(this->pnlSpeedDial,
+		container = new TfrmButtonContainer(this,
 			buttons,
 			appSettings.frmMain.speedDialWidth[i-1], 0, appSettings.gui.scalingPct,
-			i * ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN, ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN,
-			&OnProgrammableBtnClick);
-		container->Parent = this->pnlSpeedDial;
-		container->Align = alLeft;
+			ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS + (i-1) * ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER, ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER,
+			&OnProgrammableBtnClick,
+			&OnUpdateAllBtnContainers,
+			&OnSetKeepForeground,
+			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
+		container->Parent = this; //this->pnlSpeedDial;
+		container->SendToBack();
+		container->Align = alClient;
 		container->Visible = true;
 		//container->SetScaling(appSettings.gui.scalingPct);
 	}
@@ -361,7 +370,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	history.Read(&OnGetContactName);
 
 	initialScaling = static_cast<double>(appSettings.gui.scalingPct) / 100;
-	this->Height = floor(appSettings.frmMain.iHeight * initialScaling + 0.5);
+	UpdateSize();
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
 
 	this->Top = appSettings.frmMain.iPosY;
@@ -375,12 +384,11 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	UpdateLogConfig();
 
 	//btnAutoAnswer->Down = appSettings.uaConf.autoAnswer;
-	SetSpeedDial(false);
 	if (appSettings.frmMain.bSpeedDialOnly)
 	{
 		SetSpeedDial(true);
 	}
-	else if (appSettings.frmMain.bSpeedDialVisible)
+	else
 	{
 		SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);
 	}
@@ -482,7 +490,7 @@ int TfrmMain::UpdateSettingsFromJson(AnsiString json)
 
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
-	this->Height = floor(appSettings.frmMain.iHeight * initialScaling + 0.5);
+	UpdateSize();
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
 
 	if (prev.Translation.language != appSettings.Translation.language)
@@ -564,7 +572,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	// enable/disable popup menu
 	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 		TfrmButtonContainer *& container = frmButtonContainers[i];
-		container->UpdateSettings();
+		if (container)
+		{
+			container->UpdateSettings();
+		}
 	}
 	if (appSettings.frmMain.bAlwaysOnTop)
 		this->FormStyle = fsStayOnTop;
@@ -631,23 +642,26 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 	for (int cid=0; cid<ARRAY_SIZE(frmButtonContainers); cid++)
 	{
 		TfrmButtonContainer *& container = frmButtonContainers[cid];
-		int btnId = container->GetStartBtnId();
-		for (int id=0; id<container->GetBtnCnt(); id++)
+		if (container)
 		{
-			if (buttons.btnConf[btnId] != prevButtons.btnConf[btnId])
+			int btnId = container->GetStartBtnId();
+			for (int id=0; id<container->GetBtnCnt(); id++)
 			{
-				changed = true;
-				if (buttons.btnConf[btnId].UaRestartNeeded(prevButtons.btnConf[btnId]))
+				if (buttons.btnConf[btnId] != prevButtons.btnConf[btnId])
 				{
-					restartUa = true;
+					changed = true;
+					if (buttons.btnConf[btnId].UaRestartNeeded(prevButtons.btnConf[btnId]))
+					{
+						restartUa = true;
+					}
+					TProgrammableButton* btn = container->GetBtn(id);
+					if (btn)
+					{
+						btn->SetConfig(buttons.btnConf[btnId]);
+					}
 				}
-				TProgrammableButton* btn = container->GetBtn(id);
-				if (btn)
-				{
-					btn->SetConfig(buttons.btnConf[btnId]);
-				}
+				btnId++;
 			}
-			btnId++;
 		}
 	}
 	if (changed)
@@ -1008,54 +1022,31 @@ void TfrmMain::OnSetTrayIcon(const char* file)
 	}
 }
 
-void TfrmMain::OnSetButtonCaption(int id, std::string text)
+void TfrmMain::OnSetKeepForeground(bool state)
 {
-	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
-		TfrmButtonContainer *& container = frmButtonContainers[i];
-		container->UpdateBtnCaption(id, text.c_str());
-	}
-}
-
-void TfrmMain::OnSetButtonCaption2(int id, std::string text)
-{
-	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
-		TfrmButtonContainer *& container = frmButtonContainers[i];
-		if (container) {
-			container->UpdateBtnCaption2(id, text.c_str());
-		}
-	}
-}
-
-void TfrmMain::OnSetButtonDown(int id, bool state)
-{
-	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
-		TfrmButtonContainer *& container = frmButtonContainers[i];
-		container->UpdateBtnDown(id, state);
-	}
-}
-
-bool TfrmMain::OnGetButtonDown(int buttonId)
-{
-	if (buttonId >= 0)
+#if 0
+	if (state == false)
 	{
-		int containerId = buttonId/ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN;
-		if (containerId < sizeof(frmButtonContainers)/sizeof(frmButtonContainers[0]))
-		{
-			int id = buttonId % ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN;
-			if (frmButtonContainers[containerId] == NULL)
-				return false;
-			TProgrammableButton* btn = frmButtonContainers[containerId]->GetBtn(id);
-			return btn->GetDown();
-		}
+		tmrHideOtherWindow->Enabled = false;
+		tmrBringToFront->Enabled = false;
 	}
-	return false;
+	else
+	{
+		tmrHideOtherWindow->Enabled = appSettings.frmMain.bHideOtherWindow;
+		tmrBringToFront->Enabled = true;
+	}
+#endif
 }
 
-void TfrmMain::OnSetButtonImage(int id, const char* file)
+void TfrmMain::OnUpdateAllBtnContainers(void)
 {
-	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
+	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++)
+	{
 		TfrmButtonContainer *& container = frmButtonContainers[i];
-		container->UpdateBtnImage(id, file);
+		if (container)
+		{
+			container->UpdateAll();
+		}
 	}
 }
 
@@ -1235,6 +1226,24 @@ void TfrmMain::SetMainWindowLayout(int id)
 		pcMain->Top = 0;
 	}
 }
+
+void TfrmMain::UpdateSize(void)
+{
+	int iWidth, iHeight;
+	if (appSettings.frmMain.bSpeedDialOnly || appSettings.frmMain.bSpeedDialVisible)
+	{
+		iWidth = appSettings.frmMain.expandedWidth;
+		iHeight = appSettings.frmMain.expandedHeight;
+	}
+	else
+	{
+		iWidth = appSettings.frmMain.collapsedWidth;
+		iHeight = appSettings.frmMain.collapsedHeight;
+	}
+	this->Height = floor(iHeight * initialScaling + 0.5);
+	this->Width = floor(iWidth * initialScaling + 0.5);
+}
+
 
 void TfrmMain::FocusCbCallUri(void)
 {
@@ -1839,7 +1848,10 @@ void TfrmMain::PollCallbackQueue(void)
 			{
 				for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 					TfrmButtonContainer *& container = frmButtonContainers[i];
-					container->UpdateDlgInfoState(*iter, cb.dlgInfoState, updateRemoteIdentity, direction, remoteIdentity, remoteIdentityDisplay);
+					if (container)
+					{
+						container->UpdateDlgInfoState(*iter, cb.dlgInfoState, updateRemoteIdentity, direction, remoteIdentity, remoteIdentityDisplay);
+					}
 				}
 			}
 			if (appSettings.Scripts.onDialogInfo != "")
@@ -1864,7 +1876,10 @@ void TfrmMain::PollCallbackQueue(void)
 			{
 				for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 					TfrmButtonContainer *& container = frmButtonContainers[i];
-					container->UpdatePresenceState(*iter, cb.presenceState, note);
+					if (container)
+					{
+						container->UpdatePresenceState(*iter, cb.presenceState, note);
+					}
 				}
 			}
 			break;
@@ -1874,7 +1889,10 @@ void TfrmMain::PollCallbackQueue(void)
 			SetNotificationIcon(cb.mwiNewMsg > 0);
 			for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 				TfrmButtonContainer *& container = frmButtonContainers[i];
-				container->UpdateMwiState(cb.mwiNewMsg, cb.mwiOldMsg);
+				if (container)
+				{
+					container->UpdateMwiState(cb.mwiNewMsg, cb.mwiOldMsg);
+				}
 			}
 			break;
 		}
@@ -1991,7 +2009,10 @@ void TfrmMain::UpdateBtnState(Button::Type type, bool state)
 {
 	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 		TfrmButtonContainer *& container = frmButtonContainers[i];
-		container->UpdateBtnState(type, state);
+		if (container)
+		{
+			container->UpdateBtnState(type, state);
+		}
 	}
 }
 
@@ -2607,7 +2628,6 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetAudioErrorCount,
 		&OnSetTrayIcon,
 		&OnGetRegistrationState,
-		&OnSetButtonCaption, &OnSetButtonCaption2, &OnSetButtonDown, &OnGetButtonDown, &OnSetButtonImage,
 		&OnPluginSendMessageText, &OnPluginEnable,
 		&OnGetBlfState,
 		&OnRecordStart,
@@ -2667,60 +2687,21 @@ void TfrmMain::SetSpeedDial(bool visible)
 {
 	if (visible)
 	{
-		int width = 4;
-		for (int i=1; i<appSettings.frmMain.iSpeedDialSize + 2; i++)
-		{
-			width += frmButtonContainers[i]->Width;
-		}
-		pnlSpeedDial->Width = width;
-		/*
-		This weird column handling order and switching to alNone and back to alLeft
-		is intended to keep proper order of components (align with respect to each order).
-		With 1..N loop and alLeft always on columns get reordered when switching number of columns at runtime.
-		*/
-		for (int i=ARRAY_SIZE(frmButtonContainers)-1; i>=1; i--) {
-			TfrmButtonContainer *& container = frmButtonContainers[i];
-			if (i <= appSettings.frmMain.iSpeedDialSize + 1)
-			{
-				container->Visible = true;
-				container->Align = alNone;
-				container->Align = alLeft;
-			}
-			else
-			{
-				container->Visible = false;
-			}
-		}
 		if (appSettings.frmMain.bSpeedDialOnly)
 		{
 			pnlMain->Visible = false;
-			if (appSettings.frmMain.bKioskMode == false)
-			{
-				ClientWidth = pnlSpeedDial->Width + 6;
-			}
-			pnlSpeedDial->Left = 6;
 		}
 		else
 		{
 			pnlMain->Visible = true;
-			pnlSpeedDial->Left = 0;
-			if (appSettings.frmMain.bKioskMode == false)
-			{
-				this->ClientWidth = pnlMain->Width + pnlSpeedDial->Width;
-            }
 		}
-		pnlSpeedDial->Visible = true;
 		UpdateBtnConsole();
 	}
 	else
 	{
-		pnlSpeedDial->Visible = false;
-		if (appSettings.frmMain.bKioskMode == false)
-		{
-			this->Width -= pnlSpeedDial->Width;
-        }
 		UpdateBtnConsole();
 	}
+	UpdateSize();
 }
 
 void TfrmMain::ToggleSpeedDial(void)
@@ -3067,16 +3048,9 @@ void TfrmMain::HandleCommandLine(void)
 
 void TfrmMain::ProgrammableButtonClick(int buttonId)
 {
-	if (buttonId >= 0)
-	{
-		int containerId = buttonId/ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN;
-		if (containerId < sizeof(frmButtonContainers)/sizeof(frmButtonContainers[0]))
-		{
-			int id = buttonId % ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN;
-			TProgrammableButton* btn = frmButtonContainers[containerId]->GetBtn(id);
-			btn->OnClick(btn);
-		}
-	}
+	TProgrammableButton* btn = FindButton(buttonId);
+	if (btn)
+		btn->OnClick(btn);
 }
 
 void TfrmMain::StartRing(AnsiString wavFile)
@@ -3146,14 +3120,9 @@ void TfrmMain::ExecAction(const struct Action& action)
 	case Action::TYPE_BUTTON:
 		if (action.id >= 0)
 		{
-			int containerId = action.id/ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN;
-			if (containerId < sizeof(frmButtonContainers)/sizeof(frmButtonContainers[0]))
-			{
-				int btnId = action.id % ProgrammableButtons::CONSOLE_BTNS_PER_COLUMN;
-				TProgrammableButton* btn = frmButtonContainers[containerId]->GetBtn(btnId);
+			TProgrammableButton* btn = FindButton(action.id);
+			if (btn)
 				btn->OnClick(btn);
-				//OnProgrammableBtnClick(cfg->action.id, btn);
-			}
 		}
 		break;
 	case Action::TYPE_ANSWER:
@@ -3494,7 +3463,6 @@ void TfrmMain::SetKioskMode(bool state)
 			this->StatusBar->Visible = true;
 		}
 		this->BorderStyle = bsSingle;
-		SetSpeedDial(false);
 		SetSpeedDial(true);
     }
 }

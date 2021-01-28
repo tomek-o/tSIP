@@ -18,15 +18,53 @@ ButtonConf::ButtonConf(void)
 void ButtonConf::Reset(void)
 {
 	type = Button::DISABLED;
+	visible = true;
 	caption = "";
 	caption2 = "";
 	captionLines = CAPTION_LINES_MIN;
 	number = "";
 	noIcon = false;
+	down = false;
+	inactive = false;
+	left = 275;
+	top = 0;
+	width = 100;
 	height = 32;
-	marginTop = 0;
-	marginBottom = 0;
-	backgroundColor = clBtnFace;
+	bevelWidth = 1;
+	customFrame = false;
+	centerTextHorizontally = false;
+	labelCenterVertically = true;
+	labelTop = 0;
+
+	label2Left = 20;
+	label2Top = 20;
+	centerLabel2Horizontally = false;
+
+	imageTransparent = true;
+	imageLeft = 2;
+	imageCenterVertically = true;
+	imageTop = 0;
+	for (unsigned int i=0; i<sizeof(colors)/sizeof(colors[0]); i++)
+	{
+		Color &col = colors[i];
+		TColor defColor;
+		if (i == EL_BACKGROUND)
+			defColor = clBtnFace;
+		else if (i == EL_FONT)
+			defColor = clWindowText;
+		else if (i == EL_FRAME)
+			defColor = clWindowText;
+		else
+		{
+			assert(!"Unhandled defColor!");
+			return;
+		}
+		col.idle = defColor;
+		col.down = defColor;
+		col.downPressed = defColor;
+		col.inactive = defColor;
+		col.inactiveDown = defColor;
+	}
 	imgIdle = "idle.bmp";
 	imgTerminated = "terminated.bmp";
 	imgEarly = "early.bmp";
@@ -54,6 +92,8 @@ void ButtonConf::Reset(void)
 	audioTxDev = "";
 	audioRxMod = "winwave";
 	audioRxDev = "";
+
+	fontLabel2 = font;
 }
 
 bool ButtonConf::UaRestartNeeded(const ButtonConf& right) const

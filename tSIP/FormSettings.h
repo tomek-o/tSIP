@@ -415,6 +415,18 @@ __published:	// IDE-managed Components
 	TComboBox *cbDialComboboxOrder;
 	TCheckBox *chbTrayNotifierDoNotChangePosition;
 	TCheckBox *chbAcceptCommandLineScript;
+	TCheckBox *chbSpeedDialUseGrid;
+	TEdit *edSpeedDialGridSize;
+	TLabel *lblMainWindowCollapsedSize;
+	TLabel *lblCollapsedWidth;
+	TEdit *edCollapsedWidth;
+	TLabel *lblCollapsedHeight;
+	TEdit *edCollapsedHeight;
+	TLabel *lblMainWindowExpandedSize;
+	TLabel *lblExpandedWidth;
+	TEdit *edExpandedWidth;
+	TLabel *lblExpandedHeight;
+	TEdit *edExpandedHeight;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

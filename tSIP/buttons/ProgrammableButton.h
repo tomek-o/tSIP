@@ -12,8 +12,8 @@
 #include "baresip_dialog_info_status.h"
 #include "baresip_dialog_info_direction.h"
 #include "baresip_presence_status.h"
-
-class ButtonConf;
+#include "common/Colors.h"
+#include "ButtonConf.h"
 
 class PACKAGE TProgrammableButton : public TPanel
 {
@@ -27,8 +27,22 @@ private:
 	enum dialog_info_status state;
 	enum presence_status presence_state;
 	bool down;
+	bool inactive;
+	bool visible;
+	bool customFrame;
+	bool centerTextHorizontally;
+	bool centerTextVertically;
+	int labelTop;
+
+    bool centerLabel2Horizontally;
+
+	bool centerImageVertically;
+	int imageTop;
+	int bevelWidth;
 	int scalingPercentage;
 	bool once;
+
+	ButtonConf::Color colors[ButtonConf::EL_LIMITER];
 
 	int configuredLines;
 	AnsiString caption2;
@@ -44,11 +58,15 @@ private:
 
 	void SetLines(int cnt);
 	void SetImage(Graphics::TBitmap *bmp);
+	void UpdateColors(void);
+	void SetImageTop(void);
+	void SetLabelTop(void);
 protected:
 	void __fastcall MouseEnter(TObject *Sender);
 	void __fastcall MouseLeave(TObject *Sender);
 	void __fastcall MouseUpHandler(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall MouseDownHandler(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+	void __fastcall Paint(void);
 public:
 	__fastcall TProgrammableButton(TComponent* Owner, TImageList* imgList, int scalingPercentage);
 	__fastcall ~TProgrammableButton();
@@ -63,6 +81,16 @@ public:
 	bool GetDown(void)
 	{
     	return down;
+	}
+	void SetInactive(bool state);
+	bool GetInactive(void)
+	{
+		return inactive;
+	}
+	void SetVisible(bool state);
+	bool GetVisible(void)
+	{
+		return visible;
 	}
 	void SetImage(AnsiString file);
 	void SetMwiState(int newMsg, int oldMsg);

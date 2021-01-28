@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsIntegration
+    ActivePage = tsSpeedDial
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -455,28 +455,70 @@ object frmSettings: TfrmSettings
       ImageIndex = 12
       object lblSpeedDial: TLabel
         Left = 3
-        Top = 3
+        Top = 323
         Width = 78
         Height = 13
         Caption = 'Speed dial panel'
       end
       object lblSpeedDialColumnWidth: TLabel
         Left = 3
-        Top = 28
+        Top = 348
         Width = 220
         Height = 13
         Caption = 'Width of speed dial columns (restart required)'
       end
       object lblSpeedDialBlfSettings: TLabel
         Left = 3
-        Top = 196
+        Top = 132
         Width = 122
         Height = 13
         Caption = 'BLF / dialog-info settings:'
       end
+      object lblMainWindowCollapsedSize: TLabel
+        Left = 3
+        Top = 26
+        Width = 230
+        Height = 13
+        Caption = 'Main window size in collapsed (no console) state'
+      end
+      object lblCollapsedWidth: TLabel
+        Left = 263
+        Top = 26
+        Width = 26
+        Height = 13
+        Caption = 'width'
+      end
+      object lblCollapsedHeight: TLabel
+        Left = 336
+        Top = 26
+        Width = 30
+        Height = 13
+        Caption = 'height'
+      end
+      object lblMainWindowExpandedSize: TLabel
+        Left = 3
+        Top = 47
+        Width = 172
+        Height = 13
+        Caption = 'Main window size in expanded state'
+      end
+      object lblExpandedWidth: TLabel
+        Left = 263
+        Top = 47
+        Width = 27
+        Height = 13
+        Caption = 'width'
+      end
+      object lblExpandedHeight: TLabel
+        Left = 336
+        Top = 47
+        Width = 30
+        Height = 13
+        Caption = 'height'
+      end
       object cbSpeedDialSize: TComboBox
         Left = 235
-        Top = 0
+        Top = 320
         Width = 121
         Height = 21
         Style = csDropDownList
@@ -494,7 +536,7 @@ object frmSettings: TfrmSettings
       end
       object chbShowSpeedDialOnly: TCheckBox
         Left = 3
-        Top = 115
+        Top = 3
         Width = 325
         Height = 17
         Caption = 'Show only speed dial (console-only mode)'
@@ -502,7 +544,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialPopupMenu: TCheckBox
         Left = 3
-        Top = 138
+        Top = 74
         Width = 325
         Height = 17
         Caption = 'Enable popup menu (editing) for programmable keys'
@@ -510,7 +552,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialIgnorePresenceNote: TCheckBox
         Left = 3
-        Top = 161
+        Top = 97
         Width = 398
         Height = 17
         Caption = 
@@ -520,7 +562,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialIgnoreDialogInfoRemoteIdentity: TCheckBox
         Left = 19
-        Top = 218
+        Top = 154
         Width = 486
         Height = 17
         Caption = 
@@ -530,7 +572,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing: TCheckBox
         Left = 19
-        Top = 241
+        Top = 177
         Width = 478
         Height = 17
         Caption = 
@@ -540,7 +582,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated: TCheckBox
         Left = 19
-        Top = 264
+        Top = 200
         Width = 478
         Height = 17
         Caption = 
@@ -550,7 +592,7 @@ object frmSettings: TfrmSettings
       end
       object vleSpeedDialColWidths: TValueListEditor
         Left = 235
-        Top = 23
+        Top = 343
         Width = 142
         Height = 86
         DefaultColWidth = 50
@@ -564,6 +606,51 @@ object frmSettings: TfrmSettings
         ColWidths = (
           50
           86)
+      end
+      object chbSpeedDialUseGrid: TCheckBox
+        Left = 3
+        Top = 223
+        Width = 401
+        Height = 17
+        Caption = 
+          'Snap to grid when moving/resizing buttons (hold Shift to overrid' +
+          'e)     grid size:'
+        TabOrder = 8
+      end
+      object edSpeedDialGridSize: TEdit
+        Left = 400
+        Top = 221
+        Width = 31
+        Height = 21
+        TabOrder = 9
+      end
+      object edCollapsedWidth: TEdit
+        Left = 293
+        Top = 23
+        Width = 35
+        Height = 21
+        TabOrder = 10
+      end
+      object edCollapsedHeight: TEdit
+        Left = 372
+        Top = 23
+        Width = 35
+        Height = 21
+        TabOrder = 11
+      end
+      object edExpandedWidth: TEdit
+        Left = 293
+        Top = 44
+        Width = 35
+        Height = 21
+        TabOrder = 12
+      end
+      object edExpandedHeight: TEdit
+        Left = 372
+        Top = 44
+        Width = 35
+        Height = 21
+        TabOrder = 13
       end
     end
     object tsCalls: TTabSheet

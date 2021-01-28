@@ -37,7 +37,10 @@ static inline void ValidCtrCheck(TProgrammableButton *)
 
 __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageList* imgList, int scalingPercentage)
 	: TPanel(Owner), imgList(imgList), state(DIALOG_INFO_UNKNOWN),
-	down(false), scalingPercentage(scalingPercentage),
+	down(false),
+	inactive(false), visible(false),
+	centerLabel2Horizontally(true),
+	scalingPercentage(scalingPercentage),
 	once(false),
 	configuredLines(1),
 	raised(true),
@@ -102,6 +105,11 @@ __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageLis
 	image->Height = 0;
 	image->Picture->Bitmap->PixelFormat = pf24bit;
 	image->Transparent = true;
+	centerImageVertically = true;
+	imageTop = 8;
+	SetImageTop();
+
+	SetLabelTop();
 #ifdef ON_MOUSE_ENTER_LEAVE
 	image->OnMouseEnter = MouseEnter;
 	image->OnMouseLeave = MouseLeave;
@@ -136,24 +144,64 @@ namespace ProgrammableButton
 
 void __fastcall TProgrammableButton::MouseEnter(TObject *Sender)
 {
+	if (inactive)
+		return;
 	Lower();
 }
 
 void __fastcall TProgrammableButton::MouseLeave(TObject *Sender)
 {
+	if (inactive)
+		return;
 	Raise();
 }
 
 void __fastcall TProgrammableButton::MouseUpHandler(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+	if (inactive)
+		return;
 	Raise();
 }
 
 void __fastcall TProgrammableButton::MouseDownHandler(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+	if (inactive)
+		return;
 	Lower();
 }
 
+void __fastcall TProgrammableButton::Paint(void)
+{
+	TPanel::Paint();
+	if (customFrame == false)
+	{
+		return;
+	}
+	if (raised == true)
+	{
+		if (inactive == false)
+		{
+			Canvas->Pen->Color = static_cast<TColor>(this->colors[ButtonConf::EL_FRAME].idle);
+		}
+		else
+		{
+			Canvas->Pen->Color = static_cast<TColor>(colors[ButtonConf::EL_FRAME].inactive);
+		}
+	}
+	else
+	{
+		if (inactive == false)
+		{
+			Canvas->Pen->Color = static_cast<TColor>(colors[ButtonConf::EL_FRAME].down);
+		}
+		else
+		{
+			Canvas->Pen->Color = static_cast<TColor>(colors[ButtonConf::EL_FRAME].inactiveDown);
+		}
+	}
+	Canvas->Pen->Width = bevelWidth;
+	this->Canvas->Rectangle(0, 0, Width, Height);
+}
 
 void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 {
@@ -161,33 +209,125 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	if (!once)
 	{
 		percentage = 100;
+		SetDown(cfg.down);
+		SetInactive(cfg.inactive);
+		Visible = cfg.visible;
 	}
 	else
 	{
 		percentage = scalingPercentage;
     }
+	SetVisible(cfg.visible);
+
 	label->Caption = cfg.caption.c_str();
 	label2->Caption = cfg.caption2.c_str();
+	caption2 = cfg.caption2.c_str();
+
 	user = cfg.number.c_str();
-	if (cfg.noIcon)
+
+	label->Font->Name = cfg.font.name.c_str();
+	label->Font->Size = cfg.font.size;
+	label->Font->Style = TFontStyles();
+	if (cfg.font.bold)
 	{
-		image->Width = 0 * percentage/100;
-		label->Left = 2 * percentage/100;
+		label->Font->Style << fsBold;
+	}
+	if (cfg.font.italic)
+	{
+		label->Font->Style << fsItalic;
+	}
+	if (cfg.font.underline)
+	{
+		label->Font->Style << fsUnderline;
+	}
+
+
+	label2->Left = cfg.label2Left;
+	label2->Top = cfg.label2Top;
+	configuredLines = cfg.captionLines;
+	label2->Visible = (cfg.captionLines == 2);
+	label2->Font->Name = cfg.fontLabel2.name.c_str();
+	label2->Font->Size = cfg.fontLabel2.size;
+	label2->Font->Style = TFontStyles();
+	if (cfg.fontLabel2.bold)
+	{
+		label2->Font->Style << fsBold;
+	}
+	if (cfg.fontLabel2.italic)
+	{
+		label2->Font->Style << fsItalic;
+	}
+	if (cfg.fontLabel2.underline)
+	{
+		label2->Font->Style << fsUnderline;
+	}
+
+	if (cfg.centerLabel2Horizontally)
+	{
+		label2->Left = (Width - label2->Width)/2;
+	}
+
+	Left = cfg.left * percentage/100;
+	Top = cfg.top * percentage/100;
+	Width = cfg.width * percentage/100;
+	Height = cfg.height * percentage/100;
+	image->Top = label->Top;
+	image->Transparent = cfg.imageTransparent;
+	image->Left = cfg.imageLeft;
+	image->Top = cfg.imageTop;
+
+	centerTextHorizontally = cfg.centerTextHorizontally;
+	if (cfg.centerTextHorizontally)
+	{
+		label->Left = (Width - label->Width)/2;
+		//label2->Left = label->Left;
 	}
 	else
 	{
-		image->Width = 0;
-		label->Left = 20 * percentage/100;
+		if (cfg.noIcon)
+		{
+			image->Width = 0 * percentage/100;
+			label->Left = 2 * percentage/100;
+		}
+		else
+		{
+			image->Width = 0;
+			label->Left = 20 * percentage/100;
+		}
 	}
-	Height = cfg.height * percentage/100;
-	label->Top = (Height - label->Height)/2;
-	label2->Left = label->Left;
-	//image->Top = label->Top;
+	centerTextVertically = cfg.labelCenterVertically;
+	labelTop = cfg.labelTop; 
 
-	this->Margins->Top = cfg.marginTop;
-	this->Margins->Bottom = cfg.marginBottom;
+	centerImageVertically = cfg.imageCenterVertically;
+	imageTop = cfg.imageTop;
 
-	this->Color = static_cast<TColor>(cfg.backgroundColor);
+	centerLabel2Horizontally = cfg.centerLabel2Horizontally;
+
+	customFrame = cfg.customFrame;
+	bevelWidth = cfg.bevelWidth;
+	if (cfg.customFrame)
+	{
+		BorderWidth = 0;
+		BevelWidth = 0;
+		//BevelWidth = 5;
+		BevelKind = bkNone;
+		BevelInner = bvNone;
+		BevelOuter = bvNone;
+		BorderStyle = bsNone;
+		//Ctl3D = false;
+	}
+	else
+	{
+		BevelKind = bkNone;
+		BevelInner = bvNone;
+		BevelOuter = bvRaised;
+		BorderWidth = 0;
+		BorderStyle = bsNone;		
+		BevelWidth = bevelWidth;
+	}
+
+	memcpy(colors, cfg.colors, sizeof(colors));
+	UpdateColors();
 
 	LoadBitmap(bmpIdle, cfg.imgIdle.c_str());
 	LoadBitmap(bmpTerminated, cfg.imgTerminated.c_str());
@@ -198,11 +338,13 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	//SetPresenceState(PRESENCE_UNKNOWN, "");
 	presence_state = PRESENCE_UNKNOWN;
 
-    // set inside SetState
-	//image->Top = ((Height  * scalingPercentage/100) - image->Height)/2;
-	configuredLines = cfg.captionLines;
-	caption2 = cfg.caption2.c_str();
-	SetLines(cfg.captionLines);
+	//this->Repaint();
+	//this->Invalidate();
+
+	SetImageTop();
+	SetLabelTop();
+
+
 
 	once = true;	
 }
@@ -221,17 +363,21 @@ void TProgrammableButton::UpdateCallbacks(void)
 void TProgrammableButton::SetCaption(AnsiString text)
 {
 	label->Caption = text;
-
+	if (centerTextHorizontally)
+	{
+		label->Left = (Width - label->Width)/2;
+		//label2->Left = label->Left;
+	}
+	SetLabelTop();
 }
+
 void TProgrammableButton::SetCaption2(AnsiString text)
 {
 	label2->Caption = text;
-#if 0
 	if (centerLabel2Horizontally)
 	{
 		label2->Left = (Width - label2->Width)/2;
-	}
-#endif
+	}	
 }
 
 void TProgrammableButton::SetState(enum dialog_info_status state, bool updateRemoteIdentity, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay)
@@ -311,7 +457,7 @@ void TProgrammableButton::SetPresenceState(enum presence_status state, AnsiStrin
 	}
 	else
 	{
-		SetLines(1);
+		SetLines(configuredLines);
 	}
 }
 
@@ -345,6 +491,23 @@ void TProgrammableButton::SetDown(bool state)
 	}
 }
 
+void TProgrammableButton::SetInactive(bool state)
+{
+	if (inactive != state)
+	{
+		inactive = state;
+		UpdateColors();
+	}
+}
+
+void TProgrammableButton::SetVisible(bool state)
+{
+	if (visible != state)
+	{
+		visible = state;
+		Visible = visible;
+	}
+}
 void TProgrammableButton::SetImage(AnsiString file)
 {
 	if (file == "")
@@ -364,6 +527,7 @@ void TProgrammableButton::Lower(void)
 		return;
 	raised = false;			
 	BevelOuter = bvLowered;
+	UpdateColors();
 }
 
 void TProgrammableButton::Raise(void)
@@ -375,6 +539,7 @@ void TProgrammableButton::Raise(void)
         raised = true;
 		BevelOuter = bvRaised;
 	}		
+	UpdateColors();
 }
 
 void TProgrammableButton::SetLines(int cnt)
@@ -386,15 +551,16 @@ void TProgrammableButton::SetLines(int cnt)
 		//label->Top = (Height - label->Height)/3;
 		//label2->Top = (Height - label->Height)*2/3;
 
-		label->Top = (Height - label->Height - label2->Height)/3;
-		label2->Top = label->Top + label->Height + label->Top;
+		//label->Top = (Height - label->Height - label2->Height)/3;
+		SetLabelTop();
+
+		//label2->Top = label->Top + label->Height + label->Top;
 
 		label2->Visible = true;
 	}
 	else
 	{
-		label->Top = (Height - label->Height)/2;
-		//image->Top = (Height - image->Height)/2;
+		SetLabelTop();
 		label2->Visible = false;
 	}
 }
@@ -422,6 +588,78 @@ void TProgrammableButton::SetImage(Graphics::TBitmap *bmp)
 	label2->Transparent = true;
 }
 
+
+void TProgrammableButton::UpdateColors(void)
+{
+	TColor backgroundColor, fontColor;
+	if (raised == true)
+	{
+		if (inactive == false)
+		{
+			backgroundColor = static_cast<TColor>(colors[ButtonConf::EL_BACKGROUND].idle);
+			fontColor = static_cast<TColor>(colors[ButtonConf::EL_FONT].idle);
+		}
+		else
+		{
+			backgroundColor = static_cast<TColor>(colors[ButtonConf::EL_BACKGROUND].inactive);
+			fontColor = static_cast<TColor>(colors[ButtonConf::EL_FONT].inactive);
+        }
+	}
+	else
+	{
+		if (inactive == false)
+		{
+			backgroundColor = static_cast<TColor>(colors[ButtonConf::EL_BACKGROUND].down);
+			fontColor = static_cast<TColor>(colors[ButtonConf::EL_FONT].down);
+		}
+		else
+		{
+			backgroundColor = static_cast<TColor>(colors[ButtonConf::EL_BACKGROUND].inactiveDown);
+			fontColor = static_cast<TColor>(colors[ButtonConf::EL_FONT].inactiveDown);
+        }
+	}
+
+	this->Color = backgroundColor;
+	this->Font->Color = fontColor;
+	label->Font->Color = fontColor;
+	label2->Font->Color = fontColor;
+}
+
+void TProgrammableButton::SetImageTop(void)
+{
+	if (centerImageVertically)
+	{
+		//image->Top = (Height - image->Height)/2;
+		if (image->Height != 0)
+		{
+			volatile int dummy = image->Height;
+		}
+		image->Top = (Height - (image->Height * 100/scalingPercentage))/2;// * percentage/100;
+	}
+	else
+	{
+    	image->Top = imageTop;
+	}
+}
+
+void TProgrammableButton::SetLabelTop(void)
+{
+#if 0
+	// center vertically
+	if (label2->Visible == false)
+	{
+		label->Top = (Height - label->Height)/2;
+	}
+#endif
+	if (centerTextVertically)
+	{
+		label->Top = (Height - label->Height)/2;
+	}
+	else
+	{
+		label->Top = labelTop;
+	}
+}
 
 
 

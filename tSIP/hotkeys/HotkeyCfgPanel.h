@@ -17,9 +17,10 @@ private:
 	HotKeyConf &cfg;
 	void __fastcall UpdateCfg(TObject *Sender);
 	void UpdateActionTypeView(void);
+	int programmableButtonsCnt;
 protected:
 public:
-	__fastcall THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg);
+	__fastcall THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg, int programmableButtonsCnt);
 	void Start(void);
 __published:
 	TCheckBox *chbShift;
