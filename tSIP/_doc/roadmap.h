@@ -54,8 +54,6 @@ Call recording:
 
 - BLF barge in
 
-- visual appearance config for programmable button (text color, font, background color)
-
 - gnome3 and wine: call notifications not working? (LS)
 
 - warn user if wave file source is selected but source file does not exist

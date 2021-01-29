@@ -160,6 +160,8 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				cfg.labelTop = btnJson.get("labelTop", cfg.labelTop).asInt();
 				cfg.label2Left = btnJson.get("label2Left", cfg.label2Left).asInt();
 				cfg.label2Top = btnJson.get("label2Top", cfg.label2Top).asInt();
+				btnJson.getBool("spaceLabelsYEqually", cfg.spaceLabelsYEqually);
+
 				cfg.centerLabel2Horizontally = btnJson.get("label2CenterHorizontally", cfg.centerLabel2Horizontally).asBool();
 				cfg.imageTransparent = btnJson.get("imageTransparent", cfg.imageTransparent).asBool();
 				cfg.imageLeft = btnJson.get("imageLeft", cfg.imageLeft).asInt();
@@ -370,6 +372,8 @@ int ProgrammableButtons::Write(void)
 		jsonBtn["label2Left"] = cfg.label2Left;
 		jsonBtn["label2Top"] = cfg.label2Top;
 		jsonBtn["label2CenterHorizontally"] = cfg.centerLabel2Horizontally;
+		jsonBtn["spaceLabelsYEqually"] = cfg.spaceLabelsYEqually;
+
 		jsonBtn["imageTransparent"] = cfg.imageTransparent;
 		jsonBtn["imageLeft"] = cfg.imageLeft;
 		jsonBtn["imageCenterVertically"] = cfg.imageCenterVertically;

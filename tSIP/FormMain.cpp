@@ -2348,6 +2348,11 @@ AnsiString TfrmMain::OnGetContactName(AnsiString uri)
 void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 {
 	assert(id >= 0 && id < buttons.btnConf.size());
+	ButtonConf &cfg = buttons.btnConf[id];
+	if (cfg.inactive)
+	{
+		return;
+	}
 
 	if (appSettings.Scripts.onProgrammableButton != "")
 	{
@@ -2361,7 +2366,6 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 	}
 
-	ButtonConf &cfg = buttons.btnConf[id];
 	bool down = btn->GetDown();
 	switch (cfg.type)
 	{

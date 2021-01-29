@@ -106,6 +106,9 @@ void TfrmButtonEdit::ApplyConf(void)
 	chbLabel2CenterHorizontally->Checked = cfg->centerLabel2Horizontally;
 	edLabel2Left->Enabled = !chbLabel2CenterHorizontally->Checked;
 
+	chbSpaceLabelsYEqually->Checked = cfg->spaceLabelsYEqually;
+	UpdateLabelsTopVisibility();	
+
 	chbImageTransparent->Checked = cfg->imageTransparent;
 	chbNoIcon->Checked = cfg->noIcon;
 	edLeft->Text = cfg->left;
@@ -193,6 +196,8 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->label2Left = StrToIntDef(edLabel2Left->Text, 0);
 	cfg->label2Top = StrToIntDef(edLabel2Top->Text, 0);
 	cfg->centerLabel2Horizontally = chbLabel2CenterHorizontally->Checked;	
+
+	cfg->spaceLabelsYEqually = chbSpaceLabelsYEqually->Checked;
 
 	cfg->imageTransparent = chbImageTransparent->Checked;
 	cfg->noIcon = chbNoIcon->Checked;
@@ -781,4 +786,20 @@ void __fastcall TfrmButtonEdit::btnSelectedScriptOnButtonEditClick(
 	frmLuaScript->OpenFile(file);
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonEdit::chbSpaceLabelsYEquallyClick(TObject *Sender)
+{
+	UpdateLabelsTopVisibility();
+}
+//---------------------------------------------------------------------------
+
+void TfrmButtonEdit::UpdateLabelsTopVisibility(void)
+{
+	bool state = !chbSpaceLabelsYEqually->Checked;
+	lblLabelTop->Visible = state;
+	edLabelTop->Visible = state;
+	chbLabelCenterVertically->Visible = state;
+	lblLabel2Top->Visible = state;
+	edLabel2Top->Visible = state;
+}
 

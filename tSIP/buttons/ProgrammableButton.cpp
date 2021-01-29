@@ -1,7 +1,5 @@
 //---------------------------------------------------------------------------
-
 #include <vcl.h>
-
 #pragma hdrstop
 
 #include "ProgrammableButton.h"
@@ -26,15 +24,6 @@ namespace
 	}
 }
 
-//---------------------------------------------------------------------------
-// ValidCtrCheck is used to assure that the components created do not have
-// any pure virtual functions.
-//
-static inline void ValidCtrCheck(TProgrammableButton *)
-{
-	new TProgrammableButton(NULL, new TImageList(NULL), 100);
-}
-
 __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageList* imgList, int scalingPercentage)
 	: TPanel(Owner), imgList(imgList), state(DIALOG_INFO_UNKNOWN),
 	down(false),
@@ -47,8 +36,6 @@ __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageLis
 	bmpIdle(NULL), bmpTerminated(NULL), bmpEarly(NULL), bmpConfirmed(NULL)
 {
 	assert(imgList);
-
-    //this->Color = clYellow;
 
     this->DoubleBuffered = true;
 
@@ -210,13 +197,13 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	{
 		percentage = 100;
 		SetDown(cfg.down);
-		SetInactive(cfg.inactive);
 		Visible = cfg.visible;
 	}
 	else
 	{
 		percentage = scalingPercentage;
-    }
+	}
+	SetInactive(cfg.inactive);
 	SetVisible(cfg.visible);
 
 	label->Caption = cfg.caption.c_str();
@@ -243,9 +230,8 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 
 
 	label2->Left = cfg.label2Left;
-	label2->Top = cfg.label2Top;
 	configuredLines = cfg.captionLines;
-	label2->Visible = (cfg.captionLines == 2);
+	spaceLabelsYEqually = cfg.spaceLabelsYEqually;
 	label2->Font->Name = cfg.fontLabel2.name.c_str();
 	label2->Font->Size = cfg.fontLabel2.size;
 	label2->Font->Style = TFontStyles();
@@ -261,6 +247,8 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	{
 		label2->Font->Style << fsUnderline;
 	}
+
+	SetLines(cfg.captionLines);
 
 	if (cfg.centerLabel2Horizontally)
 	{
@@ -296,7 +284,8 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 		}
 	}
 	centerTextVertically = cfg.labelCenterVertically;
-	labelTop = cfg.labelTop; 
+	labelTop = cfg.labelTop;
+	label2Top = cfg.label2Top; 
 
 	centerImageVertically = cfg.imageCenterVertically;
 	imageTop = cfg.imageTop;
@@ -320,7 +309,14 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	{
 		BevelKind = bkNone;
 		BevelInner = bvNone;
-		BevelOuter = bvRaised;
+		if (down)
+		{
+			Lower();
+		}
+		else
+		{
+			Raise();
+		}
 		BorderWidth = 0;
 		BorderStyle = bsNone;		
 		BevelWidth = bevelWidth;
@@ -342,9 +338,6 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	//this->Invalidate();
 
 	SetImageTop();
-	SetLabelTop();
-
-
 
 	once = true;	
 }
@@ -368,7 +361,7 @@ void TProgrammableButton::SetCaption(AnsiString text)
 		label->Left = (Width - label->Width)/2;
 		//label2->Left = label->Left;
 	}
-	SetLabelTop();
+	//SetLabelTop();
 }
 
 void TProgrammableButton::SetCaption2(AnsiString text)
@@ -544,24 +537,35 @@ void TProgrammableButton::Raise(void)
 
 void TProgrammableButton::SetLines(int cnt)
 {
-	if (cnt == 2)
+	if (spaceLabelsYEqually == false)
 	{
-		//image->Top = (Height - image->Height)/2;
-
-		//label->Top = (Height - label->Height)/3;
-		//label2->Top = (Height - label->Height)*2/3;
-
-		//label->Top = (Height - label->Height - label2->Height)/3;
-		SetLabelTop();
-
-		//label2->Top = label->Top + label->Height + label->Top;
-
-		label2->Visible = true;
+		if (cnt == 2)
+		{
+			SetLabelTop();
+			label2->Top = label2Top;
+			label2->Visible = true;
+		}
+		else
+		{
+			SetLabelTop();
+			label2->Top = label2Top;
+			label2->Visible = false;
+		}
 	}
 	else
 	{
-		SetLabelTop();
-		label2->Visible = false;
+		if (cnt == 2)
+		{
+			label->Top = (Height - label->Height - label2->Height)/3;
+			label2->Top = label->Top + label->Height + label->Top;
+			label2->Visible = true;
+		}
+		else
+		{
+			label->Top = (Height - label->Height)/2;
+			label2->Top = label2Top;
+			label2->Visible = false;
+		}
 	}
 }
 

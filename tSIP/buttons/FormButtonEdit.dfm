@@ -249,9 +249,9 @@ object frmButtonEdit: TfrmButtonEdit
       end
       object grboxCaption1: TGroupBox
         Left = 0
-        Top = 57
+        Top = 81
         Width = 321
-        Height = 88
+        Height = 72
         Caption = 'Caption #1'
         TabOrder = 9
         object lblSpeedDialFont: TLabel
@@ -272,7 +272,7 @@ object frmButtonEdit: TfrmButtonEdit
           Left = 38
           Top = 13
           Width = 75
-          Height = 63
+          Height = 52
           AutoSize = False
           TabOrder = 0
           Text = 'abcABC 123 () [] <>,.'
@@ -325,9 +325,9 @@ object frmButtonEdit: TfrmButtonEdit
       end
       object grboxCaption2: TGroupBox
         Left = 327
-        Top = 57
+        Top = 81
         Width = 321
-        Height = 88
+        Height = 72
         Caption = 'Caption #2'
         TabOrder = 10
         object Label1: TLabel
@@ -337,7 +337,7 @@ object frmButtonEdit: TfrmButtonEdit
           Height = 13
           Caption = 'Font'
         end
-        object Label5: TLabel
+        object lblLabel2Top: TLabel
           Left = 159
           Top = 40
           Width = 18
@@ -355,7 +355,7 @@ object frmButtonEdit: TfrmButtonEdit
           Left = 38
           Top = 13
           Width = 75
-          Height = 63
+          Height = 52
           AutoSize = False
           TabOrder = 0
           Text = 'abcABC 123 () [] <>,.'
@@ -401,7 +401,7 @@ object frmButtonEdit: TfrmButtonEdit
       end
       object grboxColors: TGroupBox
         Left = 0
-        Top = 156
+        Top = 162
         Width = 648
         Height = 95
         Caption = 'Colors'
@@ -719,6 +719,23 @@ object frmButtonEdit: TfrmButtonEdit
           TabOrder = 12
           OnClick = chbImageCenterVerticallyClick
         end
+      end
+      object chbSpaceLabelsYEqually: TCheckBox
+        Left = 3
+        Top = 58
+        Width = 400
+        Height = 17
+        Caption = 
+          'space caption lines equally in Y axis (automatically for either ' +
+          '1 or 2 caption lines)'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 13
+        OnClick = chbSpaceLabelsYEquallyClick
       end
     end
     object tsBehavior: TTabSheet

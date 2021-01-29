@@ -110,7 +110,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chbLabelCenterVertically;
 	TGroupBox *grboxCaption2;
 	TLabel *Label1;
-	TLabel *Label5;
+	TLabel *lblLabel2Top;
 	TLabel *Label6;
 	TEdit *edCaption2Font;
 	TButton *btnCaption2FontSelect;
@@ -154,6 +154,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chbImageTransparent;
 	TEdit *edImageTop;
 	TCheckBox *chbImageCenterVertically;
+	TCheckBox *chbSpaceLabelsYEqually;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
@@ -174,6 +175,7 @@ __published:	// IDE-managed Components
 	void __fastcall chbImageCenterVerticallyClick(TObject *Sender);
 	void __fastcall chbLabelCenterVerticallyClick(TObject *Sender);
 	void __fastcall chbLabel2CenterHorizontallyClick(TObject *Sender);
+	void __fastcall chbSpaceLabelsYEquallyClick(TObject *Sender);
 private:	// User declarations
 	bool confirmed;
 	bool refreshAudioDevList;
@@ -186,6 +188,7 @@ private:	// User declarations
 	void ApplyConf(void);
 	void UpdateColorView(void);
 	void UpdateColors(void);
+	void UpdateLabelsTopVisibility(void);
 public:		// User declarations
 	__fastcall TfrmButtonEdit(TComponent* Owner);
 	void __fastcall ShowModal(ButtonConf *cfg, int btnId);

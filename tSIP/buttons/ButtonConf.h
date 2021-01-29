@@ -29,6 +29,9 @@ public:
 	bool centerTextHorizontally;
 	bool labelCenterVertically;
 	int labelTop;
+
+    bool spaceLabelsYEqually;
+
 	bool imageTransparent;
 	int imageLeft;
 	bool imageCenterVertically;

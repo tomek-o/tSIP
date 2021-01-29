@@ -35,6 +35,7 @@ void ButtonConf::Reset(void)
 	centerTextHorizontally = false;
 	labelCenterVertically = true;
 	labelTop = 0;
+	spaceLabelsYEqually = true;
 
 	label2Left = 20;
 	label2Top = 20;

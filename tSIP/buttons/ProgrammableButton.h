@@ -1,5 +1,4 @@
 //---------------------------------------------------------------------------
-
 #ifndef ProgrammableButtonH
 #define ProgrammableButtonH
 //---------------------------------------------------------------------------
@@ -45,7 +44,9 @@ private:
 	ButtonConf::Color colors[ButtonConf::EL_LIMITER];
 
 	int configuredLines;
+	bool spaceLabelsYEqually;
 	AnsiString caption2;
+	int label2Top;
 
 	bool raised;	// helps with flickering
 	void Lower(void);
