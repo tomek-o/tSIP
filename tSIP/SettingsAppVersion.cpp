@@ -18,6 +18,10 @@ void SettingsAppVersion::ToJson(Json::Value &jv)
 {
 	jv["FileVersionMS"] = FileVersionMS;
 	jv["FileVersionLS"] = FileVersionLS;
+
+	AnsiString asVer;
+	asVer.sprintf("%d.%02d.%02d.%02d", HIWORD(FileVersionMS), LOWORD(FileVersionMS), HIWORD(FileVersionLS), LOWORD(FileVersionLS));
+	jv["FileVersionText"] = asVer;
 }
 
 void SettingsAppVersion::FromAppExe(void)
