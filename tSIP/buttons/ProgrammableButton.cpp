@@ -28,7 +28,7 @@ __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageLis
 	: TPanel(Owner), imgList(imgList), state(DIALOG_INFO_UNKNOWN),
 	down(false),
 	inactive(false), visible(false),
-	centerLabel2Horizontally(true),
+	label2CenterHorizontally(true),
 	scalingPercentage(scalingPercentage),
 	once(false),
 	configuredLines(1),
@@ -250,7 +250,7 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 
 	SetLines(cfg.captionLines);
 
-	if (cfg.centerLabel2Horizontally)
+	if (cfg.label2CenterHorizontally)
 	{
 		label2->Left = (Width - label2->Width)/2;
 	}
@@ -264,8 +264,8 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	image->Left = cfg.imageLeft;
 	image->Top = cfg.imageTop;
 
-	centerTextHorizontally = cfg.centerTextHorizontally;
-	if (cfg.centerTextHorizontally)
+	labelCenterHorizontally = cfg.labelCenterHorizontally;
+	if (cfg.labelCenterHorizontally)
 	{
 		label->Left = (Width - label->Width)/2;
 		//label2->Left = label->Left;
@@ -290,7 +290,7 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	centerImageVertically = cfg.imageCenterVertically;
 	imageTop = cfg.imageTop;
 
-	centerLabel2Horizontally = cfg.centerLabel2Horizontally;
+	label2CenterHorizontally = cfg.label2CenterHorizontally;
 
 	customFrame = cfg.customFrame;
 	bevelWidth = cfg.bevelWidth;
@@ -356,7 +356,7 @@ void TProgrammableButton::UpdateCallbacks(void)
 void TProgrammableButton::SetCaption(AnsiString text)
 {
 	label->Caption = text;
-	if (centerTextHorizontally)
+	if (labelCenterHorizontally)
 	{
 		label->Left = (Width - label->Width)/2;
 		//label2->Left = label->Left;
@@ -367,7 +367,7 @@ void TProgrammableButton::SetCaption(AnsiString text)
 void TProgrammableButton::SetCaption2(AnsiString text)
 {
 	label2->Caption = text;
-	if (centerLabel2Horizontally)
+	if (label2CenterHorizontally)
 	{
 		label2->Left = (Width - label2->Width)/2;
 	}	

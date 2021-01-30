@@ -26,7 +26,7 @@ public:
 	int left, top, width, height;
 	unsigned int bevelWidth;
 	bool customFrame;
-	bool centerTextHorizontally;
+	bool labelCenterHorizontally;
 	bool labelCenterVertically;
 	int labelTop;
 
@@ -39,7 +39,7 @@ public:
 
 	int label2Left;
 	int label2Top;
-	bool centerLabel2Horizontally;
+	bool label2CenterHorizontally;
 
 	enum Element {
 		EL_BACKGROUND = 0,
@@ -175,11 +175,11 @@ public:
 			height == right.height &&
 			bevelWidth == right.bevelWidth &&
 			customFrame == right.customFrame &&
-			centerTextHorizontally == right.centerTextHorizontally &&
+			labelCenterHorizontally == right.labelCenterHorizontally &&
 			labelCenterVertically == right.labelCenterVertically &&
 			labelTop == right.labelTop &&
 			label2Top == right.label2Top &&
-			centerLabel2Horizontally == right.centerLabel2Horizontally &&
+			label2CenterHorizontally == right.label2CenterHorizontally &&
 			imageTransparent == right.imageTransparent &&
 			imageLeft == right.imageLeft &&
 			imageCenterVertically == right.imageCenterVertically &&

@@ -84,6 +84,7 @@ Settings::_frmSpeedDial::_frmSpeedDial(void):
 	gridSize(_frmSpeedDial::DEFAULT_GRID_SIZE),
 	showStatus(false),
 	hideEmptyStatus(false),
+	saveAllSettings(false),
 	statusPanelHeight(_frmSpeedDial::DEF_STATUS_PANEL_HEIGHT)
 {
 }
@@ -737,6 +738,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmSpeedDial.gridSize = _frmSpeedDial::DEFAULT_GRID_SIZE;
 	frmSpeedDial.showStatus = frmSpeedDialJson.get("ShowStatus", frmSpeedDial.showStatus).asBool();
 	frmSpeedDial.hideEmptyStatus = frmSpeedDialJson.get("HideEmptyStatus", frmSpeedDial.hideEmptyStatus).asBool();
+	frmSpeedDialJson.getBool("SaveAllSettings", frmSpeedDial.saveAllSettings);
 	frmSpeedDial.statusPanelHeight = frmSpeedDialJson.get("StatusPanelHeight", frmSpeedDial.statusPanelHeight).asInt();
 	if (frmSpeedDial.statusPanelHeight < _frmSpeedDial::MIN_STATUS_PANEL_HEIGHT || frmSpeedDial.statusPanelHeight > _frmSpeedDial::MAX_STATUS_PANEL_HEIGHT)
 		frmSpeedDial.statusPanelHeight = _frmSpeedDial::DEF_STATUS_PANEL_HEIGHT;
@@ -1026,11 +1028,16 @@ int Settings::Write(AnsiString asFileName)
 	root["frmContactPopup"]["Width"] = frmContactPopup.iWidth;
 	root["frmContactPopup"]["Height"] = frmContactPopup.iHeight;
 
-	root["frmSpeedDial"]["UseGrid"] = frmSpeedDial.useGrid;
-	root["frmSpeedDial"]["GridSize"] = frmSpeedDial.gridSize;
-	root["frmSpeedDial"]["ShowStatus"] = frmSpeedDial.showStatus;
-	root["frmSpeedDial"]["HideEmptyStatus"] = frmSpeedDial.hideEmptyStatus;
-	root["frmSpeedDial"]["StatusPanelHeight"] = frmSpeedDial.statusPanelHeight;
+	{
+		Json::Value &jv = root["frmSpeedDial"];
+		jv["UseGrid"] = frmSpeedDial.useGrid;
+		jv["GridSize"] = frmSpeedDial.gridSize;
+		jv["ShowStatus"] = frmSpeedDial.showStatus;
+		jv["HideEmptyStatus"] = frmSpeedDial.hideEmptyStatus;
+		jv["SaveAllSettings"] = frmSpeedDial.saveAllSettings;
+		jv["StatusPanelHeight"] = frmSpeedDial.statusPanelHeight;
+	}
+	
 	{
 		Json::Value &jLogging = root["Logging"];
 		jLogging["LogToFile"] = Logging.bLogToFile;

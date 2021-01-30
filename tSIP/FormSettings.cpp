@@ -219,9 +219,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked = tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
 	chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing->Checked = tmpSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 	chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked = tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
-
 	chbSpeedDialUseGrid->Checked = tmpSettings.frmSpeedDial.useGrid;
 	edSpeedDialGridSize->Text = tmpSettings.frmSpeedDial.gridSize;
+	chbSpeedDialSaveAllSettings->Checked = tmpSettings.frmSpeedDial.saveAllSettings;
 
 	chbKioskMode->Checked = tmpSettings.frmMain.bKioskMode;
 	chbHideSpeedDialToggleButton->Checked = tmpSettings.frmMain.bHideSpeedDialToggleButton;
@@ -528,6 +528,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		if (tmp >= Settings::_frmSpeedDial::MIN_GRID_SIZE && tmp <= Settings::_frmSpeedDial::MAX_GRID_SIZE)
 			tmpSettings.frmSpeedDial.gridSize = tmp;
 	}
+	tmpSettings.frmSpeedDial.saveAllSettings = chbSpeedDialSaveAllSettings->Checked;
 
 	tmpSettings.frmMain.bKioskMode = chbKioskMode->Checked;
 	tmpSettings.frmMain.bHideSpeedDialToggleButton = chbHideSpeedDialToggleButton->Checked;

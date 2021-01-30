@@ -56,7 +56,8 @@ void ProgrammableButtons::SetDefaultsForBtnId(int id, ButtonConf& cfg)
 	}
 }
 
-ProgrammableButtons::ProgrammableButtons(void)
+ProgrammableButtons::ProgrammableButtons(void):
+	saveAllSettings(true)
 {
 	btnConf.resize(BASIC_PANEL_CONSOLE_BTNS + (EXT_CONSOLE_COLUMNS * CONSOLE_BTNS_PER_CONTAINER));
 
@@ -97,7 +98,7 @@ ProgrammableButtons::ProgrammableButtons(void)
 	cfg->labelTop = 3;
     cfg->label2Left = 0;
 	cfg->label2Top = 17;
-	cfg->centerLabel2Horizontally = false;
+	cfg->label2CenterHorizontally = false;
 	cfg->noIcon = true;
 
 	for (unsigned int i=5; i<BASIC_PANEL_CONSOLE_BTNS; i++)
@@ -155,14 +156,14 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 
 				cfg.bevelWidth = btnJson.get("bevelWidth", cfg.bevelWidth).asUInt();
 				cfg.customFrame = btnJson.get("customFrame", cfg.customFrame).asBool();
-				cfg.centerTextHorizontally = btnJson.get("centerTextHorizontally", cfg.centerTextHorizontally).asBool();
+				cfg.labelCenterHorizontally = btnJson.get("labelCenterHorizontally", cfg.labelCenterHorizontally).asBool();
 				cfg.labelCenterVertically = btnJson.get("labelCenterVertically", cfg.labelCenterVertically).asBool();
 				cfg.labelTop = btnJson.get("labelTop", cfg.labelTop).asInt();
 				cfg.label2Left = btnJson.get("label2Left", cfg.label2Left).asInt();
 				cfg.label2Top = btnJson.get("label2Top", cfg.label2Top).asInt();
 				btnJson.getBool("spaceLabelsYEqually", cfg.spaceLabelsYEqually);
 
-				cfg.centerLabel2Horizontally = btnJson.get("label2CenterHorizontally", cfg.centerLabel2Horizontally).asBool();
+				btnJson.getBool("label2CenterHorizontally", cfg.label2CenterHorizontally);
 				cfg.imageTransparent = btnJson.get("imageTransparent", cfg.imageTransparent).asBool();
 				cfg.imageLeft = btnJson.get("imageLeft", cfg.imageLeft).asInt();
 				cfg.imageCenterVertically = btnJson.get("imageCenterVertically", cfg.imageCenterVertically).asBool();
@@ -357,33 +358,61 @@ int ProgrammableButtons::Write(void)
 		jsonBtn["captionLines"] = cfg.captionLines;
 		jsonBtn["number"] = cfg.number;
 		jsonBtn["visible"] = cfg.visible;
-		jsonBtn["down"] = cfg.down;
-		jsonBtn["inactive"] = cfg.inactive;
-		jsonBtn["noIcon"] = cfg.noIcon;
+		if (saveAllSettings || (cfg.down != defaultBtn.down))
+		{
+			jsonBtn["down"] = cfg.down;
+		}
+		if (saveAllSettings || (cfg.inactive != defaultBtn.inactive))
+		{
+			jsonBtn["inactive"] = cfg.inactive;
+		}
+		if (saveAllSettings || (cfg.noIcon != defaultBtn.noIcon))
+		{
+			jsonBtn["noIcon"] = cfg.noIcon;
+		}
 		jsonBtn["left"] = cfg.left;
 		jsonBtn["top"] = cfg.top;
 		jsonBtn["width"] = cfg.width;
 		jsonBtn["height"] = cfg.height;
-		jsonBtn["bevelWidth"] = cfg.bevelWidth;
-		jsonBtn["customFrame"] = cfg.customFrame;
-		jsonBtn["centerTextHorizontally"] = cfg.centerTextHorizontally;
-		jsonBtn["labelCenterVertically"] = cfg.labelCenterVertically;
-		jsonBtn["labelTop"] = cfg.labelTop;
-		jsonBtn["label2Left"] = cfg.label2Left;
-		jsonBtn["label2Top"] = cfg.label2Top;
-		jsonBtn["label2CenterHorizontally"] = cfg.centerLabel2Horizontally;
+		if (saveAllSettings || (cfg.bevelWidth != defaultBtn.bevelWidth))
+		{
+			jsonBtn["bevelWidth"] = cfg.bevelWidth;
+		}
+		if (saveAllSettings || (cfg.customFrame != defaultBtn.customFrame))
+		{
+			jsonBtn["customFrame"] = cfg.customFrame;
+		}
+		if (saveAllSettings || (cfg.labelCenterHorizontally != defaultBtn.labelCenterHorizontally))
+		{
+			jsonBtn["labelCenterHorizontally"] = cfg.labelCenterHorizontally;
+		}
+		if (saveAllSettings || (cfg.labelCenterVertically != defaultBtn.labelCenterVertically))
+		{
+			jsonBtn["labelCenterVertically"] = cfg.labelCenterVertically;
+		}
+		if (saveAllSettings || (cfg.labelTop != defaultBtn.labelTop))
+		{
+			jsonBtn["labelTop"] = cfg.labelTop;
+		}
+		if (saveAllSettings || (cfg.label2Left != defaultBtn.label2Left))
+		{
+			jsonBtn["label2Left"] = cfg.label2Left;
+		}
+		if (saveAllSettings || (cfg.label2Top != defaultBtn.label2Top))
+		{
+			jsonBtn["label2Top"] = cfg.label2Top;
+		}
+		if (saveAllSettings || (cfg.label2CenterHorizontally != defaultBtn.label2CenterHorizontally))
+		{
+			jsonBtn["label2CenterHorizontally"] = cfg.label2CenterHorizontally;
+		}
 		jsonBtn["spaceLabelsYEqually"] = cfg.spaceLabelsYEqually;
-
-		jsonBtn["imageTransparent"] = cfg.imageTransparent;
-		jsonBtn["imageLeft"] = cfg.imageLeft;
-		jsonBtn["imageCenterVertically"] = cfg.imageCenterVertically;
-		jsonBtn["imageTop"] = cfg.imageTop;
 
 		Json::Value &jColors = jsonBtn["colors"];
 		for (unsigned int el=0; el<sizeof(cfg.colors)/sizeof(cfg.colors[0]); el++)
 		{
 			Json::Value &jEl = jColors[el];
-			if (cfg.colors[el] != defaultBtn.colors[el])
+			if (saveAllSettings || (cfg.colors[el] != defaultBtn.colors[el]))
 			{
 				jEl["idle"] = cfg.colors[el].idle;
 				jEl["down"] = cfg.colors[el].down;
@@ -397,50 +426,79 @@ int ProgrammableButtons::Write(void)
 			}
 		}
 
+		if (saveAllSettings || (cfg.imageTransparent != defaultBtn.imageTransparent))
+		{
+			jsonBtn["imageTransparent"] = cfg.imageTransparent;
+		}
+		if (saveAllSettings || (cfg.imageLeft != defaultBtn.imageLeft))
+		{
+			jsonBtn["imageLeft"] = cfg.imageLeft;
+		}
+		if (saveAllSettings || (cfg.imageCenterVertically != defaultBtn.imageCenterVertically))
+		{
+			jsonBtn["imageCenterVertically"] = cfg.imageCenterVertically;
+		}
+		if (saveAllSettings || (cfg.imageTop != defaultBtn.imageTop))
+		{
+			jsonBtn["imageTop"] = cfg.imageTop;
+		}
+
 		jsonBtn["imgIdle"] = cfg.imgIdle;
 		jsonBtn["imgTerminated"] = cfg.imgTerminated;
 		jsonBtn["imgEarly"] = cfg.imgEarly;
 		jsonBtn["imgConfirmed"] = cfg.imgConfirmed;
-		if (cfg.blfOverrideIdle != defaultBtn.blfOverrideIdle)
+		if (saveAllSettings || (cfg.blfOverrideIdle != defaultBtn.blfOverrideIdle))
 		{
 			jsonBtn["blfOverrideIdle"]["active"] = cfg.blfOverrideIdle.active;
 			jsonBtn["blfOverrideIdle"]["number"] = cfg.blfOverrideIdle.number;
 		}
-		if (cfg.blfOverrideTerminated != defaultBtn.blfOverrideTerminated)
+		if (saveAllSettings || (cfg.blfOverrideTerminated != defaultBtn.blfOverrideTerminated))
 		{
 			jsonBtn["blfOverrideTerminated"]["active"] = cfg.blfOverrideTerminated.active;
 			jsonBtn["blfOverrideTerminated"]["number"] = cfg.blfOverrideTerminated.number;
 		}
-		if (cfg.blfOverrideEarly != defaultBtn.blfOverrideEarly)
+		if (saveAllSettings || (cfg.blfOverrideEarly != defaultBtn.blfOverrideEarly))
 		{
 			jsonBtn["blfOverrideEarly"]["active"] = cfg.blfOverrideEarly.active;
 			jsonBtn["blfOverrideEarly"]["number"] = cfg.blfOverrideEarly.number;
 		}
-		if (cfg.blfOverrideConfirmed != defaultBtn.blfOverrideConfirmed)
+		if (saveAllSettings || (cfg.blfOverrideConfirmed != defaultBtn.blfOverrideConfirmed))
 		{
 			jsonBtn["blfOverrideConfirmed"]["active"] = cfg.blfOverrideConfirmed.active;
 			jsonBtn["blfOverrideConfirmed"]["number"] = cfg.blfOverrideConfirmed.number;
 		}
-		jsonBtn["blfActionDuringCall"] = cfg.blfActionDuringCall;
-		jsonBtn["blfDtmfPrefixDuringCall"] = cfg.blfDtmfPrefixDuringCall;
-		if (cfg.arg1 != defaultBtn.arg1)
+		if (saveAllSettings || (cfg.blfActionDuringCall != defaultBtn.blfActionDuringCall))
+		{
+			jsonBtn["blfActionDuringCall"] = cfg.blfActionDuringCall;
+		}
+		if (saveAllSettings || (cfg.blfDtmfPrefixDuringCall != defaultBtn.blfDtmfPrefixDuringCall))
+		{
+			jsonBtn["blfDtmfPrefixDuringCall"] = cfg.blfDtmfPrefixDuringCall;
+		}
+		if (saveAllSettings || (cfg.arg1 != defaultBtn.arg1))
 		{
 			jsonBtn["arg1"] = cfg.arg1;
 		}
-		jsonBtn["sipCode"] = cfg.sipCode;
-		if (cfg.pagingTxWaveFile != defaultBtn.pagingTxWaveFile)
+		if (saveAllSettings || (cfg.sipCode != defaultBtn.sipCode))
+		{
+			jsonBtn["sipCode"] = cfg.sipCode;
+		}
+		if (saveAllSettings || (cfg.pagingTxWaveFile != defaultBtn.pagingTxWaveFile))
 		{
 			jsonBtn["pagingTxWaveFile"] = cfg.pagingTxWaveFile;
 		}
-		if (cfg.pagingTxCodec != defaultBtn.pagingTxCodec)
+		if (saveAllSettings || (cfg.pagingTxCodec != defaultBtn.pagingTxCodec))
 		{
 			jsonBtn["pagingTxCodec"] = cfg.pagingTxCodec;
 		}
-		if (cfg.pagingTxPtime != defaultBtn.pagingTxPtime)
+		if (saveAllSettings || (cfg.pagingTxPtime != defaultBtn.pagingTxPtime))
 		{
 			jsonBtn["pagingTxPtime"] = cfg.pagingTxPtime;
 		}
-		jsonBtn["script"] = cfg.script;
+		if (saveAllSettings || (cfg.script != defaultBtn.script))
+		{
+			jsonBtn["script"] = cfg.script;
+		}
 
 		/*
 			Since number of button types increases let's limit information types
@@ -462,7 +520,7 @@ int ProgrammableButtons::Write(void)
 
 		{
 			const ButtonConf::Font &font = cfg.font;
-			if (font != defaultBtn.font)
+			if (saveAllSettings || (font != defaultBtn.font))
 			{
 				Json::Value &jv = jsonBtn["font"];
 				jv["name"] = font.name;
@@ -475,7 +533,7 @@ int ProgrammableButtons::Write(void)
 
 		{
 			const ButtonConf::Font &font = cfg.fontLabel2;
-			if (font != defaultBtn.fontLabel2)
+			if (saveAllSettings || (font != defaultBtn.fontLabel2))
 			{
 				Json::Value &jv = jsonBtn["fontLabel2"];
 				jv["name"] = font.name;
@@ -557,6 +615,18 @@ void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)
 				contact.btnIds.push_back(btnId);
 				contacts.push_back(contact);
 			}
+		}
+	}
+}
+
+void ProgrammableButtons::SetSaveAllSettings(bool state)
+{
+	if (saveAllSettings != state)
+	{
+		saveAllSettings = state;
+		if (saveAllSettings && filename != "")
+		{
+        	Write();
 		}
 	}
 }

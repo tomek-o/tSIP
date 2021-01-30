@@ -148,7 +148,7 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 	}
 	if (chbCenterTextHorizontally->Checked)
 	{
-		btnDst.centerTextHorizontally = btnSrc.centerTextHorizontally;
+		btnDst.labelCenterHorizontally = btnSrc.labelCenterHorizontally;
 	}
 	if (chbImageTransparent->Checked)
 	{

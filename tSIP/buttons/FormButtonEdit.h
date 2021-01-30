@@ -105,7 +105,7 @@ __published:	// IDE-managed Components
 	TLabel *lblLabelTop;
 	TEdit *edSpeedDialFont;
 	TButton *btnSpeedDialFontSelect;
-	TCheckBox *chbCenterTextHorizontally;
+	TCheckBox *chbLabelCenterHorizontally;
 	TEdit *edLabelTop;
 	TCheckBox *chbLabelCenterVertically;
 	TGroupBox *grboxCaption2;

@@ -286,7 +286,7 @@ object frmButtonEdit: TfrmButtonEdit
           TabOrder = 1
           OnClick = btnSpeedDialFontSelectClick
         end
-        object chbCenterTextHorizontally: TCheckBox
+        object chbLabelCenterHorizontally: TCheckBox
           Left = 159
           Top = 16
           Width = 154

@@ -613,6 +613,9 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	/** \todo bug? use prev settings */
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
+
+	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
+
 	miSettings->Visible = !appSettings.frmMain.bHideSettings;
 	miView->Visible = !appSettings.frmMain.bHideView;
 	miTools->Visible = !appSettings.frmMain.bHideTools;
@@ -721,6 +724,8 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	frmTrayNotifier->OnAnswer = Answer;
 	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
+
+	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
 
 	if (appSettings.frmMain.bShowSettingsIfAccountSettingIsHidden)
 	{

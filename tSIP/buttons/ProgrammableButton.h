@@ -29,11 +29,11 @@ private:
 	bool inactive;
 	bool visible;
 	bool customFrame;
-	bool centerTextHorizontally;
+	bool labelCenterHorizontally;
 	bool centerTextVertically;
 	int labelTop;
 
-    bool centerLabel2Horizontally;
+    bool label2CenterHorizontally;
 
 	bool centerImageVertically;
 	int imageTop;

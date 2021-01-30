@@ -32,14 +32,14 @@ void ButtonConf::Reset(void)
 	height = 32;
 	bevelWidth = 1;
 	customFrame = false;
-	centerTextHorizontally = false;
+	labelCenterHorizontally = false;
 	labelCenterVertically = true;
 	labelTop = 0;
 	spaceLabelsYEqually = true;
 
 	label2Left = 20;
 	label2Top = 20;
-	centerLabel2Horizontally = false;
+	label2CenterHorizontally = false;
 
 	imageTransparent = true;
 	imageLeft = 2;

@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsGeneral
+    ActivePage = tsSpeedDial
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -588,6 +588,16 @@ object frmSettings: TfrmSettings
         Width = 35
         Height = 21
         TabOrder = 11
+      end
+      object chbSpeedDialSaveAllSettings: TCheckBox
+        Left = 3
+        Top = 246
+        Width = 526
+        Height = 17
+        Caption = 
+          'Save all button settings, even same as default (larger JSON file' +
+          ' but possibly easier to edit or compare)'
+        TabOrder = 12
       end
     end
     object tsCalls: TTabSheet

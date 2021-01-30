@@ -18,12 +18,14 @@ class ProgrammableButtons
 {
 private:
 	AnsiString filename;
+	bool saveAllSettings;
 	int ReadFile(AnsiString name);
-	int LoadFromJsonValue(const Json::Value &root);	
+	int LoadFromJsonValue(const Json::Value &root);
 public:
 	static void SetDefaultsForBtnId(int id, ButtonConf& cfg);
 
 	ProgrammableButtons(void);
+
 	void SetFilename(AnsiString name)
 	{
 		filename = name;
@@ -43,7 +45,9 @@ public:
 
 	std::vector<ButtonConf> btnConf;
 
-	void UpdateContacts(std::vector<UaConf::Contact> &contacts);	
+	void UpdateContacts(std::vector<UaConf::Contact> &contacts);
+
+	void SetSaveAllSettings(bool state);	
 };
 
 #endif

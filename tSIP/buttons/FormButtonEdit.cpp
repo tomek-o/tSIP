@@ -96,14 +96,14 @@ void TfrmButtonEdit::ApplyConf(void)
 	chbDown->Checked = cfg->down;
 	chbInactive->Checked = cfg->inactive;
 	chbCustomFrame->Checked = cfg->customFrame;
-	chbCenterTextHorizontally->Checked = cfg->centerTextHorizontally;
+	chbLabelCenterHorizontally->Checked = cfg->labelCenterHorizontally;
 	chbLabelCenterVertically->Checked = cfg->labelCenterVertically;
 	edLabelTop->Enabled = !chbLabelCenterVertically->Checked;
 	edLabelTop->Text = cfg->labelTop;
 
 	edLabel2Left->Text = cfg->label2Left;
 	edLabel2Top->Text = cfg->label2Top;
-	chbLabel2CenterHorizontally->Checked = cfg->centerLabel2Horizontally;
+	chbLabel2CenterHorizontally->Checked = cfg->label2CenterHorizontally;
 	edLabel2Left->Enabled = !chbLabel2CenterHorizontally->Checked;
 
 	chbSpaceLabelsYEqually->Checked = cfg->spaceLabelsYEqually;
@@ -189,13 +189,13 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->down = chbDown->Checked;
 	cfg->inactive = chbInactive->Checked;
 	cfg->customFrame = chbCustomFrame->Checked;
-	cfg->centerTextHorizontally = chbCenterTextHorizontally->Checked;
+	cfg->labelCenterHorizontally = chbLabelCenterHorizontally->Checked;
 	cfg->labelCenterVertically = chbLabelCenterVertically->Checked;
 	cfg->labelTop = StrToIntDef(edLabelTop->Text, 0);
 
 	cfg->label2Left = StrToIntDef(edLabel2Left->Text, 0);
 	cfg->label2Top = StrToIntDef(edLabel2Top->Text, 0);
-	cfg->centerLabel2Horizontally = chbLabel2CenterHorizontally->Checked;	
+	cfg->label2CenterHorizontally = chbLabel2CenterHorizontally->Checked;	
 
 	cfg->spaceLabelsYEqually = chbSpaceLabelsYEqually->Checked;
 
