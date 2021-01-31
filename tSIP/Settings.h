@@ -70,14 +70,6 @@ public:
 		bool bAlwaysOnTop;
 		bool bStartMinimizedToTray;
 		bool bSpeedDialVisible;
-		int iSpeedDialSize;				///< number of console columns minus 1 (0 = 1 column)
-		enum {
-			MIN_SPEED_DIAL_COL_WIDTH = 40
-		};
-		enum {
-        	MAX_SPEED_DIAL_COL_WIDTH = 400
-		};
-		std::vector<int> speedDialWidth;///< width of each console column
 		bool bSpeedDialOnly;
 		bool bSpeedDialPopupMenu;       ///< enable/disable popup menu (editing) for speed dial / BLF panels
 		bool bSpeedDialIgnorePresenceNote;	///< do not show "note" for presence
@@ -112,6 +104,8 @@ public:
 		bool bShowSettingsIfAccountSettingIsHidden;
 		bool bNoTaskbarButtonRestore;		///< do not restore/show taskbar button when toggling visibility (apparently restoring button may show wrong taskbar when using Windows RDP)
         bool bNoTrayIcon;					///< do not create tray icon
+
+		std::vector<int> pre0p2speedDialWidth;	///< width of each console column from version < 0.2
 
 		struct _bitmaps
 		{

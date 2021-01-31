@@ -7,6 +7,8 @@
 
 #include "ProgrammableButtons.h"
 #include "SettingsAppVersion.h"
+#include "Settings.h"	// just for transition from column-based version < 0.2
+#include "Sizes.h"
 #include "common/TimeCounter.h" 
 #include <assert.h>
 #include <algorithm>
@@ -39,15 +41,12 @@ void ProgrammableButtons::SetDefaultsForBtnId(int id, ButtonConf& cfg)
 	else
 	{
 		int offset = id - BASIC_PANEL_CONSOLE_BTNS;
-		enum { OFFSET_TOP = 4 };
-		enum { FIRST_COLUMN_LEFT = 276 };
-		enum { COLUMN_WIDTH = 104 };
-		enum { COLUMN_SEPARATION = 4 };
-		cfg.width = COLUMN_WIDTH;
+
+		cfg.width = Sizes::COLUMN_WIDTH;
 		int columnId = offset / BASIC_PANEL_CONSOLE_BTNS;
-		cfg.left = FIRST_COLUMN_LEFT + columnId * (COLUMN_WIDTH + COLUMN_SEPARATION);
+		cfg.left = Sizes::FIRST_COLUMN_LEFT + columnId * (Sizes::COLUMN_WIDTH + Sizes::COLUMN_SEPARATION);
 		int offsetTop = (offset % BASIC_PANEL_CONSOLE_BTNS);
-		cfg.top = OFFSET_TOP + (offsetTop * HEIGHT);
+		cfg.top = Sizes::BUTTON_OFFSET_TOP + (offsetTop * HEIGHT);
 		if (offsetTop > 10)
 		{
 			// some empty space before buttons that should not be visible to make aligning easier
@@ -57,7 +56,8 @@ void ProgrammableButtons::SetDefaultsForBtnId(int id, ButtonConf& cfg)
 }
 
 ProgrammableButtons::ProgrammableButtons(void):
-	saveAllSettings(true)
+	saveAllSettings(true),
+	updated(false)
 {
 	btnConf.resize(BASIC_PANEL_CONSOLE_BTNS + (EXT_CONSOLE_COLUMNS * CONSOLE_BTNS_PER_CONTAINER));
 
@@ -261,6 +261,41 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 			}
 		}
 	}
+
+	{
+		// dealing with transition to version 0.2.00.00 - new console configuration
+		// trying to keep previous column width and number
+		SettingsAppVersion ver0p2;
+		ver0p2.FileVersionMS = 2;
+		ver0p2.FileVersionLS = 0;
+
+		if (appVersion < ver0p2 && appSettings.frmMain.pre0p2speedDialWidth.size() > 0)
+		{
+			int left = Sizes::FIRST_COLUMN_LEFT;
+			int btnId = BASIC_PANEL_CONSOLE_BTNS;
+			for (int widthId = 0; widthId < appSettings.frmMain.pre0p2speedDialWidth.size(); widthId++)
+			{
+				int width = appSettings.frmMain.pre0p2speedDialWidth[widthId];
+				for (int i=0; i<BASIC_PANEL_CONSOLE_BTNS; i++)
+				{
+					btnConf[btnId].left = left;
+					btnConf[btnId].width = width;
+					btnId++;
+				}
+				left += width + Sizes::COLUMN_SEPARATION;
+			}
+			if (btnId < btnConf.size() - 1)
+			{
+				int offset = btnConf[btnId].left - left;
+				for (btnId; btnId < btnConf.size(); btnId++)
+				{
+                	btnConf[btnId].left -= offset;
+				}
+			}
+			updated = true;
+		}
+	}
+
 	return 0;
 }
 
@@ -274,6 +309,15 @@ int ProgrammableButtons::ReadFromString(AnsiString json)
 	{
 		return 2;
 	}
+
+	// assume this is newest configuration version if version is not present in text
+	if (root["info"].type() == Json::nullValue)
+	{
+		SettingsAppVersion appVersion;
+		appVersion.FromAppExe();
+		appVersion.ToJson(root["info"]);
+	}
+	
 	return LoadFromJsonValue(root);
 }
 
@@ -313,6 +357,11 @@ int ProgrammableButtons::Read(void)
 			char s[100];
 			snprintf(s, sizeof(s), "%s  %.3f ms\n", tc.getName(), tc.getTimeMs());
 			OutputDebugString(s);
+		}
+		if (updated)
+		{
+			Write();
+			updated = false;
 		}
 		return 0;
 	}

@@ -7,6 +7,7 @@
 #include "common\KeybKeys.h"
 #include "ProgrammableButtons.h"
 #include "AudioModules.h"
+#include "Sizes.h"
 #include "Branding.h"
 #include <algorithm>
 #include <fstream>
@@ -39,7 +40,6 @@ Settings::_frmMain::_frmMain(void):
 	bAlwaysOnTop(false),
 	bStartMinimizedToTray(false),	
     bSpeedDialVisible(false),
-	iSpeedDialSize(1),	// default: 2 columns
 	bSpeedDialOnly(false),
 	bSpeedDialPopupMenu(true),
 	bSpeedDialIgnorePresenceNote(false),
@@ -72,11 +72,6 @@ Settings::_frmMain::_frmMain(void):
 	layout(0),
 	dialComboboxOrder(DialComboboxOrderByNumber)
 {
-	speedDialWidth.clear();
-	for (unsigned int i=0; i<1+ProgrammableButtons::EXT_CONSOLE_COLUMNS; i++)
-	{
-		speedDialWidth.push_back(300);
-	}
 }
 
 Settings::_frmSpeedDial::_frmSpeedDial(void):
@@ -188,6 +183,14 @@ int Settings::UpdateFromText(AnsiString text)
 	catch(...)
 	{
 		return 1;
+	}
+
+	// assume this is newest configuration version if version is not present in text
+	if (root["info"].type() == Json::nullValue)
+	{
+		SettingsAppVersion appVersion;
+		appVersion.FromAppExe();
+		appVersion.ToJson(root["info"]);
 	}
 
 	return UpdateFromJsonValue(root);
@@ -609,38 +612,62 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();
 		frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing = frmMainJson.get("SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing", frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing).asBool();
 		frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated = frmMainJson.get("SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated", frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated).asBool();
-		int iSpeedDialSize = frmMainJson.get("SpeedDialSize", frmMain.iSpeedDialSize).asInt();
-		if (iSpeedDialSize >= 0 && iSpeedDialSize < ProgrammableButtons::EXT_CONSOLE_COLUMNS)
-		{
-			frmMain.iSpeedDialSize = iSpeedDialSize;
-		}
 
 		{
-			// speed dial column width(s) - changed from single int to array in 0.1.66.2
-			const Json::Value &jvs = frmMainJson["SpeedDialWidth"];
-			if (jvs.type() == Json::intValue || jvs.type() == Json::uintValue)
+			// dealing with transition to version 0.2.00.00 - new console configuration
+			SettingsAppVersion ver0p2;
+			ver0p2.FileVersionMS = 2;
+			ver0p2.FileVersionLS = 0;
+
+			if (info.appVersion < ver0p2)
 			{
-				int iSpeedDialWidth = jvs.asUInt();
-				if (iSpeedDialWidth >= _frmMain::MIN_SPEED_DIAL_COL_WIDTH && iSpeedDialWidth <= _frmMain::MAX_SPEED_DIAL_COL_WIDTH)
+				// speed dial column width(s)
+				// translating column count + column widths into application width in expanded state
+				// - changed from single int to array in 0.1.66.2
+				// - removed in 0.2.00.0
+				int iSpeedDialSize = frmMainJson.get("SpeedDialSize", 2).asInt();
+				if (iSpeedDialSize >= 0 && iSpeedDialSize <= 11)
 				{
-					for (unsigned int i=0; i<frmMain.speedDialWidth.size(); i++)
+                    iSpeedDialSize += 1;
+					enum {
+						MIN_SPEED_DIAL_COL_WIDTH = 40
+					};
+					enum {
+						MAX_SPEED_DIAL_COL_WIDTH = 400
+					};
+
+					const Json::Value &jvs = frmMainJson["SpeedDialWidth"];
+					if (jvs.type() == Json::intValue || jvs.type() == Json::uintValue)
 					{
-						frmMain.speedDialWidth[i] = iSpeedDialWidth;
+						int iSpeedDialWidth = jvs.asUInt();
+						if (iSpeedDialSize == 1 && iSpeedDialWidth >= MIN_SPEED_DIAL_COL_WIDTH && iSpeedDialWidth <= MAX_SPEED_DIAL_COL_WIDTH)
+						{
+							frmMain.expandedWidth = Sizes::FIRST_COLUMN_LEFT + iSpeedDialWidth + 2;
+							frmMain.pre0p2speedDialWidth.resize(iSpeedDialSize);
+							frmMain.pre0p2speedDialWidth[0] = iSpeedDialWidth;
+						}
 					}
-				}
-			}
-			else if (jvs.type() == Json::arrayValue)
-			{
-				for (unsigned int i=0; i<jvs.size(); i++)
-				{
-					if (i >= frmMain.speedDialWidth.size())
+					else if (jvs.type() == Json::arrayValue)
 					{
-						break;
-					}
-					int iSpeedDialWidth = jvs[i].asInt();
-					if (iSpeedDialWidth >= _frmMain::MIN_SPEED_DIAL_COL_WIDTH && iSpeedDialWidth <= _frmMain::MAX_SPEED_DIAL_COL_WIDTH)
-					{
-                    	frmMain.speedDialWidth[i] = iSpeedDialWidth;
+						if (jvs.size() >= iSpeedDialSize)
+						{
+							frmMain.pre0p2speedDialWidth.resize(iSpeedDialSize);
+                            frmMain.expandedWidth = Sizes::FIRST_COLUMN_LEFT;
+							for (unsigned int i=0; i<iSpeedDialSize; i++)
+							{
+								int iSpeedDialWidth = jvs[i].asInt();
+								if (iSpeedDialWidth >= MIN_SPEED_DIAL_COL_WIDTH && iSpeedDialWidth <= MAX_SPEED_DIAL_COL_WIDTH)
+								{
+									frmMain.pre0p2speedDialWidth[i] = iSpeedDialWidth;
+								}
+								else
+								{
+									frmMain.pre0p2speedDialWidth[i] = Sizes::COLUMN_WIDTH;
+								}
+								frmMain.expandedWidth += frmMain.pre0p2speedDialWidth[i] + Sizes::COLUMN_SEPARATION;
+							}
+							frmMain.expandedWidth += Sizes::COLUMN_SEPARATION;
+						}
 					}
 				}
 			}
@@ -957,14 +984,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialIgnoreDialogInfoRemoteIdentity"] = frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
 		jv["SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing"] = frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 		jv["SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated"] = frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
-		jv["SpeedDialSize"] = frmMain.iSpeedDialSize;
 		jv["ButtonContainerBackgroundImage"] = frmMain.buttonContainerBackgroundImage.c_str();
-		Json::Value& jvs = jv["SpeedDialWidth"];
-		jvs.resize(frmMain.speedDialWidth.size());
-		for (unsigned int i=0; i<frmMain.speedDialWidth.size(); i++)
-		{
-			jvs[i] = frmMain.speedDialWidth[i];
-		}
 		jv["StartMinimizedToTray"] = frmMain.bStartMinimizedToTray;
 		jv["XBtnMinimize"] = frmMain.bXBtnMinimize;
 		jv["RestoreOnIncomingCall"] = frmMain.bRestoreOnIncomingCall;

@@ -19,6 +19,7 @@ class ProgrammableButtons
 private:
 	AnsiString filename;
 	bool saveAllSettings;
+	bool updated;
 	int ReadFile(AnsiString name);
 	int LoadFromJsonValue(const Json::Value &root);
 public:

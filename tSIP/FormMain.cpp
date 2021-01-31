@@ -259,7 +259,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		TfrmButtonContainer *& container = frmButtonContainers[i];
 		container = new TfrmButtonContainer(this,
 			buttons,
-			appSettings.frmMain.speedDialWidth[i-1], 0, appSettings.gui.scalingPct,
+			300, 0, appSettings.gui.scalingPct,
 			ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS + (i-1) * ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER, ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER,
 			&OnProgrammableBtnClick,
 			&OnUpdateAllBtnContainers,
@@ -562,9 +562,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	}
 	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
 	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
-	if ((appSettings.frmMain.iSpeedDialSize != prev.frmMain.iSpeedDialSize && (appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly)) ||
-		prev.frmMain.bSpeedDialOnly != appSettings.frmMain.bSpeedDialOnly
-		)
+	if (prev.frmMain.bSpeedDialOnly != appSettings.frmMain.bSpeedDialOnly)
 	{
 		// apply speed dial changes
 		SetSpeedDial(appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly);		
