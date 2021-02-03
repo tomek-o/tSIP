@@ -441,7 +441,7 @@ object frmSettings: TfrmSettings
       ImageIndex = 12
       object lblSpeedDialBlfSettings: TLabel
         Left = 3
-        Top = 132
+        Top = 180
         Width = 122
         Height = 13
         Caption = 'BLF / dialog-info settings:'
@@ -454,14 +454,14 @@ object frmSettings: TfrmSettings
         Caption = 'Main window size in collapsed (no console) state'
       end
       object lblCollapsedWidth: TLabel
-        Left = 263
+        Left = 336
         Top = 26
         Width = 26
         Height = 13
         Caption = 'width'
       end
       object lblCollapsedHeight: TLabel
-        Left = 336
+        Left = 416
         Top = 26
         Width = 30
         Height = 13
@@ -475,30 +475,74 @@ object frmSettings: TfrmSettings
         Caption = 'Main window size in expanded state'
       end
       object lblExpandedWidth: TLabel
-        Left = 263
+        Left = 336
         Top = 47
         Width = 26
         Height = 13
         Caption = 'width'
       end
       object lblExpandedHeight: TLabel
-        Left = 336
+        Left = 416
         Top = 47
         Width = 30
         Height = 13
         Caption = 'height'
       end
+      object Label8: TLabel
+        Left = 3
+        Top = 68
+        Width = 310
+        Height = 13
+        Caption = 
+          'Main panel (dialpad, contacts, history) position in collapsed st' +
+          'ate'
+      end
+      object Label10: TLabel
+        Left = 3
+        Top = 89
+        Width = 181
+        Height = 13
+        Caption = 'Main panel position in expanded state'
+      end
+      object lblMainPanelCollapsedLeft: TLabel
+        Left = 336
+        Top = 68
+        Width = 16
+        Height = 13
+        Caption = 'left'
+      end
+      object lblMainPanelExpandedLeft: TLabel
+        Left = 336
+        Top = 89
+        Width = 16
+        Height = 13
+        Caption = 'left'
+      end
+      object lblMainPanelCollapsedTop: TLabel
+        Left = 416
+        Top = 68
+        Width = 16
+        Height = 13
+        Caption = 'top'
+      end
+      object lblMainPanelExpandedTop: TLabel
+        Left = 416
+        Top = 89
+        Width = 16
+        Height = 13
+        Caption = 'top'
+      end
       object chbShowSpeedDialOnly: TCheckBox
         Left = 3
         Top = 3
-        Width = 325
+        Width = 486
         Height = 17
-        Caption = 'Show only speed dial (console-only mode)'
+        Caption = 'Show only speed dial (console-only mode, main panel not visible)'
         TabOrder = 0
       end
       object chbSpeedDialPopupMenu: TCheckBox
         Left = 3
-        Top = 74
+        Top = 122
         Width = 325
         Height = 17
         Caption = 'Enable popup menu (editing) for programmable keys'
@@ -506,7 +550,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialIgnorePresenceNote: TCheckBox
         Left = 3
-        Top = 97
+        Top = 145
         Width = 398
         Height = 17
         Caption = 
@@ -516,7 +560,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialIgnoreDialogInfoRemoteIdentity: TCheckBox
         Left = 19
-        Top = 154
+        Top = 202
         Width = 486
         Height = 17
         Caption = 
@@ -526,7 +570,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing: TCheckBox
         Left = 19
-        Top = 177
+        Top = 225
         Width = 478
         Height = 17
         Caption = 
@@ -536,7 +580,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated: TCheckBox
         Left = 19
-        Top = 200
+        Top = 248
         Width = 478
         Height = 17
         Caption = 
@@ -546,7 +590,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialUseGrid: TCheckBox
         Left = 3
-        Top = 223
+        Top = 271
         Width = 401
         Height = 17
         Caption = 
@@ -556,34 +600,34 @@ object frmSettings: TfrmSettings
       end
       object edSpeedDialGridSize: TEdit
         Left = 400
-        Top = 221
+        Top = 269
         Width = 31
         Height = 21
         TabOrder = 7
       end
       object edCollapsedWidth: TEdit
-        Left = 293
+        Left = 366
         Top = 23
         Width = 35
         Height = 21
         TabOrder = 8
       end
       object edCollapsedHeight: TEdit
-        Left = 372
+        Left = 452
         Top = 23
         Width = 35
         Height = 21
         TabOrder = 9
       end
       object edExpandedWidth: TEdit
-        Left = 293
+        Left = 366
         Top = 44
         Width = 35
         Height = 21
         TabOrder = 10
       end
       object edExpandedHeight: TEdit
-        Left = 372
+        Left = 452
         Top = 44
         Width = 35
         Height = 21
@@ -591,13 +635,41 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialSaveAllSettings: TCheckBox
         Left = 3
-        Top = 246
+        Top = 294
         Width = 526
         Height = 17
         Caption = 
           'Save all button settings, even same as default (larger JSON file' +
           ' but possibly easier to edit or compare)'
         TabOrder = 12
+      end
+      object edMainPanelCollapsedLeft: TEdit
+        Left = 366
+        Top = 65
+        Width = 35
+        Height = 21
+        TabOrder = 13
+      end
+      object edMainPanelExpandedLeft: TEdit
+        Left = 366
+        Top = 86
+        Width = 35
+        Height = 21
+        TabOrder = 14
+      end
+      object edMainPanelCollapsedTop: TEdit
+        Left = 452
+        Top = 65
+        Width = 35
+        Height = 21
+        TabOrder = 15
+      end
+      object edMainPanelExpandedTop: TEdit
+        Left = 452
+        Top = 86
+        Width = 35
+        Height = 21
+        TabOrder = 16
       end
     end
     object tsCalls: TTabSheet

@@ -723,7 +723,7 @@ object frmButtonEdit: TfrmButtonEdit
       object chbSpaceLabelsYEqually: TCheckBox
         Left = 3
         Top = 58
-        Width = 400
+        Width = 632
         Height = 17
         Caption = 
           'space caption lines equally in Y axis (automatically for either ' +

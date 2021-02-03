@@ -36,6 +36,11 @@ namespace
 		dst[dstsize-1] = '\0';
 	}
 
+	void StrToIntDef2(const AnsiString &str, int& value)
+	{
+		value = StrToIntDef(str, value);
+	}
+
 	std::vector<NetInterface> networkInterfaces;
 
 	const char* EMPTY_TRANSLATION_NAME = "- NONE (default, English) -";
@@ -181,6 +186,11 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edCollapsedHeight->Text = tmpSettings.frmMain.collapsedHeight;
 	edExpandedWidth->Text = tmpSettings.frmMain.expandedWidth;
 	edExpandedHeight->Text = tmpSettings.frmMain.expandedHeight;
+
+	edMainPanelCollapsedLeft->Text = tmpSettings.frmMain.collapsedMainPanelLeft;
+	edMainPanelCollapsedTop->Text = tmpSettings.frmMain.collapsedMainPanelTop;
+	edMainPanelExpandedLeft->Text = tmpSettings.frmMain.expandedMainPanelLeft;
+	edMainPanelExpandedTop->Text = tmpSettings.frmMain.expandedMainPanelTop;
 
 	std::vector<AnsiString> translations = EnumerateTranslations();
 	cbTranslation->Clear();
@@ -482,6 +492,13 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		tmp = StrToIntDef(edExpandedHeight->Text, tmpSettings.frmMain.expandedHeight);
 		if (tmp >= Settings::_frmMain::MIN_HEIGHT)
 			tmpSettings.frmMain.expandedHeight = tmp;
+	}
+
+	{
+		StrToIntDef2(edMainPanelCollapsedLeft->Text, tmpSettings.frmMain.collapsedMainPanelLeft);
+		StrToIntDef2(edMainPanelCollapsedTop->Text, tmpSettings.frmMain.collapsedMainPanelTop);
+		StrToIntDef2(edMainPanelExpandedLeft->Text, tmpSettings.frmMain.expandedMainPanelLeft);
+		StrToIntDef2(edMainPanelExpandedTop->Text, tmpSettings.frmMain.expandedMainPanelTop);
 	}
 
 	if (cbTranslation->ItemIndex == 0)

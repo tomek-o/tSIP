@@ -1233,18 +1233,25 @@ void TfrmMain::SetMainWindowLayout(int id)
 void TfrmMain::UpdateSize(void)
 {
 	int iWidth, iHeight;
+	int mainPanelLeft, mainPanelTop;
 	if (appSettings.frmMain.bSpeedDialOnly || appSettings.frmMain.bSpeedDialVisible)
 	{
 		iWidth = appSettings.frmMain.expandedWidth;
 		iHeight = appSettings.frmMain.expandedHeight;
+		mainPanelLeft = appSettings.frmMain.expandedMainPanelLeft;
+		mainPanelTop = appSettings.frmMain.expandedMainPanelTop;
 	}
 	else
 	{
 		iWidth = appSettings.frmMain.collapsedWidth;
 		iHeight = appSettings.frmMain.collapsedHeight;
+		mainPanelLeft = appSettings.frmMain.collapsedMainPanelLeft;
+		mainPanelTop = appSettings.frmMain.collapsedMainPanelTop;
 	}
 	this->Height = floor(iHeight * initialScaling + 0.5);
 	this->Width = floor(iWidth * initialScaling + 0.5);
+	pnlMain->Left = mainPanelLeft;
+	pnlMain->Top = mainPanelTop;
 }
 
 

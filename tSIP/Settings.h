@@ -66,6 +66,11 @@ public:
 		int iPosX, iPosY;				///< main window coordinates
 		int collapsedWidth, collapsedHeight;	///< width, height when console is not visible
 		int expandedWidth, expandedHeight;		///< width, height with console visible
+
+		// main panel position
+		int collapsedMainPanelLeft, collapsedMainPanelTop;
+		int expandedMainPanelLeft, expandedMainPanelTop;
+		
 		bool bWindowMaximized;			///< is main window maximized?
 		bool bAlwaysOnTop;
 		bool bStartMinimizedToTray;

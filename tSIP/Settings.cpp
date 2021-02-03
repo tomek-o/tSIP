@@ -36,6 +36,8 @@ Settings::_frmMain::_frmMain(void):
 	iPosY(30),
 	collapsedWidth(275), collapsedHeight(429),
 	expandedWidth(606), expandedHeight(429),
+	collapsedMainPanelLeft(0), collapsedMainPanelTop(0),
+	expandedMainPanelLeft(0), expandedMainPanelTop(0),
 	bWindowMaximized(false),
 	bAlwaysOnTop(false),
 	bStartMinimizedToTray(false),	
@@ -583,6 +585,12 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		{
 			frmMain.expandedHeight = iHeight;
 		}
+
+		frmMainJson.getInt("MainPanelCollapsedLeft", frmMain.collapsedMainPanelLeft);
+		frmMainJson.getInt("MainPanelCollapsedTop", frmMain.collapsedMainPanelTop);
+		frmMainJson.getInt("MainPanelExpandedLeft", frmMain.expandedMainPanelLeft);
+		frmMainJson.getInt("MainPanelExpandedTop", frmMain.expandedMainPanelTop);
+
 		frmMain.bSpeedDialVisible = frmMainJson.get("SpeedDialVisible", frmMain.bSpeedDialVisible).asBool();
 		if (frmMain.bSpeedDialVisible || frmMain.bSpeedDialOnly)
 		{
@@ -975,6 +983,12 @@ int Settings::Write(AnsiString asFileName)
 		jv["AppExpandedHeight"] = frmMain.expandedHeight;
 		jv["AppPositionX"] = frmMain.iPosX;
 		jv["AppPositionY"] = frmMain.iPosY;
+
+		jv["MainPanelCollapsedLeft"] = frmMain.collapsedMainPanelLeft;
+		jv["MainPanelCollapsedTop"] = frmMain.collapsedMainPanelTop;
+		jv["MainPanelExpandedLeft"] = frmMain.expandedMainPanelLeft;
+		jv["MainPanelExpandedTop"] = frmMain.expandedMainPanelTop;
+
 		jv["Maximized"] = frmMain.bWindowMaximized;
 		jv["AlwaysOnTop"] = frmMain.bAlwaysOnTop;
 		jv["SpeedDialVisible"] = frmMain.bSpeedDialVisible;

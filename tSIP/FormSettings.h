@@ -422,6 +422,16 @@ __published:	// IDE-managed Components
 	TLabel *lblExpandedHeight;
 	TEdit *edExpandedHeight;
 	TCheckBox *chbSpeedDialSaveAllSettings;
+	TLabel *Label8;
+	TLabel *Label10;
+	TLabel *lblMainPanelCollapsedLeft;
+	TLabel *lblMainPanelExpandedLeft;
+	TEdit *edMainPanelCollapsedLeft;
+	TEdit *edMainPanelExpandedLeft;
+	TLabel *lblMainPanelCollapsedTop;
+	TLabel *lblMainPanelExpandedTop;
+	TEdit *edMainPanelCollapsedTop;
+	TEdit *edMainPanelExpandedTop;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
