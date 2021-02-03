@@ -55,6 +55,7 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	tabs.push_back(tsGeneral);
 	tabs.push_back(tsNetwork);
 	tabs.push_back(tsAccount);
+	tabs.push_back(tsMainWindow);
 	tabs.push_back(tsSpeedDial);
 	tabs.push_back(tsCalls);
 	tabs.push_back(tsMessages);

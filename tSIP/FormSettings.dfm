@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 413
-    ActivePage = tsSpeedDial
+    ActivePage = tsMainWindow
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -86,20 +86,6 @@ object frmSettings: TfrmSettings
         Width = 101
         Height = 13
         Caption = '(may require restart)'
-      end
-      object lblFrmMainLayout: TLabel
-        Left = 3
-        Top = 326
-        Width = 84
-        Height = 13
-        Caption = 'Main panel layout'
-      end
-      object lblDialComboboxSortOrder: TLabel
-        Left = 3
-        Top = 350
-        Width = 134
-        Height = 13
-        Caption = 'Dialing combobox sort order'
       end
       object chbAlwaysOnTop: TCheckBox
         Left = 3
@@ -213,34 +199,6 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Log keys missing in translation file'
         TabOrder = 12
-      end
-      object cbFrmMainLayout: TComboBox
-        Left = 178
-        Top = 323
-        Width = 233
-        Height = 21
-        Style = csDropDownList
-        ItemHeight = 13
-        ItemIndex = 0
-        TabOrder = 13
-        Text = 'default'
-        Items.Strings = (
-          'default'
-          'call controls inside Dialpad tab')
-      end
-      object cbDialComboboxOrder: TComboBox
-        Left = 178
-        Top = 347
-        Width = 145
-        Height = 21
-        Style = csDropDownList
-        ItemHeight = 13
-        ItemIndex = 0
-        TabOrder = 14
-        Text = 'by number'
-        Items.Strings = (
-          'by number'
-          'by date/time')
       end
     end
     object tsNetwork: TTabSheet
@@ -436,61 +394,26 @@ object frmSettings: TfrmSettings
         TabOrder = 1
       end
     end
-    object tsSpeedDial: TTabSheet
-      Caption = 'Speed Dial'
-      ImageIndex = 12
-      object lblSpeedDialBlfSettings: TLabel
-        Left = 3
-        Top = 180
-        Width = 122
-        Height = 13
-        Caption = 'BLF / dialog-info settings:'
-      end
+    object tsMainWindow: TTabSheet
+      Caption = 'Main window'
+      ImageIndex = 23
       object lblMainWindowCollapsedSize: TLabel
         Left = 3
-        Top = 26
+        Top = 82
         Width = 230
         Height = 13
         Caption = 'Main window size in collapsed (no console) state'
       end
-      object lblCollapsedWidth: TLabel
-        Left = 336
-        Top = 26
-        Width = 26
-        Height = 13
-        Caption = 'width'
-      end
-      object lblCollapsedHeight: TLabel
-        Left = 416
-        Top = 26
-        Width = 30
-        Height = 13
-        Caption = 'height'
-      end
       object lblMainWindowExpandedSize: TLabel
         Left = 3
-        Top = 47
+        Top = 103
         Width = 172
         Height = 13
         Caption = 'Main window size in expanded state'
       end
-      object lblExpandedWidth: TLabel
-        Left = 336
-        Top = 47
-        Width = 26
-        Height = 13
-        Caption = 'width'
-      end
-      object lblExpandedHeight: TLabel
-        Left = 416
-        Top = 47
-        Width = 30
-        Height = 13
-        Caption = 'height'
-      end
       object Label8: TLabel
         Left = 3
-        Top = 68
+        Top = 124
         Width = 310
         Height = 13
         Caption = 
@@ -499,177 +422,262 @@ object frmSettings: TfrmSettings
       end
       object Label10: TLabel
         Left = 3
-        Top = 89
+        Top = 145
         Width = 181
         Height = 13
         Caption = 'Main panel position in expanded state'
       end
+      object lblCollapsedWidth: TLabel
+        Left = 336
+        Top = 82
+        Width = 26
+        Height = 13
+        Caption = 'width'
+      end
+      object lblExpandedWidth: TLabel
+        Left = 336
+        Top = 103
+        Width = 26
+        Height = 13
+        Caption = 'width'
+      end
       object lblMainPanelCollapsedLeft: TLabel
         Left = 336
-        Top = 68
+        Top = 124
         Width = 16
         Height = 13
         Caption = 'left'
       end
       object lblMainPanelExpandedLeft: TLabel
         Left = 336
-        Top = 89
+        Top = 145
         Width = 16
         Height = 13
         Caption = 'left'
       end
+      object lblCollapsedHeight: TLabel
+        Left = 416
+        Top = 82
+        Width = 30
+        Height = 13
+        Caption = 'height'
+      end
+      object lblExpandedHeight: TLabel
+        Left = 416
+        Top = 103
+        Width = 30
+        Height = 13
+        Caption = 'height'
+      end
       object lblMainPanelCollapsedTop: TLabel
         Left = 416
-        Top = 68
+        Top = 124
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object lblMainPanelExpandedTop: TLabel
         Left = 416
-        Top = 89
+        Top = 145
         Width = 16
         Height = 13
         Caption = 'top'
       end
-      object chbShowSpeedDialOnly: TCheckBox
+      object lblFrmMainLayout: TLabel
         Left = 3
         Top = 3
+        Width = 33
+        Height = 13
+        Caption = 'Layout'
+      end
+      object lblDialComboboxSortOrder: TLabel
+        Left = 3
+        Top = 27
+        Width = 134
+        Height = 13
+        Caption = 'Dialing combobox sort order'
+      end
+      object chbShowSpeedDialOnly: TCheckBox
+        Left = 3
+        Top = 59
         Width = 486
         Height = 17
         Caption = 'Show only speed dial (console-only mode, main panel not visible)'
         TabOrder = 0
       end
+      object edMainPanelExpandedLeft: TEdit
+        Left = 366
+        Top = 142
+        Width = 35
+        Height = 21
+        TabOrder = 1
+      end
+      object edMainPanelCollapsedLeft: TEdit
+        Left = 366
+        Top = 121
+        Width = 35
+        Height = 21
+        TabOrder = 2
+      end
+      object edExpandedWidth: TEdit
+        Left = 366
+        Top = 100
+        Width = 35
+        Height = 21
+        TabOrder = 3
+      end
+      object edCollapsedWidth: TEdit
+        Left = 366
+        Top = 79
+        Width = 35
+        Height = 21
+        TabOrder = 4
+      end
+      object edMainPanelExpandedTop: TEdit
+        Left = 452
+        Top = 142
+        Width = 35
+        Height = 21
+        TabOrder = 5
+      end
+      object edMainPanelCollapsedTop: TEdit
+        Left = 452
+        Top = 121
+        Width = 35
+        Height = 21
+        TabOrder = 6
+      end
+      object edExpandedHeight: TEdit
+        Left = 452
+        Top = 100
+        Width = 35
+        Height = 21
+        TabOrder = 7
+      end
+      object edCollapsedHeight: TEdit
+        Left = 452
+        Top = 79
+        Width = 35
+        Height = 21
+        TabOrder = 8
+      end
+      object cbFrmMainLayout: TComboBox
+        Left = 152
+        Top = 0
+        Width = 337
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
+        TabOrder = 9
+        Text = 
+          'default, call panel above main panel (Dialpad, Contacts, History' +
+          ')'
+        Items.Strings = (
+          
+            'default, call panel above main panel (Dialpad, Contacts, History' +
+            ')'
+          'call panel inside Dialpad tab')
+      end
+      object cbDialComboboxOrder: TComboBox
+        Left = 152
+        Top = 24
+        Width = 145
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
+        TabOrder = 10
+        Text = 'by number'
+        Items.Strings = (
+          'by number'
+          'by date/time')
+      end
+    end
+    object tsSpeedDial: TTabSheet
+      Caption = 'Speed Dial'
+      ImageIndex = 12
+      object lblSpeedDialBlfSettings: TLabel
+        Left = 2
+        Top = 53
+        Width = 122
+        Height = 13
+        Caption = 'BLF / dialog-info settings:'
+      end
       object chbSpeedDialPopupMenu: TCheckBox
-        Left = 3
-        Top = 122
+        Left = 2
+        Top = 3
         Width = 325
         Height = 17
         Caption = 'Enable popup menu (editing) for programmable keys'
-        TabOrder = 1
+        TabOrder = 0
       end
       object chbSpeedDialIgnorePresenceNote: TCheckBox
-        Left = 3
-        Top = 145
+        Left = 2
+        Top = 26
         Width = 398
         Height = 17
         Caption = 
           'Ignore presence note (do not show second line for presence butto' +
           'n)'
-        TabOrder = 2
+        TabOrder = 1
       end
       object chbSpeedDialIgnoreDialogInfoRemoteIdentity: TCheckBox
-        Left = 19
-        Top = 202
+        Left = 18
+        Top = 75
         Width = 486
         Height = 17
         Caption = 
           'Ignore remote identity info (2nd line with caller/callee and cal' +
           'l direction, if present in notifications)'
-        TabOrder = 3
+        TabOrder = 2
       end
       object chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing: TCheckBox
-        Left = 19
-        Top = 225
+        Left = 18
+        Top = 98
         Width = 478
         Height = 17
         Caption = 
           'Keep previous remote identity info if remote identity is missing' +
           ' in notification'
-        TabOrder = 4
+        TabOrder = 3
       end
       object chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated: TCheckBox
-        Left = 19
-        Top = 248
+        Left = 18
+        Top = 121
         Width = 478
         Height = 17
         Caption = 
           'Ignore or clear remote identity if call state is set to terminat' +
           'ed'
-        TabOrder = 5
+        TabOrder = 4
       end
       object chbSpeedDialUseGrid: TCheckBox
-        Left = 3
-        Top = 271
+        Left = 2
+        Top = 144
         Width = 401
         Height = 17
         Caption = 
           'Snap to grid when moving/resizing buttons (hold Shift to overrid' +
           'e)     grid size:'
-        TabOrder = 6
+        TabOrder = 5
       end
       object edSpeedDialGridSize: TEdit
-        Left = 400
-        Top = 269
+        Left = 399
+        Top = 142
         Width = 31
         Height = 21
-        TabOrder = 7
-      end
-      object edCollapsedWidth: TEdit
-        Left = 366
-        Top = 23
-        Width = 35
-        Height = 21
-        TabOrder = 8
-      end
-      object edCollapsedHeight: TEdit
-        Left = 452
-        Top = 23
-        Width = 35
-        Height = 21
-        TabOrder = 9
-      end
-      object edExpandedWidth: TEdit
-        Left = 366
-        Top = 44
-        Width = 35
-        Height = 21
-        TabOrder = 10
-      end
-      object edExpandedHeight: TEdit
-        Left = 452
-        Top = 44
-        Width = 35
-        Height = 21
-        TabOrder = 11
+        TabOrder = 6
       end
       object chbSpeedDialSaveAllSettings: TCheckBox
-        Left = 3
-        Top = 294
+        Left = 2
+        Top = 167
         Width = 526
         Height = 17
         Caption = 
           'Save all button settings, even same as default (larger JSON file' +
           ' but possibly easier to edit or compare)'
-        TabOrder = 12
-      end
-      object edMainPanelCollapsedLeft: TEdit
-        Left = 366
-        Top = 65
-        Width = 35
-        Height = 21
-        TabOrder = 13
-      end
-      object edMainPanelExpandedLeft: TEdit
-        Left = 366
-        Top = 86
-        Width = 35
-        Height = 21
-        TabOrder = 14
-      end
-      object edMainPanelCollapsedTop: TEdit
-        Left = 452
-        Top = 65
-        Width = 35
-        Height = 21
-        TabOrder = 15
-      end
-      object edMainPanelExpandedTop: TEdit
-        Left = 452
-        Top = 86
-        Width = 35
-        Height = 21
-        TabOrder = 16
+        TabOrder = 7
       end
     end
     object tsCalls: TTabSheet
@@ -3563,40 +3571,42 @@ object frmSettings: TfrmSettings
     TabOrder = 0
     OnChange = tvSelectorChange
     Items.NodeData = {
-      0116000000270000000000000000000000FFFFFFFFFFFFFFFF00000000000000
+      0117000000270000000000000000000000FFFFFFFFFFFFFFFF00000000000000
       0007470065006E006500720061006C00270000000000000000000000FFFFFFFF
       FFFFFFFF0000000000000000074E006500740077006F0072006B002F00000000
       00000000000000FFFFFFFFFFFFFFFF00000000000000000B5300490050002000
-      6100630063006F0075006E0074002D0000000000000000000000FFFFFFFFFFFF
-      FFFF00000000000000000A5300700065006500640020004400690061006C0023
-      0000000000000000000000FFFFFFFFFFFFFFFF00000000000000000543006100
-      6C006C007300290000000000000000000000FFFFFFFFFFFFFFFF000000000000
-      0000084D006500730073006100670065007300270000000000000000000000FF
-      FFFFFFFFFFFFFF00000000000000000744006900730070006C00610079002700
-      00000000000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F0063
-      006B0069006E0067003B0000000000000000000000FFFFFFFFFFFFFFFF000000
-      0000000000114200720061006E00640069006E0067002C002000620069007400
-      6D00610070007300210000000000000000000000FFFFFFFFFFFFFFFF00000000
-      0000000004520069006E0067002B0000000000000000000000FFFFFFFFFFFFFF
-      FF00000000000000000941007500640069006F00200049002F004F0039000000
-      0000000000000000FFFFFFFFFFFFFFFF00000000000000001041007500640069
-      006F002000500072006F00630065007300730069006E0067002B000000000000
-      0000000000FFFFFFFFFFFFFFFF0000000000000000095200650063006F007200
-      640069006E006700250000000000000000000000FFFFFFFFFFFFFFFF00000000
-      010000000643006F006400650063007300210000000000000000000000FFFFFF
-      FFFFFFFFFF0000000000000000044F007000750073002F000000000000000000
-      0000FFFFFFFFFFFFFFFF00000000000000000B49006E00740065006700720061
-      00740069006F006E00270000000000000000000000FFFFFFFFFFFFFFFF000000
-      00000000000748006F0074006B00650079007300290000000000000000000000
-      FFFFFFFFFFFFFFFF00000000000000000843006F006E00740061006300740073
-      00270000000000000000000000FFFFFFFFFFFFFFFF0000000000000000074800
-      6900730074006F0072007900390000000000000000000000FFFFFFFFFFFFFFFF
-      000000000000000010500068006F006E00650073002000280070006C00750067
-      0069006E0073002900330000000000000000000000FFFFFFFFFFFFFFFF000000
-      00000000000D540072006100790020004E006F00740069006600690065007200
-      270000000000000000000000FFFFFFFFFFFFFFFF000000000000000007530063
-      0072006900700074007300270000000000000000000000FFFFFFFFFFFFFFFF00
-      00000000000000074C006F006700670069006E006700}
+      6100630063006F0075006E0074002F0000000000000000000000FFFFFFFFFFFF
+      FFFF00000000000000000B4D00610069006E002000770069006E0064006F0077
+      002D0000000000000000000000FFFFFFFFFFFFFFFF00000000000000000A5300
+      700065006500640020004400690061006C00230000000000000000000000FFFF
+      FFFFFFFFFFFF000000000000000005430061006C006C00730029000000000000
+      0000000000FFFFFFFFFFFFFFFF0000000000000000084D006500730073006100
+      670065007300270000000000000000000000FFFFFFFFFFFFFFFF000000000000
+      00000744006900730070006C0061007900270000000000000000000000FFFFFF
+      FFFFFFFFFF0000000000000000074C006F0063006B0069006E0067003B000000
+      0000000000000000FFFFFFFFFFFFFFFF0000000000000000114200720061006E
+      00640069006E0067002C0020006200690074006D006100700073002100000000
+      00000000000000FFFFFFFFFFFFFFFF000000000000000004520069006E006700
+      2B0000000000000000000000FFFFFFFFFFFFFFFF000000000000000009410075
+      00640069006F00200049002F004F00390000000000000000000000FFFFFFFFFF
+      FFFFFF00000000000000001041007500640069006F002000500072006F006300
+      65007300730069006E0067002B0000000000000000000000FFFFFFFFFFFFFFFF
+      0000000000000000095200650063006F007200640069006E0067002500000000
+      00000000000000FFFFFFFFFFFFFFFF00000000010000000643006F0064006500
+      63007300210000000000000000000000FFFFFFFFFFFFFFFF0000000000000000
+      044F007000750073002F0000000000000000000000FFFFFFFFFFFFFFFF000000
+      00000000000B49006E0074006500670072006100740069006F006E0027000000
+      0000000000000000FFFFFFFFFFFFFFFF00000000000000000748006F0074006B
+      00650079007300290000000000000000000000FFFFFFFFFFFFFFFF0000000000
+      0000000843006F006E0074006100630074007300270000000000000000000000
+      FFFFFFFFFFFFFFFF00000000000000000748006900730074006F007200790039
+      0000000000000000000000FFFFFFFFFFFFFFFF00000000000000001050006800
+      6F006E00650073002000280070006C007500670069006E007300290033000000
+      0000000000000000FFFFFFFFFFFFFFFF00000000000000000D54007200610079
+      0020004E006F00740069006600690065007200270000000000000000000000FF
+      FFFFFFFFFFFFFF00000000000000000753006300720069007000740073002700
+      00000000000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F0067
+      00670069006E006700}
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'
