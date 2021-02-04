@@ -188,6 +188,11 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edExpandedWidth->Text = tmpSettings.frmMain.expandedWidth;
 	edExpandedHeight->Text = tmpSettings.frmMain.expandedHeight;
 
+	edCallPanelCollapsedLeft->Text = tmpSettings.frmMain.collapsedCallPanelLeft;
+	edCallPanelCollapsedTop->Text = tmpSettings.frmMain.collapsedCallPanelTop;
+	edCallPanelExpandedLeft->Text = tmpSettings.frmMain.expandedCallPanelLeft;
+	edCallPanelExpandedTop->Text = tmpSettings.frmMain.expandedCallPanelTop;
+
 	edMainPanelCollapsedLeft->Text = tmpSettings.frmMain.collapsedMainPanelLeft;
 	edMainPanelCollapsedTop->Text = tmpSettings.frmMain.collapsedMainPanelTop;
 	edMainPanelExpandedLeft->Text = tmpSettings.frmMain.expandedMainPanelLeft;
@@ -224,7 +229,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbFrmMainUseCustomCaption->Checked = tmpSettings.frmMain.bUseCustomCaption;
 	edFrmMainCustomCaption->Text = tmpSettings.frmMain.customCaption;
 
-	chbShowSpeedDialOnly->Checked = tmpSettings.frmMain.bSpeedDialOnly;
+	chbFrmMainHideCallPanel->Checked = tmpSettings.frmMain.bHideCallPanel;
+	chbFrmMainHideMainPanel->Checked = tmpSettings.frmMain.bHideMainPanel;
+
 	chbSpeedDialPopupMenu->Checked = tmpSettings.frmMain.bSpeedDialPopupMenu;
 	chbSpeedDialIgnorePresenceNote->Checked = tmpSettings.frmMain.bSpeedDialIgnorePresenceNote;
 	chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked = tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
@@ -423,6 +430,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edScriptOnDialogInfoFile->Text = tmpSettings.Scripts.onDialogInfo;
 	edScriptOnDialFile->Text = tmpSettings.Scripts.onDial;
 	edScriptOnProgrammableButtonFile->Text = tmpSettings.Scripts.onProgrammableButton;
+	edScriptOnProgrammableButtonMouseUpDownFile->Text = tmpSettings.Scripts.onProgrammableButtonMouseUpDown;
 	edScriptOnAudioErrorFile->Text = tmpSettings.Scripts.onAudioDeviceError;
 	edScriptOnCustomRequestReplyFile->Text = tmpSettings.Scripts.onCustomRequestReply;
 	edScriptOnContactNoteOpenFile->Text = tmpSettings.Scripts.onContactNoteOpen;
@@ -496,6 +504,11 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	}
 
 	{
+		StrToIntDef2(edCallPanelCollapsedLeft->Text, tmpSettings.frmMain.collapsedCallPanelLeft);
+		StrToIntDef2(edCallPanelCollapsedTop->Text, tmpSettings.frmMain.collapsedCallPanelTop);
+		StrToIntDef2(edCallPanelExpandedLeft->Text, tmpSettings.frmMain.expandedCallPanelLeft);
+		StrToIntDef2(edCallPanelExpandedTop->Text, tmpSettings.frmMain.expandedCallPanelTop);
+
 		StrToIntDef2(edMainPanelCollapsedLeft->Text, tmpSettings.frmMain.collapsedMainPanelLeft);
 		StrToIntDef2(edMainPanelCollapsedTop->Text, tmpSettings.frmMain.collapsedMainPanelTop);
 		StrToIntDef2(edMainPanelExpandedLeft->Text, tmpSettings.frmMain.expandedMainPanelLeft);
@@ -533,7 +546,9 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bUseCustomCaption = chbFrmMainUseCustomCaption->Checked;
 	tmpSettings.frmMain.customCaption = edFrmMainCustomCaption->Text;
 
-	tmpSettings.frmMain.bSpeedDialOnly = chbShowSpeedDialOnly->Checked;
+	tmpSettings.frmMain.bHideCallPanel = chbFrmMainHideCallPanel->Checked;
+	tmpSettings.frmMain.bHideMainPanel = chbFrmMainHideMainPanel->Checked;
+
 	tmpSettings.frmMain.bSpeedDialPopupMenu = chbSpeedDialPopupMenu->Checked;
 	tmpSettings.frmMain.bSpeedDialIgnorePresenceNote = chbSpeedDialIgnorePresenceNote->Checked;
 	tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked;
@@ -793,6 +808,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onDialogInfo = edScriptOnDialogInfoFile->Text;
 	tmpSettings.Scripts.onDial = edScriptOnDialFile->Text;
 	tmpSettings.Scripts.onProgrammableButton = edScriptOnProgrammableButtonFile->Text;
+	tmpSettings.Scripts.onProgrammableButtonMouseUpDown = edScriptOnProgrammableButtonMouseUpDownFile->Text;
 	tmpSettings.Scripts.onAudioDeviceError = edScriptOnAudioErrorFile->Text;
 	tmpSettings.Scripts.onCustomRequestReply = edScriptOnCustomRequestReplyFile->Text;
 	tmpSettings.Scripts.onContactNoteOpen = edScriptOnContactNoteOpenFile->Text;
@@ -1355,6 +1371,10 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 	{
     	edit = edScriptOnProgrammableButtonFile;
 	}
+	else if (Sender == btnSelectedScriptOnProgrammableButtonMouseUpDownChange)
+	{
+		edit = edScriptOnProgrammableButtonMouseUpDownFile;
+	}
 	else if (Sender == btnSelectedScriptOnAudioErrorChange)
 	{
     	edit = edScriptOnAudioErrorFile;
@@ -1453,6 +1473,11 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	{
 		edit = edScriptOnProgrammableButtonFile;
 		eventName = "on_programmable_button";
+	}
+	else if (Sender == btnSelectedScriptOnProgrammableButtonMouseUpDownEdit)
+	{
+		edit = edScriptOnProgrammableButtonMouseUpDownFile;
+		eventName = "on_programmable_button_mouse_up_down";
 	}
 	else if (Sender == btnSelectedScriptOnAudioErrorEdit)
 	{

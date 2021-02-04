@@ -365,18 +365,10 @@ object frmMain: TfrmMain
       object tsContacts: TTabSheet
         Caption = 'Contacts'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object tsHistory: TTabSheet
         Caption = 'History'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
@@ -597,7 +589,7 @@ object frmMain: TfrmMain
   object ActionList: TActionList
     Images = imglistActions
     Left = 384
-    Top = 347
+    Top = 307
     object actShowAbout: TAction
       Caption = 'About'
       OnExecute = actShowAboutExecute
@@ -627,7 +619,7 @@ object frmMain: TfrmMain
   end
   object imglistActions: TImageList
     Left = 447
-    Top = 307
+    Top = 267
     Bitmap = {
       494C010101000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
@@ -904,20 +896,20 @@ object frmMain: TfrmMain
     Enabled = False
     OnTimer = tmrStartupTimer
     Left = 392
-    Top = 307
+    Top = 267
   end
   object tmrCallbackPoll: TTimer
     Interval = 10
     OnTimer = tmrCallbackPollTimer
     Left = 368
-    Top = 307
+    Top = 267
   end
   object tmrBackspace: TTimer
     Enabled = False
     Interval = 166
     OnTimer = tmrBackspaceTimer
     Left = 340
-    Top = 307
+    Top = 267
   end
   object popupTray: TPopupMenu
     Left = 317
@@ -930,11 +922,11 @@ object frmMain: TfrmMain
     Enabled = False
     OnTimer = tmrAutoAnswerTimer
     Left = 313
-    Top = 307
+    Top = 267
   end
   object imgListButtons: TImageList
     Left = 313
-    Top = 347
+    Top = 307
     Bitmap = {
       494C010104000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
@@ -1343,18 +1335,18 @@ object frmMain: TfrmMain
     Enabled = False
     OnTimer = tmrAntirepeatTimer
     Left = 352
-    Top = 347
+    Top = 307
   end
   object openDialog: TOpenDialog
     Filter = 'CSV files (*.csv)|*.csv|All files (*.*)|*.*'
     Options = [ofNoChangeDir, ofEnableSizing]
     Title = 'Open CSV file'
     Left = 416
-    Top = 347
+    Top = 307
   end
   object imgListIcons: TImageList
     Left = 448
-    Top = 347
+    Top = 307
     Bitmap = {
       494C010102000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010

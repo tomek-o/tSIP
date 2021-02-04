@@ -248,6 +248,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		this->pnlButtonsBasic->Width, this->pnlButtonsBasic->Height, appSettings.gui.scalingPct,
 		0, ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS,
 		&OnProgrammableBtnClick,
+		&OnProgrammableBtnMouseUpDown,
 		&OnUpdateAllBtnContainers,
 		&OnSetKeepForeground,
 		appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
@@ -262,6 +263,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 			300, 0, appSettings.gui.scalingPct,
 			ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS + (i-1) * ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER, ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER,
 			&OnProgrammableBtnClick,
+			&OnProgrammableBtnMouseUpDown,
 			&OnUpdateAllBtnContainers,
 			&OnSetKeepForeground,
 			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
@@ -340,7 +342,9 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 		this->Caption = Branding::appName;
 	}
 	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
-	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;	
+	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
+	pnlCallControls->Visible = !appSettings.frmMain.bHideCallPanel;
+	pnlMain->Visible = !appSettings.frmMain.bHideMainPanel;		
 
 #if 0 // this MIGHT work for scaling scrollbar width - not working
 	TNonClientMetrics NCMet;
@@ -384,14 +388,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	UpdateLogConfig();
 
 	//btnAutoAnswer->Down = appSettings.uaConf.autoAnswer;
-	if (appSettings.frmMain.bSpeedDialOnly)
-	{
-		SetSpeedDial(true);
-	}
-	else
-	{
-		SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);
-	}
+	SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);
 	UpdateBitmaps();
 	miSettings->Visible = !appSettings.frmMain.bHideSettings;
 	miView->Visible = !appSettings.frmMain.bHideView;
@@ -562,11 +559,8 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	}
 	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
 	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
-	if (prev.frmMain.bSpeedDialOnly != appSettings.frmMain.bSpeedDialOnly)
-	{
-		// apply speed dial changes
-		SetSpeedDial(appSettings.frmMain.bSpeedDialVisible || appSettings.frmMain.bSpeedDialOnly);		
-	}
+	pnlCallControls->Visible = !appSettings.frmMain.bHideCallPanel;
+	pnlMain->Visible = !appSettings.frmMain.bHideMainPanel;
 	// enable/disable popup menu
 	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
 		TfrmButtonContainer *& container = frmButtonContainers[i];
@@ -744,10 +738,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 
 	RegisterGlobalHotKeys();
 
-	if (appSettings.frmMain.bSpeedDialOnly == false && Visible)
-	{
-		FocusCbCallUri();
-	}
+	FocusCbCallUri();
 
 	AnsiString dir = Paths::GetProfileDir();
 	PhoneInterface::callbackKey = OnPhoneKey;
@@ -1233,11 +1224,14 @@ void TfrmMain::SetMainWindowLayout(int id)
 void TfrmMain::UpdateSize(void)
 {
 	int iWidth, iHeight;
+	int callPanelLeft, callPanelTop;
 	int mainPanelLeft, mainPanelTop;
-	if (appSettings.frmMain.bSpeedDialOnly || appSettings.frmMain.bSpeedDialVisible)
+	if (appSettings.frmMain.bSpeedDialVisible)
 	{
 		iWidth = appSettings.frmMain.expandedWidth;
 		iHeight = appSettings.frmMain.expandedHeight;
+		callPanelLeft = appSettings.frmMain.expandedCallPanelLeft;
+		callPanelTop = appSettings.frmMain.expandedCallPanelTop;
 		mainPanelLeft = appSettings.frmMain.expandedMainPanelLeft;
 		mainPanelTop = appSettings.frmMain.expandedMainPanelTop;
 	}
@@ -1245,11 +1239,15 @@ void TfrmMain::UpdateSize(void)
 	{
 		iWidth = appSettings.frmMain.collapsedWidth;
 		iHeight = appSettings.frmMain.collapsedHeight;
+		callPanelLeft = appSettings.frmMain.collapsedCallPanelLeft;
+		callPanelTop = appSettings.frmMain.collapsedCallPanelTop;
 		mainPanelLeft = appSettings.frmMain.collapsedMainPanelLeft;
 		mainPanelTop = appSettings.frmMain.collapsedMainPanelTop;
 	}
 	this->Height = floor(iHeight * initialScaling + 0.5);
 	this->Width = floor(iWidth * initialScaling + 0.5);
+	pnlCallControls->Left = callPanelLeft;
+	pnlCallControls->Top = callPanelTop;
 	pnlMain->Left = mainPanelLeft;
 	pnlMain->Top = mainPanelTop;
 }
@@ -1257,7 +1255,7 @@ void TfrmMain::UpdateSize(void)
 
 void TfrmMain::FocusCbCallUri(void)
 {
-	if (appSettings.frmMain.bSpeedDialOnly)
+	if (appSettings.frmMain.bHideCallPanel || (appSettings.frmMain.layout != 0 && appSettings.frmMain.bHideMainPanel) || !Visible)
 		return;
 	if (appSettings.frmMain.layout != 0 && pcMain->ActivePage != tsDialpad)
 		return;
@@ -2595,6 +2593,20 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	}
 }
 
+void TfrmMain::OnProgrammableBtnMouseUpDown(int id, TProgrammableButton* btn)
+{
+	assert(id >= 0 && id < buttons.btnConf.size());
+
+	if (appSettings.Scripts.onProgrammableButtonMouseUpDown != "")
+	{
+		AnsiString asScriptFile;
+		bool handled = false;
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onProgrammableButtonMouseUpDown.c_str());
+		RunScriptFile(SCRIPT_SRC_BUTTON_MOUSE_UP_DOWN, id, asScriptFile.c_str(), handled);
+	}
+}
+
+
 void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog)
 {
 	if (showLog)
@@ -2699,22 +2711,7 @@ void TfrmMain::UpdateHistoryConfig(void)
 
 void TfrmMain::SetSpeedDial(bool visible)
 {
-	if (visible)
-	{
-		if (appSettings.frmMain.bSpeedDialOnly)
-		{
-			pnlMain->Visible = false;
-		}
-		else
-		{
-			pnlMain->Visible = true;
-		}
-		UpdateBtnConsole();
-	}
-	else
-	{
-		UpdateBtnConsole();
-	}
+	UpdateBtnConsole();
 	UpdateSize();
 }
 
@@ -3159,10 +3156,7 @@ void TfrmMain::ExecAction(const struct Action& action)
 		}
 		break;
 	case Action::TYPE_SHOWHIDE_SIDECAR:
-		if (appSettings.frmMain.bSpeedDialOnly == false)
-		{
-        	ToggleSpeedDial();
-        }	
+		ToggleSpeedDial();
 		break;
 	default:
 		break;

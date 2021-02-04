@@ -33,6 +33,7 @@ __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageLis
 	once(false),
 	configuredLines(1),
 	raised(true),
+	onMouseUpDownCb(NULL),
 	bmpIdle(NULL), bmpTerminated(NULL), bmpEarly(NULL), bmpConfirmed(NULL)
 {
 	assert(imgList);
@@ -145,6 +146,9 @@ void __fastcall TProgrammableButton::MouseLeave(TObject *Sender)
 
 void __fastcall TProgrammableButton::MouseUpHandler(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+	mouseDownState = false;
+	if (onMouseUpDownCb)
+		onMouseUpDownCb(this);
 	if (inactive)
 		return;
 	Raise();
@@ -152,6 +156,9 @@ void __fastcall TProgrammableButton::MouseUpHandler(TObject *Sender, TMouseButto
 
 void __fastcall TProgrammableButton::MouseDownHandler(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+	mouseDownState = true;
+	if (onMouseUpDownCb)
+		onMouseUpDownCb(this);
 	if (inactive)
 		return;
 	Lower();

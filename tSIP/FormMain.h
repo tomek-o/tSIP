@@ -274,6 +274,7 @@ public:		// User declarations
 	void OnHttpQuery(AnsiString uri);
 	AnsiString OnGetContactName(AnsiString uri);	
 	void OnProgrammableBtnClick(int id, TProgrammableButton* btn);
+	void OnProgrammableBtnMouseUpDown(int id, TProgrammableButton* btn);
 	void obsUpdate(Observable* o, Argument * arg);
 	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
 	void SetTrayIconHint(AnsiString text);	

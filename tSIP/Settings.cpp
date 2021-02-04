@@ -36,13 +36,16 @@ Settings::_frmMain::_frmMain(void):
 	iPosY(30),
 	collapsedWidth(275), collapsedHeight(429),
 	expandedWidth(606), expandedHeight(429),
+	collapsedCallPanelLeft(0), collapsedCallPanelTop(0),
+	expandedCallPanelLeft(0), expandedCallPanelTop(0),
 	collapsedMainPanelLeft(0), collapsedMainPanelTop(0),
 	expandedMainPanelLeft(0), expandedMainPanelTop(0),
 	bWindowMaximized(false),
 	bAlwaysOnTop(false),
 	bStartMinimizedToTray(false),	
     bSpeedDialVisible(false),
-	bSpeedDialOnly(false),
+	bHideCallPanel(false),
+	bHideMainPanel(false),
 	bSpeedDialPopupMenu(true),
 	bSpeedDialIgnorePresenceNote(false),
 	bSpeedDialIgnoreDialogInfoRemoteIdentity(false),
@@ -586,13 +589,18 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			frmMain.expandedHeight = iHeight;
 		}
 
+		frmMainJson.getInt("CallPanelCollapsedLeft", frmMain.collapsedCallPanelLeft);
+		frmMainJson.getInt("CallPanelCollapsedTop", frmMain.collapsedCallPanelTop);
+		frmMainJson.getInt("CallPanelExpandedLeft", frmMain.expandedCallPanelLeft);
+		frmMainJson.getInt("CallPanelExpandedTop", frmMain.expandedCallPanelTop);
+
 		frmMainJson.getInt("MainPanelCollapsedLeft", frmMain.collapsedMainPanelLeft);
 		frmMainJson.getInt("MainPanelCollapsedTop", frmMain.collapsedMainPanelTop);
 		frmMainJson.getInt("MainPanelExpandedLeft", frmMain.expandedMainPanelLeft);
 		frmMainJson.getInt("MainPanelExpandedTop", frmMain.expandedMainPanelTop);
 
 		frmMain.bSpeedDialVisible = frmMainJson.get("SpeedDialVisible", frmMain.bSpeedDialVisible).asBool();
-		if (frmMain.bSpeedDialVisible || frmMain.bSpeedDialOnly)
+		if (frmMain.bSpeedDialVisible)
 		{
 			iWidth = frmMain.expandedWidth;
 			iHeight = frmMain.expandedHeight;
@@ -614,7 +622,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		}
 		frmMain.bWindowMaximized = frmMainJson.get("Maximized", frmMain.bWindowMaximized).asBool();
 		frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", frmMain.bAlwaysOnTop).asBool();
-		frmMain.bSpeedDialOnly = frmMainJson.get("SpeedDialOnly", frmMain.bSpeedDialOnly).asBool();
+		frmMainJson.getBool("HideCallPanel", frmMain.bHideCallPanel);
+		frmMainJson.getBool("HideMainPanel", frmMain.bHideMainPanel);
 		frmMain.bSpeedDialPopupMenu = frmMainJson.get("SpeedDialPopupMenu", frmMain.bSpeedDialPopupMenu).asBool();
 		frmMain.bSpeedDialIgnorePresenceNote = frmMainJson.get("SpeedDialIgnorePresenceNote", frmMain.bSpeedDialIgnorePresenceNote).asBool();
 		frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();
@@ -677,6 +686,13 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 							frmMain.expandedWidth += Sizes::COLUMN_SEPARATION;
 						}
 					}
+				}
+
+				bool bSpeedDialOnly = frmMainJson.get("SpeedDialOnly", false).asBool();
+				if (bSpeedDialOnly)
+				{
+					frmMain.bHideCallPanel = true;
+					frmMain.bHideMainPanel = true;
 				}
 			}
 		}
@@ -926,6 +942,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		Scripts.onDialogInfo = ScriptsJson.get("OnDialogInfo", Scripts.onDialogInfo.c_str()).asString().c_str();
 		Scripts.onDial = ScriptsJson.get("OnDial", Scripts.onDial.c_str()).asString().c_str();
 		Scripts.onProgrammableButton = ScriptsJson.get("OnProgrammableButton", Scripts.onProgrammableButton.c_str()).asString().c_str();
+		ScriptsJson.getAString("OnProgrammableButtonMouseUpDown", Scripts.onProgrammableButtonMouseUpDown);
 		Scripts.onAudioDeviceError = ScriptsJson.get("OnAudioDeviceError", Scripts.onAudioDeviceError.c_str()).asString().c_str();
 		ScriptsJson.getAString("OnCustomRequestReply", Scripts.onCustomRequestReply);
 		ScriptsJson.getAString("OnContactNoteOpen", Scripts.onContactNoteOpen);
@@ -984,6 +1001,11 @@ int Settings::Write(AnsiString asFileName)
 		jv["AppPositionX"] = frmMain.iPosX;
 		jv["AppPositionY"] = frmMain.iPosY;
 
+		jv["CallPanelCollapsedLeft"] = frmMain.collapsedCallPanelLeft;
+		jv["CallPanelCollapsedTop"] = frmMain.collapsedCallPanelTop;
+		jv["CallPanelExpandedLeft"] = frmMain.expandedCallPanelLeft;
+		jv["CallPanelExpandedTop"] = frmMain.expandedCallPanelTop;
+
 		jv["MainPanelCollapsedLeft"] = frmMain.collapsedMainPanelLeft;
 		jv["MainPanelCollapsedTop"] = frmMain.collapsedMainPanelTop;
 		jv["MainPanelExpandedLeft"] = frmMain.expandedMainPanelLeft;
@@ -992,7 +1014,8 @@ int Settings::Write(AnsiString asFileName)
 		jv["Maximized"] = frmMain.bWindowMaximized;
 		jv["AlwaysOnTop"] = frmMain.bAlwaysOnTop;
 		jv["SpeedDialVisible"] = frmMain.bSpeedDialVisible;
-		jv["SpeedDialOnly"] = frmMain.bSpeedDialOnly;
+		jv["HideCallPanel"] = frmMain.bHideCallPanel;
+		jv["HideMainPanel"] = frmMain.bHideMainPanel;
 		jv["SpeedDialPopupMenu"] = frmMain.bSpeedDialPopupMenu;
 		jv["SpeedDialIgnorePresenceNote"] = frmMain.bSpeedDialIgnorePresenceNote;
 		jv["SpeedDialIgnoreDialogInfoRemoteIdentity"] = frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
@@ -1165,6 +1188,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["OnDialogInfo"] = Scripts.onDialogInfo.c_str();
 		jv["OnDial"] = Scripts.onDial.c_str();
 		jv["OnProgrammableButton"] = Scripts.onProgrammableButton.c_str();
+		jv["OnProgrammableButtonMouseUpDown"] = Scripts.onProgrammableButtonMouseUpDown;
 		jv["OnAudioDeviceError"] = Scripts.onAudioDeviceError.c_str();
 		jv["OnCustomRequestReply"] = Scripts.onCustomRequestReply;
 		jv["OnContactNoteOpen"] = Scripts.onContactNoteOpen;

@@ -67,6 +67,10 @@ public:
 		int collapsedWidth, collapsedHeight;	///< width, height when console is not visible
 		int expandedWidth, expandedHeight;		///< width, height with console visible
 
+		// call panel position
+		int collapsedCallPanelLeft, collapsedCallPanelTop;
+		int expandedCallPanelLeft, expandedCallPanelTop;
+
 		// main panel position
 		int collapsedMainPanelLeft, collapsedMainPanelTop;
 		int expandedMainPanelLeft, expandedMainPanelTop;
@@ -75,7 +79,8 @@ public:
 		bool bAlwaysOnTop;
 		bool bStartMinimizedToTray;
 		bool bSpeedDialVisible;
-		bool bSpeedDialOnly;
+		bool bHideCallPanel;			///< do not show panel with dialing combobox, call/hangup buttons
+		bool bHideMainPanel;			///< do not show panel with Dialpad/Contacts/History
 		bool bSpeedDialPopupMenu;       ///< enable/disable popup menu (editing) for speed dial / BLF panels
 		bool bSpeedDialIgnorePresenceNote;	///< do not show "note" for presence
 		bool bSpeedDialIgnoreDialogInfoRemoteIdentity;	///< do not show remote id as 2nd line for BLF
@@ -312,6 +317,7 @@ public:
 		AnsiString onDial;			///< running when user presses one of the dialpad buttons or any key when main number edit is focused
 									///< key value (char) is passed as srcId
 		AnsiString onProgrammableButton;
+		AnsiString onProgrammableButtonMouseUpDown;
 		AnsiString onAudioDeviceError;
 		AnsiString onCustomRequestReply;
 		AnsiString onContactNoteOpen;	///< after contact note window is opened

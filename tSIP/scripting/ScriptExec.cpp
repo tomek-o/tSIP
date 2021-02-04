@@ -718,6 +718,19 @@ static int l_GetButtonDown(lua_State* L)
 	return 1;
 }
 
+static int l_GetButtonMouseDown(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	bool down = false;
+	TProgrammableButton *btn = FindButton(id);
+	if (btn)
+	{
+		down = btn->GetMouseDown();
+	}
+	lua_pushinteger( L, down?1:0 );
+	return 1;
+}
+
 static int l_SetButtonInactive(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
@@ -1500,6 +1513,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, "SetButtonCaption2", ScriptImp::l_SetButtonCaption2);
 	lua_register2(L, "SetButtonDown", ScriptImp::l_SetButtonDown);
 	lua_register2(L, "GetButtonDown", ScriptImp::l_GetButtonDown);
+	lua_register2(L, "GetButtonMouseDown", ScriptImp::l_GetButtonMouseDown);
 	lua_register2(L, "SetButtonInactive", ScriptImp::l_SetButtonInactive);
 	lua_register2(L, "SetButtonVisible", ScriptImp::l_SetButtonVisible);
 	lua_register2(L, "SetButtonImage", ScriptImp::l_SetButtonImage);

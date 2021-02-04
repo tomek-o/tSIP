@@ -4,7 +4,7 @@ object frmSettings: TfrmSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Settings'
-  ClientHeight = 450
+  ClientHeight = 480
   ClientWidth = 673
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,12 +22,13 @@ object frmSettings: TfrmSettings
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 413
+    Top = 443
     Width = 673
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 413
     object btnCancel: TButton
       Left = 593
       Top = 6
@@ -51,12 +52,13 @@ object frmSettings: TfrmSettings
     Left = 125
     Top = 0
     Width = 548
-    Height = 413
-    ActivePage = tsMainWindow
+    Height = 443
+    ActivePage = tsScripts
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
+    ExplicitHeight = 413
     object tsGeneral: TTabSheet
       Caption = 'General'
       object lblGuiScaling: TLabel
@@ -360,7 +362,7 @@ object frmSettings: TfrmSettings
       ImageIndex = 2
       object pnlAccountsBottom: TPanel
         Left = 0
-        Top = 362
+        Top = 392
         Width = 540
         Height = 31
         Align = alBottom
@@ -389,7 +391,7 @@ object frmSettings: TfrmSettings
         Left = 0
         Top = 0
         Width = 540
-        Height = 362
+        Height = 392
         Align = alClient
         TabOrder = 1
       end
@@ -397,173 +399,220 @@ object frmSettings: TfrmSettings
     object tsMainWindow: TTabSheet
       Caption = 'Main window'
       ImageIndex = 23
+      ExplicitHeight = 393
       object lblMainWindowCollapsedSize: TLabel
         Left = 3
-        Top = 82
+        Top = 3
         Width = 230
         Height = 13
         Caption = 'Main window size in collapsed (no console) state'
       end
       object lblMainWindowExpandedSize: TLabel
         Left = 3
-        Top = 103
+        Top = 24
         Width = 172
         Height = 13
         Caption = 'Main window size in expanded state'
       end
-      object Label8: TLabel
-        Left = 3
-        Top = 124
+      object lblFrmMainMainPanelPositionCollapsed: TLabel
+        Left = 2
+        Top = 177
         Width = 310
         Height = 13
         Caption = 
           'Main panel (dialpad, contacts, history) position in collapsed st' +
           'ate'
       end
-      object Label10: TLabel
-        Left = 3
-        Top = 145
+      object lblFrmMainMainlPanelPositionExpanded: TLabel
+        Left = 2
+        Top = 198
         Width = 181
         Height = 13
         Caption = 'Main panel position in expanded state'
       end
       object lblCollapsedWidth: TLabel
         Left = 336
-        Top = 82
+        Top = 5
         Width = 26
         Height = 13
         Caption = 'width'
       end
       object lblExpandedWidth: TLabel
         Left = 336
-        Top = 103
+        Top = 24
         Width = 26
         Height = 13
         Caption = 'width'
       end
       object lblMainPanelCollapsedLeft: TLabel
-        Left = 336
-        Top = 124
+        Left = 335
+        Top = 177
         Width = 16
         Height = 13
         Caption = 'left'
       end
       object lblMainPanelExpandedLeft: TLabel
-        Left = 336
-        Top = 145
+        Left = 335
+        Top = 198
         Width = 16
         Height = 13
         Caption = 'left'
       end
       object lblCollapsedHeight: TLabel
         Left = 416
-        Top = 82
+        Top = 3
         Width = 30
         Height = 13
         Caption = 'height'
       end
       object lblExpandedHeight: TLabel
         Left = 416
-        Top = 103
+        Top = 24
         Width = 30
         Height = 13
         Caption = 'height'
       end
       object lblMainPanelCollapsedTop: TLabel
-        Left = 416
-        Top = 124
+        Left = 415
+        Top = 177
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object lblMainPanelExpandedTop: TLabel
-        Left = 416
-        Top = 145
+        Left = 415
+        Top = 198
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object lblFrmMainLayout: TLabel
         Left = 3
-        Top = 3
+        Top = 60
         Width = 33
         Height = 13
         Caption = 'Layout'
       end
       object lblDialComboboxSortOrder: TLabel
         Left = 3
-        Top = 27
+        Top = 243
         Width = 134
         Height = 13
         Caption = 'Dialing combobox sort order'
       end
-      object chbShowSpeedDialOnly: TCheckBox
+      object lblFrmMainCallPanelPositionCollapsed: TLabel
         Left = 3
-        Top = 59
+        Top = 107
+        Width = 305
+        Height = 13
+        Caption = 
+          'Call panel (dialpad, contacts, history) position in collapsed st' +
+          'ate'
+      end
+      object lblFrmMainCallPanelPositionExpanded: TLabel
+        Left = 3
+        Top = 128
+        Width = 176
+        Height = 13
+        Caption = 'Call panel position in expanded state'
+      end
+      object lblCallPanelCollapsedLeft: TLabel
+        Left = 336
+        Top = 107
+        Width = 16
+        Height = 13
+        Caption = 'left'
+      end
+      object lblCallPanelExpandedLeft: TLabel
+        Left = 336
+        Top = 128
+        Width = 16
+        Height = 13
+        Caption = 'left'
+      end
+      object lblCallPanelCollapsedTop: TLabel
+        Left = 416
+        Top = 107
+        Width = 16
+        Height = 13
+        Caption = 'top'
+      end
+      object lblCallPanelExpandedTop: TLabel
+        Left = 416
+        Top = 128
+        Width = 16
+        Height = 13
+        Caption = 'top'
+      end
+      object chbFrmMainHideCallPanel: TCheckBox
+        Left = 2
+        Top = 86
         Width = 486
         Height = 17
-        Caption = 'Show only speed dial (console-only mode, main panel not visible)'
+        Caption = 
+          'Hide call panel (dialing combobox, call state labels, Call and H' +
+          'angup buttons)'
         TabOrder = 0
       end
       object edMainPanelExpandedLeft: TEdit
-        Left = 366
-        Top = 142
+        Left = 365
+        Top = 195
         Width = 35
         Height = 21
         TabOrder = 1
       end
       object edMainPanelCollapsedLeft: TEdit
-        Left = 366
-        Top = 121
+        Left = 365
+        Top = 174
         Width = 35
         Height = 21
         TabOrder = 2
       end
       object edExpandedWidth: TEdit
         Left = 366
-        Top = 100
+        Top = 21
         Width = 35
         Height = 21
         TabOrder = 3
       end
       object edCollapsedWidth: TEdit
         Left = 366
-        Top = 79
+        Top = 0
         Width = 35
         Height = 21
         TabOrder = 4
       end
       object edMainPanelExpandedTop: TEdit
-        Left = 452
-        Top = 142
+        Left = 451
+        Top = 195
         Width = 35
         Height = 21
         TabOrder = 5
       end
       object edMainPanelCollapsedTop: TEdit
-        Left = 452
-        Top = 121
+        Left = 451
+        Top = 174
         Width = 35
         Height = 21
         TabOrder = 6
       end
       object edExpandedHeight: TEdit
         Left = 452
-        Top = 100
+        Top = 21
         Width = 35
         Height = 21
         TabOrder = 7
       end
       object edCollapsedHeight: TEdit
         Left = 452
-        Top = 79
+        Top = 0
         Width = 35
         Height = 21
         TabOrder = 8
       end
       object cbFrmMainLayout: TComboBox
         Left = 152
-        Top = 0
+        Top = 57
         Width = 337
         Height = 21
         Style = csDropDownList
@@ -581,7 +630,7 @@ object frmSettings: TfrmSettings
       end
       object cbDialComboboxOrder: TComboBox
         Left = 152
-        Top = 24
+        Top = 240
         Width = 145
         Height = 21
         Style = csDropDownList
@@ -592,6 +641,42 @@ object frmSettings: TfrmSettings
         Items.Strings = (
           'by number'
           'by date/time')
+      end
+      object chbFrmMainHideMainPanel: TCheckBox
+        Left = 2
+        Top = 156
+        Width = 486
+        Height = 17
+        Caption = 'Hide main panel (Dialpad/Contacts/History)'
+        TabOrder = 11
+      end
+      object edCallPanelCollapsedLeft: TEdit
+        Left = 366
+        Top = 104
+        Width = 35
+        Height = 21
+        TabOrder = 12
+      end
+      object edCallPanelExpandedLeft: TEdit
+        Left = 366
+        Top = 125
+        Width = 35
+        Height = 21
+        TabOrder = 13
+      end
+      object edCallPanelCollapsedTop: TEdit
+        Left = 452
+        Top = 104
+        Width = 35
+        Height = 21
+        TabOrder = 14
+      end
+      object edCallPanelExpandedTop: TEdit
+        Left = 452
+        Top = 125
+        Width = 35
+        Height = 21
+        TabOrder = 15
       end
     end
     object tsSpeedDial: TTabSheet
@@ -2615,16 +2700,16 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'on dial (keypad)'
       end
-      object lblScriptOnProgrammableButton: TLabel
+      object lblScriptOnProgrammableButtonClick: TLabel
         Left = 5
         Top = 266
-        Width = 118
+        Width = 140
         Height = 13
-        Caption = 'on programmable button'
+        Caption = 'on programmable button click'
       end
       object lblScriptOnAudioError: TLabel
         Left = 5
-        Top = 292
+        Top = 316
         Width = 102
         Height = 13
         Caption = 'on audio device error'
@@ -2659,27 +2744,34 @@ object frmSettings: TfrmSettings
       end
       object lblOnCustomRequestReply: TLabel
         Left = 5
-        Top = 319
+        Top = 343
         Width = 116
         Height = 13
         Caption = 'on custom request reply'
       end
       object lblOnContactNoteOpen: TLabel
         Left = 5
-        Top = 346
+        Top = 370
         Width = 103
         Height = 13
         Caption = 'on contact note open'
       end
       object lblOnRecorderState: TLabel
         Left = 5
-        Top = 373
+        Top = 397
         Width = 84
         Height = 13
         Caption = 'on recorder state'
       end
+      object lblScriptOnProgrammableButtonMouseUpDown: TLabel
+        Left = 5
+        Top = 291
+        Width = 126
+        Height = 13
+        Caption = 'on button mouse down/up'
+      end
       object edScriptOnCallStateChangeFile: TEdit
-        Left = 145
+        Left = 148
         Top = 56
         Width = 212
         Height = 21
@@ -2695,7 +2787,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnStreamingStateChangeFile: TEdit
-        Left = 145
+        Left = 148
         Top = 82
         Width = 212
         Height = 21
@@ -2711,7 +2803,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnMakeCallFile: TEdit
-        Left = 145
+        Left = 148
         Top = 30
         Width = 212
         Height = 21
@@ -2727,7 +2819,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnTimerFile: TEdit
-        Left = 145
+        Left = 148
         Top = 158
         Width = 212
         Height = 21
@@ -2750,7 +2842,7 @@ object frmSettings: TfrmSettings
         TabOrder = 8
       end
       object edScriptOnRegistrationStateChangeFile: TEdit
-        Left = 145
+        Left = 148
         Top = 109
         Width = 212
         Height = 21
@@ -2766,7 +2858,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnStartupFile: TEdit
-        Left = 145
+        Left = 148
         Top = 134
         Width = 212
         Height = 21
@@ -2782,7 +2874,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnDialogInfoFile: TEdit
-        Left = 145
+        Left = 148
         Top = 212
         Width = 212
         Height = 21
@@ -2798,7 +2890,7 @@ object frmSettings: TfrmSettings
         OnClick = btnSelectedScriptClick
       end
       object edScriptOnDialFile: TEdit
-        Left = 145
+        Left = 148
         Top = 238
         Width = 212
         Height = 21
@@ -3094,7 +3186,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object edScriptOnProgrammableButtonFile: TEdit
-        Left = 145
+        Left = 148
         Top = 263
         Width = 212
         Height = 21
@@ -3145,15 +3237,15 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object edScriptOnAudioErrorFile: TEdit
-        Left = 145
-        Top = 290
+        Left = 148
+        Top = 314
         Width = 212
         Height = 21
         TabOrder = 28
       end
       object btnSelectedScriptOnAudioErrorChange: TButton
         Left = 363
-        Top = 290
+        Top = 314
         Width = 22
         Height = 21
         Caption = '...'
@@ -3162,7 +3254,7 @@ object frmSettings: TfrmSettings
       end
       object btnSelectedScriptOnAudioErrorEdit: TBitBtn
         Left = 390
-        Top = 290
+        Top = 314
         Width = 22
         Height = 21
         TabOrder = 30
@@ -3196,7 +3288,7 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object edScriptOnTimer2File: TEdit
-        Left = 145
+        Left = 148
         Top = 185
         Width = 212
         Height = 21
@@ -3254,15 +3346,15 @@ object frmSettings: TfrmSettings
         TabOrder = 34
       end
       object edScriptOnCustomRequestReplyFile: TEdit
-        Left = 145
-        Top = 316
+        Left = 148
+        Top = 340
         Width = 212
         Height = 21
         TabOrder = 35
       end
       object btnSelectedScriptOnCustomRequestReplyChange: TButton
         Left = 363
-        Top = 316
+        Top = 340
         Width = 22
         Height = 21
         Caption = '...'
@@ -3271,7 +3363,7 @@ object frmSettings: TfrmSettings
       end
       object btnSelectedScriptOnCustomRequestReplyEdit: TBitBtn
         Left = 390
-        Top = 316
+        Top = 340
         Width = 22
         Height = 21
         TabOrder = 37
@@ -3305,15 +3397,15 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object edScriptOnContactNoteOpenFile: TEdit
-        Left = 145
-        Top = 343
+        Left = 148
+        Top = 367
         Width = 212
         Height = 21
         TabOrder = 38
       end
       object btnSelectedScriptOnContactNoteOpenChange: TButton
         Left = 363
-        Top = 343
+        Top = 367
         Width = 22
         Height = 21
         Caption = '...'
@@ -3322,7 +3414,7 @@ object frmSettings: TfrmSettings
       end
       object btnSelectedScriptOnContactNoteOpenEdit: TBitBtn
         Left = 390
-        Top = 343
+        Top = 367
         Width = 22
         Height = 21
         TabOrder = 40
@@ -3356,15 +3448,15 @@ object frmSettings: TfrmSettings
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
       object edScriptOnRecorderStateFile: TEdit
-        Left = 145
-        Top = 370
+        Left = 148
+        Top = 394
         Width = 212
         Height = 21
         TabOrder = 41
       end
       object btnSelectedScriptOnRecorderStateChange: TButton
         Left = 363
-        Top = 370
+        Top = 394
         Width = 22
         Height = 21
         Caption = '...'
@@ -3373,10 +3465,61 @@ object frmSettings: TfrmSettings
       end
       object btnSelectedScriptOnRecorderStateEdit: TBitBtn
         Left = 390
-        Top = 370
+        Top = 394
         Width = 22
         Height = 21
         TabOrder = 43
+        OnClick = btnSelectedScriptEditClick
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+          000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
+          D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8
+          FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
+      end
+      object edScriptOnProgrammableButtonMouseUpDownFile: TEdit
+        Left = 148
+        Top = 288
+        Width = 212
+        Height = 21
+        TabOrder = 44
+      end
+      object btnSelectedScriptOnProgrammableButtonMouseUpDownChange: TButton
+        Left = 363
+        Top = 288
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 45
+        OnClick = btnSelectedScriptClick
+      end
+      object btnSelectedScriptOnProgrammableButtonMouseUpDownEdit: TBitBtn
+        Left = 390
+        Top = 288
+        Width = 22
+        Height = 21
+        TabOrder = 46
         OnClick = btnSelectedScriptEditClick
         Glyph.Data = {
           36030000424D3603000000000000360000002800000010000000100000000100
@@ -3556,7 +3699,7 @@ object frmSettings: TfrmSettings
     Left = 0
     Top = 0
     Width = 125
-    Height = 413
+    Height = 443
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -3607,6 +3750,7 @@ object frmSettings: TfrmSettings
       FFFFFFFFFFFFFF00000000000000000753006300720069007000740073002700
       00000000000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F0067
       00670069006E006700}
+    ExplicitHeight = 413
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

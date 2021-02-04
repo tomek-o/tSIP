@@ -48,6 +48,8 @@ private:
 	AnsiString caption2;
 	int label2Top;
 
+    bool mouseDownState;
+
 	bool raised;	// helps with flickering
 	void Lower(void);
 	void Raise(void);
@@ -62,6 +64,10 @@ private:
 	void UpdateColors(void);
 	void SetImageTop(void);
 	void SetLabelTop(void);
+
+	typedef void (__closure *CallbackMouseUpDown)(TProgrammableButton* btn);
+	CallbackMouseUpDown onMouseUpDownCb;
+
 protected:
 	void __fastcall MouseEnter(TObject *Sender);
 	void __fastcall MouseLeave(TObject *Sender);
@@ -83,6 +89,10 @@ public:
 	{
     	return down;
 	}
+	bool GetMouseDown(void) const
+	{
+		return mouseDownState;
+	}
 	void SetInactive(bool state);
 	bool GetInactive(void)
 	{
@@ -103,7 +113,11 @@ public:
 		{
 			scalingPercentage = percentage;
 		}
-    }
+	}
+	void SetMouseUpDownCallback(CallbackMouseUpDown cb)
+	{
+		onMouseUpDownCb = cb;
+	}
 __published:
 };
 //---------------------------------------------------------------------------

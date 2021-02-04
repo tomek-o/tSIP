@@ -59,6 +59,7 @@ __published:	// IDE-managed Components
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
 public:
 	typedef void (__closure *CallbackClick)(int id, TProgrammableButton* btn);
+	typedef void (__closure *CallbackMouseUpDown)(int id, TProgrammableButton* btn);
 	typedef void (__closure *CallbackUpdateAll)(void);
 	typedef void (__closure *CallbackSetKeepForeground)(bool disable);
 	void UpdateDlgInfoState(int id, int state, bool updateRemoteIdentity, int direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
@@ -70,9 +71,11 @@ public:
 	void UpdateBackgroundImage(AnsiString file);
 private:	// User declarations
 	CallbackClick callbackClick;
+	CallbackMouseUpDown callbackMouseUpDown;
 	CallbackUpdateAll callbackUpdateAll;
 	CallbackSetKeepForeground callbackSetKeepForeground;
 	void __fastcall SpeedDialPanelClick(TObject *Sender);
+	void OnPanelMouseUpDown(TProgrammableButton *btn);
 	void EditContact(int id);
 	void MovePanel(int id);
 	void ResizePanel(int id);
@@ -97,7 +100,9 @@ public:		// User declarations
 	__fastcall TfrmButtonContainer(TComponent* Owner, ProgrammableButtons &buttons,
 		int width, int height, int scalingPercentage,
 		int startBtnId, int btnCnt,
-		CallbackClick callbackClick, CallbackUpdateAll callbackUpdateAll,
+		CallbackClick callbackClick,
+		CallbackMouseUpDown callbackMouseUpDown,
+		CallbackUpdateAll callbackUpdateAll,
 		CallbackSetKeepForeground callbackSetKeepForeground,
         bool showStatus, int statusPanelHeight, bool hideEmptyStatus
 		);

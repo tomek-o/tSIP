@@ -34,11 +34,13 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	int width, int height, int scalingPercentage,
     int startBtnId, int btnCnt,
 	CallbackClick callbackClick,
+	CallbackMouseUpDown callbackMouseUpDown,
 	CallbackUpdateAll callbackUpdateAll,
 	CallbackSetKeepForeground callbackSetKeepForeground,	
 	bool showStatus, int statusPanelHeight, bool hideEmptyStatus)
 	: TForm(Owner), buttons(buttons), startBtnId(startBtnId), btnCnt(btnCnt),
 	callbackClick(callbackClick),
+	callbackMouseUpDown(callbackMouseUpDown),
 	callbackUpdateAll(callbackUpdateAll),
 	callbackSetKeepForeground(callbackSetKeepForeground),
 	panelIsMoving(false),
@@ -50,6 +52,7 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	assert(startBtnId >= 0);
 	assert(btnCnt >= 0);
 	assert(callbackClick);
+	assert(callbackMouseUpDown);
 	assert(callbackUpdateAll);
 	assert(callbackSetKeepForeground);
 	if (width > 0)
@@ -74,6 +77,7 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 		}
 		panel->OnClick = SpeedDialPanelClick;
 		panel->OnDblClick = SpeedDialPanelClick;
+		panel->SetMouseUpDownCallback(OnPanelMouseUpDown);
 		panel->PopupMenu = useContextMenu ? popupPanel : NULL;
 		panel->UpdateCallbacks();
 		vpanels.push_back(panel);
@@ -134,6 +138,17 @@ void __fastcall TfrmButtonContainer::SpeedDialPanelClick(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+
+void TfrmButtonContainer::OnPanelMouseUpDown(TProgrammableButton *btn)
+{
+	if (panelIsMoving || panelIsResizing)
+	{
+		return;
+	}
+	int id = startBtnId + btn->Tag;
+	callbackMouseUpDown(id, btn);	
+}
+
 
 void __fastcall TfrmButtonContainer::miEditSpeedDialClick(TObject *Sender)
 {
