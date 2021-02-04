@@ -268,6 +268,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 			&OnSetKeepForeground,
 			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
 		container->Parent = this; //this->pnlSpeedDial;
+		container->UpdateBackgroundImage();
 		container->SendToBack();
 		container->Align = alClient;
 		container->Visible = true;
