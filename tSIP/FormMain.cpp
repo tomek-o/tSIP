@@ -2513,6 +2513,13 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		UA->PagingTx(cfg.number.c_str(), cfg.pagingTxWaveFile.c_str(), cfg.pagingTxCodec.c_str(), cfg.pagingTxPtime);
 		break;
 	case Button::SCRIPT: {
+		if (cfg.script == "")
+		{
+			AnsiString msg;
+			msg.sprintf("Script file is not configured for button #%d.", id);
+			MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
+			break;
+		}
 		AnsiString asScriptFile;
 		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), cfg.script.c_str());
