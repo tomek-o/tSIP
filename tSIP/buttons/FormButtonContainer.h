@@ -45,6 +45,8 @@ __published:	// IDE-managed Components
 	TTimer *tmrMoving;
 	TPanel *movingFrame;
 	TMenuItem *miContainerMenu;
+	TMenuItem *miInfo;
+	TMenuItem *N1;
 	void __fastcall miEditSpeedDialClick(TObject *Sender);
 	void __fastcall popupAddPanelPopup(TObject *Sender);
 	void __fastcall miAddEditPanelClick(TObject *Sender);
@@ -57,6 +59,7 @@ __published:	// IDE-managed Components
 	void __fastcall miResizeSpeedDialClick(TObject *Sender);
 	void __fastcall tmrMovingTimer(TObject *Sender);
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
+	void __fastcall popupPanelPopup(TObject *Sender);
 public:
 	typedef void (__closure *CallbackClick)(int id, TProgrammableButton* btn);
 	typedef void (__closure *CallbackMouseUpDown)(int id, TProgrammableButton* btn);

@@ -15,8 +15,6 @@ object frmButtonContainer: TfrmButtonContainer
   KeyPreview = True
   OldCreateOrder = False
   OnKeyPress = FormKeyPress
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object panelMain: TPanel
@@ -507,8 +505,15 @@ object frmButtonContainer: TfrmButtonContainer
       000000000000}
   end
   object popupPanel: TPopupMenu
+    OnPopup = popupPanelPopup
     Left = 24
     Top = 288
+    object miInfo: TMenuItem
+      Caption = 'Button #'
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
     object miEditSpeedDial: TMenuItem
       Caption = 'Edit'
       OnClick = miEditSpeedDialClick

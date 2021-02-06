@@ -627,3 +627,16 @@ void __fastcall TfrmButtonContainer::FormKeyPress(TObject *Sender, char &Key)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmButtonContainer::popupPanelPopup(TObject *Sender)
+{
+	TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(popupPanel->PopupComponent);
+	assert(panel);
+	int id = panel->Tag;
+
+	AnsiString text;
+	AnsiString typeText = Button::TypeName(buttons.btnConf[startBtnId + id].type);
+	text.sprintf("Button #%d: %s", startBtnId + id, typeText.c_str());;
+	miInfo->Caption = text;
+}
+//---------------------------------------------------------------------------
+
