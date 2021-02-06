@@ -31,6 +31,7 @@ namespace
 //---------------------------------------------------------------------------
 __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	ProgrammableButtons &buttons,
+	unsigned int containerId,
 	int width, int height, int scalingPercentage,
     int startBtnId, int btnCnt,
 	CallbackClick callbackClick,
@@ -38,7 +39,9 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	CallbackUpdateAll callbackUpdateAll,
 	CallbackSetKeepForeground callbackSetKeepForeground,	
 	bool showStatus, int statusPanelHeight, bool hideEmptyStatus)
-	: TForm(Owner), buttons(buttons), startBtnId(startBtnId), btnCnt(btnCnt),
+	:
+	TForm(Owner),
+	buttons(buttons), containerId(containerId), startBtnId(startBtnId), btnCnt(btnCnt),
 	callbackClick(callbackClick),
 	callbackMouseUpDown(callbackMouseUpDown),
 	callbackUpdateAll(callbackUpdateAll),
@@ -288,7 +291,7 @@ void __fastcall TfrmButtonContainer::miAddEditPanelClick(TObject *Sender)
 
 void __fastcall TfrmButtonContainer::miSetBackgroundClick(TObject *Sender)
 {
-	AnsiString &fname = appSettings.frmMain.buttonContainerBackgroundImage;
+	AnsiString &fname = appSettings.buttonContainers[containerId].backgroundImage;
 	openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";
 	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\img\\";
 	openDialog->InitialDir = dir;
@@ -310,7 +313,7 @@ void __fastcall TfrmButtonContainer::miSetBackgroundClick(TObject *Sender)
 
 void TfrmButtonContainer::UpdateBackgroundImage(void)
 {
-	UpdateBackgroundImage(appSettings.frmMain.buttonContainerBackgroundImage);
+	UpdateBackgroundImage(appSettings.buttonContainers[containerId].backgroundImage);
 }
 
 void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file)
@@ -325,7 +328,7 @@ void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file)
 			imgBackground->Picture->LoadFromFile(asBackgroundFile);
 			lastImage = file;
 		}
-		else if (appSettings.frmMain.buttonContainerBackgroundImage == "")
+		else if (appSettings.buttonContainers[containerId].backgroundImage == "")
 		{
 			imgBackground->Picture = NULL;
 			lastImage = "";
@@ -339,7 +342,7 @@ void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file)
 
 void __fastcall TfrmButtonContainer::miClearBackgroundClick(TObject *Sender)
 {
-	appSettings.frmMain.buttonContainerBackgroundImage = "";
+	appSettings.buttonContainers[containerId].backgroundImage = "";
 	UpdateBackgroundImage();
 	AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 	appSettings.Write(asConfigFile);

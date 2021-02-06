@@ -170,6 +170,8 @@ Settings::Settings(void)
 	uaConf.accounts.push_back(new_acc);
 
 	ScriptWindow.ClearMruItems();
+
+	buttonContainers.resize(1 + ProgrammableButtons::EXT_CONSOLE_COLUMNS);
 }
 
 int Settings::UpdateFromText(AnsiString text)
@@ -702,7 +704,6 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bRestoreOnIncomingCall = frmMainJson.get("RestoreOnIncomingCall", frmMain.bRestoreOnIncomingCall).asBool();
 		frmMain.bSingleInstance = frmMainJson.get("SingleInstance", frmMain.bSingleInstance).asBool();
 		frmMain.dialpadBackgroundImage = frmMainJson.get("DialpadBackgroundImage", frmMain.dialpadBackgroundImage.c_str()).asString().c_str();
-	frmMain.buttonContainerBackgroundImage = frmMainJson.get("ButtonContainerBackgroundImage", frmMain.buttonContainerBackgroundImage.c_str()).asString().c_str();
 		frmMain.mainIcon = frmMainJson.get("MainIcon", frmMain.mainIcon.c_str()).asString().c_str();
 		frmMain.trayNotificationImage = frmMainJson.get("TrayNotificationImage", frmMain.trayNotificationImage.c_str()).asString().c_str();
 
@@ -976,6 +977,19 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		jv.getBool("logMissingKeys", Translation.logMissingKeys);
 	}
 
+	{
+		const Json::Value &jv = root["buttonContainers"];
+		if (jv.type() == Json::arrayValue)
+		{
+			for (unsigned int i=0; i<jv.size(); i++)
+			{
+				if (i >= buttonContainers.size())
+					break;
+				buttonContainers[i].FromJson(jv[i]);
+			}
+		}
+	}
+
 	return 0;
 }
 
@@ -1021,7 +1035,6 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialIgnoreDialogInfoRemoteIdentity"] = frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
 		jv["SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing"] = frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 		jv["SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated"] = frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
-		jv["ButtonContainerBackgroundImage"] = frmMain.buttonContainerBackgroundImage.c_str();
 		jv["StartMinimizedToTray"] = frmMain.bStartMinimizedToTray;
 		jv["XBtnMinimize"] = frmMain.bXBtnMinimize;
 		jv["RestoreOnIncomingCall"] = frmMain.bRestoreOnIncomingCall;
@@ -1391,6 +1404,18 @@ int Settings::Write(AnsiString asFileName)
 		Json::Value &jv = root["Translation"];
 		jv["language"] = Translation.language;
 		jv["logMissingKeys"] = Translation.logMissingKeys;
+	}
+
+	{
+		Json::Value &jv = root["buttonContainers"];
+		jv = Json::Value(Json::arrayValue);
+		for (unsigned int i=0; i<buttonContainers.size(); i++)
+		{
+			if (i >= buttonContainers.size())
+				break;
+			jv.append(Json::Value(Json::objectValue));
+			buttonContainers[i].ToJson(jv[i]);
+		}
 	}
 
 

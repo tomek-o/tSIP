@@ -485,6 +485,8 @@
         <FILE FILENAME="SpeedDialStatus.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="SpeedDialStatus" FORMNAME="" DESIGNCLASS="" ADDITIONAL="SpeedDialStatus.h"/>
         <FILE FILENAME="buttons\ButtonContainers.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonContainers" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ButtonContainers.h"/>
         <FILE FILENAME="buttons\ProgrammableButton.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ProgrammableButton" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ProgrammableButton.h"/>
+        <FILE FILENAME="Sizes.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="buttons\ButtonContainerConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonContainerConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ButtonContainerConf.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -493,7 +495,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">2</VersionInfo>
           <VersionInfo Name="Release">0</VersionInfo>
-          <VersionInfo Name="Build">1</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -505,7 +507,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.2.0.1</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.2.0.0</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

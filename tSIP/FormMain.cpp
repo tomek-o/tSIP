@@ -245,6 +245,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	TfrmButtonContainer *frmButtonContainerBasic = new TfrmButtonContainer(
 		this->pnlButtonsBasic,
 		buttons,
+		0,
 		this->pnlButtonsBasic->Width, this->pnlButtonsBasic->Height, appSettings.gui.scalingPct,
 		0, ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS,
 		&OnProgrammableBtnClick,
@@ -253,6 +254,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		&OnSetKeepForeground,
 		appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
 	frmButtonContainerBasic->Parent = this->pnlButtonsBasic;
+	frmButtonContainerBasic->UpdateBackgroundImage();
 	frmButtonContainerBasic->Visible = true;
 	frmButtonContainers[0] = frmButtonContainerBasic;
 
@@ -260,6 +262,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		TfrmButtonContainer *& container = frmButtonContainers[i];
 		container = new TfrmButtonContainer(this,
 			buttons,
+			i,
 			300, 0, appSettings.gui.scalingPct,
 			ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS + (i-1) * ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER, ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER,
 			&OnProgrammableBtnClick,

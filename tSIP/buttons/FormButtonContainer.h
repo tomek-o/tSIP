@@ -70,6 +70,7 @@ public:
 	void UpdateSettings(void);
 	void UpdateBackgroundImage(AnsiString file);
 private:	// User declarations
+	unsigned int containerId;
 	CallbackClick callbackClick;
 	CallbackMouseUpDown callbackMouseUpDown;
 	CallbackUpdateAll callbackUpdateAll;
@@ -98,6 +99,7 @@ private:	// User declarations
 	ProgrammableButtons &buttons;
 public:		// User declarations
 	__fastcall TfrmButtonContainer(TComponent* Owner, ProgrammableButtons &buttons,
+		unsigned int containerId,
 		int width, int height, int scalingPercentage,
 		int startBtnId, int btnCnt,
 		CallbackClick callbackClick,
