@@ -864,5 +864,33 @@ Version 0.1.76
 	- fixed some of the luacheck warnings from script examples
 	- FIXED: UDP transport being used instead of TCP for some calls
 	- measuring button configuration read (OutputDebugString at the start) and write times (log)
+
+Version 0.2.00
+	- [BREAKING] not all settings are kept when upgrading - please backup tSIP.json and tSIP_buttons.json before updating executable; as there are major changes you might also consider delaying update
+	- changed overall application layout - console is now main part of the window, main panel (dialpad, etc.) is on top of it
+	- buttons are now not organized in columns, can be moved and resized freely (context menu)
+	- two button containers: one small on the main panel ("Redial", etc. in default configuration), holding 15 buttons and large, covering whole window, holding 180 buttons
+	- button opening/closing console now changes main window size (hiding/uncovering part of the button container) and changes main panel position (allowing to e.g. "expand" console on the left side of main panel)
+	- new button container context menu
+	- new simple dialog window for copying button properties
+	- background bitmap can be assigned to button container
+	- added multiple new button properties:
+		- size and position
+		- visibility
+		- inactivity
+		- down/up state
+		- positioning for caption lines
+		- positioning for image
+		- font configuration for two caption lines
+		- bevel width + option to use custom, flat bevel
+		- state-depending colors for background, font and bevel
+	- extended Lua function list, mostly related to new button properties: SetButtonVisible, SetButtonInactive, SetButtonDown, SetButtonImage, SetButtonCaption2
+	- optimized button configuration saving (mostly affecting Debug/CodeGuard builds) - saving only properties different than default unless "saveAllSettings" option is used
+	- replaced "SpeedDialOnly" setting with set of "HideCallPanel" + "HideMainPanel"
+	- call controls panel and Dialpad/Contacts/History panel can be hidden and positioned independently
+	- new scripting event: "on programmable button mouse up/down", passing button id as source id
+	- Lua: added GetButtonMouseDown(buttonId) function
+	- separate background image setting for each button container
+	- showing button id and type on button popup menu
 */
 
