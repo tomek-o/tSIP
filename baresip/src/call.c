@@ -674,9 +674,6 @@ int call_connect(struct call *call, const struct pl *paddr, const struct pl *ext
 	}
 	if (err)
 		return err;
-
-	if (err)
-		return err;
 		
 	if (extra_hdr_lines) {
 		err = pl_strdup(&call->extra_hdr_lines, extra_hdr_lines);
