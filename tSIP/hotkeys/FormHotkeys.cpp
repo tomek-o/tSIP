@@ -11,7 +11,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmHotkeys *frmHotkeys;
+//TfrmHotkeys *frmHotkeys;
 //---------------------------------------------------------------------------
 __fastcall TfrmHotkeys::TfrmHotkeys(TComponent* Owner)
 	: TForm(Owner)

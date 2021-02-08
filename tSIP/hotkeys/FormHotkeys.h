@@ -37,6 +37,6 @@ public:		// User declarations
 	void SetCfg(std::list<HotKeyConf> *hotkeyCfg);
 };
 //---------------------------------------------------------------------------
-extern PACKAGE TfrmHotkeys *frmHotkeys;
+//extern PACKAGE TfrmHotkeys *frmHotkeys;
 //---------------------------------------------------------------------------
 #endif
