@@ -1,0 +1,32 @@
+{
+  "TfrmMain": {
+    "btnHangup": "Racrocher",
+    "btnMakeCall": "Appeler/Repondre",
+    "miAbout": "A Propos...",
+    "miClearCallsHistory": "Effacer historique",
+    "miCommonSettings": "Parametres",
+    "miExit": "Quitter",
+    "miFile": "Fichier",
+    "miHelp": "Aide",
+    "miImportContactsFromCsv": "Importer contacts CSV",
+    "miImportContactsFromXml": "Importer contacts XML",
+    "miMessages": "Messages",
+    "miMinimizeTray": "Minimise dans la barre de tache",
+    "miPatchButtonSettings": "Patch / update parametres boutons JSON",
+    "miRefreshTranslationFromFile": "Recharger fichier de traduction",
+    "miScripting": "Fenetre de Script",
+    "miSettings": "Configuration",
+    "miSettingsPatch": "Patch / update parametres generaux JSON",
+    "miTools": "Outils",
+    "miTroubleshooting": "Depannage",
+    "miView": "Vue",
+    "miViewLog": "Log",
+    "tsContacts": "Contacts",
+    "tsDialpad": "Pave numerique",
+    "tsHistory": "Historique"
+  },
+  "TfrmTrayNotifier": {
+    "btnAnswer": "Repondre",
+    "btnHangup": "Racrocher"
+  }
+}
