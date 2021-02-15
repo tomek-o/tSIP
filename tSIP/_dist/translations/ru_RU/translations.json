@@ -1,0 +1,32 @@
+{
+  "TfrmMain": {
+    "btnHangup": "Повесить трубку",
+    "btnMakeCall": "Позвонить/Ответить",
+    "miAbout": "О...",
+    "miClearCallsHistory": "Очистить историю звонков",
+    "miCommonSettings": "Настройки",
+    "miExit": "Выход",
+    "miFile": "Выход",
+    "miHelp": "Справка",
+    "miImportContactsFromCsv": "Импорт контактов из CSV",
+    "miImportContactsFromXml": "Импорт контактов из XML",
+    "miMessages": "Сообщения",
+    "miMinimizeTray": "Свернуть",
+    "miPatchButtonSettings": "Исправить / обновить настройки кнопок из JSON",
+    "miRefreshTranslationFromFile": "Обновить перевод из файла",
+    "miScripting": "Окно скриптов",
+    "miSettings": "Настройки",
+    "miSettingsPatch": "Исправить / обновить настройки из JSON",
+    "miTools": "Инструменты",
+    "miTroubleshooting": "Диагностика",
+    "miView": "Просмотр",
+    "miViewLog": "Логи",
+    "tsContacts": "Контакты",
+    "tsDialpad": "Номеронабиратель",
+    "tsHistory": "История"
+  },
+  "TfrmTrayNotifier": {
+    "btnAnswer": "Ответить",
+    "btnHangup": "Повесить"
+  }
+}
