@@ -20,6 +20,8 @@ const char* Action::getTypeDescription(enum Action::Type type)
 		return "call: clipboard";
 	case TYPE_SHOWHIDE_SIDECAR:
 		return "show/hide sidecar";
+	case TYPE_ANSWER_HANGUP:
+		return "answer/hangup";
 	default:
 		return "";
 	}

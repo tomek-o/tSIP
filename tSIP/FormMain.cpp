@@ -3169,6 +3169,15 @@ void TfrmMain::ExecAction(const struct Action& action)
 	case Action::TYPE_SHOWHIDE_SIDECAR:
 		ToggleSpeedDial();
 		break;
+	case Action::TYPE_ANSWER_HANGUP:
+		if (call.state != Callback::CALL_STATE_CLOSED)
+		{
+			if (call.state == Callback::CALL_STATE_INCOMING)
+				Answer();
+			else
+				Hangup();
+		}
+		break;
 	default:
 		break;
 	}

@@ -13,7 +13,8 @@ struct Action
 		TYPE_REDIAL,
 		TYPE_CALL_CLIPBOARD,
 		TYPE_SHOWHIDE_SIDECAR,	///< show/hide sidecar with programmable buttons
-		
+        TYPE_ANSWER_HANGUP,	///< answer or hangup depending on current call state
+
 		TYPE_LIMITER
 	} type;
 	int id;
