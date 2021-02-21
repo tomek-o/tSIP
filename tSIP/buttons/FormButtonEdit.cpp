@@ -289,7 +289,6 @@ void TfrmButtonEdit::SetType(Button::Type type)
 
 	edNumber->Visible = true;
 	lblNumber->Visible = true;
-	chbNoIcon->Enabled = true;
 
 	for (int i=0; i<pcBehavior->PageCount; i++)
 	{
@@ -326,8 +325,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 		tsBehaviorBlf->Visible = true;
 		break;
 	case Button::BLF:
-		chbNoIcon->Checked = false;
-		chbNoIcon->Enabled = false;
+		//chbNoIcon->Checked = false;
 		tsBehaviorBlf->Visible = true;
 		break;
 	case Button::MWI:
