@@ -65,57 +65,18 @@ ProgrammableButtons::ProgrammableButtons(void):
 	{
     	SetDefaultsForBtnId(i, btnConf[i]);
 	}
-
-	ButtonConf *cfg;
-
-	cfg = &btnConf[0];
-	cfg->caption = "    Redial";
-	cfg->noIcon = true;
-	cfg->type = Button::REDIAL;
-
-	cfg = &btnConf[1];
-	cfg->caption = "    FLASH";
-	cfg->noIcon = true;
-	cfg->type = Button::DTMF;
-	cfg->number = "R";
-
-	cfg = &btnConf[2];
-	cfg->caption = "Hold";
-	cfg->noIcon = false;
-	cfg->type = Button::HOLD;
-	cfg->imgIdle = "hold.bmp";
-
-	cfg = &btnConf[3];
-	cfg->caption = " Re-register";
-	cfg->noIcon = true;
-	cfg->type = Button::REREGISTER;
-
-	cfg = &btnConf[4];
-	cfg->captionLines = 2;
-	cfg->caption = " Right click";
-	cfg->caption2 = " to edit btn";
-	cfg->labelCenterVertically = false;
-	cfg->labelTop = 3;
-    cfg->label2Left = 0;
-	cfg->label2Top = 17;
-	cfg->label2CenterHorizontally = false;
-	cfg->noIcon = true;
-
-	for (unsigned int i=5; i<BASIC_PANEL_CONSOLE_BTNS; i++)
-	{
-		cfg = &btnConf[i];
-		//cfg->top = 5 * HEIGHT;
-		cfg->visible = false;
-	}
 }
 
 int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 {
+	int status = -1;
+
 	appVersion.FromJson(root["info"]);
 
 	const Json::Value &btnConfJson = root["btnConf"];
 	if (btnConfJson.type() == Json::arrayValue)
 	{
+        status = 0;
 		for (int i=0; i<btnConfJson.size(); i++)
 		{
 			if (i >= btnConf.size())
@@ -296,7 +257,7 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 		}
 	}
 
-	return 0;
+	return status;
 }
 
 int ProgrammableButtons::ReadFromString(AnsiString json)
@@ -370,8 +331,11 @@ int ProgrammableButtons::Read(void)
 		// earlier versions stored btn config in main file - try to read it
 		AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 		int rc = ReadFile(asConfigFile);
-		(void)rc;
-		// and write new, separate file file (either default buttons or buttons from old "main" config,
+		if (rc != 0)
+		{
+        	SetInitialSettings();
+		}
+		// and write new, separate file (either default buttons or buttons from old "main" config,
 		// if reading was successful)
 		Write();
 		return 0;
@@ -677,5 +641,50 @@ void ProgrammableButtons::SetSaveAllSettings(bool state)
 		{
         	Write();
 		}
+	}
+}
+
+void ProgrammableButtons::SetInitialSettings(void)
+{
+	ButtonConf *cfg;
+
+	cfg = &btnConf[0];
+	cfg->caption = "    Redial";
+	cfg->noIcon = true;
+	cfg->type = Button::REDIAL;
+
+	cfg = &btnConf[1];
+	cfg->caption = "    FLASH";
+	cfg->noIcon = true;
+	cfg->type = Button::DTMF;
+	cfg->number = "R";
+
+	cfg = &btnConf[2];
+	cfg->caption = "Hold";
+	cfg->noIcon = false;
+	cfg->type = Button::HOLD;
+	cfg->imgIdle = "hold.bmp";
+
+	cfg = &btnConf[3];
+	cfg->caption = " Re-register";
+	cfg->noIcon = true;
+	cfg->type = Button::REREGISTER;
+
+	cfg = &btnConf[4];
+	cfg->captionLines = 2;
+	cfg->caption = " Right click";
+	cfg->caption2 = " to edit btn";
+	cfg->labelCenterVertically = false;
+	cfg->labelTop = 3;
+    cfg->label2Left = 0;
+	cfg->label2Top = 17;
+	cfg->label2CenterHorizontally = false;
+	cfg->noIcon = true;
+
+	for (unsigned int i=5; i<BASIC_PANEL_CONSOLE_BTNS; i++)
+	{
+		cfg = &btnConf[i];
+		//cfg->top = 5 * HEIGHT;
+		cfg->visible = false;
 	}
 }

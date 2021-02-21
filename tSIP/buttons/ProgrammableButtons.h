@@ -48,7 +48,9 @@ public:
 
 	void UpdateContacts(std::vector<UaConf::Contact> &contacts);
 
-	void SetSaveAllSettings(bool state);	
+	void SetSaveAllSettings(bool state);
+
+	void SetInitialSettings(void);	
 };
 
 #endif
