@@ -109,7 +109,6 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				cfg.visible = btnJson.get("visible", cfg.visible).asBool();
 				cfg.down = btnJson.get("down", cfg.down).asBool();
 				cfg.inactive = btnJson.get("inactive", cfg.inactive).asBool();
-				cfg.noIcon = btnJson.get("noIcon", cfg.noIcon).asBool();
 				cfg.left = btnJson.get("left", cfg.left).asUInt();
 				cfg.top = btnJson.get("top", cfg.top).asUInt();
 				cfg.width = btnJson.get("width", cfg.width).asUInt();
@@ -119,6 +118,7 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				cfg.customFrame = btnJson.get("customFrame", cfg.customFrame).asBool();
 				cfg.labelCenterHorizontally = btnJson.get("labelCenterHorizontally", cfg.labelCenterHorizontally).asBool();
 				cfg.labelCenterVertically = btnJson.get("labelCenterVertically", cfg.labelCenterVertically).asBool();
+				btnJson.getInt("labelLeft", cfg.labelLeft);
 				cfg.labelTop = btnJson.get("labelTop", cfg.labelTop).asInt();
 				cfg.label2Left = btnJson.get("label2Left", cfg.label2Left).asInt();
 				cfg.label2Top = btnJson.get("label2Top", cfg.label2Top).asInt();
@@ -379,10 +379,6 @@ int ProgrammableButtons::Write(void)
 		{
 			jsonBtn["inactive"] = cfg.inactive;
 		}
-		if (saveAllSettings || (cfg.noIcon != defaultBtn.noIcon))
-		{
-			jsonBtn["noIcon"] = cfg.noIcon;
-		}
 		jsonBtn["left"] = cfg.left;
 		jsonBtn["top"] = cfg.top;
 		jsonBtn["width"] = cfg.width;
@@ -402,6 +398,10 @@ int ProgrammableButtons::Write(void)
 		if (saveAllSettings || (cfg.labelCenterVertically != defaultBtn.labelCenterVertically))
 		{
 			jsonBtn["labelCenterVertically"] = cfg.labelCenterVertically;
+		}
+		if (saveAllSettings || (cfg.labelLeft != defaultBtn.labelLeft))
+		{
+			jsonBtn["labelLeft"] = cfg.labelLeft;
 		}
 		if (saveAllSettings || (cfg.labelTop != defaultBtn.labelTop))
 		{
@@ -650,24 +650,23 @@ void ProgrammableButtons::SetInitialSettings(void)
 
 	cfg = &btnConf[0];
 	cfg->caption = "    Redial";
-	cfg->noIcon = true;
+	cfg->labelLeft = 0;
 	cfg->type = Button::REDIAL;
 
 	cfg = &btnConf[1];
 	cfg->caption = "    FLASH";
-	cfg->noIcon = true;
+	cfg->labelLeft = 0;
 	cfg->type = Button::DTMF;
 	cfg->number = "R";
 
 	cfg = &btnConf[2];
 	cfg->caption = "Hold";
-	cfg->noIcon = false;
 	cfg->type = Button::HOLD;
 	cfg->imgIdle = "hold.bmp";
 
 	cfg = &btnConf[3];
 	cfg->caption = " Re-register";
-	cfg->noIcon = true;
+	cfg->labelLeft = 4;
 	cfg->type = Button::REREGISTER;
 
 	cfg = &btnConf[4];
@@ -675,11 +674,11 @@ void ProgrammableButtons::SetInitialSettings(void)
 	cfg->caption = " Right click";
 	cfg->caption2 = " to edit btn";
 	cfg->labelCenterVertically = false;
+	cfg->labelLeft = 4;
 	cfg->labelTop = 3;
-    cfg->label2Left = 0;
+	cfg->label2Left = 4;
 	cfg->label2Top = 17;
 	cfg->label2CenterHorizontally = false;
-	cfg->noIcon = true;
 
 	for (unsigned int i=5; i<BASIC_PANEL_CONSOLE_BTNS; i++)
 	{

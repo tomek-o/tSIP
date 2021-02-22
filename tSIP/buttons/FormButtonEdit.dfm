@@ -3,7 +3,7 @@ object frmButtonEdit: TfrmButtonEdit
   Top = 0
   BorderStyle = bsSingle
   Caption = 'Edit button'
-  ClientHeight = 546
+  ClientHeight = 531
   ClientWidth = 675
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -48,12 +48,13 @@ object frmButtonEdit: TfrmButtonEdit
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 509
+    Top = 494
     Width = 675
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 509
     object btnCancel: TButton
       Left = 592
       Top = 7
@@ -115,12 +116,13 @@ object frmButtonEdit: TfrmButtonEdit
     Left = 8
     Top = 81
     Width = 659
-    Height = 428
+    Height = 408
     ActivePage = tsVisual
     TabOrder = 4
     object tsVisual: TTabSheet
       Caption = 'Visual'
       ImageIndex = 1
+      ExplicitHeight = 400
       object lblBevelWidth: TLabel
         Left = 407
         Top = 8
@@ -268,6 +270,13 @@ object frmButtonEdit: TfrmButtonEdit
           Height = 13
           Caption = 'Top'
         end
+        object lblLabelLeft: TLabel
+          Left = 159
+          Top = 17
+          Width = 19
+          Height = 13
+          Caption = 'Left'
+        end
         object edSpeedDialFont: TEdit
           Left = 38
           Top = 13
@@ -287,11 +296,11 @@ object frmButtonEdit: TfrmButtonEdit
           OnClick = btnSpeedDialFontSelectClick
         end
         object chbLabelCenterHorizontally: TCheckBox
-          Left = 159
-          Top = 16
-          Width = 154
+          Left = 245
+          Top = 15
+          Width = 71
           Height = 17
-          Caption = 'center horizontally'
+          Caption = 'centered'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
@@ -321,6 +330,13 @@ object frmButtonEdit: TfrmButtonEdit
           ParentFont = False
           TabOrder = 4
           OnClick = chbLabelCenterVerticallyClick
+        end
+        object edLabelLeft: TEdit
+          Left = 192
+          Top = 14
+          Width = 38
+          Height = 21
+          TabOrder = 5
         end
       end
       object grboxCaption2: TGroupBox
@@ -559,33 +575,33 @@ object frmButtonEdit: TfrmButtonEdit
         Left = -1
         Top = 268
         Width = 649
-        Height = 129
+        Height = 109
         Caption = 'Bitmaps (from "img" subdirectory)'
         TabOrder = 12
         object lblImgIdle: TLabel
-          Left = 7
-          Top = 41
+          Left = 8
+          Top = 20
           Width = 95
           Height = 13
           Caption = 'Idle/invalid/non-BLF'
         end
         object lblImgTerminated: TLabel
-          Left = 7
-          Top = 61
+          Left = 8
+          Top = 40
           Width = 76
           Height = 13
           Caption = 'BLF: terminated'
         end
         object lblImgEarly: TLabel
-          Left = 7
-          Top = 81
+          Left = 8
+          Top = 60
           Width = 48
           Height = 13
           Caption = 'BLF: early'
         end
         object lblImgConfirmed: TLabel
-          Left = 7
-          Top = 101
+          Left = 8
+          Top = 80
           Width = 71
           Height = 13
           Caption = 'BLF: confirmed'
@@ -604,76 +620,68 @@ object frmButtonEdit: TfrmButtonEdit
           Height = 13
           Caption = 'image: Top'
         end
-        object chbNoIcon: TCheckBox
-          Left = 7
-          Top = 18
-          Width = 97
-          Height = 17
-          Caption = 'Do not show'
+        object edImgIdle: TEdit
+          Left = 114
+          Top = 17
+          Width = 117
+          Height = 21
           TabOrder = 0
         end
-        object edImgIdle: TEdit
-          Left = 113
-          Top = 38
+        object edImgTerminated: TEdit
+          Left = 114
+          Top = 37
           Width = 117
           Height = 21
           TabOrder = 1
         end
-        object edImgTerminated: TEdit
-          Left = 113
-          Top = 58
+        object edImgEarly: TEdit
+          Left = 114
+          Top = 57
           Width = 117
           Height = 21
           TabOrder = 2
         end
-        object edImgEarly: TEdit
-          Left = 113
-          Top = 78
+        object edImgConfirmed: TEdit
+          Left = 114
+          Top = 77
           Width = 117
           Height = 21
           TabOrder = 3
         end
-        object edImgConfirmed: TEdit
-          Left = 113
-          Top = 98
-          Width = 117
-          Height = 21
-          TabOrder = 4
-        end
         object btnSelectImgTerminated: TButton
-          Left = 232
-          Top = 59
+          Left = 233
+          Top = 38
+          Width = 21
+          Height = 19
+          Caption = '...'
+          TabOrder = 4
+          OnClick = SelectImgClick
+        end
+        object btnSelectImgEarly: TButton
+          Left = 233
+          Top = 58
           Width = 21
           Height = 19
           Caption = '...'
           TabOrder = 5
           OnClick = SelectImgClick
         end
-        object btnSelectImgEarly: TButton
-          Left = 232
-          Top = 79
+        object btnSelectImgConfirmed: TButton
+          Left = 233
+          Top = 78
           Width = 21
           Height = 19
           Caption = '...'
           TabOrder = 6
           OnClick = SelectImgClick
         end
-        object btnSelectImgConfirmed: TButton
-          Left = 232
-          Top = 99
+        object btnSelectImgIdle: TButton
+          Left = 233
+          Top = 17
           Width = 21
           Height = 19
           Caption = '...'
           TabOrder = 7
-          OnClick = SelectImgClick
-        end
-        object btnSelectImgIdle: TButton
-          Left = 232
-          Top = 38
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 8
           OnClick = SelectImgClick
         end
         object edImageLeft: TEdit
@@ -681,7 +689,7 @@ object frmButtonEdit: TfrmButtonEdit
           Top = 14
           Width = 38
           Height = 21
-          TabOrder = 9
+          TabOrder = 8
         end
         object chbImageTransparent: TCheckBox
           Left = 297
@@ -695,14 +703,14 @@ object frmButtonEdit: TfrmButtonEdit
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 10
+          TabOrder = 9
         end
         object edImageTop: TEdit
           Left = 366
           Top = 38
           Width = 38
           Height = 21
-          TabOrder = 11
+          TabOrder = 10
         end
         object chbImageCenterVertically: TCheckBox
           Left = 413
@@ -716,7 +724,7 @@ object frmButtonEdit: TfrmButtonEdit
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 12
+          TabOrder = 11
           OnClick = chbImageCenterVerticallyClick
         end
       end
@@ -741,25 +749,20 @@ object frmButtonEdit: TfrmButtonEdit
     object tsBehavior: TTabSheet
       Caption = 'Behavior'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 400
       object pcBehavior: TPageControl
         Left = 0
         Top = 0
         Width = 651
-        Height = 400
+        Height = 380
         ActivePage = tsBehaviorAutoAnswer
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
+        ExplicitHeight = 400
         object tsBehaviorBlf: TTabSheet
           Caption = 'tsBehaviorBlf'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitHeight = 369
           object lblBlfInCallAction: TLabel
             Left = 3
             Top = 125
@@ -848,7 +851,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 145
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             ItemIndex = 2
             TabOrder = 1
             Text = 'blind transfer'
@@ -868,10 +871,7 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorPaging: TTabSheet
           Caption = 'tsBehaviorPaging'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitHeight = 369
           object lblPagingTxWaveFile: TLabel
             Left = 3
             Top = 3
@@ -914,7 +914,7 @@ object frmButtonEdit: TfrmButtonEdit
             Top = 23
             Width = 145
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 2
             Text = 'PCMA'
             Items.Strings = (
@@ -928,7 +928,7 @@ object frmButtonEdit: TfrmButtonEdit
             Top = 46
             Width = 71
             Height = 21
-            ItemHeight = 0
+            ItemHeight = 13
             ItemIndex = 1
             TabOrder = 3
             Text = '20'
@@ -941,10 +941,7 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorScript: TTabSheet
           Caption = 'tsBehaviorScript'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitHeight = 369
           object lblScriptFile: TLabel
             Left = 3
             Top = 3
@@ -1007,10 +1004,7 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorExecute: TTabSheet
           Caption = 'tsBehaviorExecute'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitHeight = 369
           object lblArg1: TLabel
             Left = 3
             Top = 3
@@ -1029,10 +1023,7 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioSource: TTabSheet
           Caption = 'tsBehaviorSwitchAudioSource'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitHeight = 369
           object lblSoundInputModule: TLabel
             Left = 3
             Top = 3
@@ -1053,7 +1044,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = cbSoundInputModChange
           end
@@ -1079,17 +1070,14 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
           end
         end
         object tsBehaviorSwitchAudioPlayer: TTabSheet
           Caption = 'tsBehaviorSwitchAudioPlayer'
           ImageIndex = 5
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitHeight = 369
           object Label3: TLabel
             Left = 3
             Top = 3
@@ -1110,7 +1098,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = cbSoundOutputModChange
           end
@@ -1120,17 +1108,14 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 240
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 1
           end
         end
         object tsBehaviorAutoAnswer: TTabSheet
           Caption = 'tsBehaviorAutoAnswer'
           ImageIndex = 6
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitHeight = 369
           object lblAutoAnswerSipCode: TLabel
             Left = 3
             Top = 3

@@ -141,7 +141,6 @@ __published:	// IDE-managed Components
 	TLabel *lblImgConfirmed;
 	TLabel *lblImageLeft;
 	TLabel *lblImageTop;
-	TCheckBox *chbNoIcon;
 	TEdit *edImgIdle;
 	TEdit *edImgTerminated;
 	TEdit *edImgEarly;
@@ -155,6 +154,8 @@ __published:	// IDE-managed Components
 	TEdit *edImageTop;
 	TCheckBox *chbImageCenterVertically;
 	TCheckBox *chbSpaceLabelsYEqually;
+	TLabel *lblLabelLeft;
+	TEdit *edLabelLeft;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);

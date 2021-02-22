@@ -23,7 +23,6 @@ void ButtonConf::Reset(void)
 	caption2 = "";
 	captionLines = CAPTION_LINES_MIN;
 	number = "";
-	noIcon = false;
 	down = false;
 	inactive = false;
 	left = 275;
@@ -34,6 +33,7 @@ void ButtonConf::Reset(void)
 	customFrame = false;
 	labelCenterHorizontally = false;
 	labelCenterVertically = true;
+	labelLeft = 20;
 	labelTop = 0;
 	spaceLabelsYEqually = true;
 

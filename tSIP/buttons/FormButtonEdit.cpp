@@ -98,6 +98,7 @@ void TfrmButtonEdit::ApplyConf(void)
 	chbCustomFrame->Checked = cfg->customFrame;
 	chbLabelCenterHorizontally->Checked = cfg->labelCenterHorizontally;
 	chbLabelCenterVertically->Checked = cfg->labelCenterVertically;
+	edLabelLeft->Text = cfg->labelLeft;
 	edLabelTop->Enabled = !chbLabelCenterVertically->Checked;
 	edLabelTop->Text = cfg->labelTop;
 
@@ -110,7 +111,6 @@ void TfrmButtonEdit::ApplyConf(void)
 	UpdateLabelsTopVisibility();	
 
 	chbImageTransparent->Checked = cfg->imageTransparent;
-	chbNoIcon->Checked = cfg->noIcon;
 	edLeft->Text = cfg->left;
 	edTop->Text = cfg->top;
 	edWidth->Text = cfg->width;
@@ -191,16 +191,16 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->customFrame = chbCustomFrame->Checked;
 	cfg->labelCenterHorizontally = chbLabelCenterHorizontally->Checked;
 	cfg->labelCenterVertically = chbLabelCenterVertically->Checked;
-	cfg->labelTop = StrToIntDef(edLabelTop->Text, 0);
+	cfg->labelLeft = StrToIntDef(edLabelLeft->Text, cfg->labelLeft);
+	cfg->labelTop = StrToIntDef(edLabelTop->Text, cfg->labelTop);
 
 	cfg->label2Left = StrToIntDef(edLabel2Left->Text, 0);
 	cfg->label2Top = StrToIntDef(edLabel2Top->Text, 0);
-	cfg->label2CenterHorizontally = chbLabel2CenterHorizontally->Checked;	
+	cfg->label2CenterHorizontally = chbLabel2CenterHorizontally->Checked;
 
 	cfg->spaceLabelsYEqually = chbSpaceLabelsYEqually->Checked;
 
 	cfg->imageTransparent = chbImageTransparent->Checked;
-	cfg->noIcon = chbNoIcon->Checked;
 	cfg->left = StrToIntDef(edLeft->Text, 0);
 	cfg->top = StrToIntDef(edTop->Text, 0);
 	cfg->width = StrToIntDef(edWidth->Text, 100);

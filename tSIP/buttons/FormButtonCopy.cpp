@@ -162,6 +162,7 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 	}
 	if (chbLabelPosition->Checked)
 	{
+        btnDst.labelLeft = btnSrc.labelLeft;
 		btnDst.labelTop = btnSrc.labelTop;
 		btnDst.labelCenterVertically = btnSrc.labelCenterVertically;
 		btnDst.label2Left = btnSrc.label2Left;

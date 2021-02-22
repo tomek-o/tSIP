@@ -18,7 +18,6 @@ public:
 	enum { CAPTION_LINES_MAX = 2 };
 	int captionLines;
 	std::string number;
-	bool noIcon;
 
 	bool visible;	// hide whole button
 	bool down;
@@ -28,6 +27,7 @@ public:
 	bool customFrame;
 	bool labelCenterHorizontally;
 	bool labelCenterVertically;
+	int labelLeft;
 	int labelTop;
 
     bool spaceLabelsYEqually;
@@ -168,7 +168,6 @@ public:
 			visible == right.visible &&
 			down == right.down &&
 			inactive == right.inactive &&
-			noIcon == right.noIcon &&
 			left == right.left &&
 			top == right.top &&
 			width == right.width &&
@@ -177,6 +176,7 @@ public:
 			customFrame == right.customFrame &&
 			labelCenterHorizontally == right.labelCenterHorizontally &&
 			labelCenterVertically == right.labelCenterVertically &&
+			labelLeft == right.labelLeft &&
 			labelTop == right.labelTop &&
 			label2Top == right.label2Top &&
 			label2CenterHorizontally == right.label2CenterHorizontally &&

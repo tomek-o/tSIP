@@ -279,16 +279,7 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	}
 	else
 	{
-		if (cfg.noIcon)
-		{
-			image->Width = 0 * percentage/100;
-			label->Left = 2 * percentage/100;
-		}
-		else
-		{
-			image->Width = 0;
-			label->Left = 20 * percentage/100;
-		}
+		label->Left = cfg.labelLeft;
 	}
 	centerTextVertically = cfg.labelCenterVertically;
 	labelTop = cfg.labelTop;
