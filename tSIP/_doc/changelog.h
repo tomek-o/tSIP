@@ -892,5 +892,13 @@ Version 0.2.00
 	- Lua: added GetButtonMouseDown(buttonId) function
 	- separate background image setting for each button container
 	- showing button id and type on button popup menu
+
+Version 0.2.00.4
+	- removed button "noIcon" setting
+	- added button "labelLeft" setting
+	- FIXED: do not use initial button settings ("Redial", etc.) if settings exist (problem related to default settings not being stored in file since 0.2)
+	- added new hotkey action type: answer/hangup depending on call state (intended to be used with single button on BT headset)
+	- added French translation (thanks to Thierry Pimont)
+	- added Russian translation (thanks to https://github.com/homedimon)
 */
 

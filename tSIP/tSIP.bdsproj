@@ -495,7 +495,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">2</VersionInfo>
           <VersionInfo Name="Release">0</VersionInfo>
-          <VersionInfo Name="Build">3</VersionInfo>
+          <VersionInfo Name="Build">4</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -507,7 +507,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.2.0.3</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.2.0.4</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -557,10 +557,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-      <buildevent file="tSIP.bdsproj">
-        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+			<buildevent file="tSIP.bdsproj">
+				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-      </buildevent>
-    </buildevents>
+			</buildevent>
+		</buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>
