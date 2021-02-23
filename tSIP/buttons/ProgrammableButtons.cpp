@@ -105,6 +105,21 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				{
 					cfg.captionLines = captionLines;
 				}
+				{
+					// importing setting that was removed/replaced in version 0.2
+					const Json::Value& jv = btnJson["noIcon"];
+					if (jv.type() == Json::booleanValue)
+					{
+						if (jv.asBool())
+						{
+							cfg.labelLeft = 4;
+						}
+						else
+						{
+							cfg.labelLeft = 20;
+						}
+					}
+				}
 				cfg.number = btnJson.get("number", cfg.number).asString();
 				cfg.visible = btnJson.get("visible", cfg.visible).asBool();
 				cfg.down = btnJson.get("down", cfg.down).asBool();
