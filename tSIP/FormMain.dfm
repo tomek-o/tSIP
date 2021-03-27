@@ -61,7 +61,6 @@ object frmMain: TfrmMain
           Height = 209
           Align = alBottom
           BevelOuter = bvNone
-          Caption = 'pnlDialpad'
           TabOrder = 0
           object imgDialpadBackground: TImage
             Left = 0
@@ -365,18 +364,10 @@ object frmMain: TfrmMain
       object tsContacts: TTabSheet
         Caption = 'Contacts'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object tsHistory: TTabSheet
         Caption = 'History'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
