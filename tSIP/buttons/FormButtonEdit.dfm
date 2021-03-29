@@ -46,6 +46,13 @@ object frmButtonEdit: TfrmButtonEdit
     Height = 13
     Caption = 'Caption #2'
   end
+  object lblParent: TLabel
+    Left = 9
+    Top = 31
+    Width = 80
+    Height = 13
+    Caption = 'Parent container'
+  end
   object pnlBottom: TPanel
     Left = 0
     Top = 494
@@ -54,7 +61,6 @@ object frmButtonEdit: TfrmButtonEdit
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 509
     object btnCancel: TButton
       Left = 592
       Top = 7
@@ -122,7 +128,6 @@ object frmButtonEdit: TfrmButtonEdit
     object tsVisual: TTabSheet
       Caption = 'Visual'
       ImageIndex = 1
-      ExplicitHeight = 400
       object lblBevelWidth: TLabel
         Left = 407
         Top = 8
@@ -749,7 +754,6 @@ object frmButtonEdit: TfrmButtonEdit
     object tsBehavior: TTabSheet
       Caption = 'Behavior'
       ImageIndex = 1
-      ExplicitHeight = 400
       object pcBehavior: TPageControl
         Left = 0
         Top = 0
@@ -759,10 +763,8 @@ object frmButtonEdit: TfrmButtonEdit
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
-        ExplicitHeight = 400
         object tsBehaviorBlf: TTabSheet
           Caption = 'tsBehaviorBlf'
-          ExplicitHeight = 369
           object lblBlfInCallAction: TLabel
             Left = 3
             Top = 125
@@ -871,7 +873,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorPaging: TTabSheet
           Caption = 'tsBehaviorPaging'
           ImageIndex = 1
-          ExplicitHeight = 369
           object lblPagingTxWaveFile: TLabel
             Left = 3
             Top = 3
@@ -941,7 +942,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorScript: TTabSheet
           Caption = 'tsBehaviorScript'
           ImageIndex = 2
-          ExplicitHeight = 369
           object lblScriptFile: TLabel
             Left = 3
             Top = 3
@@ -1004,7 +1004,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorExecute: TTabSheet
           Caption = 'tsBehaviorExecute'
           ImageIndex = 3
-          ExplicitHeight = 369
           object lblArg1: TLabel
             Left = 3
             Top = 3
@@ -1023,7 +1022,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioSource: TTabSheet
           Caption = 'tsBehaviorSwitchAudioSource'
           ImageIndex = 4
-          ExplicitHeight = 369
           object lblSoundInputModule: TLabel
             Left = 3
             Top = 3
@@ -1077,7 +1075,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioPlayer: TTabSheet
           Caption = 'tsBehaviorSwitchAudioPlayer'
           ImageIndex = 5
-          ExplicitHeight = 369
           object Label3: TLabel
             Left = 3
             Top = 3
@@ -1115,7 +1112,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorAutoAnswer: TTabSheet
           Caption = 'tsBehaviorAutoAnswer'
           ImageIndex = 6
-          ExplicitHeight = 369
           object lblAutoAnswerSipCode: TLabel
             Left = 3
             Top = 3
@@ -1162,6 +1158,21 @@ object frmButtonEdit: TfrmButtonEdit
     Width = 89
     Height = 21
     TabOrder = 7
+  end
+  object cbParentId: TComboBox
+    Left = 95
+    Top = 28
+    Width = 169
+    Height = 21
+    Style = csDropDownList
+    DropDownCount = 12
+    ItemHeight = 13
+    ItemIndex = 1
+    TabOrder = 8
+    Text = 'main / console'
+    Items.Strings = (
+      'dialpad'
+      'main / console')
   end
   object openDialog: TOpenDialog
     Options = [ofHideReadOnly, ofNoChangeDir, ofFileMustExist, ofEnableSizing]

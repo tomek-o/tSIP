@@ -11,6 +11,8 @@
 class ButtonConf
 {
 public:
+	enum { DEFAULT_PARENT_ID = 1 };
+    int parentId;			///< id of button container where this button belongs
 	Button::Type type;
 	std::string caption;
 	std::string caption2;	///< optional 2nd caption line
@@ -161,6 +163,7 @@ public:
 	bool operator==(const ButtonConf& right) const {
 		return (
 			type == right.type &&
+			parentId == right.parentId &&
 			number == right.number &&
 			caption == right.caption &&
 			caption2 == right.caption2 &&

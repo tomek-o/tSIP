@@ -31,7 +31,7 @@ private:
 	typedef std::string (__closure *CallbackGetDial)(void);
 	typedef void (__closure *CallbackSetDial)(std::string number);
 	typedef void (__closure *CallbackSwitchAudioSource)(std::string mod, std::string dev);	
-	typedef void (__closure *CallbackSendDtmf)(const std::string& digits);
+	typedef void (__closure *CallbackSendDtmf)(const std::string& digits, bool runScript);
 	typedef void (__closure *CallbackBlindTransfer)(const std::string& target);
 	typedef Call* (__closure *CallbackGetCall)(void);
 	typedef void (__closure *CallbackResetCall)(void);

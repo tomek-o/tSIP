@@ -90,7 +90,6 @@ public:
 		bool bXBtnMinimize;				///< minimize to tray when 'X' is pressed
 		bool bRestoreOnIncomingCall;	///< restore minimized window on incoming call
 		bool bSingleInstance;			///< check if another instance is running if started without parameters and bring it to front
-		AnsiString dialpadBackgroundImage;
 		bool bNoBeepOnEnterKey;			///< do not beep when [Enter] is pressed in dial or transfer edit
 		AnsiString mainIcon;				///< .ico file replacing regular icon
 		AnsiString trayNotificationImage;	///< .bmp file to be shown in tray on missing call (replacing regular image)

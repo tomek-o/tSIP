@@ -242,21 +242,26 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	buttons.Read();
 	buttons.UpdateContacts(appSettings.uaConf.contacts);
 
+    buttons.SetScalingPercentage(appSettings.gui.scalingPct);
+
 	TfrmButtonContainer *frmButtonContainerBasic = new TfrmButtonContainer(
-		this->pnlButtonsBasic,
+		this->pnlDialpad,
 		buttons,
 		0,
-		this->pnlButtonsBasic->Width, this->pnlButtonsBasic->Height, appSettings.gui.scalingPct,
-		0, ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS,
-		&OnProgrammableBtnClick,
-		&OnProgrammableBtnMouseUpDown,
-		&OnUpdateAllBtnContainers,
+		this->pnlDialpad->Width, this->pnlDialpad->Height, appSettings.gui.scalingPct,
 		&OnSetKeepForeground,
 		appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
-	frmButtonContainerBasic->Parent = this->pnlButtonsBasic;
+	frmButtonContainerBasic->Parent = this->pnlDialpad;
 	frmButtonContainerBasic->UpdateBackgroundImage();
 	frmButtonContainerBasic->Visible = true;
 	frmButtonContainers[0] = frmButtonContainerBasic;
+
+	trbarSoftvolMic->Parent = frmButtonContainerBasic;
+	trbarSoftvolSpeaker->Parent = frmButtonContainerBasic;
+	edTransfer->Enabled = false;	// this eliminates ugly effect with edTransfer content being selected for a moment at the startup - probably because of parent change
+	edTransfer->Parent = frmButtonContainerBasic;
+	btnResetMicVolume->Parent = frmButtonContainerBasic;
+	btnResetSpeakerVolume->Parent = frmButtonContainerBasic;
 
 	for (int i=1; i<ARRAY_SIZE(frmButtonContainers); i++) {
 		TfrmButtonContainer *& container = frmButtonContainers[i];
@@ -264,10 +269,6 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 			buttons,
 			i,
 			300, 0, appSettings.gui.scalingPct,
-			ProgrammableButtons::BASIC_PANEL_CONSOLE_BTNS + (i-1) * ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER, ProgrammableButtons::CONSOLE_BTNS_PER_CONTAINER,
-			&OnProgrammableBtnClick,
-			&OnProgrammableBtnMouseUpDown,
-			&OnUpdateAllBtnContainers,
 			&OnSetKeepForeground,
 			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
 		container->Parent = this; //this->pnlSpeedDial;
@@ -275,8 +276,15 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		container->SendToBack();
 		container->Align = alClient;
 		container->Visible = true;
-		//container->SetScaling(appSettings.gui.scalingPct);
 	}
+
+	buttons.Create(this, appSettings.gui.scalingPct,
+		&OnProgrammableBtnClick,
+		&OnProgrammableBtnMouseUpDown,
+		&OnSetKeepForeground,
+		&OnRestartUa
+		);
+	buttons.UseContextMenu(appSettings.frmMain.bSpeedDialPopupMenu);
 
 	frmContacts = new TfrmContacts(this->tsContacts, &contacts, &OnCall);
 	frmContacts->Scale(appSettings.gui.scalingPct);
@@ -290,7 +298,6 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	{
 		trIcon = new TrayIcon(this);
 		trIcon->OnLeftBtnDown = OnTrayIconLeftBtnDown;
-		trIcon->OnRightBtnDown = OnTrayIconRightBtnDown;
 		trIcon->SetPopupMenu(popupTray);
 		trIcon->SetIcon(Application->Icon);
 		trIcon->ShowInTray(true);
@@ -348,7 +355,9 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
 	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
 	pnlCallControls->Visible = !appSettings.frmMain.bHideCallPanel;
-	pnlMain->Visible = !appSettings.frmMain.bHideMainPanel;		
+	pnlMain->Visible = !appSettings.frmMain.bHideMainPanel;
+
+	//edTransfer->Text = asTransferHint;			
 
 #if 0 // this MIGHT work for scaling scrollbar width - not working
 	TNonClientMetrics NCMet;
@@ -493,7 +502,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 {
 	UpdateSize();
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
-
+	if (prev.frmMain.bSpeedDialPopupMenu != appSettings.frmMain.bSpeedDialPopupMenu)
+	{
+		buttons.UseContextMenu(appSettings.frmMain.bSpeedDialPopupMenu);
+	}
 	if (prev.Translation.language != appSettings.Translation.language)
 	{
 		LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
@@ -630,7 +642,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 
 int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 {
-	ProgrammableButtons prevButtons = buttons;
+	std::vector<ButtonConf> prevConf = buttons.btnConf;
 	int status = buttons.ReadFromString(json);
 	if (status != 0)
 	{
@@ -638,29 +650,16 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 	}
 	bool changed = false;
 	bool restartUa = false;
-	for (int cid=0; cid<ARRAY_SIZE(frmButtonContainers); cid++)
+	for (unsigned int i=0; i<buttons.btnConf.size(); i++)
 	{
-		TfrmButtonContainer *& container = frmButtonContainers[cid];
-		if (container)
+		const ButtonConf &conf = buttons.btnConf[i];
+		const ButtonConf &prev = prevConf[i];
+		if (conf != prev)
 		{
-			int btnId = container->GetStartBtnId();
-			for (int id=0; id<container->GetBtnCnt(); id++)
-			{
-				if (buttons.btnConf[btnId] != prevButtons.btnConf[btnId])
-				{
-					changed = true;
-					if (buttons.btnConf[btnId].UaRestartNeeded(prevButtons.btnConf[btnId]))
-					{
-						restartUa = true;
-					}
-					TProgrammableButton* btn = container->GetBtn(id);
-					if (btn)
-					{
-						btn->SetConfig(buttons.btnConf[btnId]);
-					}
-				}
-				btnId++;
-			}
+			changed = true;
+			if (conf.UaRestartNeeded(prev))
+				restartUa = true;
+			buttons.SetConfig(i, conf);
 		}
 	}
 	if (changed)
@@ -683,6 +682,7 @@ void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
 	UA->Destroy();
 	UA_CB->Destroy();
+	buttons.Destroy();
 	CLog::Instance()->Destroy();
 }
 //---------------------------------------------------------------------------
@@ -714,6 +714,8 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	{
 		this->Menu = NULL;
 	}
+
+	edTransfer->Enabled = true;
 
     frmTrayNotifier->Caption = Branding::appName;
 	frmTrayNotifier->OnHangup = Hangup;
@@ -1034,18 +1036,6 @@ void TfrmMain::OnSetKeepForeground(bool state)
 		tmrBringToFront->Enabled = true;
 	}
 #endif
-}
-
-void TfrmMain::OnUpdateAllBtnContainers(void)
-{
-	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++)
-	{
-		TfrmButtonContainer *& container = frmButtonContainers[i];
-		if (container)
-		{
-			container->UpdateAll();
-		}
-	}
 }
 
 int TfrmMain::OnPluginSendMessageText(const char* dllName, const char* text)
@@ -1596,8 +1586,8 @@ void TfrmMain::PollCallbackQueue(void)
 				call.reset();
 				call.recordFile = recordFile;	// should be preserved after the call to be used in script
 
-				UpdateBtnState(Button::HOLD, false);
-				UpdateBtnState(Button::MUTE, false);
+				buttons.UpdateBtnState(Button::HOLD, false);
+				buttons.UpdateBtnState(Button::MUTE, false);
 				tmrAutoAnswer->Enabled = false;
 				frmTrayNotifier->HideWindow();
 				lbl2ndParty->Caption = "";
@@ -1858,13 +1848,7 @@ void TfrmMain::PollCallbackQueue(void)
 			std::list<int>::iterator iter;
 			for (iter = ids.begin(); iter != ids.end(); ++iter)
 			{
-				for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
-					TfrmButtonContainer *& container = frmButtonContainers[i];
-					if (container)
-					{
-						container->UpdateDlgInfoState(*iter, cb.dlgInfoState, updateRemoteIdentity, direction, remoteIdentity, remoteIdentityDisplay);
-					}
-				}
+				buttons.UpdateDlgInfoState(*iter, cb.dlgInfoState, updateRemoteIdentity, direction, remoteIdentity, remoteIdentityDisplay);
 			}
 			if (appSettings.Scripts.onDialogInfo != "")
 			{
@@ -1886,26 +1870,14 @@ void TfrmMain::PollCallbackQueue(void)
 			std::list<int>::iterator iter;
 			for (iter = ids.begin(); iter != ids.end(); ++iter)
 			{
-				for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
-					TfrmButtonContainer *& container = frmButtonContainers[i];
-					if (container)
-					{
-						container->UpdatePresenceState(*iter, cb.presenceState, note);
-					}
-				}
+				buttons.UpdatePresenceState(*iter, cb.presenceState, note);
 			}
 			break;
 		}
 		case Callback::MWI_STATE:
 		{
 			SetNotificationIcon(cb.mwiNewMsg > 0);
-			for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
-				TfrmButtonContainer *& container = frmButtonContainers[i];
-				if (container)
-				{
-					container->UpdateMwiState(cb.mwiNewMsg, cb.mwiOldMsg);
-				}
-			}
+			buttons.UpdateMwiState(cb.mwiNewMsg, cb.mwiOldMsg);
 			break;
 		}
 		case Callback::PAGING_TX_STATE:
@@ -2017,73 +1989,6 @@ void TfrmMain::PollCallbackQueue(void)
 	}
 }
 
-void TfrmMain::UpdateBtnState(Button::Type type, bool state)
-{
-	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
-		TfrmButtonContainer *& container = frmButtonContainers[i];
-		if (container)
-		{
-			container->UpdateBtnState(type, state);
-		}
-	}
-}
-
-void __fastcall TfrmMain::btnDialClick(TObject *Sender)
-{
-	char digit = '\0';
-	TSpeedButton* btn = dynamic_cast<TSpeedButton*>(Sender);
-	assert(btn);
-	switch(btn->Tag)
-	{
-	case 0:
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	case 6:
-	case 7:
-	case 8:
-	case 9:
-		digit = '0' + btn->Tag;
-		break;
-	case 10:
-		digit = '*';
-		break;
-	case 11:
-		digit = '#';
-		break;
-	case 12:
-		digit = 'A';
-		break;
-	case 13:
-		digit = 'B';
-		break;
-	case 14:
-		digit = 'C';
-		break;
-	case 15:
-		digit = 'D';
-		break;
-	case 16:	// FLASH
-		digit = 'R';
-		break;
-	default:
-		assert(!"Unhandled button tag value");
-	}
-
-	Dial(digit);
-
-	if (appSettings.Scripts.onDial != "")
-	{
-		AnsiString asScriptFile;
-		bool handled = true;
-		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDial.c_str());
-		RunScriptFile(SCRIPT_SRC_ON_DIAL, digit, asScriptFile.c_str(), handled);
-	}	
-}
-//---------------------------------------------------------------------------
-
 void TfrmMain::Dial(char digit)
 {
 	if (call.connected || call.progress)
@@ -2103,7 +2008,7 @@ void TfrmMain::Dial(char digit)
 	}
 }
 
-void TfrmMain::DialString(const std::string& digits)
+void TfrmMain::DialString(const std::string& digits, bool runScript)
 {
 	for (int i=0; i<digits.length(); i++)
 	{
@@ -2112,6 +2017,13 @@ void TfrmMain::DialString(const std::string& digits)
 		if (strchr(allowed, digit))
 		{
 			Dial(digit);
+			if (runScript && appSettings.Scripts.onDial != "")
+			{
+				AnsiString asScriptFile;
+				bool handled = true;
+				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDial.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_DIAL, digit, asScriptFile.c_str(), handled);
+			}
 		}
 	}
 }
@@ -2423,7 +2335,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 			case ButtonConf::BLF_IN_CALL_DTMF:
 				// add prefix (optional in configuration)
 				dial = cfg.blfDtmfPrefixDuringCall + dial;
-				DialString(dial);
+				DialString(dial, false);
 				break;
 			case ButtonConf::BLF_IN_CALL_TRANSFER:
 				UA->Transfer(0, dial.c_str()); 			
@@ -2443,7 +2355,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		Redial();
 		break;
 	case Button::DTMF:
-		DialString(cfg.number);
+		DialString(cfg.number, true);
 		break;
 	case Button::TRANSFER:
 		if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
@@ -2453,7 +2365,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::HOLD:
 		if (call.connected == false && call.progress == false)
 			down = false;
-		UpdateBtnState(cfg.type, down);
+		buttons.UpdateBtnState(cfg.type, down);
 		UA->Hold(0, down);		
 		break;
 	case Button::REREGISTER:
@@ -2465,11 +2377,11 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::MUTE:
 		if (call.connected == false && call.progress == false)
 			down = false;
-		UpdateBtnState(cfg.type, down);
+		buttons.UpdateBtnState(cfg.type, down);
 		UA->Mute(0, down);
 		break;
 	case Button::MUTE_RING:
-		UpdateBtnState(cfg.type, down);
+		buttons.UpdateBtnState(cfg.type, down);
 		muteRing = down;
 		if (muteRing)
 		{
@@ -2617,6 +2529,14 @@ void TfrmMain::OnProgrammableBtnMouseUpDown(int id, TProgrammableButton* btn)
 	}
 }
 
+void TfrmMain::OnRestartUa(void)
+{
+	if (!appSettings.uaConf.disableUa)
+	{
+		buttons.UpdateContacts(appSettings.uaConf.contacts);
+		Ua::Instance().Restart();
+	}
+}
 
 void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog)
 {
@@ -2818,10 +2738,6 @@ void __fastcall TfrmMain::OnTrayIconLeftBtnDown(TObject *Sender)
 	ToggleVisibility();
 }
 //---------------------------------------------------------------------------
-void __fastcall TfrmMain::OnTrayIconRightBtnDown(TObject *Sender)
-{
-	//PopupMenu1 -> Tag = 1;
-}
 
 void __fastcall TfrmMain::miMinimizeTrayClick(TObject *Sender)
 {
@@ -3070,7 +2986,7 @@ void TfrmMain::HandleCommandLine(void)
 
 void TfrmMain::ProgrammableButtonClick(int buttonId)
 {
-	TProgrammableButton* btn = FindButton(buttonId);
+	TProgrammableButton* btn = buttons.GetBtn(buttonId);
 	if (btn)
 		btn->OnClick(btn);
 }
@@ -3142,7 +3058,7 @@ void TfrmMain::ExecAction(const struct Action& action)
 	case Action::TYPE_BUTTON:
 		if (action.id >= 0)
 		{
-			TProgrammableButton* btn = FindButton(action.id);
+			TProgrammableButton* btn = buttons.GetBtn(action.id);
 			if (btn)
 				btn->OnClick(btn);
 		}
@@ -3618,9 +3534,20 @@ void __fastcall TfrmMain::miRefreshTranslationFromFileClick(TObject *Sender)
 
 void TfrmMain::UpdateAutoAnswer(void)
 {
-	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {
-		TfrmButtonContainer *& container = frmButtonContainers[i];
-		container->UpdateAutoAnswer(appSettings.uaConf.autoAnswer, appSettings.uaConf.autoAnswerCode);
-	}
+	buttons.UpdateAutoAnswer(appSettings.uaConf.autoAnswer, appSettings.uaConf.autoAnswerCode);
 }
+
+void __fastcall TfrmMain::btnResetMicVolumeMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+	ActiveControl = NULL;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::btnResetSpeakerVolumeMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+	ActiveControl = NULL;	
+}
+//---------------------------------------------------------------------------
 

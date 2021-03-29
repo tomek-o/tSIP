@@ -20,7 +20,7 @@
 #include "Contacts.h"
 #include "FormContactPopup.h"
 #include "SIMPLE_Messages.h"
-#include "buttons/ButtonContainers.h"
+#include "buttons/ProgrammableButtons.h"
 #include "buttons/ProgrammableButton.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
@@ -540,7 +540,7 @@ static int l_SendDtmf(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	GetContext(L)->onSendDtmf(str);
+	GetContext(L)->onSendDtmf(str, false);
 	return 0;
 }
 
@@ -671,7 +671,7 @@ static int l_SetButtonCaption(lua_State* L)
 	const char* str = lua_tostring( L, 2 );
 	if (str == NULL)
 		str = "";
-	TProgrammableButton *btn = FindButton(id);
+	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
 		btn->SetCaption(str);
@@ -685,7 +685,7 @@ static int l_SetButtonCaption2(lua_State* L)
 	const char* str = lua_tostring( L, 2 );
 	if (str == NULL)
 		str = "";
-	TProgrammableButton *btn = FindButton(id);
+	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
 		btn->SetCaption2(str);
@@ -697,7 +697,7 @@ static int l_SetButtonDown(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	int state = lua_tointeger( L, 2 );
-	TProgrammableButton *btn = FindButton(id);
+	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
 		btn->SetDown(state);
@@ -709,7 +709,7 @@ static int l_GetButtonDown(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	bool down = false;
-	TProgrammableButton *btn = FindButton(id);
+	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
 		down = btn->GetDown();
@@ -722,7 +722,7 @@ static int l_GetButtonMouseDown(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	bool down = false;
-	TProgrammableButton *btn = FindButton(id);
+	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
 		down = btn->GetMouseDown();
@@ -735,7 +735,7 @@ static int l_SetButtonInactive(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	int state = lua_tointeger( L, 2 );
-	TProgrammableButton *btn = FindButton(id);
+	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
 		btn->SetInactive(state);
@@ -747,7 +747,7 @@ static int l_SetButtonVisible(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	int state = lua_tointeger( L, 2 );
-	TProgrammableButton *btn = FindButton(id);
+	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
 		btn->SetVisible(state);
@@ -759,7 +759,7 @@ static int l_SetButtonImage(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
-	TProgrammableButton *btn = FindButton(id);
+	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
 		btn->SetImage(str);

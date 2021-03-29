@@ -900,5 +900,8 @@ Version 0.2.00.4
 	- added new hotkey action type: answer/hangup depending on call state (intended to be used with single button on BT headset)
 	- added French translation (thanks to Thierry Pimont)
 	- added Russian translation (thanks to https://github.com/homedimon)
+
+Version
+	- removed dialpadBackgroundImage - it is not replaced by bitmap for first button container that covers whole dialpad area
 */
 

@@ -330,9 +330,6 @@ __published:	// IDE-managed Components
 	TEdit *edPortaudioInSuggestedLatency;
 	TEdit *edPortaudioOutSuggestedLatency;
 	TTabSheet *tsBranding;
-	TLabel *lblDialpadBackgroundImage;
-	TEdit *edDialpadBackgroundImage;
-	TButton *btnSelectDialpadBackgroundImage;
 	TLabel *lblMainIconFile;
 	TEdit *edMainIconFile;
 	TButton *btnSelectMainIconFile;

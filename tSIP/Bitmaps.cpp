@@ -16,26 +16,6 @@
 namespace
 {
 
-void UpdateDialpadBackgroundImage(void)
-{
-	AnsiString asDialpadBackgroundFile;
-	try
-	{
-		static AnsiString lastImage;
-		if (appSettings.frmMain.dialpadBackgroundImage != "" && appSettings.frmMain.dialpadBackgroundImage != lastImage)
-		{
-			asDialpadBackgroundFile = Paths::GetFullImgName(appSettings.frmMain.dialpadBackgroundImage);
-			frmMain->imgDialpadBackground->Picture->Bitmap->PixelFormat = pf24bit;
-			frmMain->imgDialpadBackground->Picture->LoadFromFile(asDialpadBackgroundFile);
-			lastImage = appSettings.frmMain.dialpadBackgroundImage;
-		}
-	}
-	catch (...)
-	{
-		LOG("Failed to load dialpad background (%s)\n", asDialpadBackgroundFile.c_str());
-	}
-}
-
 Graphics::TBitmap *bmpBackspace = NULL;
 AnsiString asLastBackspaceFile;
 
@@ -134,7 +114,6 @@ void LoadBitmap(Graphics::TBitmap *& bmp, AnsiString name, AnsiString &lastName)
 
 void UpdateBitmaps(void)
 {
-	UpdateDialpadBackgroundImage();
 	const Settings::_frmMain::_bitmaps &bitmaps = appSettings.frmMain.bitmaps;
 	UpdateBmp(frmMain->btnBackspace->Glyph, bitmaps.bmpBtnBackspace, bmpBackspace, asLastBackspaceFile);
 	UpdateBmp(frmMain->btnResetMicVolume->Glyph, bitmaps.bmpBtnResetMicVolume, bmpResetMicVolume, asLastResetMicVolumeFile);

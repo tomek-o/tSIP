@@ -94,25 +94,11 @@ __published:	// IDE-managed Components
 	TSpeedButton *btnHangup;
 	TSpeedButton *btnMakeCall;
 	TPanel *pnlDialpad;
-	TSpeedButton *btnDial1;
-	TSpeedButton *btnDial2;
-	TSpeedButton *btnDial3;
-	TSpeedButton *btnDial4;
-	TSpeedButton *btnDial5;
-	TSpeedButton *btnDial6;
-	TSpeedButton *btnDial7;
-	TSpeedButton *btnDial8;
-	TSpeedButton *btnDial9;
-	TSpeedButton *btnDialStar;
-	TSpeedButton *btnDial0;
-	TSpeedButton *btnDialHash;
-	TSpeedButton *btnResetMicVolume;
-	TSpeedButton *btnResetSpeakerVolume;
-	TImage *imgDialpadBackground;
 	TEdit *edTransfer;
 	TTrackBar *trbarSoftvolMic;
 	TTrackBar *trbarSoftvolSpeaker;
-	TPanel *pnlButtonsBasic;
+	TBitBtn *btnResetMicVolume;
+	TBitBtn *btnResetSpeakerVolume;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -122,7 +108,6 @@ __published:	// IDE-managed Components
 	void __fastcall btnMakeCallClick(TObject *Sender);
 	void __fastcall btnHangupClick(TObject *Sender);
 	void __fastcall tmrCallbackPollTimer(TObject *Sender);
-	void __fastcall btnDialClick(TObject *Sender);
 	void __fastcall btnBackspaceClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall btnAutoAnswerClick(TObject *Sender);
@@ -162,6 +147,10 @@ __published:	// IDE-managed Components
 	void __fastcall miPatchButtonSettingsClick(TObject *Sender);
 	void __fastcall miImportContactsFromXmlClick(TObject *Sender);
 	void __fastcall miRefreshTranslationFromFileClick(TObject *Sender);
+	void __fastcall btnResetMicVolumeMouseUp(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+	void __fastcall btnResetSpeakerVolumeMouseUp(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);
 private:	// User declarations
 	static void TranslateForm(void* obj);
 
@@ -198,7 +187,6 @@ private:	// User declarations
 	std::string OnGetRxDtmf(void);
 	void OnShowBtnContainerStatusPanel(int id, bool state);
 	void OnSetBtnContainerBackground(int id, const char* file);
-	void OnUpdateAllBtnContainers(void);
 	void OnDisableBringToFront(bool state);
 	void OnSetKeepForeground(bool state);
 	std::string OnGetUserName(void);
@@ -218,10 +206,9 @@ private:	// User declarations
 	void AccessCallUrl(void);
 	void ExecuteApp(AnsiString cmd, AnsiString params);
 	void Dial(char digit);
-	void DialString(const std::string& digits);
+	void DialString(const std::string& digits, bool runScript);
 	void StartRecording(void);
 	void PollCallbackQueue(void);
-	void UpdateBtnState(enum Button::Type type, bool state);
 	void HandleCommandLine(void);
 	void Finalize(void);
 
@@ -261,7 +248,6 @@ private:	// User declarations
 	void UpdateSize(void);
 	void FocusCbCallUri(void);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
-	void __fastcall OnTrayIconRightBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);
 	void __fastcall WMEndSession(TWMEndSession &Msg);	
 	void __fastcall WMHotKey(TWMHotKey &Message);
@@ -275,6 +261,7 @@ public:		// User declarations
 	AnsiString OnGetContactName(AnsiString uri);	
 	void OnProgrammableBtnClick(int id, TProgrammableButton* btn);
 	void OnProgrammableBtnMouseUpDown(int id, TProgrammableButton* btn);
+	void OnRestartUa(void);
 	void obsUpdate(Observable* o, Argument * arg);
 	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
 	void SetTrayIconHint(AnsiString text);	

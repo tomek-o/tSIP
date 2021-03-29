@@ -156,6 +156,8 @@ __published:	// IDE-managed Components
 	TCheckBox *chbSpaceLabelsYEqually;
 	TLabel *lblLabelLeft;
 	TEdit *edLabelLeft;
+	TLabel *lblParent;
+	TComboBox *cbParentId;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);

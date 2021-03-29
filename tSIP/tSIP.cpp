@@ -26,6 +26,7 @@ USEFORM("FormMessage.cpp", frmMessage);
 USEFORM("ua\FormUaConfOpus.cpp", frmUaConfOpus);
 USEFORM("FormSettingsPatch.cpp", frmSettingsPatch);
 USEFORM("buttons\FormButtonCopy.cpp", frmButtonCopy);
+USEFORM("buttons\ButtonsDataModule.cpp", dmButtons); /* TDataModule: File Type */
 //---------------------------------------------------------------------------
 #pragma link "re.lib"
 #pragma link "rem.lib"

@@ -17,6 +17,7 @@ ButtonConf::ButtonConf(void)
 
 void ButtonConf::Reset(void)
 {
+    parentId = DEFAULT_PARENT_ID;	// "main" button container
 	type = Button::DISABLED;
 	visible = true;
 	caption = "";

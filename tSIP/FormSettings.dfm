@@ -28,7 +28,6 @@ object frmSettings: TfrmSettings
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitTop = 413
     object btnCancel: TButton
       Left = 593
       Top = 6
@@ -53,12 +52,11 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 443
-    ActivePage = tsScripts
+    ActivePage = tsBranding
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
-    ExplicitHeight = 413
     object tsGeneral: TTabSheet
       Caption = 'General'
       object lblGuiScaling: TLabel
@@ -399,7 +397,6 @@ object frmSettings: TfrmSettings
     object tsMainWindow: TTabSheet
       Caption = 'Main window'
       ImageIndex = 23
-      ExplicitHeight = 393
       object lblMainWindowCollapsedSize: TLabel
         Left = 3
         Top = 3
@@ -1079,247 +1076,224 @@ object frmSettings: TfrmSettings
     object tsBranding: TTabSheet
       Caption = 'Branding, bitmaps'
       ImageIndex = 20
-      object lblDialpadBackgroundImage: TLabel
-        Left = 2
-        Top = 5
-        Width = 125
-        Height = 13
-        Caption = 'Dialpad background image'
-      end
       object lblMainIconFile: TLabel
         Left = 3
-        Top = 29
+        Top = 6
         Width = 128
         Height = 13
         Caption = 'Custom main icon file (.ico)'
       end
       object lblRestartRequired1: TLabel
         Left = 393
-        Top = 29
+        Top = 6
         Width = 84
         Height = 13
         Caption = '(restart required)'
       end
       object lblRestartRequired2: TLabel
         Left = 393
-        Top = 53
+        Top = 30
         Width = 84
         Height = 13
         Caption = '(restart required)'
       end
       object lblTrayNotificationIcon: TLabel
         Left = 3
-        Top = 53
+        Top = 30
         Width = 168
         Height = 13
         Caption = 'Custom tray icon notification image'
       end
       object lblBmpBtnBackspace: TLabel
         Left = 3
-        Top = 151
+        Top = 128
         Width = 128
         Height = 13
         Caption = '"Backspace" button bitmap'
       end
       object lblBmpConsoleHide: TLabel
         Left = 3
-        Top = 201
+        Top = 178
         Width = 131
         Height = 13
         Caption = 'Console hide button bitmap'
       end
       object lblBmpConsoleShow: TLabel
         Left = 3
-        Top = 176
+        Top = 153
         Width = 136
         Height = 13
         Caption = 'Console show button bitmap'
       end
       object lblBmpBtnResetMicVolume: TLabel
         Left = 3
-        Top = 227
+        Top = 204
         Width = 153
         Height = 13
         Caption = 'Reset mic volume button bitmap'
       end
       object lblBmpBtnResetSpeakerVolume: TLabel
         Left = 3
-        Top = 253
+        Top = 230
         Width = 176
         Height = 13
         Caption = 'Reset speaker volume button bitmap'
       end
-      object edDialpadBackgroundImage: TEdit
+      object edMainIconFile: TEdit
         Left = 231
-        Top = 2
+        Top = 3
         Width = 121
         Height = 21
         TabOrder = 0
       end
-      object btnSelectDialpadBackgroundImage: TButton
+      object btnSelectMainIconFile: TButton
         Left = 358
-        Top = 2
+        Top = 3
         Width = 22
         Height = 21
         Caption = '...'
         TabOrder = 1
         OnClick = btnSelectImageClick
       end
-      object edMainIconFile: TEdit
-        Left = 231
-        Top = 26
-        Width = 121
-        Height = 21
-        TabOrder = 2
-      end
-      object btnSelectMainIconFile: TButton
-        Left = 358
-        Top = 26
-        Width = 22
-        Height = 21
-        Caption = '...'
-        TabOrder = 3
-        OnClick = btnSelectImageClick
-      end
       object btnSelectTrayNotificationImage: TButton
         Left = 358
-        Top = 50
+        Top = 27
         Width = 22
         Height = 21
         Caption = '...'
-        TabOrder = 4
+        TabOrder = 2
         OnClick = btnSelectImageClick
       end
       object edTrayNotificationImage: TEdit
         Left = 231
-        Top = 50
+        Top = 27
         Width = 121
         Height = 21
-        TabOrder = 5
+        TabOrder = 3
       end
       object chbCustomUserAgent: TCheckBox
         Left = 3
-        Top = 77
+        Top = 54
         Width = 157
         Height = 17
         Caption = 'Custom User-Agent value'
-        TabOrder = 6
+        TabOrder = 4
       end
       object chbFrmMainUseCustomApplicationTitle: TCheckBox
         Left = 3
-        Top = 100
+        Top = 77
         Width = 223
         Height = 17
         Caption = 'Custom application title (text in taskbar)'
-        TabOrder = 7
+        TabOrder = 5
       end
       object chbFrmMainUseCustomCaption: TCheckBox
         Left = 3
-        Top = 124
+        Top = 101
         Width = 191
         Height = 17
         Caption = 'Custom caption for main window'
-        TabOrder = 8
+        TabOrder = 6
       end
       object edUserAgent: TEdit
         Left = 231
-        Top = 75
+        Top = 52
         Width = 121
         Height = 21
-        TabOrder = 9
+        TabOrder = 7
       end
       object edFrmMainCustomApplicationTitle: TEdit
         Left = 231
-        Top = 98
+        Top = 75
         Width = 193
         Height = 21
-        TabOrder = 10
+        TabOrder = 8
       end
       object edFrmMainCustomCaption: TEdit
         Left = 231
-        Top = 122
+        Top = 99
         Width = 193
         Height = 21
-        TabOrder = 11
+        TabOrder = 9
       end
       object edBmpBtnBackspace: TEdit
         Left = 231
-        Top = 148
+        Top = 125
+        Width = 121
+        Height = 21
+        TabOrder = 10
+      end
+      object btnSelectBmpBtnBackspace: TButton
+        Left = 358
+        Top = 125
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 11
+        OnClick = btnSelectImageClick
+      end
+      object edBmpBtnConsoleHide: TEdit
+        Left = 231
+        Top = 175
         Width = 121
         Height = 21
         TabOrder = 12
       end
-      object btnSelectBmpBtnBackspace: TButton
+      object btnSelectBmpBtnConsoleHide: TButton
         Left = 358
-        Top = 148
+        Top = 175
         Width = 22
         Height = 21
         Caption = '...'
         TabOrder = 13
         OnClick = btnSelectImageClick
       end
-      object edBmpBtnConsoleHide: TEdit
+      object edBmpBtnConsoleShow: TEdit
         Left = 231
-        Top = 198
+        Top = 150
         Width = 121
         Height = 21
         TabOrder = 14
       end
-      object btnSelectBmpBtnConsoleHide: TButton
+      object btnSelectBmpBtnConsoleShow: TButton
         Left = 358
-        Top = 198
+        Top = 150
         Width = 22
         Height = 21
         Caption = '...'
         TabOrder = 15
         OnClick = btnSelectImageClick
       end
-      object edBmpBtnConsoleShow: TEdit
+      object edBmpBtnResetMicVolume: TEdit
         Left = 231
-        Top = 173
+        Top = 201
         Width = 121
         Height = 21
         TabOrder = 16
       end
-      object btnSelectBmpBtnConsoleShow: TButton
+      object btnSelectBmpBtnResetMicVolume: TButton
         Left = 358
-        Top = 173
+        Top = 201
         Width = 22
         Height = 21
         Caption = '...'
         TabOrder = 17
         OnClick = btnSelectImageClick
       end
-      object edBmpBtnResetMicVolume: TEdit
+      object edBmpBtnResetSpeakerVolume: TEdit
         Left = 231
-        Top = 224
+        Top = 227
         Width = 121
         Height = 21
         TabOrder = 18
       end
-      object btnSelectBmpBtnResetMicVolume: TButton
+      object btnSelectBmpBtnResetSpeakerVolume: TButton
         Left = 358
-        Top = 224
+        Top = 227
         Width = 22
         Height = 21
         Caption = '...'
         TabOrder = 19
-        OnClick = btnSelectImageClick
-      end
-      object edBmpBtnResetSpeakerVolume: TEdit
-        Left = 231
-        Top = 250
-        Width = 121
-        Height = 21
-        TabOrder = 20
-      end
-      object btnSelectBmpBtnResetSpeakerVolume: TButton
-        Left = 358
-        Top = 250
-        Width = 22
-        Height = 21
-        Caption = '...'
-        TabOrder = 21
         OnClick = btnSelectImageClick
       end
     end
@@ -3750,7 +3724,6 @@ object frmSettings: TfrmSettings
       FFFFFFFFFFFFFF00000000000000000753006300720069007000740073002700
       00000000000000000000FFFFFFFFFFFFFFFF0000000000000000074C006F0067
       00670069006E006700}
-    ExplicitHeight = 413
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

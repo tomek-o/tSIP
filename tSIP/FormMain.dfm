@@ -62,248 +62,6 @@ object frmMain: TfrmMain
           Align = alBottom
           BevelOuter = bvNone
           TabOrder = 0
-          object imgDialpadBackground: TImage
-            Left = 0
-            Top = 0
-            Width = 259
-            Height = 209
-            Align = alClient
-            Transparent = True
-            ExplicitLeft = 64
-            ExplicitTop = 8
-            ExplicitWidth = 185
-            ExplicitHeight = 137
-          end
-          object btnDial1: TSpeedButton
-            Tag = 1
-            Left = 4
-            Top = 3
-            Width = 40
-            Height = 40
-            Caption = '1'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial2: TSpeedButton
-            Tag = 2
-            AlignWithMargins = True
-            Left = 51
-            Top = 3
-            Width = 40
-            Height = 40
-            Caption = '2'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial3: TSpeedButton
-            Tag = 3
-            Left = 99
-            Top = 3
-            Width = 40
-            Height = 40
-            Caption = '3'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial4: TSpeedButton
-            Tag = 4
-            Left = 4
-            Top = 46
-            Width = 40
-            Height = 40
-            Caption = '4'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial5: TSpeedButton
-            Tag = 5
-            Left = 51
-            Top = 46
-            Width = 40
-            Height = 40
-            Caption = '5'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial6: TSpeedButton
-            Tag = 6
-            Left = 99
-            Top = 46
-            Width = 40
-            Height = 40
-            Caption = '6'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial7: TSpeedButton
-            Tag = 7
-            Left = 4
-            Top = 90
-            Width = 40
-            Height = 40
-            Caption = '7'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial8: TSpeedButton
-            Tag = 8
-            Left = 51
-            Top = 90
-            Width = 40
-            Height = 40
-            Caption = '8'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial9: TSpeedButton
-            Tag = 9
-            Left = 99
-            Top = 90
-            Width = 40
-            Height = 40
-            Caption = '9'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDialStar: TSpeedButton
-            Tag = 10
-            Left = 4
-            Top = 134
-            Width = 40
-            Height = 40
-            Caption = '*'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDial0: TSpeedButton
-            Left = 51
-            Top = 134
-            Width = 40
-            Height = 40
-            Caption = '0'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnDialHash: TSpeedButton
-            Tag = 11
-            Left = 99
-            Top = 134
-            Width = 40
-            Height = 40
-            Caption = '#'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -29
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            OnClick = btnDialClick
-          end
-          object btnResetMicVolume: TSpeedButton
-            Left = 143
-            Top = 181
-            Width = 18
-            Height = 24
-            Hint = 'Reset audio input volume'
-            Glyph.Data = {
-              E6010000424DE60100000000000036000000280000000C0000000C0000000100
-              180000000000B0010000C40E0000C40E00000000000000000000FFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-              FF000000FFFFFFFFFFFF000000000000000000000000FFFFFFFFFFFFFFFFFFFF
-              FFFFFFFFFF000000FFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF
-              FFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-              FF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-              FFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000
-              000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
-              FF000000FFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFF
-              FFFFFFFFFF000000FFFFFFFFFFFF000000000000000000000000FFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFF}
-            OnClick = btnResetMicVolumeClick
-          end
-          object btnResetSpeakerVolume: TSpeedButton
-            Left = 165
-            Top = 181
-            Width = 18
-            Height = 24
-            Hint = 'Reset audio output volume'
-            Glyph.Data = {
-              E6010000424DE60100000000000036000000280000000C0000000C0000000100
-              180000000000B0010000C40E0000C40E00000000000000000000FFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFF
-              FFFFFFFFFFFFFFFFFF000000000000000000000000000000FFFFFFFFFFFF0000
-              00FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFF
-              FFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF000000
-              FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
-              FF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFF
-              FFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000
-              000000000000000000000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFFFFFFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFF
-              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
-              00FFFFFFFFFFFFFFFFFF}
-            OnClick = btnResetSpeakerVolumeClick
-          end
           object edTransfer: TEdit
             Left = 3
             Top = 181
@@ -316,7 +74,7 @@ object frmMain: TfrmMain
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            Text = 'Transfer to ...'
+            Text = 'Transfer to ... [Enter]'
             OnEnter = edTransferEnter
             OnKeyPress = edTransferKeyPress
           end
@@ -350,14 +108,61 @@ object frmMain: TfrmMain
             TickMarks = tmBoth
             OnChange = trbarSoftvolSpeakerChange
           end
-          object pnlButtonsBasic: TPanel
-            Left = 183
-            Top = 3
-            Width = 76
-            Height = 205
-            Align = alCustom
-            BevelOuter = bvNone
+          object btnResetMicVolume: TBitBtn
+            Left = 143
+            Top = 181
+            Width = 18
+            Height = 24
+            Hint = 'Reset audio input volume'
             TabOrder = 3
+            TabStop = False
+            OnClick = btnResetMicVolumeClick
+            OnMouseUp = btnResetMicVolumeMouseUp
+            Glyph.Data = {
+              E6010000424DE60100000000000036000000280000000C0000000C0000000100
+              180000000000B0010000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FF000000FFFFFFFFFFFF000000000000000000000000FFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFF000000FFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF
+              FFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFF000000
+              000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
+              FF000000FFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFF
+              FFFFFFFFFF000000FFFFFFFFFFFF000000000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFF}
+          end
+          object btnResetSpeakerVolume: TBitBtn
+            Left = 165
+            Top = 181
+            Width = 18
+            Height = 24
+            Hint = 'Reset audio output volume'
+            TabOrder = 4
+            TabStop = False
+            OnClick = btnResetSpeakerVolumeClick
+            OnMouseUp = btnResetSpeakerVolumeMouseUp
+            Glyph.Data = {
+              E6010000424DE60100000000000036000000280000000C0000000C0000000100
+              180000000000B0010000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFF
+              FFFFFFFFFFFFFFFFFF000000000000000000000000000000FFFFFFFFFFFF0000
+              00FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF000000FFFFFFFF
+              FFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF000000
+              FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFF
+              FF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFF
+              FFFFFFFFFF000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFF000000
+              000000000000000000000000FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF000000FFFFFFFFFFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000FFFFFF
+              FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0000
+              00FFFFFFFFFFFFFFFFFF}
           end
         end
       end

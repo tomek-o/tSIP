@@ -281,7 +281,6 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbUserOnlyClip->Checked = tmpSettings.Display.bUserOnlyClip;
 	chbDecodeUtfDisplayToAnsi->Checked = tmpSettings.Display.bDecodeUtfDisplayToAnsi;
 	chbUsePAssertedIdentity->Checked = tmpSettings.Display.bUsePAssertedIdentity;
-	edDialpadBackgroundImage->Text = tmpSettings.frmMain.dialpadBackgroundImage;
 	edMainIconFile->Text = tmpSettings.frmMain.mainIcon;
 	edTrayNotificationImage->Text = tmpSettings.frmMain.trayNotificationImage;
 	edBmpBtnBackspace->Text = tmpSettings.frmMain.bitmaps.bmpBtnBackspace;
@@ -595,7 +594,6 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Display.bDecodeUtfDisplayToAnsi = chbDecodeUtfDisplayToAnsi->Checked;
 	tmpSettings.Display.bUsePAssertedIdentity = chbUsePAssertedIdentity->Checked;
 
-	tmpSettings.frmMain.dialpadBackgroundImage = edDialpadBackgroundImage->Text;
 	tmpSettings.frmMain.mainIcon = edMainIconFile->Text;
 	tmpSettings.frmMain.trayNotificationImage = edTrayNotificationImage->Text;
 	tmpSettings.frmMain.bitmaps.bmpBtnBackspace = edBmpBtnBackspace->Text;
@@ -1175,11 +1173,7 @@ void __fastcall TfrmSettings::btnSelectImageClick(
 {
 	TEdit *edit;
 	openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";	// default filter
-	if (Sender == btnSelectDialpadBackgroundImage)
-	{
-		edit = edDialpadBackgroundImage;
-	}
-	else if (Sender == btnSelectMainIconFile)
+	if (Sender == btnSelectMainIconFile)
 	{
 		edit = edMainIconFile;
 		openDialog->Filter = "Icon files (*.ico)|*.ico|All files|*.*";

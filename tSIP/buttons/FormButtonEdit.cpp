@@ -85,6 +85,14 @@ void __fastcall TfrmButtonEdit::ShowModal(ButtonConf *cfg, int btnId)
 void TfrmButtonEdit::ApplyConf(void)
 {
 	cbType->ItemIndex = cfg->type;
+	if (cfg->parentId >= 0 && cfg->parentId < cbParentId->Items->Count)
+	{
+		cbParentId->ItemIndex = cfg->parentId;
+	}
+	else
+	{
+    	cbParentId->ItemIndex = ButtonConf::DEFAULT_PARENT_ID;
+	}
 	if (cfg->captionLines > 0 && cfg->captionLines <= cbCaptionLines->Items->Count)
 	{
 		cbCaptionLines->ItemIndex = cfg->captionLines - 1;
@@ -180,6 +188,7 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 {
 	confirmed = true;
 	cfg->type = static_cast<Button::Type>(cbType->ItemIndex);
+	cfg->parentId = cbParentId->ItemIndex;
 	cfg->captionLines = cbCaptionLines->ItemIndex + 1;
 	cfg->caption = edCaption->Text.c_str();
 	cfg->caption2 = edCaption2->Text.c_str();

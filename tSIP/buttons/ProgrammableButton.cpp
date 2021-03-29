@@ -199,7 +199,7 @@ void __fastcall TProgrammableButton::Paint(void)
 
 void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 {
-    int percentage;
+	int percentage;
 	if (!once)
 	{
 		percentage = 100;
@@ -255,6 +255,11 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 		label2->Font->Style << fsUnderline;
 	}
 
+	Left = cfg.left * percentage/100;
+	Top = cfg.top * percentage/100;
+	Width = cfg.width * percentage/100;
+	Height = cfg.height * percentage/100;
+
 	SetLines(cfg.captionLines);
 
 	if (cfg.label2CenterHorizontally)
@@ -262,10 +267,6 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 		label2->Left = (Width - label2->Width)/2;
 	}
 
-	Left = cfg.left * percentage/100;
-	Top = cfg.top * percentage/100;
-	Width = cfg.width * percentage/100;
-	Height = cfg.height * percentage/100;
 	image->Top = label->Top;
 	image->Transparent = cfg.imageTransparent;
 	image->Left = cfg.imageLeft;

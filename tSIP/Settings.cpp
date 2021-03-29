@@ -703,7 +703,6 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bXBtnMinimize = frmMainJson.get("XBtnMinimize", frmMain.bXBtnMinimize).asBool();
 		frmMain.bRestoreOnIncomingCall = frmMainJson.get("RestoreOnIncomingCall", frmMain.bRestoreOnIncomingCall).asBool();
 		frmMain.bSingleInstance = frmMainJson.get("SingleInstance", frmMain.bSingleInstance).asBool();
-		frmMain.dialpadBackgroundImage = frmMainJson.get("DialpadBackgroundImage", frmMain.dialpadBackgroundImage.c_str()).asString().c_str();
 		frmMain.mainIcon = frmMainJson.get("MainIcon", frmMain.mainIcon.c_str()).asString().c_str();
 		frmMain.trayNotificationImage = frmMainJson.get("TrayNotificationImage", frmMain.trayNotificationImage.c_str()).asString().c_str();
 
@@ -1039,7 +1038,6 @@ int Settings::Write(AnsiString asFileName)
 		jv["XBtnMinimize"] = frmMain.bXBtnMinimize;
 		jv["RestoreOnIncomingCall"] = frmMain.bRestoreOnIncomingCall;
 		jv["SingleInstance"] = frmMain.bSingleInstance;
-		jv["DialpadBackgroundImage"] = frmMain.dialpadBackgroundImage.c_str();
 		jv["MainIcon"] = frmMain.mainIcon.c_str();
 		jv["TrayNotificationImage"] = frmMain.trayNotificationImage.c_str();
 		jv["NoBeepOnEnterKey"] = frmMain.bNoBeepOnEnterKey;

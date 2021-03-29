@@ -6,6 +6,11 @@
 #pragma hdrstop
 
 #include "ProgrammableButtons.h"
+#include "ProgrammableButton.h"
+#include "ButtonsDataModule.h"
+#include "ButtonContainers.h"
+#include "FormButtonContainer.h"
+#include "FormButtonEdit.h"
 #include "SettingsAppVersion.h"
 #include "Settings.h"	// just for transition from column-based version < 0.2
 #include "Sizes.h"
@@ -20,9 +25,18 @@
 
 #pragma package(smart_init)
 
+#define ARRAY_SIZE(a)    (sizeof(a)/sizeof(a[0]))
+
 namespace
 {
 	SettingsAppVersion appVersion;
+	bool IsShiftPressed(void)
+	{
+		int res = GetAsyncKeyState(VK_SHIFT);
+		if (res & 0x8000)
+			return true;
+		return false;
+	}	
 }
 
 void ProgrammableButtons::SetDefaultsForBtnId(int id, ButtonConf& cfg)
@@ -56,8 +70,13 @@ void ProgrammableButtons::SetDefaultsForBtnId(int id, ButtonConf& cfg)
 }
 
 ProgrammableButtons::ProgrammableButtons(void):
+	dmButtons(NULL),
 	saveAllSettings(true),
-	updated(false)
+	updated(false),
+	panelIsMoving(false),
+	panelIsResizing(false),
+	editedPanelId(-1),
+	scalingPercentage(100)	
 {
 	btnConf.resize(BASIC_PANEL_CONSOLE_BTNS + (EXT_CONSOLE_COLUMNS * CONSOLE_BTNS_PER_CONTAINER));
 
@@ -93,6 +112,7 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 			{
 				ButtonConf &cfg = btnConf[i];
 
+				btnJson.getInt("parentId", cfg.parentId);
 				Button::Type type = (Button::Type)btnJson.get("type", cfg.type).asInt();
 				if (type >= 0 && type < Button::TYPE_LIMITER)
 				{
@@ -245,30 +265,48 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 		ver0p2.FileVersionMS = 2;
 		ver0p2.FileVersionLS = 0;
 
-		if (appVersion < ver0p2 && appSettings.frmMain.pre0p2speedDialWidth.size() > 0)
+		// first version with programmable buttons on whole dialpad area
+		SettingsAppVersion ver0p2p1;
+		ver0p2p1.FileVersionMS = 2;
+		ver0p2p1.FileVersionLS = 65535;
+
+		if (appVersion < ver0p2)
 		{
-			int left = Sizes::FIRST_COLUMN_LEFT;
-			int btnId = BASIC_PANEL_CONSOLE_BTNS;
-			for (int widthId = 0; widthId < appSettings.frmMain.pre0p2speedDialWidth.size(); widthId++)
+			if (appSettings.frmMain.pre0p2speedDialWidth.size() > 0)
 			{
-				int width = appSettings.frmMain.pre0p2speedDialWidth[widthId];
-				for (int i=0; i<BASIC_PANEL_CONSOLE_BTNS; i++)
+				int left = Sizes::FIRST_COLUMN_LEFT;
+				int btnId = BASIC_PANEL_CONSOLE_BTNS;
+				for (int widthId = 0; widthId < appSettings.frmMain.pre0p2speedDialWidth.size(); widthId++)
 				{
-					btnConf[btnId].left = left;
-					btnConf[btnId].width = width;
-					btnId++;
+					int width = appSettings.frmMain.pre0p2speedDialWidth[widthId];
+					for (int i=0; i<BASIC_PANEL_CONSOLE_BTNS; i++)
+					{
+						btnConf[btnId].left = left;
+						btnConf[btnId].width = width;
+						btnId++;
+					}
+					left += width + Sizes::COLUMN_SEPARATION;
 				}
-				left += width + Sizes::COLUMN_SEPARATION;
+				if (btnId < btnConf.size() - 1)
+				{
+					int offset = btnConf[btnId].left - left;
+					for (btnId; btnId < btnConf.size(); btnId++)
+					{
+						btnConf[btnId].left -= offset;
+					}
+				}
+				updated = true;
 			}
-			if (btnId < btnConf.size() - 1)
+		}
+		else if (appVersion < ver0p2p1)
+		{
+			SetInitialDialpad();
+			for (unsigned int i=0; i<BASIC_PANEL_CONSOLE_BTNS; i++)
 			{
-				int offset = btnConf[btnId].left - left;
-				for (btnId; btnId < btnConf.size(); btnId++)
-				{
-                	btnConf[btnId].left -= offset;
-				}
+				ButtonConf &cfg = btnConf[i];
+				cfg.left += 184;
+				cfg.parentId = 0;
 			}
-			updated = true;
 		}
 	}
 
@@ -339,6 +377,7 @@ int ProgrammableButtons::Read(void)
 			Write();
 			updated = false;
 		}
+
 		return 0;
 	}
 	else
@@ -348,7 +387,7 @@ int ProgrammableButtons::Read(void)
 		int rc = ReadFile(asConfigFile);
 		if (rc != 0)
 		{
-        	SetInitialSettings();
+			SetInitialSettings();
 		}
 		// and write new, separate file (either default buttons or buttons from old "main" config,
 		// if reading was successful)
@@ -380,6 +419,7 @@ int ProgrammableButtons::Write(void)
 	{
 		const ButtonConf &cfg = btnConf[i];
 		Json::Value &jsonBtn = jBtnConf.append(Json::objectValue);
+		jsonBtn["parentId"] = cfg.parentId;
 		jsonBtn["type"] = cfg.type;
 		jsonBtn["caption"] = cfg.caption;
 		jsonBtn["caption2"] = cfg.caption2;
@@ -662,27 +702,48 @@ void ProgrammableButtons::SetSaveAllSettings(bool state)
 void ProgrammableButtons::SetInitialSettings(void)
 {
 	ButtonConf *cfg;
+	enum { LEFT = 184 };
+	enum { WIDTH = 73 };
+	enum { HEIGHT = 32 };
+
+	for (unsigned int i=0; i<BASIC_PANEL_CONSOLE_BTNS; i++)
+	{
+		cfg = &btnConf[i];
+		cfg->parentId = 0;
+		cfg->left = LEFT;
+		cfg->width = WIDTH;
+		cfg->height = HEIGHT;
+	}
+
+	int top = 3;
 
 	cfg = &btnConf[0];
 	cfg->caption = "    Redial";
 	cfg->labelLeft = 0;
 	cfg->type = Button::REDIAL;
+	cfg->top = top;
 
 	cfg = &btnConf[1];
 	cfg->caption = "    FLASH";
 	cfg->labelLeft = 0;
 	cfg->type = Button::DTMF;
 	cfg->number = "R";
+	top += HEIGHT;
+	cfg->top = top;
 
 	cfg = &btnConf[2];
 	cfg->caption = "Hold";
 	cfg->type = Button::HOLD;
 	cfg->imgIdle = "hold.bmp";
+	top += HEIGHT;
+	cfg->top = top;
 
 	cfg = &btnConf[3];
 	cfg->caption = " Re-register";
 	cfg->labelLeft = 4;
 	cfg->type = Button::REREGISTER;
+	top += HEIGHT;
+	cfg->top = top;
 
 	cfg = &btnConf[4];
 	cfg->captionLines = 2;
@@ -694,6 +755,8 @@ void ProgrammableButtons::SetInitialSettings(void)
 	cfg->label2Left = 4;
 	cfg->label2Top = 17;
 	cfg->label2CenterHorizontally = false;
+	top += HEIGHT;
+	cfg->top = top;
 
 	for (unsigned int i=5; i<BASIC_PANEL_CONSOLE_BTNS; i++)
 	{
@@ -701,4 +764,534 @@ void ProgrammableButtons::SetInitialSettings(void)
 		//cfg->top = 5 * HEIGHT;
 		cfg->visible = false;
 	}
+
+	SetInitialDialpad();
 }
+
+void ProgrammableButtons::SetInitialDialpad(void)
+{
+	enum { START_BTN = 200 };
+	enum { BTN_CNT = 12 };
+	enum { WIDTH = 40 };
+	enum { HEIGHT = 40 };
+	assert(START_BTN + BTN_CNT < GetTotalCnt());
+	for (unsigned int i=START_BTN; i<START_BTN + BTN_CNT; i++)
+	{
+		ButtonConf &cfg = btnConf[i];
+		cfg.parentId = 0;
+		cfg.visible = true;
+		cfg.width = WIDTH;
+		cfg.height = HEIGHT;
+		cfg.type = Button::DTMF;
+		cfg.font.size = 22;
+		cfg.labelCenterHorizontally = true;
+	}
+
+	unsigned int id = START_BTN;
+	ButtonConf *cfg;
+
+	enum { LEFT1 = 4, LEFT2 = 51, LEFT3 = 99 };
+	enum { TOP1 = 3, TOP2 = 46, TOP3 = 90, TOP4 = 134 };
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "1";
+	cfg->left = LEFT1;
+	cfg->top = TOP1;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "2";
+	cfg->left = LEFT2;
+	cfg->top = TOP1;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "3";
+	cfg->left = LEFT3;
+	cfg->top = TOP1;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "4";
+	cfg->left = LEFT1;
+	cfg->top = TOP2;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "5";
+	cfg->left = LEFT2;
+	cfg->top = TOP2;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "6";
+	cfg->left = LEFT3;
+	cfg->top = TOP2;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "7";
+	cfg->left = LEFT1;
+	cfg->top = TOP3;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "8";
+	cfg->left = LEFT2;
+	cfg->top = TOP3;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "9";
+	cfg->left = LEFT3;
+	cfg->top = TOP3;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "*";
+	cfg->left = LEFT1;
+	cfg->top = TOP4;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "0";
+	cfg->left = LEFT2;
+	cfg->top = TOP4;
+
+	cfg = &btnConf[id++];
+	cfg->caption = cfg->number = "#";
+	cfg->left = LEFT3;
+	cfg->top = TOP4;
+
+
+}
+
+TfrmButtonContainer* ProgrammableButtons::GetBtnContainer(int btnId)
+{
+    assert(btnId >= 0 && btnId < btnConf.size());
+	const ButtonConf &cfg = btnConf[btnId];
+	if (cfg.parentId <= ARRAY_SIZE(frmButtonContainers))
+	{
+		return frmButtonContainers[cfg.parentId];
+	}
+	else
+	{
+		assert(ARRAY_SIZE(frmButtonContainers) < ButtonConf::DEFAULT_PARENT_ID);
+		return frmButtonContainers[ButtonConf::DEFAULT_PARENT_ID];
+	}
+}
+
+
+void ProgrammableButtons::Create(TComponent* Owner,
+		int scalingPercentage,
+		CallbackClick callbackClick,
+		CallbackMouseUpDown callbackMouseUpDown,
+		CallbackSetKeepForeground callbackSetKeepForeground,
+		CallbackRestartUa callbackRestartUa
+		)
+{
+	assert(dmButtons == NULL);
+	dmButtons = new TdmButtons(NULL);
+	this->callbackClick = callbackClick;
+	this->callbackSetKeepForeground = callbackSetKeepForeground;
+	this->callbackMouseUpDown = callbackMouseUpDown;
+	this->callbackRestartUa = callbackRestartUa;
+	for (unsigned int i=0; i<ARRAY_SIZE(frmButtonContainers); i++)
+	{
+		TfrmButtonContainer *frm = frmButtonContainers[i];
+		frm->OnKeyPress = FormKeyPress;
+		frm->imgBackground->OnClick = containerBackgroundClick;
+		frm->panelMain->OnClick = containerBackgroundClick;
+	}
+	for (unsigned int i=0; i<btnConf.size(); i++)
+	{
+		TProgrammableButton *panel = new TProgrammableButton(Owner, dmButtons->imgList, scalingPercentage);
+		panel->Tag = i;
+		//panel->AlignWithMargins = true;
+		if (i < btnConf.size())
+		{
+			panel->Parent = GetBtnContainer(i)->GetButtonParent();
+			const ButtonConf &cfg = btnConf[i];			
+			panel->SetConfig(cfg);
+		}
+		panel->OnClick = SpeedDialPanelClick;
+		panel->OnDblClick = SpeedDialPanelClick;
+		panel->SetMouseUpDownCallback(OnPanelMouseUpDown);
+		panel->UpdateCallbacks();
+		btns.push_back(panel);
+	}
+
+	dmButtons->tmrMoving->OnTimer = this->tmrMovingTimer;
+}
+
+void ProgrammableButtons::Destroy(void)
+{
+	for (unsigned int i=0; i<btns.size(); i++)
+	{
+		delete btns[i];
+	}
+	btns.clear();
+	if (dmButtons)
+	{
+		delete dmButtons;
+		dmButtons = NULL;
+	}
+}
+
+void __fastcall ProgrammableButtons::containerBackgroundClick(TObject *Sender)
+{
+	if (panelIsMoving || panelIsResizing)
+	{
+    	SpeedDialPanelClick(Sender);
+	}
+}
+
+void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
+{
+	if (panelIsMoving)
+	{
+		panelIsMoving = false;
+
+		TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
+
+		container->imgBackground->Cursor = crDefault;
+
+		TPoint P = container->ScreenToClient(Mouse->CursorPos);
+		if (P.x < 0)
+			P.x = 0;
+		if (P.y < 0)
+			P.y = 0;
+		ButtonConf cfg = btnConf[editedPanelId];	// copy
+		cfg.left = P.x * 100/scalingPercentage;
+		cfg.top = P.y * 100/scalingPercentage;
+
+		if (!IsShiftPressed() && appSettings.frmSpeedDial.useGrid)
+		{
+			int grid = appSettings.frmSpeedDial.gridSize;
+			int modX = cfg.left % grid;
+			if (modX >= grid/2)
+				cfg.left += grid - modX;
+			else
+				cfg.left -= modX;
+			int modY = cfg.top % grid;
+			if (modY >= grid/2)
+				cfg.top += grid - modY;
+			else
+				cfg.top -= modY;
+		}
+
+		ApplyButtonCfg(editedPanelId, cfg);
+	}
+	else if (panelIsResizing)
+	{
+		panelIsResizing = false;
+		TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
+		container->imgBackground->Cursor = crDefault;
+
+		TPoint P = container->ScreenToClient(Mouse->CursorPos);
+		if (P.x < 0)
+			P.x = 0;
+		if (P.y < 0)
+			P.y = 0;
+		ButtonConf cfg = btnConf[editedPanelId];	// copy
+		cfg.width = P.x * 100/scalingPercentage - cfg.left;
+		cfg.height = P.y * 100/scalingPercentage - cfg.top;
+
+		if (cfg.width < 10 || cfg.height < 10)
+			return;
+
+		if (!IsShiftPressed() && appSettings.frmSpeedDial.useGrid)
+		{
+			int grid = appSettings.frmSpeedDial.gridSize;
+			int modX = cfg.width % grid;
+			if (modX >= grid/2)
+				cfg.width += grid - modX;
+			else
+				cfg.width -= modX;
+			int modY = cfg.height % grid;
+			if (modY >= grid/2)
+				cfg.height += grid - modY;
+			else
+				cfg.height -= modY;
+		}
+
+		ApplyButtonCfg(editedPanelId, cfg);
+	}
+	else
+	{
+		TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(Sender);
+		if (panel == NULL)
+		{
+			TComponent *component = dynamic_cast<TComponent*>(Sender);
+			assert(component);
+			panel = dynamic_cast<TProgrammableButton*>(component->Owner);
+		}
+		assert(panel);
+		if (panel->GetInactive() == true)
+		{
+			return;
+        }
+		int id = panel->Tag;
+
+		ButtonConf &cfg = btnConf[id];
+		if (cfg.type == Button::HOLD || cfg.type == Button::MUTE || cfg.type == Button::MUTE_RING)
+		{
+			panel->SetDown(!panel->GetDown());
+		}
+
+		callbackClick(id, panel);
+	}
+}
+
+void ProgrammableButtons::OnPanelMouseUpDown(TProgrammableButton *btn)
+{
+	if (panelIsMoving || panelIsResizing)
+	{
+		return;
+	}
+	int id = btn->Tag;
+	callbackMouseUpDown(id, btn);	
+}
+
+void ProgrammableButtons::UseContextMenu(bool state)
+{
+	for (unsigned int i=0; i<btns.size(); i++)
+	{
+		btns[i]->PopupMenu = state ? dmButtons->popupPanel : NULL;
+	}
+}
+
+void ProgrammableButtons::ApplyButtonCfg(int id, const ButtonConf &cfg)
+{
+	if (cfg != btnConf[id])
+	{
+		bool restartUa = false;
+		if (cfg.UaRestartNeeded(btnConf[id]))
+		{
+			restartUa = true;
+		}
+
+		btnConf[id] = cfg;
+		TProgrammableButton* panel = btns[id];
+		panel->Parent = GetBtnContainer(id)->GetButtonParent();
+		panel->SetConfig(cfg);
+		if (cfg.type != Button::BLF)
+		{
+			panel->SetState(DIALOG_INFO_UNKNOWN, true, DIALOG_INFO_DIR_UNKNOWN, "", "");	// make sure BLF icon is cleared
+		}
+		if (cfg.type != Button::PRESENCE)
+		{
+			panel->ClearPresenceState();			// clear icon
+		}
+		Write();
+
+		if (restartUa && callbackRestartUa)
+		{
+        	callbackRestartUa();
+		}
+	}
+	else
+	{
+		// assign anyway - some fields may be unintentionally omited from != operator
+		btnConf[id] = cfg;
+		Write();
+	}
+}
+
+void ProgrammableButtons::UpdateDlgInfoState(int id, int state, bool updateRemoteIdentity, int direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay)
+{
+	if (id < 0 || id >= btns.size())
+		return;
+	btns[id]->SetState((enum dialog_info_status)state, updateRemoteIdentity, (enum dialog_info_direction)direction, remoteIdentity, remoteIdentityDisplay);
+}
+
+void ProgrammableButtons::UpdatePresenceState(int id, int state, AnsiString note)
+{
+	if (id < 0 || id >= btns.size())
+		return;
+	btns[id]->SetPresenceState((enum presence_status)state, note);
+}
+
+void ProgrammableButtons::UpdateBtnState(Button::Type type, bool state)
+{
+	for (unsigned int i=0; i<btns.size(); i++)
+	{
+		const ButtonConf &cfg = btnConf[i];
+		if (cfg.type == type)
+		{
+			btns[i]->SetDown(state);
+		}
+	}
+}
+
+void ProgrammableButtons::UpdateMwiState(int newMsg, int oldMsg)
+{
+	for (unsigned int i=0; i<btns.size(); i++)
+	{
+		const ButtonConf &cfg = btnConf[i];
+		if (cfg.type == Button::MWI)
+		{
+			btns[i]->SetMwiState(newMsg, oldMsg);
+		}
+	}
+}
+
+void ProgrammableButtons::UpdateAutoAnswer(bool enabled, int sipCode)
+{
+	for (unsigned int i=0; i<btns.size(); i++)
+	{
+		const ButtonConf &cfg = btnConf[i];
+		if (cfg.type == Button::AUTO_ANSWER_DND)
+		{
+			if (cfg.sipCode == sipCode && enabled)
+			{
+				btns[i]->SetDown(true);
+			}
+			else
+			{
+				btns[i]->SetDown(false);
+			}
+		}
+	}
+}
+
+void ProgrammableButtons::Edit(int id)
+{
+	ButtonConf cfg = btnConf[id];	// copy
+	AnsiString caption;
+	caption.sprintf("Edit button #%02d", id);
+	frmButtonEdit->Caption = caption;
+	
+	callbackSetKeepForeground(false);
+	frmButtonEdit->ShowModal(&cfg, id);
+	callbackSetKeepForeground(true);	
+
+	if (frmButtonEdit->isConfirmed())
+	{
+		ApplyButtonCfg(id, cfg);
+		TfrmButtonContainer *container = GetBtnContainer(id);
+		container->Repaint();
+	}
+}
+
+void ProgrammableButtons::Move(int id)
+{
+	editedPanelId = id;
+	panelIsMoving = true;
+	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
+	container->imgBackground->Cursor = crCross;
+	dmButtons->tmrMoving->Enabled = true;
+}
+
+void ProgrammableButtons::Resize(int id)
+{
+	editedPanelId = id;
+	panelIsResizing = true;
+	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
+	container->imgBackground->Cursor = crCross;
+	dmButtons->tmrMoving->Enabled = true;	
+}
+
+void ProgrammableButtons::UpdateAll(void)
+{
+	for (int id = 0; id < btnConf.size(); id++)
+	{
+		if (id >= btns.size())
+			break;
+		TProgrammableButton* panel = btns[id];
+		panel->Parent = GetBtnContainer(id)->GetButtonParent();		
+		panel->SetConfig(btnConf[id]);
+	}
+	for (unsigned int i=0; i<ARRAY_SIZE(frmButtonContainers); i++)
+	{
+		frmButtonContainers[i]->Repaint();
+	}
+}
+
+void ProgrammableButtons::SetConfig(int btnId, const ButtonConf &conf)
+{
+	TProgrammableButton* btn = GetBtn(btnId);
+	if (btn)
+	{
+		btn->Parent = GetBtnContainer(btnId)->GetButtonParent();		
+		btn->SetConfig(conf);
+	}
+}
+
+void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
+{
+	if (!panelIsMoving && !panelIsResizing)
+	{
+		dmButtons->tmrMoving->Enabled = false;
+		TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
+		container->movingFrame->Visible = false;
+		return;
+	}
+	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
+	container->movingFrame->Visible = true;
+	TPoint P = container->ScreenToClient(Mouse->CursorPos);
+	if (P.x < 0)
+		P.x = 0;
+	if (P.y < 0)
+		P.y = 0;
+	const ButtonConf &cfg = btnConf[editedPanelId];	// copy
+	if (panelIsMoving)
+	{
+		int left = P.x * 100/scalingPercentage;
+		int top = P.y * 100/scalingPercentage;
+
+		if (!IsShiftPressed() && appSettings.frmSpeedDial.useGrid)
+		{
+			int grid = appSettings.frmSpeedDial.gridSize;
+			int modX = left % grid;
+			if (modX >= grid/2)
+				left += grid - modX;
+			else
+				left -= modX;
+			int modY = top % grid;
+			if (modY >= grid/2)
+				top += grid - modY;
+			else
+				top -= modY;
+		}
+		container->movingFrame->Top = top;
+		container->movingFrame->Left = left;
+		container->movingFrame->Width = cfg.width;
+		container->movingFrame->Height = cfg.height;
+		container->movingFrame->BringToFront();
+	}
+	else if (panelIsResizing)
+	{
+		int width = P.x * 100/scalingPercentage - cfg.left;
+		int height = P.y * 100/scalingPercentage - cfg.top;
+
+		if (width < 10 || height < 10)
+			return;
+
+		if (!IsShiftPressed() && appSettings.frmSpeedDial.useGrid)
+		{
+			int grid = appSettings.frmSpeedDial.gridSize;
+			int modX = width % grid;
+			if (modX >= grid/2)
+				width += grid - modX;
+			else
+				width -= modX;
+			int modY = height % grid;
+			if (modY >= grid/2)
+				height += grid - modY;
+			else
+				height -= modY;
+		}
+		container->movingFrame->Top = cfg.top;
+		container->movingFrame->Left = cfg.left;
+		container->movingFrame->Width = width;
+		container->movingFrame->Height = height;
+		container->movingFrame->BringToFront();
+	}
+}
+
+void __fastcall ProgrammableButtons::FormKeyPress(TObject *Sender, char &Key)
+{
+	if (Key == VK_ESCAPE)
+	{
+		if (panelIsMoving || panelIsResizing)
+		{
+			panelIsMoving = false;
+			TfrmButtonContainer *container = dynamic_cast<TfrmButtonContainer*>(Sender);
+			assert(container);
+			container->imgBackground->Cursor = crDefault;
+		}
+	}
+}
+
+
