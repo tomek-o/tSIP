@@ -80,6 +80,7 @@ public:
 		bool bAlwaysOnTop;
 		bool bStartMinimizedToTray;
 		bool bSpeedDialVisible;
+		bool bUseClientAreaSizes;
 		bool bHideCallPanel;			///< do not show panel with dialing combobox, call/hangup buttons
 		bool bHideMainPanel;			///< do not show panel with Dialpad/Contacts/History
 		bool bSpeedDialPopupMenu;       ///< enable/disable popup menu (editing) for speed dial / BLF panels

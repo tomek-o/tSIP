@@ -445,6 +445,7 @@ __published:	// IDE-managed Components
 	TEdit *edScriptOnProgrammableButtonMouseUpDownFile;
 	TButton *btnSelectedScriptOnProgrammableButtonMouseUpDownChange;
 	TBitBtn *btnSelectedScriptOnProgrammableButtonMouseUpDownEdit;
+	TCheckBox *chbFrmMainUseClientAreaSizes;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

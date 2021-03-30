@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 443
-    ActivePage = tsBranding
+    ActivePage = tsMainWindow
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -413,7 +413,7 @@ object frmSettings: TfrmSettings
       end
       object lblFrmMainMainPanelPositionCollapsed: TLabel
         Left = 2
-        Top = 177
+        Top = 203
         Width = 310
         Height = 13
         Caption = 
@@ -422,7 +422,7 @@ object frmSettings: TfrmSettings
       end
       object lblFrmMainMainlPanelPositionExpanded: TLabel
         Left = 2
-        Top = 198
+        Top = 224
         Width = 181
         Height = 13
         Caption = 'Main panel position in expanded state'
@@ -443,14 +443,14 @@ object frmSettings: TfrmSettings
       end
       object lblMainPanelCollapsedLeft: TLabel
         Left = 335
-        Top = 177
+        Top = 203
         Width = 16
         Height = 13
         Caption = 'left'
       end
       object lblMainPanelExpandedLeft: TLabel
         Left = 335
-        Top = 198
+        Top = 224
         Width = 16
         Height = 13
         Caption = 'left'
@@ -471,35 +471,35 @@ object frmSettings: TfrmSettings
       end
       object lblMainPanelCollapsedTop: TLabel
         Left = 415
-        Top = 177
+        Top = 203
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object lblMainPanelExpandedTop: TLabel
         Left = 415
-        Top = 198
+        Top = 224
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object lblFrmMainLayout: TLabel
         Left = 3
-        Top = 60
+        Top = 86
         Width = 33
         Height = 13
         Caption = 'Layout'
       end
       object lblDialComboboxSortOrder: TLabel
         Left = 3
-        Top = 243
+        Top = 269
         Width = 134
         Height = 13
         Caption = 'Dialing combobox sort order'
       end
       object lblFrmMainCallPanelPositionCollapsed: TLabel
         Left = 3
-        Top = 107
+        Top = 133
         Width = 305
         Height = 13
         Caption = 
@@ -508,42 +508,42 @@ object frmSettings: TfrmSettings
       end
       object lblFrmMainCallPanelPositionExpanded: TLabel
         Left = 3
-        Top = 128
+        Top = 154
         Width = 176
         Height = 13
         Caption = 'Call panel position in expanded state'
       end
       object lblCallPanelCollapsedLeft: TLabel
         Left = 336
-        Top = 107
+        Top = 133
         Width = 16
         Height = 13
         Caption = 'left'
       end
       object lblCallPanelExpandedLeft: TLabel
         Left = 336
-        Top = 128
+        Top = 154
         Width = 16
         Height = 13
         Caption = 'left'
       end
       object lblCallPanelCollapsedTop: TLabel
         Left = 416
-        Top = 107
+        Top = 133
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object lblCallPanelExpandedTop: TLabel
         Left = 416
-        Top = 128
+        Top = 154
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object chbFrmMainHideCallPanel: TCheckBox
         Left = 2
-        Top = 86
+        Top = 112
         Width = 486
         Height = 17
         Caption = 
@@ -553,14 +553,14 @@ object frmSettings: TfrmSettings
       end
       object edMainPanelExpandedLeft: TEdit
         Left = 365
-        Top = 195
+        Top = 221
         Width = 35
         Height = 21
         TabOrder = 1
       end
       object edMainPanelCollapsedLeft: TEdit
         Left = 365
-        Top = 174
+        Top = 200
         Width = 35
         Height = 21
         TabOrder = 2
@@ -581,14 +581,14 @@ object frmSettings: TfrmSettings
       end
       object edMainPanelExpandedTop: TEdit
         Left = 451
-        Top = 195
+        Top = 221
         Width = 35
         Height = 21
         TabOrder = 5
       end
       object edMainPanelCollapsedTop: TEdit
         Left = 451
-        Top = 174
+        Top = 200
         Width = 35
         Height = 21
         TabOrder = 6
@@ -609,7 +609,7 @@ object frmSettings: TfrmSettings
       end
       object cbFrmMainLayout: TComboBox
         Left = 152
-        Top = 57
+        Top = 83
         Width = 337
         Height = 21
         Style = csDropDownList
@@ -627,7 +627,7 @@ object frmSettings: TfrmSettings
       end
       object cbDialComboboxOrder: TComboBox
         Left = 152
-        Top = 240
+        Top = 266
         Width = 145
         Height = 21
         Style = csDropDownList
@@ -641,7 +641,7 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainHideMainPanel: TCheckBox
         Left = 2
-        Top = 156
+        Top = 182
         Width = 486
         Height = 17
         Caption = 'Hide main panel (Dialpad/Contacts/History)'
@@ -649,31 +649,39 @@ object frmSettings: TfrmSettings
       end
       object edCallPanelCollapsedLeft: TEdit
         Left = 366
-        Top = 104
+        Top = 130
         Width = 35
         Height = 21
         TabOrder = 12
       end
       object edCallPanelExpandedLeft: TEdit
         Left = 366
-        Top = 125
+        Top = 151
         Width = 35
         Height = 21
         TabOrder = 13
       end
       object edCallPanelCollapsedTop: TEdit
         Left = 452
-        Top = 104
+        Top = 130
         Width = 35
         Height = 21
         TabOrder = 14
       end
       object edCallPanelExpandedTop: TEdit
         Left = 452
-        Top = 125
+        Top = 151
         Width = 35
         Height = 21
         TabOrder = 15
+      end
+      object chbFrmMainUseClientAreaSizes: TCheckBox
+        Left = 3
+        Top = 48
+        Width = 486
+        Height = 17
+        Caption = 'Use client area sizes instead of absolute sizes'
+        TabOrder = 16
       end
     end
     object tsSpeedDial: TTabSheet

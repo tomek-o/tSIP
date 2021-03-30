@@ -187,6 +187,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edCollapsedHeight->Text = tmpSettings.frmMain.collapsedHeight;
 	edExpandedWidth->Text = tmpSettings.frmMain.expandedWidth;
 	edExpandedHeight->Text = tmpSettings.frmMain.expandedHeight;
+	chbFrmMainUseClientAreaSizes->Checked = tmpSettings.frmMain.bUseClientAreaSizes;
 
 	edCallPanelCollapsedLeft->Text = tmpSettings.frmMain.collapsedCallPanelLeft;
 	edCallPanelCollapsedTop->Text = tmpSettings.frmMain.collapsedCallPanelTop;
@@ -501,6 +502,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		if (tmp >= Settings::_frmMain::MIN_HEIGHT)
 			tmpSettings.frmMain.expandedHeight = tmp;
 	}
+	tmpSettings.frmMain.bUseClientAreaSizes = chbFrmMainUseClientAreaSizes->Checked;
 
 	{
 		StrToIntDef2(edCallPanelCollapsedLeft->Text, tmpSettings.frmMain.collapsedCallPanelLeft);

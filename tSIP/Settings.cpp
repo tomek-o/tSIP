@@ -43,7 +43,8 @@ Settings::_frmMain::_frmMain(void):
 	bWindowMaximized(false),
 	bAlwaysOnTop(false),
 	bStartMinimizedToTray(false),	
-    bSpeedDialVisible(false),
+	bSpeedDialVisible(false),
+	bUseClientAreaSizes(false),
 	bHideCallPanel(false),
 	bHideMainPanel(false),
 	bSpeedDialPopupMenu(true),
@@ -612,6 +613,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			iWidth = frmMain.collapsedWidth;
 			iHeight = frmMain.collapsedHeight;
 		}
+		frmMainJson.getBool("UseClientAreaSizes", frmMain.bUseClientAreaSizes);
 		int iPosX = frmMainJson.get("AppPositionX", frmMain.iPosX).asInt();
 		if (iPosX >= 0 && iPosX + iWidth <= maxX)
 		{
@@ -1027,6 +1029,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["Maximized"] = frmMain.bWindowMaximized;
 		jv["AlwaysOnTop"] = frmMain.bAlwaysOnTop;
 		jv["SpeedDialVisible"] = frmMain.bSpeedDialVisible;
+		jv["UseClientAreaSizes"] = frmMain.bUseClientAreaSizes;
 		jv["HideCallPanel"] = frmMain.bHideCallPanel;
 		jv["HideMainPanel"] = frmMain.bHideMainPanel;
 		jv["SpeedDialPopupMenu"] = frmMain.bSpeedDialPopupMenu;

@@ -1238,8 +1238,19 @@ void TfrmMain::UpdateSize(void)
 		mainPanelLeft = appSettings.frmMain.collapsedMainPanelLeft;
 		mainPanelTop = appSettings.frmMain.collapsedMainPanelTop;
 	}
-	this->Height = floor(iHeight * initialScaling + 0.5);
-	this->Width = floor(iWidth * initialScaling + 0.5);
+	iHeight = floor(iHeight * initialScaling + 0.5);
+	iWidth = floor(iWidth * initialScaling + 0.5);
+	if (appSettings.frmMain.bUseClientAreaSizes)
+	{
+		this->ClientWidth = iWidth;
+		this->ClientHeight = iHeight;
+	}
+	else
+	{
+		this->Width = iWidth;
+		this->Height = iHeight;
+	}
+
 	pnlCallControls->Left = callPanelLeft;
 	pnlCallControls->Top = callPanelTop;
 	pnlMain->Left = mainPanelLeft;
