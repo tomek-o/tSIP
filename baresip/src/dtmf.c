@@ -25,10 +25,16 @@
 
 #include <re.h>
 #include <baresip.h>
-#include "core.h"
+#include "dtmf.h"
 
 #include <errno.h>
 #include <math.h>
+
+struct dtmf_to_freq {
+	uint16_t f0;			/* Hz */
+	uint16_t f1;			/* Hz */
+	uint8_t	key;
+};
 
 static const struct dtmf_to_freq dtmf_to_freq[] = {
 	{941, 1477, '#'},

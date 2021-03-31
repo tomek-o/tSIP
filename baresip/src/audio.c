@@ -17,6 +17,7 @@
 #include <rem.h>
 #include <baresip.h>
 #include "core.h"
+#include "dtmf.h"
 
 
 #define DEBUG_MODULE "audio"
