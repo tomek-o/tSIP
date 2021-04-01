@@ -34,6 +34,7 @@ public:
 		SEND_CUSTOM_REQUEST,
 		SEND_MESSAGE,
 		RECORD_PAUSE,
+		GENERATE_TONES,
 
 		TYPE__LIMITER
 	} type;
@@ -58,6 +59,15 @@ public:
 	int requestId;					///< sending custom messages and sending MESSAGE messages
 	AnsiString method;				///< SEND_CUSTOM_REQUEST
 	AnsiString text;				///< SEND_MESSAGE
+
+	struct Tone {
+		float amplitude;
+		float frequency;
+		Tone(void):
+			amplitude(0.0f),
+			frequency(0.0f)
+		{}
+	} tones[4];
 
 	Command(void):
 		type(TYPE__LIMITER),

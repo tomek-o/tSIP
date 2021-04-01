@@ -20,6 +20,7 @@
 #include "Contacts.h"
 #include "FormContactPopup.h"
 #include "SIMPLE_Messages.h"
+#include "ControlQueue.h"
 #include "buttons/ProgrammableButtons.h"
 #include "buttons/ProgrammableButton.h"
 #include "common/Mutex.h"
@@ -541,6 +542,17 @@ static int l_SendDtmf(lua_State* L)
 		return 0;
 	}
 	GetContext(L)->onSendDtmf(str, false);
+	return 0;
+}
+
+static int l_GenerateTones(lua_State* L)
+{
+	UA->GenerateTone(0,
+		lua_tonumber(L, 1), lua_tonumber(L, 2),	// amplitude, frequency
+		lua_tonumber(L, 3), lua_tonumber(L, 4),
+		lua_tonumber(L, 5), lua_tonumber(L, 6),
+		lua_tonumber(L, 7), lua_tonumber(L, 8)
+	);
 	return 0;
 }
 
@@ -1478,6 +1490,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, "SetDial", ScriptImp::l_SetDial);
 	lua_register2(L, "SwitchAudioSource", ScriptImp::l_SwitchAudioSource);
 	lua_register2(L, "SendDtmf", ScriptImp::l_SendDtmf);
+	lua_register2(L, "GenerateTones", ScriptImp::l_GenerateTones);
 	lua_register2(L, "BlindTransfer", ScriptImp::l_BlindTransfer);
 	lua_register2(L, "GetCallState", ScriptImp::l_GetCallState);
 	lua_register2(L, "GetRecorderState", ScriptImp::l_GetRecorderState);

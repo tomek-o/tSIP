@@ -21,6 +21,11 @@ public:
 	void Answer(int callId, AnsiString audioRxMod="", AnsiString audioRxDev="");
 	void Transfer(int callId, AnsiString target);
 	void SendDigit(int callId, char key);
+	void GenerateTone(int callId,
+		float amplitude1 = 0.0f, float frequency1 = 0.0f,
+		float amplitude2 = 0.0f, float frequency2 = 0.0f,
+		float amplitude3 = 0.0f, float frequency3 = 0.0f,
+		float amplitude4 = 0.0f, float frequency4 = 0.0f);
 	void Hold(int callId, bool state);
 	void Mute(int callId, bool state);
 	void Hangup(int callId, int code=0);

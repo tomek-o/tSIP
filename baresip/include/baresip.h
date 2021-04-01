@@ -71,6 +71,8 @@ typedef void (call_dtmf_h)(struct call *call, char key, void *arg);
 int  call_modify(struct call *call);
 int  call_hold(struct call *call, bool hold);
 int  call_send_digit(struct call *call, char key);
+int  call_start_tone(struct call *call, unsigned int tone_id, float amplitude, float frequency);
+int  call_stop_tone(struct call *call, unsigned int tone_id);
 bool call_has_audio(const struct call *call);
 bool call_has_video(const struct call *call);
 int  call_transfer(struct call *call, const char *uri);

@@ -141,6 +141,8 @@ int  audio_decoder_set(struct audio *a, const struct aucodec *ac,
 struct stream *audio_strm(const struct audio *a);
 int  audio_send_digit_rfc2833(struct audio *a, char key);
 int  audio_send_digit_inband(struct audio *a, char key);
+int audio_start_tone(struct audio *a, unsigned int tone_id, float amplitude, float frequency);
+int audio_stop_tone(struct audio *a, unsigned int tone_id);
 void audio_sdp_attr_decode(struct audio *a);
 
 /*

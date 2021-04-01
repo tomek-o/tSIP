@@ -403,6 +403,8 @@
         <FILE FILENAME="..\..\src\dtmf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dtmf" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\dtmf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\baresip_recorder.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\tone_generator.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tone_generator" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\tone_generator.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

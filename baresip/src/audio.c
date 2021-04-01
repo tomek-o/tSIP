@@ -18,6 +18,7 @@
 #include <baresip.h>
 #include "core.h"
 #include "dtmf.h"
+#include "tone_generator.h"
 
 
 #define DEBUG_MODULE "audio"
@@ -111,6 +112,7 @@ struct autx {
 #endif
 	} u;
 	struct dtmf_generator dtmfgen;	/**< DTMF generator state	    */
+	struct tone_generator tonegen;	/**< tone generator state       */
 };
 
 
@@ -346,6 +348,8 @@ static void poll_aubuf_tx(struct audio *a)
 				break;
 		}
 	}
+
+	tone_generator_process(&tx->tonegen, tx->ausrc_prm.srate, sampv, sampc);
 
 	/* Process exactly one audio-frame in list order */
 	for (le = tx->filtl.head; le; le = le->next) {
@@ -693,6 +697,8 @@ int audio_alloc(struct audio **ap, const struct config *cfg,
 	if (a->cfg.txmode == AUDIO_MODE_TMR)
 		tmr_init(&tx->u.tmr);
 
+	tone_generator_init(&a->tx.tonegen);
+
  out:
 	if (err)
 		mem_deref(a);
@@ -767,6 +773,8 @@ int audio_alloc2(struct audio **ap, const struct config *cfg,
 
 	if (a->cfg.txmode == AUDIO_MODE_TMR)
 		tmr_init(&tx->u.tmr);
+
+	tone_generator_init(&a->tx.tonegen);
 
  out:
 	if (err)
@@ -1387,6 +1395,20 @@ int audio_send_digit_inband(struct audio *a, char key)
 	a->tx.cur_key = key;
 
 	return err;
+}
+
+int audio_start_tone(struct audio *a, unsigned int tone_id, float amplitude, float frequency)
+{
+	if (!a)
+		return EINVAL;
+	return tone_generator_start(&a->tx.tonegen, tone_id, amplitude, frequency);
+}
+
+int audio_stop_tone(struct audio *a, unsigned int tone_id)
+{
+	if (!a)
+		return EINVAL;
+	return tone_generator_stop(&a->tx.tonegen, tone_id);
 }
 
 

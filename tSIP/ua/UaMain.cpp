@@ -22,6 +22,7 @@
 
 #pragma package(smart_init)
 
+
 inline void strncpyz(char* dst, const char* src, int dstsize) {
 	strncpy(dst, src, dstsize);
 	dst[dstsize-1] = '\0';
@@ -1087,6 +1088,22 @@ extern "C" void control_handler(void)
 	case Command::SEND_MESSAGE: {
 		err = message_send(ua_cur(), cmd.target.c_str(), cmd.text.c_str(), (void*)cmd.requestId);
 		DEBUG_WARNING("Sending message to %s: status = %d\n", cmd.target.c_str(), err);
+		break;
+	}
+	case Command::GENERATE_TONES: {
+		if (app.callp) {
+			for (unsigned int i=0; i<ARRAY_SIZE(cmd.tones); i++) {
+				const struct Command::Tone &tone = cmd.tones[i];
+				if (tone.amplitude > 0.000001f)
+				{
+					call_start_tone(app.callp, i, tone.amplitude, tone.frequency);
+				}
+				else
+				{
+					call_stop_tone(app.callp, i);
+				}
+			}
+		}
 		break;
 	}
 	default:

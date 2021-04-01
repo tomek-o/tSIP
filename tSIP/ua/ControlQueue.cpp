@@ -6,6 +6,7 @@
 #include "ControlQueue.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
+#include "common/StaticCheck.h"
 
 //---------------------------------------------------------------------------
 
@@ -13,6 +14,8 @@
 
 #include "common/fifo.h"
 #include "Command.h"
+
+#define ARRAY_SIZE(a)    (sizeof(a)/sizeof(a[0]))
 
 namespace
 {
@@ -122,6 +125,30 @@ void ControlQueue::SendDigit(int callId, char key)
 	cmd->type = Command::SEND_DIGIT;
 	cmd->callId = callId;
 	cmd->key = key;
+	fifo.push();
+}
+
+void ControlQueue::GenerateTone(int callId,
+	float amplitude1, float frequency1,
+	float amplitude2, float frequency2,
+	float amplitude3, float frequency3,
+	float amplitude4, float frequency4)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::GENERATE_TONES;
+	cmd->callId = callId;
+	STATIC_CHECK(ARRAY_SIZE(cmd->tones) == 4, TonesSizeMismatch);
+	cmd->tones[0].amplitude = amplitude1;
+	cmd->tones[0].frequency = frequency1;
+	cmd->tones[1].amplitude = amplitude2;
+	cmd->tones[1].frequency = frequency2;
+	cmd->tones[2].amplitude = amplitude3;
+	cmd->tones[2].frequency = frequency3;
+	cmd->tones[3].amplitude = amplitude4;
+	cmd->tones[3].frequency = frequency4;
 	fifo.push();
 }
 

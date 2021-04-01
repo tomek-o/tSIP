@@ -1102,6 +1102,20 @@ int call_send_digit(struct call *call, char key)
 	}
 }
 
+int call_start_tone(struct call *call, unsigned int tone_id, float amplitude, float frequency)
+{
+	if (!call)
+		return EINVAL;
+	return audio_start_tone(call->audio, tone_id, amplitude, frequency);
+}
+
+int call_stop_tone(struct call *call, unsigned int tone_id)
+{
+	if (!call)
+		return EINVAL;
+	return audio_stop_tone(call->audio, tone_id);
+}
+
 
 struct ua *call_get_ua(const struct call *call)
 {
