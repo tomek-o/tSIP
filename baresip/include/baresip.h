@@ -196,6 +196,7 @@ struct config {
 		} agc_rx;
 		double portaudioInSuggestedLatency;
 		double portaudioOutSuggestedLatency;
+		bool loop_ring_without_silence;
 	} audio;
 
 #ifdef USE_VIDEO
@@ -517,9 +518,9 @@ struct dnsc     *net_dnsc(void);
 
 struct play;
 
-int  play_file(struct play **playp, const char *mod, const char *dev, const char *filename, int repeat);
+int  play_file(struct play **playp, const char *mod, const char *dev, const char *filename, int repeat, bool loop_without_silence);
 int  play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf *tone,
-	       uint32_t srate, uint8_t ch, int repeat);
+	       uint32_t srate, uint8_t ch, int repeat, bool loop_without_silence);
 void play_init(const struct config *cfg);
 void play_close(void);
 void play_set_path(const char *path);
@@ -588,7 +589,7 @@ void ua_unregister(struct ua *ua);
 bool ua_isregistered(const struct ua *ua);
 unsigned int ua_regint(const struct ua *ua);
 int	ua_reregister(struct ua *ua);
-int ua_play_file(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, int repeat);
+int ua_play_file(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, int repeat, bool loop_without_silence);
 int ua_play_stop(struct ua *ua);
 /** Start playing another, separate "ring", with no options to repeat/cancel */
 int ua_play_file2(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename);

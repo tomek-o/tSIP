@@ -394,6 +394,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edRingBellcoreDr7->Text = tmpSettings.Ring.bellcore[6];
 	edRingBellcoreDr8->Text = tmpSettings.Ring.bellcore[7];
 
+	chbLoopRingWithoutSilence->Checked = tmpSettings.uaConf.loopRingWithoutSilence;
+
 	edMessagesRing->Text = tmpSettings.Messages.ring;
 
 	chbContactPopupShowOnIncoming->Checked = tmpSettings.frmContactPopup.showOnIncoming;
@@ -767,6 +769,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Ring.bellcore[5] = edRingBellcoreDr6->Text;
 	tmpSettings.Ring.bellcore[6] = edRingBellcoreDr7->Text;
 	tmpSettings.Ring.bellcore[7] = edRingBellcoreDr8->Text;
+
+	tmpSettings.uaConf.loopRingWithoutSilence = chbLoopRingWithoutSilence->Checked;
 
 	tmpSettings.Messages.ring = edMessagesRing->Text;
 

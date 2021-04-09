@@ -324,6 +324,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			jv.getDouble("releaseRate", uaConf.audioAgcRx.releaseRate);
 		}
 
+		uaConfJson.getBool("loopRingWithoutSilence", uaConf.loopRingWithoutSilence);
+
 		if (Branding::recording)
 		{
 			const Json::Value &uaConfRecordingJson = uaConfJson["recording"];
@@ -1234,6 +1236,8 @@ int Settings::Write(AnsiString asFileName)
 		jv["attackRate"] = uaConf.audioAgcRx.attackRate;
 		jv["releaseRate"] = uaConf.audioAgcRx.releaseRate;
 	}
+
+	root["uaConf"]["loopRingWithoutSilence"] = uaConf.loopRingWithoutSilence;
 
 	if (Branding::recording)
 	{

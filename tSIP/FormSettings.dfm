@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 443
-    ActivePage = tsMainWindow
+    ActivePage = tsRing
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1374,12 +1374,12 @@ object frmSettings: TfrmSettings
       object edRingDefault: TEdit
         Left = 96
         Top = 0
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 0
       end
       object btnRingSelectDefault: TButton
-        Left = 221
+        Left = 287
         Top = 0
         Width = 22
         Height = 21
@@ -1390,12 +1390,12 @@ object frmSettings: TfrmSettings
       object edRingBellcoreDr1: TEdit
         Left = 96
         Top = 23
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 2
       end
       object btnRingSelectBellcoreDr1: TButton
-        Left = 221
+        Left = 287
         Top = 23
         Width = 22
         Height = 21
@@ -1406,12 +1406,12 @@ object frmSettings: TfrmSettings
       object edRingBellcoreDr2: TEdit
         Left = 96
         Top = 46
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 4
       end
       object btnRingSelectBellcoreDr2: TButton
-        Left = 221
+        Left = 287
         Top = 46
         Width = 22
         Height = 21
@@ -1422,12 +1422,12 @@ object frmSettings: TfrmSettings
       object edRingBellcoreDr3: TEdit
         Left = 96
         Top = 69
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 6
       end
       object btnRingSelectBellcoreDr3: TButton
-        Left = 221
+        Left = 287
         Top = 69
         Width = 22
         Height = 21
@@ -1438,12 +1438,12 @@ object frmSettings: TfrmSettings
       object edRingBellcoreDr4: TEdit
         Left = 96
         Top = 92
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 8
       end
       object btnRingSelectBellcoreDr4: TButton
-        Left = 221
+        Left = 287
         Top = 92
         Width = 22
         Height = 21
@@ -1454,12 +1454,12 @@ object frmSettings: TfrmSettings
       object edRingBellcoreDr5: TEdit
         Left = 96
         Top = 115
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 10
       end
       object btnRingSelectBellcoreDr5: TButton
-        Left = 221
+        Left = 287
         Top = 115
         Width = 22
         Height = 21
@@ -1470,12 +1470,12 @@ object frmSettings: TfrmSettings
       object edRingBellcoreDr6: TEdit
         Left = 96
         Top = 138
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 12
       end
       object btnRingSelectBellcoreDr6: TButton
-        Left = 221
+        Left = 287
         Top = 138
         Width = 22
         Height = 21
@@ -1486,12 +1486,12 @@ object frmSettings: TfrmSettings
       object edRingBellcoreDr7: TEdit
         Left = 96
         Top = 161
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 14
       end
       object btnRingSelectBellcoreDr7: TButton
-        Left = 221
+        Left = 287
         Top = 161
         Width = 22
         Height = 21
@@ -1502,18 +1502,26 @@ object frmSettings: TfrmSettings
       object edRingBellcoreDr8: TEdit
         Left = 96
         Top = 184
-        Width = 121
+        Width = 180
         Height = 21
         TabOrder = 16
       end
       object btnRingSelectBellcoreDr8: TButton
-        Left = 221
+        Left = 287
         Top = 184
         Width = 22
         Height = 21
         Caption = '...'
         TabOrder = 17
         OnClick = btnRingSelectClick
+      end
+      object chbLoopRingWithoutSilence: TCheckBox
+        Left = 3
+        Top = 224
+        Width = 238
+        Height = 17
+        Caption = 'Loop ring without silence'
+        TabOrder = 18
       end
     end
     object tsAudioIO: TTabSheet

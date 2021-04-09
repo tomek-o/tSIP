@@ -568,6 +568,8 @@ static int app_init(void)
 	cfg->audio.portaudioInSuggestedLatency = appSettings.uaConf.audioPortaudio.inSuggestedLatency;
 	cfg->audio.portaudioOutSuggestedLatency = appSettings.uaConf.audioPortaudio.outSuggestedLatency;
 
+	cfg->audio.loop_ring_without_silence = appSettings.uaConf.loopRingWithoutSilence;
+
 	configure();
 
 	/* Initialise User Agents */
@@ -957,7 +959,7 @@ extern "C" void control_handler(void)
 		struct ua* ua = ua_cur();
 		struct config * cfg = conf_config();
 		//LOG("UaMain: START_RING\n");
-		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), -1);
+		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), -1, cfg->audio.loop_ring_without_silence);
 		break;
 	}
 	case Command::PLAY_STOP: {

@@ -227,6 +227,8 @@ public:
 		}
 	} audioAgcRx;
 
+	bool loopRingWithoutSilence;	
+
 	struct RecordingCfg {
 		bool enabled;
 		enum RecDir {
@@ -522,6 +524,7 @@ public:
 		logMessages = false;
 		logMessagesOnlyFirstLine = false;
 		logAubuf = false;
+		loopRingWithoutSilence = false;
 		autoAnswer = false;
 		autoAnswerCode = 200;
 		autoAnswerDelayMin = 0;
@@ -536,6 +539,8 @@ public:
 
 	bool operator==(const UaConf& right) const {
 		if (disableUa != right.disableUa)
+			return false;
+		if (loopRingWithoutSilence != right.loopRingWithoutSilence)
 			return false;
 		if (accounts.size() != right.accounts.size())
 			return false;

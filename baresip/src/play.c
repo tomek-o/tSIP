@@ -28,6 +28,7 @@ struct play {
 	struct tmr tmr;
 	int repeat;
 	bool eof;
+	bool loop_without_silence;
 };
 
 
@@ -95,6 +96,12 @@ static bool write_handler(uint8_t *buf, size_t sz, void *arg)
 	if (play->eof)
 		goto silence;
 
+	if (play->loop_without_silence && mbuf_get_left(play->mb) < sz &&
+			(play->repeat > 0 || play->repeat < 0 /* repeat indefinitely */)) {
+		play->mb->pos = 0;
+		play->repeat--;
+	}
+	
 	if (mbuf_get_left(play->mb) < sz) {
 		play->eof = true;
 	}
@@ -206,7 +213,7 @@ static int aufile_load(struct mbuf *mb, const char *filename,
  * @return 0 if success, otherwise errorcode
  */
 int play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf *tone, uint32_t srate,
-		  uint8_t ch, int repeat)
+		  uint8_t ch, int repeat, bool loop_without_silence)
 {
 	struct auplay_prm wprm;
 	struct play *play;
@@ -221,6 +228,7 @@ int play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf
 
 	tmr_init(&play->tmr);
 	play->repeat = repeat;
+	play->loop_without_silence = loop_without_silence;
 	play->mb     = mem_ref(tone);
 
 	err = lock_alloc(&play->lock);
@@ -261,10 +269,11 @@ int play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf
  * @param dev      Audio device name used for playing 
  * @param filename Name of WAV file to play
  * @param repeat   Number of times to repeat
+ * @param loop_without_silence Concatenate samples when looping, without additional silence
  *
  * @return 0 if success, otherwise errorcode
  */
-int play_file(struct play **playp, const char *mod, const char *dev, const char *filename, int repeat)
+int play_file(struct play **playp, const char *mod, const char *dev, const char *filename, int repeat, bool loop_without_silence)
 {
 	struct mbuf *mb;
 	char path[768];
@@ -289,7 +298,7 @@ int play_file(struct play **playp, const char *mod, const char *dev, const char 
 		goto out;
 	}
 
-	err = play_tone(playp, mod, dev, mb, srate, ch, repeat);
+	err = play_tone(playp, mod, dev, mb, srate, ch, repeat, loop_without_silence);
 
  out:
 	mem_deref(mb);
