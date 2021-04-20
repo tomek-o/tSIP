@@ -37,11 +37,22 @@ struct DialpadConf
 		{}
 		void fromJson(const Json::Value &jv);
 		void toJson(Json::Value &jv);
+		bool operator==(const ElementConf &right) const;
+		bool operator!=(const ElementConf &right) const
+		{
+			return !(*this == right);
+		}
 	} elements[EL_CNT];
 
 	DialpadConf(void);
 	void fromJson(const Json::Value &jv);
 	void toJson(Json::Value &jv);
+
+	bool operator==(const DialpadConf &right) const;
+	bool operator!=(const DialpadConf &right) const
+	{
+		return !(*this == right);
+	}
 };
 
 #endif

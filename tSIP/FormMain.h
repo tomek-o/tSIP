@@ -246,6 +246,7 @@ private:	// User declarations
 	void UpdateClip(void);
 	void SetMainWindowLayout(int id);
 	void UpdateSize(void);
+	void UpdateDialpad(void);
 	void FocusCbCallUri(void);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);

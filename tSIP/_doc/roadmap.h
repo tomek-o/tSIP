@@ -89,8 +89,6 @@ Lua: get BLF button state => route incoming call to selected (idle) extension
 
 - audible DTMF keypad tones during the call and while dialing: as opt-in options, PlaySound, resources, ASYNC?
 
-- sine wave audio input device
-
 - more command-line control: show/hide, dtmf, hold/unhold
 
 ping plugin: add context menu to history

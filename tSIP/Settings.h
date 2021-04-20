@@ -12,6 +12,7 @@
 #include "PhoneConf.h"
 #include "SettingsAppVersion.h"
 #include "buttons/ButtonContainerConf.h"
+#include "DialpadConf.h"
 #include <deque>
 #include <list>
 
@@ -351,6 +352,8 @@ public:
 	std::list<HotKeyConf> hotKeyConf;
 
 	std::vector<ButtonContainerConf> buttonContainers;
+
+	DialpadConf dialpad;
 
 	Settings(void);
 

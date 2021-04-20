@@ -389,6 +389,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	initialScaling = static_cast<double>(appSettings.gui.scalingPct) / 100;
 	UpdateSize();
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
+	UpdateDialpad();
 
 	this->Top = appSettings.frmMain.iPosY;
 	this->Left = appSettings.frmMain.iPosX;
@@ -501,6 +502,10 @@ int TfrmMain::UpdateSettingsFromJson(AnsiString json)
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
 	UpdateSize();
+	if (prev.dialpad != appSettings.dialpad)
+	{
+		UpdateDialpad();
+	}
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
 	if (prev.frmMain.bSpeedDialPopupMenu != appSettings.frmMain.bSpeedDialPopupMenu)
 	{
@@ -1257,6 +1262,49 @@ void TfrmMain::UpdateSize(void)
 	pnlMain->Top = mainPanelTop;
 }
 
+void TfrmMain::UpdateDialpad(void)
+{
+	{
+		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_ED_TRANSFER];
+		edTransfer->Visible = el.visible;
+		edTransfer->Left = el.left;
+		edTransfer->Top = el.top;
+		edTransfer->Width = el.width;
+		edTransfer->Height = el.height;
+	}
+	{
+		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_TRBAR_MIC_VOLUME];
+		trbarSoftvolMic->Visible = el.visible;
+		trbarSoftvolMic->Left = el.left;
+		trbarSoftvolMic->Top = el.top;
+		trbarSoftvolMic->Width = el.width;
+		trbarSoftvolMic->Height = el.height;
+	}
+	{
+		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_BTN_RESET_MIC_VOLUME];
+		btnResetMicVolume->Visible = el.visible;
+		btnResetMicVolume->Left = el.left;
+		btnResetMicVolume->Top = el.top;
+		btnResetMicVolume->Width = el.width;
+		btnResetMicVolume->Height = el.height;
+	}
+	{
+		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_TRBAR_SPEAKER_VOLUME];
+		trbarSoftvolSpeaker->Visible = el.visible;
+		trbarSoftvolSpeaker->Left = el.left;
+		trbarSoftvolSpeaker->Top = el.top;
+		trbarSoftvolSpeaker->Width = el.width;
+		trbarSoftvolSpeaker->Height = el.height;
+	}
+	{
+		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_BTN_RESET_SPEAKER_VOLUME];
+		btnResetSpeakerVolume->Visible = el.visible;
+		btnResetSpeakerVolume->Left = el.left;
+		btnResetSpeakerVolume->Top = el.top;
+		btnResetSpeakerVolume->Width = el.width;
+		btnResetSpeakerVolume->Height = el.height;
+	}
+}
 
 void TfrmMain::FocusCbCallUri(void)
 {

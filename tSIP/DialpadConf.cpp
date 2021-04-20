@@ -78,6 +78,19 @@ void DialpadConf::ElementConf::toJson(Json::Value &jv)
 	jv["height"] = height;
 }
 
+bool DialpadConf::ElementConf::operator==(const DialpadConf::ElementConf &right) const
+{
+	if (visible == right.visible &&
+		left == right.left &&
+		top == right.top &&
+		width == right.top &&
+		height == right.height)
+	{
+		return true;
+	}
+	return false;
+}
+
 void DialpadConf::fromJson(const Json::Value &jv)
 {
 	if (jv.type() != Json::objectValue)
@@ -102,3 +115,15 @@ void DialpadConf::toJson(Json::Value &jv)
 		elements[i].toJson(je[i]);
 	}
 }
+
+bool DialpadConf::operator==(const DialpadConf &right) const
+{
+	for (unsigned int i=0; i<ARRAY_SIZE(elements); i++)
+	{
+		if (elements[i] != right.elements[i])
+			return false;
+	}
+
+	return true;
+}
+

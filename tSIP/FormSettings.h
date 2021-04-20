@@ -23,6 +23,7 @@ class TfrmAccount;
 class TfrmHotkeys;
 class TfrmPhones;
 class TfrmUaConfOpus;
+class TfrmDialpadConf;
 
 class TfrmSettings : public TForm
 {
@@ -447,6 +448,7 @@ __published:	// IDE-managed Components
 	TBitBtn *btnSelectedScriptOnProgrammableButtonMouseUpDownEdit;
 	TCheckBox *chbFrmMainUseClientAreaSizes;
 	TCheckBox *chbLoopRingWithoutSilence;
+	TTabSheet *tsDialpad;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -490,6 +492,7 @@ private:	// User declarations
 	TfrmHotkeys *frmHotkeys;
 	TfrmPhones *frmPhones;
 	TfrmUaConfOpus *frmConfOpus;
+	TfrmDialpadConf *frmDialpadConf;
 	std::vector<TTabSheet*> tabs;	// first level of tabs
 	TTabSheet *lastTab;
 	void AudioCodecEnableSelected(void);

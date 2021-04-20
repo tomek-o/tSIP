@@ -8,6 +8,7 @@
 #include "FormHotkeys.h"
 #include "FormPhones.h"
 #include "FormUaConfOpus.h"
+#include "FormDialpadConf.h"
 #include "AudioDevicesList.h"
 #include "AudioModules.h"
 #include "ProgrammableButtons.h"
@@ -91,6 +92,10 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	frmUaConfOpus = new TfrmUaConfOpus(tsUaConfOpus);
 	frmUaConfOpus->Parent = tsUaConfOpus;
 	frmUaConfOpus->Visible = true;
+
+	frmDialpadConf = new TfrmDialpadConf(tsDialpad);
+	frmDialpadConf->Parent = tsDialpad;
+	frmDialpadConf->Visible = true;
 
 	for (int i=0; i<pcGeneral->PageCount; i++)
 	{
@@ -457,6 +462,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	frmPhones->SetCfg(&tmpSettings.phoneConf);
 
 	frmUaConfOpus->SetCfg(&tmpSettings.uaConf.opus);
+
+	frmDialpadConf->SetCfg(&tmpSettings.dialpad);
 }
 
 void TfrmSettings::UpdateNetworkInterface(void)
@@ -825,7 +832,9 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.layout = cbFrmMainLayout->ItemIndex;
 	tmpSettings.frmMain.dialComboboxOrder = static_cast<Settings::_frmMain::DialComboboxOrder>(cbDialComboboxOrder->ItemIndex);
 
-    frmUaConfOpus->Apply();
+	frmUaConfOpus->Apply();
+
+	frmDialpadConf->Apply();
 
 	appSettings = tmpSettings;
 	this->Close();	
@@ -1167,6 +1176,14 @@ void __fastcall TfrmSettings::tvSelectorChange(TObject *Sender, TTreeNode *Node)
 			if (Node->Text == "Opus")
 			{
 				lastTab = tsUaConfOpus;
+				lastTab->Visible = true;
+			}
+		}
+		else if (Node->Parent->Text == "Main window")
+		{
+			if (Node->Text == "Dialpad")
+			{
+				lastTab = tsDialpad;
 				lastTab->Visible = true;
 			}
 		}
