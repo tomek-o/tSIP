@@ -70,8 +70,8 @@ static uint32_t wait_fail(unsigned failc)
 
 	case 1:  return 30;
 	case 2:  return 300;
-	case 3:  return 3600;
-	default: return 86400;
+	case 3:  return 600;
+	default: return 3600;
 	}
 }
 
