@@ -158,6 +158,8 @@ __published:	// IDE-managed Components
 	TEdit *edLabelLeft;
 	TLabel *lblParent;
 	TComboBox *cbParentId;
+	TLabel *lblBlfExpires;
+	TEdit *edBlfExpires;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);

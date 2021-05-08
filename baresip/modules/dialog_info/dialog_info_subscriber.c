@@ -361,7 +361,7 @@ static int subscribe(struct dialog_info *dlg_info)
 	routev[0] = ua_outbound(ua);
 
 	err = sipevent_subscribe(&dlg_info->sub, uag_sipevent_sock(), uri, NULL,
-				 ua_aor(ua), "dialog", "application/dialog-info+xml", NULL, 600,
+				 ua_aor(ua), "dialog", "application/dialog-info+xml", NULL, dlg_info->expires,
 				 ua_cuser(ua), routev, routev[0] ? 1 : 0,
 				 auth_handler, ua_prm(ua), true, NULL,
 				 notify_handler, close_handler, dlg_info,
@@ -385,7 +385,7 @@ static void tmr_handler(void *arg)
 }
 
 
-static int dialog_info_alloc(struct contact *contact)
+static int dialog_info_alloc(struct contact *contact, unsigned int expires)
 {
 	struct dialog_info *dlg_info;
 
@@ -395,6 +395,7 @@ static int dialog_info_alloc(struct contact *contact)
 
 	dlg_info->status  = DIALOG_INFO_UNKNOWN;
 	dlg_info->contact = mem_ref(contact);
+	dlg_info->expires = expires;
 
 	tmr_init(&dlg_info->tmr);
 	tmr_start(&dlg_info->tmr, 1000, tmr_handler, dlg_info);
@@ -418,8 +419,13 @@ int dialog_info_subscriber_init(void)
 
 		if (0 == msg_param_decode(&addr->params, "dlginfo", &val) &&
 		    0 == pl_strcasecmp(&val, "p2p")) {
-
-			err |= dialog_info_alloc(le->data);
+			int expires = 600;
+			if (msg_param_decode(&addr->params, "dlginfo_expires", &val) == 0) {
+				expires = pl_u32(&val);
+				if (expires > 72 * 3600)
+					expires = 600;
+			}
+			err |= dialog_info_alloc(le->data, expires);
 		}
 	}
 

@@ -49,12 +49,15 @@ int      pl_casecmp(const struct pl *pl1, const struct pl *pl2);
 const char *pl_strchr(const struct pl *pl, char c);
 
 /** Advance pl position/length by +/- N bytes */
+#ifndef __BORLANDC__
 static __inline void pl_advance(struct pl *pl, ssize_t n)
 {
 	pl->p += n;
 	pl->l -= n;
 }
-
+#else
+#define pl_advance(pl, n) {	(pl)->p += (n);	(pl)->l -= (n); }
+#endif
 
 /* Formatted printing */
 

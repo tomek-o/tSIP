@@ -758,11 +758,11 @@ static int app_start(void)
 			}
 			if (contact.sub_dialog_info)
 			{
-				addr.cat_printf(";dlginfo=p2p");
+				addr.cat_printf(";dlginfo=p2p;dlginfo_expires=%d", contact.sub_dialog_info_expires);
 			}
 			if (contact.sub_presence)
 			{
-				addr.cat_printf(";presence=p2p");
+				addr.cat_printf(";presence=p2p;presence_expires=%d", contact.sub_presence_expires);
 			}
 			pl pl_addr;
 			pl_set_str(&pl_addr, addr.c_str());

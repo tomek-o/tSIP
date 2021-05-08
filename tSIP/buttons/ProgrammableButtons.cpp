@@ -221,6 +221,7 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				cfg.arg1 = btnJson.get("arg1", cfg.arg1).asString();
 
 				btnJson.getInt("sipCode", cfg.sipCode);
+				btnJson.getInt("expires", cfg.expires);
 
 				cfg.pagingTxWaveFile = btnJson.get("pagingTxWaveFile", cfg.pagingTxWaveFile).asString();
 				cfg.pagingTxCodec = btnJson.get("pagingTxCodec", cfg.pagingTxCodec).asString();
@@ -551,6 +552,10 @@ int ProgrammableButtons::Write(void)
 		{
 			jsonBtn["sipCode"] = cfg.sipCode;
 		}
+		if (saveAllSettings || (cfg.expires != defaultBtn.expires))
+		{
+        	jsonBtn["expires"] = cfg.expires;
+		}
 		if (saveAllSettings || (cfg.pagingTxWaveFile != defaultBtn.pagingTxWaveFile))
 		{
 			jsonBtn["pagingTxWaveFile"] = cfg.pagingTxWaveFile;
@@ -657,6 +662,7 @@ void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)
 				UaConf::Contact contact;
 				contact.user = cfg.number;
 				contact.sub_dialog_info = true;
+				contact.sub_dialog_info_expires = cfg.expires;
 				contact.btnIds.push_back(btnId);
 				contacts.push_back(contact);
 			}
@@ -680,6 +686,7 @@ void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)
 				UaConf::Contact contact;
 				contact.user = cfg.number;
 				contact.sub_presence = true;
+				contact.sub_presence_expires = cfg.expires;				
 				contact.btnIds.push_back(btnId);
 				contacts.push_back(contact);
 			}

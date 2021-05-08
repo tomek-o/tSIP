@@ -27,6 +27,7 @@ struct presence {
 	enum presence_status status;
 	unsigned failc;
 	struct contact *contact;
+	unsigned int expires;
 };
 
 static struct list presencel;
@@ -209,7 +210,7 @@ static int subscribe(struct presence *pres)
 	routev[0] = ua_outbound(ua);
 
 	err = sipevent_subscribe(&pres->sub, uag_sipevent_sock(), uri, NULL,
-				 ua_aor(ua), "presence", "application/pidf+xml", NULL, 600,
+				 ua_aor(ua), "presence", "application/pidf+xml", NULL, pres->expires,
 				 ua_cuser(ua), routev, routev[0] ? 1 : 0,
 				 auth_handler, ua_prm(ua), true, NULL,
 				 notify_handler, close_handler, pres,
@@ -233,7 +234,7 @@ static void tmr_handler(void *arg)
 }
 
 
-static int presence_alloc(struct contact *contact)
+static int presence_alloc(struct contact *contact, unsigned int expires)
 {
 	struct presence *pres;
 
@@ -243,6 +244,7 @@ static int presence_alloc(struct contact *contact)
 
 	pres->status  = PRESENCE_UNKNOWN;
 	pres->contact = mem_ref(contact);
+	pres->expires = expires;
 
 	tmr_init(&pres->tmr);
 	tmr_start(&pres->tmr, 1000, tmr_handler, pres);
@@ -266,8 +268,13 @@ int subscriber_init(void)
 
 		if (0 == msg_param_decode(&addr->params, "presence", &val) &&
 		    0 == pl_strcasecmp(&val, "p2p")) {
-
-			err |= presence_alloc(le->data);
+			int expires = 600;
+			if (msg_param_decode(&addr->params, "presence_expires", &val) == 0) {
+				expires = pl_u32(&val);
+				if (expires > 72 * 3600)
+					expires = 600;
+			}
+			err |= presence_alloc(le->data, expires);
 		}
 	}
 

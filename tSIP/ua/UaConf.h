@@ -135,7 +135,9 @@ public:
 		std::string description;
 		std::string user;
 		bool sub_dialog_info;
+		int sub_dialog_info_expires;
 		bool sub_presence;
+		int sub_presence_expires;
 		std::list<int> btnIds;
 		int dialog_info_state;	///< not actual configuration - current state
 		bool operator==(const Contact& right) const {
@@ -143,7 +145,9 @@ public:
 				description == right.description &&
 				user == right.user &&
 				sub_dialog_info == right.sub_dialog_info &&
-				sub_presence == right.sub_presence
+				sub_dialog_info_expires == right.sub_dialog_info_expires &&
+				sub_presence == right.sub_presence &&
+				sub_presence_expires == right.sub_presence_expires
 				);
 		}
 		bool operator!=(const Contact& right) const {
@@ -151,7 +155,9 @@ public:
 		}
 		Contact():
 			sub_dialog_info(false),
+			sub_dialog_info_expires(600),
 			sub_presence(false),
+			sub_presence_expires(600),
 			dialog_info_state(-1)
 		{
 		}

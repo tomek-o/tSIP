@@ -123,7 +123,7 @@ object frmButtonEdit: TfrmButtonEdit
     Top = 81
     Width = 659
     Height = 408
-    ActivePage = tsVisual
+    ActivePage = tsBehavior
     TabOrder = 4
     object tsVisual: TTabSheet
       Caption = 'Visual'
@@ -759,7 +759,7 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 0
         Width = 651
         Height = 380
-        ActivePage = tsBehaviorAutoAnswer
+        ActivePage = tsBehaviorBlf
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -778,6 +778,13 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 228
             Height = 13
             Caption = 'BLF/Presence/SpeedDial DTMF prefix during call'
+          end
+          object lblBlfExpires: TLabel
+            Left = 3
+            Top = 181
+            Width = 51
+            Height = 13
+            Caption = 'Expires [s]'
           end
           object grboxBlfOverride: TGroupBox
             Left = 3
@@ -868,6 +875,14 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 117
             Height = 21
             TabOrder = 2
+          end
+          object edBlfExpires: TEdit
+            Left = 116
+            Top = 178
+            Width = 45
+            Height = 21
+            TabOrder = 3
+            Text = '600'
           end
         end
         object tsBehaviorPaging: TTabSheet

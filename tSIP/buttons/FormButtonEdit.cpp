@@ -150,6 +150,8 @@ void TfrmButtonEdit::ApplyConf(void)
 	cbBlfActionDuringCall->ItemIndex = cfg->blfActionDuringCall;
 	edBlfDtmfPrefixDuringCall->Text = cfg->blfDtmfPrefixDuringCall.c_str();
 
+	edBlfExpires->Text = cfg->expires;
+
 	edArg1->Text = cfg->arg1.c_str();
 
 	edAutoAnswerSipCode->Text = cfg->sipCode;
@@ -242,6 +244,12 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 
 	cfg->blfActionDuringCall = static_cast<ButtonConf::BlfActionDuringCall>(cbBlfActionDuringCall->ItemIndex);
 	cfg->blfDtmfPrefixDuringCall = edBlfDtmfPrefixDuringCall->Text.c_str();
+
+	{
+		int tmp = StrToIntDef(edBlfExpires->Text, cfg->expires);
+		if (tmp > 10 && tmp < 72*3600)
+			cfg->expires = tmp;
+	}
 
 	cfg->arg1 = edArg1->Text.c_str();
 

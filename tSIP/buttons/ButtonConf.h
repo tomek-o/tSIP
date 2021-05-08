@@ -78,7 +78,8 @@ public:
 
 	std::string arg1;
 
-	int sipCode;	
+	int sipCode;
+	int expires;	
 
 	std::string pagingTxWaveFile;
 	std::string pagingTxCodec;
@@ -194,6 +195,7 @@ public:
 			imgConfirmed == right.imgConfirmed &&
 			arg1 == right.arg1 &&
 			sipCode == right.sipCode &&
+			expires == right.expires &&
             pagingTxWaveFile == right.pagingTxWaveFile &&
 			pagingTxCodec == right.pagingTxCodec &&
 			pagingTxPtime == right.pagingTxPtime &&
