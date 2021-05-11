@@ -901,7 +901,15 @@ Version 0.2.00.4
 	- added French translation (thanks to Thierry Pimont)
 	- added Russian translation (thanks to https://github.com/homedimon)
 
-Version
+Version 0.2.02
 	- removed dialpadBackgroundImage - it is not replaced by bitmap for first button container that covers whole dialpad area
+	- numeric buttons are now configurable; button container covers whole dialpad area
+	- added configuration of dialpad elements other than programmable buttons (hiding, sizes and position)
+	- added setting to use ClientWidth/ClientHeight instead of Width/Height for main window
+	- added tone generator with Lua GenerateTones(ampl, freq); GenerateTones() takes up to 4 amplitude (as a fraction of full scales) + frequency (Hz) pairs; calling GenerateTones with empty parameter lists stops generator; tone generator is placed before softvol
+	- added setting to loop ring wave file without silence period
+	- added Lua function: state = GetButtonBlfState(btnId)
+	- reduced subscriptions retry times to maximum of 3600 s
+	- added Expires configuration for each dialog-info and presence panel/button
 */
 
