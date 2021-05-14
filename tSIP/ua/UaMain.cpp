@@ -10,6 +10,7 @@
 #include "CallbackQueue.h"
 #include "Callback.h"
 #include "Settings.h"
+#include "NetInterfaces.h"
 #include "Paths.h"
 #include <re.h>
 #include <rem.h>
@@ -536,7 +537,37 @@ static int app_init(void)
 	}
 
 	strncpyz(cfg->sip.local, appSettings.uaConf.local.c_str(), sizeof(cfg->sip.local));
-	strncpyz(cfg->net.ifname, appSettings.uaConf.ifname.c_str(), sizeof(cfg->net.ifname));
+	if (appSettings.uaConf.ifname.size() > 0) {
+		strncpyz(cfg->net.ifname, appSettings.uaConf.ifname.c_str(), sizeof(cfg->net.ifname));
+	} else {
+		// try to avoid VirtualBox interface
+		cfg->net.ifname[0] = '\0';
+		std::vector<NetInterface> interfaces;
+		GetNetInterfaces(interfaces);
+		if (!interfaces.empty()) {
+			for (unsigned int i=0; i<interfaces.size(); i++) {
+				const NetInterface &netIf = interfaces[i];
+				if (netIf.ip == "0.0.0.0" || strncmp(netIf.ip.c_str(), "169.154.", strlen("169.154.")) == 0) {
+					continue;
+				}
+			#if 0
+				if (netIf.ip == "192.168.56.1") {	// VirtualBox default IP
+					continue;
+				}
+			#endif
+				AnsiString driverName = GetNetAdapterDriverName(netIf.name);
+				if (driverName.Pos("VirtualBox") > 0 ||
+					driverName.Pos("VMware") > 0 ||
+					driverName.Pos("Hyper-V") > 0 ||
+					driverName.Pos("Virtual Ethernet") > 0) {
+					continue;
+				}
+				DEBUG_WARNING("No adapter specified in config, network adapter [%s] seems to be valid to bind\n", driverName.c_str());
+				strncpyz(cfg->net.ifname, netIf.name.c_str(), sizeof(cfg->net.ifname));
+				break;
+			}
+		}
+	}
 
 	net_debug(&pf_log, NULL);
 

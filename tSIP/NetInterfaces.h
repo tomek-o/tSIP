@@ -14,5 +14,6 @@ struct NetInterface
 };
 
 int GetNetInterfaces(std::vector<NetInterface> &interfaces);
+AnsiString GetNetAdapterDriverName(AnsiString adapterGuid);
 
 #endif
