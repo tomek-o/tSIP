@@ -299,7 +299,8 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				updated = true;
 			}
 		}
-		else if (appVersion < ver0p2p1)
+
+		if (appVersion < ver0p2p1)
 		{
 			SetInitialDialpad();
 			for (unsigned int i=0; i<BASIC_PANEL_CONSOLE_BTNS; i++)
