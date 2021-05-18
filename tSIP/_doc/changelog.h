@@ -911,5 +911,9 @@ Version 0.2.02
 	- added Lua function: state = GetButtonBlfState(btnId)
 	- reduced subscriptions retry times to maximum of 3600 s
 	- added Expires configuration for each dialog-info and presence panel/button
+    
+Version 0.2.03
+    - FIXED: missing dialpad keys when upgrading from version < 0.2
+    - aoid binding to VirtulBox/VMvare/Hyper-V network interface
 */
 
