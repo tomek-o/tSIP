@@ -915,5 +915,8 @@ Version 0.2.02
 Version 0.2.03
     - FIXED: missing dialpad keys when upgrading from version < 0.2
     - avoid binding to VirtulBox/VMvare/Hyper-V network interface
+    
+Version 0.2.03.1
+    - FIXED: bug in pl_advance introduced in 0.2.03, affecting RFC2833 DTMF transmission
 */
 

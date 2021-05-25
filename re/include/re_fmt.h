@@ -56,7 +56,7 @@ static __inline void pl_advance(struct pl *pl, ssize_t n)
 	pl->l -= n;
 }
 #else
-#define pl_advance(pl, n) {	(pl)->p += (n);	(pl)->l -= (n); }
+#define pl_advance(pl, n) {	ssize_t n_ = n; (pl)->p += (n_); (pl)->l -= (n_); }
 #endif
 
 /* Formatted printing */
