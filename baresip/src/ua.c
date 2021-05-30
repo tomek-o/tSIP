@@ -153,7 +153,7 @@ static int ua_register(struct ua *ua)
 	struct account *acc;
 	struct le *le;
 	struct uri uri;
-	char reg_uri[64];
+	char reg_uri[128];
 	char params[256] = "";
 	unsigned i;
 	int err;
