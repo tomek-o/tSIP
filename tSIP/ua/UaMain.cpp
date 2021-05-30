@@ -754,16 +754,20 @@ static int app_start(void)
 		{
 			app.n_uas++;
 		}
+		else
+		{
+			DEBUG_WARNING("Failed to add account #%d\n", i); 
+		}
 	}
 	if (!app.n_uas)
 	{
-		DEBUG_WARNING("No SIP accounts found - check your config\n");
+		DEBUG_WARNING("No valid SIP account found - check your config\n");
 		return ENOENT;
 	}
 
 	if (appSettings.uaConf.accounts.size() != 1)
 	{
-		DEBUG_WARNING("Multiple accounts not handled!");
+		DEBUG_WARNING("Multiple accounts not handled!\n");
 	}
 	if (appSettings.uaConf.accounts.size() > 0)
 	{
