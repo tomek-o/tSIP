@@ -1,0 +1,32 @@
+{
+  "TfrmMain": {
+    "btnHangup": "Colgar",
+    "btnMakeCall": "Llamar/Responder",
+    "miAbout": "Acerca de...",
+    "miClearCallsHistory": "Limpiar el historial de llamadas",
+    "miCommonSettings": "Configuración",
+    "miExit": "Salir",
+    "miFile": "Archivo",
+    "miHelp": "Ayuda",
+    "miImportContactsFromCsv": "Importar contactos desde archivo CSV",
+    "miImportContactsFromXml": "Importar contactos desde archivo XML",
+    "miMessages": "Mensajes",
+    "miMinimizeTray": "Minimizar a la bandeja del sistema",
+    "miPatchButtonSettings": "Parchear / actualizar los ajustes de los botones con JSON",
+    "miRefreshTranslationFromFile": "Recargar el archivo de idioma",
+    "miScripting": "Ventana de script",
+    "miSettings": "A&justes",
+    "miSettingsPatch": "Parchear / actualizar los ajustes principales con JSON",
+    "miTools": "Herramientas",
+    "miTroubleshooting": "Solucionar problemas",
+    "miView": "Ver",
+    "miViewLog": "Log",
+    "tsContacts": "Contactos",
+    "tsDialpad": "Teclado",
+    "tsHistory": "Historial"
+  },
+  "TfrmTrayNotifier": {
+    "btnAnswer": "Responder",
+    "btnHangup": "Colgar"
+  }
+}
