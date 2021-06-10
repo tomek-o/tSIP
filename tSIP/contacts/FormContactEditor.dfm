@@ -5,8 +5,8 @@ object frmContactEditor: TfrmContactEditor
   ClientHeight = 349
   ClientWidth = 434
   Color = clBtnFace
-  Constraints.MinHeight = 388
-  Constraints.MinWidth = 450
+  Constraints.MinHeight = 376
+  Constraints.MinWidth = 442
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

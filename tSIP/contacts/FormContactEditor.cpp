@@ -4,14 +4,35 @@
 #pragma hdrstop
 
 #include "FormContactEditor.h"
+#include "Translate.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TfrmContactEditor *frmContactEditor = NULL;
 //---------------------------------------------------------------------------
+
+void TfrmContactEditor::TranslateForm(void* obj)
+{
+	TfrmContactEditor *frm = reinterpret_cast<TfrmContactEditor*>(obj);
+	assert(frm);
+	TRANSLATE_TMP("TfrmContactEditor.caption", frm->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblDescription", frm->lblDescription->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblCompany", frm->lblCompany->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblNumber1", frm->lblNumber1->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblNumber2", frm->lblNumber2->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblNumber3", frm->lblNumber3->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblNote", frm->lblNote->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblContactFile", frm->lblContactFile->Caption);
+
+	TRANSLATE_TMP("TfrmContactEditor.btnApply", frm->btnApply->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.btnCancel", frm->btnCancel->Caption);
+}
+
 __fastcall TfrmContactEditor::TfrmContactEditor(TComponent* Owner)
 	: TForm(Owner)
 {
+	RegisterTranslationCb(this, TranslateForm);
+	
 	//RichEdit: URL highlighting and OnClick event
 	HANDLE handle = memoNote->Handle;
 	unsigned mask = SendMessage(handle, EM_GETEVENTMASK, 0, 0);

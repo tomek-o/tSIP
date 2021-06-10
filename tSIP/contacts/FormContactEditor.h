@@ -46,6 +46,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnFileSelectClick(TObject *Sender);
 	void __fastcall memoNoteChange(TObject *Sender);
 private:	// User declarations
+	static void TranslateForm(void* obj);
 	bool confirmed;
 	Contacts::Entry *entry;
 	bool storeNoteInSeparateFile;

@@ -44,6 +44,7 @@ __published:	// IDE-managed Components
 public:
 	typedef void (__closure *CallbackCall)(AnsiString uri);
 private:	// User declarations
+	static void TranslateForm(void* obj);
 	Contacts *contacts;
 	CallbackCall callbackCall;
 	struct FilteredEntry

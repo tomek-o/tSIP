@@ -47,6 +47,7 @@ public:
 	typedef void (__closure *CallbackPhonebookEdit)(AnsiString uri);
 	typedef void (__closure *CallbackHttpQuery)(AnsiString uri);
 private:	// User declarations
+	static void TranslateForm(void* obj);
 	History *history;
 	CallbackCall callbackCall;
 	CallbackPhonebookEdit callbackPhonebookEdit;

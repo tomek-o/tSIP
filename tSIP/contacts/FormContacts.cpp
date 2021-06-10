@@ -7,6 +7,7 @@
 #include "FormContactEditor.h"
 #include "Contacts.h"
 #include "SIMPLE_Messages.h"
+#include "Translate.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -15,10 +16,26 @@ TfrmContacts *frmContacts;
 
 namespace {
 
-AnsiString singleItemCallText = "Call: ";
-AnsiString singleItemMessageText = "Message: ";
+AnsiString singleItemCallText = "Call:";
+AnsiString singleItemMessageText = "Message:";
 AnsiString multiItemCallText = "Call...";
 AnsiString multiItemMessageText = "Message...";
+AnsiString noNumberUriText = "no number/URI";
+
+}
+
+void TfrmContacts::TranslateForm(void* obj)
+{
+	TfrmContacts *frm = reinterpret_cast<TfrmContacts*>(obj);
+	assert(frm);
+	TRANSLATE_TMP("TfrmContacts.miAdd", frm->miAdd->Caption);
+	TRANSLATE_TMP("TfrmContacts.miEdit", frm->miEdit->Caption);
+	TRANSLATE_TMP("TfrmContacts.miDelete", frm->miDelete->Caption);
+	Translate("TfrmContacts.singleItemCallText", singleItemCallText);
+	Translate("TfrmContacts.singleItemMessageText", singleItemMessageText);
+	Translate("TfrmContacts.multiItemCallText", multiItemCallText);
+	Translate("TfrmContacts.multiItemMessageText", multiItemMessageText);
+	Translate("TfrmContacts.noNumberUriText", noNumberUriText);
 }
 
 __fastcall TfrmContacts::TfrmContacts(TComponent* Owner, Contacts *contacts, CallbackCall callbackCall)
@@ -27,6 +44,7 @@ __fastcall TfrmContacts::TfrmContacts(TComponent* Owner, Contacts *contacts, Cal
 	callbackCall(callbackCall),
 	filterUsingNote(false)
 {
+	RegisterTranslationCb(this, TranslateForm);
 	assert(contacts);
 	assert(callbackCall);
 	contacts->addObserver(*this);
@@ -153,9 +171,10 @@ void __fastcall TfrmContacts::miCallSingleItemClick(TObject *Sender)
 	if (item == NULL)
 		return;
 	AnsiString text = item->Caption;
-	if (strncmp(text.c_str(), singleItemCallText.c_str(), singleItemCallText.Length()) == 0)
+	AnsiString needle = singleItemCallText + " ";
+	if (strncmp(text.c_str(), needle.c_str(), needle.Length()) == 0)
 	{
-		callbackCall(text.c_str() + singleItemCallText.Length());
+		callbackCall(text.c_str() + needle.Length());
 	}
 }
 
@@ -165,9 +184,10 @@ void __fastcall TfrmContacts::miMessageSingleItemClick(TObject *Sender)
 	if (item == NULL)
 		return;
 	AnsiString text = item->Caption;
-	if (strncmp(text.c_str(), singleItemMessageText.c_str(), singleItemMessageText.Length()) == 0)
+	AnsiString needle = singleItemCallText + " ";
+	if (strncmp(text.c_str(), needle.c_str(), needle.Length()) == 0)
 	{
-		SIMPLE_Messages::Send(text.c_str() + singleItemMessageText.Length(), "", false);
+		SIMPLE_Messages::Send(text.c_str() + needle.Length(), "", false);
 	}
 }
 
@@ -202,16 +222,16 @@ void __fastcall TfrmContacts::popupContactListPopup(TObject *Sender)
 		miMessage->Enabled = validUriCount;
 		if (validUriCount == 0)
 		{
-			miCall->Caption = "Call: no number/uri";
+			miCall->Caption = singleItemCallText + " " + noNumberUriText;
 			miCall->OnClick = NULL;
-			miMessage->Caption = "Message: no number/uri";
+			miMessage->Caption = singleItemMessageText + " " + noNumberUriText;
 			miMessage->OnClick = NULL;
 		}
 		else if (validUriCount == 1)
 		{
-			miCall->Caption = singleItemCallText + validUri;
+			miCall->Caption = singleItemCallText + " " + validUri;
 			miCall->OnClick = miCallSingleItemClick;
-			miMessage->Caption = singleItemMessageText + validUri;
+			miMessage->Caption = singleItemMessageText + " " + validUri;
 			miMessage->OnClick = miMessageSingleItemClick;
 		}
 		else

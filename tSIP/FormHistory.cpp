@@ -7,12 +7,28 @@
 #include "FormHistory.h"
 #include "History.h"
 #include "SIMPLE_Messages.h"
+#include "Translate.h"
 #include <assert.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TfrmHistory *frmHistory;
 //---------------------------------------------------------------------------
+
+void TfrmHistory::TranslateForm(void* obj)
+{
+	TfrmHistory *frm = reinterpret_cast<TfrmHistory*>(obj);
+	assert(frm);
+	TRANSLATE_TMP("TfrmHistory.miAddEditPhonebook", frm->miAddEditPhonebook->Caption);
+	TRANSLATE_TMP("TfrmHistory.miCopyNumber", frm->miCopyNumber->Caption);
+	TRANSLATE_TMP("TfrmHistory.miHttpQuery", frm->miHttpQuery->Caption);
+	TRANSLATE_TMP("TfrmHistory.miMessage", frm->miMessage->Caption);
+	if (frm->lvHistory->Columns->Count > 0)
+		TRANSLATE_TMP("TfrmHistory.timestamp", frm->lvHistory->Columns->Items[0]->Caption);
+	if (frm->lvHistory->Columns->Count > 1)
+		TRANSLATE_TMP("TfrmHistory.nameNumber", frm->lvHistory->Columns->Items[1]->Caption);
+}
+
 __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 	CallbackCall callbackCall,
 	CallbackPhonebookEdit callbackPhonebookEdit,
@@ -32,6 +48,9 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 	assert(callbackCall);
 	assert(callbackPhonebookEdit);
 	assert(callbackHttpQuery);
+
+	RegisterTranslationCb(this, TranslateForm);
+
 	history->addObserver(*this);
 	lvHistory->DoubleBuffered = true;
 }
