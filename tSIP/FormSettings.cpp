@@ -207,14 +207,12 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	std::vector<AnsiString> translations = EnumerateTranslations();
 	cbTranslation->Clear();
 	cbTranslation->Items->Add(EMPTY_TRANSLATION_NAME);
+	cbTranslation->ItemIndex = 0;
 	for (unsigned int i=0; i<translations.size(); i++)
 	{
-    	cbTranslation->Items->Add(translations[i]);
-	}
-	cbTranslation->Text = tmpSettings.Translation.language;
-	if (tmpSettings.Translation.language == "")
-	{
-    	cbTranslation->Text = EMPTY_TRANSLATION_NAME;
+		cbTranslation->Items->Add(translations[i]);
+		if (translations[i] == tmpSettings.Translation.language)
+			cbTranslation->ItemIndex = i + 1;
 	}
 	chbTranslationLogMissingKeys->Checked = tmpSettings.Translation.logMissingKeys;	
 

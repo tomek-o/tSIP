@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 443
-    ActivePage = tsHistory
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -189,6 +189,7 @@ object frmSettings: TfrmSettings
         Top = 4
         Width = 230
         Height = 21
+        Style = csDropDownList
         ItemHeight = 13
         TabOrder = 11
       end
