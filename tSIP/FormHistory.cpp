@@ -15,6 +15,18 @@
 TfrmHistory *frmHistory;
 //---------------------------------------------------------------------------
 
+namespace {
+
+AnsiString incomingCallText = "Incoming call";
+AnsiString outgoingCallText = "Outgoing call";
+AnsiString unansweredText = "(unanswered)";
+AnsiString notCompletedText = "(not completed)";
+AnsiString callTimeText = "Call time:";
+AnsiString codecText = "Codec:";
+
+}
+
+
 void TfrmHistory::TranslateForm(void* obj)
 {
 	TfrmHistory *frm = reinterpret_cast<TfrmHistory*>(obj);
@@ -27,6 +39,13 @@ void TfrmHistory::TranslateForm(void* obj)
 		TRANSLATE_TMP("TfrmHistory.timestamp", frm->lvHistory->Columns->Items[0]->Caption);
 	if (frm->lvHistory->Columns->Count > 1)
 		TRANSLATE_TMP("TfrmHistory.nameNumber", frm->lvHistory->Columns->Items[1]->Caption);
+
+	Translate("TfrmHistory.incomingCallText", incomingCallText);
+	Translate("TfrmHistory.outgoingCallText", outgoingCallText);
+	Translate("TfrmHistory.unansweredText", unansweredText);
+	Translate("TfrmHistory.notCompletedText", notCompletedText);
+	Translate("TfrmHistory.callTimeText", callTimeText);
+	Translate("TfrmHistory.codecText", codecText);
 }
 
 __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
@@ -312,11 +331,11 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 
 	AnsiString hint;
 
-	hint.cat_sprintf("%02d.%02d  %02d:%02d:%02d     %s%s",
+	hint.cat_sprintf("%02d.%02d  %02d:%02d:%02d     %s %s",
 		entry.timestamp.month, entry.timestamp.day,
 		entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec,
-		entry.incoming?"Incoming call":"Outgoing call",
-		entry.time==0?(entry.incoming?" (unanswered)":" (not completed)"):""
+		entry.incoming?incomingCallText.c_str():outgoingCallText.c_str(),
+		entry.time==0?(entry.incoming?unansweredText.c_str():notCompletedText.c_str()):""
 		);
 	hint += "\n";
 
@@ -355,23 +374,23 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 			int seconds = entry.time % 60;
 			if (hours > 0)
 			{
-				hint.cat_sprintf("\nCall time: %d:%02d:%02d", hours, mins, seconds);
+				hint.cat_sprintf("\n%s %d:%02d:%02d", callTimeText.c_str(), hours, mins, seconds);
 			}
 			else
 			{
-				hint.cat_sprintf("\nCall time: %d:%02d", mins, seconds);
+				hint.cat_sprintf("\n%s %d:%02d", callTimeText.c_str(), mins, seconds);
 			}
 		}
 		else
 		{
-			hint.cat_sprintf("\nCall time: %d s", entry.time);
+			hint.cat_sprintf("\n%s %d s", callTimeText.c_str(), entry.time);
 		}
 
 	}
 
 	if (showCodecNameInHint && entry.codecName != "")
 	{
-		hint.cat_sprintf("\nCodec: %s", entry.codecName.c_str());
+		hint.cat_sprintf("\n%s %s", codecText.c_str(), entry.codecName.c_str());
 	}
 
 	return hint;

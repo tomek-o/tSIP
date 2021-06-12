@@ -22,12 +22,18 @@
     "singleItemMessageText": "Wyślij wiadomość:"
   },
   "TfrmHistory": {
+    "callTimeText": "Czas połączenia:",
+    "codecText": "Kodek:",
+    "incomingCallText": "Połączenie przychodzące",
     "miAddEditPhonebook": "Dodaj/edytuj wpis w książce telefonicznej",
     "miCopyNumber": "Skopiuj numer",
     "miHttpQuery": "Zapytanie HTTP",
     "miMessage": "Wyślij wiadomość",
     "nameNumber": "Nazwa/numer",
-    "timestamp": "Czas"
+    "notCompletedText": "(nieodebrane)",
+    "outgoingCallText": "Połączenie wychodzące",
+    "timestamp": "Czas",
+    "unansweredText": "(nieodebrane)"
   },
   "TfrmMain": {
     "btnHangup": "Zakończ",

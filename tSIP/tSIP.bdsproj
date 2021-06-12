@@ -498,7 +498,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">2</VersionInfo>
           <VersionInfo Name="Release">3</VersionInfo>
-          <VersionInfo Name="Build">2</VersionInfo>
+          <VersionInfo Name="Build">3</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -510,7 +510,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.2.3.2</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.2.3.3</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

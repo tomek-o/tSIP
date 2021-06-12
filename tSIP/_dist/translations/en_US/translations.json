@@ -22,12 +22,18 @@
     "singleItemMessageText": "Message:"
   },
   "TfrmHistory": {
+    "callTimeText": "Call time:",
+    "codecText": "Codec:",
+    "incomingCallText": "Incoming call",
     "miAddEditPhonebook": "Add/edit phonebook entry",
     "miCopyNumber": "Copy number",
     "miHttpQuery": "HTTP query",
     "miMessage": "Message",
     "nameNumber": "Name/number",
-    "timestamp": "Timestamp"
+    "notCompletedText": "(not completed)",
+    "outgoingCallText": "Outgoing call",
+    "timestamp": "Timestamp",
+    "unansweredText": "(unanswered)"
   },
   "TfrmMain": {
     "btnHangup": "Hangup",
