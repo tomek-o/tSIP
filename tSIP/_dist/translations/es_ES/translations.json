@@ -1,4 +1,34 @@
 {
+  "TfrmContactEditor": {
+    "btnApply": "Aplicar",
+    "btnCancel": "Cancelar",
+    "caption": "Añadir/editar contacto",
+    "lblCompany": "Empresa",
+    "lblContactFile": "Archivo",
+    "lblDescription": "Descripción",
+    "lblNote": "Notas",
+    "lblNumber1": "Número #1",
+    "lblNumber2": "Número #2",
+    "lblNumber3": "Número #3"
+  },
+  "TfrmContacts": {
+    "miAdd": "Añadir",
+    "miDelete": "Eliminar",
+    "miEdit": "Editar",
+    "multiItemCallText": "Llamar...",
+    "multiItemMessageText": "Mensaje...",
+    "noNumberUriText": "sin número/URI",
+    "singleItemCallText": "Llamar:",
+    "singleItemMessageText": "Mensaje:"
+  },
+  "TfrmHistory": {
+    "miAddEditPhonebook": "Añadir/editar contacto",
+    "miCopyNumber": "Copiar número",
+    "miHttpQuery": "Petición HTTP",
+    "miMessage": "Mensaje",
+    "nameNumber": "Nombre/número",
+    "timestamp": "Fecha/Hora"
+  },
   "TfrmMain": {
     "btnHangup": "Colgar",
     "btnMakeCall": "Llamar/Responder",
