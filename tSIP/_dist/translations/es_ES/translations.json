@@ -22,12 +22,18 @@
     "singleItemMessageText": "Mensaje:"
   },
   "TfrmHistory": {
+    "callTimeText": "Duración:",
+    "codecText": "Codec:",
+    "incomingCallText": "Llamada entrante",
     "miAddEditPhonebook": "Añadir/editar contacto",
     "miCopyNumber": "Copiar número",
     "miHttpQuery": "Petición HTTP",
     "miMessage": "Mensaje",
     "nameNumber": "Nombre/número",
-    "timestamp": "Fecha/Hora"
+    "notCompletedText": "(no contesta)",
+    "outgoingCallText": "Llamada saliente",
+    "timestamp": "Fecha/Hora",
+    "unansweredText": "(perdida)"
   },
   "TfrmMain": {
     "btnHangup": "Colgar",
