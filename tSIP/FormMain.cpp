@@ -3027,6 +3027,7 @@ void TfrmMain::HandleCommandLine(void)
 	}
 	else if (cmd.action == CommandLine::ACTION_SCRIPT)
 	{
+		LOG("Command line script:\n%s\n", cmd.script.c_str());
 		if (appSettings.Integration.bAcceptCommandLineScript == false)
 		{
 			LOG("Script processing from command line is not enabled in configuration!\n");
