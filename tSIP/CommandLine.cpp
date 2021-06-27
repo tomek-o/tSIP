@@ -4,6 +4,7 @@
 #include "CommandLine.h"
 #include "Settings.h"
 #include "common/Utils.h"
+#include "common/base64.h"
 #include "Branding.h"
 #include "Log.h"
 #include <string>
@@ -35,6 +36,7 @@ namespace {
 	const char* PROGRAMMABLE_BTN_STR = "PROGRAMMABLE_BTN_";
 
 	const char* SCRIPT_STR = "SCRIPT=";
+	const char* SCRIPT_B64_STR = "SCRIPT_B64=";
 }	// namespace
 
 
@@ -199,6 +201,12 @@ void CommandLine::Execute(char* buf, int paramcnt)
 					script = script.SubString(1, script.Length()-1);
 				}
 			#endif
+				action = ACTION_SCRIPT;
+			}
+			else if (asCommandPart.Pos(SCRIPT_B64_STR) == 1)
+			{
+				script = asCommandPart.SubString(strlen(SCRIPT_B64_STR)+1, asCommandPart.Length() - strlen(SCRIPT_B64_STR));
+				script = base64_decode(script.c_str(), BASE64_ALPHABET_BASIC).c_str();
 				action = ACTION_SCRIPT;
 			}
 			else
