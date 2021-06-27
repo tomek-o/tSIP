@@ -140,7 +140,7 @@ void CommandLine::Execute(char* buf, int paramcnt)
 
 			AnsiString asCommandPart;
 			int i = asCallTo.Pos(":");
-			if (i)
+			if (i && i < 9)
 				asCommandPart = asCallTo.SubString(i+1, asCallTo.Length()-i);
 			else
 				asCommandPart = asCallTo;
