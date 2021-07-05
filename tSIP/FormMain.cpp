@@ -2721,12 +2721,12 @@ void __fastcall TfrmMain::cbCallURIKeyPress(TObject *Sender, char &Key)
 			if (target != "")
 			{
 				MakeCall(target);
-				if (appSettings.frmMain.bNoBeepOnEnterKey)
-				{
-                    // this was unintentional, but it looks like Windows beep is meaning that [Enter] is not accepted by the control 
-					Key = NULL;
-				}
 			}
+		}
+		if (appSettings.frmMain.bNoBeepOnEnterKey)
+		{
+			// this was unintentional, but it looks like Windows beep is meaning that [Enter] is not accepted by the control
+			Key = NULL;
 		}
 	}
 	const char* dtmfKeys = "01234567890*#ABCDabcd";
@@ -2897,13 +2897,13 @@ void __fastcall TfrmMain::edTransferKeyPress(TObject *Sender, char &Key)
 {
 	if (Key == VK_RETURN)
 	{
-		if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
-			return;
-		UA->Transfer(0, edTransfer->Text);
 		if (appSettings.frmMain.bNoBeepOnEnterKey)
 		{
 			Key = NULL;
-		}
+		}	
+		if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
+			return;
+		UA->Transfer(0, edTransfer->Text);
 	}	
 }
 //---------------------------------------------------------------------------
