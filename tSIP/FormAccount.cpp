@@ -52,6 +52,7 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 	{
 		cbDtmfTxFormat->ItemIndex = 0;
 	}
+	chbZrtp->Checked = acc.zrtp;
 }
 //---------------------------------------------------------------------------
 
@@ -197,5 +198,9 @@ void __fastcall TfrmAccount::cbDtmfTxFormatChange(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-
+void __fastcall TfrmAccount::chbZrtpClick(TObject *Sender)
+{
+	acc.zrtp = chbZrtp->Checked;
+}
+//---------------------------------------------------------------------------
 

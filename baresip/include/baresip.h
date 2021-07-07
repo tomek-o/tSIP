@@ -19,6 +19,7 @@ extern "C" {
 #include "baresip_dialog_info_direction.h"
 #include "baresip_presence_status.h"
 #include "baresip_recorder.h"
+#include "baresip_zrtp.h"
 
 /* forward declarations */
 struct sa;
@@ -276,6 +277,11 @@ struct config {
 		bool set_packet_loss;
 		uint32_t packet_loss;
 	} opus;
+
+	struct {
+		bool start_parallel;
+		char zid_filename[256];
+	} zrtp;
 
 	/* Network */
 	struct config_net {

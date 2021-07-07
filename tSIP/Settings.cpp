@@ -398,6 +398,12 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			jv.getUInt("packetLoss", opus.packetLoss);
 		}
 
+		{
+			const Json::Value &jv = uaConfJson["zrtp"];
+			UaConf::Zrtp &zrtp = uaConf.zrtp;
+			jv.getBool("startParallel", zrtp.startParallel);
+		}
+
 		uaConf.logMessages = uaConfJson.get("logMessages", uaConf.logMessages).asBool();
 		uaConfJson.getBool("logMessagesOnlyFirstLine", uaConf.logMessagesOnlyFirstLine);
         uaConfJson.getBool("logAubuf", uaConf.logAubuf);
@@ -492,6 +498,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			new_acc.stun_server = acc.get("stun_server", new_acc.stun_server).asString();
 			new_acc.outbound1 = acc.get("outbound1", new_acc.outbound1).asString();
 			new_acc.outbound2 = acc.get("outbound2", new_acc.outbound2).asString();
+
+			acc.getBool("zrtp", new_acc.zrtp);
 
 			const Json::Value &audio_codecs = acc["audio_codecs"];
 			if (audio_codecs.type() == Json::arrayValue)
@@ -1324,6 +1332,12 @@ int Settings::Write(AnsiString asFileName)
 		jv["packetLoss"] = opus.packetLoss;
 	}
 
+	{
+		Json::Value &jv = root["uaConf"]["zrtp"];
+		const UaConf::Zrtp &zrtp = uaConf.zrtp;
+		jv["startParallel"] = zrtp.startParallel;
+	}
+
 	// write accounts
 	for (unsigned int i=0; i<uaConf.accounts.size(); i++)
 	{
@@ -1361,6 +1375,7 @@ int Settings::Write(AnsiString asFileName)
 		{
 			cfgAcc["audio_codecs"][j] = acc.audio_codecs[j];
 		}
+		cfgAcc["zrtp"] = acc.zrtp;
 	}
 
 	{

@@ -53,6 +53,7 @@ public:
 	void UpdateSoftvolRx(unsigned int val);
 	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines);
 	int SendMessage(int requestId, int accountId, AnsiString target, AnsiString text);
+	int ZrtpVerifySas(bool state);
 };
 
 #define UA ControlQueue::Instance()

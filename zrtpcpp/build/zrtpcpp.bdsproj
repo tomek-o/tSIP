@@ -1,0 +1,422 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">CPlusPlusBuilder.Personality</Option>
+			<Option Name="ProjectType">CppStaticLibrary</Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{EF65B6EA-F2ED-4391-9F96-DA028F9EB11D}</Option>
+		</Option>
+	</PersonalityInfo>
+	<CPlusPlusBuilder.Personality>
+		<Source>
+			<Source Name="MainSource">zrtpcpp.cpp</Source>
+		</Source>
+		<BCBPROJECT>
+      <project version="10.0">
+        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="count" value="1"/>
+        <property category="build.config" name="excludedefaultforzero" value="0"/>
+        <property category="build.config.0" name="builddir" value="Debug"/>
+        <property category="build.config.0" name="key" value="Debug_Build"/>
+        <property category="build.config.0" name="name" value="Debug Build"/>
+        <property category="build.config.0" name="settings.win32b" value="default"/>
+        <property category="build.config.0" name="type" value="Toolset"/>
+        <property category="build.config.0" name="win32.win32b.builddir" value="Debug_Build"/>
+        <property category="build.config.1" name="key" value="Release_Build"/>
+        <property category="build.config.1" name="name" value="Release Build"/>
+        <property category="build.config.1" name="settings.win32b" value="default"/>
+        <property category="build.config.1" name="type" value="Toolset"/>
+        <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
+        <property category="build.node" name="lastconfig" value="Debug_Build"/>
+        <property category="build.node" name="libraries" value="vcl.lib rtl.lib"/>
+        <property category="build.node" name="name" value="zrtpcpp.lib"/>
+        <property category="build.node" name="packages" value="vclx;vcl;rtl;dbrtl;vcldb;dbxcds;dbexpress;xmlrtl;vclie;inet;inetdbbde;inetdbxpress;dsnap;bdertl;adortl;soaprtl;vcldbx"/>
+        <property category="build.node" name="sparelibs" value="rtl.lib vcl.lib"/>
+        <property category="build.node" name="use_packages" value="0"/>
+        <property category="build.platform" name="active" value="win32"/>
+        <property category="build.platform" name="win32.Debug_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.Release_Build.toolset" value="win32b"/>
+        <property category="build.platform" name="win32.default" value="win32b"/>
+        <property category="build.platform" name="win32.enabled" value="1"/>
+        <property category="build.platform" name="win32.win32b.enabled" value="1"/>
+        <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.listfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.objfile.merge" value="1"/>
+        <property category="win32.*.win32b.tasm32" name="param.xreffile.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.1" value="_DEBUG"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.Od.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.k.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.r.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vG.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.vi.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.bcc32" name="option.y.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.$O.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.1" value="DEBUG"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.dcc32" name="option.V.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.D.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.Gn.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\debug"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.v.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.1" value="NDEBUG"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.D.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.O2.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.k.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.r.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.bcc32" name="option.vi.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$D.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.$O.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.dcc32" name="option.V.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\release"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.z.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zi.enabled" value="0"/>
+        <property category="win32.Release_Build.win32b.tasm32" name="option.zn.enabled" value="1"/>
+        <optionset name="all_configurations">
+          <property category="node" name="displayname" value="All Configurations"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.1" value="$(BDS)\lib\vcl100.csm"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="..\srtp\crypto"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="..\"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="..\bnlib"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="..\..\common"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="..\bnlib\ec"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\cryptcommon"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\srtp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\common"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\zrtp\crypto"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\zrtp\crypto\openssl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="..\zrtp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\zrtpcpp\build"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.Q.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.2" value="NO_STRICT"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.merge" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.sysdefines.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tW.enabled" value="1"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWC.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWD.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.tWM.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="..\srtp\crypto"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\zrtpcpp\build"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="..\bnlib\ec"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="..\cryptcommon"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="..\bnlib"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\srtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\common"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\zrtp\crypto"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="..\zrtp\crypto\openssl"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="..\zrtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="..\srtp\crypto"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\zrtpcpp\build"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="..\bnlib\ec"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="..\cryptcommon"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="..\bnlib"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\srtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\common"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\zrtp\crypto"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="..\zrtp\crypto\openssl"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="..\zrtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="..\srtp\crypto"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\zrtpcpp\build"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="..\bnlib\ec"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="..\cryptcommon"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="..\bnlib"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\srtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\common"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\zrtp\crypto"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="..\zrtp\crypto\openssl"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="..\zrtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="..\srtp\crypto"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\zrtpcpp\build"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="C:\Users\Tomasz\Documents\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="..\bnlib\ec"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="..\cryptcommon"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="..\bnlib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\srtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\common"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="..\zrtp\crypto"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="..\zrtp\crypto\openssl"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="..\zrtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
+          <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="..\srtp\crypto"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="D:\Dokumenty\_PROJEKTY\libre\tSIP\zrtpcpp\build"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="..\bnlib\ec"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="..\cryptcommon"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="..\bnlib"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\srtp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\common"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\zrtp\crypto"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="..\zrtp\crypto\openssl"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="..\zrtp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.2" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.3" value="$(BDS)\lib\psdk"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.arg.merge" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.L.enabled" value="1"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpd.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpe.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.Tpp.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.aa.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.ap.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.dynamicrtl.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg" value="64"/>
+          <property category="win32.*.win32b.tlib" name="option.P.arg.merge" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.P.enabled" value="1"/>
+          <property category="win32.*.win32b.tlib" name="option.dynamicrtl.enabled" value="0"/>
+        </optionset>
+      </project>
+      <FILELIST>
+        <FILE FILENAME="zrtpcpp.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="zrtpcpp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\Base32.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\EmojiBase32.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZIDCache.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZIDCacheDb.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZIDCacheEmpty.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZIDCacheFile.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZIDRecord.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZIDRecordDb.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZIDRecordEmpty.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZIDRecordFile.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZRtp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\zrtpB64Decode.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\zrtpB64Encode.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\zrtpCacheDbBackend.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpCallback.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpCallbackWrapper.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpCodes.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpConfigure.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpCrc32.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpCWrapper.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\zrtpPacket.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketBase.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketClearAck.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketCommit.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketConf2Ack.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketConfirm.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketDHPart.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketError.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketErrorAck.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketGoClear.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketHello.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketHelloAck.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketPing.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketPingAck.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketRelayAck.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpPacketSASrelay.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpSdesStream.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpStateClass.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpStates.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpTextData.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\libzrtpcpp\ZrtpUserCallback.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\EmojiBase32.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="EmojiBase32" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZIDCacheFile.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZIDCacheFile" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZIDRecordFile.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZIDRecordFile" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZRtp.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZRtp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\zrtpB64Decode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="zrtpB64Decode" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\zrtpB64Encode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="zrtpB64Encode" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpCallbackWrapper.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpCallbackWrapper" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpConfigure.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpConfigure" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpCrc32.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpCrc32" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpCWrapper.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpCWrapper" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketClearAck.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketClearAck" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketCommit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketCommit" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketConf2Ack.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketConf2Ack" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketConfirm.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketConfirm" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketDHPart.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketDHPart" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketError.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketError" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketErrorAck.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketErrorAck" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketGoClear.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketGoClear" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketHello.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketHello" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketHelloAck.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketHelloAck" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketPing.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketPing" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketPingAck.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketPingAck" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketRelayAck.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketRelayAck" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpPacketSASrelay.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketSASrelay" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpSdesStream.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpSdesStream" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpStateClass.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpStateClass" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\ZrtpTextData.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpTextData" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\aesCFB.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aesCFB" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\aesCFB.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\hmac256.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hmac256" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\hmac256.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\hmac384.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hmac384" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\hmac384.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\sha2.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sha2" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\sha2.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\sha256.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sha256" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\sha256.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\sha384.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sha384" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\sha384.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\skein256.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="skein256" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\skein256.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\skein384.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="skein384" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\skein384.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\skeinMac256.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="skeinMac256" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\skeinMac256.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\skeinMac384.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="skeinMac384" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\skeinMac384.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\twoCFB.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="twoCFB" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\twoCFB.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\zrtpDH.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="zrtpDH" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\crypto\zrtpDH.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\common\osSpecifics.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="osSpecifics" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\common\osSpecifics.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\CryptoContext.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CryptoContext" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\CryptoContext.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\CryptoContextCtrl.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="CryptoContextCtrl" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\CryptoContextCtrl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\SrtpHandler.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="SrtpHandler" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\SrtpHandler.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\bn.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bn" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\bn.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\bn00.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bn00" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\bnprint.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bnprint" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\bnprint.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\bnsize00.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\germain.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="germain" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\germain.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\jacobi.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="jacobi" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\jacobi.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\kludge.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\lbn.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\lbn00.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="lbn00" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\lbnmem.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="lbnmem" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\lbnmem.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\legal.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="legal" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\legal.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\prime.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="prime" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\prime.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\sieve.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sieve" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\sieve.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\aes.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\aes_modes.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aes_modes" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\aescpp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\aescrypt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aescrypt" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\aeskey.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aeskey" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\aesopt.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\aestab.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aestab" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\aestab.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\brg_endian.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\brg_types.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\macSkein.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="macSkein" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\macSkein.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\skein.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="skein" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\skein.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\skein_block.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="skein_block" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\skein_iv.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\skein_port.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\skeinApi.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="skeinApi" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\skeinApi.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\twofish.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="twofish" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\twofish.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\twofish_cfb.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="twofish_cfb" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\ZrtpRandom.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpRandom" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\cryptcommon\ZrtpRandom.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\ec\curve25519-donna.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="curve25519-donna" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\ec\ec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ec" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\ec\ec.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\ec\ecdh.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ecdh" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\bnlib\ec\ecdh.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\crypto\SrtpSymCrypto.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="SrtpSymCrypto" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\crypto\SrtpSymCrypto.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\crypto\hmac.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hmac" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\crypto\hmac.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\crypto\sha1.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sha1" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\srtp\crypto\sha1.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\zrtp\Base32.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Base32" FORMNAME="" DESIGNCLASS=""/>
+      </FILELIST>
+      <IDEOPTIONS>
+        <VersionInfo>
+          <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+          <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+          <VersionInfo Name="MajorVer">1</VersionInfo>
+          <VersionInfo Name="MinorVer">0</VersionInfo>
+          <VersionInfo Name="Release">0</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Debug">False</VersionInfo>
+          <VersionInfo Name="PreRelease">False</VersionInfo>
+          <VersionInfo Name="Special">False</VersionInfo>
+          <VersionInfo Name="Private">False</VersionInfo>
+          <VersionInfo Name="DLL">False</VersionInfo>
+          <VersionInfo Name="Locale">1045</VersionInfo>
+          <VersionInfo Name="CodePage">1250</VersionInfo>
+        </VersionInfo>
+        <VersionInfoKeys>
+          <VersionInfoKeys Name="CompanyName"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileDescription"></VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
+          <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
+          <VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductName"></VersionInfoKeys>
+          <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+          <VersionInfoKeys Name="Comments"></VersionInfoKeys>
+        </VersionInfoKeys>
+        <Debugging>
+          <Debugging Name="DebugSourceDirs"></Debugging>
+        </Debugging>
+        <Parameters>
+          <Parameters Name="RunParams"></Parameters>
+          <Parameters Name="Launcher"></Parameters>
+          <Parameters Name="UseLauncher">False</Parameters>
+          <Parameters Name="DebugCWD"></Parameters>
+          <Parameters Name="HostApplication"></Parameters>
+          <Parameters Name="RemoteHost"></Parameters>
+          <Parameters Name="RemotePath"></Parameters>
+          <Parameters Name="RemoteParams"></Parameters>
+          <Parameters Name="RemoteLauncher"></Parameters>
+          <Parameters Name="UseRemoteLauncher">False</Parameters>
+          <Parameters Name="RemoteCWD"></Parameters>
+          <Parameters Name="RemoteDebug">False</Parameters>
+          <Parameters Name="Debug Symbols Search Path"></Parameters>
+          <Parameters Name="LoadAllSymbols">True</Parameters>
+          <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+        </Parameters>
+        <Linker>
+          <Linker Name="LibPrefix"></Linker>
+          <Linker Name="LibSuffix"></Linker>
+          <Linker Name="LibVersion"></Linker>
+        </Linker>
+      </IDEOPTIONS>
+    </BCBPROJECT>
+		<Folders/>
+		<buildevents/>
+	</CPlusPlusBuilder.Personality>
+</BorlandProject>

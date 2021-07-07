@@ -105,43 +105,46 @@
           <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="..\..\modules\opus"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\..\modules\recorder"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\..\modules\mwi"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\..\modules\webrtc_aec"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="..\..\modules\dialog_info"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="..\..\modules\presence"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="..\..\modules\winwave"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="..\..\modules\stun"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\..\modules\speex_aec"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\..\modules\speex"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value="..\..\modules\portaudio"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="..\..\modules\winwave2"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.20" value="..\..\modules\ice"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.21" value="..\..\modules\gsm"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.22" value="..\..\modules\g726_32"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.23" value="..\..\modules\g711"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.24" value="..\..\src"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.25" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.26" value="$(BDS)\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.27" value="$(BDS)\include\dinkumware"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.28" value="$(BDS)\include\vcl"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.29" value="..\..\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\..\modules\aufile_mm"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.30" value="..\..\..\re\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.31" value="..\..\..\rem\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.32" value="..\..\..\g722"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.33" value="..\..\..\gsm\inc"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.34" value="..\..\..\portaudio\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.35" value="..\..\..\speex\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.36" value="..\..\..\webrtc"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.37" value="..\..\..\opus\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\modules\nullaudio"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\..\modules\softvol"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\modules\speex_pp"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\modules\l16"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="..\..\modules\aufile"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="..\..\modules\g722"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="..\..\modules\gzrtp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\..\modules\g722"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.17" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.18" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.19" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="..\..\modules\opus"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.20" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.21" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.22" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.23" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.24" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.25" value="..\..\src"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.26" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.27" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.28" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.29" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\..\modules\winwave2"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.30" value="..\..\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.31" value="..\..\..\re\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.32" value="..\..\..\rem\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.33" value="..\..\..\g722"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.34" value="..\..\..\gsm\inc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.35" value="..\..\..\portaudio\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.36" value="..\..\..\speex\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.37" value="..\..\..\webrtc"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.38" value="..\..\..\opus\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.39" value="..\..\..\zrtpcpp\zrtp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\modules\aufile_mm"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.40" value="..\..\..\zrtpcpp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="..\..\modules\aufile"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.O1.enabled" value="0"/>
@@ -161,143 +164,148 @@
           <property category="win32.*.win32b.bcc32" name="option.w.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.wcsu.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.wpch.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="..\..\modules\opus"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="..\..\modules\recorder"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.11" value="..\..\modules\mwi"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.12" value="..\..\modules\webrtc_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.13" value="..\..\modules\dialog_info"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.14" value="..\..\modules\presence"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.15" value="..\..\modules\winwave"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.16" value="..\..\modules\stun"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.17" value="..\..\modules\speex_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.18" value="..\..\modules\speex"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.19" value="..\..\modules\portaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="..\..\modules\winwave2"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.20" value="..\..\modules\ice"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.21" value="..\..\modules\gsm"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.22" value="..\..\modules\g726_32"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.23" value="..\..\modules\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.24" value="..\..\src"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.25" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="..\..\modules\aufile_mm"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="..\..\modules\nullaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\..\modules\softvol"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\..\modules\speex_pp"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\..\modules\l16"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="..\..\modules\g722"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="..\..\modules\gzrtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.11" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.12" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.13" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.14" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.15" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.16" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.17" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.18" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.19" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="..\..\modules\opus"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.20" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.21" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.22" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.23" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.24" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.25" value="..\..\src"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.26" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="..\..\modules\winwave2"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="..\..\modules\aufile_mm"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="..\..\modules\g722"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="..\..\modules\opus"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="..\..\modules\recorder"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.11" value="..\..\modules\mwi"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.12" value="..\..\modules\webrtc_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.13" value="..\..\modules\dialog_info"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.14" value="..\..\modules\presence"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.15" value="..\..\modules\winwave"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.16" value="..\..\modules\stun"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.17" value="..\..\modules\speex_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.18" value="..\..\modules\speex"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.19" value="..\..\modules\portaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="..\..\modules\winwave2"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.20" value="..\..\modules\ice"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.21" value="..\..\modules\gsm"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.22" value="..\..\modules\g726_32"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.23" value="..\..\modules\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.24" value="..\..\src"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.25" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="..\..\modules\aufile_mm"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="..\..\modules\nullaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\..\modules\softvol"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\..\modules\speex_pp"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\..\modules\l16"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="..\..\modules\g722"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="..\..\modules\gzrtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.11" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.12" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.13" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.14" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.15" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.16" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.17" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.18" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.19" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="..\..\modules\opus"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.20" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.21" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.22" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.23" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.24" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.25" value="..\..\src"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.26" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="..\..\modules\winwave2"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="..\..\modules\aufile_mm"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="..\..\modules\g722"/>
           <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="..\..\modules\opus"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="..\..\modules\recorder"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.11" value="..\..\modules\mwi"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.12" value="..\..\modules\webrtc_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.13" value="..\..\modules\dialog_info"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.14" value="..\..\modules\presence"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.15" value="..\..\modules\winwave"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.16" value="..\..\modules\stun"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.17" value="..\..\modules\speex_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.18" value="..\..\modules\speex"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.19" value="..\..\modules\portaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="..\..\modules\winwave2"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.20" value="..\..\modules\ice"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.21" value="..\..\modules\gsm"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.22" value="..\..\modules\g726_32"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.23" value="..\..\modules\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.24" value="..\..\src"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.25" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="..\..\modules\aufile_mm"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="..\..\modules\nullaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\..\modules\softvol"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\..\modules\speex_pp"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\..\modules\l16"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="..\..\modules\g722"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="..\..\modules\gzrtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.11" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.12" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.13" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.14" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.15" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.16" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.17" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.18" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.19" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="..\..\modules\opus"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.20" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.21" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.22" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.23" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.24" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.25" value="..\..\src"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.26" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="..\..\modules\winwave2"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="..\..\modules\aufile_mm"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="..\..\modules\g722"/>
           <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="..\..\modules\opus"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="..\..\modules\recorder"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="..\..\modules\mwi"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="..\..\modules\webrtc_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="..\..\modules\dialog_info"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.14" value="..\..\modules\presence"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.15" value="..\..\modules\winwave"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.16" value="..\..\modules\stun"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.17" value="..\..\modules\speex_aec"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.18" value="..\..\modules\speex"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.19" value="..\..\modules\portaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="..\..\modules\winwave2"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.20" value="..\..\modules\ice"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.21" value="..\..\modules\gsm"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.22" value="..\..\modules\g726_32"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.23" value="..\..\modules\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.24" value="..\..\src"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.25" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.26" value="..\..\..\..\..\..\Borland Studio Projects"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.27" value="$(BDS)\lib"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.28" value="$(BDS)\lib\obj"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="..\..\modules\aufile_mm"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="..\..\modules\nullaudio"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\..\modules\softvol"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\modules\speex_pp"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="..\..\modules\l16"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="..\..\modules\g722"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="..\..\modules\gzrtp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.14" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.15" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.16" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.17" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.18" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.19" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="..\..\modules\opus"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.20" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.21" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.22" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.23" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.24" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.25" value="..\..\src"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.26" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.27" value="..\..\..\..\..\..\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.28" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.29" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="..\..\modules\winwave2"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="..\..\modules\aufile_mm"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="..\..\modules\g722"/>
           <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
           <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="..\..\modules\opus"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="..\..\modules\recorder"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="..\..\modules\mwi"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.12" value="..\..\modules\webrtc_aec"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.13" value="..\..\modules\dialog_info"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.14" value="..\..\modules\presence"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.15" value="..\..\modules\winwave"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.16" value="..\..\modules\stun"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.17" value="..\..\modules\speex_aec"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.18" value="..\..\modules\speex"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.19" value="..\..\modules\portaudio"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="..\..\modules\winwave2"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.20" value="..\..\modules\ice"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.21" value="..\..\modules\gsm"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.22" value="..\..\modules\g726_32"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.23" value="..\..\modules\g711"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.24" value="..\..\src"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.25" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="..\..\modules\aufile_mm"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="..\..\modules\nullaudio"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\..\modules\softvol"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\..\modules\speex_pp"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\..\modules\l16"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="..\..\modules\g722"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="..\..\modules\gzrtp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="..\..\modules\aufile"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="..\..\modules\recorder"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.12" value="..\..\modules\mwi"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.13" value="..\..\modules\webrtc_aec"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.14" value="..\..\modules\dialog_info"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.15" value="..\..\modules\presence"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.16" value="..\..\modules\winwave"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.17" value="..\..\modules\stun"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.18" value="..\..\modules\speex_aec"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.19" value="..\..\modules\speex"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="..\..\modules\opus"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.20" value="..\..\modules\portaudio"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.21" value="..\..\modules\ice"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.22" value="..\..\modules\gsm"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.23" value="..\..\modules\g726_32"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.24" value="..\..\modules\g711"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.25" value="..\..\src"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.26" value="..\_PROJEKTY\libre\tSIP\baresip\mk\win32-tc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="..\..\modules\winwave2"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="..\..\modules\aufile_mm"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\..\modules\nullaudio"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\..\modules\softvol"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\..\modules\speex_pp"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="..\..\modules\l16"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="..\..\modules\g722"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
           <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
@@ -405,6 +413,15 @@
         <FILE FILENAME="..\..\include\baresip_recorder.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\tone_generator.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="tone_generator" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\tone_generator.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gzrtp\gzrtp.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gzrtp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gzrtp\messages.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="messages" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gzrtp\session.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="session" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gzrtp\session.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gzrtp\srtp.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="srtp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gzrtp\srtp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gzrtp\gzrtp_stream.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gzrtp_stream" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\gzrtp\gzrtp_stream.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\include\baresip_zrtp.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

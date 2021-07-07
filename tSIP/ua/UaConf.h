@@ -56,6 +56,8 @@ public:
 		std::string outbound1;
 		std::string outbound2;
 
+		bool zrtp;
+
 		bool operator==(const Account& right) const {
 			return (reg_server == right.reg_server &&
 				user == right.user &&
@@ -79,7 +81,9 @@ public:
 				ptime == right.ptime &&
 				stun_server == right.stun_server &&
 				outbound1 == right.outbound1 &&
-				outbound2 == right.outbound2
+				outbound2 == right.outbound2 &&
+
+				zrtp == right.zrtp
 				);
 		}
 		bool operator!=(const Account& right) const {
@@ -102,7 +106,9 @@ public:
 			hide_pwd(false),
 			hide_cuser(false),
 
-			ptime(DEF_PTIME)
+			ptime(DEF_PTIME),
+
+			zrtp(false)
 		{
 			audio_codecs.push_back("PCMU/8000/1");
 			audio_codecs.push_back("PCMA/8000/1");
@@ -413,6 +419,25 @@ public:
 		}
 	} opus;
 
+	struct Zrtp {
+		bool startParallel;
+		Zrtp(void):
+			startParallel(true)
+		{}
+		bool operator==(const Zrtp& right) const {
+			if (
+				startParallel == right.startParallel
+				)
+			{
+				return true;
+			}
+			return false;
+		}
+		bool operator!=(const Zrtp& right) const {
+			return !(*this == right);
+		}
+	} zrtp;
+
 
 	std::string local;
 	std::string ifname;	///< baresip config_net.ifname
@@ -589,6 +614,8 @@ public:
 		if (webrtcAec != right.webrtcAec)
 			return false;
 		if (opus != right.opus)
+			return false;
+		if (zrtp != right.zrtp)
 			return false;
 		if (local != right.local)
 			return false;

@@ -49,6 +49,7 @@ __published:	// IDE-managed Components
 	TLabel *lblDisplayName;
 	TEdit *edDisplayName;
 	TCheckBox *chbHideDisplayName;
+	TCheckBox *chbZrtp;
 	void __fastcall edRegServerChange(TObject *Sender);
 	void __fastcall edUserChange(TObject *Sender);
 	void __fastcall edPasswordChange(TObject *Sender);
@@ -69,6 +70,7 @@ __published:	// IDE-managed Components
 	void __fastcall cbDtmfTxFormatChange(TObject *Sender);
 	void __fastcall edDisplayNameChange(TObject *Sender);
 	void __fastcall chbHideDisplayNameClick(TObject *Sender);
+	void __fastcall chbZrtpClick(TObject *Sender);
 private:	// User declarations
 	UaConf::Account& acc;
 public:		// User declarations

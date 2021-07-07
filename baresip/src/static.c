@@ -23,6 +23,7 @@ extern const struct mod_export exports_aufile;
 extern const struct mod_export exports_aufile_mm;
 extern const struct mod_export exports_softvol;
 extern const struct mod_export exports_nullaudio;
+extern const struct mod_export exports_gzrtp;
 
 
 const struct mod_export *mod_table[] = {
@@ -47,5 +48,6 @@ const struct mod_export *mod_table[] = {
 	&exports_aufile_mm,
 	&exports_softvol,
 	&exports_nullaudio,
+	&exports_gzrtp,
 	NULL
 };

@@ -79,6 +79,11 @@ const char* Button::TypeName(enum Type type)
 		return "Pause recording";
 	case AUTO_ANSWER_DND:
 		return "Auto answer/DND";
+	case ZRTP_VERIFY_SAS:
+		return "ZRTP: verify SAS";
+	case ZRTP_UNVERIFY_SAS:
+		return "ZRTP: unverify SAS";
+
 	default:
 		return "???";
 	}
@@ -151,6 +156,10 @@ const char* Button::TypeDescription(enum Type type)
 		return "Pause current recording.";
 	case AUTO_ANSWER_DND:
 		return "Auto answer or DND. For auto answer use SIP code = 200, for DND = 486 or 603.";
+	case ZRTP_VERIFY_SAS:
+		return "Verify SAS (Short Authentication String) for current ZRTP session";
+	case ZRTP_UNVERIFY_SAS:
+		return "Remove SAS (Short Authentication String) verification for current ZRTP session";
 	default:
 		return "???";
 	}

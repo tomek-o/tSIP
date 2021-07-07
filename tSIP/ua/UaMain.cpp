@@ -536,6 +536,12 @@ static int app_init(void)
 		cfg->opus.packet_loss = opus.packetLoss;
 	}
 
+	{
+		const UaConf::Zrtp &zrtp = appSettings.uaConf.zrtp;
+		cfg->zrtp.start_parallel = zrtp.startParallel;
+		strncpyz(cfg->zrtp.zid_filename, (Paths::GetProfileDir() + "\\zrtp.zid").c_str(), sizeof(cfg->zrtp.zid_filename));
+	}
+
 	strncpyz(cfg->sip.local, appSettings.uaConf.local.c_str(), sizeof(cfg->sip.local));
 	if (appSettings.uaConf.ifname.size() > 0) {
 		strncpyz(cfg->net.ifname, appSettings.uaConf.ifname.c_str(), sizeof(cfg->net.ifname));
@@ -727,6 +733,11 @@ static int app_start(void)
 		}
 		addr.cat_printf(";dtmf_tx_format=%d", acc.dtmf_tx_format);
 		addr.cat_printf(";ptime=%d", acc.ptime);
+
+		if (acc.zrtp)
+		{
+        	addr.cat_printf(";mediaenc=zrtp");
+		}
 
 		{
 			addr.cat_printf(";audio_codecs=");
@@ -1141,6 +1152,10 @@ extern "C" void control_handler(void)
 				}
 			}
 		}
+		break;
+	}
+	case Command::ZRTP_VERIFY_SAS: {
+    	baresip_zrtp_verify_sas(1, cmd.bParam);
 		break;
 	}
 	default:

@@ -7,7 +7,7 @@ extern "C" {
 
 #include <windows.h>
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__BORLANDC__)
 #	define CALL_CONV
 #else
 #	define CALL_CONV //__stdcall // let's use default __cdecl

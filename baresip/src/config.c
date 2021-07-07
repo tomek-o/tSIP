@@ -106,6 +106,13 @@ static struct config core_config = {
 		false, 10		/* packet_loss */
 	},
 
+	/* ZRTP */
+	{
+		false,
+		false,
+		{0}				/* zid_filename */
+	},
+
 	/* Network */
 	{
 		""

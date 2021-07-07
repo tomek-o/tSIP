@@ -4,7 +4,7 @@ object frmAccount: TfrmAccount
   Align = alTop
   BorderStyle = bsNone
   Caption = 'Account'
-  ClientHeight = 326
+  ClientHeight = 346
   ClientWidth = 532
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -377,5 +377,14 @@ object frmAccount: TfrmAccount
     Caption = 'Hide/do not store in file'
     TabOrder = 19
     OnClick = chbHideDisplayNameClick
+  end
+  object chbZrtp: TCheckBox
+    Left = 8
+    Top = 321
+    Width = 346
+    Height = 17
+    Caption = 'Enable ZRTP'
+    TabOrder = 20
+    OnClick = chbZrtpClick
   end
 end

@@ -2569,6 +2569,13 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		appSettings.Write(Paths::GetConfig());		
 		break;
+	case Button::ZRTP_VERIFY_SAS:
+		UA->ZrtpVerifySas(true);
+		break;
+	case Button::ZRTP_UNVERIFY_SAS:
+		UA->ZrtpVerifySas(false);
+		break;
+
 	default:
 		LOG("Unhandled BTN type = %d\n", static_cast<int>(cfg.type));
 		break;

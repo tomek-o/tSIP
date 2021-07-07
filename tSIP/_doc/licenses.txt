@@ -220,3 +220,109 @@ Redistribution and use in source and binary forms, with or without modification,
 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
 
 THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+=============================================================================
+ZRTPCPP:
+=============================================================================
+
+Copyright 2006 - 2018, Werner Dittmann
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and limitations under the License.
+
+
+=============================================================================
+bnlib:
+=============================================================================
+
+Copyright (c) 1995, 2005 Colin Plumb.  All rights reserved.
+For licensing information, please contact Philip R. Zimmermann <prz@mit.edu>, http://philzimmermann.com
+This subroutine library is licensed to the general public under the GNU GPL, version 2.  Any software that uses code under a GPL license is itself subject to the same GPL licensing terms.
+
+For licensing bnlib under alternate terms, so that you can use it without your own product becoming infected with the obligations of the GPL, you should contact Philip Zimmermann, who has unlimited sublicensing rights under non-GPL terms.
+
+This module must be packaged together with the rest of the bnlib source code.  That's why it's in a .c file.
+
+Lawyers have requested that the following information be included:
+
+Warranties:
+  This software is provided "as is," with no warranty expressed or implied.
+
+Export controls:
+  This software may be subject to export controls by the US Commerce Department's Bureau of Industry and Security.
+
+As a special exception, you may combine this library with the code of ZRTPCPP or ZRTPCPP derivatives and modify, redistribute, and use the resulting source code and executable binaries (including modified versions of each) under the Apache License Version 2.
+
+As a restatement of the above, you may use, modify, and  redistribute this library as if it were licensed under the Apache V2 license if and only if it is combined with ZRTPCPP or a derivative work of the ZRTPCPP code.  If it is not combined with anything, the terms of the GNU GPL, version 2 apply.  If it is combined with any other program that is not ZRTPCPP or a derivative work of the ZRTPCPP code but not also combined with ZRTPCPP or a derivative work of the ZRTPCPP code in the same work, the terms of the GNU GPL, version 2 apply.
+
+
+=============================================================================
+AES from ZRTPCPP:
+=============================================================================
+
+Copyright (c) 1998-2010, Brian Gladman, Worcester, UK. All rights reserved.
+
+The redistribution and use of this software (with or without changes) is allowed without the payment of fees or royalties provided that:
+
+  source code distributions include the above copyright notice, this list of conditions and the following disclaimer;
+
+  binary distributions include the above copyright notice, this list of conditions and the following disclaimer in their documentation.
+
+This software is provided 'as is' with no explicit or implied warranties in respect of its operation, including, but not limited to, correctness and fitness for purpose.
+
+
+=============================================================================
+skein from ZRTPCPP:
+=============================================================================
+
+Source code author: Doug Whiting, 2008.
+
+This algorithm and source code is released to the public domain.
+
+
+=============================================================================
+Twofish from ZRTPCPP:
+=============================================================================
+
+Copyright (c) 2002 by Niels Ferguson.  
+
+The author hereby grants a perpetual license to everybody to use this code for any purpose as long as the copyright message is included in the source code of this or any derived work. 
+
+
+=============================================================================
+SHA1 from ZRTPCPP:
+=============================================================================
+
+Copyright (c) 2002, Dr Brian Gladman, Worcester, UK.   All rights reserved.
+
+The free distribution and use of this software in both source and binary form is allowed (with or without changes) provided that:
+
+   1. distributions of this source code include the above copyright notice, this list of conditions and the following disclaimer;
+
+   2. distributions in binary form include the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other associated materials;
+
+   3. the copyright holder's name is not used to endorse products built using this software without specific written permission.
+
+ALTERNATIVELY, provided that this notice is retained in full, this product may be distributed under the terms of the GNU General Public License (GPL), in which case the provisions of the GPL apply INSTEAD OF those given above.
+
+DISCLAIMER
+
+This software is provided 'as is' with no explicit or implied warranties in respect of its properties, including, but not limited to, correctness and/or fitness for purpose.
+
+
+=============================================================================
+base32 from ZRTPCPP:
+=============================================================================
+
+Copyright (c) 2002 Bryce "Zooko" Wilcox-O'Hearn Permission is hereby granted, free of charge, to any person obtaining a copy of this software to deal in this software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of this software, and to permit persons to whom this software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of this software.
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THIS SOFTWARE OR THE USE OR OTHER DEALINGS IN THIS SOFTWARE.
+
+Converted to C++ by:
+@author Werner Dittmann <Werner.Dittmann@t-online.de>
