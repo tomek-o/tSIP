@@ -942,6 +942,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		Scripts.onStreamingState = ScriptsJson.get("OnStreamingState", Scripts.onStreamingState.c_str()).asString().c_str();
 		Scripts.onRegistrationState = ScriptsJson.get("OnRegistrationState", Scripts.onRegistrationState.c_str()).asString().c_str();
 		ScriptsJson.getAString("OnRecorderState", Scripts.onRecorderState);
+		ScriptsJson.getAString("OnEncryptionState", Scripts.onEncryptionState);
 		Scripts.onStartup = ScriptsJson.get("OnStartup", Scripts.onStartup.c_str()).asString().c_str();
 		Scripts.onTimer = ScriptsJson.get("OnTimer", Scripts.onTimer.c_str()).asString().c_str();
 		int timer = ScriptsJson.get("Timer", Scripts.timer).asInt();
@@ -1206,6 +1207,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["OnStreamingState"] = Scripts.onStreamingState.c_str();
 		jv["OnRegistrationState"] = Scripts.onRegistrationState.c_str();
 		jv["OnRecorderState"] = Scripts.onRecorderState;
+		jv["OnEncryptionState"] = Scripts.onEncryptionState;
 		jv["OnStartup"] = Scripts.onStartup.c_str();
 		jv["OnTimer"] = Scripts.onTimer.c_str();
 		jv["Timer"] = Scripts.timer;

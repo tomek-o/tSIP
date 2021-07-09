@@ -449,6 +449,10 @@ __published:	// IDE-managed Components
 	TCheckBox *chbFrmMainUseClientAreaSizes;
 	TCheckBox *chbLoopRingWithoutSilence;
 	TTabSheet *tsDialpad;
+	TLabel *lblOnEncryptionState;
+	TEdit *edScriptOnEncryptionStateFile;
+	TButton *btnSelectedScriptOnEncryptionStateChange;
+	TBitBtn *btnSelectedScriptOnEncryptionStateEdit;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

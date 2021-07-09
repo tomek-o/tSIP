@@ -468,6 +468,19 @@ static void recorder_state_handler(struct recorder_st *recorder, enum recorder_s
 	UA_CB->ChangeRecorderState(0, static_cast<Callback::rec_state_e>(state));	
 }
 
+static void zrtp_state_handler(int session_id, struct zrtp_st *st)
+{
+	DEBUG_WARNING("ZRTP state changed: session_id %d, active = %d, sas [%s], cipher [%s], verified = %d\n",
+		session_id, static_cast<int>(st->active), st->sas, st->cipher, static_cast<int>(st->verified));
+	Callback::Zrtp zrtp;
+	zrtp.sessionId = session_id;
+	zrtp.active = st->active;
+	zrtp.sas = st->sas;
+	zrtp.cipher = st->cipher;
+	zrtp.verified = st->verified;
+	UA_CB->ChangeEncryptionState(zrtp);
+}
+
 static int app_init(void)
 {
 	int err;
@@ -647,6 +660,8 @@ static int app_init(void)
 	}
 
 	recorder_init(recorder_state_handler);
+
+	baresip_zrtp_init(zrtp_state_handler);
 
 	return 0;
 }

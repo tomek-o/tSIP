@@ -10,6 +10,7 @@
 
 #include <re.h>
 #include <baresip.h>
+#include <baresip_zrtp.h>
 
 //#include <string.h>
 

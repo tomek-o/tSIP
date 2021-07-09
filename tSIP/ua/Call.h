@@ -30,6 +30,20 @@ struct Call
 	AnsiString paiPeerUri;
 	AnsiString paiPeerName;
 	AnsiString codecName;
+
+	struct Zrtp {
+		int sessionId;
+		bool active;
+		AnsiString sas;
+		AnsiString cipher;
+		bool verified;
+		Zrtp(void):
+			sessionId(-1),
+			active(false),
+			verified(false)
+		{}
+	} zrtp;	
+
 	Call(void):
 		incoming(false),
 		progress(false),

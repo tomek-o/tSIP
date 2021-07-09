@@ -591,6 +591,22 @@ static int l_GetRecorderState(lua_State* L)
 	return 0;
 }
 
+static int l_GetEncryptionState(lua_State* L)
+{
+	Call *call = GetContext(L)->onGetCall();
+	if (call)
+	{
+		const Call::Zrtp &zrtp = call->zrtp;
+		lua_pushinteger(L, zrtp.sessionId);
+		lua_pushinteger(L, zrtp.active);
+		lua_pushstring(L, zrtp.sas.c_str());
+		lua_pushstring(L, zrtp.cipher.c_str());
+		lua_pushinteger(L, zrtp.verified);
+		return 5;
+	}
+	return 0;
+}
+
 static int l_IsCallIncoming(lua_State* L)
 {
 	Call *call = GetContext(L)->onGetCall();
@@ -1507,6 +1523,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, "BlindTransfer", ScriptImp::l_BlindTransfer);
 	lua_register2(L, "GetCallState", ScriptImp::l_GetCallState);
 	lua_register2(L, "GetRecorderState", ScriptImp::l_GetRecorderState);
+	lua_register2(L, "GetEncryptionState", ScriptImp::l_GetEncryptionState);
 	lua_register2(L, "IsCallIncoming", ScriptImp::l_IsCallIncoming);
 	lua_register2(L, "GetCallPeer", ScriptImp::l_GetCallPeer);
 	lua_register2(L, "GetCallInitialRxInvite", ScriptImp::l_GetCallInitialRxInvite);

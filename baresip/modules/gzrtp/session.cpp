@@ -15,6 +15,22 @@
 #define DEBUG_LEVEL 5
 #include <re_dbg.h>
 
+static baresip_zrtp_state_h *baresip_state_handler = NULL;
+
+static void report_state(int session_id, Stream *stream) {
+	if (baresip_state_handler) {
+		struct zrtp_st st;
+		memset(&st, 0, sizeof(st));
+		if (stream) {
+			st.active = true;
+			str_ncpy(st.sas, stream->get_sas(), sizeof(st.sas));
+			str_ncpy(st.cipher, stream->get_ciphers(), sizeof(st.cipher));
+			st.verified = stream->sas_verified();
+		}
+		baresip_state_handler(session_id, &st);		
+	}
+}
+
 
 std::vector<Session *> Session::s_sessl;
 
@@ -52,6 +68,7 @@ Session::~Session()
 	}
 
 	DEBUG_INFO("zrtp: Session <%d> is destroyed\n", id());
+	report_state(-1, NULL);
 }
 
 
@@ -144,7 +161,8 @@ void Session::on_secure(Stream *stream)
 		     "SAS is [%s] (%s)\n",
 		     m_master->get_ciphers(),
 		     m_master->get_sas(),
-		     (m_master->sas_verified())? "verified" : "NOT VERIFIED");
+			 (m_master->sas_verified())? "verified" : "NOT VERIFIED");
+		report_state(this->id(), m_master);
 		return;
 	}
 
@@ -197,6 +215,8 @@ int Session::verify_sas(int session_id, bool verify)
 	     sess->m_master->get_sas(),
 	     (sess->m_master->sas_verified())? "verified" : "NOT VERIFIED");
 
+	report_state(sess->id(), sess->m_master);
+
 	return 0;
 }
 
@@ -204,4 +224,10 @@ int baresip_zrtp_verify_sas(int session_id, bool verify)
 {
 	return Session::verify_sas(session_id, verify);
 }
+
+void baresip_zrtp_init(baresip_zrtp_state_h *state_h)
+{
+	baresip_state_handler = state_h;
+}
+
 

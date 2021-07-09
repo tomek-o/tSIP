@@ -4,7 +4,7 @@ object frmSettings: TfrmSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Settings'
-  ClientHeight = 480
+  ClientHeight = 505
   ClientWidth = 673
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,12 +22,13 @@ object frmSettings: TfrmSettings
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 443
+    Top = 468
     Width = 673
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
+    ExplicitTop = 443
     object btnCancel: TButton
       Left = 593
       Top = 6
@@ -51,14 +52,16 @@ object frmSettings: TfrmSettings
     Left = 125
     Top = 0
     Width = 548
-    Height = 443
-    ActivePage = tsGeneral
+    Height = 468
+    ActivePage = tsScripts
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
+    ExplicitHeight = 443
     object tsGeneral: TTabSheet
       Caption = 'General'
+      ExplicitHeight = 423
       object lblGuiScaling: TLabel
         Left = 3
         Top = 191
@@ -205,6 +208,7 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
+      ExplicitHeight = 423
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -361,7 +365,7 @@ object frmSettings: TfrmSettings
       ImageIndex = 2
       object pnlAccountsBottom: TPanel
         Left = 0
-        Top = 392
+        Top = 417
         Width = 540
         Height = 31
         Align = alBottom
@@ -390,7 +394,7 @@ object frmSettings: TfrmSettings
         Left = 0
         Top = 0
         Width = 540
-        Height = 392
+        Height = 417
         Align = alClient
         TabOrder = 1
       end
@@ -398,6 +402,7 @@ object frmSettings: TfrmSettings
     object tsMainWindow: TTabSheet
       Caption = 'Main window'
       ImageIndex = 23
+      ExplicitHeight = 423
       object lblMainWindowCollapsedSize: TLabel
         Left = 3
         Top = 3
@@ -1528,6 +1533,7 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
+      ExplicitHeight = 423
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -1783,6 +1789,7 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
+      ExplicitHeight = 423
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -1965,6 +1972,7 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
+      ExplicitHeight = 423
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -2108,6 +2116,7 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
+      ExplicitHeight = 423
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -2184,6 +2193,7 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
+      ExplicitHeight = 423
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -2310,6 +2320,7 @@ object frmSettings: TfrmSettings
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
+      ExplicitHeight = 423
       object lblContactPopup: TLabel
         Left = 2
         Top = 87
@@ -2621,6 +2632,8 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -2760,6 +2773,13 @@ object frmSettings: TfrmSettings
         Width = 126
         Height = 13
         Caption = 'on button mouse down/up'
+      end
+      object lblOnEncryptionState: TLabel
+        Left = 5
+        Top = 425
+        Width = 94
+        Height = 13
+        Caption = 'on encryption state'
       end
       object edScriptOnCallStateChangeFile: TEdit
         Left = 148
@@ -3540,10 +3560,62 @@ object frmSettings: TfrmSettings
           FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
+      object edScriptOnEncryptionStateFile: TEdit
+        Left = 148
+        Top = 422
+        Width = 212
+        Height = 21
+        TabOrder = 47
+      end
+      object btnSelectedScriptOnEncryptionStateChange: TButton
+        Left = 363
+        Top = 422
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 48
+        OnClick = btnSelectedScriptClick
+      end
+      object btnSelectedScriptOnEncryptionStateEdit: TBitBtn
+        Left = 390
+        Top = 422
+        Width = 22
+        Height = 21
+        TabOrder = 49
+        OnClick = btnSelectedScriptEditClick
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+          000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
+          D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8
+          FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
+      end
     end
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
+      ExplicitHeight = 423
       object lblUiCapacity: TLabel
         Left = 5
         Top = 172
@@ -3698,7 +3770,7 @@ object frmSettings: TfrmSettings
     Left = 0
     Top = 0
     Width = 125
-    Height = 443
+    Height = 468
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -3750,6 +3822,7 @@ object frmSettings: TfrmSettings
       00000000000000000000FFFFFFFFFFFFFFFF0000000000000000075300630072
       006900700074007300270000000000000000000000FFFFFFFFFFFFFFFF000000
       0000000000074C006F006700670069006E006700}
+    ExplicitHeight = 443
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

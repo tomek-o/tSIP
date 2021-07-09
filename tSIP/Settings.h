@@ -309,6 +309,7 @@ public:
 		AnsiString onStreamingState;
 		AnsiString onRegistrationState;
 		AnsiString onRecorderState;
+		AnsiString onEncryptionState;
 		AnsiString onStartup;
 		AnsiString onTimer;
 		int timer;					///< ms

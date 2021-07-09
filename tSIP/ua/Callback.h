@@ -29,6 +29,7 @@ public:
 		SIMPLE_MESSAGE,
 		SIMPLE_MESSAGE_STATUS,		///< status for sent MESSAGE; using requestUid, requestError, scode
 		RECORDER_STATE,
+		ENCRYPTION_STATE,
 	} type;
 
 	enum ua_state_e
@@ -116,6 +117,20 @@ public:
 
 	AnsiString contentType;		// MESSAGE
 	AnsiString body;			// MESSAGE
+
+	// encryption
+	struct Zrtp {
+		int sessionId;
+		bool active;
+		AnsiString sas;
+		AnsiString cipher;
+		bool verified;
+		Zrtp(void):
+			sessionId(-1),
+			active(false),
+			verified(false)
+		{}
+	} zrtp;
 };
 
 #endif

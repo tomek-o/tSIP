@@ -425,6 +425,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
     edScriptOnMakeCallFile->Text = tmpSettings.Scripts.onMakeCall;
 	edScriptOnCallStateChangeFile->Text = tmpSettings.Scripts.onCallState;
 	edScriptOnRecorderStateFile->Text = tmpSettings.Scripts.onRecorderState;
+	edScriptOnEncryptionStateFile->Text = tmpSettings.Scripts.onEncryptionState;
 	edScriptOnStreamingStateChangeFile->Text = tmpSettings.Scripts.onStreamingState;
 	edScriptOnRegistrationStateChangeFile->Text = tmpSettings.Scripts.onRegistrationState;
 	edScriptOnTimerFile->Text = tmpSettings.Scripts.onTimer;
@@ -803,6 +804,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onMakeCall = edScriptOnMakeCallFile->Text;
 	tmpSettings.Scripts.onCallState = edScriptOnCallStateChangeFile->Text;
 	tmpSettings.Scripts.onRecorderState = edScriptOnRecorderStateFile->Text;
+	tmpSettings.Scripts.onEncryptionState = edScriptOnEncryptionStateFile->Text;
 	tmpSettings.Scripts.onStreamingState = edScriptOnStreamingStateChangeFile->Text;
 	tmpSettings.Scripts.onRegistrationState = edScriptOnRegistrationStateChangeFile->Text;
 	tmpSettings.Scripts.onTimer = edScriptOnTimerFile->Text;
@@ -1354,6 +1356,10 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 	{
 		edit = edScriptOnRecorderStateFile;
 	}
+	else if (Sender == btnSelectedScriptOnEncryptionStateChange)
+	{
+		edit = edScriptOnEncryptionStateFile;
+	}
 	else if (Sender == btnSelectedScriptOnStreamingStateChange)
 	{
 		edit = edScriptOnStreamingStateChangeFile;
@@ -1448,6 +1454,11 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	{
 		edit = edScriptOnRecorderStateFile;
 		eventName = "on_recorder_state";
+	}
+	else if (Sender == btnSelectedScriptOnEncryptionStateEdit)
+	{
+		edit = edScriptOnEncryptionStateFile;
+		eventName = "on_encryption_state";
 	}
 	else if (Sender == btnSelectedScriptOnStreamingStateEdit)
 	{

@@ -1819,6 +1819,22 @@ void TfrmMain::PollCallbackQueue(void)
 			}
 			break;
 		}
+		case Callback::ENCRYPTION_STATE:
+		{
+			call.zrtp.sessionId = cb.zrtp.sessionId;
+			call.zrtp.active = cb.zrtp.active;
+			call.zrtp.sas = cb.zrtp.sas;
+			call.zrtp.cipher = cb.zrtp.cipher;
+			call.zrtp.verified = cb.zrtp.verified;
+			if (appSettings.Scripts.onEncryptionState != "")
+			{
+				AnsiString asScriptFile;
+				bool handled = true;
+				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onEncryptionState.c_str());
+				RunScriptFile(SCRIPT_SRC_ON_ENCRYPTION_STATE, cb.zrtp.sessionId, asScriptFile.c_str(), handled);
+			}
+			break;
+		}
 		case Callback::APP_STATE:
 		{
 			AnsiString text;

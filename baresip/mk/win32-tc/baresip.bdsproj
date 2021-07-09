@@ -421,7 +421,7 @@
         <FILE FILENAME="..\..\modules\gzrtp\srtp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\gzrtp\gzrtp_stream.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gzrtp_stream" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\gzrtp\gzrtp_stream.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\include\baresip_zrtp.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="..\..\include\baresip_zrtp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

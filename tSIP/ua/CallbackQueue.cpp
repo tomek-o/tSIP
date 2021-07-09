@@ -109,6 +109,17 @@ void CallbackQueue::ChangeRecorderState(int id, Callback::rec_state_e state)
 	fifo.push();
 }
 
+void CallbackQueue::ChangeEncryptionState(const Callback::Zrtp &state)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Callback *cb = fifo.getWriteable();
+	if (!cb)
+		return;
+	cb->type = Callback::ENCRYPTION_STATE;
+	cb->zrtp = state;
+	fifo.push();
+}
+
 
 void CallbackQueue::ChangeRegState(int acc_id, Callback::reg_state_e state, const char *prm)
 {
