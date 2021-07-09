@@ -470,8 +470,8 @@ static void recorder_state_handler(struct recorder_st *recorder, enum recorder_s
 
 static void zrtp_state_handler(int session_id, struct zrtp_st *st)
 {
-	DEBUG_WARNING("ZRTP state changed: session_id %d, active = %d, sas [%s], cipher [%s], verified = %d\n",
-		session_id, static_cast<int>(st->active), st->sas, st->cipher, static_cast<int>(st->verified));
+	//DEBUG_WARNING("ZRTP state changed: session_id %d, active = %d, sas [%s], cipher [%s], verified = %d\n",
+	//	session_id, static_cast<int>(st->active), st->sas, st->cipher, static_cast<int>(st->verified));
 	Callback::Zrtp zrtp;
 	zrtp.sessionId = session_id;
 	zrtp.active = st->active;
