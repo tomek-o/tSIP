@@ -359,8 +359,8 @@ int TfrmContactsCsvImport::UpdateContacts(void)
 
 	int descriptionId =	cbDescriptionColumn->ItemIndex;
 	int numberId1 = cbNumberColumn1->ItemIndex - 1;	// "- none -" offset
-	int numberId2 = cbNumberColumn1->ItemIndex - 1;
-	int numberId3 = cbNumberColumn1->ItemIndex - 1;
+	int numberId2 = cbNumberColumn2->ItemIndex - 1;
+	int numberId3 = cbNumberColumn3->ItemIndex - 1;
 	int companyId = cbCompanyColumn->ItemIndex - 1;
 
 	int addedCnt = 0;
@@ -369,11 +369,12 @@ int TfrmContactsCsvImport::UpdateContacts(void)
 	{
 		Contacts::Entry entry;
 		Fields &fields = csvRows[id];
-		if (fields.size() > descriptionId &&
-			fields.size() > numberId1 &&
-			fields.size() > numberId2 &&
-			fields.size() > numberId3 &&
-			fields.size() > companyId
+		int fieldsSize = fields.size();
+		if (fieldsSize > descriptionId &&
+			fieldsSize > numberId1 &&
+			fieldsSize > numberId2 &&
+			fieldsSize > numberId3 &&
+			fieldsSize > companyId
 			)
 		{
 			entry.description = fields[descriptionId].c_str();

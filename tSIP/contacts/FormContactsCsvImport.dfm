@@ -24,10 +24,10 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 0
-    ExplicitWidth = 318
-    ExplicitHeight = 205
     object tsConfigureCsv: TTabSheet
       Caption = 'tsConfigureCsv'
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 310
       ExplicitHeight = 174
       object lblSeparator: TLabel
@@ -110,6 +110,8 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     object tsReadCsv: TTabSheet
       Caption = 'tsReadCsv'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 310
       ExplicitHeight = 174
       object Label2: TLabel
@@ -163,8 +165,6 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     object tsGenerateJson: TTabSheet
       Caption = 'tsGenerateJson'
       ImageIndex = 2
-      ExplicitWidth = 310
-      ExplicitHeight = 174
       object Label7: TLabel
         Left = 8
         Top = 8
@@ -288,8 +288,6 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitTop = 205
-    ExplicitWidth = 318
     object Bevel1: TBevel
       Left = 4
       Top = 0
@@ -305,7 +303,6 @@ object frmContactsCsvImport: TfrmContactsCsvImport
       Align = alRight
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitLeft = 72
       object btnPrev: TButton
         Left = 76
         Top = 6
