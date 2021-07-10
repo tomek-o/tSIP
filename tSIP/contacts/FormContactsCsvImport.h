@@ -50,6 +50,8 @@ __published:	// IDE-managed Components
 	TComboBox *cbNumberColumn3;
 	TLabel *lblCompany;
 	TComboBox *cbCompanyColumn;
+	TLabel *lblNoteColumn;
+	TComboBox *cbNoteColumn;
 	void __fastcall btnNextClick(TObject *Sender);
 	void __fastcall btnPrevClick(TObject *Sender);
 	void __fastcall lblInfo2Click(TObject *Sender);

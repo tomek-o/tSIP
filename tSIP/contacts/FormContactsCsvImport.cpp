@@ -114,6 +114,8 @@ void __fastcall TfrmContactsCsvImport::btnNextClick(TObject *Sender)
 		cbNumberColumn3->Items->Add("- none -");
 		cbCompanyColumn->Clear();
 		cbCompanyColumn->Items->Add("- none -");
+		cbNoteColumn->Clear();
+		cbNoteColumn->Items->Add("- none -");
 		for (unsigned int i=0; i<csvRows[0].size(); i++)
 		{
 			AnsiString text;
@@ -123,12 +125,14 @@ void __fastcall TfrmContactsCsvImport::btnNextClick(TObject *Sender)
 			cbNumberColumn2->Items->Add(text);
 			cbNumberColumn3->Items->Add(text);
 			cbCompanyColumn->Items->Add(text);
+			cbNoteColumn->Items->Add(text);
 		}
 		cbDescriptionColumn->ItemIndex = 0;
 		cbNumberColumn1->ItemIndex = 0;
 		cbNumberColumn2->ItemIndex = 0;
 		cbNumberColumn3->ItemIndex = 0;
 		cbCompanyColumn->ItemIndex = 0;
+		cbNoteColumn->ItemIndex = 0;
 	}
 
 	if (pageIdx < pcWizard->PageCount - 1)
@@ -362,6 +366,7 @@ int TfrmContactsCsvImport::UpdateContacts(void)
 	int numberId2 = cbNumberColumn2->ItemIndex - 1;
 	int numberId3 = cbNumberColumn3->ItemIndex - 1;
 	int companyId = cbCompanyColumn->ItemIndex - 1;
+	int noteId = cbNoteColumn->ItemIndex - 1;
 
 	int addedCnt = 0;
 	int skippedCnt = 0;
@@ -393,6 +398,10 @@ int TfrmContactsCsvImport::UpdateContacts(void)
 			if (companyId >= 0)
 			{
 				entry.company = fields[companyId].c_str();
+			}
+			if (noteId >= 0 && fieldsSize > noteId)
+			{
+            	entry.note = fields[noteId].c_str();
 			}
 			if (chbSkipDuplicatedNumbers->Checked)
 			{

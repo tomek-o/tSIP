@@ -2,7 +2,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
   Left = 0
   Top = 0
   Caption = 'Import contacts from CSV file'
-  ClientHeight = 278
+  ClientHeight = 305
   ClientWidth = 316
   Color = clBtnFace
   DefaultMonitor = dmMainForm
@@ -19,17 +19,15 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     Left = 0
     Top = 0
     Width = 316
-    Height = 239
+    Height = 266
     ActivePage = tsGenerateJson
     Align = alClient
     Style = tsFlatButtons
     TabOrder = 0
+    ExplicitHeight = 239
     object tsConfigureCsv: TTabSheet
       Caption = 'tsConfigureCsv'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 310
-      ExplicitHeight = 174
+      ExplicitHeight = 208
       object lblSeparator: TLabel
         Left = 80
         Top = 40
@@ -110,10 +108,6 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     object tsReadCsv: TTabSheet
       Caption = 'tsReadCsv'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 310
-      ExplicitHeight = 174
       object Label2: TLabel
         Left = 8
         Top = 8
@@ -165,6 +159,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     object tsGenerateJson: TTabSheet
       Caption = 'tsGenerateJson'
       ImageIndex = 2
+      ExplicitHeight = 208
       object Label7: TLabel
         Left = 8
         Top = 8
@@ -213,6 +208,13 @@ object frmContactsCsvImport: TfrmContactsCsvImport
         Height = 13
         Caption = 'Company column'
       end
+      object lblNoteColumn: TLabel
+        Left = 8
+        Top = 162
+        Width = 59
+        Height = 13
+        Caption = 'Note column'
+      end
       object cbDescriptionColumn: TComboBox
         Left = 120
         Top = 37
@@ -224,7 +226,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
       end
       object chbSkipFirstRow: TCheckBox
         Left = 8
-        Top = 168
+        Top = 192
         Width = 236
         Height = 17
         Caption = 'Skip first row (first row is a header)'
@@ -243,7 +245,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
       end
       object chbSkipDuplicatedNumbers: TCheckBox
         Left = 8
-        Top = 191
+        Top = 215
         Width = 236
         Height = 17
         Caption = 'Skip duplicated numbers (number #1 only)'
@@ -278,16 +280,26 @@ object frmContactsCsvImport: TfrmContactsCsvImport
         ItemHeight = 13
         TabOrder = 6
       end
+      object cbNoteColumn: TComboBox
+        Left = 120
+        Top = 159
+        Width = 160
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 7
+      end
     end
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 239
+    Top = 266
     Width = 316
     Height = 39
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 239
     object Bevel1: TBevel
       Left = 4
       Top = 0
