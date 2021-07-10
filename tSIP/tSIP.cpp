@@ -7,7 +7,6 @@ USEFORM("contacts\FormContactsCsvImport.cpp", frmContactsCsvImport);
 USEFORM("contacts\FormContacts.cpp", frmContacts);
 USEFORM("contacts\FormContactPopup.cpp", frmContactPopup);
 USEFORM("contacts\FormContactEditor.cpp", frmContactEditor);
-USEFORM("contacts\FormContactCsvImport.cpp", frmContactCsvImport);
 USEFORM("buttons\FormButtonEdit.cpp", frmButtonEdit);
 USEFORM("buttons\FormButtonContainer.cpp", frmButtonContainer);
 USEFORM("hotkeys\FormHotkeys.cpp", frmHotkeys);
@@ -116,7 +115,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
 		Application->CreateForm(__classid(TfrmTrayNotifier), &frmTrayNotifier);
 		Application->CreateForm(__classid(TfrmTroubleshooting), &frmTroubleshooting);
-		Application->CreateForm(__classid(TfrmContactCsvImport), &frmContactCsvImport);
 		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
 		Application->CreateForm(__classid(TfrmContactPopup), &frmContactPopup);
 		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);

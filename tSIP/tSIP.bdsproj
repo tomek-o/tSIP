@@ -415,7 +415,6 @@
         <FILE FILENAME="contacts\FormContacts.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContacts" FORMNAME="frmContacts" DESIGNCLASS="" ADDITIONAL="contacts\FormContacts.h"/>
         <FILE FILENAME="contacts\FormContactPopup.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactPopup" FORMNAME="frmContactPopup" DESIGNCLASS="" ADDITIONAL="contacts\FormContactPopup.h"/>
         <FILE FILENAME="contacts\FormContactEditor.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactEditor" FORMNAME="frmContactEditor" DESIGNCLASS="" ADDITIONAL="contacts\FormContactEditor.h"/>
-        <FILE FILENAME="contacts\FormContactCsvImport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactCsvImport" FORMNAME="frmContactCsvImport" DESIGNCLASS="" ADDITIONAL="contacts\FormContactCsvImport.h"/>
         <FILE FILENAME="contacts\Contacts.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Contacts" FORMNAME="" DESIGNCLASS="" ADDITIONAL="contacts\Contacts.h"/>
         <FILE FILENAME="buttons\ProgrammableButtons.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ProgrammableButtons" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ProgrammableButtons.h"/>
         <FILE FILENAME="buttons\FormButtonEdit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonEdit" FORMNAME="frmButtonEdit" DESIGNCLASS="" ADDITIONAL="buttons\FormButtonEdit.h"/>
@@ -562,10 +561,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-      <buildevent file="tSIP.bdsproj">
-        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+			<buildevent file="tSIP.bdsproj">
+				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-      </buildevent>
-    </buildevents>
+			</buildevent>
+		</buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>
