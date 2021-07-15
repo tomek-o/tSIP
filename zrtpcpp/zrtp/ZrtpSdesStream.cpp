@@ -237,8 +237,10 @@ bool ZrtpSdesStream::outgoingRtp(uint8_t *packet, size_t length, size_t *newLeng
         return true;
     }
     bool rc = SrtpHandler::protect(sendSrtp, packet, length, newLength);
-	if (rc)
-        ;//protect++;
+	if (rc) {
+		(void)rc;
+		;//protect++;
+	}
     return rc;
 }
 
@@ -265,8 +267,10 @@ bool ZrtpSdesStream::outgoingZrtpTunnel(uint8_t *packet, size_t length, size_t *
         return true;
     }
     bool rc = SrtpHandler::protect(sendZrtpTunnel, packet, length, newLength);
-	if (rc)
-        ;//protect++;
+	if (rc) {
+		(void)rc;
+		;//protect++;
+	}
     return rc;
 }
 

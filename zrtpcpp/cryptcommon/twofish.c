@@ -495,7 +495,7 @@ void Two_debugDummy(Twofish_Byte* in, Twofish_Byte* out, Twofish_Byte* ivec)
  * Somewhere, someday, this is going to save somebody a lot of time, 
  * because misbehaving macros are hard to debug. 
  */ 
-static int test_platform() 
+static int test_platform(void) 
     { 
     /* Buffer with test values. */ 
     Twofish_Byte buf[] = {0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0}; 
@@ -678,7 +678,7 @@ static int test_vector( Twofish_Byte key[], int key_len, Twofish_Byte p[16], Two
  * This is an absolutely minimal self-test.  
  * This routine does not test odd-sized keys. 
  */ 
-static int test_vectors() 
+static int test_vectors(void)
     { 
     /* 
      * We run three tests, one for each major key length. 
@@ -822,7 +822,7 @@ static int test_sequence( int key_len, Twofish_Byte final_value[] )
  * This checks the most extensive test vectors currently available  
  * for Twofish. The data is from the Twofish book, appendix B.2. 
  */ 
-static int test_sequences() 
+static int test_sequences(void) 
     { 
     static Twofish_Byte r128[] = { 
         0x5D, 0x9D, 0x4E, 0xEF, 0xFA, 0x91, 0x51, 0x57, 
@@ -860,7 +860,7 @@ static int test_sequences()
  * If the expanded keys are identical, then the encryptions and decryptions 
  * will behave the same. 
  */ 
-static int test_odd_sized_keys() 
+static int test_odd_sized_keys(void) 
     { 
     Twofish_Byte buf[32]; 
     Twofish_key xkey; 
@@ -922,7 +922,7 @@ static int test_odd_sized_keys()
  * you could remove some of the tests. Make sure you did run them 
  * once in the software and hardware configuration you are using. 
  */ 
-static int self_test() 
+static int self_test(void) 
     {
       int ret;
     /* The three test vectors form an absolute minimal test set. */ 
@@ -1041,7 +1041,7 @@ static void make_q_table( Twofish_Byte t[4][16], Qtype q[256] )
 /*  
  * Initialise both q-box tables.  
  */ 
-static void initialise_q_boxes() { 
+static void initialise_q_boxes(void) { 
     /* Initialise each of the q-boxes using the t-tables */ 
     make_q_table( t_table[0], q_table[0] ); 
     make_q_table( t_table[1], q_table[1] ); 
@@ -1085,7 +1085,7 @@ static Twofish_UInt32 MDS_table[4][256];
 static Twofish_UInt32 mds_poly_divx_const[] = {0,0xb4}; 
  
 /* Function to initialise the MDS tables. */ 
-static void initialise_mds_tables() 
+static void initialise_mds_tables(void) 
     { 
     int i; 
     Twofish_UInt32 q,qef,q5b;       /* Temporary variables. */ 
@@ -1275,7 +1275,7 @@ static int Twofish_initialised = 0;
  * This routine also does some sanity checks, to make sure that 
  * all the macros behave, and it tests the whole cipher. 
  */ 
-int Twofish_initialise() 
+int Twofish_initialise(void) 
     {
       int ret;
     /* First test the various platform-specific definitions. */ 

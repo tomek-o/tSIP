@@ -121,7 +121,7 @@ typedef
  *
  * @returns a negative number if an error happend, +1 otherwise
  */ 
-extern int Twofish_initialise(); 
+extern int Twofish_initialise(void); 
  
  
 /**

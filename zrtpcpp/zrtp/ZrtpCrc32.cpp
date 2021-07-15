@@ -106,7 +106,7 @@ bool zrtpCheckCksum(const uint8_t *buffer, uint16_t length, uint32_t crc32)
     return (crc32 == chksum);
 }
 
-uint32_t zrtpGenerateCksum(const uint8_t *buffer, uint16_t length)
+uint32_t zrtpGenerateCksum(const uint8_t *buffer, uint32_t length)
 {
     uint32_t crc32 = ~(uint32_t) 0;
     uint32_t i;

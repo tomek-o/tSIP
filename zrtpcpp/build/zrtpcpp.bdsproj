@@ -250,10 +250,8 @@
         <FILE FILENAME="..\zrtp\ZRtp.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZRtp" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\zrtp\zrtpB64Decode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="zrtpB64Decode" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\zrtp\zrtpB64Encode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="zrtpB64Encode" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\zrtp\ZrtpCallbackWrapper.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpCallbackWrapper" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\zrtp\ZrtpConfigure.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpConfigure" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\zrtp\ZrtpCrc32.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpCrc32" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\zrtp\ZrtpCWrapper.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpCWrapper" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\zrtp\ZrtpPacketClearAck.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketClearAck" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\zrtp\ZrtpPacketCommit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketCommit" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\zrtp\ZrtpPacketConf2Ack.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ZrtpPacketConf2Ack" FORMNAME="" DESIGNCLASS=""/>

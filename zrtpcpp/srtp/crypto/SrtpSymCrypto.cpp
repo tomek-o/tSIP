@@ -107,7 +107,7 @@ void SrtpSymCrypto::encrypt(const uint8_t* input, uint8_t* output) {
 }
 
 void SrtpSymCrypto::get_ctr_cipher_stream(uint8_t* output, uint32_t length, uint8_t* iv) {
-    uint16_t ctr = 0;
+    uint32_t ctr = 0;
     unsigned char temp[SRTP_BLOCK_SIZE];
 
     for(ctr = 0; ctr < length/SRTP_BLOCK_SIZE; ctr++) {

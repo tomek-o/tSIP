@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright 2006 - 2018, Werner Dittmann
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -261,7 +261,7 @@ static int newMod521(BigNum *r, const BigNum *a, const BigNum *modulo);
 static int mod3617(BigNum *r, const BigNum *a, const BigNum *modulo);
 static int mod25519(BigNum *r, const BigNum *a, const BigNum *modulo);
 
-static void commonInit()
+static void commonInit(void)
 {
     bnBegin(mpiZero); bnSetQ(mpiZero, 0);
     bnBegin(mpiOne); bnSetQ(mpiOne, 1);

@@ -376,25 +376,23 @@ uint32_t ZrtpDH::getDhSize() const
     switch (pkType) {
     case DH2K:
         return 2048/8;
-        break;
+
     case DH3K:
-        return 3072/8;
-        break;
+		return 3072/8;
 
     case EC25:
         return 32;
-        break;
-    case EC38:
-        return 48;
-        break;
+
+	case EC38:
+		return 48;
 
     case E255:
-        return 32;
-        break;
+		return 32;
+
     case E414:
         return 52;
-        break;
-    }
+
+	}
     return 0;
 }
 

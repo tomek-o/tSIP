@@ -55,7 +55,7 @@ bool zrtpCheckCksum(const uint8_t *buffer, uint16_t length, uint32_t crc32);
  * @return
  *    A preliminary CRC32 checksum
  */
-uint32_t zrtpGenerateCksum(const uint8_t *buffer, uint16_t length);
+uint32_t zrtpGenerateCksum(const uint8_t *buffer, uint32_t length);
 
 /**
  * Close CRC32 computation.
