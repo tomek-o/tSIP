@@ -456,7 +456,16 @@ int32_t ZrtpDH::checkPubKey(uint8_t *pubKeyBytes) const
         bnInsertBigBytes(pub.x, pubKeyBytes, 0, len);
         bnInsertBigBytes(pub.y, pubKeyBytes+len, 0, len);
 
-        return ecCheckPubKey(&tmpCtx->curve, &pub);
+		int ret =  ecCheckPubKey(&tmpCtx->curve, &pub);
+		if (pub.x) {
+			bnEnd(pub.x);
+			pub.x = NULL;
+		}
+		if (pub.y) {
+			bnEnd(pub.y);
+			pub.y = NULL;
+		}
+		return ret;
     }
 
     if (pkType == E255) {
