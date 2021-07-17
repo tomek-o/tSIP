@@ -454,7 +454,8 @@ void ecFreeCurveNistECp(EcCurve *curve)
     bnEnd(curve->n);
     bnEnd(curve->SEED);
     bnEnd(curve->c);
-    bnEnd(curve->b);
+    bnEnd(curve->a);
+	bnEnd(curve->b);
     bnEnd(curve->Gx);
     bnEnd(curve->Gy);
 
