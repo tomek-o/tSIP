@@ -52,6 +52,16 @@ ZIDCache* getZidCacheInstance() {
     return instance;
 }
 
+class ZidCacheInstanceDestroyer {
+public:
+	~ZidCacheInstanceDestroyer(void) {
+		if (instance) {
+			delete instance;
+			instance = NULL;
+		}
+	}
+} zidCacheInstanceDestroyer;
+
 
 void ZIDCacheFile::createZIDFile(char* name) {
     zidFile = fopen(name, "wb+");
