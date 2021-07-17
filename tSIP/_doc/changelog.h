@@ -918,5 +918,14 @@ Version 0.2.03
     
 Version 0.2.03.1
     - FIXED: bug in pl_advance introduced in 0.2.03, affecting RFC2833 DTMF transmission
+    
+Version 0.2.04
+    - added ZRTP support
+    - added translation mechanism for contacts, history, contsct editor
+    - added Spanish translation
+    - FIXED: importing numbers #2 and #3 from CSV to contacts
+    - added note import when importing contacts from CSV
+    - added "SCRIPT_B64=" command line parameters - sometimes it might be easier to encode script with base64 than to escape it for command line
+    - increased buffer size for registrar URI, added log if adding account failed
 */
 
