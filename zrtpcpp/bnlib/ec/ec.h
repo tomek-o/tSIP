@@ -272,6 +272,8 @@ int bnMulQMod_ (struct BigNum *rslt, struct BigNum *n1, unsigned n2, struct BigN
 
 int bnSquareMod_ (struct BigNum *rslt, struct BigNum *n1, struct BigNum *mod, const EcCurve *curve);
 
+void ecDestroyStatic(void);
+
 #ifdef __cplusplus
 }
 #endif

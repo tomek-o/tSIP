@@ -38,6 +38,18 @@ static BigNum* mpiFour  = &_mpiFour;
 static BigNum* mpiEight = &_mpiEight;
 static int initialized = 0;
 
+void ecDestroyStatic(void) {
+	if (initialized) {
+		initialized = 0;
+		bnEnd(&_mpiZero);
+		bnEnd(&_mpiOne);
+		bnEnd(&_mpiTwo);
+		bnEnd(&_mpiThree);
+		bnEnd(&_mpiFour);
+		bnEnd(&_mpiEight);
+	}
+}
+
 
 /* The following parameters are given:
  - The prime modulus p

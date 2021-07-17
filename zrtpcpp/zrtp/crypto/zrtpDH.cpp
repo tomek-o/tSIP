@@ -44,6 +44,23 @@ static BigNum two = {0};
 
 static uint8_t dhinit = 0;
 
+class ZrtpDhStaticDestroyer {
+public:
+	~ZrtpDhStaticDestroyer(void) {
+		if (dhinit) {
+			dhinit = 0;
+			bnEnd(&two);
+			bnEnd(&bnP2048);
+			bnEnd(&bnP3072);
+			bnEnd(&bnP2048MinusOne);
+			bnEnd(&bnP3072MinusOne);
+		}
+		
+		ecDestroyStatic();
+	}
+} zrtpDhStaticDestroyer;
+
+
 typedef struct _dhCtx {
     BigNum privKey;
     BigNum pubKey;
