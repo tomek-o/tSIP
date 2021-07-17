@@ -240,8 +240,8 @@ Stream::~Stream()
 	mem_deref(m_rtpsock);
 	mem_deref(m_rtcpsock);
 
-	mem_deref(&m_zrtp_lock);
-	mem_deref(&m_send_lock);
+	mem_deref(m_zrtp_lock);
+	mem_deref(m_send_lock);
 
 	tmr_cancel(&m_zrtp_timer);
 }
