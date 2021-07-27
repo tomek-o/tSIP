@@ -18,40 +18,19 @@ namespace Troubleshooting {
 		LevelLimiter
 	};
 
-	enum ItemType
-	{
-		NoAudioInputDevice = 0,
-		NoAudioOutputDevice,
-		WavFileMissing,
-		IncorrectWavFormat,
-		VirtualboxNetworkAdapter,
-		LocalAutomaticPrivateIpAddress,
-		InvalidFrameLength,
-		UncommonFrameLength,
-		PopularCodecsDisabled,
-		NoRegistration,
-		NoLocalPortAssigned,
-		SpeexPreprocessingEnabled,
-		NoCodecsEnabled,
-		TooManyCodecsEnabled,
-		PcmuPcmaPtime,
-
-		ItemTypeLimiter
-	};
-
 	struct Item
 	{
-		enum ItemType type;
+		int typeId;
 		AnsiString extraMsg;
 		Item(void):
-			type(ItemTypeLimiter)
+			typeId(-1)
 		{}
 		enum Level getLevel(void) const;
 		const char* getName(void) const;
 		const char* getDescription(void) const;
 	};
 
-	void AddItem(ItemType type, AnsiString extraMsg = "");
+	void AddItem(int typeId, AnsiString extraMsg = "");
 
 	const std::vector<Item>& getItems(void);
 

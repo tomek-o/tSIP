@@ -219,7 +219,34 @@ namespace {
 		return false;
 	}
 
-	struct ItemTypeData itemTypeData[ItemTypeLimiter] =
+	bool CheckL16Ptime(void)
+	{
+		for (unsigned int accId = 0; accId < appSettings.uaConf.accounts.size(); accId++)
+		{
+			const UaConf::Account &acc = appSettings.uaConf.accounts[accId];
+			for (unsigned int i=0; i<acc.audio_codecs.size(); i++)
+			{
+				const std::string& codec = acc.audio_codecs[i];
+				/*
+					L16/48000/1: 1920 B @ ptime = 20
+					L16/44100/1: 1764 B @ ptime = 20
+				*/
+				if (codec == "L16/48000/1" || codec == "L16/44100/1")
+				{
+					if (acc.ptime > 10)
+						return true;
+				}
+				else if (codec == "L16/48000/2" || codec == "L16/44100/2")
+				{
+					if (acc.ptime > 5)
+						return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	struct ItemTypeData itemTypeData[] =
 	{
 		{ LevelWarning, "No audio input device", "", CheckAudioInputDevice },
 		{ LevelWarning, "No audio output device", "", CheckAudioOutputDevice },
@@ -239,6 +266,7 @@ namespace {
 			, CheckLocalAutomaticPrivateIpAddress
 			},
 		{ LevelWarning, "Invalid frame ptime", "Selected RTP ptime may not work well with specified codec(s), exceeding network MTU.", NULL },
+		{ LevelWarning, "Invalid frame ptime for L16 codec(s)", "Selected RTP ptime may be too large for selected L16 codec, exceeding network MTU.", CheckL16Ptime },
 		{ LevelHint, "Selected ptime is different then commonly used 20ms.", "Ptime other than 20ms with commonly used codecs may cause interoperability problems.", CheckUncommonFrameLength },
 		{ LevelHint, "Popular codecs are disabled", "Note: popular/commonly used codecs (G.711a, G.711u) are not enabled.", CheckCommonCodecs },
 		{ LevelHint, "No registration", "Note: registration is not enabled (registration expires value is set to zero in account configuration).", CheckNoRegistration },
@@ -259,29 +287,29 @@ namespace {
 			},
 	};
 
-	enum Level getItemLevel(enum ItemType type)
+	enum Level getItemLevel(int typeId)
 	{
-		if (type >= 0 && type < ItemTypeLimiter)
+		if (typeId >= 0 && typeId < ARRAY_SIZE(itemTypeData))
 		{
-			return itemTypeData[type].level;
+			return itemTypeData[typeId].level;
 		}
 		return LevelLimiter;
 	}
 
-	const char* getItemTypeName(enum ItemType type)
+	const char* getItemTypeName(int typeId)
 	{
-		if (type >= 0 && type < ItemTypeLimiter)
+		if (typeId >= 0 && typeId < ARRAY_SIZE(itemTypeData))
 		{
-			return itemTypeData[type].name;
+			return itemTypeData[typeId].name;
 		}
 		return "???";
 	}
 
-	const char* getItemTypeDescription(enum ItemType type)
+	const char* getItemTypeDescription(int typeId)
 	{
-		if (type >= 0 && type < ItemTypeLimiter)
+		if (typeId >= 0 && typeId < ARRAY_SIZE(itemTypeData))
 		{
-			return itemTypeData[type].description;
+			return itemTypeData[typeId].description;
 		}
 		return "???";
 	}
@@ -291,15 +319,15 @@ namespace {
 }	// namespace
 
 enum Level Item::getLevel(void) const {
-	return getItemLevel(type);
+	return getItemLevel(typeId);
 }
 
 const char* Item::getName(void) const {
-	return getItemTypeName(type);
+	return getItemTypeName(typeId);
 }
 
 const char* Item::getDescription(void) const {
-	return getItemTypeDescription(type);
+	return getItemTypeDescription(typeId);
 }
 
 
@@ -308,10 +336,10 @@ std::vector<Item> getItems(void)
 	return items;
 }
 
-void Troubleshooting::AddItem(ItemType type, AnsiString extraMsg)
+void Troubleshooting::AddItem(int typeId, AnsiString extraMsg)
 {
 	Item item;
-	item.type = type;
+	item.typeId = typeId;
 	item.extraMsg = extraMsg;
 	items.push_back(item);
 }
@@ -324,7 +352,7 @@ const std::vector<Item>& Troubleshooting::getItems(void)
 void Troubleshooting::Update(void)
 {
 	items.clear();
-	for (int i=0; i<ItemTypeLimiter; i++)
+	for (int i=0; i<ARRAY_SIZE(itemTypeData); i++)
 	{
 		struct ItemTypeData &it = itemTypeData[i];
 		if (it.fnCheck)
@@ -332,7 +360,7 @@ void Troubleshooting::Update(void)
 			bool result = it.fnCheck();
 			if (result)
 			{
-				AddItem(static_cast<ItemType>(i), "");
+				AddItem(i, "");
 			}
 		}
 	}
