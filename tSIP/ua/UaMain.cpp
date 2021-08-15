@@ -555,6 +555,19 @@ static int app_init(void)
 		strncpyz(cfg->zrtp.zid_filename, (Paths::GetProfileDir() + "\\zrtp.zid").c_str(), sizeof(cfg->zrtp.zid_filename));
 	}
 
+	{
+		const UaConf::Tls &tls = appSettings.uaConf.tls;
+		if (tls.certificate != "")
+		{
+			strncpyz(cfg->sip.cert, (Paths::GetProfileDir() + "\\certificates\\" + tls.certificate.c_str()).c_str(), sizeof(cfg->sip.cert));
+		}
+		if (tls.caFile != "")
+		{
+			strncpyz(cfg->sip.cafile, (Paths::GetProfileDir() + "\\certificates\\" + tls.caFile.c_str()).c_str(), sizeof(cfg->sip.cafile));
+		}
+		cfg->sip.verify_server = tls.verifyServer;
+	}
+
 	strncpyz(cfg->sip.local, appSettings.uaConf.local.c_str(), sizeof(cfg->sip.local));
 	if (appSettings.uaConf.ifname.size() > 0) {
 		strncpyz(cfg->net.ifname, appSettings.uaConf.ifname.c_str(), sizeof(cfg->net.ifname));
@@ -749,9 +762,9 @@ static int app_start(void)
 		addr.cat_printf(";dtmf_tx_format=%d", acc.dtmf_tx_format);
 		addr.cat_printf(";ptime=%d", acc.ptime);
 
-		if (acc.zrtp)
+		if (acc.mediaenc != "")
 		{
-        	addr.cat_printf(";mediaenc=zrtp");
+        	addr.cat_printf(";mediaenc=%s", acc.mediaenc.c_str());
 		}
 
 		{

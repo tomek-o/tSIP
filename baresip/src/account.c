@@ -42,6 +42,7 @@ static void destructor(void *arg)
 	mem_deref(acc->dispname);
 	mem_deref(acc->buf);
 	mem_deref(acc->buf_pwd);
+	mem_deref(acc->cert);	
 }
 
 

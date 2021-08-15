@@ -53,9 +53,7 @@ static struct {
 	struct sip_lsnr *lsnr;         /**< SIP Listener                    */
 	struct sipsess_sock *sock;     /**< SIP Session socket              */
 	struct sipevent_sock *evsock;  /**< SIP Event socket                */
-	bool use_udp;                  /**< Use UDP transport               */
-	bool use_tcp;                  /**< Use TCP transport               */
-	bool use_tls;                  /**< Use TLS transport               */
+	uint32_t transports;           /**< Supported transports mask       */
 	bool prefer_ipv6;              /**< Force IPv6 transport            */
 #ifdef USE_TLS
 	struct tls *tls;               /**< TLS Context                     */
@@ -68,9 +66,7 @@ static struct {
 	NULL,
 	NULL,
 	NULL,
-	true,
-	true,
-	true,
+	0,
 	false,
 #ifdef USE_TLS
 	NULL,
@@ -1039,9 +1035,39 @@ int ua_debug(struct re_printf *pf, const struct ua *ua)
 /* One instance */
 
 
+#ifdef USE_TLS
+static int add_transp_clientcert(void)
+{
+	struct le *le;
+	int err = 0;
+
+	for (le = list_head(&uag.ual); le; le = le->next) {
+		struct account *acc = ua_account(le->data);
+		if (acc->cert) {
+			err = sip_transp_add_ccert(uag.sip,
+					&acc->laddr.uri, acc->cert);
+			if (err) {
+				DEBUG_WARNING("uag: SIP/TLS add client "
+					"certificate %s failed: %m\n",
+					acc->cert, err);
+				return err;
+			}
+		}
+	}
+
+	return err;
+}
+#endif
+
+
 static int add_transp_af(const struct sa *laddr)
 {
 	struct sa local;
+#ifdef USE_TLS
+	const char *cert = NULL;
+	const char *cafile = NULL;
+	const char *capath = NULL;
+#endif
 	int err = 0;
 
 	if (str_isset(uag.cfg->local)) {
@@ -1070,32 +1096,52 @@ static int add_transp_af(const struct sa *laddr)
 		sa_set_port(&local, 0);
 	}
 
-	if (uag.use_udp)
+	if (u32mask_enabled(uag.transports, SIP_TRANSP_UDP))
 		err |= sip_transp_add(uag.sip, SIP_TRANSP_UDP, &local);
-	if (uag.use_tcp)
+	if (u32mask_enabled(uag.transports, SIP_TRANSP_TCP))
 		err |= sip_transp_add(uag.sip, SIP_TRANSP_TCP, &local);
 	if (err) {
-		DEBUG_WARNING("SIP Transport failed: %m\n", err);
+		DEBUG_WARNING("ua: SIP Transport failed: %m\n", err);
 		return err;
 	}
 
 #ifdef USE_TLS
-	if (uag.use_tls) {
+	if (u32mask_enabled(uag.transports, SIP_TRANSP_TLS)) {
 		/* Build our SSL context*/
 		if (!uag.tls) {
-			const char *cert = NULL;
-
 			if (str_isset(uag.cfg->cert)) {
 				cert = uag.cfg->cert;
-				(void)re_printf("SIP Certificate: %s\n", cert);
+				DEBUG_INFO("SIP Certificate: %s\n", cert);
 			}
 
 			err = tls_alloc(&uag.tls, TLS_METHOD_SSLV23,
 					cert, NULL);
 			if (err) {
-				DEBUG_WARNING("tls_alloc() failed: %m\n", err);
+				DEBUG_WARNING("ua: tls_alloc() failed: %m\n", err);
 				return err;
 			}
+
+			if (str_isset(uag.cfg->cafile))
+				cafile = uag.cfg->cafile;
+			if (str_isset(uag.cfg->capath))
+				capath = uag.cfg->capath;
+
+			if (cafile || capath) {
+				DEBUG_INFO("ua: adding SIP CA file: %s\n", cafile);
+				if (capath) {
+					DEBUG_INFO("ua: adding SIP CA path: %s\n", capath);
+				}
+
+				err = tls_add_cafile_path(uag.tls,
+					cafile, capath);
+				if (err) {
+					DEBUG_WARNING("ua: tls_add_ca() failed:"
+						" %m\n", err);
+				}
+			}
+
+			if (!uag.cfg->verify_server)
+				tls_disable_verify_server(uag.tls);
 		}
 
 		if (sa_isset(&local, SA_PORT))
@@ -1103,12 +1149,69 @@ static int add_transp_af(const struct sa *laddr)
 
 		err = sip_transp_add(uag.sip, SIP_TRANSP_TLS, &local, uag.tls);
 		if (err) {
-			DEBUG_WARNING("SIP/TLS transport failed: %m\n", err);
+			DEBUG_WARNING("ua: SIP/TLS transport failed: %m\n", err);
+			return err;
+		}
+
+		err = add_transp_clientcert();
+		if (err)
+			return err;
+	}
+#endif
+
+#if 0
+	if (u32mask_enabled(uag.transports, SIP_TRANSP_WS)) {
+		err = sip_transp_add_websock(uag.sip, SIP_TRANSP_WS, &local,
+				false, NULL, NULL);
+		if (err) {
+			DEBUG_WARNING("ua: could not add Websock transport (%m)\n",
+					err);
 			return err;
 		}
 	}
 #endif
 
+#if 0 //def USE_TLS
+	if (u32mask_enabled(uag.transports, SIP_TRANSP_WSS)) {
+		if (!uag.wss_tls) {
+			err = tls_alloc(&uag.wss_tls, TLS_METHOD_SSLV23,
+					NULL, NULL);
+			if (err) {
+				warning("ua: wss tls_alloc() failed: %m\n",
+					err);
+				return err;
+			}
+
+			err = tls_set_verify_purpose(uag.wss_tls, "sslserver");
+			if (err) {
+				warning("ua: wss tls_set_verify_purpose() "
+					"failed: %m\n", err);
+				return err;
+			}
+
+			if (cafile || capath) {
+				err = tls_add_cafile_path(uag.wss_tls, cafile,
+							  capath);
+				if (err) {
+					warning("ua: wss tls_add_ca() failed:"
+							" %m\n", err);
+				}
+			}
+
+			if (!uag.cfg->verify_server)
+				tls_disable_verify_server(uag.wss_tls);
+		}
+		err = sip_transp_add_websock(uag.sip, SIP_TRANSP_WSS, &local,
+				false, uag.cfg->cert, uag.wss_tls);
+		if (err) {
+			warning("ua: could not add secure Websock transport "
+				"(%m)\n", err);
+			return err;
+		}
+	}
+#endif
+
+	//sip_settos(uag.sip, uag.cfg->tos);
 	return err;
 }
 
@@ -1274,9 +1377,16 @@ int ua_init(const char *software, bool udp, bool tcp, bool tls, bool prefer_ipv6
 		return err;
 	}
 
-	uag.use_udp = udp;
-	uag.use_tcp = tcp;
-	uag.use_tls = tls;
+	if (cfg->sip.transports) {
+		uag.transports = cfg->sip.transports;
+	}
+	else {
+		u32mask_enable(&uag.transports, SIP_TRANSP_UDP, udp);
+		u32mask_enable(&uag.transports, SIP_TRANSP_TCP, tcp);
+		u32mask_enable(&uag.transports, SIP_TRANSP_TLS, tls);
+		//u32mask_enable(&uag.transports, SIP_TRANSP_WS,  true);
+		//u32mask_enable(&uag.transports, SIP_TRANSP_WSS, true);
+	}
 	uag.prefer_ipv6 = prefer_ipv6;
 
 	list_init(&uag.ual);
@@ -1627,6 +1737,18 @@ struct ua *uag_find_aor(const char *aor)
 const char *ua_cuser(const struct ua *ua)
 {
 	return ua ? ua->cuser : NULL;
+}
+
+/**
+ * Get Account of a User-Agent
+ *
+ * @param ua User-Agent
+ *
+ * @return Pointer to UA's account
+ */
+struct account *ua_account(const struct ua *ua)
+{
+	return ua ? ua->acc : NULL;
 }
 
 

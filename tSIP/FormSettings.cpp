@@ -56,6 +56,7 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	tabs.push_back(tsGeneral);
 	tabs.push_back(tsNetwork);
 	tabs.push_back(tsAccount);
+	tabs.push_back(tsTls);
 	tabs.push_back(tsMainWindow);
 	tabs.push_back(tsSpeedDial);
 	tabs.push_back(tsCalls);
@@ -400,6 +401,10 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbLoopRingWithoutSilence->Checked = tmpSettings.uaConf.loopRingWithoutSilence;
 
 	edMessagesRing->Text = tmpSettings.Messages.ring;
+
+	edTlsCertificate->Text = tmpSettings.uaConf.tls.certificate.c_str();
+	edTlsCaFile->Text = tmpSettings.uaConf.tls.caFile.c_str();
+	chbTlsVerifyServerCertificate->Checked = tmpSettings.uaConf.tls.verifyServer;
 
 	chbContactPopupShowOnIncoming->Checked = tmpSettings.frmContactPopup.showOnIncoming;
 	chbContactPopupShowOnOutgoing->Checked = tmpSettings.frmContactPopup.showOnOutgoing;
@@ -779,6 +784,10 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.loopRingWithoutSilence = chbLoopRingWithoutSilence->Checked;
 
 	tmpSettings.Messages.ring = edMessagesRing->Text;
+
+	tmpSettings.uaConf.tls.certificate = edTlsCertificate->Text.c_str();
+	tmpSettings.uaConf.tls.caFile = edTlsCaFile->Text.c_str();
+	tmpSettings.uaConf.tls.verifyServer = chbTlsVerifyServerCertificate->Checked;
 
 	tmpSettings.frmContactPopup.showOnIncoming = chbContactPopupShowOnIncoming->Checked;
 	tmpSettings.frmContactPopup.showOnOutgoing = chbContactPopupShowOnOutgoing->Checked;
@@ -1665,6 +1674,40 @@ void __fastcall TfrmSettings::btnMessagesSelectRingClick(TObject *Sender)
 		*str = ExtractFileName(dlgOpenRing->FileName);
 		edit->Text = *str;
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::btnSelectTlsClick(TObject *Sender)
+{
+	TEdit *edit;
+	openDialog->Filter = "PEM file (*.pem)|*.pem|All files|*.*";
+	if (Sender == btnSelectTlsCertificate)
+	{
+		edit = edTlsCertificate;
+	}
+	else if (Sender == btnSelectTlsCaFile)
+	{
+		edit = edTlsCaFile;
+	}
+	else
+	{
+		assert(!"Unhandler sender!");
+		return;
+	}
+	AnsiString dir = Paths::GetProfileDir() + "\\certificates\\";
+	if (ForceDirectories(dir) == false)
+	{
+		ShowMessage("Failed to create directory for certificates!");
+	}
+	openDialog->InitialDir = dir;
+	if (FileExists(dir + edit->Text))
+		openDialog->FileName = dir + edit->Text;
+	else
+		openDialog->FileName = "";
+	if (openDialog->Execute())
+	{
+    	edit->Text = ExtractFileName(openDialog->FileName);
+	}	
 }
 //---------------------------------------------------------------------------
 

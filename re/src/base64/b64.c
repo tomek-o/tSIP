@@ -135,7 +135,7 @@ int base64_decode(const char *in, size_t ilen, uint8_t *out, size_t *olen)
 	if (*olen < 3 * (ilen/4))
 		return EOVERFLOW;
 
-	for (;in+3 < in_end; ) {
+	while (ilen >= 4) {
 		uint32_t v;
 
 		v  = b64val(*in++) << 18;
@@ -148,6 +148,8 @@ int base64_decode(const char *in, size_t ilen, uint8_t *out, size_t *olen)
 			*out++ = (v>>8) & 0xff;
 		if (!(v & (1<<24)))
 			*out++ = (v>>0) & 0xff;
+
+		ilen -= 4;
 	}
 
 	*olen = out - o;

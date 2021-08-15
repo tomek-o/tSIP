@@ -21,7 +21,8 @@ struct sip {
 	void *arg;
 	bool closing;
 	bool log_messages;
-	bool log_messages_only_first_lines;	
+	bool log_messages_only_first_lines;
+	enum sip_transp tp_def;
 };
 
 
@@ -51,7 +52,7 @@ struct sip_ctrans;
 
 int  sip_ctrans_request(struct sip_ctrans **ctp, struct sip *sip,
 			enum sip_transp tp, const struct sa *dst, char *met,
-			char *branch, struct mbuf *mb, sip_resp_h *resph,
+			char *branch, char *host, struct mbuf *mb, sip_resp_h *resph,
 			void *arg);
 int  sip_ctrans_cancel(struct sip_ctrans *ct);
 int  sip_ctrans_init(struct sip *sip, uint32_t sz);
@@ -70,7 +71,7 @@ typedef void(sip_transp_h)(int err, void *arg);
 
 int  sip_transp_init(struct sip *sip, uint32_t sz);
 int  sip_transp_send(struct sip_connqent **qentp, struct sip *sip, void *sock,
-		     enum sip_transp tp, const struct sa *dst, struct mbuf *mb,
+		     enum sip_transp tp, const struct sa *dst, char *host, struct mbuf *mb,
 		     sip_transp_h *transph, void *arg);
 int  sip_transp_laddr(struct sip *sip, struct sa *laddr, enum sip_transp tp,
 		      const struct sa *dst);

@@ -45,6 +45,7 @@ struct sip_ctrans {
 	struct sip_connqent *qent;
 	char *met;
 	char *branch;
+	char *host;
 	sip_resp_h *resph;
 	void *arg;
 	enum sip_transp tp;
@@ -112,6 +113,7 @@ static void destructor(void *arg)
 	tmr_cancel(&ct->tmre);
 	mem_deref(ct->met);
 	mem_deref(ct->branch);
+	mem_deref(ct->host);
 	mem_deref(ct->qent);
 	mem_deref(ct->req);
 	mem_deref(ct->mb);
@@ -205,7 +207,7 @@ static void retransmit_handler(void *arg)
 	tmr_start(&ct->tmre, timeout, retransmit_handler, ct);
 
 	err = sip_transp_send(&ct->qent, ct->sip, NULL, ct->tp, &ct->dst,
-			      ct->mb, transport_handler, ct);
+			      ct->host, ct->mb, transport_handler, ct);
 	if (err) {
 		terminate(ct, err);
 		mem_deref(ct);
@@ -309,7 +311,7 @@ static bool response_handler(const struct sip_msg *msg, void *arg)
 
 int sip_ctrans_request(struct sip_ctrans **ctp, struct sip *sip,
 		       enum sip_transp tp, const struct sa *dst, char *met,
-		       char *branch, struct mbuf *mb,
+		       char *branch, char *host, struct mbuf *mb,
 		       sip_resp_h *resph, void *arg)
 {
 	struct sip_ctrans *ct;
@@ -326,6 +328,7 @@ int sip_ctrans_request(struct sip_ctrans **ctp, struct sip *sip,
 
 	ct->invite = !strcmp(met, "INVITE");
 	ct->branch = mem_ref(branch);
+	ct->host   = mem_ref(host);
 	ct->met    = mem_ref(met);
 	ct->mb     = mem_ref(mb);
 	ct->dst    = *dst;
@@ -335,7 +338,7 @@ int sip_ctrans_request(struct sip_ctrans **ctp, struct sip *sip,
 	ct->resph  = resph ? resph : dummy_handler;
 	ct->arg    = arg;
 
-	err = sip_transp_send(&ct->qent, sip, NULL, tp, dst, mb,
+	err = sip_transp_send(&ct->qent, sip, NULL, tp, dst, host, mb,
 			      transport_handler, ct);
 	if (err)
 		goto out;
@@ -386,7 +389,7 @@ int sip_ctrans_cancel(struct sip_ctrans *ct)
 		goto out;
 
 	err = sip_ctrans_request(NULL, ct->sip, ct->tp, &ct->dst, cancel,
-				 ct->branch, mb, NULL, NULL);
+				 ct->branch, NULL, mb, NULL, NULL);
 	if (err)
 		goto out;
 

@@ -27,8 +27,6 @@ Call recording:
 - semi-automatic record mode: record call by default, delete file if not "saved" by user
 - UID for file names to avoid conflicts with very short (<1 s) recordings
 
-- hotkeys: move focus to transfer textbox
-
 - example: link handling from mail client
 - ICE
 - select reject code: 486 Busy (other devices keep ringing) or 603 Decline (all devices stop ringing)
@@ -57,8 +55,6 @@ Call recording:
 - gnome3 and wine: call notifications not working? (LS)
 
 - warn user if wave file source is selected but source file does not exist
-
-- translation mechanism
 
 - supporting animated GIFs or frame-by-frame animations in BLFs
 
@@ -111,7 +107,6 @@ latency tracker
 tSIP: help on button types (+ images)
 tSIP: directory import from vcard
 tSIP: verify wave file format when selecting for wave source audio device
-tSIP: "zawieszenie" przy po³¹czeniu przychodz¹cym gdy brak urz¹dzenia audio (?)
 tSIP: RecordViewer: play multiple files one by one (multiple selection list)
 multiple accounts; disable / set as default for outgoing
 lepsze informowanie o problemach: brak kompatybilnego kodeka, brak urz¹dzenia audio
@@ -129,9 +124,6 @@ tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(),
 tSIP scripting: file I/O example (report call quality after each call)
 
 BUG: halt if audio device (mic with autosensing) is detached during call - winwave => winwave2
-
-
-FIXME: btn reregister not always working correctly, depending on current registration state (?)
 
 www: scripting with javascript
 

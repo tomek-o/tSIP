@@ -921,7 +921,7 @@ Version 0.2.03.1
     
 Version 0.2.04
     - added ZRTP support
-    - added translation mechanism for contacts, history, contsct editor
+    - added translation mechanism for contacts, history, contact editor
     - added Spanish translation
     - FIXED: importing numbers #2 and #3 from CSV to contacts
     - added note import when importing contacts from CSV

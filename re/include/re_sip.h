@@ -290,14 +290,20 @@ void sip_log_messages(struct sip *sip, bool log, bool only_first_lines);
 /* transport */
 int  sip_transp_add(struct sip *sip, enum sip_transp tp,
 		    const struct sa *laddr, ...);
+int  sip_transp_add_ccert(struct sip *sip, const struct uri *uri,
+			  const char *ccertfile);
+
 void sip_transp_flush(struct sip *sip);
 bool sip_transp_isladdr(const struct sip *sip, enum sip_transp tp,
 			const struct sa *laddr);
 const char *sip_transp_name(enum sip_transp tp);
 const char *sip_transp_param(enum sip_transp tp);
+enum sip_transp sip_transp_decode(const struct pl *pl);
 uint16_t sip_transp_port(enum sip_transp tp, uint16_t port);
 int  sip_transp_laddr(struct sip *sip, struct sa *laddr, enum sip_transp tp,
 		      const struct sa *dst);
+int  sip_transp_set_default(struct sip *sip, enum sip_transp tp);
+
 
 
 /* request */

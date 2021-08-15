@@ -227,7 +227,9 @@ void SHA1_Update(SHA1_CTX* context, const uint8_t* data, const size_t len)
 		j = 0;
 	}
 	else i = 0;
-	memcpy(&context->buffer[j], &data[i], len - i);
+	if (len - i > 0) {
+		memcpy(&context->buffer[j], &data[i], len - i);
+	}
 }
 
 
@@ -241,14 +243,17 @@ void SHA1_Final(uint8_t digest[SHA1_DIGEST_SIZE], SHA1_CTX* context)
 {
 	uint32_t i;
 	uint8_t  finalcount[8];
+	unsigned char c;
 
 	for (i = 0; i < 8; i++) {
 		finalcount[i] = (uint8_t)((context->count[(i >= 4 ? 0 : 1)]
 					   >> ((3-(i & 3)) * 8) ) & 255);
 	}
-	SHA1_Update(context, (uint8_t *)"\200", 1);
+	c = 0200;
+	SHA1_Update(context, &c, 1);
 	while ((context->count[0] & 504) != 448) {
-		SHA1_Update(context, (uint8_t *)"\0", 1);
+		c = 0000;
+		SHA1_Update(context, &c, 1);
 	}
 	SHA1_Update(context, finalcount, 8); /* Should cause SHA1_Transform */
 	for (i = 0; i < SHA1_DIGEST_SIZE; i++) {

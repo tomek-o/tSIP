@@ -191,5 +191,8 @@ int configure(void)
 	pl_set_str(&modname, "gzrtp");
 	load_module2(NULL, &modname);
 
+	pl_set_str(&modname, "srtp");
+	load_module2(NULL, &modname);
+
 	return err;
 }

@@ -238,6 +238,15 @@ typedef bool _Bool;
 #define EAUTH 217
 #endif
 
+/** No STREAM resources */
+#ifndef ENOSR
+#define ENOSR 218
+#endif
+
+/** Key was rejected by service */
+#ifndef EKEYREJECTED
+#define EKEYREJECTED 129
+#endif
 
 /* Additional error codes */
 #define E_SIP_SESSION_CLOSED_BYE		100000

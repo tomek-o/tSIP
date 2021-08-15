@@ -26,7 +26,12 @@ static struct config core_config = {
 		16,
 		"",
 		"",
-		""
+		"",
+		"",
+		"",
+		0,
+		SIP_TRANSP_UDP,
+		false
 	},
 
 	/** Audio */
@@ -162,3 +167,21 @@ struct config *conf_config(void)
 {
 	return &core_config;
 }
+
+void u32mask_enable(uint32_t *mask, uint8_t bit, bool enable)
+{
+	if (!mask)
+		return;
+
+	if (enable)
+		*mask |=  (1u << bit);
+	else
+		*mask &= ~(1u << bit);
+}
+
+
+bool u32mask_enabled(uint32_t mask, uint8_t bit)
+{
+	return 0 != (mask & (1u << bit));
+}
+

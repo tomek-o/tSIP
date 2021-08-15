@@ -168,6 +168,11 @@ struct config {
 		char uuid[64];          /**< Universally Unique Identifier  */
 		char local[64];         /**< Local SIP Address              */
 		char cert[256];         /**< SIP Certificate                */
+		char cafile[256];       /**< SIP CA-file                    */
+		char capath[256];       /**< SIP CA-path                    */
+		uint32_t transports;    /**< Supported transports mask      */
+		enum sip_transp transp; /**< Default outgoing SIP transport protocol */
+		bool verify_server;     /**< Enable SIP TLS verify server   */
 	} sip;
 
 	/** Audio */
@@ -601,6 +606,7 @@ int ua_play_stop(struct ua *ua);
 int ua_play_file2(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename);
 const char     *ua_aor(const struct ua *ua);
 const char     *ua_cuser(const struct ua *ua);
+struct account *ua_account(const struct ua *ua);
 const char     *ua_outbound(const struct ua *ua);
 struct call    *ua_call(const struct ua *ua);
 struct account *ua_prm(const struct ua *ua);

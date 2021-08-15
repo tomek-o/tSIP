@@ -52,11 +52,17 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 	{
 		cbDtmfTxFormat->ItemIndex = 0;
 	}
-	chbZrtp->Checked = acc.zrtp;
+	cbMediaEncryption->ItemIndex = 0;
+	for (int i=1; i<cbMediaEncryption->Items->Count; i++)
+	{
+		if (cbMediaEncryption->Items->Strings[i] == acc.mediaenc.c_str())
+		{
+			cbMediaEncryption->ItemIndex = i;
+			break;
+		}
+	}
 }
 //---------------------------------------------------------------------------
-
-
 
 void __fastcall TfrmAccount::edRegServerChange(TObject *Sender)
 {
@@ -198,9 +204,12 @@ void __fastcall TfrmAccount::cbDtmfTxFormatChange(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmAccount::chbZrtpClick(TObject *Sender)
+void __fastcall TfrmAccount::cbMediaEncryptionChange(TObject *Sender)
 {
-	acc.zrtp = chbZrtp->Checked;
+	if (cbMediaEncryption->ItemIndex == 0)
+		acc.mediaenc = "";
+	else
+		acc.mediaenc = cbMediaEncryption->Text.c_str();
 }
 //---------------------------------------------------------------------------
 

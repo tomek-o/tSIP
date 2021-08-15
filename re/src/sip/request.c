@@ -145,7 +145,7 @@ static void response_handler(int err, const struct sip_msg *msg, void *arg)
 
 	req->ct = NULL;
 
-	if (!req->canceled && (err || msg->scode == 503) &&
+	if (!req->canceled && (err || (msg && msg->scode == 503)) &&
 	    (req->addrl.head || req->srvl.head)) {
 
 		err = request_next(req);
@@ -194,7 +194,8 @@ static int request(struct sip_request *req, enum sip_transp tp,
 		err = sip_send(req->sip, NULL, tp, dst, mb);
 	else
 		err = sip_ctrans_request(&req->ct, req->sip, tp, dst, req->met,
-					 branch, mb, response_handler, req);
+					 branch, req->host, mb,
+					 response_handler, req);
 	if (err)
 		goto out;
 
@@ -302,6 +303,22 @@ static bool transp_next_srv(struct sip *sip, enum sip_transp *tp)
 	}
 
 	return false;
+}
+
+
+static bool transp_first(struct sip *sip, enum sip_transp *tp)
+{
+	if (!sip || !tp)
+		return false;
+
+	if (sip->tp_def != SIP_TRANSP_NONE &&
+			sip_transp_supported(sip, sip->tp_def, AF_UNSPEC)) {
+		*tp = sip->tp_def;
+		return true;
+	}
+
+	*tp = SIP_TRANSP_NONE;
+	return transp_next(sip, tp);
 }
 
 
@@ -463,8 +480,7 @@ static void srv_handler(int err, const struct dnshdr *hdr, struct list *ansl,
 				return;
 			}
 
-			req->tp = SIP_TRANSP_NONE;
-			if (!transp_next(req->sip, &req->tp)) {
+			if (!transp_first(req->sip, &req->tp)) {
 				err = EPROTONOSUPPORT;
 				goto fail;
 			}
@@ -640,13 +656,8 @@ int sip_request(struct sip_request **reqp, struct sip *sip, bool stateful,
 
 	if (!msg_param_decode(&route->params, "transport", &pl)) {
 
-		if (!pl_strcasecmp(&pl, "udp"))
-			req->tp = SIP_TRANSP_UDP;
-		else if (!pl_strcasecmp(&pl, "tcp"))
-			req->tp = SIP_TRANSP_TCP;
-		else if (!pl_strcasecmp(&pl, "tls"))
-			req->tp = SIP_TRANSP_TLS;
-		else {
+		req->tp = sip_transp_decode(&pl);
+		if (req->tp  == SIP_TRANSP_NONE) {
 			err = EPROTONOSUPPORT;
 			goto out;
 		}
@@ -659,8 +670,7 @@ int sip_request(struct sip_request **reqp, struct sip *sip, bool stateful,
 		req->tp_selected = true;
 	}
 	else {
-		req->tp = SIP_TRANSP_NONE;
-		if (!transp_next(sip, &req->tp)) {
+		if (!transp_first(sip, &req->tp)) {
 			err = EPROTONOSUPPORT;
 			goto out;
 		}

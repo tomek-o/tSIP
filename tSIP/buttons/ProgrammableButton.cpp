@@ -20,7 +20,15 @@ namespace
 			{
 				bmp->LoadFromFile(fname);
 			}
-		} catch(...) {}
+			else
+			{
+            	//bmp->
+			}
+		}
+		catch(...)
+		{
+			//bmp->
+		}
 	}
 }
 

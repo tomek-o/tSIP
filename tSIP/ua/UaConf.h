@@ -14,6 +14,13 @@
 
 #include <stdint.h>
 
+namespace Json
+{
+	class Value;
+}
+
+struct SettingsAppVersion;
+
 class UaConf
 {
 public:
@@ -25,6 +32,7 @@ public:
 		{
 			TRANSPORT_UDP = 0,
 			TRANSPORT_TCP,
+			TRANSPORT_TLS,
 			TRANSPORT_LIMITER
 		} transport;
 		std::string reg_server;
@@ -56,7 +64,7 @@ public:
 		std::string outbound1;
 		std::string outbound2;
 
-		bool zrtp;
+		std::string mediaenc;
 
 		bool operator==(const Account& right) const {
 			return (reg_server == right.reg_server &&
@@ -83,7 +91,7 @@ public:
 				outbound1 == right.outbound1 &&
 				outbound2 == right.outbound2 &&
 
-				zrtp == right.zrtp
+				mediaenc == right.mediaenc
 				);
 		}
 		bool operator!=(const Account& right) const {
@@ -108,7 +116,7 @@ public:
 
 			ptime(DEF_PTIME),
 
-			zrtp(false)
+			mediaenc("")
 		{
 			audio_codecs.push_back("PCMU/8000/1");
 			audio_codecs.push_back("PCMA/8000/1");
@@ -120,6 +128,8 @@ public:
 				return "udp";
 			case TRANSPORT_TCP:
 				return "tcp";
+			case TRANSPORT_TLS:
+				return "tls";
 			default:
 				assert(!"Unhandled cfg transport type");
 				return "???";
@@ -438,6 +448,25 @@ public:
 		}
 	} zrtp;
 
+	struct Tls {
+		std::string certificate;
+		std::string caFile;
+		bool verifyServer;
+		Tls(void):
+			verifyServer(true)
+		{}
+		bool operator==(const Tls& right) const {
+			return (
+				certificate == right.certificate &&
+				caFile == right.caFile &&
+				verifyServer == right.verifyServer
+			);
+		}
+		bool operator!=(const Tls& right) const {
+        	return !(*this == right);
+		}
+	} tls;
+
 
 	std::string local;
 	std::string ifname;	///< baresip config_net.ifname
@@ -617,6 +646,8 @@ public:
 			return false;
 		if (zrtp != right.zrtp)
 			return false;
+		if (tls != right.tls)
+			return false;
 		if (local != right.local)
 			return false;
 		if (ifname != right.ifname)
@@ -634,6 +665,9 @@ public:
 	bool operator!=(const UaConf& right) const {
 		return !(*this == right);
 	}
+
+	void fromJson(const Json::Value& uaConfJson, const struct SettingsAppVersion& settingsAppVersion);
+	void toJson(Json::Value& uaConfJson) const;
 };
 
 #endif

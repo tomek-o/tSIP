@@ -453,6 +453,14 @@ __published:	// IDE-managed Components
 	TEdit *edScriptOnEncryptionStateFile;
 	TButton *btnSelectedScriptOnEncryptionStateChange;
 	TBitBtn *btnSelectedScriptOnEncryptionStateEdit;
+	TTabSheet *tsTls;
+	TCheckBox *chbTlsVerifyServerCertificate;
+	TLabel *lblTlsClientCertificate;
+	TEdit *edTlsCertificate;
+	TLabel *Label8;
+	TEdit *edTlsCaFile;
+	TButton *btnSelectTlsCaFile;
+	TButton *btnSelectTlsCertificate;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -490,6 +498,7 @@ __published:	// IDE-managed Components
 	void __fastcall cbNetworkInterfacesChange(TObject *Sender);
 	void __fastcall btnSelectContactsFileClick(TObject *Sender);
 	void __fastcall btnMessagesSelectRingClick(TObject *Sender);
+	void __fastcall btnSelectTlsClick(TObject *Sender);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
 	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, int moduleIndex, AnsiString selected);

@@ -1,0 +1,1 @@
+Directory for CA PEM file and client certificate PEM.

@@ -232,226 +232,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 {
 	info.appVersion.FromJson(root["info"]);
 
-	{
-		const Json::Value &uaConfJson = root["uaConf"];
-
-		{
-			const Json::Value &uaConfAudioCfgSrcJson = uaConfJson["audioCfgSrc"];
-			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-			strncpyz(str, uaConfAudioCfgSrcJson.get("mod", uaConf.audioCfgSrc.mod).asString().c_str(), sizeof(str));
-			if (AudioModules::IsInput(str))
-			{
-				strncpyz(uaConf.audioCfgSrc.mod, str, sizeof(uaConf.audioCfgSrc.mod));
-			}
-			strncpyz(uaConf.audioCfgSrc.dev, uaConfAudioCfgSrcJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgSrc.dev));
-			strncpyz(uaConf.audioCfgSrc.wavefile, uaConfAudioCfgSrcJson["wavefile"].asString().c_str(), sizeof(uaConf.audioCfgSrc.wavefile));
-		}
-
-		{
-			const Json::Value &uaConfAudioCfgPlayJson = uaConfJson["audioCfgPlay"];
-			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-			strncpyz(str, uaConfAudioCfgPlayJson.get("mod", uaConf.audioCfgPlay.mod).asString().c_str(), sizeof(str));
-			if (AudioModules::IsOutput(str))
-			{
-				strncpyz(uaConf.audioCfgPlay.mod, str, sizeof(uaConf.audioCfgPlay.mod));
-			}
-			strncpyz(uaConf.audioCfgPlay.dev, uaConfAudioCfgPlayJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgPlay.dev));
-		}
-
-		{
-			const Json::Value &uaConfAudioCfgAlertJson = uaConfJson["audioCfgAlert"];
-			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-			strncpyz(str, uaConfAudioCfgAlertJson.get("mod", uaConf.audioCfgAlert.mod).asString().c_str(), sizeof(str));
-			if (AudioModules::IsOutput(str))
-			{
-				strncpyz(uaConf.audioCfgAlert.mod, str, sizeof(uaConf.audioCfgAlert.mod));
-			}
-			strncpyz(uaConf.audioCfgAlert.dev, uaConfAudioCfgAlertJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgAlert.dev));
-		}
-		
-		{
-			SettingsAppVersion verCfgRingAdded;
-			verCfgRingAdded.FileVersionMS = 1;
-			verCfgRingAdded.FileVersionLS = 3866629;
-			if (info.appVersion < verCfgRingAdded)
-			{
-				// new setting added, separated from "alert" - copy alert if found settings from older version
-				strncpyz(uaConf.audioCfgRing.mod, uaConf.audioCfgAlert.mod, sizeof(uaConf.audioCfgRing.mod));
-				strncpyz(uaConf.audioCfgRing.dev, uaConf.audioCfgAlert.dev, sizeof(uaConf.audioCfgRing.dev));
-			}
-			else
-			{
-				const Json::Value &uaConfAudioCfgRingJson = uaConfJson["audioCfgRing"];
-				char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-				strncpyz(str, uaConfAudioCfgRingJson.get("mod", uaConf.audioCfgRing.mod).asString().c_str(), sizeof(str));
-				if (AudioModules::IsOutput(str))
-				{
-					strncpyz(uaConf.audioCfgRing.mod, str, sizeof(uaConf.audioCfgRing.mod));
-				}
-				strncpyz(uaConf.audioCfgRing.dev, uaConfAudioCfgRingJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgRing.dev));
-			}
-		}
-
-		{
-			const Json::Value &uaConfAudioCfgPlayIntercomJson = uaConfJson["audioCfgPlayIntercom"];
-			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-			strncpyz(str, uaConfAudioCfgPlayIntercomJson.get("mod", uaConf.audioCfgPlayIntercom.mod).asString().c_str(), sizeof(str));
-			if (AudioModules::IsOutput(str))
-			{
-				strncpyz(uaConf.audioCfgPlayIntercom.mod, str, sizeof(uaConf.audioCfgPlayIntercom.mod));
-			}
-			strncpyz(uaConf.audioCfgPlayIntercom.dev, uaConfAudioCfgPlayIntercomJson["dev"].asString().c_str(), sizeof(uaConf.audioCfgPlayIntercom.dev));
-		}
-
-		{
-			const Json::Value &jv = uaConfJson["audioPortaudio"];
-			jv.getDouble("inSuggestedLatency", uaConf.audioPortaudio.inSuggestedLatency);
-			jv.getDouble("outSuggestedLatency", uaConf.audioPortaudio.outSuggestedLatency);
-		}
-
-		{
-			const Json::Value &uaConfAudioSoftVol = uaConfJson["audioSoftVol"];
-			uaConf.audioSoftVol.tx = uaConfAudioSoftVol.get("tx", uaConf.audioSoftVol.tx).asUInt();
-			uaConf.audioSoftVol.rx = uaConfAudioSoftVol.get("rx", uaConf.audioSoftVol.rx).asUInt();
-		}
-
-		{
-			const Json::Value &jv = uaConfJson["audioAgcRx"];
-			jv.getBool("enabled", uaConf.audioAgcRx.enabled);
-			jv.getUInt("target", uaConf.audioAgcRx.target);
-			jv.getDouble("maxGain", uaConf.audioAgcRx.maxGain);
-			jv.getDouble("attackRate", uaConf.audioAgcRx.attackRate);
-			jv.getDouble("releaseRate", uaConf.audioAgcRx.releaseRate);
-		}
-
-		uaConfJson.getBool("loopRingWithoutSilence", uaConf.loopRingWithoutSilence);
-
-		if (Branding::recording)
-		{
-			const Json::Value &uaConfRecordingJson = uaConfJson["recording"];
-			uaConfRecordingJson.getBool("enabled", uaConf.recording.enabled);
-			UaConf::RecordingCfg::RecDir recDir = static_cast<UaConf::RecordingCfg::RecDir>(uaConfRecordingJson.get("recDir", uaConf.recording.recDir).asInt());
-			if (recDir >= 0 && uaConf.recording.recDir < UaConf::RecordingCfg::RecDirLimiter) {
-				uaConf.recording.recDir = recDir;
-			}
-			uaConf.recording.customRecDir = uaConfRecordingJson.get("customRecDir", uaConf.recording.customRecDir).asString();
-			unsigned int channels = uaConfRecordingJson.get("channels", uaConf.recording.channels).asUInt();
-			if (channels >= UaConf::RecordingCfg::CHANNELS_MIN && channels <= UaConf::RecordingCfg::CHANNELS_MAX) {
-				uaConf.recording.channels = channels;
-			}
-			uaConf.recording.side = uaConfRecordingJson.get("side", uaConf.recording.side).asUInt();
-			UaConf::RecordingCfg::RecStart recStart = static_cast<UaConf::RecordingCfg::RecStart>(uaConfRecordingJson.get("recStart", uaConf.recording.recStart).asInt());
-			if (recStart >= 0 && recStart < UaConf::RecordingCfg::RecStartLimiter) {
-				uaConf.recording.recStart = recStart;
-			}
-			uaConfRecordingJson.getBool("noNumberB64Encoding", uaConf.recording.noNumberB64Encoding);
-		}
-		else
-		{
-			uaConf.recording.enabled = false;
-		}
-
-		{
-			const Json::Value &uaConfAudioPreprocTxJson = uaConfJson["audioPreprocTx"];
-			uaConf.audioPreprocTx.enabled = uaConfAudioPreprocTxJson.get("enabled", uaConf.audioPreprocTx.enabled).asBool();
-			uaConf.audioPreprocTx.denoiseEnabled = uaConfAudioPreprocTxJson.get("denoiseEnabled", uaConf.audioPreprocTx.denoiseEnabled).asBool();
-			uaConf.audioPreprocTx.agcEnabled = uaConfAudioPreprocTxJson.get("agcEnabled", uaConf.audioPreprocTx.agcEnabled).asBool();
-			uaConf.audioPreprocTx.vadEnabled = uaConfAudioPreprocTxJson.get("vadEnabled", uaConf.audioPreprocTx.vadEnabled).asBool();
-			uaConf.audioPreprocTx.dereverbEnabled = uaConfAudioPreprocTxJson.get("dereverbEnabled", uaConf.audioPreprocTx.dereverbEnabled).asBool();
-			uaConf.audioPreprocTx.agcLevel = uaConfAudioPreprocTxJson.get("agcLevel", uaConf.audioPreprocTx.agcLevel).asInt();
-		}
-
-		{
-			UaConf::Aec aec = static_cast<UaConf::Aec>(uaConfJson.get("aec", uaConf.aec).asInt());
-			if (aec >= 0 && uaConf.aec < UaConf::AEC_LIMIT)
-			{
-				uaConf.aec = aec;
-			}
-		}
-
-		{
-			const Json::Value &webrtcAec = uaConfJson["webrtcAec"];
-			uaConf.webrtcAec.msInSndCardBuf = webrtcAec.get("msInSndCardBuf", uaConf.webrtcAec.msInSndCardBuf).asInt();
-			uaConf.webrtcAec.skew = webrtcAec.get("skew", uaConf.webrtcAec.skew).asInt();
-		}
-
-		{
-			const Json::Value &jv = uaConfJson["opus"];
-			UaConf::Opus &opus = uaConf.opus;
-			jv.getBool("stereo", opus.stereo);
-			jv.getBool("spropStereo", opus.spropStereo);
-			jv.getBool("setBitrate", opus.setBitrate);
-			jv.getUInt("bitrate", opus.bitrate);
-			jv.getBool("setSamplerate", opus.setSamplerate);
-			jv.getUInt("samplerate", opus.samplerate);
-			jv.getBool("setCbr", opus.setCbr);
-			jv.getBool("cbr", opus.cbr);
-			jv.getBool("setInbandFec", opus.setInbandFec);
-			jv.getBool("inbandFec", opus.inbandFec);
-			jv.getBool("setDtx", opus.setDtx);
-			jv.getBool("dtx", opus.dtx);
-			jv.getBool("mirror", opus.mirror);
-			jv.getUInt("complexity", opus.complexity);
-			jv.getBool("setApplication", opus.setApplication);
-			jv.getInt("application", opus.application);
-			jv.getBool("setPacketLoss", opus.setPacketLoss);
-			jv.getUInt("packetLoss", opus.packetLoss);
-		}
-
-		{
-			const Json::Value &jv = uaConfJson["zrtp"];
-			UaConf::Zrtp &zrtp = uaConf.zrtp;
-			jv.getBool("startParallel", zrtp.startParallel);
-		}
-
-		uaConf.logMessages = uaConfJson.get("logMessages", uaConf.logMessages).asBool();
-		uaConfJson.getBool("logMessagesOnlyFirstLine", uaConf.logMessagesOnlyFirstLine);
-        uaConfJson.getBool("logAubuf", uaConf.logAubuf);
-		uaConf.local = uaConfJson.get("localAddress", uaConf.local).asString();
-		uaConf.ifname = uaConfJson.get("ifName", uaConf.ifname).asString();
-
-		{
-			const Json::Value &uaAvtJson = uaConfJson["avt"];
-			UaConf::Avt prev = uaConf.avt;
-			uaConf.avt.portMin = uaAvtJson.get("portMin", uaConf.avt.portMin).asUInt();
-			uaConf.avt.portMax = uaAvtJson.get("portMax", uaConf.avt.portMax).asUInt();
-			uaConf.avt.jbufDelayMin = uaAvtJson.get("jbufDelayMin", uaConf.avt.jbufDelayMin).asUInt();
-			uaConf.avt.jbufDelayMax = uaAvtJson.get("jbufDelayMax", uaConf.avt.jbufDelayMax).asUInt();
-			uaConf.avt.rtpTimeout = uaAvtJson.get("rtpTimeout", uaConf.avt.rtpTimeout).asUInt();
-			if (uaConf.avt.Validate())
-			{
-				uaConf.avt = prev;
-			}
-		}
-
-		{
-			const Json::Value &uaMessagesJson = uaConfJson["messages"];
-			uaMessagesJson.getInt("replyCode", uaConf.messages.replyCode);
-			uaMessagesJson.getString("replyReason", uaConf.messages.replyReason);
-			uaMessagesJson.getBool("doNotReply", uaConf.messages.doNotReply);
-		}
-
-		uaConf.autoAnswer = uaConfJson.get("autoAnswer", uaConf.autoAnswer).asBool();
-		uaConf.autoAnswerCode = uaConfJson.get("autoAnswerCode", uaConf.autoAnswerCode).asInt();
-		unsigned int prevAutoAnswerDelayMin = uaConf.autoAnswerDelayMin;
-		unsigned int prevAutoAnswerDelayMax = uaConf.autoAnswerDelayMax;
-		uaConf.autoAnswerDelayMin = uaConfJson.get("autoAnswerDelayMin", uaConf.autoAnswerDelayMin). asUInt();
-		uaConf.autoAnswerDelayMax = uaConfJson.get("autoAnswerDelayMax", uaConf.autoAnswerDelayMax). asUInt();
-		if (uaConf.autoAnswerDelayMin > uaConf.autoAnswerDelayMax)
-		{
-			uaConf.autoAnswerDelayMin = prevAutoAnswerDelayMin;
-			uaConf.autoAnswerDelayMax = prevAutoAnswerDelayMax;
-		}
-		uaConf.autoAnswerCallInfo = uaConfJson.get("autoAnswerCallInfo", uaConf.autoAnswerCallInfo).asBool();
-		uaConf.autoAnswerCallInfoDelayMin = uaConfJson.get("autoAnswerCallInfoDelayMin", uaConf.autoAnswerCallInfoDelayMin).asUInt();
-
-		uaConf.answerOnEventTalk = uaConfJson.get("answerOnEventTalk", uaConf.answerOnEventTalk).asBool();
-
-		uaConf.handleOodRefer = uaConfJson.get("handleOodRefer", uaConf.handleOodRefer).asBool();
-
-		uaConf.customUserAgent = uaConfJson.get("customUserAgent", uaConf.customUserAgent).asBool();
-		uaConf.userAgent = uaConfJson.get("userAgent", uaConf.userAgent).asString();
-	}
+	uaConf.fromJson(root["uaConf"], info.appVersion);
 
 	{
 		const Json::Value &accounts = root["Accounts"];
@@ -499,7 +280,16 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			new_acc.outbound1 = acc.get("outbound1", new_acc.outbound1).asString();
 			new_acc.outbound2 = acc.get("outbound2", new_acc.outbound2).asString();
 
-			acc.getBool("zrtp", new_acc.zrtp);
+			bool zrtp = false;
+			acc.getBool("zrtp", zrtp);
+			if (zrtp)
+			{
+				new_acc.mediaenc = "zrtp";
+			}
+			else
+			{
+				acc.getString("mediaenc", new_acc.mediaenc);
+			}
 
 			const Json::Value &audio_codecs = acc["audio_codecs"];
 			if (audio_codecs.type() == Json::arrayValue)
@@ -1222,123 +1012,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["OnContactNoteOpen"] = Scripts.onContactNoteOpen;
 	}
 
-	root["uaConf"]["audioCfgSrc"]["mod"] = uaConf.audioCfgSrc.mod;
-	root["uaConf"]["audioCfgSrc"]["dev"] = uaConf.audioCfgSrc.dev;
-	root["uaConf"]["audioCfgSrc"]["wavefile"] = uaConf.audioCfgSrc.wavefile;
-	root["uaConf"]["audioCfgPlay"]["mod"] = uaConf.audioCfgPlay.mod;
-	root["uaConf"]["audioCfgPlay"]["dev"] = uaConf.audioCfgPlay.dev;
-	root["uaConf"]["audioCfgAlert"]["mod"] = uaConf.audioCfgAlert.mod;
-	root["uaConf"]["audioCfgAlert"]["dev"] = uaConf.audioCfgAlert.dev;
-	root["uaConf"]["audioCfgRing"]["mod"] = uaConf.audioCfgRing.mod;
-	root["uaConf"]["audioCfgRing"]["dev"] = uaConf.audioCfgRing.dev;
-	root["uaConf"]["audioCfgPlayIntercom"]["mod"] = uaConf.audioCfgPlayIntercom.mod;
-	root["uaConf"]["audioCfgPlayIntercom"]["dev"] = uaConf.audioCfgPlayIntercom.dev;
-
-	root["uaConf"]["audioPortaudio"]["inSuggestedLatency"] = uaConf.audioPortaudio.inSuggestedLatency;
-	root["uaConf"]["audioPortaudio"]["outSuggestedLatency"] = uaConf.audioPortaudio.outSuggestedLatency;
-
-	root["uaConf"]["audioSoftVol"]["tx"] = uaConf.audioSoftVol.tx;
-	root["uaConf"]["audioSoftVol"]["rx"] = uaConf.audioSoftVol.rx;
-
-	{
-		Json::Value &jv = root["uaConf"]["audioAgcRx"];
-		jv["enabled"] = uaConf.audioAgcRx.enabled;
-		jv["target"] = uaConf.audioAgcRx.target;
-		jv["maxGain"] = uaConf.audioAgcRx.maxGain;
-		jv["attackRate"] = uaConf.audioAgcRx.attackRate;
-		jv["releaseRate"] = uaConf.audioAgcRx.releaseRate;
-	}
-
-	root["uaConf"]["loopRingWithoutSilence"] = uaConf.loopRingWithoutSilence;
-
-	if (Branding::recording)
-	{
-		Json::Value &jv = root["uaConf"]["recording"];
-		jv["enabled"] = uaConf.recording.enabled;
-		jv["recDir"] = uaConf.recording.recDir;
-		jv["customRecDir"] = uaConf.recording.customRecDir;
-		jv["channels"] = uaConf.recording.channels;
-		jv["side"] = uaConf.recording.side;
-		jv["recStart"] = uaConf.recording.recStart;
-		jv["noNumberB64Encoding"] = uaConf.recording.noNumberB64Encoding;
-	}
-
-	{
-		Json::Value &cfgJson = root["uaConf"]["audioPreprocTx"];
-		const UaConf::AudioPreproc &tx = uaConf.audioPreprocTx;
-		cfgJson["enabled"] = tx.enabled;
-		cfgJson["denoiseEnabled"] = tx.denoiseEnabled;
-		cfgJson["agcEnabled"] = tx.agcEnabled;
-		cfgJson["vadEnabled"] = tx.vadEnabled;
-		cfgJson["dereverbEnabled"] = tx.dereverbEnabled;
-		cfgJson["agcLevel"] = tx.agcLevel;
-	}
-
-	root["uaConf"]["aec"] = uaConf.aec;
-	root["uaConf"]["logMessages"] = uaConf.logMessages;
-	root["uaConf"]["logMessagesOnlyFirstLine"] = uaConf.logMessagesOnlyFirstLine;
-	root["uaConf"]["logAubuf"] = uaConf.logAubuf;	
-	
-	root["uaConf"]["localAddress"] = uaConf.local;
-	root["uaConf"]["ifName"] = uaConf.ifname;
-	root["uaConf"]["avt"]["portMin"] = uaConf.avt.portMin;
-	root["uaConf"]["avt"]["portMax"] = uaConf.avt.portMax;
-	root["uaConf"]["avt"]["jbufDelayMin"] = uaConf.avt.jbufDelayMin;
-	root["uaConf"]["avt"]["jbufDelayMax"] = uaConf.avt.jbufDelayMax;
-	root["uaConf"]["avt"]["rtpTimeout"] = uaConf.avt.rtpTimeout;
-
-	{
-		Json::Value &jv = root["uaConf"]["messages"];
-		jv["replyCode"] = uaConf.messages.replyCode;
-		jv["replyReason"] = uaConf.messages.replyReason;
-		jv["doNotReply"] = uaConf.messages.doNotReply;
-	}
-
-	root["uaConf"]["autoAnswer"] = uaConf.autoAnswer;
-	root["uaConf"]["autoAnswerCode"] = uaConf.autoAnswerCode;
-	root["uaConf"]["autoAnswerDelayMin"] = uaConf.autoAnswerDelayMin;
-	root["uaConf"]["autoAnswerDelayMax"] = uaConf.autoAnswerDelayMax;
-	root["uaConf"]["autoAnswerCallInfo"] = uaConf.autoAnswerCallInfo;
-	root["uaConf"]["autoAnswerCallInfoDelayMin"] = uaConf.autoAnswerCallInfoDelayMin;
-
-	root["uaConf"]["answerOnEventTalk"] = uaConf.answerOnEventTalk;
-
-	root["uaConf"]["handleOodRefer"] = uaConf.handleOodRefer;
-
-	root["uaConf"]["customUserAgent"] = uaConf.customUserAgent;
-	root["uaConf"]["userAgent"] = uaConf.userAgent;
-
-	root["uaConf"]["webrtcAec"]["msInSndCardBuf"] = uaConf.webrtcAec.msInSndCardBuf;
-	root["uaConf"]["webrtcAec"]["skew"] = uaConf.webrtcAec.skew;
-
-	{
-		Json::Value &jv = root["uaConf"]["opus"];
-		const UaConf::Opus &opus = uaConf.opus;
-		jv["stereo"] = opus.stereo;
-		jv["spropStereo"] =  opus.spropStereo;
-		jv["setBitrate"] = opus.setBitrate;
-		jv["bitrate"] = opus.bitrate;
-		jv["setSamplerate"] = opus.setSamplerate;
-		jv["samplerate"] = opus.samplerate;
-		jv["setCbr"] = opus.setCbr;
-		jv["cbr"] = opus.cbr;
-		jv["setInbandFec"] = opus.setInbandFec;
-		jv["inbandFec"] = opus.inbandFec;
-		jv["setDtx"] = opus.setDtx;
-		jv["dtx"] = opus.dtx;
-		jv["mirror"] = opus.mirror;
-		jv["complexity"] = opus.complexity;
-		jv["setApplication"] = opus.setApplication;
-		jv["application"] = opus.application;
-		jv["setPacketLoss"] = opus.setPacketLoss;
-		jv["packetLoss"] = opus.packetLoss;
-	}
-
-	{
-		Json::Value &jv = root["uaConf"]["zrtp"];
-		const UaConf::Zrtp &zrtp = uaConf.zrtp;
-		jv["startParallel"] = zrtp.startParallel;
-	}
+	uaConf.toJson(root["uaConf"]);
 
 	// write accounts
 	for (unsigned int i=0; i<uaConf.accounts.size(); i++)
@@ -1377,7 +1051,7 @@ int Settings::Write(AnsiString asFileName)
 		{
 			cfgAcc["audio_codecs"][j] = acc.audio_codecs[j];
 		}
-		cfgAcc["zrtp"] = acc.zrtp;
+		cfgAcc["mediaenc"] = acc.mediaenc;
 	}
 
 	{

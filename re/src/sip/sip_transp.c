@@ -33,10 +33,17 @@ enum {
 };
 
 
+struct sip_ccert {
+	struct le he;
+	struct pl file;
+};
+
+
 struct sip_transport {
 	struct le le;
 	struct sa laddr;
 	struct sip *sip;
+	struct hash *ht_ccert;
 	struct tls *tls;
 	void *sock;
 	enum sip_transp tp;
@@ -57,6 +64,9 @@ struct sip_conn {
 	struct sip *sip;
 	uint32_t ka_interval;
 	bool established;
+
+	enum sip_transp tp;
+
 };
 
 
@@ -87,6 +97,8 @@ static void transp_destructor(void *arg)
 		udp_handler_set(transp->sock, NULL, NULL);
 
 	list_unlink(&transp->le);
+	hash_flush(transp->ht_ccert);
+	mem_deref(transp->ht_ccert);
 	mem_deref(transp->sock);
 	mem_deref(transp->tls);
 }
@@ -560,14 +572,52 @@ static void tcp_connect_handler(const struct sa *paddr, void *arg)
 	}
 }
 
+#ifdef USE_TLS
+static uint32_t get_hash_of_fromhdr(struct mbuf *mb)
+{
+	struct sip_msg *msg;
+	struct mbuf *sup = NULL;
+	uint32_t hsup = 0;
+	int err = 0;
+
+	err = sip_msg_decode(&msg, mb);
+	if (err)
+		return 0;
+
+	sup = mbuf_alloc(30);
+	if (!sup)
+		return ENOMEM;
+
+	err = mbuf_printf(sup, "\"%r\" <%r:%r@%r:%d>", &msg->from.uri.user,
+		&msg->from.uri.scheme, &msg->from.uri.user,
+		&msg->from.uri.host, msg->from.uri.port);
+	if (err)
+		goto out;
+
+	mbuf_set_pos(sup, 0);
+	hsup = hash_joaat(mbuf_buf(sup), mbuf_get_left(sup));
+	mbuf_set_pos(mb, 0);
+
+ out:
+	mem_deref(msg);
+	mem_deref(sup);
+
+	return hsup;
+}
+#endif
+
 
 static int conn_send(struct sip_connqent **qentp, struct sip *sip, bool secure,
-		     const struct sa *dst, struct mbuf *mb,
+		     const struct sa *dst, char *host, struct mbuf *mb,
 		     sip_transp_h *transph, void *arg)
 {
 	struct sip_conn *conn, *new_conn = NULL;
 	struct sip_connqent *qent;
 	int err = 0;
+
+#ifndef USE_TLS
+	(void) host;
+#endif
 
 	conn = conn_find(sip, dst, secure);
 	if (conn) {
@@ -584,6 +634,7 @@ static int conn_send(struct sip_connqent **qentp, struct sip *sip, bool secure,
 	hash_append(sip->ht_conn, sa_hash(dst, SA_ALL), &conn->he, conn);
 	conn->paddr = *dst;
 	conn->sip   = sip;
+	conn->tp    = secure ? SIP_TRANSP_TLS : SIP_TRANSP_TCP;
 
 	err = tcp_connect(&conn->tc, dst, tcp_estab_handler, tcp_recv_handler,
 			  tcp_close_handler, conn);
@@ -597,6 +648,8 @@ static int conn_send(struct sip_connqent **qentp, struct sip *sip, bool secure,
 #ifdef USE_TLS
 	if (secure) {
 		const struct sip_transport *transp;
+		struct sip_ccert *ccert;
+		uint32_t hash = 0;
 
 		transp = transp_find(sip, SIP_TRANSP_TLS, sa_af(dst), dst);
 		if (!transp || !transp->tls) {
@@ -605,6 +658,25 @@ static int conn_send(struct sip_connqent **qentp, struct sip *sip, bool secure,
 		}
 
 		err = tls_start_tcp(&conn->sc, transp->tls, conn->tc, 0);
+		if (err)
+			goto out;
+
+		hash = get_hash_of_fromhdr(mb);
+		ccert = list_ledata(
+				list_head(hash_list(transp->ht_ccert, hash)));
+		if (ccert) {
+			char *f;
+			err = pl_strdup(&f, &ccert->file);
+			if (err)
+				goto out;
+
+			err = tls_conn_change_cert(conn->sc, f);
+			mem_deref(f);
+			if (err)
+				goto out;
+		}
+
+		err |= tls_set_verify_server(conn->sc, host);
 		if (err)
 			goto out;
 	}
@@ -660,7 +732,7 @@ int sip_transp_add(struct sip *sip, enum sip_transp tp,
 	struct sip_transport *transp;
 	struct tls *tls;
 	va_list ap;
-	int err;
+	int err = 0;
 
 	if (!sip || !laddr || !sa_isset(laddr, SA_ADDR))
 		return EINVAL;
@@ -668,6 +740,14 @@ int sip_transp_add(struct sip *sip, enum sip_transp tp,
 	transp = mem_zalloc(sizeof(*transp), transp_destructor);
 	if (!transp)
 		return ENOMEM;
+
+	if (tp == SIP_TRANSP_TLS) {
+		err = hash_alloc(&transp->ht_ccert, 32);
+		if (err) {
+			mem_deref(transp);
+			return err;
+		}
+	}
 
 	list_append(&sip->transpl, &transp->le, transp);
 	transp->sip = sip;
@@ -719,6 +799,70 @@ int sip_transp_add(struct sip *sip, enum sip_transp tp,
 	return err;
 }
 
+/**
+ * Add a client certificate to the TLS transport object
+ * Client certificates are saved as hash-table.
+ * Hashtable-Key: "username" <sip:username\@address:port>
+ *
+ * @param sip Global SIP stack
+ * @param uri Account uri information
+ * @param cert Certificate + Key file
+ *
+ * @return int 0 if success, otherwise errorcode
+ */
+int sip_transp_add_ccert(struct sip *sip, const struct uri *uri,
+			 const char *cert)
+{
+	int err = 0;
+	const struct sip_transport *transp = NULL;
+	struct sip_ccert *ccert = NULL;
+	struct mbuf *sup = NULL;
+	uint32_t hsup = 0;
+
+	if (!sip || !uri || !cert)
+		return EINVAL;
+
+	sup = mbuf_alloc(30);
+	if (!sup)
+		return ENOMEM;
+
+	err = mbuf_printf(sup, "\"%r\" <%r:%r@%r:%d>", &uri->user,
+		&uri->scheme, &uri->user, &uri->host, uri->port);
+	if (err)
+		goto out;
+
+	mbuf_set_pos(sup, 0);
+
+	hsup = hash_joaat(mbuf_buf(sup), mbuf_get_left(sup));
+	transp = transp_find(sip, SIP_TRANSP_TLS, AF_INET, NULL);
+	if (transp) {
+		ccert = mem_zalloc(sizeof(*ccert), NULL);
+		if (!ccert) {
+			err = ENOMEM;
+			goto out;
+		}
+
+		pl_set_str(&ccert->file, cert);
+		hash_append(transp->ht_ccert, hsup, &ccert->he, ccert);
+	}
+
+	transp = transp_find(sip, SIP_TRANSP_TLS, AF_INET6, NULL);
+	if (transp) {
+		ccert = mem_zalloc(sizeof(*ccert), NULL);
+		if (!ccert) {
+			err = ENOMEM;
+			goto out;
+		}
+
+		pl_set_str(&ccert->file, cert);
+		hash_append(transp->ht_ccert, hsup, &ccert->he, ccert);
+	}
+
+ out:
+	mem_deref(sup);
+	return err;
+}
+
 
 /**
  * Flush all transports of a SIP stack instance
@@ -736,7 +880,7 @@ void sip_transp_flush(struct sip *sip)
 
 
 int sip_transp_send(struct sip_connqent **qentp, struct sip *sip, void *sock,
-		    enum sip_transp tp, const struct sa *dst, struct mbuf *mb,
+		    enum sip_transp tp, const struct sa *dst, char *host, struct mbuf *mb,
 		    sip_transp_h *transph, void *arg)
 {
 	const struct sip_transport *transp;
@@ -790,7 +934,7 @@ int sip_transp_send(struct sip_connqent **qentp, struct sip *sip, void *sock,
 		if (conn && conn->tc)
 			err = tcp_send(conn->tc, mb);
 		else
-			err = conn_send(qentp, sip, secure, dst, mb,
+			err = conn_send(qentp, sip, secure, dst, host, mb,
 					transph, arg);
 		break;
 
@@ -827,6 +971,16 @@ bool sip_transp_supported(struct sip *sip, enum sip_transp tp, int af)
 		return false;
 
 	return transp_find(sip, tp, af, NULL) != NULL;
+}
+
+
+int  sip_transp_set_default(struct sip *sip, enum sip_transp tp)
+{
+	if (!sip)
+		return EINVAL;
+
+	sip->tp_def = tp;
+	return 0;
 }
 
 
@@ -913,6 +1067,23 @@ const char *sip_transp_param(enum sip_transp tp)
 	}
 }
 
+
+enum sip_transp sip_transp_decode(const struct pl *pl)
+{
+	enum sip_transp tp = SIP_TRANSP_NONE;
+	if (!pl_strcasecmp(pl, "udp"))
+		tp = SIP_TRANSP_UDP;
+	else if (!pl_strcasecmp(pl, "tcp"))
+		tp = SIP_TRANSP_TCP;
+	else if (!pl_strcasecmp(pl, "tls"))
+		tp = SIP_TRANSP_TLS;
+	//else if (!pl_strcasecmp(pl, "ws"))
+	//	tp = SIP_TRANSP_WS;
+	//else if (!pl_strcasecmp(pl, "wss"))
+	//	tp = SIP_TRANSP_WSS;
+
+	return tp;
+}
 
 bool sip_transp_reliable(enum sip_transp tp)
 {

@@ -75,6 +75,10 @@ const char *str_error(int errnum, char *buf, size_t sz)
 		return "Operation already in progress";
 	case EINPROGRESS:
 		return "Operation now in progress";
+	case ENOSR:
+		return "No STREAM resources";
+	case EKEYREJECTED:
+		return "Key was rejected by service";
 
 	case E_SIP_SESSION_CLOSED_BYE:
 		return "End of call (BYE received)";

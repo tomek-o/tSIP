@@ -28,7 +28,7 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
-        <property category="build.node" name="lastconfig" value="Release_Build"/>
+        <property category="build.node" name="lastconfig" value="Debug_Build"/>
         <property category="build.node" name="libraries" value="vclx.lib vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="tSIP.exe"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;xmlrtl;vclie;inet;inetdbbde;inetdbxpress"/>
@@ -66,6 +66,7 @@
         <property category="win32.Debug_Build.win32b.dcc32" name="option.D.arg.merge" value="1"/>
         <property category="win32.Debug_Build.win32b.dcc32" name="option.D.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.dcc32" name="option.V.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="container.SelectedWarnings.containerenabled" value="1"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.1" value="$(BDS)\lib\debug"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.10" value="..\jsoncpp\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.11" value="..\lua\turbo_cpp\debug_build"/>
@@ -73,6 +74,7 @@
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.13" value="..\scintilla\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.14" value="..\common\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.15" value="..\zrtpcpp\build\debug_build"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.16" value="..\openssl\out32"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.2" value="..\re\mk\win32-tc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.3" value="..\rem\mk\win32-tc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.4" value="..\baresip\mk\win32-tc\debug_build"/>
@@ -83,7 +85,13 @@
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.9" value="..\webrtc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.merge" value="1"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.enabled" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.additional_switches.arg" value="-d &quot;libcrypto-1_1.dll&quot; "/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.additional_switches.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.additional_switches.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.d.arg.merge" value="1"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.d.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.dynamicrtl.enabled" value="0"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.r.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
@@ -108,6 +116,7 @@
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.13" value="..\scintilla\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.14" value="..\common\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.15" value="..\zrtpcpp\build\release_build"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.16" value="..\openssl\out32"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.2" value="..\re\mk\win32-tc\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.3" value="..\baresip\mk\win32-tc\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.4" value="..\rem\mk\win32-tc\release_build"/>
@@ -499,7 +508,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">2</VersionInfo>
           <VersionInfo Name="Release">4</VersionInfo>
-          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Build">2</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -511,7 +520,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.2.4.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.2.4.2</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

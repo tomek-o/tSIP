@@ -97,6 +97,7 @@ int sip_alloc(struct sip **sipp, struct dnsc *dnsc, uint32_t ctsz,
 	if (!sip)
 		return ENOMEM;
 
+	sip->tp_def = SIP_TRANSP_NONE;
 	err = sip_transp_init(sip, tcsz);
 	if (err)
 		goto out;
@@ -173,7 +174,7 @@ void sip_close(struct sip *sip, bool force)
 int sip_send(struct sip *sip, void *sock, enum sip_transp tp,
 	     const struct sa *dst, struct mbuf *mb)
 {
-	return sip_transp_send(NULL, sip, sock, tp, dst, mb, NULL, NULL);
+	return sip_transp_send(NULL, sip, sock, tp, dst, NULL, mb, NULL, NULL);
 }
 
 

@@ -40,6 +40,7 @@
 #include "re_sipevent.h"
 #include "re_sipreg.h"
 #include "re_sipsess.h"
+#include "re_srtp.h"
 #include "re_stun.h"
 #include "re_natbd.h"
 #include "re_sys.h"

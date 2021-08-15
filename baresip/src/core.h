@@ -75,6 +75,7 @@ struct account {
 	struct list vidcodecl;       /**< List of preferred video-codecs     */
 	uint32_t answer_any;         /**< This account can be used to handle ANY incoming call */
 	enum dtmf_fmt dtmf_tx_format;/**< Method used for transmitting DTMF */
+	char *cert;                  /**< SIP TLS client certificate+keyfile */ 	
 };
 
 
@@ -338,6 +339,8 @@ void         ua_printf(const struct ua *ua, const char *fmt, ...);
 struct tls  *uag_tls(void);
 const char  *uag_allowed_methods(void);
 
+void u32mask_enable(uint32_t *mask, uint8_t bit, bool enable);
+bool u32mask_enabled(uint32_t mask, uint8_t bit); 
 
 /*
  * Video Display

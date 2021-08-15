@@ -128,6 +128,13 @@ object frmAccount: TfrmAccount
     Height = 13
     Caption = 'Display name'
   end
+  object lblMediaEncryption: TLabel
+    Left = 8
+    Top = 326
+    Width = 82
+    Height = 13
+    Caption = 'Media encryption'
+  end
   object grboxAccount: TGroupBox
     Left = 379
     Top = 293
@@ -165,7 +172,8 @@ object frmAccount: TfrmAccount
     OnChange = cbTransportChange
     Items.Strings = (
       'UDP'
-      'TCP')
+      'TCP'
+      'TLS')
   end
   object edUser: TEdit
     Left = 126
@@ -378,13 +386,22 @@ object frmAccount: TfrmAccount
     TabOrder = 19
     OnClick = chbHideDisplayNameClick
   end
-  object chbZrtp: TCheckBox
-    Left = 8
-    Top = 321
-    Width = 346
-    Height = 17
-    Caption = 'Enable ZRTP'
+  object cbMediaEncryption: TComboBox
+    Left = 126
+    Top = 323
+    Width = 131
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    ItemIndex = 0
     TabOrder = 20
-    OnClick = chbZrtpClick
+    Text = '[none]'
+    OnChange = cbMediaEncryptionChange
+    Items.Strings = (
+      '[none]'
+      'srtp'
+      'srtp-mand'
+      'srtp-mandf'
+      'zrtp')
   end
 end
