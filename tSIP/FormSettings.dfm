@@ -398,8 +398,6 @@ object frmSettings: TfrmSettings
     object tsTls: TTabSheet
       Caption = 'TLS'
       ImageIndex = 25
-      ExplicitLeft = 6
-      ExplicitTop = 20
       object lblTlsClientCertificate: TLabel
         Left = 5
         Top = 3
@@ -416,7 +414,7 @@ object frmSettings: TfrmSettings
       end
       object chbTlsVerifyServerCertificate: TCheckBox
         Left = 5
-        Top = 48
+        Top = 66
         Width = 526
         Height = 17
         Caption = 'Verify server certificate'
@@ -453,6 +451,14 @@ object frmSettings: TfrmSettings
         Caption = '...'
         TabOrder = 4
         OnClick = btnSelectTlsClick
+      end
+      object chbTlsUseWindowsRootCaStore: TCheckBox
+        Left = 5
+        Top = 47
+        Width = 526
+        Height = 17
+        Caption = 'Use CA certificates from Windows root store'
+        TabOrder = 5
       end
     end
     object tsMainWindow: TTabSheet
@@ -1369,8 +1375,6 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
-      ExplicitLeft = 6
-      ExplicitTop = 20
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -3871,7 +3875,6 @@ object frmSettings: TfrmSettings
       00270000000000000000000000FFFFFFFFFFFFFFFF0000000000000000075300
       630072006900700074007300270000000000000000000000FFFFFFFFFFFFFFFF
       0000000000000000074C006F006700670069006E006700}
-    ExplicitLeft = -2
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'

@@ -209,6 +209,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		const Json::Value &jv = uaConfJson["tls"];
 		jv.getString("certificate", tls.certificate);
 		jv.getString("caFile", tls.caFile);
+		jv.getBool("useWindowsRootCaStore", tls.useWindowsRootCaStore);
 		jv.getBool("verifyServer", tls.verifyServer);
 	}
 
@@ -382,6 +383,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		Json::Value &jv = uaConfJson["tls"];
 		jv["certificate"] = tls.certificate;
 		jv["caFile"] = tls.caFile;
+		jv["useWindowsRootCaStore"] = tls.useWindowsRootCaStore;
 		jv["verifyServer"] = tls.verifyServer;
 	}
 

@@ -31,6 +31,7 @@ static struct config core_config = {
 		"",
 		0,
 		SIP_TRANSP_UDP,
+		true,
 		false
 	},
 

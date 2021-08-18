@@ -34,7 +34,11 @@ enum tls_keytype {
 
 
 int tls_alloc(struct tls **tlsp, enum tls_method method, const char *keyfile,
-	      const char *pwd);
+		  const char *pwd);
+#if defined(WIN32) || defined(__WIN32__)
+/* \brief Import certificates from the Windows root certificate store */
+int tls_add_windows_ca(struct tls *tls);
+#endif
 int tls_add_ca(struct tls *tls, const char *cafile);
 int tls_add_cafile_path(struct tls *tls, const char *cafile,
 	const char *capath);

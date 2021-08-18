@@ -44,6 +44,7 @@ USEFORM("FormDialpadConf.cpp", frmDialpadConf);
 #pragma link "zrtpcpp.lib"
 #pragma link "libcrypto-1_1.lib"
 #pragma link "libssl-1_1.lib"
+#pragma link "crypt32.lib"
 
 #include "Settings.h"
 #include "Paths.h"

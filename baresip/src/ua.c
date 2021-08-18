@@ -1121,6 +1121,12 @@ static int add_transp_af(const struct sa *laddr)
 				return err;
 			}
 
+#if defined(WIN32) || defined(__WIN32__)
+			if (uag.cfg->use_windows_root_ca_store) {
+				tls_add_windows_ca(uag.tls);
+			}
+#endif
+
 			if (str_isset(uag.cfg->cafile))
 				cafile = uag.cfg->cafile;
 			if (str_isset(uag.cfg->capath))

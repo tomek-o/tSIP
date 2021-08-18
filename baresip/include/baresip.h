@@ -172,6 +172,7 @@ struct config {
 		char capath[256];       /**< SIP CA-path                    */
 		uint32_t transports;    /**< Supported transports mask      */
 		enum sip_transp transp; /**< Default outgoing SIP transport protocol */
+		bool use_windows_root_ca_store;
 		bool verify_server;     /**< Enable SIP TLS verify server   */
 	} sip;
 

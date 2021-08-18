@@ -142,8 +142,9 @@ static int verify_handler(int ok, X509_STORE_CTX *ctx)
 	DEBUG_WARNING("TLS issuer_name  = %s\n", buf);
 #endif
 
+	depth = X509_STORE_CTX_get_error_depth(ctx);
+	
 	if (err) {
-		depth = X509_STORE_CTX_get_error_depth(ctx);
 		DEBUG_WARNING("%s: depth = %d, err = %d (%s)\n", __FUNC__, depth, err, X509_verify_cert_error_string(err));
 	}
 
@@ -278,6 +279,75 @@ int tls_alloc(struct tls **tlsp, enum tls_method method, const char *keyfile,
 	return err;
 }
 
+#if defined(WIN32) || defined(__WIN32__)
+int tls_add_windows_ca(struct tls *tls)
+{
+	X509_STORE *store;
+	HCERTSTORE hStore;
+    int count = 0;
+
+	if (!tls || !tls->ctx)
+		return EINVAL;
+
+	store = SSL_CTX_get_cert_store(tls->ctx);
+	hStore = CertOpenSystemStore(NULL, "ROOT");
+
+    if(hStore) {
+		PCCERT_CONTEXT pContext = NULL;
+		FILETIME now;
+
+        GetSystemTimeAsFileTime(&now);		
+		
+		for(;;) {
+			X509 *x509;
+            BYTE key_usage[2];
+            DWORD req_size;
+            const unsigned char *encoded_cert;
+			char cert_name[256];
+
+            pContext = CertEnumCertificatesInStore(hStore, pContext);
+            if(!pContext)
+                break;
+
+			if(!CertGetNameStringA(pContext, CERT_NAME_SIMPLE_DISPLAY_TYPE, 0, NULL, cert_name, sizeof(cert_name))) {
+                strcpy(cert_name, "Unknown");
+            }
+			DEBUG_INFO("TLS: Checking Windows store cert [%s]\n", cert_name);
+
+            encoded_cert = (const unsigned char *)pContext->pbCertEncoded;
+            if(!encoded_cert)
+                continue;
+
+            if(CompareFileTime(&pContext->pCertInfo->NotBefore, &now) > 0 || CompareFileTime(&now, &pContext->pCertInfo->NotAfter) > 0)
+                continue;
+
+            /* If key usage exists check for signing attribute */
+            if(CertGetIntendedKeyUsage(pContext->dwCertEncodingType,
+                                       pContext->pCertInfo,
+                                       key_usage, sizeof(key_usage))) {
+                if(!(key_usage[0] & CERT_KEY_CERT_SIGN_KEY_USAGE))
+                    continue;
+            } else if(GetLastError())
+                continue;
+
+            x509 = d2i_X509(NULL, &encoded_cert, pContext->cbCertEncoded);
+            if(!x509)
+                continue;
+
+            if(X509_STORE_add_cert(store, x509) == 1) {
+				DEBUG_INFO("TLS: Imported cert [%s] from Windows store\n", cert_name);
+				count++;
+			}
+            X509_free(x509);
+        }
+
+        CertFreeCertificateContext(pContext);
+		CertCloseStore(hStore, 0);
+	}
+	DEBUG_WARNING("TLS: add %d certificate(s) from Windows store\n", count);
+	return 0;
+}
+#endif
 
 /**
  * Set default locations for trusted CA certificates

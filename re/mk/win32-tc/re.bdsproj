@@ -674,10 +674,10 @@
         <FILE FILENAME="..\..\src\srtp\replay.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="replay" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\srtp\srtcp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="srtcp" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\srtp\srtp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="srtp" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\srtp\srtp.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="..\..\src\srtp\srtp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\srtp\stream.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stream" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\aes\aes.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aes" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\include\re_aes.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="..\..\include\re_aes.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\hmac\hmac.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hmac" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>

@@ -404,6 +404,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	edTlsCertificate->Text = tmpSettings.uaConf.tls.certificate.c_str();
 	edTlsCaFile->Text = tmpSettings.uaConf.tls.caFile.c_str();
+	chbTlsUseWindowsRootCaStore->Checked = tmpSettings.uaConf.tls.useWindowsRootCaStore;
 	chbTlsVerifyServerCertificate->Checked = tmpSettings.uaConf.tls.verifyServer;
 
 	chbContactPopupShowOnIncoming->Checked = tmpSettings.frmContactPopup.showOnIncoming;
@@ -787,6 +788,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.uaConf.tls.certificate = edTlsCertificate->Text.c_str();
 	tmpSettings.uaConf.tls.caFile = edTlsCaFile->Text.c_str();
+	tmpSettings.uaConf.tls.useWindowsRootCaStore = chbTlsUseWindowsRootCaStore->Checked;
 	tmpSettings.uaConf.tls.verifyServer = chbTlsVerifyServerCertificate->Checked;
 
 	tmpSettings.frmContactPopup.showOnIncoming = chbContactPopupShowOnIncoming->Checked;

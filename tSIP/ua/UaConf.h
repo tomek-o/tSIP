@@ -451,14 +451,17 @@ public:
 	struct Tls {
 		std::string certificate;
 		std::string caFile;
+		bool useWindowsRootCaStore;
 		bool verifyServer;
 		Tls(void):
+			useWindowsRootCaStore(true),
 			verifyServer(true)
 		{}
 		bool operator==(const Tls& right) const {
 			return (
 				certificate == right.certificate &&
 				caFile == right.caFile &&
+				useWindowsRootCaStore == right.useWindowsRootCaStore &&
 				verifyServer == right.verifyServer
 			);
 		}

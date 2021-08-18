@@ -565,6 +565,7 @@ static int app_init(void)
 		{
 			strncpyz(cfg->sip.cafile, (Paths::GetProfileDir() + "\\certificates\\" + tls.caFile.c_str()).c_str(), sizeof(cfg->sip.cafile));
 		}
+		cfg->sip.use_windows_root_ca_store = tls.useWindowsRootCaStore;
 		cfg->sip.verify_server = tls.verifyServer;
 	}
 

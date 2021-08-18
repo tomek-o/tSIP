@@ -430,7 +430,7 @@
         <FILE FILENAME="..\..\modules\gzrtp\gzrtp_stream.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\baresip_zrtp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\srtp\sdes.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sdes" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\modules\srtp\sdes.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="..\..\modules\srtp\sdes.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\srtp\srtp_srtp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="srtp_srtp" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
