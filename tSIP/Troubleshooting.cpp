@@ -246,6 +246,38 @@ namespace {
 		return false;
 	}
 
+	/** TLS enabled but no media encryption is selected
+	*/
+	bool CheckAccountMediaEncryptionMissing(void)
+	{
+		for (unsigned int accId = 0; accId < appSettings.uaConf.accounts.size(); accId++)
+		{
+			const UaConf::Account &acc = appSettings.uaConf.accounts[accId];
+			if (acc.transport == UaConf::Account::TRANSPORT_TLS &&
+				acc.mediaenc == "")
+			{
+            	return true;
+			}
+		}
+		return false;
+	}
+
+	/** SRTP enabled but transport/signalization is unencrypted
+	*/
+	bool CheckAccountTlsForSrtpMissing(void)
+	{
+		for (unsigned int accId = 0; accId < appSettings.uaConf.accounts.size(); accId++)
+		{
+			const UaConf::Account &acc = appSettings.uaConf.accounts[accId];
+			if (acc.transport != UaConf::Account::TRANSPORT_TLS &&
+				(acc.mediaenc == "srtp" || acc.mediaenc == "srtp-mand" || acc.mediaenc == "srtp-mandf"))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	struct ItemTypeData itemTypeData[] =
 	{
 		{ LevelWarning, "No audio input device", "", CheckAudioInputDevice },
@@ -284,6 +316,14 @@ namespace {
 		{ LevelWarning, "Packetization time (ptime) other than 20 ms for PCMU/PCMA",
             "For PCMU/PCMA (G.711u/a) codecs 20 ms packetization time is recommended for compatibility reasons.",
 			CheckPcmuPcmaPtime
+			},
+		{ LevelHint, "TLS is selected for account but no media encryption",
+			"TLS is selected for account transport (signaling) but no media encryption - it is possible that this is an oversight.",
+			CheckAccountMediaEncryptionMissing
+			},
+		{ LevelHint, "SRTP without TLS is used",
+			"SRTP is selected as account media encryption, but selected transport is not secure (non-TLS) - SRTP keys would be sent unencrypted.",
+			CheckAccountTlsForSrtpMissing
 			},
 	};
 
