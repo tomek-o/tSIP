@@ -926,6 +926,9 @@ Version 0.2.04
     - FIXED: importing numbers #2 and #3 from CSV to contacts
     - added note import when importing contacts from CSV
     - added "SCRIPT_B64=" command line parameters - sometimes it might be easier to encode script with base64 than to escape it for command line
-    - increased buffer size for registrar URI, added log if adding account failed
+	- increased buffer size for registrar URI, added log if adding account failed
+
+Version 0.2.05
+	- added support for TLS and SRTP
 */
 
