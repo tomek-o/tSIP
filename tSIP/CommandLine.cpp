@@ -37,6 +37,7 @@ namespace {
 
 	const char* SCRIPT_STR = "SCRIPT=";
 	const char* SCRIPT_B64_STR = "SCRIPT_B64=";
+	const char* SCRIPT_FILE_STR = "SCRIPT_FILE=";
 }	// namespace
 
 
@@ -208,6 +209,11 @@ void CommandLine::Execute(char* buf, int paramcnt)
 				script = asCommandPart.SubString(strlen(SCRIPT_B64_STR)+1, asCommandPart.Length() - strlen(SCRIPT_B64_STR));
 				script = base64_decode(script.c_str(), BASE64_ALPHABET_BASIC).c_str();
 				action = ACTION_SCRIPT;
+			}
+			else if (asCommandPart.Pos(SCRIPT_FILE_STR) == 1)
+			{
+				scriptFile = asCommandPart.SubString(strlen(SCRIPT_FILE_STR)+1, asCommandPart.Length() - strlen(SCRIPT_FILE_STR));
+				action = ACTION_SCRIPT_FILE;
 			}
 			else
 			{

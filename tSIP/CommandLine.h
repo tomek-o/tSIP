@@ -34,10 +34,12 @@ public:
 		ACTION_RECORD_START,
 		ACTION_RECORD_PAUSE,
 		ACTION_SCRIPT,
+		ACTION_SCRIPT_FILE
 	} action;
 	AnsiString asTarget;
 	int programmableBtnId;
 	AnsiString script;
+	AnsiString scriptFile;
 
 	static AnsiString GetProfileDir(void);
 };

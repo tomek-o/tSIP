@@ -3060,6 +3060,20 @@ void TfrmMain::HandleCommandLine(void)
 		bool handled = false;
 		RunScript(SCRIPT_SRC_COMMAND_LINE, 0, cmd.script, breakReq, handled);
 	}
+	else if (cmd.action == CommandLine::ACTION_SCRIPT_FILE)
+	{
+		LOG("Command line script file:\n%s\n", cmd.script.c_str());
+		if (appSettings.Integration.bAcceptCommandLineScript == false)
+		{
+			LOG("Script processing from command line is not enabled in configuration!\n");
+			return;
+		}
+		bool breakReq = false;
+		bool handled = false;
+		AnsiString asScriptFile;
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), cmd.scriptFile.c_str());
+		RunScriptFile(SCRIPT_SRC_COMMAND_LINE, 0, asScriptFile, breakReq, handled);
+	}
 	else
 	{
     	LOG("Unhandled action type!\n");
