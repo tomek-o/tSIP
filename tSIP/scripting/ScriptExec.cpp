@@ -25,6 +25,7 @@
 #include "buttons/ProgrammableButton.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
+#include "common/Os.h"
 #include <Clipbrd.hpp>
 #include <psapi.h>
 #include <string>
@@ -76,14 +77,11 @@ struct {
 
 static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 {
-	DWORD dwThreadId, dwProcessId;
-	HINSTANCE hInstance;
-	char String[255];
-	HANDLE hProcess;
 	if (!hWnd)
 		return TRUE;		// Not a window
 	if (findWindowData.windowName)
 	{
+        char String[512];
 		if (!SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String))
 		{
 			return TRUE;		// No window title (length = 0)
@@ -95,21 +93,34 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 	}
 	if (findWindowData.exeName)
 	{
-		hInstance = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);
-		dwThreadId = GetWindowThreadProcessId(hWnd, &dwProcessId);
-		hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, dwProcessId);
-		// GetModuleFileNameEx uses psapi, which works for NT only!
-		BOOL result = TRUE;
-		if (GetModuleFileNameEx(hProcess, hInstance, String, sizeof(String)))
+		HINSTANCE hInstance = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);
+		DWORD dwProcessId;
+		DWORD dwThreadId = GetWindowThreadProcessId(hWnd, &dwProcessId);
+
+		#define PROCESS_QUERY_LIMITED_INFORMATION 0x1000
+		HANDLE hProcess;
+		if (IsWinVistaOrLater())
 		{
-			String[sizeof(String)-1] = '\0';
-			if (stricmp(String, findWindowData.exeName) == 0)
-			{
-				findWindowData.hWndFound = hWnd;
-				result = FALSE;
-			}
+			hProcess = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, 0, dwProcessId);
 		}
-		CloseHandle(hProcess);
+		else
+		{
+			hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, 0, dwProcessId);
+		}
+		BOOL result = TRUE;
+		if (hProcess)
+		{
+			char exeName[512] = {0};
+			if (GetProcessImageFileName(hProcess, exeName, sizeof(exeName)))
+			{
+				if (stricmp(exeName, findWindowData.exeName) == 0)
+				{
+					findWindowData.hWndFound = hWnd;
+					result = FALSE;
+				}
+			}
+			CloseHandle(hProcess);
+		}
 		return result;
 	}
 	return TRUE;
@@ -398,7 +409,28 @@ static int l_FindWindowByCaptionAndExeName(lua_State* L)
 	findWindowData.hWndFound = NULL;
 
 	findWindowData.windowName = lua_tostring(L, 1);
-	findWindowData.exeName = lua_tostring(L, 2);
+	const char* exeName = lua_tostring(L, 2);
+	AnsiString dosExeName = "";
+	if (exeName)
+	{
+		if (strlen(exeName) >= 2)
+		{
+			char targetPath[512];
+			char drive[3];
+			drive[0] = exeName[0];
+			drive[1] = exeName[1];
+			drive[2] = '\0';
+			if (QueryDosDevice(drive, targetPath, sizeof(targetPath)))
+			{
+				dosExeName.cat_printf("%s%s", targetPath, &exeName[2]);
+				findWindowData.exeName = dosExeName.c_str();
+			}
+		}
+	}
+	else
+	{
+		findWindowData.exeName = NULL;
+	}
 	if (findWindowData.windowName == NULL && findWindowData.exeName == NULL)
 	{
 		LOG("Lua: either window name or exe name is required\n");
