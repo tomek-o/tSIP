@@ -4,5 +4,6 @@
 #define OSH
 //---------------------------------------------------------------------------
 bool IsWin7OrLater(void);
+bool IsWinVistaOrLater(void);
 
 #endif
