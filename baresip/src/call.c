@@ -1542,8 +1542,13 @@ static void sipsess_progr_handler(const struct sip_msg *msg, void *arg)
 
 	call_stream_stop(call);
 
-	if (media)
+	if (media) {
+		int err;
 		call_stream_start(call, false);
+		err = update_media(call);
+		if (err)
+			DEBUG_WARNING("Failed to update media on call progress, status = %d\n", err);
+	}
 }
 
 
