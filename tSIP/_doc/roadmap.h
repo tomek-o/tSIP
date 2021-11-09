@@ -134,6 +134,8 @@ update Lua to 5.3.x, remove CVS tags from Lua source
 
 integrate RecordViewer.exe?
 
+TODO: TLS not working (UDP used instead) when outbound proxy is specified?
+
 */
 
 

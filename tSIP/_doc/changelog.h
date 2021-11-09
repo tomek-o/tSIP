@@ -930,5 +930,11 @@ Version 0.2.04
 
 Version 0.2.05
 	- added support for TLS and SRTP
+
+Version 0.2.05.3
+	- added "SCRIPT_FILE=" command line parameter - starting specified script file from /scripts subfolder
+    - use GetProcessImageFileName instead of GetModuleFileNameEx for FindWindowByCaptionAndExeName() Lua function (compatibility with 64-bit OS)
+    - FIXED: missing early media audio when SRTP was enabled
+    - added vcruntime140.dll to distributed binaries
 */
 
