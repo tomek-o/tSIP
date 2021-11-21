@@ -73,6 +73,7 @@ namespace {
 	unsigned int audioErrorCount;
 
 	Call call;
+	Call previousCall;
 	struct PagingTx {
 		bool active;
 		int state;				///< as in Callback
@@ -968,6 +969,11 @@ void TfrmMain::OnResetCall(void)
 	call.reset();
 }
 
+Call* TfrmMain::OnGetPreviousCall(void)
+{
+	return &previousCall;
+}
+
 Recorder* TfrmMain::OnGetRecorder(int id)
 {
 	if (id == recorder.id)
@@ -1595,6 +1601,12 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			case Callback::CALL_STATE_CLOSED: {
 				//LOG("Callback::CALL_STATE_CLOSED\n");
+				call.lastScode = cb.scode;
+				if (cb.scode != 0)
+				{
+                	call.lastReplyLine = cb.caller;
+				}
+				previousCall = call;
 				if (call.ringStarted) {
 					UA->PlayStop();
 					call.ringStarted = false;
@@ -2661,6 +2673,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnSwitchAudioSource, &DialString, &OnBlindTransfer,
 		&OnGetCall,
 		&OnResetCall,
+		&OnGetPreviousCall,
 		&OnGetRecorder,
 		&OnGetContactName,
 		&OnGetStreamingState,

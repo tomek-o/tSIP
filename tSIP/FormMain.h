@@ -175,6 +175,7 @@ private:	// User declarations
 	void OnBlindTransfer(const std::string& target);
 	Call* OnGetCall(void);
 	void OnResetCall(void);
+	Call* OnGetPreviousCall(void);	
 	Recorder* OnGetRecorder(int id);
 	int OnGetBlfState(int contactId, std::string &number);
 	int OnGetStreamingState(void);

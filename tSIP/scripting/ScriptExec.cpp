@@ -546,6 +546,24 @@ static int l_ResetCall(lua_State* L)
 	return 0;
 }
 
+static int l_GetPreviousCallStatusCode(lua_State* L)
+{
+	Call *call = GetContext(L)->onGetPreviousCall();
+	if (call == NULL)
+		return 0;
+	lua_pushinteger( L, call->lastScode );
+	return 1;
+}
+
+static int l_GetPreviousCallReplyLine(lua_State* L)
+{
+	Call *call = GetContext(L)->onGetPreviousCall();
+	if (call == NULL)
+		return 0;
+	lua_pushstring( L, call->lastReplyLine.c_str() );
+	return 1;
+}
+
 static int l_SwitchAudioSource(lua_State* L)
 {
 	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
@@ -1438,6 +1456,7 @@ ScriptExec::ScriptExec(
 	CallbackBlindTransfer onBlindTransfer,
 	CallbackGetCall onGetCall,
 	CallbackResetCall onResetCall,
+	CallbackGetPreviousCall onGetPreviousCall,
 	CallbackGetRecorder onGetRecorder,
 	CallbackGetContactName onGetContactName,
 	CallbackGetStreamingState onGetStreamingState,
@@ -1473,6 +1492,7 @@ ScriptExec::ScriptExec(
 	onBlindTransfer(onBlindTransfer),
 	onGetCall(onGetCall),
 	onResetCall(onResetCall),
+	onGetPreviousCall(onGetPreviousCall),
 	onGetRecorder(onGetRecorder),
 	onGetContactName(onGetContactName),
 	onGetStreamingState(onGetStreamingState),
@@ -1499,6 +1519,7 @@ ScriptExec::ScriptExec(
 		onSwitchAudioSource && onSendDtmf && onBlindTransfer &&
 		onGetCall &&
 		onResetCall &&
+		onGetPreviousCall &&
 		onGetRecorder &&
 		onGetContactName &&
 		onGetStreamingState &&
@@ -1581,6 +1602,8 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, "SetInitialCallTarget", ScriptImp::l_SetInitialCallTarget);
 	lua_register2(L, "SetCallTarget", ScriptImp::l_SetCallTarget);
 	lua_register2(L, "ResetCall", ScriptImp::l_ResetCall);
+	lua_register2(L, "GetPreviousCallStatusCode", ScriptImp::l_GetPreviousCallStatusCode);
+	lua_register2(L, "GetPreviousCallReplyLine", ScriptImp::l_GetPreviousCallReplyLine);
 	lua_register2(L, "ShellExecute", ScriptImp::l_ShellExecute);
 	lua_register2(L, "SetTrayIcon", ScriptImp::l_SetTrayIcon);
 	lua_register2(L, "GetRegistrationState", ScriptImp::l_GetRegistrationState);

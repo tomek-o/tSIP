@@ -35,6 +35,7 @@ private:
 	typedef void (__closure *CallbackBlindTransfer)(const std::string& target);
 	typedef Call* (__closure *CallbackGetCall)(void);
 	typedef void (__closure *CallbackResetCall)(void);
+	typedef Call* (__closure *CallbackGetPreviousCall)(void);
 	typedef Recorder* (__closure *CallbackGetRecorder)(int id);
 	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString number);	///< get name for number/uri
 	typedef int (__closure *CallbackGetStreamingState)(void);	///< get current streaming (paging) state, values as in Callback::paging_tx_state_e
@@ -67,6 +68,7 @@ private:
 	CallbackBlindTransfer onBlindTransfer;
 	CallbackGetCall onGetCall;
 	CallbackResetCall onResetCall;
+	CallbackGetPreviousCall onGetPreviousCall;
 	CallbackGetRecorder onGetRecorder;
 	CallbackGetContactName onGetContactName;
 	CallbackGetStreamingState onGetStreamingState;
@@ -116,6 +118,7 @@ public:
 		CallbackBlindTransfer onBlindTransfer,
 		CallbackGetCall onGetCall,
 		CallbackResetCall onResetCall,
+		CallbackGetPreviousCall onGetPreviousCall,
 		CallbackGetRecorder onGetRecorder,
 		CallbackGetContactName onGetContactName,
 		CallbackGetStreamingState onGetStreamingState,

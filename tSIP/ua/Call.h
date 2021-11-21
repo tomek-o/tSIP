@@ -22,7 +22,8 @@ struct Call
 	TDateTime timestamp;
 	TDateTime timeTalkStart;
 	int state;				///< as in Callback::ua_state_e enum
-	int last_scode;			///< last SIP code (on disconnected)
+	int lastScode;			///< last SIP code (on disconnected)
+	AnsiString lastReplyLine;
 	AnsiString recordFile;
 	bool recording;
 	std::deque<char> dtmfRxQueue;
@@ -51,7 +52,7 @@ struct Call
 		disconnecting(false),
 		accessUrlMode(0),
 		state(0),
-		last_scode(0),
+		lastScode(0),
 		recording(false),
 		ringStarted(false)
 	{}
