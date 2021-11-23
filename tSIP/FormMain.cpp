@@ -1561,6 +1561,8 @@ void TfrmMain::PollCallbackQueue(void)
 				call.paiPeerUri = cb.paiPeerUri;
 				call.paiPeerName = GetPeerName(cb.paiPeerName);
 				call.codecName = cb.codecName;
+				call.lastScode = 200;
+				call.lastReplyLine = "200 OK";
 
 				UpdateClip();
 
@@ -1601,10 +1603,10 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			case Callback::CALL_STATE_CLOSED: {
 				//LOG("Callback::CALL_STATE_CLOSED\n");
-				call.lastScode = cb.scode;
 				if (cb.scode != 0)
 				{
-                	call.lastReplyLine = cb.caller;
+					call.lastScode = cb.scode;
+					call.lastReplyLine = cb.caller;
 				}
 				previousCall = call;
 				if (call.ringStarted) {
