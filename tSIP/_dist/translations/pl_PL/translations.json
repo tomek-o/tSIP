@@ -33,7 +33,9 @@
     "notCompletedText": "(nieodebrane)",
     "outgoingCallText": "Połączenie wychodzące",
     "timestamp": "Czas",
-    "unansweredText": "(nieodebrane)"
+    "unansweredText": "(nieodebrane)",
+    "replyCode": "Kod odpowiedzi SIP:",
+    "replyLine": "Odpowiedź SIP:"
   },
   "TfrmMain": {
     "btnHangup": "Zakończ",

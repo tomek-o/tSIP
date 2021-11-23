@@ -1651,6 +1651,8 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 				// trying to extract number from PAI URI for any call
 				entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
+				entry.lastScode = call.lastScode;
+				entry.lastReplyLine = call.lastReplyLine;
 
 				history.AddEntry(entry);
 				UpdateCallHistory();

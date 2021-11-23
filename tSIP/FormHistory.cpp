@@ -23,6 +23,8 @@ AnsiString unansweredText = "(unanswered)";
 AnsiString notCompletedText = "(not completed)";
 AnsiString callTimeText = "Call time:";
 AnsiString codecText = "Codec:";
+AnsiString replyCodeText = "Reply code:";
+AnsiString replyLineText = "Reply line:";
 
 }
 
@@ -46,6 +48,8 @@ void TfrmHistory::TranslateForm(void* obj)
 	Translate("TfrmHistory.notCompletedText", notCompletedText);
 	Translate("TfrmHistory.callTimeText", callTimeText);
 	Translate("TfrmHistory.codecText", codecText);
+	Translate("TfrmHistory.replyCode", replyCodeText);
+	Translate("TfrmHistory.replyLine", replyLineText);
 }
 
 __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
@@ -391,6 +395,16 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 	if (showCodecNameInHint && entry.codecName != "")
 	{
 		hint.cat_sprintf("\n%s %s", codecText.c_str(), entry.codecName.c_str());
+	}
+
+	if (entry.lastScode != 0)
+	{
+		hint.cat_sprintf("\n%s %d", replyCodeText.c_str(), entry.lastScode);
+	}
+
+	if (entry.lastReplyLine != "")
+	{
+		hint.cat_sprintf("\n%s %s", replyLineText.c_str(), entry.lastReplyLine.c_str());
 	}
 
 	return hint;

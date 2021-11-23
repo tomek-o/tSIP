@@ -46,6 +46,14 @@ public:
 		int time;	///< call time in seconds (starting from CONFIRMED state)
 
 		AnsiString codecName;
+		int lastScode;				///< last SIP code from received reply (on disconnected)
+		AnsiString lastReplyLine;
+
+		Entry(void):
+			incoming(false),
+			time(0),
+			lastScode(0)
+		{}
 
 		bool operator==(const Entry& right) const {
 			return (
