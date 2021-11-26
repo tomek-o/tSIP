@@ -153,13 +153,6 @@ Settings::Settings(void)
 
 	SipAccessUrl.accessMode = _SipAccessUrl::accessModeAlwaysPassive;
 
-	History.bNoStoreToFile = false;
-	History.bUsePaiForDisplayIfAvailable = true;
-	History.bUsePaiForDialIfAvailable = true;
-	History.bShowHint = true;
-	History.bFormatCallDurationAsHourMinSec = true;
-	History.bShowCodecNameInHint = true;
-
     Messages.ring = "pluck.wav";
 
 	Scripts.timer = 1000;
@@ -707,7 +700,9 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		History.bUsePaiForDialIfAvailable = HistoryJson.get("UsePaiForDialIfAvailable", History.bUsePaiForDialIfAvailable).asBool();
 		History.bShowHint = HistoryJson.get("ShowHint", History.bShowHint).asBool();
 		History.bFormatCallDurationAsHourMinSec = HistoryJson.get("FormatCallDurationAsHourMinSec", History.bFormatCallDurationAsHourMinSec).asBool();
-		History.bShowCodecNameInHint = HistoryJson.get("ShowCodecNameInHint", History.bShowCodecNameInHint).asBool();
+		HistoryJson.getBool("ShowCodecNameInHint", History.bShowCodecNameInHint);
+		HistoryJson.getBool("ShowLastCodeInHint", History.bShowLastCodeInHint);
+		HistoryJson.getBool("ShowLastReplyLineInHint", History.bShowLastReplyLineInHint);
 		{
 			const Json::Value &jlcw = HistoryJson["ListColumnWidths"];
 			if (jlcw.type() == Json::arrayValue)
@@ -976,6 +971,8 @@ int Settings::Write(AnsiString asFileName)
 		jv["ShowHint"] = History.bShowHint;
 		jv["FormatCallDurationAsHourMinSec"] = History.bFormatCallDurationAsHourMinSec;
 		jv["ShowCodecNameInHint"] = History.bShowCodecNameInHint;
+		jv["ShowLastCodeInHint"] = History.bShowLastCodeInHint;
+		jv["ShowLastReplyLineInHint"] = History.bShowLastReplyLineInHint;
 
 		Json::Value &jlcw = jv["ListColumnWidths"];
 		jlcw.resize(0);

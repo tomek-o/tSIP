@@ -296,7 +296,19 @@ public:
 		bool bShowHint;
 		bool bFormatCallDurationAsHourMinSec;
 		bool bShowCodecNameInHint;
+		bool bShowLastCodeInHint;
+		bool bShowLastReplyLineInHint;
 		std::vector<int> listColumnWidths;
+		_History(void):
+			bNoStoreToFile(false),
+			bUsePaiForDisplayIfAvailable(true),
+			bUsePaiForDialIfAvailable(true),
+			bShowHint(true),
+			bFormatCallDurationAsHourMinSec(true),
+			bShowCodecNameInHint(true),
+			bShowLastCodeInHint(true),
+			bShowLastReplyLineInHint(true)
+		{}
 	} History;
 	struct _Messages
 	{

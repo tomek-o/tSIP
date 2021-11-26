@@ -65,7 +65,9 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 	usePaiForDisplayIfAvailable(true),
 	usePaiForDialIfAvailable(true),
 	formatCallDurationAsHourMinSec(true),
-	showCodecNameInHint(true)
+	showCodecNameInHint(true),
+	showLastCodeInHint(true),
+	showLastReplyLineInHint(true)
 {
 	assert(history);
 	assert(callbackCall);
@@ -397,12 +399,12 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 		hint.cat_sprintf("\n%s %s", codecText.c_str(), entry.codecName.c_str());
 	}
 
-	if (entry.lastScode != 0)
+	if (showLastCodeInHint && entry.lastScode != 0)
 	{
 		hint.cat_sprintf("\n%s %d", replyCodeText.c_str(), entry.lastScode);
 	}
 
-	if (entry.lastReplyLine != "")
+	if (showLastReplyLineInHint && entry.lastReplyLine != "")
 	{
 		hint.cat_sprintf("\n%s %s", replyLineText.c_str(), entry.lastReplyLine.c_str());
 	}

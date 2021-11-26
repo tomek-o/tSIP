@@ -2736,6 +2736,8 @@ void TfrmMain::UpdateHistoryConfig(void)
 	frmHistory->ShowHint(appSettings.History.bShowHint);
 	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
 	frmHistory->ShowCodecNameInHint(appSettings.History.bShowCodecNameInHint);
+	frmHistory->ShowLastCodeInHint(appSettings.History.bShowLastCodeInHint);
+	frmHistory->ShowLastReplyLineInHint(appSettings.History.bShowLastReplyLineInHint);
 	frmHistory->SetColumnWidths(appSettings.History.listColumnWidths);
 }
 

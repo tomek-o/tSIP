@@ -65,6 +65,8 @@ private:	// User declarations
 	bool usePaiForDialIfAvailable;
 	bool formatCallDurationAsHourMinSec;
 	bool showCodecNameInHint;
+	bool showLastCodeInHint;
+	bool showLastReplyLineInHint;
 	History::Entry* getSelectedEntry(void);
 	AnsiString getDefaultUri(const History::Entry* entry);
 	AnsiString GetHint(TListItem *item);
@@ -94,6 +96,14 @@ public:		// User declarations
 
 	void ShowCodecNameInHint(bool state) {
     	showCodecNameInHint = state;
+	}
+
+	void ShowLastCodeInHint(bool state) {
+		showLastCodeInHint = state;
+	}
+
+	void ShowLastReplyLineInHint(bool state) {
+		showLastReplyLineInHint = state;
 	}
 
 	std::vector<int> GetColumnWidths(void);

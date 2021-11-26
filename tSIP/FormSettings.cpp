@@ -427,6 +427,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHistoryShowHint->Checked = tmpSettings.History.bShowHint;
 	chbHistoryFormatCallDurationAsHourMinSec->Checked = tmpSettings.History.bFormatCallDurationAsHourMinSec;
 	chbHistoryShowCodecNameInHint->Checked = tmpSettings.History.bShowCodecNameInHint;
+	chbHistoryShowLastReplyCodeInHint->Checked = tmpSettings.History.bShowLastCodeInHint;
+	chbHistoryShowLastReplyLineInHint->Checked = tmpSettings.History.bShowLastReplyLineInHint;
 
     edScriptOnMakeCallFile->Text = tmpSettings.Scripts.onMakeCall;
 	edScriptOnCallStateChangeFile->Text = tmpSettings.Scripts.onCallState;
@@ -811,6 +813,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.History.bShowHint = chbHistoryShowHint->Checked;
 	tmpSettings.History.bFormatCallDurationAsHourMinSec = chbHistoryFormatCallDurationAsHourMinSec->Checked;
 	tmpSettings.History.bShowCodecNameInHint = chbHistoryShowCodecNameInHint->Checked;
+	tmpSettings.History.bShowLastCodeInHint = chbHistoryShowLastReplyCodeInHint->Checked;
+	tmpSettings.History.bShowLastReplyLineInHint = chbHistoryShowLastReplyLineInHint->Checked;
 
 	tmpSettings.Scripts.onMakeCall = edScriptOnMakeCallFile->Text;
 	tmpSettings.Scripts.onCallState = edScriptOnCallStateChangeFile->Text;

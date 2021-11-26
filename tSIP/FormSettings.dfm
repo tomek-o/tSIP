@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 468
-    ActivePage = tsTls
+    ActivePage = tsHistory
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2567,7 +2567,7 @@ object frmSettings: TfrmSettings
       end
       object chbHistoryFormatCallDurationAsHourMinSec: TCheckBox
         Left = 2
-        Top = 118
+        Top = 161
         Width = 446
         Height = 17
         Caption = 'Format call duration time as hours:minutes:seconds'
@@ -2580,6 +2580,22 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Show codec name in hint'
         TabOrder = 5
+      end
+      object chbHistoryShowLastReplyCodeInHint: TCheckBox
+        Left = 21
+        Top = 117
+        Width = 446
+        Height = 17
+        Caption = 'Show last SIP reply code code in hint'
+        TabOrder = 6
+      end
+      object chbHistoryShowLastReplyLineInHint: TCheckBox
+        Left = 21
+        Top = 139
+        Width = 446
+        Height = 17
+        Caption = 'Show last SIP reply line in hint'
+        TabOrder = 7
       end
     end
     object tsPhones: TTabSheet
