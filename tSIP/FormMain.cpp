@@ -983,6 +983,16 @@ Recorder* TfrmMain::OnGetRecorder(int id)
 	return NULL;
 }
 
+int TfrmMain::OnGetContactId(const char* user)
+{
+	for (unsigned int i=0; i<appSettings.uaConf.contacts.size(); i++)
+	{
+		if (appSettings.uaConf.contacts[i].user == user)
+			return i;
+	}
+	return -1;
+}
+
 int TfrmMain::OnGetBlfState(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction)
 {
 	if (contactId < 0 || contactId >= appSettings.uaConf.contacts.size())
@@ -2695,6 +2705,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnSetTrayIcon,
 		&OnGetRegistrationState,
 		&OnPluginSendMessageText, &OnPluginEnable,
+		&OnGetContactId,
 		&OnGetBlfState,
 		&OnRecordStart,
 		&OnGetRxDtmf,
