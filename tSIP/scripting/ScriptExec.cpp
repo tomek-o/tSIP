@@ -1078,6 +1078,16 @@ static int l_GetRecordFile(lua_State* L)
 	return 0;
 }
 
+static int l_GetContactId(lua_State* L)
+{
+	const char* str = lua_tostring( L, 1 );
+	if (str == NULL)
+		return 0;
+	int id = GetContext(L)->onGetContactId(str);
+	lua_pushinteger( L, id );
+	return 1;
+}
+
 static int l_GetBlfState(lua_State* L)
 {
 	int contactId = lua_tointeger( L, 1 );
@@ -1471,6 +1481,7 @@ ScriptExec::ScriptExec(
 	CallbackGetRegistrationState onGetRegistrationState,
 	CallbackPluginSendMessageText onPluginSendMessageText,
 	CallbackPluginEnable onPluginEnable,
+	CallbackGetContactId onGetContactId,
 	CallbackGetBlfState onGetBlfState,
 	CallbackRecordStart onRecordStart,
 	CallbackGetRxDtmf onGetRxDtmf,
@@ -1506,6 +1517,7 @@ ScriptExec::ScriptExec(
 	onGetRegistrationState(onGetRegistrationState),
 	onPluginSendMessageText(onPluginSendMessageText),
 	onPluginEnable(onPluginEnable),
+	onGetContactId(onGetContactId),
 	onGetBlfState(onGetBlfState),
 	onRecordStart(onRecordStart),
 	onGetRxDtmf(onGetRxDtmf),
@@ -1532,6 +1544,7 @@ ScriptExec::ScriptExec(
 		onSetTrayIcon &&
 		onGetRegistrationState &&
 		onPluginSendMessageText && onPluginEnable &&
+		onGetContactId &&
 		onGetBlfState &&
 		onRecordStart &&
 		onGetRxDtmf &&
@@ -1627,6 +1640,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, "GetExecSourceType", ScriptImp::l_GetExecSourceType);
 	lua_register2(L, "GetExecSourceId", ScriptImp::l_GetExecSourceId);
 	lua_register2(L, "GetRecordFile", ScriptImp::l_GetRecordFile);
+	lua_register2(L, "GetContactId", ScriptImp::l_GetContactId);
 	lua_register2(L, "GetBlfState", ScriptImp::l_GetBlfState);
 	lua_register2(L, "RecordStart", ScriptImp::l_RecordStart);
 	lua_register2(L, "GetExeName", ScriptImp::l_GetExeName);

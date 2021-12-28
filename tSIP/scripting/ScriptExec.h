@@ -44,6 +44,7 @@ private:
 	typedef int (__closure *CallbackGetRegistrationState)(void);///< as in Callback::reg_state_e
 	typedef int (__closure *CallbackPluginSendMessageText)(const char* dllName, const char* text);
 	typedef int (__closure *CallbackPluginEnable)(const char* dllName, bool state);
+	typedef int (__closure *CallbackGetContactId)(const char* user);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction);
 	typedef int (__closure *CallbackRecordStart)(const char* file, int channels, int side);
 	// pop single DTMF character from RX queue
@@ -78,6 +79,7 @@ private:
 	CallbackGetRegistrationState onGetRegistrationState;
 	CallbackPluginSendMessageText onPluginSendMessageText;
 	CallbackPluginEnable onPluginEnable;
+	CallbackGetContactId onGetContactId;
 	CallbackGetBlfState onGetBlfState;
 	CallbackRecordStart onRecordStart;
 	CallbackGetRxDtmf onGetRxDtmf;
@@ -128,6 +130,7 @@ public:
 		CallbackGetRegistrationState onGetRegistrationState,
 		CallbackPluginSendMessageText onPluginSendMessageText,
 		CallbackPluginEnable onPluginEnable,
+		CallbackGetContactId onGetContactId,
 		CallbackGetBlfState onGetBlfState,
 		CallbackRecordStart onRecordStart,
 		CallbackGetRxDtmf onGetRxDtmf,
