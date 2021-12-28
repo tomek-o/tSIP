@@ -11,6 +11,7 @@
 #include <mem.h>
 
 #include "AudioModules.h"
+#include "baresip_dialog_info_direction.h"
 
 #include <stdint.h>
 
@@ -155,7 +156,13 @@ public:
 		bool sub_presence;
 		int sub_presence_expires;
 		std::list<int> btnIds;
-		int dialog_info_state;	///< not actual configuration - current state
+
+		/// not actual configuration - current state
+		int dialog_info_state;
+		enum dialog_info_direction direction;
+		std::string remoteIdentity;
+		std::string remoteIdentityDisplay;
+
 		bool operator==(const Contact& right) const {
 			return (
 				description == right.description &&
@@ -174,7 +181,8 @@ public:
 			sub_dialog_info_expires(600),
 			sub_presence(false),
 			sub_presence_expires(600),
-			dialog_info_state(-1)
+			dialog_info_state(-1),
+			direction(DIALOG_INFO_DIR_UNKNOWN)
 		{
 		}
 	};

@@ -177,7 +177,7 @@ private:	// User declarations
 	void OnResetCall(void);
 	Call* OnGetPreviousCall(void);	
 	Recorder* OnGetRecorder(int id);
-	int OnGetBlfState(int contactId, std::string &number);
+	int OnGetBlfState(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction);
 	int OnGetStreamingState(void);
 	unsigned int OnGetAudioErrorCount(void);
 	int OnGetRegistrationState(void);

@@ -983,7 +983,7 @@ Recorder* TfrmMain::OnGetRecorder(int id)
 	return NULL;
 }
 
-int TfrmMain::OnGetBlfState(int contactId, std::string &number)
+int TfrmMain::OnGetBlfState(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction)
 {
 	if (contactId < 0 || contactId >= appSettings.uaConf.contacts.size())
 	{
@@ -992,6 +992,9 @@ int TfrmMain::OnGetBlfState(int contactId, std::string &number)
     }
 	const UaConf::Contact &contact = appSettings.uaConf.contacts[contactId];
 	number = contact.user;
+	remoteIdentity = contact.remoteIdentity.c_str();
+	remoteIdentityDisplay = contact.remoteIdentityDisplay.c_str();
+	direction = contact.direction;
 	return contact.dialog_info_state;
 }
 
@@ -1934,7 +1937,14 @@ void TfrmMain::PollCallbackQueue(void)
 					}
 				}
 			}
-			appSettings.uaConf.contacts[cb.contactId].dialog_info_state = cb.dlgInfoState;
+			UaConf::Contact &contact = appSettings.uaConf.contacts[cb.contactId];
+			contact.dialog_info_state = cb.dlgInfoState;
+			if (updateRemoteIdentity)
+			{
+				contact.direction = direction;
+				contact.remoteIdentity = remoteIdentity.c_str();
+				contact.remoteIdentityDisplay = remoteIdentityDisplay.c_str();
+			}
 			std::list<int> &ids = appSettings.uaConf.contacts[cb.contactId].btnIds;
 			std::list<int>::iterator iter;
 			for (iter = ids.begin(); iter != ids.end(); ++iter)

@@ -1083,10 +1083,16 @@ static int l_GetBlfState(lua_State* L)
 	int contactId = lua_tointeger( L, 1 );
 
 	std::string number;
-	int state = GetContext(L)->onGetBlfState(contactId, number);
+	std::string remoteIdentity;
+	std::string remoteIdentityDisplay;
+	enum dialog_info_direction direction;
+	int state = GetContext(L)->onGetBlfState(contactId, number, remoteIdentity, remoteIdentityDisplay, direction);
 	lua_pushstring( L, number.c_str() );
 	lua_pushinteger( L, state );
-	return 2;
+	lua_pushstring( L, remoteIdentity.c_str() );
+	lua_pushstring( L, remoteIdentityDisplay.c_str() );
+	lua_pushinteger( L, direction );
+	return 5;
 }
 
 static int l_RecordStart(lua_State* L)
