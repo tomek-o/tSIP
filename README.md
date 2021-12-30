@@ -13,7 +13,7 @@ Parts of the code might be using different but offering similar freedom (freedom
 
 ## Compiling
 
-tSIP is built with Turbo C++ Exlorer 2006 (free version of BDS 2006, aka C++ Builder).
+tSIP is built with Turbo C++ Explorer 2006 (free version of BDS 2006, aka C++ Builder).
 
 ## Homepage and binary releases
 http://tomeko.net/software/SIPclient/
