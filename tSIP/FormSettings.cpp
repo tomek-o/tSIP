@@ -242,6 +242,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked = tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
 	chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing->Checked = tmpSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 	chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked = tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
+	cbDialogInfoPreferredState->ItemIndex = tmpSettings.frmMain.dialogInfoPreferredState;
 	chbSpeedDialUseGrid->Checked = tmpSettings.frmSpeedDial.useGrid;
 	edSpeedDialGridSize->Text = tmpSettings.frmSpeedDial.gridSize;
 	chbSpeedDialSaveAllSettings->Checked = tmpSettings.frmSpeedDial.saveAllSettings;
@@ -571,6 +572,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = chbSpeedDialIgnoreDialogInfoRemoteIdentity->Checked;
 	tmpSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing = chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing->Checked;
 	tmpSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated = chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated->Checked;
+	tmpSettings.frmMain.dialogInfoPreferredState = static_cast<Settings::_frmMain::DialogInfoPreferredState>(cbDialogInfoPreferredState->ItemIndex);
 
 	tmpSettings.frmSpeedDial.useGrid = chbSpeedDialUseGrid->Checked;
 	{

@@ -1929,38 +1929,89 @@ void TfrmMain::PollCallbackQueue(void)
 			AnsiString remoteIdentity;
 			AnsiString remoteIdentityDisplay;
 			bool updateRemoteIdentity = true;
-			if (!appSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity)
-			{
+			enum dialog_info_status dlgInfoState = DIALOG_INFO_UNKNOWN;
 
-				if (cb.dlgInfoState == DIALOG_INFO_TERMINATED && appSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated)
+			UaConf::Contact &contact = appSettings.uaConf.contacts[cb.contactId];
+
+			struct dialog_data *ddata = NULL;
+			for (unsigned int i=0; i<cb.ddata_cnt; i++)
+			{
+				struct dialog_data *d = &cb.ddata[i];
+				if (appSettings.frmMain.dialogInfoPreferredState == Settings::_frmMain::DIALOG_INFO_PREFERRED_FIRST)
 				{
-					// clearing/ignoring remote identity if call is terminated
+					ddata = d;
+					break;
 				}
-				else
+				else if (appSettings.frmMain.dialogInfoPreferredState == Settings::_frmMain::DIALOG_INFO_PREFERRED_EARLY)
 				{
-					direction = static_cast<enum dialog_info_direction>(cb.dlgInfoDirection);
-					remoteIdentity = cb.dlgInfoRemoteIdentity;
-					remoteIdentityDisplay = GetPeerName(cb.dlgInfoRemoteIdentityDisplay);
-					if (!remoteIdentity.Length() && !remoteIdentity.Length() && appSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing)
+					if (d->status == DIALOG_INFO_EARLY)
 					{
-						updateRemoteIdentity = false;
+						ddata = d;
+						break;
+					}
+				}
+				else if (appSettings.frmMain.dialogInfoPreferredState == Settings::_frmMain::DIALOG_INFO_PREFERRED_CONFIRMED)
+				{
+					if (d->status == DIALOG_INFO_CONFIRMED)
+					{
+						ddata = d;
+						break;
 					}
 				}
 			}
-			UaConf::Contact &contact = appSettings.uaConf.contacts[cb.contactId];
-			contact.dialog_info_state = cb.dlgInfoState;
-			if (updateRemoteIdentity)
+			if (ddata == NULL)
 			{
-				contact.direction = direction;
-				contact.remoteIdentity = remoteIdentity.c_str();
-				contact.remoteIdentityDisplay = remoteIdentityDisplay.c_str();
+				for (unsigned int i=0; i<cb.ddata_cnt; i++)
+				{
+					struct dialog_data *d = &cb.ddata[i];
+					if (d->status == DIALOG_INFO_EARLY || d->status == DIALOG_INFO_CONFIRMED)
+					{
+						ddata = d;
+						break;
+					}
+				}
 			}
+			if (ddata == NULL)
+			{
+				if (cb.ddata_cnt > 0)
+					ddata = &cb.ddata[0];
+			}
+			if (ddata)
+			{
+				if (!appSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity)
+				{
+
+					if (dlgInfoState == DIALOG_INFO_TERMINATED && appSettings.frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated)
+					{
+						// clearing/ignoring remote identity if call is terminated
+					}
+					else
+					{
+						direction = ddata->direction;
+						remoteIdentity = ddata->identity;
+						remoteIdentityDisplay = GetPeerName(ddata->identity_display);
+						if (!remoteIdentity.Length() && !remoteIdentity.Length() && appSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing)
+						{
+							updateRemoteIdentity = false;
+						}
+					}
+				}
+				dlgInfoState = ddata->status;
+				if (updateRemoteIdentity)
+				{
+					contact.direction = direction;
+					contact.remoteIdentity = remoteIdentity.c_str();
+					contact.remoteIdentityDisplay = remoteIdentityDisplay.c_str();
+				}
+			}
+			contact.dialog_info_state = dlgInfoState;
 			std::list<int> &ids = appSettings.uaConf.contacts[cb.contactId].btnIds;
 			std::list<int>::iterator iter;
 			for (iter = ids.begin(); iter != ids.end(); ++iter)
 			{
-				buttons.UpdateDlgInfoState(*iter, cb.dlgInfoState, updateRemoteIdentity, direction, remoteIdentity, remoteIdentityDisplay);
+				buttons.UpdateDlgInfoState(*iter, dlgInfoState, updateRemoteIdentity, direction, remoteIdentity, remoteIdentityDisplay);
 			}
+
 			if (appSettings.Scripts.onDialogInfo != "")
 			{
 				AnsiString asScriptFile;

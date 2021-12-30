@@ -89,6 +89,12 @@ public:
 		bool bSpeedDialIgnoreDialogInfoRemoteIdentity;	///< do not show remote id as 2nd line for BLF
 		bool bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;		///< if dialog-info remote identity is missing (e.g. in state = confirmed) keep identity from previous notification 
 		bool bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;	///< ignore/clear remote id for BLF if state = terminated (idle)
+		enum DialogInfoPreferredState {
+			DIALOG_INFO_PREFERRED_FIRST = 0,
+			DIALOG_INFO_PREFERRED_EARLY,
+			DIALOG_INFO_PREFERRED_CONFIRMED,
+			DIALOG_INFO_PREFERRED__LIMITER
+		} dialogInfoPreferredState;		///< which dialog information should be preferred if NOTIFY contains multiple dialog info?
 		bool bXBtnMinimize;				///< minimize to tray when 'X' is pressed
 		bool bRestoreOnIncomingCall;	///< restore minimized window on incoming call
 		bool bSingleInstance;			///< check if another instance is running if started without parameters and bring it to front

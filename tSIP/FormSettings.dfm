@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 468
-    ActivePage = tsHistory
+    ActivePage = tsSpeedDial
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -756,10 +756,19 @@ object frmSettings: TfrmSettings
       ImageIndex = 12
       object lblSpeedDialBlfSettings: TLabel
         Left = 2
-        Top = 53
+        Top = 56
         Width = 122
         Height = 13
         Caption = 'BLF / dialog-info settings:'
+      end
+      object lblDialogInfoPreferredState: TLabel
+        Left = 18
+        Top = 147
+        Width = 335
+        Height = 13
+        Caption = 
+          'Preferred state if multiple dialog elements are received in NOTI' +
+          'FY XML'
       end
       object chbSpeedDialPopupMenu: TCheckBox
         Left = 2
@@ -781,7 +790,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialIgnoreDialogInfoRemoteIdentity: TCheckBox
         Left = 18
-        Top = 75
+        Top = 78
         Width = 486
         Height = 17
         Caption = 
@@ -791,7 +800,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing: TCheckBox
         Left = 18
-        Top = 98
+        Top = 101
         Width = 478
         Height = 17
         Caption = 
@@ -801,7 +810,7 @@ object frmSettings: TfrmSettings
       end
       object chbSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated: TCheckBox
         Left = 18
-        Top = 121
+        Top = 124
         Width = 478
         Height = 17
         Caption = 
@@ -810,8 +819,8 @@ object frmSettings: TfrmSettings
         TabOrder = 4
       end
       object chbSpeedDialUseGrid: TCheckBox
-        Left = 2
-        Top = 144
+        Left = 3
+        Top = 176
         Width = 401
         Height = 17
         Caption = 
@@ -820,21 +829,36 @@ object frmSettings: TfrmSettings
         TabOrder = 5
       end
       object edSpeedDialGridSize: TEdit
-        Left = 399
-        Top = 142
+        Left = 400
+        Top = 174
         Width = 31
         Height = 21
         TabOrder = 6
       end
       object chbSpeedDialSaveAllSettings: TCheckBox
-        Left = 2
-        Top = 167
+        Left = 3
+        Top = 199
         Width = 526
         Height = 17
         Caption = 
           'Save all button settings, even same as default (larger JSON file' +
           ' but possibly easier to edit or compare)'
         TabOrder = 7
+      end
+      object cbDialogInfoPreferredState: TComboBox
+        Left = 359
+        Top = 144
+        Width = 138
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
+        TabOrder = 8
+        Text = 'first one'
+        Items.Strings = (
+          'first one'
+          'early (ringing)'
+          'confirmed')
       end
     end
     object tsCalls: TTabSheet

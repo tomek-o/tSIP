@@ -26,7 +26,7 @@ public:
 	void ChangeEncryptionState(const Callback::Zrtp &state);
 	void ChangeRegState(int acc_id, Callback::reg_state_e state, const char *prm);
 	void ChangeAppState(Callback::app_state_e state);
-	void ChangeDlgInfoState(int id, int state, int direction, const char *remote_identity, const char *remote_identity_display);
+	void ChangeDlgInfoState(int id, const struct dialog_data *ddata, unsigned int ddata_cnt);
 	void ChangePresenceState(int id, int state, const char *note);
 	void ChangeMwiState(int newMsg, int oldMsg);
 	void ChangePagingTxState(Callback::paging_tx_state_e state);

@@ -464,6 +464,8 @@ __published:	// IDE-managed Components
 	TCheckBox *chbTlsUseWindowsRootCaStore;
 	TCheckBox *chbHistoryShowLastReplyCodeInHint;
 	TCheckBox *chbHistoryShowLastReplyLineInHint;
+	TLabel *lblDialogInfoPreferredState;
+	TComboBox *cbDialogInfoPreferredState;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

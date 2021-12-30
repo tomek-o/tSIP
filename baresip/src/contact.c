@@ -5,6 +5,7 @@
  */
 #include <re.h>
 #include <baresip.h>
+#include <assert.h>
 
 
 struct contact {
@@ -16,10 +17,9 @@ struct contact {
 	int id;
 	contact_dlginfo_h *dlginfo_h;
 	contact_presence_h *presence_h;
-	enum dialog_info_status dlg_info_status;
-	enum dialog_info_direction dlg_info_direction;
-	char dialog_info_remote_identity[64];
-	char dialog_info_remote_identity_display[64];
+
+	int dialog_data_cnt;
+    struct dialog_data ddata[MAX_DIALOG_DATA_CNT];	
 };
 
 static struct list cl;
@@ -69,8 +69,7 @@ int contact_add(struct contact **contactp, const struct pl *addr, int id, contac
 	}
 
 	c->status = PRESENCE_UNKNOWN;
-	c->dlg_info_status = DIALOG_INFO_UNKNOWN;
-	c->dlg_info_direction = DIALOG_INFO_DIR_UNKNOWN;
+    c->dialog_data_cnt = 0;
 
 	list_append(&cl, &c->le, c);
 
@@ -161,12 +160,12 @@ const char *contact_presence_str(enum presence_status status)
 }
 
 
-void contact_set_dialog_info(struct contact *c, enum dialog_info_status status, enum dialog_info_direction direction, const struct pl *remote_identity, const struct pl *remote_identity_display)
+void contact_set_dialog_info(struct contact *c, const struct dialog_data *ddata, unsigned int ddata_cnt)
 {
 	int len;
 	if (!c)
 		return;
-
+#if 0
 	if (c->status != DIALOG_INFO_UNKNOWN && c->dlg_info_status != status) {
 
 		(void)re_printf("<%r> changed status from %s to %s\n",
@@ -174,24 +173,19 @@ void contact_set_dialog_info(struct contact *c, enum dialog_info_status status, 
 				contact_dialog_info_str(c->dlg_info_status),
 				contact_dialog_info_str(status));
 	}
-
-	c->dlg_info_status = status;
-	c->dlg_info_direction = direction;
-
-	len = remote_identity->l < (sizeof(c->dialog_info_remote_identity)-1) ? remote_identity->l : (sizeof(c->dialog_info_remote_identity)-1);
-	if (len) {
-		strncpy(c->dialog_info_remote_identity, remote_identity->p, len);
+#else
+	{
+		static int TODO__ADD_DIALOG_INFO_LOG_ON_CHANGE;
 	}
-	c->dialog_info_remote_identity[len] = '\0';
+#endif
 
-	len = remote_identity_display->l < (sizeof(c->dialog_info_remote_identity_display)-1) ? remote_identity_display->l : (sizeof(c->dialog_info_remote_identity_display)-1);
-	if (len) {
-		strncpy(c->dialog_info_remote_identity_display, remote_identity_display->p, len);
-	}
-	c->dialog_info_remote_identity_display[len] = '\0';
+	assert(sizeof(c->ddata) >= sizeof(*ddata)*ddata_cnt);
+
+	c->dialog_data_cnt = ddata_cnt;
+	memcpy(c->ddata, ddata, ddata_cnt * sizeof(ddata[0]));
 
 	if (c->dlginfo_h) {
-		c->dlginfo_h(c->id, c->dlg_info_status, c->dlg_info_direction, c->dialog_info_remote_identity, c->dialog_info_remote_identity_display);
+		c->dlginfo_h(c->id, c->ddata, c->dialog_data_cnt);
 	}
 }
 
@@ -206,7 +200,7 @@ const char *contact_dialog_info_str(enum dialog_info_status status)
 	}
 }
 
-
+#if 0
 int contacts_print(struct re_printf *pf, void *unused)
 {
 	struct le *le;
@@ -231,3 +225,4 @@ int contacts_print(struct re_printf *pf, void *unused)
 
 	return err;
 }
+#endif

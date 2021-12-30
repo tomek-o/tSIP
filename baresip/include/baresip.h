@@ -320,7 +320,7 @@ struct config *conf_config(void);
 
 struct contact;
 
-typedef int (contact_dlginfo_h)(int id, enum dialog_info_status status, enum dialog_info_direction direction, const char* remote_identity, const char* remote_identity_display);
+typedef int (contact_dlginfo_h)(int id, const struct dialog_data *ddata, unsigned int ddata_cnt);
 typedef int (contact_presence_h)(int id, enum presence_status status, const char *note);
 
 int  contact_add(struct contact **contactp, const struct pl *addr, int id, contact_dlginfo_h *dlginfo_h, contact_presence_h *presence_h);
@@ -330,7 +330,7 @@ struct sip_addr *contact_addr(const struct contact *c);
 struct list     *contact_list(void);
 const char      *contact_str(const struct contact *c);
 const char      *contact_presence_str(enum presence_status status);
-void			contact_set_dialog_info(struct contact *c, enum dialog_info_status status, enum dialog_info_direction direction, const struct pl *remote_identity, const struct pl *remote_identity_display);
+void			contact_set_dialog_info(struct contact *c, const struct dialog_data *ddata, unsigned int ddata_cnt);
 const char		*contact_dialog_info_str(enum dialog_info_status status);
 
 

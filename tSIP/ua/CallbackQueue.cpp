@@ -145,7 +145,7 @@ void CallbackQueue::ChangeAppState(Callback::app_state_e state)
 	fifo.push();
 }
 
-void CallbackQueue::ChangeDlgInfoState(int id, int state, int direction, const char *remote_identity, const char *remote_identity_display)
+void CallbackQueue::ChangeDlgInfoState(int id, const struct dialog_data *ddata, unsigned int ddata_cnt)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -153,10 +153,10 @@ void CallbackQueue::ChangeDlgInfoState(int id, int state, int direction, const c
 		return;
 	cb->type = Callback::DLG_INFO_STATE;
 	cb->contactId = id;
-	cb->dlgInfoState = state;
-	cb->dlgInfoDirection = direction;
-	cb->dlgInfoRemoteIdentity = remote_identity;
-	cb->dlgInfoRemoteIdentityDisplay = remote_identity_display;
+	if (ddata_cnt > sizeof(cb->ddata)/sizeof(cb->ddata[0]))
+		ddata_cnt = sizeof(cb->ddata)/sizeof(cb->ddata[0]);
+	cb->ddata_cnt = ddata_cnt;
+	memcpy(cb->ddata, ddata, ddata_cnt * sizeof(ddata[0]));
 	fifo.push();
 }
 

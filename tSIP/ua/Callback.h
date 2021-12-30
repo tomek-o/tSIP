@@ -6,6 +6,7 @@
 
 #include <System.hpp>
 #include <vector>
+#include "baresip_dialog_info_status.h"
 
 class Callback
 {
@@ -93,10 +94,8 @@ public:
 	AnsiString paiPeerName;
 	AnsiString codecName;
 
-	int dlgInfoState;
-	int dlgInfoDirection;
-	AnsiString dlgInfoRemoteIdentity;
-	AnsiString dlgInfoRemoteIdentityDisplay;
+	unsigned int ddata_cnt;
+	struct dialog_data ddata[MAX_DIALOG_DATA_CNT];
 
 	int presenceState;
 	AnsiString presenceNote;

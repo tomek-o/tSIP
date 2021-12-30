@@ -52,6 +52,7 @@ Settings::_frmMain::_frmMain(void):
 	bSpeedDialIgnoreDialogInfoRemoteIdentity(false),
 	bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing(false),
 	bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated(true),
+	dialogInfoPreferredState(_frmMain::DIALOG_INFO_PREFERRED_EARLY),
 	bXBtnMinimize(false),
 	bRestoreOnIncomingCall(false),
 	bSingleInstance(false),
@@ -426,6 +427,15 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity = frmMainJson.get("SpeedDialIgnoreDialogInfoRemoteIdentity", frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity).asBool();
 		frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing = frmMainJson.get("SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing", frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing).asBool();
 		frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated = frmMainJson.get("SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated", frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated).asBool();
+
+		{
+			int tmp = frmMain.dialogInfoPreferredState;;
+			frmMainJson.getInt("DialogInfoPreferredState", tmp);
+			if (tmp >= 0 && tmp < _frmMain::DIALOG_INFO_PREFERRED__LIMITER)
+			{
+				frmMain.dialogInfoPreferredState = static_cast<enum _frmMain::DialogInfoPreferredState>(tmp);
+			}
+		}
 
 		{
 			// dealing with transition to version 0.2.00.00 - new console configuration
@@ -835,6 +845,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialIgnoreDialogInfoRemoteIdentity"] = frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity;
 		jv["SpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing"] = frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing;
 		jv["SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated"] = frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
+		jv["DialogInfoPreferredState"] = frmMain.dialogInfoPreferredState;
 		jv["StartMinimizedToTray"] = frmMain.bStartMinimizedToTray;
 		jv["XBtnMinimize"] = frmMain.bXBtnMinimize;
 		jv["RestoreOnIncomingCall"] = frmMain.bRestoreOnIncomingCall;

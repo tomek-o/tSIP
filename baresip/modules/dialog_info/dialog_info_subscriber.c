@@ -76,25 +76,21 @@ struct dialog_info_context {
 	bool in_dialog;
 	bool in_remote;
 	bool in_identity;
-	enum dialog_info_direction direction;	
-	char identity_display[64];
-	char identity[64];
-	enum dialog_info_status status;	
+	bool in_state;
+	int dialog_data_cnt;
+    struct dialog_data ddata[MAX_DIALOG_DATA_CNT];
 };
 
 static int dialog_info_sxmlc_callback(XMLEvent evt, const XMLNode* node, SXML_CHAR* text, const int n, SAX_Data* sd)
 {
 	struct dialog_info_context* ctx = (struct dialog_info_context*)sd->user;
+    struct dialog_data *ddata = &ctx->ddata[ctx->dialog_data_cnt];
 
 	switch(evt) {
 		case XML_EVENT_START_NODE:
 			if (!ctx->in_dialog_info) {
 				if (!stricmp(node->tag, C2SX("dialog-info"))) {
 					ctx->in_dialog_info = true;
-					// FreeSWITCH interoperability: after subscribing there is no "dialog" element if extension is idle
-					// (which actually makes sense)
-					// => assuming that extension is in "terminated" state by default
-					ctx->status = DIALOG_INFO_TERMINATED;
 				}
 			}
 			if (!ctx->in_dialog_info)
@@ -103,12 +99,17 @@ static int dialog_info_sxmlc_callback(XMLEvent evt, const XMLNode* node, SXML_CH
 				if (!stricmp(node->tag, C2SX("dialog"))) {
 					SXML_CHAR* val = NULL;
 					ctx->in_dialog = true;
+					// fill defaults
+					ddata->direction = DIALOG_INFO_DIR_UNKNOWN;
+					ddata->identity_display[0] = '\0';
+					ddata->identity[0] = '\0';
+					ddata->status = DIALOG_INFO_UNKNOWN;
 					if (XMLNode_get_attribute_with_default(node, C2SX("direction"), &val, NULL) != false) {
 						if (val) {
 							if (!strcmp(val, "initiator")) {
-								ctx->direction = DIALOG_INFO_DIR_INITIATOR;
+								ddata->direction = DIALOG_INFO_DIR_INITIATOR;
 							} else if (!strcmp(val, "recipient")) {
-								ctx->direction = DIALOG_INFO_DIR_RECIPIENT;
+								ddata->direction = DIALOG_INFO_DIR_RECIPIENT;
 							}
 							__free(val);
 						}
@@ -121,16 +122,15 @@ static int dialog_info_sxmlc_callback(XMLEvent evt, const XMLNode* node, SXML_CH
 				if (!stricmp(node->tag, C2SX("remote")))
 					ctx->in_remote = true;
 			}
-			if (!ctx->in_remote)
-				break;
-			if (!ctx->in_identity) {
+
+			if (ctx->in_remote && !ctx->in_identity) {
 				if (!stricmp(node->tag, C2SX("identity"))) {
 					SXML_CHAR* val = NULL;
 					ctx->in_identity = true;
 					if (XMLNode_get_attribute_with_default(node, C2SX("display"), &val, NULL) != false) {
                     	if (val) {
-							strncpy(ctx->identity_display, val, sizeof(ctx->identity_display));
-							ctx->identity_display[sizeof(ctx->identity_display)-1] = '\0';
+							strncpy(ddata->identity_display, val, sizeof(ddata->identity_display));
+							ddata->identity_display[sizeof(ddata->identity_display)-1] = '\0';
                         }
 					}
 					if (val) {
@@ -138,37 +138,78 @@ static int dialog_info_sxmlc_callback(XMLEvent evt, const XMLNode* node, SXML_CH
                     }
 				}
 			}
-			if (!ctx->in_identity)
-				break;
+			if (!ctx->in_state) {
+				if (!stricmp(node->tag, C2SX("state"))) {
+					ctx->in_state = true;
+				}
+			}
 			
 			break;
 
 		case XML_EVENT_END_NODE:
-			if (!stricmp(node->tag, C2SX("dialog-info"))) return false;
-			if (!stricmp(node->tag, C2SX("dialog"))) return false;
-			if (!stricmp(node->tag, C2SX("remote"))) return false;
+			if (!stricmp(node->tag, C2SX("dialog-info"))) {
+				ctx->in_dialog_info = false;
+				if (ctx->dialog_data_cnt == 0) {
+					// FreeSWITCH interoperability: after subscribing there is no "dialog" element if extension is idle
+					// (which actually makes sense)
+					// => assuming that extension is in "terminated" state by default
+					ddata->status = DIALOG_INFO_TERMINATED;
+					ctx->dialog_data_cnt++;
+				}
+				return false;
+			}
+			if (!stricmp(node->tag, C2SX("dialog"))) {
+				ctx->in_dialog = false;
+				ctx->dialog_data_cnt++;
+				if (ctx->dialog_data_cnt >= sizeof(ctx->ddata)/sizeof(ctx->ddata[0]))
+					return false;
+				return true;
+			}
+			if (!stricmp(node->tag, C2SX("remote"))) {
+				ctx->in_remote = false;
+				return true;
+			}
 			if (ctx->in_remote) {
-				if (!stricmp(node->tag, C2SX("identity"))) return false;
+				if (!stricmp(node->tag, C2SX("identity"))) {
+					ctx->in_identity = false;
+					return true;
+				}
+			}
+			if (ctx->in_state) {
+				if (!stricmp(node->tag, C2SX("state"))) {
+					ctx->in_state = false;
+				}
 			}
 			break;
 
 		case XML_EVENT_TEXT:
 			if (ctx->in_identity) {
-				strncpy(ctx->identity, text, sizeof(ctx->identity));
-				ctx->identity[sizeof(ctx->identity)-1] = '\0';
+				strncpy(ddata->identity, text, sizeof(ddata->identity));
+				ddata->identity[sizeof(ddata->identity)-1] = '\0';
+			}
+			if (ctx->in_state) {
+				if (strcmp(text, STR_EARLY) == 0) {
+					ddata->status = DIALOG_INFO_EARLY;
+				} else if (strcmp(text, STR_CONFIRMED) == 0) {
+					ddata->status = DIALOG_INFO_CONFIRMED;
+				} else if (strcmp(text, STR_TERMINATED) == 0) {
+					ddata->status = DIALOG_INFO_TERMINATED;
+				} else {
+                	ddata->status = DIALOG_INFO_UNKNOWN;
+				}
 			}
 			break;
 
 		case XML_EVENT_ERROR:
 			ctx->error = true;
-			return false;
-			
+			return false;	// stop parsing
+
 		default:
 			break;
 	}
 
-	
-	return true;
+
+	return true;	// continue parsing
 }
 
 static void notify_handler(struct sip *sip, const struct sip_msg *msg,
@@ -245,7 +286,7 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg,
 	}
 
 	memset(&ctx, 0, sizeof(ctx));
-	ctx.status = DIALOG_INFO_UNKNOWN;
+	ctx.ddata[0].status = DIALOG_INFO_UNKNOWN;
 	SAX_Callbacks_init(&sax);
 	sax.all_event = dialog_info_sxmlc_callback;
 
@@ -282,13 +323,15 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg,
 #endif
 	(void)sip_treply(NULL, sip, msg, 200, "OK");
 
+#if 0
 	pl_set_str(&pl_remote_identity, ctx.identity);
 	pl_set_str(&pl_remote_identity_display, ctx.identity_display);
 	if (status == DIALOG_INFO_UNKNOWN)
 	{
-        status = ctx.status;
-    }
-	contact_set_dialog_info(dlg_info->contact, status, ctx.direction, &pl_remote_identity, &pl_remote_identity_display);
+		status = ctx.status;
+	}
+#endif
+	contact_set_dialog_info(dlg_info->contact, ctx.ddata, ctx.dialog_data_cnt);
 }
 
 
@@ -320,7 +363,7 @@ static void close_handler(int err, const struct sip_msg *msg,
 
 	tmr_start(&dlg_info->tmr, wait * 1000, tmr_handler, dlg_info);
 
-	contact_set_dialog_info(dlg_info->contact, DIALOG_INFO_UNKNOWN, DIALOG_INFO_DIR_UNKNOWN, &pl_null, &pl_null);
+	contact_set_dialog_info(dlg_info->contact, NULL, 0);
 }
 
 
