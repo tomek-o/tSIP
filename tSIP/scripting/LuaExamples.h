@@ -206,6 +206,29 @@ const LuaExample luaExamples [] =
 	},
 
 	{
+	"Calling numbers from list",
+
+	"-- calling numbers from the list\n"
+	"local numbers = {\n"
+	"\t'1000',\n"
+	"\t'1001',\n"
+	"\t'1002'\n"
+	"}\n"
+	"for i = 1, #numbers do\n"
+	"\tCall(numbers[i])\n"
+	"\tSleep(4000)\n"
+	"\tHangup()\n"
+	"\tSleep(1000)\n"
+	"\tlocal ret = CheckBreak()\n"
+	"\t-- break on user request\n"
+	"\tif ret ~= 0 then\n"
+	"\t\tprint ('User break\\n')\n"
+	"\t\tbreak\n"
+	"\tend\n"
+	"end"
+	},
+
+	{
 	"Call + DTMFs",
 	
 	"-- calling and sending DTMFs\n"
