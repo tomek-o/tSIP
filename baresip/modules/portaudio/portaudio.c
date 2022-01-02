@@ -100,14 +100,14 @@ static int read_stream_open(struct ausrc_st *st, const struct ausrc_prm *prm,
 	if (paNoError != err) {
 		DEBUG_WARNING("read: Pa_OpenStream: %s\n",
 			      Pa_GetErrorText(err));
-		return EINVAL;
+		return E_AUDIO_SOURCE_DEV_OPEN_ERROR;
 	}
 
 	err = Pa_StartStream(st->stream_rd);
 	if (paNoError != err) {
 		DEBUG_WARNING("read: Pa_StartStream: %s\n",
 			      Pa_GetErrorText(err));
-		return EINVAL;
+		return E_AUDIO_SOURCE_DEV_OPEN_ERROR;
 	}
 
 	info = Pa_GetStreamInfo(st->stream_rd);
@@ -138,14 +138,14 @@ static int write_stream_open(struct auplay_st *st,
 	if (paNoError != err) {
 		DEBUG_WARNING("write: Pa_OpenStream: %s\n",
 			      Pa_GetErrorText(err));
-		return EINVAL;
+		return E_AUDIO_OUTPUT_DEV_OPEN_ERROR;
 	}
 
 	err = Pa_StartStream(st->stream_wr);
 	if (paNoError != err) {
 		DEBUG_WARNING("write: Pa_StartStream: %s\n",
 			      Pa_GetErrorText(err));
-		return EINVAL;
+		return E_AUDIO_OUTPUT_DEV_OPEN_ERROR;
 	}
 
 	info = Pa_GetStreamInfo(st->stream_wr);

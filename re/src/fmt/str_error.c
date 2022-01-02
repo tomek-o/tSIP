@@ -86,6 +86,10 @@ const char *str_error(int errnum, char *buf, size_t sz)
 		return "End of call (CANCEL received)";
 	case E_AUDIO_SOURCE_FILE_FOPEN_ERROR:
 		return "Failed to open audio source file";
+	case E_AUDIO_SOURCE_DEV_OPEN_ERROR:
+		return "Failed to open audio source device";
+	case E_AUDIO_OUTPUT_DEV_OPEN_ERROR:
+		return "Failed to open audio output device";
 	default:
 		strncpy(buf, strerror(errnum), sz);
 		{

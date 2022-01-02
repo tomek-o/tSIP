@@ -187,7 +187,7 @@ static int read_stream_open(unsigned int dev, struct ausrc_st *st, const struct 
 			  CALLBACK_FUNCTION | WAVE_FORMAT_DIRECT);
 	if (res != MMSYSERR_NOERROR) {
 		DEBUG_WARNING("waveInOpen: failed, status = %u\n", res);
-		return EINVAL;
+		return E_AUDIO_SOURCE_DEV_OPEN_ERROR;
 	}
 
 	/* Prepare enough IN buffers to suite at least 50ms of data */

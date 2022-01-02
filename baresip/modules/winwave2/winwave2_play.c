@@ -198,7 +198,7 @@ static int write_stream_open(unsigned int dev, struct auplay_st *st,
 	                  CALLBACK_FUNCTION | WAVE_FORMAT_DIRECT);
 	if (res != MMSYSERR_NOERROR) {
 		DEBUG_WARNING("waveOutOpen: failed %d\n", res);
-		return EINVAL;
+		return E_AUDIO_OUTPUT_DEV_OPEN_ERROR;
 	}
 
 	return 0;
