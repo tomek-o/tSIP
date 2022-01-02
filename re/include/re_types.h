@@ -4,6 +4,9 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifndef RE_TYPES_H
+#define RE_TYPES_H
+
 #include <sys/types.h>
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
@@ -249,6 +252,12 @@ typedef bool _Bool;
 #endif
 
 /* Additional error codes */
-#define E_SIP_SESSION_CLOSED_BYE		100000
-#define E_SIP_SESSION_CLOSED_CANCEL		100001
+enum
+{
+	E_SIP_SESSION_CLOSED_BYE = 100000,
+	E_SIP_SESSION_CLOSED_CANCEL,
+	E_AUDIO_SOURCE_FILE_FOPEN_ERROR,		  /* Failed to open source audio file */
+};
+
+#endif
 

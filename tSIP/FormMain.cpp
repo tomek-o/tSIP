@@ -1626,9 +1626,9 @@ void TfrmMain::PollCallbackQueue(void)
 					UA->PlayStop();
 					call.ringStarted = false;
 				}
-				if (cb.scode != 0)
+				if (cb.scode != 0 || cb.caller != "")
 				{
-					asStateText = cb.caller;	// here it's filled with e.g. "488 Not Acceptable Here"
+					asStateText = cb.caller;	// here it's filled with e.g. "488 Not Acceptable Here" or local error string
 					tmrClearCallState->Enabled = true;
 				}
 				else

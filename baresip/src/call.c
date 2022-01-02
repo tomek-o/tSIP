@@ -1370,12 +1370,17 @@ static void sipsess_close_handler(int err, const struct sip_msg *msg,
 	MAGIC_CHECK(call);
 
 	if (err) {
+		const char *str;
 		(void)re_printf("%s: session closed: %m\n",
 				call->peer_uri, err);
 
 		if (call->not) {
 			(void)call_notify_sipfrag(call, 500, "%m", err);
 		}
+
+		str = str_error(err, reason, sizeof(reason));
+		if (str != reason)
+			str_ncpy(reason, str, sizeof(reason));
 	}
 	else if (msg) {
 

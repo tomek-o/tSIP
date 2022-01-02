@@ -126,7 +126,10 @@ int aufile_open(struct aufile **afp, struct aufile_prm *prm,
 
 	af->f = fopen(filename, mode == AUFILE_READ ? "rb" : "wb");
 	if (!af->f) {
-		err = errno;
+		if (mode == AUFILE_READ)
+			err = E_AUDIO_SOURCE_FILE_FOPEN_ERROR;
+		else
+			err = errno;
 		goto out;
 	}
 
