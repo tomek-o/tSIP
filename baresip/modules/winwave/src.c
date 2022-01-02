@@ -186,7 +186,7 @@ static int read_stream_open(unsigned int dev, struct ausrc_st *st, const struct 
 			  (DWORD_PTR) st,
 			  CALLBACK_FUNCTION | WAVE_FORMAT_DIRECT);
 	if (res != MMSYSERR_NOERROR) {
-		DEBUG_WARNING("waveInOpen: failed %d\n", err);
+		DEBUG_WARNING("waveInOpen: failed, status = %u\n", res);
 		return EINVAL;
 	}
 
