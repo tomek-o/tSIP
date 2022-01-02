@@ -1140,18 +1140,20 @@ int audio_start(struct audio *a)
 		err  = start_source(&a->tx, a);
 		if (err) {
 			DEBUG_WARNING("start_source failed: %m\n", err);
+		} else {
+			DEBUG_WARNING("starting player...\n");
+			err = start_player(&a->rx, a);
 		}
-		DEBUG_WARNING("starting player...\n");
-		err |= start_player(&a->rx, a);
 	}
 	else {
 		DEBUG_WARNING("starting player...\n");
 		err  = start_player(&a->rx, a);
 		if (err) {
 			DEBUG_WARNING("start_player failed: %m\n", err);
+		} else {
+			DEBUG_WARNING("starting source...\n");
+			err = start_source(&a->tx, a);
 		}
-		DEBUG_WARNING("starting source...\n");
-		err |= start_source(&a->tx, a);
 	}
 	if (err)
 		return err;
