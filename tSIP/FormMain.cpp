@@ -910,10 +910,10 @@ void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::Hangup(void)
+void TfrmMain::Hangup(int sipCode, AnsiString reason)
 {
 	call.disconnecting = true;
-	UA->Hangup(0);
+	UA->Hangup(0, sipCode, reason);
 }
 
 void TfrmMain::Answer(void)

@@ -118,7 +118,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			if (app.paging_txp)
 			{
 				LOG("Denying incoming call (paging TX active)\n");
-				ua_hangup(ua_cur(), call, 486, NULL);
+				ua_hangup(ua_cur(), call, 486, "Busy Here");
 				break;
 			}
 			const char* initial_rx_invite = call_initial_rx_invite(call);
@@ -1002,7 +1002,7 @@ extern "C" void control_handler(void)
 	case Command::HANGUP:
 		if (app.callp)
 		{
-			ua_hangup(ua_cur(), app.callp, cmd.code, NULL);
+			ua_hangup(ua_cur(), app.callp, cmd.code, cmd.reason.c_str());
 			UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
 			app.callp = NULL;
 		}

@@ -732,9 +732,11 @@ int call_hangup(struct call *call, uint16_t scode, const char *reason)
 			scode = 486;
 			reason = "Rejected";
 		}
+		if (reason == NULL)
+			reason = "Unspecified hangup reason";	/* reason is required by vreplyf */
 		(void)re_printf("rejecting incoming call from %s (%u %s)\n",
 				call->peer_uri, scode, reason);
-		(void)sipsess_reject(call->sess, scode, reason, NULL);
+		err = sipsess_reject(call->sess, scode, reason, NULL);
 		break;
 
 	default:

@@ -167,7 +167,7 @@ private:	// User declarations
 	AnsiString GetClip(AnsiString uri);
 	void MakeCall(AnsiString target);
 	void CallNumberBackspace(void);
-	void Hangup(void);
+	void Hangup(int sipCode = 486, AnsiString reason = "Busy Here");
 	void Answer(void);
 	std::string OnGetDial(void);
 	void OnSetDial(std::string number);

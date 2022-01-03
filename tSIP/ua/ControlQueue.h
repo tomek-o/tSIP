@@ -28,7 +28,7 @@ public:
 		float amplitude4 = 0.0f, float frequency4 = 0.0f);
 	void Hold(int callId, bool state);
 	void Mute(int callId, bool state);
-	void Hangup(int callId, int code=0);
+	void Hangup(int callId, int code=0, AnsiString reason = "Busy Here");
 	void SetMsgLogging(bool enabled, bool onlyFirstLines);
 	void SetAubufLogging(bool enabled);	
 	void ReRegister(int accountId);

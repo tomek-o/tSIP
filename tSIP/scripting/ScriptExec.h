@@ -27,7 +27,7 @@ private:
 
 	typedef void (__closure *CallbackAddOutputText)(const char* text);
 	typedef void (__closure *CallbackCall)(const char* number);
-	typedef void (__closure *CallbackHangup)(void);
+	typedef void (__closure *CallbackHangup)(int sipCode, AnsiString reason);
 	typedef void (__closure *CallbackAnswer)(void);
 	typedef std::string (__closure *CallbackGetDial)(void);
 	typedef void (__closure *CallbackSetDial)(std::string number);

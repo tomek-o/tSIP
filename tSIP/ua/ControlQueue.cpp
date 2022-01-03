@@ -199,7 +199,7 @@ void ControlQueue::SetAubufLogging(bool enabled)
 	fifo.push();
 }
 
-void ControlQueue::Hangup(int callId, int code)
+void ControlQueue::Hangup(int callId, int code, AnsiString reason)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
@@ -208,6 +208,7 @@ void ControlQueue::Hangup(int callId, int code)
 	cmd->type = Command::HANGUP;
 	cmd->callId = callId;
 	cmd->code = code;
+	cmd->reason = reason;
 	fifo.push();
 }
 

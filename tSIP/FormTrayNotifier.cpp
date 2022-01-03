@@ -72,7 +72,7 @@ void TfrmTrayNotifier::HideWindow(void)
 void __fastcall TfrmTrayNotifier::btnHangupClick(TObject *Sender)
 {
 	if (OnHangup)
-		OnHangup();	
+		OnHangup(486, "Busy Here");	
 }
 //---------------------------------------------------------------------------
 

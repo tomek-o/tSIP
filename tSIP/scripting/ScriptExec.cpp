@@ -458,7 +458,21 @@ static int l_Call(lua_State* L)
 
 static int l_Hangup(lua_State* L)
 {
-	GetContext(L)->onHangup();
+	int argCount = lua_gettop(L);
+	enum { DEFAULT_CODE = 486 };
+	int sipCode = DEFAULT_CODE;
+	if (argCount >= 1)
+	{
+		sipCode = lua_tointeger(L, 1);
+		if (sipCode < 400 || sipCode > 699)
+			sipCode = DEFAULT_CODE;
+	}
+	AnsiString reason = "Busy Here";
+	if (argCount >= 2)
+	{
+    	reason = lua_tostring(L, 2);
+	}
+	GetContext(L)->onHangup(sipCode, reason);
 	return 0;
 }
 

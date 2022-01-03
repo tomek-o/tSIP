@@ -45,6 +45,7 @@ public:
 	int accountId;
 	int callId;
 	int code;
+	AnsiString reason;
 	char key;
 	bool bEnabled;
 	bool bParam;
