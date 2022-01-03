@@ -242,6 +242,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 
 	autoAnswer = uaConfJson.get("autoAnswer", autoAnswer).asBool();
 	autoAnswerCode = uaConfJson.get("autoAnswerCode", autoAnswerCode).asInt();
+	uaConfJson.getString("autoAnswerReason", autoAnswerReason);
 	unsigned int prevAutoAnswerDelayMin = autoAnswerDelayMin;
 	unsigned int prevAutoAnswerDelayMax = autoAnswerDelayMax;
 	autoAnswerDelayMin = uaConfJson.get("autoAnswerDelayMin", autoAnswerDelayMin). asUInt();
@@ -337,6 +338,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 
 	uaConfJson["autoAnswer"] = autoAnswer;
 	uaConfJson["autoAnswerCode"] = autoAnswerCode;
+	uaConfJson["autoAnswerReason"] = autoAnswerReason;
 	uaConfJson["autoAnswerDelayMin"] = autoAnswerDelayMin;
 	uaConfJson["autoAnswerDelayMax"] = autoAnswerDelayMax;
 	uaConfJson["autoAnswerCallInfo"] = autoAnswerCallInfo;

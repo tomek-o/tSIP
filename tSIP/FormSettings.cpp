@@ -355,6 +355,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	chbAutoAnswer->Checked = tmpSettings.uaConf.autoAnswer;
 	edAutoAnswerCode->Text = tmpSettings.uaConf.autoAnswerCode;
+	edAutoAnswerReason->Text = tmpSettings.uaConf.autoAnswerReason.c_str();
 	edAutoAnswerDelayMin->Text = tmpSettings.uaConf.autoAnswerDelayMin;
 	edAutoAnswerDelayMax->Text = tmpSettings.uaConf.autoAnswerDelayMax;
 
@@ -733,6 +734,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
    	tmpSettings.uaConf.autoAnswer = chbAutoAnswer->Checked;
 	tmpSettings.uaConf.autoAnswerCode = StrToIntDef(edAutoAnswerCode->Text, 200);
+	tmpSettings.uaConf.autoAnswerReason = edAutoAnswerReason->Text.c_str();
 	tmpSettings.uaConf.autoAnswerDelayMin = StrToIntDef(edAutoAnswerDelayMin->Text, 0);
 	tmpSettings.uaConf.autoAnswerDelayMax = StrToIntDef(edAutoAnswerDelayMax->Text, 0);
 	if (tmpSettings.uaConf.autoAnswerDelayMin > tmpSettings.uaConf.autoAnswerDelayMax)

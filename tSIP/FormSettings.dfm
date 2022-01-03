@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 468
-    ActivePage = tsSpeedDial
+    ActivePage = tsCalls
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -906,6 +906,13 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Extra/custom header lines for outgoing calls'
       end
+      object lblSipAutoAnswerReason: TLabel
+        Left = 342
+        Top = 29
+        Width = 33
+        Height = 13
+        Caption = 'reason'
+      end
       object edAutoAnswerCode: TEdit
         Left = 272
         Top = 26
@@ -991,6 +998,13 @@ object frmSettings: TfrmSettings
           'Disconnect call on audio error (disable when using "on audio err' +
           'or" script event)'
         TabOrder = 9
+      end
+      object edAutoAnswerReason: TEdit
+        Left = 381
+        Top = 26
+        Width = 148
+        Height = 21
+        TabOrder = 10
       end
     end
     object tsMessages: TTabSheet

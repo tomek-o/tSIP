@@ -576,6 +576,7 @@ public:
 
 	bool autoAnswer;
 	int autoAnswerCode;
+	std::string autoAnswerReason;
 	unsigned int autoAnswerDelayMin;
 	unsigned int autoAnswerDelayMax;
 
@@ -598,6 +599,7 @@ public:
 		loopRingWithoutSilence = false;
 		autoAnswer = false;
 		autoAnswerCode = 200;
+		autoAnswerReason = "OK";
 		autoAnswerDelayMin = 0;
 		autoAnswerDelayMax = 0;
 		autoAnswerCallInfo = false;

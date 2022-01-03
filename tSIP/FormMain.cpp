@@ -2986,7 +2986,7 @@ void TfrmMain::AutoAnswer(void)
 			frmTrayNotifier->HideWindow();
 		}
 	} else if (autoAnswerCode >= 400) {
-		UA->Hangup(0, autoAnswerCode);
+		UA->Hangup(0, autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
 		lbl2ndParty->Caption = "";
 		lbl2ndPartyDesc->Caption = "";
 		lblCallState->Caption = "";
