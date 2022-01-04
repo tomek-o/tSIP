@@ -333,3 +333,27 @@ void TfrmContacts::Scale(int percentage)
         lv->Columns->Items[i]->Width = (float)lv->Columns->Items[i]->Width * percentage / 100.0f;
     }
 }
+void __fastcall TfrmContacts::lvContactsInfoTip(TObject *Sender,
+      TListItem *Item, AnsiString &InfoTip)
+{
+	if (Item == NULL)
+		return;
+	int id = filteredContacts[Item->Index].id;
+	Contacts::Entry &entry = contacts->GetEntries()[id];
+
+	AnsiString tip;
+	if (entry.company != "")
+		tip.cat_printf("Company: %s\n", entry.company.c_str());
+	if (entry.uri1 != "")
+		tip.cat_printf("Number #1: %s\n", entry.uri1.c_str());
+	if (entry.uri2 != "")
+		tip.cat_printf("Number #2: %s\n", entry.uri2.c_str());
+	if (entry.uri3 != "")
+		tip.cat_printf("Number #3: %s\n", entry.uri3.c_str());
+	if (entry.note != "")
+		tip.cat_printf("Note: %s", entry.note.c_str());
+
+	InfoTip = tip.Trim();
+}
+//---------------------------------------------------------------------------
+

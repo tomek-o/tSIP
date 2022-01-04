@@ -41,6 +41,8 @@ __published:	// IDE-managed Components
 	void __fastcall miDeleteClick(TObject *Sender);
 	void __fastcall edFilterChange(TObject *Sender);
 	void __fastcall edFilterKeyPress(TObject *Sender, char &Key);
+	void __fastcall lvContactsInfoTip(TObject *Sender, TListItem *Item,
+          AnsiString &InfoTip);
 public:
 	typedef void (__closure *CallbackCall)(AnsiString uri);
 private:	// User declarations
