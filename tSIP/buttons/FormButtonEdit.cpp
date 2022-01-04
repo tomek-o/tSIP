@@ -324,7 +324,6 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::HOLD:
 	case Button::HTTP_QUERY:
 	case Button::SIP_ACCESS_URL:
-	case Button::HANGUP:
 	case Button::SHOW_SETTINGS:
 	case Button::MINIMIZE:
 	case Button::SHOW_LOG:
@@ -396,6 +395,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 		break;
 		
 	case Button::AUTO_ANSWER_DND:
+	case Button::HANGUP:
 		tsBehaviorAutoAnswer->Visible = true;
 		edNumber->Visible = false;
 		lblNumber->Visible = false;		

@@ -2613,7 +2613,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		UA->SwitchAudioPlayer(0, cfg.audioTxMod.c_str(), cfg.audioTxDev.c_str());
 		break;
 	case Button::HANGUP:
-		Hangup();
+		Hangup(cfg.sipCode, cfg.sipReason.c_str());
 		break;
 	case Button::SEND_TEXT_MESSAGE: {
 		AnsiString target = cfg.number.c_str();
