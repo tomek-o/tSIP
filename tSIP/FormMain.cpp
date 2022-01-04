@@ -2668,6 +2668,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		{
 			appSettings.uaConf.autoAnswer = true;
 			appSettings.uaConf.autoAnswerCode = cfg.sipCode;
+			appSettings.uaConf.autoAnswerReason = cfg.sipReason;
 			UpdateAutoAnswer();
 		}
 		appSettings.Write(Paths::GetConfig());		
@@ -3722,7 +3723,7 @@ void __fastcall TfrmMain::miRefreshTranslationFromFileClick(TObject *Sender)
 
 void TfrmMain::UpdateAutoAnswer(void)
 {
-	buttons.UpdateAutoAnswer(appSettings.uaConf.autoAnswer, appSettings.uaConf.autoAnswerCode);
+	buttons.UpdateAutoAnswer(appSettings.uaConf.autoAnswer, appSettings.uaConf.autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
 }
 
 void __fastcall TfrmMain::btnResetMicVolumeMouseUp(TObject *Sender,

@@ -759,7 +759,7 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 0
         Width = 651
         Height = 380
-        ActivePage = tsBehaviorBlf
+        ActivePage = tsBehaviorAutoAnswer
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -1134,6 +1134,20 @@ object frmButtonEdit: TfrmButtonEdit
             Height = 13
             Caption = 'SIP code'
           end
+          object lblAutoAnswerSipReason: TLabel
+            Left = 3
+            Top = 30
+            Width = 52
+            Height = 13
+            Caption = 'SIP reason'
+          end
+          object lblAutoAnswerSipReasonInfo: TLabel
+            Left = 283
+            Top = 30
+            Width = 152
+            Height = 13
+            Caption = '(e.g. "Busy Here" for 486 code)'
+          end
           object edAutoAnswerSipCode: TEdit
             Left = 64
             Top = 0
@@ -1141,6 +1155,14 @@ object frmButtonEdit: TfrmButtonEdit
             Height = 21
             TabOrder = 0
             Text = '200'
+          end
+          object edAutoAnswerSipReason: TEdit
+            Left = 64
+            Top = 27
+            Width = 201
+            Height = 21
+            TabOrder = 1
+            Text = 'OK'
           end
         end
       end

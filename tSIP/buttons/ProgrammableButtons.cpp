@@ -221,6 +221,7 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				cfg.arg1 = btnJson.get("arg1", cfg.arg1).asString();
 
 				btnJson.getInt("sipCode", cfg.sipCode);
+				btnJson.getString("sipReason", cfg.sipReason);
 				btnJson.getInt("expires", cfg.expires);
 
 				cfg.pagingTxWaveFile = btnJson.get("pagingTxWaveFile", cfg.pagingTxWaveFile).asString();
@@ -552,6 +553,10 @@ int ProgrammableButtons::Write(void)
 		if (saveAllSettings || (cfg.sipCode != defaultBtn.sipCode))
 		{
 			jsonBtn["sipCode"] = cfg.sipCode;
+		}
+		if (saveAllSettings || (cfg.sipReason != defaultBtn.sipReason))
+		{
+			jsonBtn["sipReason"] = cfg.sipReason;
 		}
 		if (saveAllSettings || (cfg.expires != defaultBtn.expires))
 		{
@@ -1134,14 +1139,14 @@ void ProgrammableButtons::UpdateMwiState(int newMsg, int oldMsg)
 	}
 }
 
-void ProgrammableButtons::UpdateAutoAnswer(bool enabled, int sipCode)
+void ProgrammableButtons::UpdateAutoAnswer(bool enabled, int sipCode, AnsiString sipReason)
 {
 	for (unsigned int i=0; i<btns.size(); i++)
 	{
 		const ButtonConf &cfg = btnConf[i];
 		if (cfg.type == Button::AUTO_ANSWER_DND)
 		{
-			if (cfg.sipCode == sipCode && enabled)
+			if (cfg.sipCode == sipCode && cfg.sipReason == sipReason.c_str() && enabled)
 			{
 				btns[i]->SetDown(true);
 			}

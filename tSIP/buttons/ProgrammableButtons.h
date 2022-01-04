@@ -128,7 +128,7 @@ public:
 	void UpdatePresenceState(int id, int state, AnsiString note);
 	void UpdateBtnState(Button::Type type, bool state);
 	void UpdateMwiState(int newMsg, int oldMsg);
-	void UpdateAutoAnswer(bool enabled, int sipCode);
+	void UpdateAutoAnswer(bool enabled, int sipCode, AnsiString sipReason);
 
 	void SetConfig(int btnId, const ButtonConf &conf);
 };

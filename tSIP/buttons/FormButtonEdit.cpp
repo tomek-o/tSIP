@@ -155,6 +155,7 @@ void TfrmButtonEdit::ApplyConf(void)
 	edArg1->Text = cfg->arg1.c_str();
 
 	edAutoAnswerSipCode->Text = cfg->sipCode;
+	edAutoAnswerSipReason->Text = cfg->sipReason.c_str();
 
 	edPagingTxWaveFile->Text = cfg->pagingTxWaveFile.c_str();
 	cbPagingTxCodec->Text = cfg->pagingTxCodec.c_str();
@@ -254,10 +255,11 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->arg1 = edArg1->Text.c_str();
 
 	{
-    	int tmp = StrToIntDef(edAutoAnswerSipCode->Text, cfg->sipCode);
+		int tmp = StrToIntDef(edAutoAnswerSipCode->Text, cfg->sipCode);
 		if (tmp >= 100 && tmp <= 999)
 			cfg->sipCode = tmp;
 	}
+	cfg->sipReason = edAutoAnswerSipReason->Text.c_str();
 
 	cfg->pagingTxWaveFile = edPagingTxWaveFile->Text.c_str();
 	cfg->pagingTxCodec = cbPagingTxCodec->Text.c_str();

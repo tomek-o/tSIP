@@ -75,6 +75,7 @@ void ButtonConf::Reset(void)
 	arg1 = "";
 
 	sipCode = 200;
+	sipReason = "OK";
 	expires = 600;
 
 	pagingTxWaveFile = "";
