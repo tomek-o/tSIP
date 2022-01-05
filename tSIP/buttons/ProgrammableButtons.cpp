@@ -1231,13 +1231,22 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 		return;
 	}
 	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
+	const ButtonConf &cfg = btnConf[editedPanelId];	// copy
+
+	AnsiString text;
+	AnsiString caption = "[unnamed]";
+	if (cfg.caption != "")
+		caption = cfg.caption.c_str();
+	text.sprintf("#%02d: %s", editedPanelId, caption.Trim().c_str());
+	container->movingFrame->Caption = text;
+
 	container->movingFrame->Visible = true;
 	TPoint P = container->ScreenToClient(Mouse->CursorPos);
 	if (P.x < 0)
 		P.x = 0;
 	if (P.y < 0)
 		P.y = 0;
-	const ButtonConf &cfg = btnConf[editedPanelId];	// copy
+
 	if (panelIsMoving)
 	{
 		int left = P.x * 100/scalingPercentage;
