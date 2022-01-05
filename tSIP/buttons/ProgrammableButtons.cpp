@@ -1230,7 +1230,19 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 		container->movingFrame->Visible = false;
 		return;
 	}
+
 	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
+
+	{
+		SHORT state = GetAsyncKeyState( VK_ESCAPE );
+		// Test high bit - if set, key was down when GetAsyncKeyState was called.
+		if( ( 1 << 15 ) & state )
+		{
+			EndEditing(container);
+			return;
+		}
+	}
+
 	const ButtonConf &cfg = btnConf[editedPanelId];	// copy
 
 	AnsiString text;
@@ -1306,13 +1318,20 @@ void __fastcall ProgrammableButtons::FormKeyPress(TObject *Sender, char &Key)
 {
 	if (Key == VK_ESCAPE)
 	{
-		if (panelIsMoving || panelIsResizing)
-		{
-			panelIsMoving = false;
-			TfrmButtonContainer *container = dynamic_cast<TfrmButtonContainer*>(Sender);
-			assert(container);
-			container->imgBackground->Cursor = crDefault;
-		}
+		TfrmButtonContainer *container = dynamic_cast<TfrmButtonContainer*>(Sender);
+		EndEditing(container);
+	}
+}
+
+void ProgrammableButtons::EndEditing(TfrmButtonContainer *container)
+{
+	if (panelIsMoving || panelIsResizing)
+	{
+		panelIsMoving = false;
+		panelIsResizing = false;
+
+		assert(container);
+		container->imgBackground->Cursor = crDefault;
 	}
 }
 

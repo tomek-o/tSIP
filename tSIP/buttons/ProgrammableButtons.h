@@ -56,6 +56,7 @@ private:
 	void __fastcall SpeedDialPanelClick(TObject *Sender);
 	void OnPanelMouseUpDown(TProgrammableButton *btn);
 	TfrmButtonContainer *GetBtnContainer(int btnId);
+	void EndEditing(TfrmButtonContainer *container);
 
 	void __fastcall miAddEditPanelClick(TObject *Sender);
 	void __fastcall tmrMovingTimer(TObject *Sender);
