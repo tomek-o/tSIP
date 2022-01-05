@@ -36,7 +36,6 @@ object frmContacts: TfrmContacts
     OnData = lvContactsData
     OnDblClick = lvContactsDblClick
     OnInfoTip = lvContactsInfoTip
-    ExplicitTop = -1
   end
   object pnlBottom: TPanel
     Left = 0

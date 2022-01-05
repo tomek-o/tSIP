@@ -343,15 +343,15 @@ void __fastcall TfrmContacts::lvContactsInfoTip(TObject *Sender,
 
 	AnsiString tip;
 	if (entry.company != "")
-		tip.cat_printf("Company: %s\n", entry.company.c_str());
+		tip.cat_printf("%s: %s\n", Translate2("TfrmContactEditor.lblCompany", "Company").c_str(), entry.company.c_str());
 	if (entry.uri1 != "")
-		tip.cat_printf("Number #1: %s\n", entry.uri1.c_str());
+		tip.cat_printf("%s: %s\n", Translate2("TfrmContactEditor.lblNumber1", "Number #1").c_str(), entry.uri1.c_str());
 	if (entry.uri2 != "")
-		tip.cat_printf("Number #2: %s\n", entry.uri2.c_str());
+		tip.cat_printf("%s: %s\n", Translate2("TfrmContactEditor.lblNumber2", "Number #2").c_str(), entry.uri2.c_str());
 	if (entry.uri3 != "")
-		tip.cat_printf("Number #3: %s\n", entry.uri3.c_str());
+		tip.cat_printf("%s: %s\n", Translate2("TfrmContactEditor.lblNumber3", "Number #3").c_str(), entry.uri3.c_str());
 	if (entry.note != "")
-		tip.cat_printf("Note: %s", entry.note.c_str());
+		tip.cat_printf("%s: %s", Translate2("TfrmContactEditor.lblNote", "Note").c_str(), entry.note.c_str());
 
 	InfoTip = tip.Trim();
 }
