@@ -44,6 +44,7 @@ __published:	// IDE-managed Components
 	TMenuItem *miCloseWindow;
 	TButton *btnLuacheck;
 	TListView *lvValidation;
+	TMenuItem *miCustomLuaFunctions;
 	void __fastcall btnExecuteClick(TObject *Sender);
 	void __fastcall btnBreakClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
@@ -58,6 +59,7 @@ __published:	// IDE-managed Components
 	void __fastcall lvValidationData(TObject *Sender, TListItem *Item);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall lvValidationDblClick(TObject *Sender);
+	void __fastcall miCustomLuaFunctionsClick(TObject *Sender);
 private:	// User declarations
 	bool breakRequest;
 	volatile bool running;

@@ -9,7 +9,7 @@
 #include "baresip_dialog_info_direction.h"
 
 #include <string>
-#include <set>
+#include <vector>
 #include <System.hpp>
 
 struct lua_State;
@@ -180,7 +180,18 @@ public:
 	*/
 	static void WaitWhileAnyRunning(unsigned int ms);
 
-	static const std::set<AnsiString>& GetGlobals(void);
+	struct Symbol
+	{
+		AnsiString name;
+		AnsiString brief;
+		AnsiString description;
+		bool operator<(const struct Symbol &other) const
+		{
+		   return name < other.name;
+		}
+	};
+
+	static const std::vector<Symbol>& GetSymbols(void);
 private:
 	enum ScriptSource srcType;
 	int srcId;

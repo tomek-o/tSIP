@@ -45,9 +45,10 @@ object frmContacts: TfrmContacts
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 173
     object imgFilter: TImage
       Left = 6
-      Top = 5
+      Top = 6
       Width = 17
       Height = 19
       Picture.Data = {

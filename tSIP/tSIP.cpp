@@ -27,6 +27,7 @@ USEFORM("FormSettingsPatch.cpp", frmSettingsPatch);
 USEFORM("buttons\FormButtonCopy.cpp", frmButtonCopy);
 USEFORM("buttons\ButtonsDataModule.cpp", dmButtons); /* TDataModule: File Type */
 USEFORM("FormDialpadConf.cpp", frmDialpadConf);
+USEFORM("scripting\FormLuaScriptHelp.cpp", frmLuaScriptHelp);
 //---------------------------------------------------------------------------
 #pragma link "re.lib"
 #pragma link "rem.lib"
@@ -124,6 +125,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
 		Application->CreateForm(__classid(TfrmSettingsPatch), &frmSettingsPatch);
 		Application->CreateForm(__classid(TfrmButtonCopy), &frmButtonCopy);
+		Application->CreateForm(__classid(TfrmLuaScriptHelp), &frmLuaScriptHelp);
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
 		frmContactPopup->Width = appSettings.frmContactPopup.iWidth;

@@ -2,7 +2,7 @@ object frmLuaScript: TfrmLuaScript
   Left = 0
   Top = 0
   Caption = 'Script'
-  ClientHeight = 360
+  ClientHeight = 379
   ClientWidth = 493
   Color = clBtnFace
   Constraints.MinHeight = 300
@@ -23,12 +23,13 @@ object frmLuaScript: TfrmLuaScript
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 240
+    Top = 259
     Width = 493
     Height = 120
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 240
     object pnlBottom2: TPanel
       Left = 0
       Top = 79
@@ -125,6 +126,10 @@ object frmLuaScript: TfrmLuaScript
       Caption = 'Help'
       object miHelpExamples: TMenuItem
         Caption = 'Examples'
+      end
+      object miCustomLuaFunctions: TMenuItem
+        Caption = 'Custom Lua functions'
+        OnClick = miCustomLuaFunctionsClick
       end
     end
   end

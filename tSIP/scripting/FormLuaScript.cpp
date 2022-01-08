@@ -5,6 +5,7 @@
 
 #include "FormLuaScript.h"
 #include "FormTextEditor.h"
+#include "FormLuaScriptHelp.h"
 #include "ScriptExec.h"
 #include "common/BtnController.h"
 #include "LuaExamples.h"
@@ -79,7 +80,8 @@ bool GetNextLine(AnsiString &Line, AnsiString &buf, char &lastchar)
 void TfrmLuaScript::SetCallbackRunScript(CallbackRunScript cb)
 {
 	assert(cb);
-	callbackRunScript = cb;	
+	callbackRunScript = cb;
+	TfrmLuaScriptHelp::SetCallbackRunScript(cb);
 }
 
 __fastcall TfrmLuaScript::TfrmLuaScript(TComponent* Owner)
@@ -535,7 +537,7 @@ void __fastcall TfrmLuaScript::btnLuacheckClick(TObject *Sender)
 
 	AnsiString command = (AnsiString)"\"" + appName + "\" \"" + asFile + "\" --formatter plain ";
 
-	const std::set<AnsiString> &globalsSet = ScriptExec::GetGlobals();
+	const std::vector<ScriptExec::Symbol> &globalsSet = ScriptExec::GetSymbols();
 	if (globalsSet.empty())
 	{
         // run once empty script to fill global function list
@@ -549,10 +551,10 @@ void __fastcall TfrmLuaScript::btnLuacheckClick(TObject *Sender)
 	if (!globalsSet.empty())
 	{
 		command += "--globals";
-		for (std::set<AnsiString>::const_iterator iter = globalsSet.begin(); iter != globalsSet.end(); ++iter)
+		for (std::vector<ScriptExec::Symbol>::const_iterator iter = globalsSet.begin(); iter != globalsSet.end(); ++iter)
 		{
 			command += " ";
-			command += *iter;
+			command += iter->name;
 		}
 	}
     // Create the process.
@@ -717,6 +719,12 @@ void __fastcall TfrmLuaScript::lvValidationDblClick(TObject *Sender)
 		frmEditor->MarkError(entry.line, entry.position > 0 ? entry.position : 1);
 		frmEditor->SetSciFocus();
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScript::miCustomLuaFunctionsClick(TObject *Sender)
+{
+	frmLuaScriptHelp->Show();	
 }
 //---------------------------------------------------------------------------
 

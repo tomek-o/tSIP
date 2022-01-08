@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="0"/>
+        <property category="build.config" name="active" value="1"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -500,6 +500,7 @@
         <FILE FILENAME="buttons\ButtonsDataModule.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonsDataModule" FORMNAME="dmButtons" DESIGNCLASS="TDataModule" ADDITIONAL="buttons\ButtonsDataModule.h"/>
         <FILE FILENAME="DialpadConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="DialpadConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="DialpadConf.h"/>
         <FILE FILENAME="FormDialpadConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormDialpadConf" FORMNAME="frmDialpadConf" DESIGNCLASS="" ADDITIONAL="FormDialpadConf.h"/>
+        <FILE FILENAME="scripting\FormLuaScriptHelp.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLuaScriptHelp" FORMNAME="frmLuaScriptHelp" DESIGNCLASS="" ADDITIONAL="scripting\FormLuaScriptHelp.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -508,7 +509,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">2</VersionInfo>
           <VersionInfo Name="Release">5</VersionInfo>
-          <VersionInfo Name="Build">3</VersionInfo>
+          <VersionInfo Name="Build">9</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -520,7 +521,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.2.5.3</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.2.5.9</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -570,10 +571,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>
