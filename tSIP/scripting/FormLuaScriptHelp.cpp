@@ -88,6 +88,7 @@ void TfrmLuaScriptHelp::SetCallbackRunScript(CallbackRunScript cb)
 void __fastcall TfrmLuaScriptHelp::edFilterChange(TObject *Sender)
 {
 	Filter();
+	lvSymbols->ClearSelection();
 	if (!lvSymbols->Selected)
 		memoDescription->Clear();
 }
