@@ -29,7 +29,6 @@ Call recording:
 
 - example: link handling from mail client
 - ICE
-- select reject code: 486 Busy (other devices keep ringing) or 603 Decline (all devices stop ringing)
 - hotkeys or speed dial: volume
 - encrypt password
 - contacts: master/detail view
@@ -109,11 +108,10 @@ tSIP: directory import from vcard
 tSIP: verify wave file format when selecting for wave source audio device
 tSIP: RecordViewer: play multiple files one by one (multiple selection list)
 multiple accounts; disable / set as default for outgoing
-lepsze informowanie o problemach: brak kompatybilnego kodeka, brak urz¹dzenia audio
+lepsze informowanie o problemach: brak kompatybilnego kodeka
 RecordViewer: keep sorting column/dir after restart
 RecordViewer: recompress using opusenc?
 
-tSIP scripting: help for commands (factory pattern)
 tSIP scripting: Unregister, Reregister
 
 plugin interface: showsettings

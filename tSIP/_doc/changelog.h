@@ -935,6 +935,21 @@ Version 0.2.05.3
 	- added "SCRIPT_FILE=" command line parameter - starting specified script file from /scripts subfolder
     - use GetProcessImageFileName instead of GetModuleFileNameEx for FindWindowByCaptionAndExeName() Lua function (compatibility with 64-bit OS)
     - FIXED: missing early media audio when SRTP was enabled
-    - added vcruntime140.dll to distributed binaries
+	- added vcruntime140.dll to distributed binaries
+
+Version 0.2.06
+	- saving last SIP reply code and reply text in call history, can be added to history list hint
+	- added Lua GetPreviousCallStatusCode() and GetPreviousCallReplyLine() returning information about last failed call (after this call has ended, e.g. using "on call state" CALL_CLOSED event)
+	- added 3 extra returned values to GetBlfState(contactId) function: remote identity URI, remote identity display name, call direction
+	- Lua: added contactId = GetContactId(blfUser) function (number to contact id conversion to be used with GetBlfState() function)
+	- added new setting: SpeedDial/"Preferred state if multiple dialog elements are received in NOTIFY XML"
+	- added separate error codes/texts for opening wave files and opening audio devices
+	- call state label shows also local error information like error opening audio device (when call ends)
+	- Lua Hangup() takes SIP code and reason text as optional arguments
+	- added reason text to auto answer configuration, auto answer/DND button configuration and custom hangup button configuration
+	- added hint/tooltip to contact list (numbers + note)
+	- showing button ID + description on button editor frame
+	- exiting button editing (resizing/moving) with Esc
+	- added window with short (very short at the moment) description for each custom Lua function, accessible from Script window / Help
 */
 
