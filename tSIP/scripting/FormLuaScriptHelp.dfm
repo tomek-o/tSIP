@@ -33,8 +33,6 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 136
-    ExplicitWidth = 430
     object pnlBottom2: TPanel
       Left = 0
       Top = 83
@@ -43,8 +41,6 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 0
-      ExplicitTop = 173
-      ExplicitWidth = 233
       object imgFilter: TImage
         Left = 6
         Top = 6
@@ -104,9 +100,9 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
       Height = 79
       Align = alTop
       PlainText = True
+      ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 1
-      ExplicitWidth = 430
     end
   end
   object lvSymbols: TListView
@@ -132,7 +128,5 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
     ViewStyle = vsReport
     OnData = lvSymbolsData
     OnSelectItem = lvSymbolsSelectItem
-    ExplicitWidth = 430
-    ExplicitHeight = 207
   end
 end
