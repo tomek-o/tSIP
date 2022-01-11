@@ -502,26 +502,25 @@ static int app_init(void)
 
 	struct config * cfg = conf_config();
 
-	strncpyz(cfg->audio.src_mod, appSettings.uaConf.audioCfgSrc.mod, sizeof(cfg->audio.src_mod));
-	if (strcmp(appSettings.uaConf.audioCfgSrc.mod, AudioModules::aufile) &&
-        strcmp(appSettings.uaConf.audioCfgSrc.mod, AudioModules::aufileMm)
-		)
+	strncpyz(cfg->audio.src_mod, appSettings.uaConf.audioCfgSrc.mod.c_str(), sizeof(cfg->audio.src_mod));
+	if (appSettings.uaConf.audioCfgSrc.mod != AudioModules::aufile &&
+		appSettings.uaConf.audioCfgSrc.mod != AudioModules::aufileMm)
 	{
-		strncpyz(cfg->audio.src_dev, appSettings.uaConf.audioCfgSrc.dev, sizeof(cfg->audio.src_dev));
+		strncpyz(cfg->audio.src_dev, appSettings.uaConf.audioCfgSrc.dev.c_str(), sizeof(cfg->audio.src_dev));
 	}
 	else
 	{
         // aufile / aufile_mm
 		AnsiString fileFull;
-		fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), appSettings.uaConf.audioCfgSrc.wavefile);
+		fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), appSettings.uaConf.audioCfgSrc.wavefile.c_str());
 		strncpyz(cfg->audio.src_dev, fileFull.c_str(), sizeof(cfg->audio.src_dev));
 	}
-	strncpyz(cfg->audio.play_mod, appSettings.uaConf.audioCfgPlay.mod, sizeof(cfg->audio.play_mod));
-	strncpyz(cfg->audio.play_dev, appSettings.uaConf.audioCfgPlay.dev, sizeof(cfg->audio.play_dev));
-	strncpyz(cfg->audio.alert_mod, appSettings.uaConf.audioCfgAlert.mod, sizeof(cfg->audio.alert_mod));
-	strncpyz(cfg->audio.alert_dev, appSettings.uaConf.audioCfgAlert.dev, sizeof(cfg->audio.alert_dev));
-	strncpyz(cfg->audio.ring_mod, appSettings.uaConf.audioCfgRing.mod, sizeof(cfg->audio.ring_mod));
-	strncpyz(cfg->audio.ring_dev, appSettings.uaConf.audioCfgRing.dev, sizeof(cfg->audio.ring_dev));
+	strncpyz(cfg->audio.play_mod, appSettings.uaConf.audioCfgPlay.mod.c_str(), sizeof(cfg->audio.play_mod));
+	strncpyz(cfg->audio.play_dev, appSettings.uaConf.audioCfgPlay.dev.c_str(), sizeof(cfg->audio.play_dev));
+	strncpyz(cfg->audio.alert_mod, appSettings.uaConf.audioCfgAlert.mod.c_str(), sizeof(cfg->audio.alert_mod));
+	strncpyz(cfg->audio.alert_dev, appSettings.uaConf.audioCfgAlert.dev.c_str(), sizeof(cfg->audio.alert_dev));
+	strncpyz(cfg->audio.ring_mod, appSettings.uaConf.audioCfgRing.mod.c_str(), sizeof(cfg->audio.ring_mod));
+	strncpyz(cfg->audio.ring_dev, appSettings.uaConf.audioCfgRing.dev.c_str(), sizeof(cfg->audio.ring_dev));
 
 	cfg->aec = (config::e_aec)appSettings.uaConf.aec;
 

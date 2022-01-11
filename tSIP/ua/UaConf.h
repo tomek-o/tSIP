@@ -193,21 +193,18 @@ public:
 	bool logAubuf;
 
 	struct AudioCfg {
-		enum { MAX_MOD_LENGTH = 32 };
-		char mod[MAX_MOD_LENGTH];       /**< Audio source module            */
-		char dev[128];      /**< Audio source device            */
-		char wavefile[512];
+		std::string mod;       	/**< Audio source module            */
+		std::string dev;		/**< Audio source device            */
+		std::string wavefile;
 		AudioCfg(void) {
-			//mod[0] = '\0';
-			strcpy(mod, AudioModules::winwave);
-			dev[0] = '\0';
+			mod = AudioModules::winwave;
 		}
 		bool operator==(const AudioCfg& right) const {
-			if (strcmp(mod, right.mod))
+			if (mod != right.mod)
 				return false;
-			if (strcmp(dev, right.dev))
+			if (dev != right.dev)
 				return false;
-			if (strcmp(wavefile, right.wavefile))
+			if (wavefile != right.wavefile)
 				return false;
 			return true;
 		}

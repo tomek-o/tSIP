@@ -2977,8 +2977,8 @@ void TfrmMain::AutoAnswer(void)
 {
 	if (autoAnswerCode == 200) {
 		if (autoAnswerIntercom) {
-			LOG("Answering with module %s, device %s\n", appSettings.uaConf.audioCfgPlayIntercom.mod, appSettings.uaConf.audioCfgPlayIntercom.dev);
-			UA->Answer(0, appSettings.uaConf.audioCfgPlayIntercom.mod, appSettings.uaConf.audioCfgPlayIntercom.dev);
+			LOG("Answering with module %s, device %s\n", appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
+			UA->Answer(0, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
 		} else {
 			Answer();
 		}

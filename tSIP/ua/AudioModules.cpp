@@ -88,7 +88,7 @@ const char* AudioModules::GetInputModuleFromCbIndex(int id)
 	return portaudio;
 }
 
-int AudioModules::GetInputModuleCbIndex(const char* name)
+int AudioModules::GetInputModuleCbIndex(const std::string& name)
 {
 	int idCounter = -1;
 	for (unsigned int i=0; i<ARRAY_SIZE(audioModuleDefs); i++)
@@ -97,7 +97,7 @@ int AudioModules::GetInputModuleCbIndex(const char* name)
 		if (mod.input)
 		{
 			idCounter++;
-			if (strcmp(name, mod.name) == 0)
+			if (name == mod.name)
 			{
 				return idCounter;
 			}
@@ -127,7 +127,7 @@ const char* AudioModules::GetOutputModuleFromCbIndex(int id)
 	return portaudio;
 }
 
-int AudioModules::GetOutputModuleCbIndex(const char* name)
+int AudioModules::GetOutputModuleCbIndex(const std::string& name)
 {
 	int idCounter = -1;
 	for (unsigned int i=0; i<ARRAY_SIZE(audioModuleDefs); i++)
@@ -136,7 +136,7 @@ int AudioModules::GetOutputModuleCbIndex(const char* name)
 		if (mod.output)
 		{
 			idCounter++;
-			if (strcmp(name, mod.name) == 0)
+			if (name == mod.name)
 			{
 				return idCounter;
 			}
@@ -146,14 +146,14 @@ int AudioModules::GetOutputModuleCbIndex(const char* name)
 	return 0;
 }
 
-bool AudioModules::IsInput(const char* name)
+bool AudioModules::IsInput(const std::string& name)
 {
 	for (unsigned int i=0; i<ARRAY_SIZE(audioModuleDefs); i++)
 	{
 		const AudioModuleDef &mod = audioModuleDefs[i];
 		if (mod.input)
 		{
-			if (strcmp(name, mod.name) == 0)
+			if (name == mod.name)
 			{
 				return true;
 			}
@@ -162,14 +162,14 @@ bool AudioModules::IsInput(const char* name)
 	return false;
 }
 
-bool AudioModules::IsOutput(const char* name)
+bool AudioModules::IsOutput(const std::string& name)
 {
 	for (unsigned int i=0; i<ARRAY_SIZE(audioModuleDefs); i++)
 	{
 		const AudioModuleDef &mod = audioModuleDefs[i];
 		if (mod.output)
 		{
-			if (strcmp(name, mod.name) == 0)
+			if (name == mod.name)
 			{
 				return true;
 			}

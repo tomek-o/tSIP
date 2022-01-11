@@ -119,13 +119,13 @@ namespace {
 		const UaConf::AudioCfg &cfg = appSettings.uaConf.audioCfgSrc;
 		AudioDevicesList &adl = AudioDevicesList::Instance();
 		adl.Refresh();
-		if (strcmp(cfg.mod, AudioModules::portaudio) == 0)
+		if (cfg.mod == AudioModules::portaudio)
 		{
             // one default entry is always present (?)
 			if (adl.portaudioDevsIn.size() <= 1)
 				return true;
 		}
-		else if (strcmp(cfg.mod, AudioModules::winwave) == 0 || strcmp(cfg.mod, AudioModules::winwave2) == 0)
+		else if (cfg.mod == AudioModules::winwave || cfg.mod == AudioModules::winwave2)
 		{
 			if (adl.winwaveDevsIn.empty())
 				return true;
@@ -138,13 +138,13 @@ namespace {
 		const UaConf::AudioCfg &cfg = appSettings.uaConf.audioCfgPlay;
 		AudioDevicesList &adl = AudioDevicesList::Instance();
 		adl.Refresh();
-		if (strcmp(cfg.mod, AudioModules::portaudio) == 0)
+		if (cfg.mod == AudioModules::portaudio)
 		{
             // one default entry is always present (?)
 			if (adl.portaudioDevsOut.size() <= 1)
 				return true;
 		}
-		else if (strcmp(cfg.mod, AudioModules::winwave) == 0 || strcmp(cfg.mod, AudioModules::winwave2) == 0)
+		else if (cfg.mod == AudioModules::winwave || cfg.mod == AudioModules::winwave2)
 		{
 			if (adl.winwaveDevsOut.empty())
 				return true;

@@ -40,36 +40,36 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 {
 	{
 		const Json::Value &uaConfAudioCfgSrcJson = uaConfJson["audioCfgSrc"];
-		char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-		strncpyz(str, uaConfAudioCfgSrcJson.get("mod", audioCfgSrc.mod).asString().c_str(), sizeof(str));
+		std::string str = audioCfgSrc.mod;
+		uaConfAudioCfgSrcJson.getString("mod", str);
 		if (AudioModules::IsInput(str))
 		{
-			strncpyz(audioCfgSrc.mod, str, sizeof(audioCfgSrc.mod));
+			audioCfgSrc.mod = str;
 		}
-		strncpyz(audioCfgSrc.dev, uaConfAudioCfgSrcJson["dev"].asString().c_str(), sizeof(audioCfgSrc.dev));
-		strncpyz(audioCfgSrc.wavefile, uaConfAudioCfgSrcJson["wavefile"].asString().c_str(), sizeof(audioCfgSrc.wavefile));
+		uaConfAudioCfgSrcJson.getString("dev", audioCfgSrc.dev);
+		uaConfAudioCfgSrcJson.getString("wavefile", audioCfgSrc.wavefile);
 	}
 
 	{
 		const Json::Value &uaConfAudioCfgPlayJson = uaConfJson["audioCfgPlay"];
-		char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-		strncpyz(str, uaConfAudioCfgPlayJson.get("mod", audioCfgPlay.mod).asString().c_str(), sizeof(str));
+		std::string str = audioCfgPlay.mod;
+		uaConfAudioCfgPlayJson.getString("mod", str);
 		if (AudioModules::IsOutput(str))
 		{
-			strncpyz(audioCfgPlay.mod, str, sizeof(audioCfgPlay.mod));
+			audioCfgPlay.mod = str;
 		}
-		strncpyz(audioCfgPlay.dev, uaConfAudioCfgPlayJson["dev"].asString().c_str(), sizeof(audioCfgPlay.dev));
+		uaConfAudioCfgPlayJson.getString("dev", audioCfgPlay.dev);
 	}
 
 	{
 		const Json::Value &uaConfAudioCfgAlertJson = uaConfJson["audioCfgAlert"];
-		char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-		strncpyz(str, uaConfAudioCfgAlertJson.get("mod", audioCfgAlert.mod).asString().c_str(), sizeof(str));
+		std::string str = audioCfgAlert.mod;
+		uaConfAudioCfgAlertJson.getString("mod", str);
 		if (AudioModules::IsOutput(str))
 		{
-			strncpyz(audioCfgAlert.mod, str, sizeof(audioCfgAlert.mod));
+			audioCfgAlert.mod = str;
 		}
-		strncpyz(audioCfgAlert.dev, uaConfAudioCfgAlertJson["dev"].asString().c_str(), sizeof(audioCfgAlert.dev));
+		uaConfAudioCfgAlertJson.getString("dev", audioCfgAlert.dev);
 	}
 
 	{
@@ -79,31 +79,31 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		if (settingsAppVersion < verCfgRingAdded)
 		{
 			// new setting added, separated from "alert" - copy alert if found settings from older version
-			strncpyz(audioCfgRing.mod, audioCfgAlert.mod, sizeof(audioCfgRing.mod));
-			strncpyz(audioCfgRing.dev, audioCfgAlert.dev, sizeof(audioCfgRing.dev));
+			audioCfgRing.mod = audioCfgAlert.mod;
+			audioCfgRing.dev = audioCfgAlert.dev;
 		}
 		else
 		{
 			const Json::Value &uaConfAudioCfgRingJson = uaConfJson["audioCfgRing"];
-			char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-			strncpyz(str, uaConfAudioCfgRingJson.get("mod", audioCfgRing.mod).asString().c_str(), sizeof(str));
+			std::string str = audioCfgRing.mod;
+			uaConfAudioCfgRingJson.getString("mod", str);
 			if (AudioModules::IsOutput(str))
 			{
-				strncpyz(audioCfgRing.mod, str, sizeof(audioCfgRing.mod));
+				audioCfgRing.mod = str;
 			}
-			strncpyz(audioCfgRing.dev, uaConfAudioCfgRingJson["dev"].asString().c_str(), sizeof(audioCfgRing.dev));
+			uaConfAudioCfgRingJson.getString("dev", audioCfgRing.dev);
 		}
 	}
 
 	{
 		const Json::Value &uaConfAudioCfgPlayIntercomJson = uaConfJson["audioCfgPlayIntercom"];
-		char str[UaConf::AudioCfg::MAX_MOD_LENGTH];
-		strncpyz(str, uaConfAudioCfgPlayIntercomJson.get("mod", audioCfgPlayIntercom.mod).asString().c_str(), sizeof(str));
+		std::string str = audioCfgPlayIntercom.mod;
+		uaConfAudioCfgPlayIntercomJson.getString("mod", str);
 		if (AudioModules::IsOutput(str))
 		{
-			strncpyz(audioCfgPlayIntercom.mod, str, sizeof(audioCfgPlayIntercom.mod));
+			audioCfgPlayIntercom.mod = str;
 		}
-		strncpyz(audioCfgPlayIntercom.dev, uaConfAudioCfgPlayIntercomJson["dev"].asString().c_str(), sizeof(audioCfgPlayIntercom.dev));
+		uaConfAudioCfgPlayIntercomJson.getString("dev", audioCfgPlayIntercom.dev);
 	}
 
 	{
