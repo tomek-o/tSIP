@@ -5,6 +5,8 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
   ClientHeight = 382
   ClientWidth = 600
   Color = clBtnFace
+  Constraints.MinHeight = 200
+  Constraints.MinWidth = 200
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -15,13 +17,14 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Splitter1: TSplitter
+  object Splitter: TSplitter
     Left = 0
     Top = 267
     Width = 600
     Height = 3
     Cursor = crVSplit
     Align = alBottom
+    MinSize = 50
     ExplicitTop = 0
     ExplicitWidth = 270
   end
@@ -97,12 +100,13 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
       Left = 0
       Top = 0
       Width = 600
-      Height = 79
-      Align = alTop
+      Height = 83
+      Align = alClient
       PlainText = True
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 1
+      ExplicitHeight = 79
     end
   end
   object lvSymbols: TListView

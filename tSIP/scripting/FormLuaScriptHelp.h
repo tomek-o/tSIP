@@ -24,7 +24,7 @@ __published:	// IDE-managed Components
 	TImage *imgFilter;
 	TEdit *edFilter;
 	TRichEdit *memoDescription;
-	TSplitter *Splitter1;
+	TSplitter *Splitter;
 	void __fastcall lvSymbolsData(TObject *Sender, TListItem *Item);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall edFilterChange(TObject *Sender);
