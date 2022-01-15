@@ -1602,9 +1602,9 @@ void ScriptExec::Run(const char* script)
 	luaL_openlibs(L);
 	contexts[L] = this;
 
-	lua_register2(L, ScriptImp::LuaError, "_ALERT", "Send error message to console (internal function)", "");
-	lua_register2(L, ScriptImp::LuaPrint, "print", "Send text to console (standard function)", "");
-	lua_register2(L, ScriptImp::l_ShowMessage, "ShowMessage", "Show simple message dialog", "");
+	lua_register2(L, ScriptImp::LuaError, "_ALERT", "Send error message to log window (internal function)", "");
+	lua_register2(L, ScriptImp::LuaPrint, "print", "Send text to console / log window (standard function)", "");
+	lua_register2(L, ScriptImp::l_ShowMessage, "ShowMessage", "Show simple message dialog", "Example: ShowMessage(\"text\")");
 	lua_register2(L, l_MessageBox, "MessageBox", "Show standard WinAPI MessageBox", "");
 	lua_register2(L, ScriptImp::l_InputQuery, "InputQuery", "Display modal dialog allowing to take text input from the user", "");
 	lua_register2(L, ScriptImp::l_Sleep, "Sleep", "Pause script for specified time (miliseconds)", "");
@@ -1612,13 +1612,13 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_CheckBreak, "CheckBreak", "Check if \"Break\" button was pressed by the user", "Allowing to interrupt scripts");
 	lua_register2(L, ScriptImp::l_GetClipboardText, "GetClipboardText", "Get clipboard content as text", "");
 	lua_register2(L, ScriptImp::l_SetClipboardText, "SetClipboardText", "Copy text to clipboard", "");
-	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "");
+	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "Equivalent of VCL function with same name.");
 	lua_register2(L, ScriptImp::l_FindWindowByCaptionAndExeName, "FindWindowByCaptionAndExeName", "Search for window by caption and executable name", "");
 	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "");
-	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect current call, reject incoming call", "");
+	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect current call, reject incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer incoming call", "");
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");
-	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set dial edit text", "");
+	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "");
 	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbos during the call", "Accepts single DTMF or whole string");
 	lua_register2(L, ScriptImp::l_GenerateTones, "GenerateTones", "Generate up to 4 tones with specified amplitude and frequency", "");
@@ -1636,8 +1636,8 @@ void ScriptExec::Run(const char* script)
 
 	lua_register2(L, ScriptImp::l_SetVariable, "SetVariable", "Set value for variable with specified name", "");
 	lua_register2(L, ScriptImp::l_GetVariable, "GetVariable", "Get variable value and isSet flag for variable with specified name", "");
-	lua_register2(L, ScriptImp::l_ClearVariable, "ClearVariable", "Delete (unset) variable with specified name", "");
-	lua_register2(L, ScriptImp::l_ClearAllVariables, "ClearAllVariables", "Delete (unset) all variables", "");
+	lua_register2(L, ScriptImp::l_ClearVariable, "ClearVariable", "Delete/unset variable with specified name", "");
+	lua_register2(L, ScriptImp::l_ClearAllVariables, "ClearAllVariables", "Delete/unset all variables", "");
 
 	// QueuePush(queueName, stringValue)
 	lua_register2(L, ScriptImp::l_QueuePush, "QueuePush", "Push string value to queue with specified name", "");
@@ -1681,10 +1681,10 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_ProgrammableButtonClick, "ProgrammableButtonClick", "Programmatically press button", "");
 	lua_register2(L, ScriptImp::l_RefreshAudioDevicesList, "RefreshAudioDevicesList", "Rescan available audio devices", "");
 	lua_register2(L, ScriptImp::l_GetAudioDevice, "GetAudioDevice", "Get the name of selected audio input or output device", "");
-	lua_register2(L, ScriptImp::l_UpdateSettings, "UpdateSettings", "Update main settings with JSON", "Provisioning applications or changing settings while running. JSON is merged.");
-	lua_register2(L, ScriptImp::l_UpdateButtons, "UpdateButtons", "Update buttons settings with JSON", "Provisioning applications or changing settings while running. JSON is merged. Example:\nUpdateButtons('{\"btnConf\":[{\"caption\":\"    REDIAL\"}]}')");
+	lua_register2(L, ScriptImp::l_UpdateSettings, "UpdateSettings", "Update main settings with JSON", "Application provisioning or changing settings while running. JSON is merged.");
+	lua_register2(L, ScriptImp::l_UpdateButtons, "UpdateButtons", "Update buttons settings with JSON", "Provisioning for buttons or changing settings while running. JSON is merged. Example:\nUpdateButtons('{\"btnConf\":[{\"caption\":\"    REDIAL\"}]}')");
 
-	lua_register2(L, ScriptImp::l_SetHandled, "SetHandled", "Set \"handled\" flag associated with script trigger event, possibly skipping default handling", "");
+	lua_register2(L, ScriptImp::l_SetHandled, "SetHandled", "Set \"handled\" flag associated with script trigger event", "Possibility of skipping default event handling after script was called (replacing default behavior with script).");
 
 	lua_register2(L, ScriptImp::l_GetButtonType, "GetButtonType", "Get type of the button with specified id", "");
 	lua_register2(L, ScriptImp::l_GetButtonNumber, "GetButtonNumber", "Get number/URI from button configuration", "");
@@ -1692,10 +1692,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_MainMenuShow, "MainMenuShow", "Show/hide main menu (e.g. in kiosk applications)", "");
 	lua_register2(L, ScriptImp::l_ApplicationClose, "ApplicationClose", "Close this program", "");
 
-	// requestUid = SendCustomRequest(uri, method, extraHeaderLines)
-	// requestUid is > 0 on success
-	// extraHeaderLines parameter is optional
-	lua_register2(L, ScriptImp::l_SendCustomRequest, "SendCustomRequest", "Send custom SIP request", "");
+	lua_register2(L, ScriptImp::l_SendCustomRequest, "SendCustomRequest", "Send custom SIP request", "Example: requestUid = SendCustomRequest(uri, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional");
 	lua_register2(L, ScriptImp::l_ClearCustomRequests, "ClearCustomRequests", "Delete status info of custom SIP requests", "");
 	lua_register2(L, ScriptImp::l_DeleteCustomRequest, "DeleteCustomRequest", "Delete single custom request info", "");
 	lua_register2(L, ScriptImp::l_GetCustomRequest, "GetCustomRequest", "Get information about custom request", "");
