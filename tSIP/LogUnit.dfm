@@ -32,7 +32,6 @@ object frmLog: TfrmLog
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitHeight = 264
   end
   object pnlBottom: TPanel
     Left = 0
@@ -43,50 +42,68 @@ object frmLog: TfrmLog
     BevelOuter = bvNone
     TabOrder = 1
     object btnClear: TButton
-      Left = 8
+      Left = 5
       Top = 6
-      Width = 73
+      Width = 41
       Height = 35
       Caption = 'Clear'
       TabOrder = 0
       OnClick = btnClearClick
     end
     object chbAutoScroll: TCheckBox
-      Left = 103
+      Left = 151
       Top = 6
-      Width = 97
+      Width = 90
       Height = 17
       Caption = 'Auto Scroll'
       Checked = True
       State = cbChecked
-      TabOrder = 1
+      TabOrder = 3
     end
     object chbLogMessages: TCheckBox
-      Left = 222
+      Left = 244
       Top = 6
       Width = 251
       Height = 17
       Caption = 'Log received and transmitted SIP messages'
-      TabOrder = 2
+      TabOrder = 5
       OnClick = chbLogMessagesClick
     end
     object chbLogToFile: TCheckBox
-      Left = 103
+      Left = 151
       Top = 22
-      Width = 89
+      Width = 86
       Height = 17
       Caption = 'Log to file'
-      TabOrder = 3
+      TabOrder = 4
       OnClick = chbLogToFileClick
     end
     object chbLogMessagesOnlyFirstLines: TCheckBox
-      Left = 238
+      Left = 260
       Top = 22
       Width = 235
       Height = 17
       Caption = 'only first lines (Request-Line/Status-Line)'
-      TabOrder = 4
+      TabOrder = 6
       OnClick = chbLogMessagesClick
+    end
+    object btnCopyAll: TButton
+      Left = 45
+      Top = 6
+      Width = 92
+      Height = 18
+      Caption = 'Copy all'
+      TabOrder = 1
+      OnClick = btnCopyAllClick
+    end
+    object btnCopyLast: TButton
+      Left = 45
+      Top = 23
+      Width = 92
+      Height = 18
+      Caption = 'Copy last lines'
+      TabOrder = 2
+      OnClick = btnCopyLastClick
     end
   end
   object tmrUpdate: TTimer

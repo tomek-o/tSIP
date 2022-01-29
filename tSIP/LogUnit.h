@@ -43,6 +43,8 @@ __published:	// IDE-managed Components
 	TSaveDialog *saveDialog;
 	TCheckBox *chbLogToFile;
 	TCheckBox *chbLogMessagesOnlyFirstLines;
+	TButton *btnCopyAll;
+	TButton *btnCopyLast;
 	void __fastcall tmrUpdateTimer(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall FormResize(TObject *Sender);
@@ -53,6 +55,8 @@ __published:	// IDE-managed Components
 	void __fastcall miSaveToFileClick(TObject *Sender);
 	void __fastcall chbLogToFileClick(TObject *Sender);
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
+	void __fastcall btnCopyAllClick(TObject *Sender);
+	void __fastcall btnCopyLastClick(TObject *Sender);
 private:	// User declarations
 	Mutex mutex;
 	typedef void (__closure *CallbackClose)(void);

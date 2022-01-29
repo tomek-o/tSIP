@@ -197,3 +197,32 @@ void __fastcall TfrmLog::FormKeyPress(TObject *Sender, char &Key)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmLog::btnCopyAllClick(TObject *Sender)
+{
+	Clipboard()->AsText = redMain->Text;	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLog::btnCopyLastClick(TObject *Sender)
+{
+	enum { LIMIT = 400 };
+
+	AnsiString text = redMain->Text;
+	int newLineCnt = 0;
+	for (unsigned int i = text.Length(); i>=1; i--)
+	{
+		if (text[i] == '\n')
+		{
+			newLineCnt++;
+			if (newLineCnt >= LIMIT)
+			{
+				text = text.SubString(i+1, text.Length() - i);
+				break;
+			}
+		}
+	}
+
+	Clipboard()->AsText = text;
+}
+//---------------------------------------------------------------------------
+
