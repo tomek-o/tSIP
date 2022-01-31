@@ -271,7 +271,7 @@ static void notify_handler(struct sipevent_sock *sock,
 	}
 
 	mem_ref(sub);
-	sub->notifyh(sip, msg, sub->arg);
+	sub->notifyh(sip, msg, sub->termconf, sub->arg);
 	nrefs = mem_nrefs(sub);
 	mem_deref(sub);
 

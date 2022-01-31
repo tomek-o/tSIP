@@ -1705,7 +1705,7 @@ int call_notify_sipfrag(struct call *call, uint16_t scode,
 }
 
 
-static void sipsub_notify_handler(struct sip *sip, const struct sip_msg *msg,
+static void sipsub_notify_handler(struct sip *sip, const struct sip_msg *msg, bool termconf,
 				  void *arg)
 {
 	struct call *call = arg;

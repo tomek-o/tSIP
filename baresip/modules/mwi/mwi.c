@@ -45,7 +45,7 @@ static int auth_handler(char **username, char **password,
 }
 
 
-static void notify_handler(struct sip *sip, const struct sip_msg *msg,
+static void notify_handler(struct sip *sip, const struct sip_msg *msg, bool termconf,
 			   void *arg)
 {
 	struct mwi *mwi = arg;

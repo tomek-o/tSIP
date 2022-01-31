@@ -212,8 +212,7 @@ static int dialog_info_sxmlc_callback(XMLEvent evt, const XMLNode* node, SXML_CH
 	return true;	// continue parsing
 }
 
-static void notify_handler(struct sip *sip, const struct sip_msg *msg,
-			   void *arg)
+static void notify_handler(struct sip *sip, const struct sip_msg *msg, bool termconf, void *arg)
 {
 	enum dialog_info_status status = DIALOG_INFO_UNKNOWN;
 	struct dialog_info *dlg_info = arg;
@@ -227,10 +226,13 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg,
 
 	hdr = sip_msg_hdr(msg, SIP_HDR_CONTENT_TYPE);
 	if (!hdr || 0 != pl_strcasecmp(&hdr->val, "application/dialog-info+xml")) {
-
-		if (hdr)
-			DEBUG_WARNING("dialog-info: unsupported content-type: '%r'\n",
-				&hdr->val);
+		if (hdr) {
+			DEBUG_WARNING("dialog-info: unsupported content-type: '%r'\n", &hdr->val);
+		} else if (termconf && (mbuf_get_left(msg->mb) == 0)) {
+			/* Ignore missing content type for terminated subscription (e.g. noresource) */
+			(void)sip_treply(NULL, sip, msg, 200, "OK");
+			return;
+		}
 
 		sip_treplyf(NULL, NULL, sip, msg, false,
 			    415, "Unsupported Media Type",

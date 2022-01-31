@@ -83,7 +83,7 @@ struct sipsub;
 
 typedef int  (sipsub_fork_h)(struct sipsub **subp, struct sipsub *osub,
 			     const struct sip_msg *msg, void *arg);
-typedef void (sipsub_notify_h)(struct sip *sip, const struct sip_msg *msg,
+typedef void (sipsub_notify_h)(struct sip *sip, const struct sip_msg *msg, bool termconf,
 			       void *arg);
 typedef void (sipsub_close_h)(int err, const struct sip_msg *msg,
 			      const struct sipevent_substate *substate,

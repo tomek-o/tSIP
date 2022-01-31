@@ -77,8 +77,7 @@ static uint32_t wait_fail(unsigned failc)
 }
 
 
-static void notify_handler(struct sip *sip, const struct sip_msg *msg,
-			   void *arg)
+static void notify_handler(struct sip *sip, const struct sip_msg *msg, bool termconf, void *arg)
 {
 	enum presence_status status = PRESENCE_CLOSED;
 	struct presence *pres = arg;
@@ -90,9 +89,13 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg,
 	hdr = sip_msg_hdr(msg, SIP_HDR_CONTENT_TYPE);
 	if (!hdr || 0 != pl_strcasecmp(&hdr->val, "application/pidf+xml")) {
 
-		if (hdr)
-			DEBUG_WARNING("presence: unsupported content-type: '%r'\n",
-				&hdr->val);
+		if (hdr) {
+			DEBUG_WARNING("presence: unsupported content-type: '%r'\n", &hdr->val);
+		} else if (termconf && (mbuf_get_left(msg->mb) == 0)) {
+			/* Ignore missing content type for terminated subscription (e.g. noresource) */
+			(void)sip_treply(NULL, sip, msg, 200, "OK");
+			return;
+		}
 
 		sip_treplyf(NULL, NULL, sip, msg, false,
 			    415, "Unsupported Media Type",

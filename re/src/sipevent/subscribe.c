@@ -35,7 +35,7 @@ static uint32_t failwait(uint32_t failc)
 static int request(struct sipsub *sub, bool reset_ls);
 
 
-static void internal_notify_handler(struct sip *sip, const struct sip_msg *msg,
+static void internal_notify_handler(struct sip *sip, const struct sip_msg *msg, bool termconf,
 				    void *arg)
 {
 	(void)arg;
