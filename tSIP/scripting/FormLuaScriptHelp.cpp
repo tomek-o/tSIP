@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FormLuaScriptHelp.h"
+#include <Clipbrd.hpp>
 #include <set>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -108,6 +109,33 @@ void __fastcall TfrmLuaScriptHelp::lvSymbolsSelectItem(TObject *Sender,
 	}
 	const ScriptExec::Symbol &symbol = entries[Item->Index];
 	memoDescription->Text = symbol.description;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScriptHelp::miCopyFunctionNameClick(TObject *Sender)
+{
+	TListItem *Item = lvSymbols->Selected;
+	if (!Item)
+		return;
+	int id = Item->Index;
+	const ScriptExec::Symbol &symbol = entries[id];
+	Clipboard()->AsText = symbol.name;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScriptHelp::miCopyBriefDescriptionClick(TObject *Sender)
+{
+	TListItem *Item = lvSymbols->Selected;
+	if (!Item)
+		return;
+	int id = Item->Index;
+	const ScriptExec::Symbol &symbol = entries[id];
+	AnsiString text = symbol.brief;
+	if (symbol.description != "")
+	{
+		text = text + "\r\n" + symbol.description;
+	}
+	Clipboard()->AsText = text;
 }
 //---------------------------------------------------------------------------
 

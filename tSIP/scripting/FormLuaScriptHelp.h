@@ -13,6 +13,7 @@
 
 #include "ScriptExec.h"
 #include <Graphics.hpp>
+#include <Menus.hpp>
 #include <vector>
 
 class TfrmLuaScriptHelp : public TForm
@@ -25,11 +26,16 @@ __published:	// IDE-managed Components
 	TEdit *edFilter;
 	TRichEdit *memoDescription;
 	TSplitter *Splitter;
+	TPopupMenu *popupList;
+	TMenuItem *miCopyFunctionName;
+	TMenuItem *miCopyBriefDescription;
 	void __fastcall lvSymbolsData(TObject *Sender, TListItem *Item);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall edFilterChange(TObject *Sender);
 	void __fastcall lvSymbolsSelectItem(TObject *Sender, TListItem *Item,
           bool Selected);
+	void __fastcall miCopyFunctionNameClick(TObject *Sender);
+	void __fastcall miCopyBriefDescriptionClick(TObject *Sender);
 private:	// User declarations
 	std::vector<ScriptExec::Symbol> entries;
 	void Filter(void);

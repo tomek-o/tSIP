@@ -106,7 +106,6 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 1
-      ExplicitHeight = 79
     end
   end
   object lvSymbols: TListView
@@ -128,9 +127,22 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
     OwnerData = True
     ReadOnly = True
     RowSelect = True
+    PopupMenu = popupList
     TabOrder = 1
     ViewStyle = vsReport
     OnData = lvSymbolsData
     OnSelectItem = lvSymbolsSelectItem
+  end
+  object popupList: TPopupMenu
+    Left = 16
+    Top = 112
+    object miCopyFunctionName: TMenuItem
+      Caption = 'Copy function name'
+      OnClick = miCopyFunctionNameClick
+    end
+    object miCopyBriefDescription: TMenuItem
+      Caption = 'Copy brief + description'
+      OnClick = miCopyBriefDescriptionClick
+    end
   end
 end
