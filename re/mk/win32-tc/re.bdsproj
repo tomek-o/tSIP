@@ -679,6 +679,7 @@
         <FILE FILENAME="..\..\src\aes\aes.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aes" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\re_aes.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\hmac\hmac.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="hmac" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipevent\sipevent.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
