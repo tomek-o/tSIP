@@ -36,6 +36,8 @@ struct HotKeyConf
 		modifiers = SHIFT | CTRL | ALT;
 		global = false;
 	}
+
+	AnsiString GetDescription(void) const;
 };
 
 #endif

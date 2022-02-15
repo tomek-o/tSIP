@@ -431,7 +431,6 @@
         <FILE FILENAME="buttons\ButtonType.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonType" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ButtonType.h"/>
         <FILE FILENAME="buttons\ButtonConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ButtonConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="buttons\ButtonConf.h"/>
         <FILE FILENAME="hotkeys\Hotkeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Hotkeys" FORMNAME="" DESIGNCLASS="" ADDITIONAL="hotkeys\Hotkeys.h"/>
-        <FILE FILENAME="hotkeys\HotKeyConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="hotkeys\HotkeyCfgPanel.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="HotkeyCfgPanel" FORMNAME="" DESIGNCLASS="" ADDITIONAL="hotkeys\HotkeyCfgPanel.h"/>
         <FILE FILENAME="hotkeys\FormHotkeys.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormHotkeys" FORMNAME="frmHotkeys" DESIGNCLASS="" ADDITIONAL="hotkeys\FormHotkeys.h"/>
         <FILE FILENAME="ua\UaMain.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="UaMain" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\UaMain.h"/>
@@ -501,6 +500,8 @@
         <FILE FILENAME="DialpadConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="DialpadConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="DialpadConf.h"/>
         <FILE FILENAME="FormDialpadConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormDialpadConf" FORMNAME="frmDialpadConf" DESIGNCLASS="" ADDITIONAL="FormDialpadConf.h"/>
         <FILE FILENAME="scripting\FormLuaScriptHelp.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLuaScriptHelp" FORMNAME="frmLuaScriptHelp" DESIGNCLASS="" ADDITIONAL="scripting\FormLuaScriptHelp.h"/>
+        <FILE FILENAME="hotkeys\HotKeyConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="HotKeyConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="hotkeys\HotKeyConf.h"/>
+        <FILE FILENAME="hotkeys\HotKeyConf.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -509,7 +510,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">2</VersionInfo>
           <VersionInfo Name="Release">6</VersionInfo>
-          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Build">2</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -521,7 +522,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.2.6.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.2.6.2</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

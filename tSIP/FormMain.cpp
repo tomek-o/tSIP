@@ -3052,6 +3052,7 @@ void __fastcall TfrmMain::WMHotKey(TWMHotKey &Message)
 	}
 	if (cfg)
 	{
+		LOG("Received hotkey: %s -> action: %s\n", cfg->GetDescription().c_str(), Action::getTypeDescription(cfg->action.type));
 		ExecAction(cfg->action);
 		if (IsWin7OrLater() == false)
 		{
@@ -3228,6 +3229,7 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key,
 	lastHotkey = cfg;
 	if (cfg)
 	{
+		LOG("Received hotkey: %s -> action: %s\n", cfg->GetDescription().c_str(), Action::getTypeDescription(cfg->action.type));
 		ExecAction(cfg->action);
 		tmrAntirepeat->Enabled = false;
 		tmrAntirepeat->Enabled = true;
