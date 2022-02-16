@@ -23,7 +23,8 @@ struct HotKeyConf
 	bool operator==(const HotKeyConf& right) const {
 		if (keyCode != right.keyCode ||
 			modifiers != right.modifiers ||
-			global != right.global)
+			global != right.global ||
+			action != right.action)
 		{
 			return false;
 		}

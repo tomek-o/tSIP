@@ -24,6 +24,20 @@ struct Action
 		id(0)
 	{
 	}
+
+	bool operator==(const Action& right) const {
+		if (type != right.type ||
+			id != right.id)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	bool operator!=(const Action& right) const {
+    	return !(*this == right);
+	}
+
 	static const char* getTypeDescription(enum Type type);
 
 };

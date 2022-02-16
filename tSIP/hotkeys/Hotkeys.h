@@ -11,6 +11,11 @@
 class HotKeys
 {
 public:
+	enum {
+		MIN_ID = 0x0000,
+		MAX_ID = 0xBFFF,
+		INVALID_HOTKEY_ID = MIN_ID - 1
+	};
 	HotKeys(void);
 	/** \brief Find key in configuration
 	*/
@@ -26,6 +31,7 @@ private:
 		bool registered;
 		bool remove;
 		GlobalHotKey(void):
+			id(INVALID_HOTKEY_ID),
 			registered(false),
 			remove(false)
 		{
@@ -33,10 +39,6 @@ private:
 	};
 	std::list<GlobalHotKey> globalHotKeys;
 	int nextId;
-	enum {
-		MIN_ID = 0x0000,
-		MAX_ID = 0xBFFF
-	};
 	int FindNextId(void);
 };
 

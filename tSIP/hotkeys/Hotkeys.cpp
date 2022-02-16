@@ -82,6 +82,7 @@ int HotKeys::RegisterGlobal(const std::list<HotKeyConf> &conf, HWND hwnd)
 				{
 					exist = true;
 					it->remove = false;
+					ghk.hotKeyConf.action = cfg.action;
 					break;
 				}
 			}
@@ -113,29 +114,18 @@ int HotKeys::RegisterGlobal(const std::list<HotKeyConf> &conf, HWND hwnd)
 					fsModifiers |= MOD_ALT;
 				}
 				int id = FindNextId();
+				if (id < MIN_ID)
+				{
+                    LOG("Hotkeys: could not find nextId (id = %d)!\n", id);
+					break;
+				}
+				else
+				{
+                	//LOG("Registering hotkey with id = %d\n", id);
+				}
 				if (RegisterHotKey(hwnd, id, fsModifiers, cfg.vkCode) == 0)
 				{
-					AnsiString desc;
-					if (cfg.modifiers & HotKeyConf::CTRL)
-					{
-						desc = "Ctrl";
-					}
-					if (cfg.modifiers & HotKeyConf::SHIFT)
-					{
-						if (desc != "")
-							desc += "+";
-						desc += "Shift";
-					}
-					if (cfg.modifiers & HotKeyConf::ALT)
-					{
-						if (desc != "")
-							desc += "+";
-						desc += "Alt";
-					}
-					if (desc != "")
-						desc += "+";
-					desc += cfg.keyCode;
-					LOG("Failed to register global hotkey %s\n", desc.c_str());
+					LOG("Failed to register global hotkey %s\n", cfg.GetDescription().c_str());
 					rc++;
 				}
 				else
@@ -183,28 +173,42 @@ void HotKeys::Unregister(HWND hwnd)
 
 int HotKeys::FindNextId(void)
 {
+	//LOG("Hotkeys: FindNextId, nextId = %d, globalHotKeys size = %u\n", nextId, globalHotKeys.size());
+#if 1
 	for (int i=MIN_ID; i<=MAX_ID; i++)
+#else
+	int TODO__RESTORE_DEBUG;
+	for (int i=MIN_ID; i<=MIN_ID + 20; i++)
+#endif
 	{
 		std::list<GlobalHotKey>::iterator it;
 		for (it = globalHotKeys.begin(); it != globalHotKeys.end(); ++it)
 		{
 			if (it->id == nextId)
 			{
+				//LOG("Hotkeys: id %d is used\n", nextId);
 				break;
 			}
 		}
 		if (it == globalHotKeys.end())
 		{
+			//LOG("Hotkeys: unused id = %d found\n", nextId);
 			int rc = nextId;
 			nextId++;
 			if (nextId > MAX_ID)
 			{
-				nextId = 0;
+				nextId = MIN_ID;
 			}
 			return rc;
 		}
+		nextId++;
+		if (nextId > MAX_ID)
+		{
+			nextId = MIN_ID;
+		}
 	}
-	return MIN_ID-1;
+	//LOG("Hotkeys: unused id not found!\n");
+	return INVALID_HOTKEY_ID;
 }
 
 

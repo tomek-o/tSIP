@@ -609,6 +609,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	{
     	frmLog->UpdateUi();
 	}
+
 	if (prev.hotKeyConf != appSettings.hotKeyConf)
 	{
 		RegisterGlobalHotKeys();
@@ -748,6 +749,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	Ua::Instance().Start();
 	SetStatus("Initializing...");
 
+    //LOG("Registering hotkeys...\n");
 	RegisterGlobalHotKeys();
 
 	FocusCbCallUri();
@@ -3039,6 +3041,9 @@ void __fastcall TfrmMain::WMCopyData(TWMCopyData& Message)
 void __fastcall TfrmMain::WMHotKey(TWMHotKey &Message)
 {
 	TForm::Dispatch(&Message);
+#if 1
+	LOG("WMHotKey: Message.Hotkey = %d\n", static_cast<int>(Message.HotKey));
+#endif
 	const HotKeyConf* cfg = hotKeys.FindGlobal(Message.HotKey);
 	if (IsWin7OrLater() == false)
 	{
@@ -3216,7 +3221,7 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
 #if 0
-	LOG("Key = %d, CTRL = %d, SHIFT = %d, ALT = %d\n",
+	LOG("FormKeyDown: Key = %d, CTRL = %d, SHIFT = %d, ALT = %d\n",
 		Key,
 		Shift.Contains(ssCtrl), Shift.Contains(ssShift), Shift.Contains(ssAlt));
 #endif

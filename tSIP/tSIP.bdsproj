@@ -501,7 +501,7 @@
         <FILE FILENAME="FormDialpadConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormDialpadConf" FORMNAME="frmDialpadConf" DESIGNCLASS="" ADDITIONAL="FormDialpadConf.h"/>
         <FILE FILENAME="scripting\FormLuaScriptHelp.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLuaScriptHelp" FORMNAME="frmLuaScriptHelp" DESIGNCLASS="" ADDITIONAL="scripting\FormLuaScriptHelp.h"/>
         <FILE FILENAME="hotkeys\HotKeyConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="HotKeyConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="hotkeys\HotKeyConf.h"/>
-        <FILE FILENAME="hotkeys\HotKeyConf.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="hotkeys\HotKeyConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
