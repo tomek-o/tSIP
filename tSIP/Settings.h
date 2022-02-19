@@ -68,6 +68,7 @@ public:
 		int iPosX, iPosY;				///< main window coordinates
 		int collapsedWidth, collapsedHeight;	///< width, height when console is not visible
 		int expandedWidth, expandedHeight;		///< width, height with console visible
+		int expandingPosLeftOffset, expandingPosTopOffset;	///< moving window when expanding/collapsing
 
 		// call panel position
 		int collapsedCallPanelLeft, collapsedCallPanelTop;

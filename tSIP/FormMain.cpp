@@ -2825,7 +2825,29 @@ void TfrmMain::SetSpeedDial(bool visible)
 void TfrmMain::ToggleSpeedDial(void)
 {
 	appSettings.frmMain.bSpeedDialVisible = !appSettings.frmMain.bSpeedDialVisible;
-	SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);
+	if (appSettings.frmMain.expandingPosLeftOffset != 0)
+	{
+		if (appSettings.frmMain.bSpeedDialVisible)
+		{
+			this->Left = this->Left + appSettings.frmMain.expandingPosLeftOffset;
+		}
+		else
+		{
+			this->Left = this->Left - appSettings.frmMain.expandingPosLeftOffset;
+		}
+	}
+	if (appSettings.frmMain.expandingPosTopOffset != 0)
+	{
+		if (appSettings.frmMain.bSpeedDialVisible)
+		{
+			this->Top = this->Top + appSettings.frmMain.expandingPosLeftOffset;
+		}
+		else
+		{
+			this->Top = this->Top - appSettings.frmMain.expandingPosLeftOffset;
+		}
+	}
+	SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);	
 }
 
 void __fastcall TfrmMain::cbCallURIKeyPress(TObject *Sender, char &Key)

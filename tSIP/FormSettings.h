@@ -468,6 +468,11 @@ __published:	// IDE-managed Components
 	TComboBox *cbDialogInfoPreferredState;
 	TLabel *lblSipAutoAnswerReason;
 	TEdit *edAutoAnswerReason;
+	TLabel *lblMainWindowPosOffset;
+	TLabel *lblExpandingPosLeftOffset;
+	TEdit *edExpandingPosLeftOffset;
+	TLabel *lblExpandingPosTopOffset;
+	TEdit *edExpandingPosTopOffset;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

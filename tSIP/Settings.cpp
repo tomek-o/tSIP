@@ -36,6 +36,7 @@ Settings::_frmMain::_frmMain(void):
 	iPosY(30),
 	collapsedWidth(275), collapsedHeight(429),
 	expandedWidth(606), expandedHeight(429),
+	expandingPosLeftOffset(0), expandingPosTopOffset(0),
 	collapsedCallPanelLeft(0), collapsedCallPanelTop(0),
 	expandedCallPanelLeft(0), expandedCallPanelTop(0),
 	collapsedMainPanelLeft(0), collapsedMainPanelTop(0),
@@ -385,6 +386,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		{
 			frmMain.expandedHeight = iHeight;
 		}
+		frmMainJson.getInt("ExpandingPosLeftOffset", frmMain.expandingPosLeftOffset);
+		frmMainJson.getInt("ExpandingPosTopOffset", frmMain.expandingPosTopOffset);
 
 		frmMainJson.getInt("CallPanelCollapsedLeft", frmMain.collapsedCallPanelLeft);
 		frmMainJson.getInt("CallPanelCollapsedTop", frmMain.collapsedCallPanelTop);
@@ -823,6 +826,8 @@ int Settings::Write(AnsiString asFileName)
 		jv["AppExpandedHeight"] = frmMain.expandedHeight;
 		jv["AppPositionX"] = frmMain.iPosX;
 		jv["AppPositionY"] = frmMain.iPosY;
+		jv["ExpandingPosLeftOffset"] = frmMain.expandingPosLeftOffset;
+		jv["ExpandingPosTopOffset"] = frmMain.expandingPosTopOffset;
 
 		jv["CallPanelCollapsedLeft"] = frmMain.collapsedCallPanelLeft;
 		jv["CallPanelCollapsedTop"] = frmMain.collapsedCallPanelTop;
