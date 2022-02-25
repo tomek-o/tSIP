@@ -113,6 +113,7 @@ struct autx {
 	} u;
 	struct dtmf_generator dtmfgen;	/**< DTMF generator state	    */
 	struct tone_generator tonegen;	/**< tone generator state       */
+	struct ausrc_st *ausrc_extra;
 };
 
 
@@ -1104,6 +1105,86 @@ static int start_source(struct autx *tx, struct audio *a)
 	return 0;
 }
 
+static void ausrc_extra_read_handler(const uint8_t *buf, size_t sz, void *arg)
+{
+}
+
+
+static void ausrc_extra_error_handler(int err, const char *str, void *arg)
+{
+}
+
+/** Extra instance of audio input just to reduce problem with some Bluetooth headset delay
+	(switching modes at the beginning of the call?)
+*/
+static int start_extra_source(struct autx *tx, struct audio *a)
+{
+    int err;
+	/* Start Audio Source */
+	if (!tx->ausrc_extra && ausrc_find(NULL)) {
+
+		struct ausrc_prm prm;
+
+		prm.fmt        = AUFMT_S16LE;
+		prm.srate      = 8000;
+		prm.ch         = 1;
+		prm.frame_size = calc_nsamp(prm.srate, prm.ch, 20);
+
+		tx->psize = 2 * prm.frame_size;
+
+		DEBUG_WARNING("ausrc_extra_alloc\n");
+		err = ausrc_alloc(&tx->ausrc_extra, NULL, a->cfg.src_mod,
+				  &prm, tx->device,
+				  ausrc_extra_read_handler, ausrc_extra_error_handler, a);
+		DEBUG_WARNING("ausrc_extra_alloc status = %d\n", err);
+		if (err) {
+			DEBUG_WARNING("start_extra_source failed: %m\n", err);
+			return err;
+		}
+
+		switch (a->cfg.txmode) {
+#ifdef HAVE_PTHREAD
+		case AUDIO_MODE_THREAD:
+		case AUDIO_MODE_THREAD_REALTIME:
+			if (!tx->u.thr.run) {
+				tx->u.thr.run = true;
+				err = pthread_create(&tx->u.thr.tid, NULL,
+						     tx_thread, a);
+				if (err) {
+					tx->u.thr.tid = false;
+					return err;
+				}
+			}
+			break;
+#endif
+
+		case AUDIO_MODE_TMR:
+			tmr_start(&tx->u.tmr, 1, timeout_tx, a);
+			break;
+
+		default:
+			break;
+		}
+
+		tx->ausrc_prm = prm;
+	}
+
+	DEBUG_WARNING("start_extra_source: end\n");
+
+	return 0;
+}
+
+
+int audio_start_extra_source(struct audio *a)
+{
+	int err;
+	DEBUG_WARNING("starting extra source (only)...\n");
+	err  = start_extra_source(&a->tx, a);
+	if (err) {
+		DEBUG_WARNING("start_source failed: %m\n", err);
+	}
+	return err;
+}
 
 /**
  * Start the audio playback and recording
@@ -1155,6 +1236,12 @@ int audio_start(struct audio *a)
 			err = start_source(&a->tx, a);
 		}
 	}
+#if 0
+	if (a->tx.ausrc_extra) {
+		mem_deref(a->tx.ausrc_extra);
+		a->tx.ausrc_extra = NULL;
+	}
+#endif
 	if (err)
 		return err;
 
@@ -1209,6 +1296,10 @@ void audio_stop(struct audio *a)
 	}
 
 	/* audio device must be stopped first */
+	if (tx->ausrc_extra) {
+		mem_deref(tx->ausrc_extra);
+		tx->ausrc_extra = NULL;
+	}
 	tx->ausrc  = mem_deref(tx->ausrc);
 	rx->auplay = mem_deref(rx->auplay);
 

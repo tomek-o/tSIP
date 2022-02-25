@@ -213,6 +213,8 @@ public:
 		}
 	} audioCfgSrc, audioCfgPlay, audioCfgAlert, audioCfgRing, audioCfgPlayIntercom;
 
+	bool startAudioSourceAtCallStart;	// start audio source at the very beginning of the call (fighting with some delay on BT devices) 
+
 	struct AudioPortaudio {
 		double inSuggestedLatency;
 		double outSuggestedLatency;
@@ -594,6 +596,7 @@ public:
 		logMessagesOnlyFirstLine = false;
 		logAubuf = false;
 		loopRingWithoutSilence = false;
+		startAudioSourceAtCallStart = false;
 		autoAnswer = false;
 		autoAnswerCode = 200;
 		autoAnswerReason = "OK";
@@ -640,6 +643,8 @@ public:
 		if (audioCfgRing != right.audioCfgRing)
 			return false;
 	#endif
+		if (startAudioSourceAtCallStart != right.startAudioSourceAtCallStart)
+			return false;
 		if (recording != right.recording)
 			return false;
 		if (audioAgcRx != right.audioAgcRx)

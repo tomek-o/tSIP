@@ -389,6 +389,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	edPortaudioInSuggestedLatency->Text = tmpSettings.uaConf.audioPortaudio.inSuggestedLatency;
 	edPortaudioOutSuggestedLatency->Text = tmpSettings.uaConf.audioPortaudio.outSuggestedLatency;
+	chbStartAudioSourceAtCallStart->Checked = tmpSettings.uaConf.startAudioSourceAtCallStart;
 
 	AudioPreprocessingUpdate();
 
@@ -777,6 +778,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.uaConf.audioPortaudio.inSuggestedLatency = StrToFloatDef(edPortaudioInSuggestedLatency->Text, tmpSettings.uaConf.audioPortaudio.inSuggestedLatency);
 	tmpSettings.uaConf.audioPortaudio.outSuggestedLatency = StrToFloatDef(edPortaudioOutSuggestedLatency->Text, tmpSettings.uaConf.audioPortaudio.outSuggestedLatency);
+	tmpSettings.uaConf.startAudioSourceAtCallStart = chbStartAudioSourceAtCallStart->Checked;
 
 	tmpSettings.Ring.defaultRing = edRingDefault->Text;
 	tmpSettings.Ring.bellcore[0] = edRingBellcoreDr1->Text;
@@ -1720,4 +1722,5 @@ void __fastcall TfrmSettings::btnSelectTlsClick(TObject *Sender)
 	}	
 }
 //---------------------------------------------------------------------------
+
 

@@ -11,6 +11,7 @@
 
 #pragma package(smart_init)
 
+
 namespace
 {
 	inline void strncpyz(char* dst, const char* src, int dstsize) {
@@ -128,6 +129,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 	}
 
 	uaConfJson.getBool("loopRingWithoutSilence", loopRingWithoutSilence);
+	uaConfJson.getBool("startAudioSourceAtCallStart", startAudioSourceAtCallStart);
 
 	if (Branding::recording)
 	{
@@ -293,6 +295,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	}
 
 	uaConfJson["loopRingWithoutSilence"] = loopRingWithoutSilence;
+	uaConfJson["startAudioSourceAtCallStart"] = startAudioSourceAtCallStart;
 
 	if (Branding::recording)
 	{

@@ -145,6 +145,11 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			if (pai_peer_name == NULL)
 				pai_peer_name = "";
 
+			if (appSettings.uaConf.startAudioSourceAtCallStart)
+			{
+				call_start_audio_extra_source(call);
+			}
+
 			UA_CB->ChangeCallState(state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name, "");
 			break;
 		}
@@ -159,6 +164,10 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 	case UA_EVENT_CALL_OUTGOING:
 		state = Callback::CALL_STATE_OUTGOING;
 		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		if (appSettings.uaConf.startAudioSourceAtCallStart)
+		{
+			call_start_audio_extra_source(call);
+		}
 		break;
 	case UA_EVENT_CALL_PROGRESS:
 		state = Callback::CALL_STATE_PROGRESS;

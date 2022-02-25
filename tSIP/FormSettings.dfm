@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 468
-    ActivePage = tsMainWindow
+    ActivePage = tsAudioIO
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1917,6 +1917,16 @@ object frmSettings: TfrmSettings
         Width = 49
         Height = 21
         TabOrder = 13
+      end
+      object chbStartAudioSourceAtCallStart: TCheckBox
+        Left = 3
+        Top = 367
+        Width = 534
+        Height = 17
+        Caption = 
+          'Start audio input (e.g. microphone) before call is confirmed (mi' +
+          'ght help with some Bluetooth devices delay)'
+        TabOrder = 14
       end
     end
     object tsAudioProcessing: TTabSheet

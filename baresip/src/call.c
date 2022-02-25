@@ -1118,6 +1118,14 @@ int call_stop_tone(struct call *call, unsigned int tone_id)
 	return audio_stop_tone(call->audio, tone_id);
 }
 
+int  call_start_audio_extra_source(struct call *call)
+{
+	if (!call)
+		return EINVAL;
+	if (!call->audio)
+		return EINVAL;
+	return audio_start_extra_source(call->audio);
+}
 
 struct ua *call_get_ua(const struct call *call)
 {

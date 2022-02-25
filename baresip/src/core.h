@@ -134,6 +134,9 @@ int audio_alloc2(struct audio **ap, const struct config *cfg,
 		uint32_t ptime,
 		audio_event_h *eventh, audio_err_h *errh, void *arg);
 int  audio_start(struct audio *a);
+/** \brief Start only audio source
+*/
+int audio_start_extra_source(struct audio *a);
 void audio_stop(struct audio *a);
 int  audio_encoder_set(struct audio *a, const struct aucodec *ac,
 		       int pt_tx, const char *params);
