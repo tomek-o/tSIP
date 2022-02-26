@@ -1346,6 +1346,10 @@ void __fastcall TfrmSettings::lboxAudioCodecsEnabledDragDrop(TObject *Sender,
 {
 	TListBox *lbox = lboxAudioCodecsEnabled;
 	int dropIndex = lbox->ItemAtPos(Point(X,Y), false);
+	if (dropIndex >= lbox->Items->Count)
+	{
+    	dropIndex--;
+	}
 	if (dropIndex >= 0)
 	{
 		lbox->Items->Move(audioCodecsEnabledDraggedIndex, dropIndex);
