@@ -702,9 +702,13 @@ Value::asString() const
    case realValue:
    case arrayValue:
    case objectValue:
+#ifdef __BORLANDC__
 #pragma warn -8008
+#endif
 	  JSON_ASSERT_MESSAGE( false, "Type is not convertible to string" );
+#ifdef __BORLANDC__
 #pragma warn .8008
+#endif
    default:
 	  JSON_ASSERT_UNREACHABLE;
    }
@@ -766,9 +770,13 @@ Value::asInt() const
    case stringValue:
    case arrayValue:
    case objectValue:
+#ifdef __BORLANDC__
 #pragma warn -8008
+#endif
 	  JSON_ASSERT_MESSAGE( false, "Type is not convertible to int" );
+#ifdef __BORLANDC__
 #pragma warn .8008
+#endif
    default:
       JSON_ASSERT_UNREACHABLE;
    }
@@ -795,9 +803,13 @@ Value::asUInt() const
    case stringValue:
    case arrayValue:
    case objectValue:
+#ifdef __BORLANDC__
 #pragma warn -8008
+#endif
 	  JSON_ASSERT_MESSAGE( false, "Type is not convertible to uint" );
+#ifdef __BORLANDC__
 #pragma warn .8008
+#endif
    default:
       JSON_ASSERT_UNREACHABLE;
    }
@@ -822,9 +834,13 @@ Value::asDouble() const
    case stringValue:
    case arrayValue:
    case objectValue:
+#ifdef __BORLANDC__
 #pragma warn -8008
+#endif
 	  JSON_ASSERT_MESSAGE( false, "Type is not convertible to double" );
+#ifdef __BORLANDC__
 #pragma warn .8008
+#endif
    default:
       JSON_ASSERT_UNREACHABLE;
    }
