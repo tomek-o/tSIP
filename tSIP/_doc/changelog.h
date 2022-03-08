@@ -951,5 +951,15 @@ Version 0.2.06
 	- showing button ID + description on button editor frame
 	- exiting button editing (resizing/moving) with Esc
 	- added window with short (very short at the moment) description for each custom Lua function, accessible from Script window / Help
+
+Version 0.2.07
+	- FIXED: audio devices configuration was reset after config merge
+	- few minor updates to Lua help window
+	- log window: added buttons copying all and last 400 lines
+	- replying with 200 instead of 415 for NOTIFY with terminated/noresource (less mess in logs when working with FreeSWITCH)
+	- FIXED few bugs related to global hotkeys
+	- added new main window settings: offset allowing to change window position when switching between "normal" and "expanded" state, e.g. for anchoring window to right side of the desktop
+	- FIXED exception when in codec selection list codec was moved below last item list
+	- added option to start audio source early (actually opening it twice) - intended to fight with initial audio delay on Mairdi Bluetooth headset when switching profiles
 */
 
