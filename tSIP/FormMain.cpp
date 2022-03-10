@@ -1980,6 +1980,7 @@ void TfrmMain::PollCallbackQueue(void)
 			}
 			if (ddata)
 			{
+				dlgInfoState = ddata->status;
 				if (!appSettings.frmMain.bSpeedDialIgnoreDialogInfoRemoteIdentity)
 				{
 
@@ -1998,7 +1999,6 @@ void TfrmMain::PollCallbackQueue(void)
 						}
 					}
 				}
-				dlgInfoState = ddata->status;
 				if (updateRemoteIdentity)
 				{
 					contact.direction = direction;
