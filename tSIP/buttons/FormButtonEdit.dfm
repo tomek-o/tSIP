@@ -123,7 +123,7 @@ object frmButtonEdit: TfrmButtonEdit
     Top = 81
     Width = 659
     Height = 408
-    ActivePage = tsBehavior
+    ActivePage = tsVisual
     TabOrder = 4
     object tsVisual: TTabSheet
       Caption = 'Visual'
@@ -1232,7 +1232,7 @@ object frmButtonEdit: TfrmButtonEdit
     Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
-    Options = [fdEffects, fdForceFontExist]
+    Options = [fdForceFontExist]
     Left = 160
     Top = 408
   end

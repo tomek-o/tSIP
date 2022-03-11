@@ -658,8 +658,14 @@ void __fastcall TfrmButtonEdit::btnSpeedDialFontSelectClick(TObject *Sender)
 		fontDialog->Font->Style << fsItalic;
 	if (font->underline)
 		fontDialog->Font->Style << fsUnderline;
+	fontDialog->Font->Color = clBlack;
 	if (fontDialog->Execute())
 	{
+		if (fontDialog->Font->Color != clBlack)
+		{
+			MessageBox(this->Handle, "Warning: this dialog is not used for font color selection.\nUse \"Colors\" group below for this purpose.", "Font color selection", MB_ICONEXCLAMATION);
+			fontDialog->Font->Color = clBlack;			
+		}
 		ed->Font = fontDialog->Font;
 		font->name = fontDialog->Font->Name.c_str();
 		font->size = fontDialog->Font->Size;
