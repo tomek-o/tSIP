@@ -12,6 +12,7 @@
 #define DEBUG_LEVEL 5
 #include <re_dbg.h>
 
+enum { DNS_SERVERS_COUNT = 8 };
 
 static struct {
 	struct config_net cfg;
@@ -23,7 +24,7 @@ static struct {
 #endif
 	struct tmr tmr;
 	struct dnsc *dnsc;
-	struct sa nsv[4];    /**< Configured name servers           */
+	struct sa nsv[DNS_SERVERS_COUNT];    /**< Configured name servers           */
 	uint32_t nsn;        /**< Number of configured name servers */
 	uint32_t interval;
 	int af;              /**< Preferred address family          */
@@ -38,7 +39,7 @@ static struct {
  */
 static void dns_refresh(void)
 {
-	struct sa nsv[8];
+	struct sa nsv[DNS_SERVERS_COUNT];
 	uint32_t i, nsn;
 	int err;
 
@@ -129,7 +130,7 @@ bool net_check(void)
 
 static int dns_init(void)
 {
-	struct sa nsv[8];
+	struct sa nsv[DNS_SERVERS_COUNT];
 	uint32_t i, nsn;
 	int err;
 
@@ -312,7 +313,7 @@ void net_change(uint32_t interval, net_change_h *ch, void *arg)
 
 static int dns_debug(struct re_printf *pf, void *unused)
 {
-	struct sa nsv[4];
+	struct sa nsv[DNS_SERVERS_COUNT];
 	uint32_t i, nsn;
 	int err;
 
