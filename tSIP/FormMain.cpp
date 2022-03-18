@@ -1710,8 +1710,11 @@ void TfrmMain::PollCallbackQueue(void)
 				if (appSettings.frmMain.bRestoreOnIncomingCall)
 				{
 					if (IsIconic(Application->Handle))
-						Application->Restore();
-					SetForegroundWindow( Application->Handle );
+					{
+						//Application->Restore();	// this takes focus
+						ShowWindow(Application->Handle, SW_SHOWNOACTIVATE);
+					}
+					//SetForegroundWindow( Application->Handle );
 					//this->BringToFront();
 					// https://stackoverflow.com/questions/19136365/win32-setforegroundwindow-not-working-all-the-time
 					SetWindowPos(this->Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
