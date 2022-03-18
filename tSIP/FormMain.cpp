@@ -707,6 +707,12 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 {
 	tmrStartup->Enabled = false;
 
+	{
+		// trying to fight with inconsistent state of tray notifier when trying to show it without activation
+		frmTrayNotifier->Show();
+		frmTrayNotifier->Hide();
+	}
+
 	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
 
 	if (appSettings.frmMain.bKioskMode)

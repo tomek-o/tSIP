@@ -48,7 +48,7 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 {
 	frmTrayNotifier->Left = appSettings.frmTrayNotifier.iPosX;
 	frmTrayNotifier->Top = appSettings.frmTrayNotifier.iPosY;
-#if 1
+#if 0
 	/** \todo frmTrayNotifier steals focus at first call */
 	Visible = true;
 #else
@@ -67,6 +67,7 @@ void TfrmTrayNotifier::HideWindow(void)
 		appSettings.frmTrayNotifier.iPosY = frmTrayNotifier->Top;
 	}
 	Visible = false;
+	ShowWindow(Handle, SW_HIDE);
 }
 
 void __fastcall TfrmTrayNotifier::btnHangupClick(TObject *Sender)
@@ -115,7 +116,7 @@ void TfrmTrayNotifier::UpdateBackgroundImage(void)
 void __fastcall TfrmTrayNotifier::CreateParams(TCreateParams &Params)
 {
 	TForm::CreateParams(Params);
-	Params.ExStyle  |= WS_EX_APPWINDOW;
+	Params.ExStyle  |= WS_EX_APPWINDOW;	// Forces a top-level window onto the taskbar when the window is visible.
 	Params.WndParent = GetDesktopWindow();
 }
 
