@@ -297,10 +297,10 @@ object frmAbout: TfrmAbout
     object lblInfo2: TLabel
       Left = 33
       Top = 320
-      Width = 84
+      Width = 181
       Height = 13
       Cursor = crHandPoint
-      Caption = 'http://tomeko.net'
+      Caption = 'http://tomeko.net/software/SIPclient/'
       Color = clBtnFace
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlue
@@ -312,8 +312,8 @@ object frmAbout: TfrmAbout
       OnClick = lblInfo2Click
     end
     object lblInfo3: TLabel
-      Left = 123
-      Top = 320
+      Left = 221
+      Top = 319
       Width = 150
       Height = 13
       Caption = 'for updates and documentation.'
