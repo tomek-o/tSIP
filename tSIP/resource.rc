@@ -5,5 +5,6 @@ STRINGTABLE
     ID_STR_RECORDING_FEATURE    "RECORDING_ENABLED"
     ID_STR_APP_NAME             "tSIP"
     ID_STR_APP_PROTO            "tsip"
+    ID_STR_APP_URL              "https://tomeko.net/software/SIPclient/"
 }
 

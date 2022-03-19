@@ -63,7 +63,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	try
 	{
 		Application->Initialize();
-		Branding::init();
 		Application -> ShowMainForm = false;
 
         Paths::SetProfileDir(CommandLine::GetProfileDir());

@@ -31,6 +31,11 @@ Font::Font(void)
 	style = TFontStyles();
 }
 
+Settings::BrandingInitializer::BrandingInitializer(void)
+{
+	Branding::init();
+}
+
 Settings::_frmMain::_frmMain(void):
 	iPosX(30),
 	iPosY(30),
@@ -128,6 +133,11 @@ Settings::_Integration::_Integration(void):
 	bDoNotUseSipPrefixForDirectIpCalls(false),
 	bDoNotPassParametersToPreviousInstance(false),
 	bAcceptCommandLineScript(false)
+{
+}
+
+Settings::_Branding::_Branding(void):
+	appUrl(Branding::appUrl)
 {
 }
 

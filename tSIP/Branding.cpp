@@ -12,10 +12,18 @@
 
 AnsiString Branding::appName = "tSIP";
 AnsiString Branding::appProto = "tsip";
+AnsiString Branding::appUrl = "";
 bool Branding::recording = false;
+
+namespace
+{
+	bool initialized = false;
+}
 
 void Branding::init(void)
 {
+	if (initialized)
+		return;
 	AnsiString text = LoadStr(ID_STR_RECORDING_FEATURE);
 	if (text == "RECORDING_ENABLED")
 		recording = true;
@@ -25,5 +33,8 @@ void Branding::init(void)
 	text = LoadStr(ID_STR_APP_PROTO);
 	if (text != "")
 		appProto = text;
+	appUrl = LoadStr(ID_STR_APP_URL);
+
+	initialized = true;
 }
 

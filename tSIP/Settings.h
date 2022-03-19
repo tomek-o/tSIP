@@ -42,6 +42,11 @@ struct Font
 
 class Settings
 {
+private:
+	struct BrandingInitializer
+	{
+		BrandingInitializer(void);
+	} brandingInitializer;
 public:
 	int Read(AnsiString asFileName);
 	int Write(AnsiString asFileName);
@@ -379,9 +384,7 @@ public:
 	struct _Branding
 	{
 		AnsiString appUrl;
-		_Branding(void):
-			appUrl("https://tomeko.net/software/SIPclient/")
-		{}
+		_Branding(void);
 	} branding;
 
 	Settings(void);
