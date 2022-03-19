@@ -369,11 +369,20 @@ public:
 		void ClearMruItems(void);
 	} ScriptWindow;
 
+
 	std::list<HotKeyConf> hotKeyConf;
 
 	std::vector<ButtonContainerConf> buttonContainers;
 
 	DialpadConf dialpad;
+
+	struct _Branding
+	{
+		AnsiString appUrl;
+		_Branding(void):
+			appUrl("https://tomeko.net/software/SIPclient/")
+		{}
+	} branding;
 
 	Settings(void);
 

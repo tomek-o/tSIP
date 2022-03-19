@@ -474,6 +474,8 @@ __published:	// IDE-managed Components
 	TLabel *lblExpandingPosTopOffset;
 	TEdit *edExpandingPosTopOffset;
 	TCheckBox *chbStartAudioSourceAtCallStart;
+	TLabel *lblBrandingAppUrl;
+	TEdit *edBrandingAppUrl;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

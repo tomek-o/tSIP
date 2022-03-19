@@ -296,6 +296,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edBmpBtnConsoleHide->Text = tmpSettings.frmMain.bitmaps.bmpConsoleHide;
 	edBmpBtnResetMicVolume->Text = tmpSettings.frmMain.bitmaps.bmpBtnResetMicVolume;
 	edBmpBtnResetSpeakerVolume->Text = tmpSettings.frmMain.bitmaps.bmpBtnResetSpeakerVolume;
+	edBrandingAppUrl->Text = tmpSettings.branding.appUrl;
 
 	chbNoBeepOnEnterKey->Checked = tmpSettings.frmMain.bNoBeepOnEnterKey;
 	chbHideSettings->Checked = tmpSettings.frmMain.bHideSettings;
@@ -630,6 +631,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bitmaps.bmpConsoleHide = edBmpBtnConsoleHide->Text;
 	tmpSettings.frmMain.bitmaps.bmpBtnResetMicVolume = edBmpBtnResetMicVolume->Text;
 	tmpSettings.frmMain.bitmaps.bmpBtnResetSpeakerVolume = edBmpBtnResetSpeakerVolume->Text;
+	tmpSettings.branding.appUrl = edBrandingAppUrl->Text;
 
 	tmpSettings.frmMain.bNoBeepOnEnterKey = chbNoBeepOnEnterKey->Checked;
 	tmpSettings.frmMain.bHideSettings = chbHideSettings->Checked;

@@ -24,9 +24,7 @@ __published:
 	TLabel *ProductName;
 	TButton *OKButton;
 	TLabel *lblVersion;
-	TLabel *lblInfo1;
-	TLabel *lblInfo2;
-	TLabel *lblInfo3;
+	TLabel *lblUrl;
 	TLabel *lblBuilt;
 	TLabel *lblBuildTimestamp;
 	TMemo *Memo;
@@ -41,11 +39,12 @@ __published:
 	TLabel *lblLocation;
 	TLabel *lblProfileDir;
 	TLabel *lblProfileDirLocation;
-	void __fastcall lblInfo2Click(TObject *Sender);
+	void __fastcall lblUrlClick(TObject *Sender);
 	void __fastcall lblCodeGuardStateClick(TObject *Sender);
 	void __fastcall lblExeLocationClick(TObject *Sender);
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
 	void __fastcall lblProfileDirLocationClick(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
 private:
 public:
 	virtual __fastcall TfrmAbout(TComponent* AOwner);

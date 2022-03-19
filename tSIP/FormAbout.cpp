@@ -5,6 +5,7 @@
 #include "FormAbout.h"
 #include "common\Utilities.h"
 #include "Paths.h"
+#include "Settings.h"
 //---------------------------------------------------------------------
 #pragma resource "*.dfm"
 TfrmAbout *frmAbout;
@@ -33,7 +34,7 @@ __fastcall TfrmAbout::TfrmAbout(TComponent* AOwner)
 	lblProfileDirLocation->Caption = Paths::GetProfileDir();	
 }
 //---------------------------------------------------------------------
-void __fastcall TfrmAbout::lblInfo2Click(TObject *Sender)
+void __fastcall TfrmAbout::lblUrlClick(TObject *Sender)
 {
 	TLabel* lbl = dynamic_cast<TLabel*>(Sender);
 	if (!lbl)
@@ -70,6 +71,12 @@ void __fastcall TfrmAbout::FormKeyPress(TObject *Sender, char &Key)
 	{
 		Close();
     }	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAbout::FormShow(TObject *Sender)
+{
+	lblUrl->Caption = appSettings.branding.appUrl;	
 }
 //---------------------------------------------------------------------------
 

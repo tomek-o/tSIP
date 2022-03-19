@@ -15,6 +15,7 @@ object frmAbout: TfrmAbout
   OldCreateOrder = True
   Position = poScreenCenter
   OnKeyPress = FormKeyPress
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Panel1: TPanel
@@ -287,20 +288,13 @@ object frmAbout: TfrmAbout
       Height = 13
       Caption = 'lblVersion'
     end
-    object lblInfo1: TLabel
+    object lblUrl: TLabel
       Left = 8
       Top = 320
-      Width = 19
-      Height = 13
-      Caption = 'Visit'
-    end
-    object lblInfo2: TLabel
-      Left = 33
-      Top = 320
-      Width = 181
+      Width = 186
       Height = 13
       Cursor = crHandPoint
-      Caption = 'http://tomeko.net/software/SIPclient/'
+      Caption = 'https://tomeko.net/software/SIPclient/'
       Color = clBtnFace
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlue
@@ -309,14 +303,7 @@ object frmAbout: TfrmAbout
       Font.Style = [fsUnderline]
       ParentColor = False
       ParentFont = False
-      OnClick = lblInfo2Click
-    end
-    object lblInfo3: TLabel
-      Left = 221
-      Top = 319
-      Width = 150
-      Height = 13
-      Caption = 'for updates and documentation.'
+      OnClick = lblUrlClick
     end
     object lblBuilt: TLabel
       Left = 88
@@ -398,7 +385,7 @@ object frmAbout: TfrmAbout
       Font.Style = [fsUnderline]
       ParentColor = False
       ParentFont = False
-      OnClick = lblInfo2Click
+      OnClick = lblUrlClick
     end
     object lblExeLocation: TLabel
       Left = 159

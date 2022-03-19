@@ -802,6 +802,11 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 
 	dialpad.fromJson(root["dialpad"]);
 
+	{
+		const Json::Value &jv = root["branding"];
+		jv.getAString("appUrl", branding.appUrl);
+	}
+
 	return 0;
 }
 
@@ -1130,6 +1135,11 @@ int Settings::Write(AnsiString asFileName)
 	}
 
 	dialpad.toJson(root["dialpad"]);
+
+	{
+		Json::Value &jv = root["branding"];
+		jv["appUrl"] = branding.appUrl;
+	}
 
 	std::string outputConfig = writer.write( root );
 
