@@ -521,13 +521,14 @@ private:	// User declarations
 	TfrmPhones *frmPhones;
 	TfrmUaConfOpus *frmConfOpus;
 	TfrmDialpadConf *frmDialpadConf;
-	std::vector<TTabSheet*> tabs;	// first level of tabs
 	TTabSheet *lastTab;
 	void AudioCodecEnableSelected(void);
 	void AudioCodecDisableSelected(void);
 	void AudioPreprocessingUpdate(void);
 	void ShowFonts(void);
 	void UpdateNetworkInterface(void);
+	TTreeNode* CreatePagesNode(TTreeNode *parent, AnsiString name, TTabSheet *tab);
+	void CreatePages(void);
 public:		// User declarations
 	__fastcall TfrmSettings(TComponent* Owner);
 	Settings tmpSettings;

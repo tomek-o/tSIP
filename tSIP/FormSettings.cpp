@@ -53,39 +53,10 @@ namespace
 __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	: TForm(Owner), lastTab(NULL)
 {
-	tabs.push_back(tsGeneral);
-	tabs.push_back(tsNetwork);
-	tabs.push_back(tsAccount);
-	tabs.push_back(tsTls);
-	tabs.push_back(tsMainWindow);
-	tabs.push_back(tsSpeedDial);
-	tabs.push_back(tsCalls);
-	tabs.push_back(tsMessages);
-	tabs.push_back(tsDisplay);
-	tabs.push_back(tsLocking);
-	tabs.push_back(tsBranding);
-	tabs.push_back(tsRing);
-	tabs.push_back(tsAudioIO);
-	tabs.push_back(tsAudioProcessing);
-	tabs.push_back(tsRecording);
-	tabs.push_back(tsCodecs);
-	tabs.push_back(tsIntegration);
-	tabs.push_back(tsHotkeys);
-	tabs.push_back(tsContacts);
-	tabs.push_back(tsHistory);
-	tabs.push_back(tsPhones);
-	tabs.push_back(tsTrayNotifier);
-	tabs.push_back(tsScripts);
-	tabs.push_back(tsLogging);
-
-	pcGeneral->ActivePage = tsGeneral;
 	frmHotkeys = new TfrmHotkeys(tsHotkeys);
 	frmHotkeys->Parent = tsHotkeys;
 	frmHotkeys->Visible = true;
-	if (Branding::recording == false)
-	{
-    	tsRecording->TabVisible = false;
-	}
+
 	frmPhones = new TfrmPhones(tsPhones);
 	frmPhones->Parent = tsPhones;
 	frmPhones->Visible = true;
@@ -98,20 +69,68 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	frmDialpadConf->Parent = tsDialpad;
 	frmDialpadConf->Visible = true;
 
-	for (int i=0; i<pcGeneral->PageCount; i++)
-	{
-		pcGeneral->Pages[i]->TabVisible = false;
-	}
-	// make "Accounts" selected and visible
-	tvSelector->Items->Item[tsAccount->PageIndex]->Selected = true;
-
 	AudioModules::FillInputSelectorCb(cbSoundInputMod);
 	AudioModules::FillOutputSelectorCb(cbSoundOutputMod);
 	AudioModules::FillOutputSelectorCb(cbSoundAlertOutputMod);
 	AudioModules::FillOutputSelectorCb(cbSoundRingOutputMod);
 	AudioModules::FillOutputSelectorCb(cbSoundOutputIntercomMod);
+
+	for (int i=0; i<pcGeneral->PageCount; i++)
+	{
+		pcGeneral->Pages[i]->TabVisible = false;
+		pcGeneral->Pages[i]->Visible = false;
+	}
+
+	CreatePages();
 }
 //---------------------------------------------------------------------------
+
+TTreeNode* TfrmSettings::CreatePagesNode(TTreeNode *parent, AnsiString name, TTabSheet *tab)
+{
+	TTreeNode *node;
+	if (parent == NULL)
+		node = tvSelector->Items->Add(parent, name);
+	else
+		node = tvSelector->Items->AddChild(parent, name);
+	node->Data = tab;
+	return node;
+}
+
+void TfrmSettings::CreatePages(void)
+{
+	tvSelector->Items->Clear();
+
+	CreatePagesNode(NULL, "General", tsGeneral);
+	CreatePagesNode(NULL, "Network", tsNetwork);
+	TTreeNode *nodeAccount = CreatePagesNode(NULL, "SIP account", tsAccount);
+	CreatePagesNode(NULL, "TLS", tsTls);
+	TTreeNode *nodeMainWindow = CreatePagesNode(NULL, "Main window", tsMainWindow);
+	CreatePagesNode(nodeMainWindow, "Dialpad", tsDialpad);
+	CreatePagesNode(NULL, "Speed Dial", tsSpeedDial);
+	CreatePagesNode(NULL, "Calls", tsCalls);
+	CreatePagesNode(NULL, "Messages", tsMessages);
+	CreatePagesNode(NULL, "Display", tsDisplay);
+	CreatePagesNode(NULL, "Locking", tsLocking);
+	CreatePagesNode(NULL, "Branding, bitmaps", tsBranding);
+	CreatePagesNode(NULL, "Ring", tsRing);
+	CreatePagesNode(NULL, "Audio I/O", tsAudioIO);
+	CreatePagesNode(NULL, "Audio processing", tsAudioProcessing);
+	if (Branding::recording)
+		CreatePagesNode(NULL, "Recording", tsRecording);
+	TTreeNode *nodeCodecs = CreatePagesNode(NULL, "Codecs", tsCodecs);
+	CreatePagesNode(nodeCodecs, "Opus", tsUaConfOpus);
+	CreatePagesNode(NULL, "Integration", tsIntegration);
+	CreatePagesNode(NULL, "Hotkeys", tsHotkeys);
+	CreatePagesNode(NULL, "Contacts", tsContacts);
+	CreatePagesNode(NULL, "History", tsHistory);
+	CreatePagesNode(NULL, "Phones (plugins)", tsPhones);
+	CreatePagesNode(NULL, "Tray notifier", tsTrayNotifier);
+	CreatePagesNode(NULL, "Scripts", tsScripts);
+	CreatePagesNode(NULL, "Logging", tsLogging);
+
+	// make "Accounts" selected and visible
+	nodeAccount->Selected = true;
+}
 
 void __fastcall TfrmSettings::FormShow(TObject *Sender)
 {
@@ -1181,35 +1200,14 @@ void __fastcall TfrmSettings::btnSelectWaveFileClick(TObject *Sender)
 
 void __fastcall TfrmSettings::tvSelectorChange(TObject *Sender, TTreeNode *Node)
 {
-	if (lastTab)
+	if (Node && Node->Selected)
 	{
-		lastTab->Visible = false;
-	}
-	if (Node->Selected)
-	{
-		if (Node->Parent == NULL)
-		{
-			int id = Node->Index;
-			assert(id < tabs.size());
-			lastTab = tabs[id];
-			lastTab->Visible = true;
-		}
-		else if (Node->Parent->Text == "Codecs")
-		{
-			if (Node->Text == "Opus")
-			{
-				lastTab = tsUaConfOpus;
-				lastTab->Visible = true;
-			}
-		}
-		else if (Node->Parent->Text == "Main window")
-		{
-			if (Node->Text == "Dialpad")
-			{
-				lastTab = tsDialpad;
-				lastTab->Visible = true;
-			}
-		}
+		TTabSheet *tab = reinterpret_cast<TTabSheet*>(Node->Data);
+		assert(tab);
+		tab->Visible = true;
+		if (lastTab)
+			lastTab->Visible = false;
+		lastTab = tab;
 	}
 }
 //---------------------------------------------------------------------------
