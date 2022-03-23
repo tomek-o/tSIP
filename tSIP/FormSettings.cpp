@@ -85,51 +85,79 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 
-TTreeNode* TfrmSettings::CreatePagesNode(TTreeNode *parent, AnsiString name, TTabSheet *tab)
+TTreeNode* TfrmSettings::CreatePagesNode(TTreeNode *parent, TTabSheet *tab)
 {
+	AnsiString chbName;
+	chbName.sprintf("%s [%s]", tab->Caption.c_str(), tab->Name.c_str());
+	chbBoxLockingSettingsPages->Items->Add(chbName);
+
+	for (unsigned int j=0; j<tmpSettings.locking.hiddenSettingsPages.size(); j++)
+	{
+		if (tmpSettings.locking.hiddenSettingsPages[j] == tab->Name)
+		{
+			tab->Visible = false;
+			chbBoxLockingSettingsPages->Checked[chbBoxLockingSettingsPages->Items->Count - 1] = true;
+			return NULL;
+		}
+	}
+	chbBoxLockingSettingsPages->Checked[chbBoxLockingSettingsPages->Items->Count - 1] = false;
+
 	TTreeNode *node;
 	if (parent == NULL)
-		node = tvSelector->Items->Add(parent, name);
+		node = tvSelector->Items->Add(parent, tab->Caption);
 	else
-		node = tvSelector->Items->AddChild(parent, name);
+		node = tvSelector->Items->AddChild(parent, tab->Caption);
 	node->Data = tab;
+
 	return node;
 }
 
 void TfrmSettings::CreatePages(void)
 {
 	tvSelector->Items->Clear();
+	chbBoxLockingSettingsPages->Items->Clear();
 
-	CreatePagesNode(NULL, "General", tsGeneral);
-	CreatePagesNode(NULL, "Network", tsNetwork);
-	TTreeNode *nodeAccount = CreatePagesNode(NULL, "SIP account", tsAccount);
-	CreatePagesNode(NULL, "TLS", tsTls);
-	TTreeNode *nodeMainWindow = CreatePagesNode(NULL, "Main window", tsMainWindow);
-	CreatePagesNode(nodeMainWindow, "Dialpad", tsDialpad);
-	CreatePagesNode(NULL, "Speed Dial", tsSpeedDial);
-	CreatePagesNode(NULL, "Calls", tsCalls);
-	CreatePagesNode(NULL, "Messages", tsMessages);
-	CreatePagesNode(NULL, "Display", tsDisplay);
-	CreatePagesNode(NULL, "Locking", tsLocking);
-	CreatePagesNode(NULL, "Branding, bitmaps", tsBranding);
-	CreatePagesNode(NULL, "Ring", tsRing);
-	CreatePagesNode(NULL, "Audio I/O", tsAudioIO);
-	CreatePagesNode(NULL, "Audio processing", tsAudioProcessing);
+	CreatePagesNode(NULL, tsGeneral);
+	CreatePagesNode(NULL, tsNetwork);
+	TTreeNode *nodeAccount = CreatePagesNode(NULL, tsAccount);
+	CreatePagesNode(NULL, tsTls);
+	TTreeNode *nodeMainWindow = CreatePagesNode(NULL, tsMainWindow);
+	CreatePagesNode(nodeMainWindow, tsDialpad);
+	CreatePagesNode(NULL, tsSpeedDial);
+	CreatePagesNode(NULL, tsCalls);
+	CreatePagesNode(NULL, tsMessages);
+	CreatePagesNode(NULL, tsDisplay);
+	TTreeNode *nodeLocking = CreatePagesNode(NULL, tsLocking);
+	CreatePagesNode(nodeLocking, tsLockingSettingsPages);
+	CreatePagesNode(NULL, tsBranding);
+	CreatePagesNode(NULL, tsRing);
+	CreatePagesNode(NULL, tsAudioIO);
+	CreatePagesNode(NULL, tsAudioProcessing);
 	if (Branding::recording)
-		CreatePagesNode(NULL, "Recording", tsRecording);
-	TTreeNode *nodeCodecs = CreatePagesNode(NULL, "Codecs", tsCodecs);
-	CreatePagesNode(nodeCodecs, "Opus", tsUaConfOpus);
-	CreatePagesNode(NULL, "Integration", tsIntegration);
-	CreatePagesNode(NULL, "Hotkeys", tsHotkeys);
-	CreatePagesNode(NULL, "Contacts", tsContacts);
-	CreatePagesNode(NULL, "History", tsHistory);
-	CreatePagesNode(NULL, "Phones (plugins)", tsPhones);
-	CreatePagesNode(NULL, "Tray notifier", tsTrayNotifier);
-	CreatePagesNode(NULL, "Scripts", tsScripts);
-	CreatePagesNode(NULL, "Logging", tsLogging);
+		CreatePagesNode(NULL, tsRecording);
+	TTreeNode *nodeCodecs = CreatePagesNode(NULL, tsCodecs);
+	CreatePagesNode(nodeCodecs, tsUaConfOpus);
+	CreatePagesNode(NULL, tsIntegration);
+	CreatePagesNode(NULL, tsHotkeys);
+	CreatePagesNode(NULL, tsContacts);
+	CreatePagesNode(NULL, tsHistory);
+	CreatePagesNode(NULL, tsPhones);
+	CreatePagesNode(NULL, tsTrayNotifier);
+	CreatePagesNode(NULL, tsScripts);
+	CreatePagesNode(NULL, tsLogging);
 
-	// make "Accounts" selected and visible
-	nodeAccount->Selected = true;
+	if (nodeAccount)
+	{
+		// make "Accounts" selected and visible
+		nodeAccount->Selected = true;
+	}
+	else
+	{
+		if (tvSelector->Items->Count > 0)
+		{
+        	tvSelector->Items->Item[0]->Selected = true;
+		}
+	}
 }
 
 void __fastcall TfrmSettings::FormShow(TObject *Sender)
@@ -364,7 +392,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	chbRecordingEnabled->Checked = tmpSettings.uaConf.recording.enabled;
 	cbRecDirType->ItemIndex = tmpSettings.uaConf.recording.recDir;
-	cbRecDirTypeChange(NULL);	
+	cbRecDirTypeChange(NULL);
 	this->edCustomRecDir->Text = tmpSettings.uaConf.recording.customRecDir.c_str();
 	cbRecordingChannels->ItemIndex = tmpSettings.uaConf.recording.channels - 1;
 	cbRecordingChannelsChange(NULL);
@@ -496,6 +524,12 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	frmUaConfOpus->SetCfg(&tmpSettings.uaConf.opus);
 
 	frmDialpadConf->SetCfg(&tmpSettings.dialpad);
+
+	if (tmpSettings.locking.hiddenSettingsPages != previousHiddenSettingsPages)
+	{
+		CreatePages();
+		previousHiddenSettingsPages = tmpSettings.locking.hiddenSettingsPages;
+	}
 }
 
 void TfrmSettings::UpdateNetworkInterface(void)
@@ -877,6 +911,29 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	frmUaConfOpus->Apply();
 
 	frmDialpadConf->Apply();
+
+	{
+		tmpSettings.locking.hiddenSettingsPages.clear();
+		for (int i=0; i<chbBoxLockingSettingsPages->Count; i++)
+		{
+			if (chbBoxLockingSettingsPages->Checked[i])
+			{
+				AnsiString str = chbBoxLockingSettingsPages->Items->Strings[i];
+				// try to extract tab name from between last []
+				char* lastSqOpen = StrRScan(str.c_str(), '[');	// find last '['
+				if (lastSqOpen)
+				{
+					lastSqOpen++;
+					char* lastSqClose = strchr(lastSqOpen, ']');
+					if (lastSqClose)
+					{
+						*lastSqClose = '\0';
+						tmpSettings.locking.hiddenSettingsPages.push_back(lastSqOpen);
+					}
+				}
+			}
+		}
+	}
 
 	appSettings = tmpSettings;
 	this->Close();	

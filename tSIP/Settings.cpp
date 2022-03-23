@@ -817,6 +817,23 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		jv.getAString("appUrl", branding.appUrl);
 	}
 
+	{
+		const Json::Value &jLocking = root["locking"];
+		if (jLocking.type() == Json::objectValue)
+		{
+			const Json::Value &jhsp = jLocking["hiddenSettingsPages"];
+			if (jhsp.type() == Json::arrayValue)
+			{
+				locking.hiddenSettingsPages.clear();
+				for (unsigned int i=0; i<jhsp.size(); i++)
+				{
+					AnsiString name = jhsp[i].asAString();
+					locking.hiddenSettingsPages.push_back(name);
+				}
+			}
+		}
+	}
+
 	return 0;
 }
 
@@ -1149,6 +1166,17 @@ int Settings::Write(AnsiString asFileName)
 	{
 		Json::Value &jv = root["branding"];
 		jv["appUrl"] = branding.appUrl;
+	}
+
+	{
+		Json::Value &jLocking = root["locking"];
+		{
+			Json::Value &jhsp = jLocking["hiddenSettingsPages"];
+			for (unsigned int i=0; i<locking.hiddenSettingsPages.size(); i++)
+			{
+				jhsp[i] = locking.hiddenSettingsPages[i];
+			}
+		}
 	}
 
 	std::string outputConfig = writer.write( root );

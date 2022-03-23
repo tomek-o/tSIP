@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 548
     Height = 468
-    ActivePage = tsBranding
+    ActivePage = tsDialpad
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -786,6 +786,14 @@ object frmSettings: TfrmSettings
         TabOrder = 18
       end
     end
+    object tsDialpad: TTabSheet
+      Margins.Left = 0
+      Margins.Top = 0
+      Margins.Right = 0
+      Margins.Bottom = 0
+      Caption = 'Dialpad'
+      ImageIndex = 24
+    end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
@@ -1219,6 +1227,28 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Hide Dialpad'
         TabOrder = 9
+      end
+    end
+    object tsLockingSettingsPages: TTabSheet
+      Caption = 'Settings pages'
+      ImageIndex = 26
+      object lblSettingsPagesToHide: TLabel
+        Left = 3
+        Top = 3
+        Width = 357
+        Height = 13
+        Caption = 
+          'Settings pages to hide (edit JSON directly to unhide "Locking" o' +
+          'r this page)'
+      end
+      object chbBoxLockingSettingsPages: TCheckListBox
+        Left = 3
+        Top = 22
+        Width = 534
+        Height = 291
+        Columns = 2
+        ItemHeight = 13
+        TabOrder = 0
       end
     end
     object tsBranding: TTabSheet
@@ -3921,14 +3951,6 @@ object frmSettings: TfrmSettings
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'
       ImageIndex = 21
-    end
-    object tsDialpad: TTabSheet
-      Margins.Left = 0
-      Margins.Top = 0
-      Margins.Right = 0
-      Margins.Bottom = 0
-      Caption = 'Dialpad'
-      ImageIndex = 24
     end
   end
   object tvSelector: TTreeView

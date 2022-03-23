@@ -476,6 +476,9 @@ __published:	// IDE-managed Components
 	TCheckBox *chbStartAudioSourceAtCallStart;
 	TLabel *lblBrandingAppUrl;
 	TEdit *edBrandingAppUrl;
+	TTabSheet *tsLockingSettingsPages;
+	TLabel *lblSettingsPagesToHide;
+	TCheckListBox *chbBoxLockingSettingsPages;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -527,8 +530,9 @@ private:	// User declarations
 	void AudioPreprocessingUpdate(void);
 	void ShowFonts(void);
 	void UpdateNetworkInterface(void);
-	TTreeNode* CreatePagesNode(TTreeNode *parent, AnsiString name, TTabSheet *tab);
+	TTreeNode* CreatePagesNode(TTreeNode *parent, TTabSheet *tab);
 	void CreatePages(void);
+	std::vector<AnsiString> previousHiddenSettingsPages;
 public:		// User declarations
 	__fastcall TfrmSettings(TComponent* Owner);
 	Settings tmpSettings;

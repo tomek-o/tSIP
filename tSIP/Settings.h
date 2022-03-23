@@ -387,6 +387,11 @@ public:
 		_Branding(void);
 	} branding;
 
+	struct _Locking
+	{
+		std::vector<AnsiString> hiddenSettingsPages;
+	} locking;
+
 	Settings(void);
 
 private:
