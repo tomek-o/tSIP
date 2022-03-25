@@ -488,6 +488,7 @@ void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 {
 	Settings prev = appSettings;	// keep track what is changed
 	frmSettings->ShowModal();
+	appSettings.UpdateFromText(Branding::fixedSettings);	// not checking status: this may fail, resource may be empty
 	UpdateSettings(prev);
 }
 //---------------------------------------------------------------------------
@@ -496,6 +497,9 @@ int TfrmMain::UpdateSettingsFromJson(AnsiString json)
 {
 	Settings prev = appSettings;	// keep track what is changed
 	int status = appSettings.UpdateFromText(json);
+	if (status != 0)
+		return status;
+	appSettings.UpdateFromText(Branding::fixedSettings);	// not checking status: this may fail, resource may be empty
 	UpdateSettings(prev);
 	return status;
 }

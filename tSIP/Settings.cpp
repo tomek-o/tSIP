@@ -182,6 +182,12 @@ Settings::Settings(void)
 
 int Settings::UpdateFromText(AnsiString text)
 {
+	//ShowMessage(text);
+	if (text == "")
+		return 3;
+	if (text == "{}")
+		return 0;
+
 	Json::Value root;   // will contains the root value after parsing.
 	Json::Reader reader;
 

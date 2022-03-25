@@ -74,6 +74,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		}
 
 		appSettings.Read(Paths::GetConfig());
+		appSettings.UpdateFromText(Branding::fixedSettings);		
 
 		if (appSettings.frmMain.bUseCustomApplicationTitle)
 		{

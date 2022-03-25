@@ -8,3 +8,6 @@ STRINGTABLE
     ID_STR_APP_URL              "https://tomeko.net/software/SIPclient/"
 }
 
+
+ID_RCDATA_FIXED_SETTINGS RCDATA "FixedSettings.json"
+
