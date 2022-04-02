@@ -50,6 +50,16 @@ int l_WinapiPlaySound(lua_State* L)
 	return 1;
 }
 
+int l_Winapi_keybd_event(lua_State* L)
+{
+	unsigned int bVk = lua_tointegerx(L, 1, NULL);
+	unsigned int bScan = lua_tointegerx(L, 2, NULL);
+	unsigned int dwFlags = lua_tointegerx(L, 3, NULL);
+	unsigned int dwExtraInfo = 0;
+	keybd_event(bVk, bScan, dwFlags, dwExtraInfo);
+	return 0;
+}
+
 }	// namespace
 
 
@@ -62,6 +72,7 @@ int luaopen_tsip_winapi (lua_State *L)
 		{"MessageBox", ScriptExec::l_MessageBox},
 		{"GetAsyncKeyState", l_WinapiGetAsyncKeyState},
 		{"PlaySound", l_WinapiPlaySound},
+		{"keybd_event", l_Winapi_keybd_event},
 		{NULL, NULL}
 	};
 	luaL_newlib(L, tsip_winapi);
