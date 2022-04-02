@@ -19,6 +19,7 @@ private:
 	void UpdateActionTypeView(void);
 	int programmableButtonsCnt;
 protected:
+	void __fastcall btnBrowseClick(TObject *Sender);
 public:
 	__fastcall THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg, int programmableButtonsCnt);
 	void Start(void);
@@ -30,6 +31,8 @@ __published:
 	TComboBox *cbAction;
 	TComboBox *cbId;
 	TCheckBox *chbGlobal;
+	TEdit     *edScriptFile;
+	TButton   *btnScriptFileSelect;
 	TButton	  *btnRemove;
 };
 //---------------------------------------------------------------------------

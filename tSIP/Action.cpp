@@ -22,6 +22,8 @@ const char* Action::getTypeDescription(enum Action::Type type)
 		return "show/hide sidecar";
 	case TYPE_ANSWER_HANGUP:
 		return "answer/hangup";
+	case TYPE_SCRIPT_FILE:
+		return "script file";
 	default:
 		return "";
 	}

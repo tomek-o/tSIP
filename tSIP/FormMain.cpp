@@ -3325,6 +3325,15 @@ void TfrmMain::ExecAction(const struct Action& action)
 				Hangup();
 		}
 		break;
+	case Action::TYPE_SCRIPT_FILE:
+		if (action.scriptFile != "")
+		{
+			AnsiString asScriptFile;
+			bool handled = true;
+			asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), action.scriptFile.c_str());
+			frmMain->RunScriptFile(SCRIPT_SRC_HOTKEY, -1, asScriptFile.c_str(), handled);
+		}
+		break;
 	default:
 		break;
 	}

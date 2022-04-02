@@ -1,6 +1,8 @@
 #ifndef ActionH
 #define ActionH
 
+#include <System.hpp>
+
 struct Action
 {
 	enum Type
@@ -13,11 +15,13 @@ struct Action
 		TYPE_REDIAL,
 		TYPE_CALL_CLIPBOARD,
 		TYPE_SHOWHIDE_SIDECAR,	///< show/hide sidecar with programmable buttons
-        TYPE_ANSWER_HANGUP,	///< answer or hangup depending on current call state
+		TYPE_ANSWER_HANGUP,	///< answer or hangup depending on current call state
+		TYPE_SCRIPT_FILE,
 
 		TYPE_LIMITER
 	} type;
 	int id;
+	AnsiString scriptFile;
 
 	Action(void):
 		type(TYPE_NONE),
@@ -27,7 +31,9 @@ struct Action
 
 	bool operator==(const Action& right) const {
 		if (type != right.type ||
-			id != right.id)
+			id != right.id ||
+            scriptFile != right.scriptFile
+			)
 		{
 			return false;
 		}

@@ -13,8 +13,6 @@ object frmHotkeys: TfrmHotkeys
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object pnlBottom: TPanel
@@ -25,8 +23,6 @@ object frmHotkeys: TfrmHotkeys
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 271
-    ExplicitWidth = 473
     object btnAddHotkey: TButton
       Left = 8
       Top = 6
@@ -47,8 +43,6 @@ object frmHotkeys: TfrmHotkeys
     BevelOuter = bvNone
     BorderStyle = bsNone
     TabOrder = 1
-    ExplicitWidth = 473
-    ExplicitHeight = 244
     object panel: TFlowPanel
       Left = 0
       Top = 0
@@ -60,7 +54,6 @@ object frmHotkeys: TfrmHotkeys
       BevelOuter = bvNone
       FlowStyle = fsTopBottomLeftRight
       TabOrder = 0
-      ExplicitWidth = 457
     end
   end
   object pnlTop: TPanel
@@ -71,16 +64,15 @@ object frmHotkeys: TfrmHotkeys
     Align = alTop
     BevelWidth = 2
     TabOrder = 2
-    ExplicitWidth = 473
-    object Label1: TLabel
+    object lblHeader: TLabel
       Left = 8
       Top = 7
-      Width = 467
+      Width = 482
       Height = 13
       Caption = 
         'Global    Ctrl Shift  Alt                        Key            ' +
-        '                                   Action                       ' +
-        ' ID       '
+        '                              Action                     Paramet' +
+        'er       '
     end
   end
   object timerRemove: TTimer

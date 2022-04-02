@@ -355,6 +355,8 @@ const LuaExample luaExamples [] =
 	"\tprint(\"button mouse up/down\")\n"
 	"elseif execSourceType == 17 then\n"
 	"\tprint(\"encryption state\")\n"
+	"elseif execSourceType == 18 then\n"
+	"\tprint(\"hotkey\")\n"
 	"else\n"
 	"\tprint(string.format(\"type = %d, missing description\", execSourceType))\n"
 	"end\n"

@@ -8,6 +8,7 @@
 #include "HotKeyConf.h"
 #include "common\KeybKeys.h"
 #include "Settings.h"
+#include "Paths.h"
 #pragma package(smart_init)
 //---------------------------------------------------------------------------
 // ValidCtrCheck is used to assure that the components created do not have
@@ -24,7 +25,7 @@ __fastcall THotkeyCfgPanel::THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg, 
 	cfg(cfg),
 	programmableButtonsCnt(programmableButtonsCnt)
 {
-	Width = 540;
+	Width = 570;
 	Height = 32;
 
 	int left = 16;
@@ -68,8 +69,9 @@ __fastcall THotkeyCfgPanel::THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg, 
 	cbKey->Width = 160;
 	cbKey->Style = Stdctrls::csDropDownList;
 	cbKey->Visible = true;
+	cbKey->DropDownCount = 12;
 
-	left += cbKey->Width + 30;
+	left += cbKey->Width + 16;
 	cbAction = new TComboBox(this);
 	cbAction->Parent = this;
 	cbAction->Left = left;
@@ -78,16 +80,34 @@ __fastcall THotkeyCfgPanel::THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg, 
 	cbAction->Style = Stdctrls::csDropDownList;
 	cbAction->Visible = true;
 
-	left += cbAction->Width + 20;
+	left += cbAction->Width + 25;
 	cbId = new TComboBox(this);
 	cbId->Parent = this;
 	cbId->Left = left;
 	cbId->Top = 5;
 	cbId->Width = 40;
 	cbId->Style = Stdctrls::csDropDownList;
-	cbId->Visible = true;
+	cbId->Visible = false;
 
-	left += cbId->Width + 28;
+	{
+		edScriptFile = new TEdit(this);
+		edScriptFile->Parent = this;
+		edScriptFile->Left = left - 23;
+		edScriptFile->Top = 5;
+		edScriptFile->Width = 90;
+		edScriptFile->Visible = false;
+
+		btnScriptFileSelect = new TButton(this);
+		btnScriptFileSelect->Parent = this;
+		btnScriptFileSelect->Left = edScriptFile->Left + edScriptFile->Width + 4;
+		btnScriptFileSelect->Top = 5;
+		btnScriptFileSelect->Width = 24;
+		btnScriptFileSelect->Height = 20;
+		btnScriptFileSelect->Visible = false;
+		btnScriptFileSelect->Caption = "...";
+	}
+
+	left += cbId->Width + 62;
 	btnRemove = new TButton(this);
 	btnRemove->Parent = this;
 	btnRemove->Left = left;
@@ -100,6 +120,7 @@ __fastcall THotkeyCfgPanel::THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg, 
 
 void __fastcall THotkeyCfgPanel::UpdateCfg(TObject *Sender)
 {
+
 	cfg.modifiers = 0;
 	if (chbCtrl->Checked)
 		cfg.modifiers |= HotKeyConf::CTRL;
@@ -118,12 +139,16 @@ void __fastcall THotkeyCfgPanel::UpdateCfg(TObject *Sender)
 	}
 	else
 	{
-    	cfg.vkCode = -1;
+		cfg.vkCode = -1;
 	}
 	cfg.global = chbGlobal->Checked;
 	cfg.action.type = static_cast<Action::Type>(cbAction->ItemIndex);
-	UpdateActionTypeView();
+	if (Sender == cbAction)	// do not update action type if not needed - TEdit losing focus for script name 
+	{
+		UpdateActionTypeView();
+	}
 	cfg.action.id = cbId->ItemIndex;
+	cfg.action.scriptFile = edScriptFile->Text;
 }
 
 void THotkeyCfgPanel::UpdateActionTypeView(void)
@@ -134,7 +159,18 @@ void THotkeyCfgPanel::UpdateActionTypeView(void)
 	}
 	else
 	{
-    	cbId->Visible = false;
+		cbId->Visible = false;
+	}
+
+	if (cbAction->ItemIndex == Action::TYPE_SCRIPT_FILE)
+	{
+		edScriptFile->Visible = true;
+		btnScriptFileSelect->Visible = true;
+	}
+	else
+	{
+		edScriptFile->Visible = false;
+		btnScriptFileSelect->Visible = false;
 	}
 }
 
@@ -148,7 +184,7 @@ void THotkeyCfgPanel::Start(void)
 	cbId->OnChange = NULL;
 	chbGlobal->OnClick = NULL;
 
-	for (int i=0; i<vkey_list_size(); i++)
+	for (unsigned int i=0; i<vkey_list_size(); i++)
 	{
     	cbKey->Items->Add(vkey_list[i].description);
 	}
@@ -168,6 +204,7 @@ void THotkeyCfgPanel::Start(void)
 	cbAction->ItemIndex = cfg.action.type;
 	UpdateActionTypeView();
 	cbId->ItemIndex = cfg.action.id;
+	edScriptFile->Text = cfg.action.scriptFile;
 	chbGlobal->Checked = cfg.global;
 
 	chbCtrl->OnClick = UpdateCfg;
@@ -176,9 +213,38 @@ void THotkeyCfgPanel::Start(void)
 	cbKey->OnChange = UpdateCfg;
 	cbAction->OnChange = UpdateCfg;
 	cbId->OnChange = UpdateCfg;
+	edScriptFile->OnChange = UpdateCfg;
 	chbGlobal->OnClick = UpdateCfg;
+	btnScriptFileSelect->OnClick = btnBrowseClick;
 }
 
+void __fastcall THotkeyCfgPanel::btnBrowseClick(TObject *Sender)
+{
+	TOpenDialog *openDialog = new TOpenDialog(NULL);
+
+	AnsiString dir = Paths::GetProfileDir() + "\\scripts";
+	ForceDirectories(dir);
+	openDialog->InitialDir = dir;
+	openDialog->Filter = "Lua files (*.lua)|*.lua|All files|*.*";
+	AnsiString fileName = dir + "\\" + edScriptFile->Text;
+	if (FileExists(fileName))
+		openDialog->FileName = fileName;
+	else
+		openDialog->FileName = "";
+	if (openDialog->Execute())
+	{
+		if (UpperCase(dir) != UpperCase(ExtractFileDir(openDialog->FileName)))
+		{
+			MessageBox(this->Handle, "Entry was not updated.\nFor portability script files must be placed in \"script\" subdirectory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+		}
+		else
+		{
+			edScriptFile->Text = ExtractFileName(openDialog->FileName);
+		}
+	}
+
+	delete openDialog;
+}
 //---------------------------------------------------------------------------
 namespace Hotkeycfgpanel
 {

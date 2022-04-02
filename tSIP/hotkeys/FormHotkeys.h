@@ -23,7 +23,7 @@ __published:	// IDE-managed Components
 	TScrollBox *ScrollBox1;
 	TFlowPanel *panel;
 	TPanel *pnlTop;
-	TLabel *Label1;
+	TLabel *lblHeader;
 	TTimer *timerRemove;
 	void __fastcall btnAddHotkeyClick(TObject *Sender);
 	void __fastcall btnRemoveClick(TObject *Sender);

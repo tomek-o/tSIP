@@ -348,6 +348,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 					const Json::Value &action = hotkeyJson["action"];
 					cfg.action.type = static_cast<Action::Type>(action.get("type", cfg.action.type).asInt());
 					cfg.action.id = action.get("id", cfg.action.id).asInt();
+					action.getAString("scriptFile", cfg.action.scriptFile);
 				}
 			}
 		}
@@ -1117,6 +1118,7 @@ int Settings::Write(AnsiString asFileName)
 			cfgJson["global"] = cfg.global;
 			cfgJson["action"]["type"] = cfg.action.type;
 			cfgJson["action"]["id"] = cfg.action.id;
+			cfgJson["action"]["scriptFile"] = cfg.action.scriptFile;
 		}
 	}
 
