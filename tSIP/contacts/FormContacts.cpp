@@ -184,7 +184,7 @@ void __fastcall TfrmContacts::miMessageSingleItemClick(TObject *Sender)
 	if (item == NULL)
 		return;
 	AnsiString text = item->Caption;
-	AnsiString needle = singleItemCallText + " ";
+	AnsiString needle = singleItemMessageText + " ";
 	if (strncmp(text.c_str(), needle.c_str(), needle.Length()) == 0)
 	{
 		SIMPLE_Messages::Send(text.c_str() + needle.Length(), "", false);
@@ -356,4 +356,6 @@ void __fastcall TfrmContacts::lvContactsInfoTip(TObject *Sender,
 	InfoTip = tip.Trim();
 }
 //---------------------------------------------------------------------------
+
+
 
