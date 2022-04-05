@@ -56,6 +56,7 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 	ShowWindow(Handle, SW_SHOWNOACTIVATE);
 	SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	//frmTrayNotifier->BringToFront();
+	Visible = true;	
 #endif
 }
 
