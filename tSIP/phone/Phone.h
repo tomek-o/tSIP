@@ -15,7 +15,7 @@ extern "C" {
 
 #include <windows.h>
 
-#if defined(_MSC_VER) || defined(__BORLANDC__)
+#if defined(_MSC_VER)
 #	define CALL_CONV
 #else
 #	define CALL_CONV __stdcall
