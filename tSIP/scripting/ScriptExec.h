@@ -50,6 +50,7 @@ private:
 	// pop single DTMF character from RX queue
 	typedef std::string (__closure *CallbackGetRxDtmf)(void);
 	typedef void (__closure *CallbackShowTrayNotifier)(AnsiString description, AnsiString uri, bool incoming);
+	typedef void (__closure *CallbackHideTrayNotifier)(void);
 	typedef std::string (__closure *CallbackGetUserName)(void);
 	typedef void (__closure *CallbackProgrammableButtonClick)(int id);
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
@@ -84,6 +85,7 @@ private:
 	CallbackRecordStart onRecordStart;
 	CallbackGetRxDtmf onGetRxDtmf;
 	CallbackShowTrayNotifier onShowTrayNotifier;
+	CallbackHideTrayNotifier onHideTrayNotifier;
 	CallbackGetUserName onGetUserName;
 	CallbackProgrammableButtonClick onProgrammableButtonClick;
 	CallbackUpdateSettings onUpdateSettings;
@@ -135,6 +137,7 @@ public:
 		CallbackRecordStart onRecordStart,
 		CallbackGetRxDtmf onGetRxDtmf,
 		CallbackShowTrayNotifier onShowTrayNotifier,
+		CallbackHideTrayNotifier onHideTrayNotifier,
 		CallbackGetUserName onGetUserName,
 		CallbackProgrammableButtonClick onProgrammableButtonClick,
 		CallbackUpdateSettings onUpdateSettings,

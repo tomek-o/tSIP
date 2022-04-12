@@ -853,8 +853,13 @@ void TfrmMain::UpdateCallHistory(void)
 
 void TfrmMain::ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming)
 {
-	frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, incoming);
+	frmTrayNotifier->SetData(description, uri, incoming);
 	frmTrayNotifier->ShowWithoutFocus();
+}
+
+void TfrmMain::HideTrayNotifier(void)
+{
+	frmTrayNotifier->HideWindow();
 }
 
 void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
@@ -2777,6 +2782,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnRecordStart,
 		&OnGetRxDtmf,
 		&ShowTrayNotifier,
+		&HideTrayNotifier,
 		&OnGetUserName,
 		&ProgrammableButtonClick,
 		&UpdateSettingsFromJson,

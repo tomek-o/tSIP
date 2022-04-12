@@ -1185,6 +1185,12 @@ static int l_ShowTrayNotifier(lua_State* L)
 	return 1;
 }
 
+static int l_HideTrayNotifier(lua_State* L)
+{
+	GetContext(L)->onHideTrayNotifier();
+	return 0;
+}
+
 static int l_GetUserName(lua_State* L)
 {
 	std::string user = GetContext(L)->onGetUserName();
@@ -1516,6 +1522,7 @@ ScriptExec::ScriptExec(
 	CallbackRecordStart onRecordStart,
 	CallbackGetRxDtmf onGetRxDtmf,
 	CallbackShowTrayNotifier onShowTrayNotifier,
+	CallbackHideTrayNotifier onHideTrayNotifier,
 	CallbackGetUserName onGetUserName,
 	CallbackProgrammableButtonClick onProgrammableButtonClick,
 	CallbackUpdateSettings onUpdateSettings,
@@ -1552,6 +1559,7 @@ ScriptExec::ScriptExec(
 	onRecordStart(onRecordStart),
 	onGetRxDtmf(onGetRxDtmf),
 	onShowTrayNotifier(onShowTrayNotifier),
+	onHideTrayNotifier(onHideTrayNotifier),
 	onGetUserName(onGetUserName),
 	onProgrammableButtonClick(onProgrammableButtonClick),
 	onUpdateSettings(onUpdateSettings),
@@ -1579,6 +1587,7 @@ ScriptExec::ScriptExec(
 		onRecordStart &&
 		onGetRxDtmf &&
 		onShowTrayNotifier &&
+		onHideTrayNotifier &&
 		onGetUserName &&
 		onProgrammableButtonClick &&
 		onUpdateSettings &&
@@ -1677,6 +1686,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetRecordingState, "GetRecordingState", "Check if softphone is recording at the moment", "");
 	lua_register2(L, ScriptImp::l_GetRxDtmf, "GetRxDtmf", "Get DTMF from receiving queue, empty string if queue is empty", "");
 	lua_register2(L, ScriptImp::l_ShowTrayNotifier, "ShowTrayNotifier", "Show tray notifier window with specified description, URI and incoming state", "");
+	lua_register2(L, ScriptImp::l_HideTrayNotifier, "HideTrayNotifier", "Hide tray notifier window", "");
 	lua_register2(L, ScriptImp::l_GetUserName, "GetUserName", "Get user name from account settings", "");
 	lua_register2(L, ScriptImp::l_ProgrammableButtonClick, "ProgrammableButtonClick", "Programmatically press button", "");
 	lua_register2(L, ScriptImp::l_RefreshAudioDevicesList, "RefreshAudioDevicesList", "Rescan available audio devices", "");

@@ -163,6 +163,7 @@ private:	// User declarations
 	void SetSpeedDial(bool visible);
 	void UpdateCallHistory(void);
 	void ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming);
+	void HideTrayNotifier(void);
 	AnsiString CleanUri(AnsiString uri);
 	AnsiString GetClip(AnsiString uri);
 	void MakeCall(AnsiString target);
