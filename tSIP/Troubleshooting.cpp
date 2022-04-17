@@ -7,6 +7,8 @@
 #include "Settings.h"
 #include "AudioModules.h"
 #include "AudioDevicesList.h"
+#include "ProgrammableButtons.h"
+#include "Globals.h"
 
 #include <re.h>
 #include <baresip.h>
@@ -278,6 +280,25 @@ namespace {
 		return false;
 	}
 
+	bool CheckPresenceBitmaps(void)
+	{
+		ButtonConf defaultBtnConf;
+		const std::vector<ButtonConf> &conf = buttons.btnConf;
+		for (unsigned int i=0; i<conf.size(); i++)
+		{
+			const ButtonConf &c = conf[i];
+			if (c.type == Button::PRESENCE)
+			{
+				if (c.imgTerminated == defaultBtnConf.imgTerminated ||
+					c.imgEarly == defaultBtnConf.imgEarly)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	struct ItemTypeData itemTypeData[] =
 	{
 		{ LevelWarning, "No audio input device", "", CheckAudioInputDevice },
@@ -314,7 +335,7 @@ namespace {
 			CheckTooManyCodecs
 			},
 		{ LevelWarning, "Packetization time (ptime) other than 20 ms for PCMU/PCMA",
-            "For PCMU/PCMA (G.711u/a) codecs 20 ms packetization time is recommended for compatibility reasons.",
+			"For PCMU/PCMA (G.711u/a) codecs 20 ms packetization time is recommended for compatibility reasons.",
 			CheckPcmuPcmaPtime
 			},
 		{ LevelHint, "TLS is selected for account but no media encryption",
@@ -324,6 +345,10 @@ namespace {
 		{ LevelHint, "SRTP without TLS is used",
 			"SRTP is selected as account media encryption, but selected transport is not secure (non-TLS) - SRTP keys would be sent unencrypted.",
 			CheckAccountTlsForSrtpMissing
+			},
+		{ LevelHint, "Presence buttons bitmaps",
+			"Presence button(s) probably should use deticated bitmaps (check.bmp, cross.bmp) instead of default BLF bitmaps.",
+			CheckPresenceBitmaps
 			},
 	};
 
