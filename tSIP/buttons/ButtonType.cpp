@@ -97,7 +97,7 @@ const char* Button::TypeDescription(enum Type type)
 	case SPEED_DIAL:
 		return "Quick dialing.";
 	case BLF:
-		return "Busy Lamp Field - show peer call state.";
+		return "Busy Lamp Field - show peer call state (dialog subscription).";
 	case DTMF:
 		return "Send digits during call or add digits to dialed number. Accepted: 0-9, *, #, A, B, C, D and also R = FLASH.";
 	case REDIAL:
@@ -107,7 +107,7 @@ const char* Button::TypeDescription(enum Type type)
 	case HOLD:
 		return "Temporary disable media stream.";
 	case REREGISTER:
-		return "Repeat registration immediately.";
+		return "Repeat registration immediately (speed up recovery after server restart).";
 	case MWI:
 		return "Voice mail: Message Waiting Indicator (unsolicited). Uses \"early\" icon if new messages are present.";
 	case MUTE:
@@ -119,7 +119,7 @@ const char* Button::TypeDescription(enum Type type)
 	case HTTP_QUERY:
 		return "Open browser - query for number from last incoming call.";
 	case PRESENCE:
-		return "Presence (application/pidf+xml).";
+		return "Presence (application/pidf+xml). Use \"terminated\" bitmap for Online state, \"early\" bitmap for Offline, \"confirmed\" bitmap for Busy.";
 	case UNREGISTER:
 		return "Unregister (leave registration server).";
 	case EXECUTE:
@@ -131,13 +131,13 @@ const char* Button::TypeDescription(enum Type type)
 	case SIP_ACCESS_URL:
 		return "Open URL specified by \"Access-URL\" header from incoming INVITE.";
 	case SWITCH_AUDIO_SOURCE:
-		return "Switch audio source device for current call or RTP streaming.";
+		return "Switch audio source device for the current call or RTP streaming.";
 	case SWITCH_AUDIO_PLAYER:
-		return "Switch audio output device for current call.";
+		return "Switch audio output device for the current call.";
 	case HANGUP:
 		return "Terminate current call or RTP streaming (paging).";
 	case SHOW_SETTINGS:
-		return "Show application settings.";
+		return "Show application settings window (to be used in kiosk applications and/or if main menu is hidden).";
 	case MINIMIZE:
 		return "Minimize application window.";
 	case SHOW_LOG:
