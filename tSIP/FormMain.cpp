@@ -444,11 +444,7 @@ void TfrmMain::Finalize(void)
 	appSettings.frmMain.bWindowMaximized = (this->WindowState == wsMaximized);
 	if (!appSettings.frmMain.bWindowMaximized)
 	{
-		// these values are meaningless is wnd is maximized
-	#if 0
-		appSettings.frmMain.iWidth = this->Width;
-		appSettings.frmMain.iHeight = this->Height;	// editing only through settings window
-	#endif
+		// width and height values are meaningless is window is maximized, storing only position
 		appSettings.frmMain.iPosY = this->Top;
 		appSettings.frmMain.iPosX = this->Left;
 	}
@@ -3158,8 +3154,6 @@ void TfrmMain::HandleCommandLine(void)
 		SetForegroundWindow (Handle);
 		SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 		FocusCbCallUri();
-		/** \todo Bring window to front */
-		//BringToFront();
 	}
 	else if (cmd.action == CommandLine::ACTION_APP_QUIT)
 	{
@@ -3679,16 +3673,7 @@ void __fastcall TfrmMain::tmrClearCallStateTimer(TObject *Sender)
 void __fastcall TfrmMain::miScriptingClick(TObject *Sender)
 {
 	TfrmLuaScript *frmLuaScript = new TfrmLuaScript(this);
-	//frmLuaScript->SetScript(asScript);
-	bool modal = false;
-	if (modal)
-	{
-		frmLuaScript->ShowModal();
-	}
-	else
-	{
-		frmLuaScript->Show();
-	}
+	frmLuaScript->Show();
 	// frmLuaScript is self-deleting with caFree
 }
 //---------------------------------------------------------------------------
