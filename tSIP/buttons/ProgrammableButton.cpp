@@ -275,7 +275,6 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 		label2->Left = (Width - label2->Width)/2;
 	}
 
-	image->Top = label->Top;
 	image->Transparent = cfg.imageTransparent;
 	image->Left = cfg.imageLeft;
 	image->Top = cfg.imageTop;
@@ -325,7 +324,7 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 			Raise();
 		}
 		BorderWidth = 0;
-		BorderStyle = bsNone;		
+		BorderStyle = bsNone;
 		BevelWidth = bevelWidth;
 	}
 
@@ -588,9 +587,8 @@ void TProgrammableButton::SetImage(Graphics::TBitmap *bmp)
 	{
 		image->Width = bmp->Width;
 		image->Height = bmp->Height;
-		//image->Top = (Height - image->Height)/2;// * percentage/100;
-		image->Top = (Height - (image->Height * 100/percentage))/2;// * percentage/100;
 	}
+	SetImageTop();
 	image->Picture->Bitmap->PixelFormat = pf24bit;
 	image->Picture->Bitmap = bmp;
 	label->BringToFront();
@@ -641,15 +639,11 @@ void TProgrammableButton::SetImageTop(void)
 	if (centerImageVertically)
 	{
 		//image->Top = (Height - image->Height)/2;
-		if (image->Height != 0)
-		{
-			volatile int dummy = image->Height;
-		}
 		image->Top = (Height - (image->Height * 100/scalingPercentage))/2;// * percentage/100;
 	}
 	else
 	{
-    	image->Top = imageTop;
+		image->Top = imageTop;
 	}
 }
 
