@@ -29,7 +29,6 @@ object frmLuaScript: TfrmLuaScript
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 240
     object pnlBottom2: TPanel
       Left = 0
       Top = 79
@@ -105,6 +104,10 @@ object frmLuaScript: TfrmLuaScript
     object miFile: TMenuItem
       Caption = 'File'
       OnClick = miFileClick
+      object miFileNew: TMenuItem
+        Caption = 'New'
+        OnClick = miFileNewClick
+      end
       object Open1: TMenuItem
         Action = actFileOpen
       end

@@ -728,3 +728,19 @@ void __fastcall TfrmLuaScript::miCustomLuaFunctionsClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmLuaScript::miFileNewClick(TObject *Sender)
+{
+	TfrmLuaScript *frmLuaScript = new TfrmLuaScript(this->Owner);
+	frmLuaScript->Show();
+	int left = Left + 20;
+	int top = Top + 20;
+	if (left >= Screen->Width - 60)
+		left = 0;
+	if (top >= Screen->Height - 60)
+		top = 0;
+	frmLuaScript->Left = left;
+	frmLuaScript->Top = top;
+	// would be destroyed with caFree
+}
+//---------------------------------------------------------------------------
+
