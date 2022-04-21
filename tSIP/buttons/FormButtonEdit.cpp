@@ -362,8 +362,6 @@ void TfrmButtonEdit::SetType(Button::Type type)
 		break;
 	case Button::SCRIPT:
 		tsBehaviorScript->Visible = true;
-		edNumber->Visible = false;
-		lblNumber->Visible = false;		
 		break;
 	case Button::SWITCH_AUDIO_SOURCE:
 		tsBehaviorSwitchAudioSource->Visible = true;
