@@ -413,6 +413,22 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	trbarSoftvolMic->Position = trbarSoftvolMic->Max + trbarSoftvolMic->Min - appSettings.uaConf.audioSoftVol.tx;
 	trbarSoftvolSpeaker->Position = trbarSoftvolSpeaker->Max + trbarSoftvolSpeaker->Min - appSettings.uaConf.audioSoftVol.rx;
 
+	if (appSettings.frmMain.bKioskMode)
+	{
+		SetKioskMode(appSettings.frmMain.bKioskMode);
+	}
+	else
+	{
+		if (appSettings.frmMain.bHideStatusBar)
+		{
+			StatusBar->Visible = false;
+		}
+		if (appSettings.frmMain.bHideMainMenu)
+		{
+			this->Menu = NULL;
+		}
+	}
+
 	UpdateCallHistory();
 	UpdateAutoAnswer();
 }
@@ -563,21 +579,18 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	{
 		SetKioskMode(appSettings.frmMain.bKioskMode);
 	}
+	if (!appSettings.frmMain.bKioskMode)
+	{
+		StatusBar->Visible = !appSettings.frmMain.bHideStatusBar;
+		this->Menu = appSettings.frmMain.bHideMainMenu ? NULL : MainMenu;
+	}
 	if (appSettings.frmMain.bHideMouseCursor)
 	{
 		Screen->Cursor = crNone;
 	}
 	else
 	{
-    	Screen->Cursor = crDefault;
-	}
-	if (appSettings.frmMain.bHideStatusBar)
-	{
-		StatusBar->Visible = false;
-	}
-	if (appSettings.frmMain.bHideMainMenu)
-	{
-		this->Menu = NULL;
+		Screen->Cursor = crDefault;
 	}
 	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
 	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
@@ -714,20 +727,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	}
 
 	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
-
-	if (appSettings.frmMain.bKioskMode)
-	{
-		SetKioskMode(appSettings.frmMain.bKioskMode);
-	}
-	if (appSettings.frmMain.bHideStatusBar)
-	{
-		StatusBar->Visible = false;
-	}
-	if (appSettings.frmMain.bHideMainMenu)
-	{
-		this->Menu = NULL;
-	}
-
+	
 	edTransfer->Enabled = true;
 
     frmTrayNotifier->Caption = Branding::appName;
