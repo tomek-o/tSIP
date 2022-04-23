@@ -427,6 +427,10 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 		{
 			this->Menu = NULL;
 		}
+		if (appSettings.frmMain.bBorderless)
+		{
+        	this->BorderStyle = bsNone;
+		}
 	}
 
 	UpdateCallHistory();
@@ -583,6 +587,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	{
 		StatusBar->Visible = !appSettings.frmMain.bHideStatusBar;
 		this->Menu = appSettings.frmMain.bHideMainMenu ? NULL : MainMenu;
+		this->BorderStyle = appSettings.frmMain.bBorderless ? bsNone : bsSingle;
 	}
 	if (appSettings.frmMain.bHideMouseCursor)
 	{
@@ -3646,7 +3651,10 @@ void TfrmMain::SetKioskMode(bool state)
 		{
 			this->StatusBar->Visible = true;
 		}
-		this->BorderStyle = bsSingle;
+		if (appSettings.frmMain.bBorderless == false)
+		{
+			this->BorderStyle = bsSingle;
+		}
 		SetSpeedDial(true);
     }
 }

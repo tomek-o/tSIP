@@ -28,7 +28,6 @@ object frmSettings: TfrmSettings
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 673
     object btnCancel: TButton
       Left = 593
       Top = 6
@@ -53,16 +52,13 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsDialpad
+    ActivePage = tsLocking
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
-    ExplicitLeft = 125
-    ExplicitWidth = 548
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitWidth = 540
       object lblGuiScaling: TLabel
         Left = 3
         Top = 191
@@ -209,7 +205,6 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
-      ExplicitWidth = 540
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -364,7 +359,6 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
-      ExplicitWidth = 567
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 417
@@ -373,7 +367,6 @@ object frmSettings: TfrmSettings
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 567
         object btnAddAccount: TButton
           Left = 464
           Top = 4
@@ -400,13 +393,11 @@ object frmSettings: TfrmSettings
         Height = 417
         Align = alClient
         TabOrder = 1
-        ExplicitWidth = 567
       end
     end
     object tsTls: TTabSheet
       Caption = 'TLS'
       ImageIndex = 25
-      ExplicitWidth = 567
       object lblTlsClientCertificate: TLabel
         Left = 5
         Top = 3
@@ -473,7 +464,6 @@ object frmSettings: TfrmSettings
     object tsMainWindow: TTabSheet
       Caption = 'Main window'
       ImageIndex = 23
-      ExplicitWidth = 540
       object lblMainWindowCollapsedSize: TLabel
         Left = 3
         Top = 3
@@ -803,12 +793,10 @@ object frmSettings: TfrmSettings
       Margins.Bottom = 0
       Caption = 'Dialpad'
       ImageIndex = 24
-      ExplicitWidth = 540
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
-      ExplicitWidth = 540
       object lblSpeedDialBlfSettings: TLabel
         Left = 2
         Top = 56
@@ -919,7 +907,6 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
-      ExplicitWidth = 567
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -1066,7 +1053,6 @@ object frmSettings: TfrmSettings
     object tsMessages: TTabSheet
       Caption = 'Messages'
       ImageIndex = 22
-      ExplicitWidth = 567
       object lblMessagesRing: TLabel
         Left = 5
         Top = 3
@@ -1132,7 +1118,6 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
-      ExplicitWidth = 567
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -1161,7 +1146,8 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
-      ExplicitWidth = 567
+      ExplicitLeft = 6
+      ExplicitTop = 20
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -1193,7 +1179,7 @@ object frmSettings: TfrmSettings
         Top = 84
         Width = 398
         Height = 17
-        Caption = 'Kiosk mode (fullscreen, no main menu, status bar, border)'
+        Caption = 'Kiosk mode (fullscreen, no main menu, no status bar, no border)'
         TabOrder = 3
       end
       object chbHideMouseCursor: TCheckBox
@@ -1238,17 +1224,24 @@ object frmSettings: TfrmSettings
       end
       object chbHideDialpad: TCheckBox
         Left = 3
-        Top = 190
+        Top = 214
         Width = 398
         Height = 17
         Caption = 'Hide Dialpad'
         TabOrder = 9
       end
+      object chbFrmMainBorderless: TCheckBox
+        Left = 3
+        Top = 191
+        Width = 398
+        Height = 17
+        Caption = 'Make main window borderless; this removes also main menu'
+        TabOrder = 10
+      end
     end
     object tsLockingSettingsPages: TTabSheet
       Caption = 'Settings pages'
       ImageIndex = 26
-      ExplicitWidth = 540
       object lblSettingsPagesToHide: TLabel
         Left = 3
         Top = 3
@@ -1271,7 +1264,6 @@ object frmSettings: TfrmSettings
     object tsBranding: TTabSheet
       Caption = 'Branding, bitmaps'
       ImageIndex = 20
-      ExplicitWidth = 567
       object lblMainIconFile: TLabel
         Left = 3
         Top = 6
@@ -1510,7 +1502,6 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
-      ExplicitWidth = 567
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1730,7 +1721,6 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
-      ExplicitWidth = 540
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -1996,7 +1986,6 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
-      ExplicitWidth = 540
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -2179,7 +2168,6 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
-      ExplicitWidth = 540
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -2323,7 +2311,6 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Codecs'
       ImageIndex = 3
-      ExplicitWidth = 540
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -2400,7 +2387,6 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
-      ExplicitWidth = 540
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -2523,12 +2509,10 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
-      ExplicitWidth = 567
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
-      ExplicitWidth = 540
       object lblContactPopup: TLabel
         Left = 2
         Top = 87
@@ -2682,7 +2666,6 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
-      ExplicitWidth = 567
       object chbHistoryNoStoreToFile: TCheckBox
         Left = 3
         Top = 3
@@ -2755,12 +2738,10 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Phones'
       ImageIndex = 13
-      ExplicitWidth = 567
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      ExplicitWidth = 567
       object lblTrayNotifierBackgroundImage: TLabel
         Left = 3
         Top = 72
@@ -2859,7 +2840,6 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
-      ExplicitWidth = 567
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -3841,7 +3821,6 @@ object frmSettings: TfrmSettings
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitWidth = 540
       object lblUiCapacity: TLabel
         Left = 5
         Top = 172
@@ -3982,7 +3961,6 @@ object frmSettings: TfrmSettings
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'
       ImageIndex = 21
-      ExplicitWidth = 567
     end
   end
   object tvSelector: TTreeView

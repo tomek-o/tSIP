@@ -115,6 +115,7 @@ public:
 		bool bHideStatusBar;
 		bool bHideMainMenu;
 		bool bHideDialpad;
+		bool bBorderless;
 
 		bool bHideSpeedDialToggleButton;///< hide "<<"/">>" button
 		bool bHideMouseCursor;
