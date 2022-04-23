@@ -965,6 +965,7 @@ extern "C" void control_handler(void)
 		if (err)
 		{
 			DEBUG_WARNING("connect failed: %m\n", err);
+			UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
 		}
 		break;
 	case Command::ANSWER:
