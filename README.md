@@ -6,6 +6,8 @@ Based on re/rem/baresip (https://github.com/baresip/).
 
 ![tSIP 0.2.00](http://tomeko.net/software/SIPclient/tSIP_0_2_00.png)
 
+![tSIP 0.2.08 flat GUI example](http://tomeko.net/software/SIPclient/howto/flat_GUI/tSIP_flat.png)
+
 ## License
 
 Source code is using mostly BSD license (same as baresip).  
