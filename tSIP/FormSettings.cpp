@@ -295,6 +295,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbSpeedDialUseGrid->Checked = tmpSettings.frmSpeedDial.useGrid;
 	edSpeedDialGridSize->Text = tmpSettings.frmSpeedDial.gridSize;
 	chbSpeedDialSaveAllSettings->Checked = tmpSettings.frmSpeedDial.saveAllSettings;
+	chbSpeedDialDragApplicationWithButtonContainer->Checked = tmpSettings.frmSpeedDial.dragApplicationWithButtonContainer;
 
 	chbKioskMode->Checked = tmpSettings.frmMain.bKioskMode;
 	chbHideSpeedDialToggleButton->Checked = tmpSettings.frmMain.bHideSpeedDialToggleButton;
@@ -645,6 +646,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 			tmpSettings.frmSpeedDial.gridSize = tmp;
 	}
 	tmpSettings.frmSpeedDial.saveAllSettings = chbSpeedDialSaveAllSettings->Checked;
+	tmpSettings.frmSpeedDial.dragApplicationWithButtonContainer = chbSpeedDialDragApplicationWithButtonContainer->Checked;
 
 	tmpSettings.frmMain.bKioskMode = chbKioskMode->Checked;
 	tmpSettings.frmMain.bHideSpeedDialToggleButton = chbHideSpeedDialToggleButton->Checked;

@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsLocking
+    ActivePage = tsSpeedDial
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -902,6 +902,14 @@ object frmSettings: TfrmSettings
           'first one'
           'early (ringing)'
           'confirmed')
+      end
+      object chbSpeedDialDragApplicationWithButtonContainer: TCheckBox
+        Left = 3
+        Top = 222
+        Width = 526
+        Height = 17
+        Caption = 'Move application window when dragging over button container'
+        TabOrder = 9
       end
     end
     object tsCalls: TTabSheet

@@ -45,6 +45,10 @@ __published:	// IDE-managed Components
 	void __fastcall miClearBackgroundClick(TObject *Sender);
 	void __fastcall miCopyPanelClick(TObject *Sender);
 	void __fastcall lvStatusData(TObject *Sender, TListItem *Item);
+	void __fastcall panelMainMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+	void __fastcall imgBackgroundMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
 public:
 	typedef void (__closure *CallbackSetKeepForeground)(bool disable);
 	void UpdateSettings(void);
@@ -62,7 +66,7 @@ private:	// User declarations
 
 	bool showStatus;
 	bool hideEmptyStatus;
-
+	
 	ProgrammableButtons &buttons;
 public:		// User declarations
 	__fastcall TfrmButtonContainer(TComponent* Owner, ProgrammableButtons &buttons,

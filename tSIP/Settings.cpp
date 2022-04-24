@@ -93,6 +93,7 @@ Settings::_frmSpeedDial::_frmSpeedDial(void):
 	gridSize(_frmSpeedDial::DEFAULT_GRID_SIZE),
 	showStatus(false),
 	hideEmptyStatus(false),
+	dragApplicationWithButtonContainer(false),
 	saveAllSettings(false),
 	statusPanelHeight(_frmSpeedDial::DEF_STATUS_PANEL_HEIGHT)
 {
@@ -616,6 +617,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmSpeedDial.gridSize = _frmSpeedDial::DEFAULT_GRID_SIZE;
 	frmSpeedDial.showStatus = frmSpeedDialJson.get("ShowStatus", frmSpeedDial.showStatus).asBool();
 	frmSpeedDial.hideEmptyStatus = frmSpeedDialJson.get("HideEmptyStatus", frmSpeedDial.hideEmptyStatus).asBool();
+	frmSpeedDialJson.getBool("DragApplicationWithButtonContainer", frmSpeedDial.dragApplicationWithButtonContainer);
 	frmSpeedDialJson.getBool("SaveAllSettings", frmSpeedDial.saveAllSettings);
 	frmSpeedDial.statusPanelHeight = frmSpeedDialJson.get("StatusPanelHeight", frmSpeedDial.statusPanelHeight).asInt();
 	if (frmSpeedDial.statusPanelHeight < _frmSpeedDial::MIN_STATUS_PANEL_HEIGHT || frmSpeedDial.statusPanelHeight > _frmSpeedDial::MAX_STATUS_PANEL_HEIGHT)
@@ -961,6 +963,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["GridSize"] = frmSpeedDial.gridSize;
 		jv["ShowStatus"] = frmSpeedDial.showStatus;
 		jv["HideEmptyStatus"] = frmSpeedDial.hideEmptyStatus;
+		jv["DragApplicationWithButtonContainer"] = frmSpeedDial.dragApplicationWithButtonContainer;
 		jv["SaveAllSettings"] = frmSpeedDial.saveAllSettings;
 		jv["StatusPanelHeight"] = frmSpeedDial.statusPanelHeight;
 	}

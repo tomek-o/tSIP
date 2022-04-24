@@ -168,6 +168,7 @@ public:
 		};
 		int statusPanelHeight;
 		bool hideEmptyStatus;
+		bool dragApplicationWithButtonContainer;
 		bool saveAllSettings;	///< save all (even identical to default) button settings; larger JSON file but possibly easier to edit
 		_frmSpeedDial(void);
 	} frmSpeedDial;	

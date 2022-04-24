@@ -14,6 +14,8 @@ object frmButtonContainer: TfrmButtonContainer
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object panelMain: TPanel
@@ -25,6 +27,7 @@ object frmButtonContainer: TfrmButtonContainer
     BevelOuter = bvNone
     PopupMenu = popupAddPanel
     TabOrder = 0
+    OnMouseDown = panelMainMouseDown
     object imgBackground: TImage
       Left = 0
       Top = 0
@@ -32,6 +35,7 @@ object frmButtonContainer: TfrmButtonContainer
       Height = 303
       Align = alClient
       Stretch = True
+      OnMouseDown = imgBackgroundMouseDown
       ExplicitLeft = 88
       ExplicitTop = 136
       ExplicitWidth = 105

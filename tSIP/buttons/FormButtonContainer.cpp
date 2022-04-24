@@ -32,7 +32,7 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	ProgrammableButtons &buttons,
 	unsigned int containerId,
 	int width, int height, int scalingPercentage,
-	CallbackSetKeepForeground callbackSetKeepForeground,	
+	CallbackSetKeepForeground callbackSetKeepForeground,
 	bool showStatus, int statusPanelHeight, bool hideEmptyStatus)
 	:
 	TForm(Owner),
@@ -218,4 +218,24 @@ void TfrmButtonContainer::ShowStatusPanel(bool state)
 }
 
 
+
+
+void __fastcall TfrmButtonContainer::panelMainMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+	ShowMessage("mose down");	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonContainer::imgBackgroundMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+	if (appSettings.frmSpeedDial.dragApplicationWithButtonContainer && Button == mbLeft)
+	{
+		enum {SC_DRAGMOVE = 0xF012};
+		ReleaseCapture();
+		SendMessage(Application->MainForm->Handle, WM_SYSCOMMAND, SC_DRAGMOVE, 0);
+	}
+}
+//---------------------------------------------------------------------------
 
