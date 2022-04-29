@@ -961,5 +961,25 @@ Version 0.2.07
 	- added new main window settings: offset allowing to change window position when switching between "normal" and "expanded" state, e.g. for anchoring window to right side of the desktop
 	- FIXED exception when in codec selection list codec was moved below last item list
 	- added option to start audio source early (actually opening it twice) - intended to fight with initial audio delay on Mairdi Bluetooth headset when switching profiles
+
+Version 0.2.08
+	- FIXED option clearing BLF remote identity on call disconnection
+	- changed code responsible for restoring main window and showing tray notification to avoid stealing focus
+	- link in "About" window is now configurable and default value can be changed by editing resources
+	- refactored managing of settings pages
+	- settings pages can now be hidden individually
+	- settings (fixed/forced) can now be embedded as a resource, allowing e.g. to prevent some settings from editing by the end user by editing JSON file
+	- scripts can now be assigned to hotkeys directly (without previously needed programmable key middleman)
+	- added WinAPI keybd_event Lua function (e.g. for simulating Ctrl+C to copy selected text and make call using number from clipboard)
+	- FIXED "Message" contact popup menu item for contacts with single number
+	- added Lua HideTrayNotifier() function, fixed unused texts from ShowTrayNotifier()
+	- Troubleshooting: hints if bitmaps intended for BLF (dialog-info) are left after switching button type to Presence
+	- FIXED: button image was always centered vertically regardless of configuration
+	- Lua window: added File/New (mostly for convenience when working with kiosk-like GUI missing main menu)
+	- button configuration: number setting is not hidden for "Script" button (number may be read by script and then few buttons might use same script)
+	- FIXED: if main menu was hidden in settings, it was still visible at startup for a short moment
+	- FIXED: incoherent GUI state after making the call that failed immediately due to no network
+	- Locking: added separate setting making main window borderless
+	- added option (SpeedDial tab) to move main window by dragging button container (for semi-kiosk borderless applications)
 */
 

@@ -51,7 +51,7 @@ Call recording:
 
 - BLF barge in
 
-- gnome3 and wine: call notifications not working? (LS)
+- shared line appearance, RFC7463
 
 - warn user if wave file source is selected but source file does not exist
 
@@ -83,8 +83,6 @@ button: mouse down event
 Lua: get BLF button state => route incoming call to selected (idle) extension
 
 - audible DTMF keypad tones during the call and while dialing: as opt-in options, PlaySound, resources, ASYNC?
-
-- more command-line control: show/hide, dtmf, hold/unhold
 
 ping plugin: add context menu to history
 
@@ -133,6 +131,8 @@ update Lua to 5.3.x, remove CVS tags from Lua source
 integrate RecordViewer.exe?
 
 TODO: TLS not working (UDP used instead) when outbound proxy is specified?
+
+CRM application communicating through TCPServer plugin
 
 */
 
