@@ -22,9 +22,9 @@
       <Projects Name="webrtc_tc.lib">webrtc\webrtc_tc.bdsproj</Projects>
       <Projects Name="scintilla.lib">scintilla\scintilla.bdsproj</Projects>
       <Projects Name="common.lib">common\common.bdsproj</Projects>
-      <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
       <Projects Name="zrtpcpp.lib">zrtpcpp\build\zrtpcpp.bdsproj</Projects>
-      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib libopus.lib jsoncpp.lib lua_static.lib webrtc_tc.lib scintilla.lib common.lib tSIP.exe zrtpcpp.lib</Projects>
+      <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
+      <Projects Name="Targets">re.lib rem.lib baresip.lib portaudio.lib libspeex.lib g722.lib gsm.lib libopus.lib jsoncpp.lib lua_static.lib webrtc_tc.lib scintilla.lib common.lib zrtpcpp.lib tSIP.exe</Projects>
     </Projects>
     <Dependencies>
       <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">
