@@ -56,6 +56,7 @@ public:
 	unsigned int pagingTxPtime;
 	unsigned int channels;
 	unsigned int recSide;
+	unsigned int recFileFormat;
 	unsigned int softvol;
 
 	int requestId;					///< sending custom messages and sending MESSAGE messages

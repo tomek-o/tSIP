@@ -46,7 +46,7 @@ private:
 	typedef int (__closure *CallbackPluginEnable)(const char* dllName, bool state);
 	typedef int (__closure *CallbackGetContactId)(const char* user);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction);
-	typedef int (__closure *CallbackRecordStart)(const char* file, int channels, int side);
+	typedef int (__closure *CallbackRecordStart)(const char* file, int channels, int side, int fileFormat);
 	// pop single DTMF character from RX queue
 	typedef std::string (__closure *CallbackGetRxDtmf)(void);
 	typedef void (__closure *CallbackShowTrayNotifier)(AnsiString description, AnsiString uri, bool incoming);

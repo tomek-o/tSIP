@@ -40,6 +40,7 @@ USEFORM("scripting\FormLuaScriptHelp.cpp", frmLuaScriptHelp);
 #pragma link "jsoncpp.lib"
 #pragma link "lua_static.lib"
 #pragma link "libopus.lib"
+#pragma link "libopusenc.lib"
 #pragma link "scintilla.lib"
 #pragma link "common.lib"
 #pragma link "zrtpcpp.lib"

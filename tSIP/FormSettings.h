@@ -481,6 +481,8 @@ __published:	// IDE-managed Components
 	TCheckListBox *chbBoxLockingSettingsPages;
 	TCheckBox *chbFrmMainBorderless;
 	TCheckBox *chbSpeedDialDragApplicationWithButtonContainer;
+	TLabel *lblRecordingFileFormat;
+	TComboBox *cbRecordingFileFormat;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

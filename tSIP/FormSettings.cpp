@@ -401,7 +401,11 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	if (tmpSettings.uaConf.recording.side < cbRecordedSide->Items->Count)
 	{
 		cbRecordedSide->ItemIndex = tmpSettings.uaConf.recording.side;
-    }
+	}
+	if (tmpSettings.uaConf.recording.fileFormat < cbRecordingFileFormat->Items->Count)
+	{
+    	cbRecordingFileFormat->ItemIndex = tmpSettings.uaConf.recording.fileFormat;
+	}
 	cbRecordingStart->ItemIndex = tmpSettings.uaConf.recording.recStart;
 	chbRecordingNoNumberB64Encoding->Checked = tmpSettings.uaConf.recording.noNumberB64Encoding;
 
@@ -789,6 +793,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.recording.customRecDir = edCustomRecDir->Text.c_str();
 	tmpSettings.uaConf.recording.channels = cbRecordingChannels->ItemIndex + 1;
 	tmpSettings.uaConf.recording.side = cbRecordedSide->ItemIndex;
+   	tmpSettings.uaConf.recording.fileFormat = cbRecordingFileFormat->ItemIndex;	
 	tmpSettings.uaConf.recording.recStart = static_cast<UaConf::RecordingCfg::RecStart>(cbRecordingStart->ItemIndex);
 	tmpSettings.uaConf.recording.noNumberB64Encoding = chbRecordingNoNumberB64Encoding->Checked;
 

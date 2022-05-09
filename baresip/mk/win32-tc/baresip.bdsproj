@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -140,8 +140,9 @@
           <property category="win32.*.win32b.bcc32" name="option.I.arg.38" value="..\..\..\webrtc"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.39" value="..\..\..\opus\include"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\modules\winwave2"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.40" value="..\..\..\zrtpcpp\zrtp"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.41" value="..\..\..\zrtpcpp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.40" value="..\..\..\opusenc\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.41" value="..\..\..\zrtpcpp\zrtp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.42" value="..\..\..\zrtpcpp"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\..\modules\aufile_mm"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\modules\nullaudio"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\modules\softvol"/>

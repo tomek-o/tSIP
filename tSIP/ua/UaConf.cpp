@@ -145,6 +145,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 			recording.channels = channels;
 		}
 		recording.side = uaConfRecordingJson.get("side", recording.side).asUInt();
+		uaConfRecordingJson.getUInt("fileFormat", recording.fileFormat);
 		UaConf::RecordingCfg::RecStart recStart = static_cast<UaConf::RecordingCfg::RecStart>(uaConfRecordingJson.get("recStart", recording.recStart).asInt());
 		if (recStart >= 0 && recStart < UaConf::RecordingCfg::RecStartLimiter) {
 			recording.recStart = recStart;
@@ -305,6 +306,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		jv["customRecDir"] = recording.customRecDir;
 		jv["channels"] = recording.channels;
 		jv["side"] = recording.side;
+		jv["fileFormat"] = recording.fileFormat;
 		jv["recStart"] = recording.recStart;
 		jv["noNumberB64Encoding"] = recording.noNumberB64Encoding;
 	}

@@ -981,5 +981,11 @@ Version 0.2.08
 	- FIXED: incoherent GUI state after making the call that failed immediately due to no network
 	- Locking: added separate setting making main window borderless
 	- added option (SpeedDial tab) to move main window by dragging button container (for semi-kiosk borderless applications)
+
+Version 0.2.09
+	- file format selection for call recording, calls can be now recorder also as Opus/OGG
+		- libopusenc.lib project is added
+		- Lua StartRecording(): new optional parameter selecting recording format (0 = WAVE, 1 = Opus/OGG)
+		- note: selecting very low bitrate for Opus would switch it to mono mode even if recording is configured as stereo	
 */
 

@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsSpeedDial
+    ActivePage = tsRecording
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1154,8 +1154,6 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
-      ExplicitLeft = 6
-      ExplicitTop = 20
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -2199,17 +2197,24 @@ object frmSettings: TfrmSettings
       end
       object lblRecordingStartMode: TLabel
         Left = 3
-        Top = 121
+        Top = 149
         Width = 53
         Height = 13
         Caption = 'Start mode'
       end
       object lblRecordedSide: TLabel
         Left = 3
-        Top = 148
+        Top = 176
         Width = 68
         Height = 13
         Caption = 'Recorded side'
+      end
+      object lblRecordingFileFormat: TLabel
+        Left = 3
+        Top = 120
+        Width = 100
+        Height = 13
+        Caption = 'Recording file format'
       end
       object chbRecordingEnabled: TCheckBox
         Left = 3
@@ -2267,7 +2272,7 @@ object frmSettings: TfrmSettings
       end
       object cbRecordingStart: TComboBox
         Left = 167
-        Top = 118
+        Top = 146
         Width = 274
         Height = 21
         Style = csDropDownList
@@ -2282,7 +2287,7 @@ object frmSettings: TfrmSettings
       end
       object cbRecordedSide: TComboBox
         Left = 167
-        Top = 145
+        Top = 173
         Width = 274
         Height = 21
         Style = csDropDownList
@@ -2306,14 +2311,29 @@ object frmSettings: TfrmSettings
         OnClick = btnOpenRecordingFolderClick
       end
       object chbRecordingNoNumberB64Encoding: TCheckBox
-        Left = 3
-        Top = 176
+        Left = 2
+        Top = 232
         Width = 534
         Height = 17
         Caption = 
           'Do not encode number/URI with filesystem-safe base64; not compat' +
           'ible with RecordViewer.exe'
         TabOrder = 8
+      end
+      object cbRecordingFileFormat: TComboBox
+        Left = 167
+        Top = 117
+        Width = 274
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
+        TabOrder = 9
+        Text = 'WAVE'
+        OnChange = cbRecordingChannelsChange
+        Items.Strings = (
+          'WAVE'
+          'Opus/OGG')
       end
     end
     object tsCodecs: TTabSheet

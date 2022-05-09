@@ -9,6 +9,7 @@
 #include <assert.h>
 #include "baresip_recorder.h"
 #include "wavfile.h"
+#include "opusenc.h"
 
 #define DEBUG_MODULE "recorder"
 #define DEBUG_LEVEL 5
@@ -23,6 +24,7 @@ static bool filename_set = false;
 static char filename[512];
 static unsigned int channels = 1;
 static enum recorder_side side = RECORDER_SIDE_BOTH;
+static enum recorder_file_format format = RECORDER_FILE_FORMAT_OPUS_OGG;
 static bool pause = false;
 static recorder_state_h *recorder_state_handler = NULL;
 
@@ -41,6 +43,8 @@ struct recorder_st {
 	bool paused;
 	bool terminated;
 	FILE *pFile;
+	OggOpusEnc *enc;
+	OggOpusComments *comments;
 	HANDLE thread;
 
 	unsigned frame_size;
@@ -49,13 +53,14 @@ struct recorder_st {
 	struct aubuf *abtx;
 };
 
-int recorder_start(const char* const file, unsigned int rec_channels, enum recorder_side rec_side) {
+int recorder_start(const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format) {
 	if (rec_lock == NULL)
 		return -1;
 	lock_write_get(rec_lock);
 	if (filename_set == false) {
 		channels = rec_channels;
 		side = rec_side;
+		format = rec_format;
 		strncpy(filename, file, sizeof(filename));
 		filename[sizeof(filename)-1] = '\0';
 		filename_set = true;
@@ -120,6 +125,15 @@ static void recorder_destructor(void *arg)
 		wavfile_close(st->pFile);
 		st->pFile = NULL;
 		notify_state(st, RECORDER_STATE_IDLE);		
+	}
+	if (st->enc) {
+		ope_encoder_drain(st->enc);
+		ope_encoder_destroy(st->enc);
+		st->enc = NULL;
+	}
+	if (st->comments) {
+		ope_comments_destroy(st->comments);
+		st->comments = NULL;
 	}
 	filename_set = false;
 }
@@ -302,16 +316,33 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		size_t sizetx = aubuf_cur_size(rec->abrx);
 		//DEBUG_WARNING("sizerx=%d, sizetx=%d\n", (int)sizerx, (int)sizetx);
 
-		if (rec->pFile == NULL) {
+		if (rec->pFile == NULL && rec->enc == NULL) {
 			lock_write_get(rec_lock);
 			if (filename_set) {
-				rec->pFile = wavfile_open(filename, channels, rec->srate);
-				if (!rec->pFile) {
-					DEBUG_WARNING("recorder: failed to create file\n");
-					lock_rel(rec_lock);
-					break;
+				if (format == RECORDER_FILE_FORMAT_OPUS_OGG) {
+					int error;
+					int TODO__OGG_COMMENTS;
+					int TODO__OPUS_BITRATE;
+					int TODO__OPUS_VBR;
+					rec->comments = ope_comments_create();
+					ope_comments_add(rec->comments, "ARTIST", "Someone");
+					ope_comments_add(rec->comments, "TITLE", "Some track");
+					rec->enc = ope_encoder_create_file(filename, rec->comments, rec->srate, channels, 0, &error);
+					if (!rec->enc) {
+						DEBUG_WARNING("recorder: failed to create Opus/OGG file\n");
+						lock_rel(rec_lock);
+						break;
+					}
+					ope_encoder_ctl(rec->enc, OPUS_SET_BITRATE_REQUEST, 64000);
+				} else {
+					rec->pFile = wavfile_open(filename, channels, rec->srate);
+					if (!rec->pFile) {
+						DEBUG_WARNING("recorder: failed to create WAVE file\n");
+						lock_rel(rec_lock);
+						break;
+					}
 				}
-				notify_state(rec, RECORDER_STATE_ACTIVE);				
+				notify_state(rec, RECORDER_STATE_ACTIVE);
 			}
 			lock_rel(rec_lock);
 			Sleep(50);
@@ -361,15 +392,27 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 				short *dst = (short*)bufrx;
 				short *src = (short*)buftx;
 				if (side == RECORDER_SIDE_LOCAL) {
-					fwrite(bufrx, cnt, 1, rec->pFile);
+					if (rec->pFile) {
+						fwrite(bufrx, cnt, 1, rec->pFile);
+					} else if (rec->enc) {
+						ope_encoder_write(rec->enc, (const opus_int16*)bufrx, cnt/sizeof(short));
+					}
 				} else if (side == RECORDER_SIDE_REMOTE) {
-					fwrite(buftx, cnt, 1, rec->pFile);
+					if (rec->pFile) {
+						fwrite(buftx, cnt, 1, rec->pFile);
+					} else  if (rec->enc) {
+						ope_encoder_write(rec->enc, (const opus_int16*)buftx, cnt/sizeof(short));
+					}
 				} else {
 					// default: both parties mixed
 					for (i=0; i<cnt/sizeof(short); i++) {
 						dst[i] += src[i];
 					}
-					fwrite(bufrx, cnt, 1, rec->pFile);
+					if (rec->pFile) {
+						fwrite(bufrx, cnt, 1, rec->pFile);
+					} else if (rec->enc) {
+						ope_encoder_write(rec->enc, (const opus_int16*)bufrx, cnt/sizeof(short));
+					}
 				}
 			} else if (channels == 2) {
 				short bufstereo[8000];
@@ -379,7 +422,11 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 					bufstereo[i]     = *srcA++;
 					bufstereo[i + 1] = *srcB++;
 				}
-				fwrite(bufstereo, cnt * sizeof(short), 1, rec->pFile);
+				if (rec->pFile) {
+					fwrite(bufstereo, cnt * sizeof(short), 1, rec->pFile);
+				} else if (rec->enc) {
+					ope_encoder_write(rec->enc, (const opus_int16*)bufstereo, cnt/channels);
+				}
 			} else {
 				assert(!"Unhandled channel count");
 			}

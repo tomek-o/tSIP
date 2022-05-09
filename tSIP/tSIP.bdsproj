@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -28,7 +28,7 @@
         <property category="build.config.1" name="settings.win32b" value="default"/>
         <property category="build.config.1" name="type" value="Toolset"/>
         <property category="build.config.1" name="win32.win32b.builddir" value="Release_Build"/>
-        <property category="build.node" name="lastconfig" value="Debug_Build"/>
+        <property category="build.node" name="lastconfig" value="Release_Build"/>
         <property category="build.node" name="libraries" value="vclx.lib vcl.lib rtl.lib"/>
         <property category="build.node" name="name" value="tSIP.exe"/>
         <property category="build.node" name="packages" value="vclx;vcl;rtl;xmlrtl;vclie;inet;inetdbbde;inetdbxpress"/>
@@ -71,10 +71,11 @@
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.10" value="..\jsoncpp\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.11" value="..\lua\turbo_cpp\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.12" value="..\opus\debug_build"/>
-        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.13" value="..\scintilla\debug_build"/>
-        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.14" value="..\common\debug_build"/>
-        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.15" value="..\zrtpcpp\build\debug_build"/>
-        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.16" value="..\openssl\out32"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.13" value="..\opusenc\win32-tc\debug_build"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.14" value="..\scintilla\debug_build"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.15" value="..\common\debug_build"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.16" value="..\zrtpcpp\build\debug_build"/>
+        <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.17" value="..\openssl\out32"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.2" value="..\re\mk\win32-tc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.3" value="..\rem\mk\win32-tc\debug_build"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.L.arg.4" value="..\baresip\mk\win32-tc\debug_build"/>
@@ -113,10 +114,11 @@
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.10" value="..\jsoncpp\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.11" value="..\lua\turbo_cpp\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.12" value="..\opus\release_build"/>
-        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.13" value="..\scintilla\release_build"/>
-        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.14" value="..\common\release_build"/>
-        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.15" value="..\zrtpcpp\build\release_build"/>
-        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.16" value="..\openssl\out32"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.13" value="..\opusenc\win32-tc\release_build"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.14" value="..\scintilla\release_build"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.15" value="..\common\release_build"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.16" value="..\zrtpcpp\build\release_build"/>
+        <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.17" value="..\openssl\out32"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.2" value="..\re\mk\win32-tc\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.3" value="..\baresip\mk\win32-tc\release_build"/>
         <property category="win32.Release_Build.win32b.ilink32" name="option.L.arg.4" value="..\rem\mk\win32-tc\release_build"/>
@@ -572,10 +574,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>
