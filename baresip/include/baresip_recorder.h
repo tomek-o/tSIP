@@ -41,7 +41,7 @@ enum recorder_file_format
 	\param rec_side which call side (local/remote) to record; used only if recording as mono/single channel
 	\return 0 on success
 */
-int recorder_start(const char* const filename, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format);
+int recorder_start(const char* const filename, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate);
 
 /** \brief Toggle recorder active/paused
 */

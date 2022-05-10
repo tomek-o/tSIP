@@ -186,7 +186,7 @@ private:	// User declarations
 	void OnSetTrayIcon(const char* file);
 	int OnPluginSendMessageText(const char* dllName, const char* text);
 	int OnPluginEnable(const char* dllName, bool state);
-	int OnRecordStart(const char* file, int channels, int side, int fileFormat);
+	int OnRecordStart(const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
 	std::string OnGetRxDtmf(void);
 	void OnShowBtnContainerStatusPanel(int id, bool state);
 	void OnSetBtnContainerBackground(int id, const char* file);

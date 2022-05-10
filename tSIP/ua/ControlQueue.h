@@ -36,7 +36,7 @@ public:
 	void StartRing(AnsiString wavFile);
 	void PlayStop(void);
 	void StartRing2(AnsiString wavFile);
-	void Record(AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat);
+	void Record(AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate);
 	void RecordPause(void);
 	/** \brief Start transmitting RTP to specified targee
 		\param target address IP + port

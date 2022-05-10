@@ -1141,7 +1141,10 @@ static int l_RecordStart(lua_State* L)
 	int channels = lua_tointeger( L, 2 );
 	int side = lua_tointeger( L, 3 );		// optional, introduced in tSIP 0.1.66
 	int fileFormat = lua_tointeger( L, 4 );	// optional, introduced in tSIP 0.2.9
-	int ret = GetContext(L)->onRecordStart(file, channels, side, fileFormat);
+	unsigned int bitrate = lua_tointeger( L, 5 );
+	if (bitrate <= 0)
+		bitrate = 64000;
+	int ret = GetContext(L)->onRecordStart(file, channels, side, fileFormat, bitrate);
 	lua_pushinteger(L, ret);
 	return 1;
 }

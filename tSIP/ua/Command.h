@@ -57,6 +57,7 @@ public:
 	unsigned int channels;
 	unsigned int recSide;
 	unsigned int recFileFormat;
+	unsigned int bitrate;
 	unsigned int softvol;
 
 	int requestId;					///< sending custom messages and sending MESSAGE messages
@@ -83,6 +84,8 @@ public:
 		pagingTxPtime(0),
 		channels(0),
 		recSide(0),
+		recFileFormat(0),
+		bitrate(64000),
 		softvol(0),
 		requestId(-1)
 	{}

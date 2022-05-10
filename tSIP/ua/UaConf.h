@@ -271,6 +271,7 @@ public:
 		unsigned int channels;
 		unsigned int side;				///< which party to record in single channel mode, \sa baresip.h: enum recorder_side; 0 = both parties mixed
 		unsigned int fileFormat;		///< \sa baresip_recorder.h
+		unsigned int bitrate;
 		enum RecStart {
 			RecStartManual = 0,			///< start recording manually, e.g. using Lua API
 			RecStartCallConfirmed,		///< recording starts on call confirmed
@@ -285,6 +286,7 @@ public:
 			channels(1),
 			side(0),
 			fileFormat(0),
+			bitrate(64000),
 			recStart(RecStartCallConfirmed),
 			noNumberB64Encoding(false)
 		{}

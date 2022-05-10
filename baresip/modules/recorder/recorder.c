@@ -25,6 +25,7 @@ static char filename[512];
 static unsigned int channels = 1;
 static enum recorder_side side = RECORDER_SIDE_BOTH;
 static enum recorder_file_format format = RECORDER_FILE_FORMAT_OPUS_OGG;
+unsigned int bitrate = 64000;
 static bool pause = false;
 static recorder_state_h *recorder_state_handler = NULL;
 
@@ -53,7 +54,7 @@ struct recorder_st {
 	struct aubuf *abtx;
 };
 
-int recorder_start(const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format) {
+int recorder_start(const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate) {
 	if (rec_lock == NULL)
 		return -1;
 	lock_write_get(rec_lock);
@@ -61,6 +62,7 @@ int recorder_start(const char* const file, unsigned int rec_channels, enum recor
 		channels = rec_channels;
 		side = rec_side;
 		format = rec_format;
+		bitrate = rec_bitrate;
 		strncpy(filename, file, sizeof(filename));
 		filename[sizeof(filename)-1] = '\0';
 		filename_set = true;
@@ -321,19 +323,20 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 			if (filename_set) {
 				if (format == RECORDER_FILE_FORMAT_OPUS_OGG) {
 					int error;
-					int TODO__OGG_COMMENTS;
-					int TODO__OPUS_BITRATE;
-					int TODO__OPUS_VBR;
+					/** \todo VBR? */
 					rec->comments = ope_comments_create();
+					/** \todo OGG comments? */
+				#if 0
 					ope_comments_add(rec->comments, "ARTIST", "Someone");
 					ope_comments_add(rec->comments, "TITLE", "Some track");
+				#endif
 					rec->enc = ope_encoder_create_file(filename, rec->comments, rec->srate, channels, 0, &error);
 					if (!rec->enc) {
 						DEBUG_WARNING("recorder: failed to create Opus/OGG file\n");
 						lock_rel(rec_lock);
 						break;
 					}
-					ope_encoder_ctl(rec->enc, OPUS_SET_BITRATE_REQUEST, 64000);
+					ope_encoder_ctl(rec->enc, OPUS_SET_BITRATE_REQUEST, bitrate);
 				} else {
 					rec->pFile = wavfile_open(filename, channels, rec->srate);
 					if (!rec->pFile) {

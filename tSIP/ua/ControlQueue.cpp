@@ -244,7 +244,7 @@ void ControlQueue::StartRing2(AnsiString wavFile)
 	fifo.push();
 }
 
-void ControlQueue::Record(AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat)
+void ControlQueue::Record(AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
@@ -254,6 +254,7 @@ void ControlQueue::Record(AnsiString wavFile, unsigned int channels, unsigned in
 	cmd->channels = channels;
 	cmd->recSide = side;
 	cmd->recFileFormat = fileFormat;
+	cmd->bitrate = bitrate;
 	cmd->target = wavFile;
 	fifo.push();
 }

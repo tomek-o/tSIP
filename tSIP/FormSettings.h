@@ -483,6 +483,8 @@ __published:	// IDE-managed Components
 	TCheckBox *chbSpeedDialDragApplicationWithButtonContainer;
 	TLabel *lblRecordingFileFormat;
 	TComboBox *cbRecordingFileFormat;
+	TLabel *lblRecordingBitrate;
+	TEdit *edRecordingBitrate;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

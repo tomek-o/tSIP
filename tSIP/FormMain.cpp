@@ -1126,7 +1126,7 @@ int TfrmMain::OnPluginEnable(const char* dllName, bool state)
 	return -1;
 }
 
-int TfrmMain::OnRecordStart(const char* file, int channels, int side, int fileFormat)
+int TfrmMain::OnRecordStart(const char* file, int channels, int side, int fileFormat, unsigned int bitrate)
 {
 	if (appSettings.uaConf.recording.enabled == false)
 	{
@@ -1138,7 +1138,7 @@ int TfrmMain::OnRecordStart(const char* file, int channels, int side, int fileFo
 		LOG("OnRecordStart: no current call with active media\n");
 		return -2;
 	}
-	UA->Record(file, channels, side, fileFormat);
+	UA->Record(file, channels, side, fileFormat, bitrate);
 	call.recordFile = file;
 	call.recording = true;
 	return 0;
@@ -2272,7 +2272,8 @@ void TfrmMain::StartRecording(void)
 			{
 				LOG("Record file: %s\n", file.c_str());
 			}
-			UA->Record(file, appSettings.uaConf.recording.channels, appSettings.uaConf.recording.side, appSettings.uaConf.recording.fileFormat);
+			UA->Record(file, appSettings.uaConf.recording.channels, appSettings.uaConf.recording.side,
+				appSettings.uaConf.recording.fileFormat, appSettings.uaConf.recording.bitrate);
 			call.recordFile = file;
 			call.recording = true;
 		}

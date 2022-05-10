@@ -108,7 +108,6 @@ tSIP: RecordViewer: play multiple files one by one (multiple selection list)
 multiple accounts; disable / set as default for outgoing
 lepsze informowanie o problemach: brak kompatybilnego kodeka
 RecordViewer: keep sorting column/dir after restart
-RecordViewer: recompress using opusenc?
 
 tSIP scripting: Unregister, Reregister
 

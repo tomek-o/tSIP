@@ -1061,7 +1061,10 @@ extern "C" void control_handler(void)
 	}
 	case Command::RECORD: {
 		recorder_start(cmd.target.c_str(), cmd.channels,
-			static_cast<enum recorder_side>(cmd.recSide), static_cast<enum recorder_file_format>(cmd.recFileFormat));
+			static_cast<enum recorder_side>(cmd.recSide),\
+			static_cast<enum recorder_file_format>(cmd.recFileFormat),
+			cmd.bitrate
+		);
 		break;
 	}
 	case Command::RECORD_PAUSE: {
