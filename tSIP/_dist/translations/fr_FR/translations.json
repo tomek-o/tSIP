@@ -1,10 +1,48 @@
 {
+  "TfrmContactEditor": {
+    "btnApply": "Appliquer",
+    "btnCancel": "Annuler",
+    "caption": "Ajout/éditer contact",
+    "lblCompany": "Société",
+    "lblContactFile": "Fichier",
+    "lblDescription": "Description",
+    "lblNote": "Note",
+    "lblNumber1": "Numéro #1",
+    "lblNumber2": "Numéro #2",
+    "lblNumber3": "Numéro #3"
+  },
+  "TfrmContacts": {
+    "miAdd": "Ajouter",
+    "miDelete": "Supprimer",
+    "miEdit": "Editer",
+    "multiItemCallText": "Appeler...",
+    "multiItemMessageText": "Message...",
+    "noNumberUriText": "Aucun num/URI",
+    "singleItemCallText": "Appel:",
+    "singleItemMessageText": "Message:"
+  },
+  "TfrmHistory": {
+    "callTimeText": "Durée d'appel:",
+    "codecText": "Codec:",
+    "incomingCallText": "Appel entrant",
+    "miAddEditPhonebook": "Ajout/éditer un contact",
+    "miCopyNumber": "Copier le numéro",
+    "miHttpQuery": "Requête HTTP",
+    "miMessage": "Message",
+    "nameNumber": "Nom/numéro",
+    "notCompletedText": "(incomplet)",
+    "outgoingCallText": "Appel sortant",
+    "replyCode": "Répondre au code:",
+    "replyLine": "Répondre à la ligne:",
+    "timestamp": "Horodatage",
+    "unansweredText": "(Sans réponse)"
+  },
   "TfrmMain": {
-    "btnHangup": "Racrocher",
-    "btnMakeCall": "Appeler/Repondre",
+    "btnHangup": "Raccrocher",
+    "btnMakeCall": "Appeler/Répondre",
     "miAbout": "A Propos...",
     "miClearCallsHistory": "Effacer historique",
-    "miCommonSettings": "Parametres",
+    "miCommonSettings": "Paramètres",
     "miExit": "Quitter",
     "miFile": "Fichier",
     "miHelp": "Aide",
@@ -12,21 +50,21 @@
     "miImportContactsFromXml": "Importer contacts XML",
     "miMessages": "Messages",
     "miMinimizeTray": "Minimise dans la barre de tache",
-    "miPatchButtonSettings": "Patch / update parametres boutons JSON",
-    "miRefreshTranslationFromFile": "Recharger fichier de traduction",
-    "miScripting": "Fenetre de Script",
+    "miPatchButtonSettings": "Patch / update paramètres boutons JSON",
+    "miRefreshTranslationFromFile": "Recharger le fichier de traduction",
+    "miScripting": "Fenêtre de script",
     "miSettings": "Configuration",
-    "miSettingsPatch": "Patch / update parametres generaux JSON",
+    "miSettingsPatch": "Patch / update paramètres généraux JSON",
     "miTools": "Outils",
-    "miTroubleshooting": "Depannage",
+    "miTroubleshooting": "Dépannage",
     "miView": "Vue",
     "miViewLog": "Log",
     "tsContacts": "Contacts",
-    "tsDialpad": "Pave numerique",
+    "tsDialpad": "Pave numérique",
     "tsHistory": "Historique"
   },
   "TfrmTrayNotifier": {
-    "btnAnswer": "Repondre",
-    "btnHangup": "Racrocher"
+    "btnAnswer": "Répondre",
+    "btnHangup": "Raccrocher"
   }
 }
