@@ -986,6 +986,7 @@ Version 0.2.09
 	- file format selection for call recording, calls can be now recorder also as Opus/OGG
 		- libopusenc.lib project is added
 		- Lua StartRecording(): new optional parameter selecting recording format (0 = WAVE, 1 = Opus/OGG)
-		- note: selecting very low bitrate for Opus would switch it to mono mode even if recording is configured as stereo	
+		- note: selecting very low bitrate for Opus would switch it to mono mode even if recording is configured as stereo
+	- updated French translation file - thanks to lyonelf
 */
 
