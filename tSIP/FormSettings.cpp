@@ -196,7 +196,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 			{
 				const NetInterface &ni = networkInterfaces[i];
 				AnsiString text;
-				text.sprintf("%s - %s", ni.name.c_str(), ni.ip.c_str());
+				AnsiString driverName = GetNetAdapterDriverName(ni.name);
+				text.sprintf("%s  -  %s  -  %s", ni.ip.c_str(), driverName.c_str(), ni.name.c_str());
 				cbNetworkInterfaces->Items->Add(text);
 			}
 		}
