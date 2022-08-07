@@ -86,8 +86,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			Application->Title = Branding::appName;
 		}
 
-		LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
-
 		if (appSettings.frmMain.mainIcon != "")
 		{
 			try

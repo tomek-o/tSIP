@@ -345,6 +345,8 @@ __fastcall TfrmMain::~TfrmMain()
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
+	LoadTranslation();
+
 	if (appSettings.frmMain.bUseCustomCaption)
 	{
 		this->Caption = appSettings.frmMain.customCaption;
@@ -534,7 +536,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	}
 	if (prev.Translation.language != appSettings.Translation.language)
 	{
-		LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
+		LoadTranslation();
 	}
 
 	// modify application title and main window caption only if config changes,
@@ -3775,9 +3777,20 @@ void __fastcall TfrmMain::miImportContactsFromXmlClick(TObject *Sender)
 
 void __fastcall TfrmMain::miRefreshTranslationFromFileClick(TObject *Sender)
 {
-	LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
+	LoadTranslation();
 }
 //---------------------------------------------------------------------------
+
+void TfrmMain::LoadTranslation(void)
+{
+	int status = LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
+	if (appSettings.Translation.language != "")
+	{
+		AnsiString msg;
+		msg.sprintf("Failed to load %s translation", appSettings.Translation.language.c_str());
+		MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONEXCLAMATION);
+	}
+}
 
 void TfrmMain::UpdateAutoAnswer(void)
 {

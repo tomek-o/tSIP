@@ -248,6 +248,7 @@ private:	// User declarations
 	void UpdateAutoAnswer(void);
 	void UpdateClip(void);
 	void SetMainWindowLayout(int id);
+	void LoadTranslation(void);
 	void UpdateSize(void);
 	void UpdateDialpad(void);
 	void FocusCbCallUri(void);
