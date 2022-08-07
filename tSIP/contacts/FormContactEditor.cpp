@@ -32,7 +32,7 @@ __fastcall TfrmContactEditor::TfrmContactEditor(TComponent* Owner)
 	: TForm(Owner)
 {
 	RegisterTranslationCb(this, TranslateForm);
-	
+
 	//RichEdit: URL highlighting and OnClick event
 	HANDLE handle = memoNote->Handle;
 	unsigned mask = SendMessage(handle, EM_GETEVENTMASK, 0, 0);
@@ -42,7 +42,7 @@ __fastcall TfrmContactEditor::TfrmContactEditor(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TfrmContactEditor::btnCancelClick(TObject *Sender)
 {
-	Close();	
+	Close();
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmContactEditor::btnApplyClick(TObject *Sender)
@@ -136,7 +136,7 @@ void __fastcall TfrmContactEditor::WndProc(Messages::TMessage &Message)
     {
         // handle RichEdit link being clicked
         if (((LPNMHDR)Message.LParam)->code == EN_LINK)
-        {
+		{
             ENLINK* p = (ENLINK *)Message.LParam;
             if (p->msg == WM_LBUTTONDOWN)
             {
@@ -160,7 +160,15 @@ void __fastcall TfrmContactEditor::FormKeyPress(TObject *Sender, char &Key)
 void __fastcall TfrmContactEditor::btnFileOpenClick(
       TObject *Sender)
 {
-	ShellExecute(Handle, "open", edFile->Text.c_str(), 0, 0, SW_SHOWNORMAL);
+	if (edFile->Text == "")
+	{
+		AnsiString msg = Translate2("TfrmContactEditor.msgFileNotSpecified", "Could not edit file, file is not specified");
+		MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_ICONINFORMATION);
+	}
+	else
+	{
+		ShellExecute(Handle, "open", edFile->Text.c_str(), 0, 0, SW_SHOWNORMAL);
+	}
 }
 //---------------------------------------------------------------------------
 

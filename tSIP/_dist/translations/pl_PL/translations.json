@@ -9,7 +9,8 @@
     "lblNote": "Notatka",
     "lblNumber1": "Numer #1",
     "lblNumber2": "Numer #2",
-    "lblNumber3": "Numer #2"
+    "lblNumber3": "Numer #2",
+    "msgFileNotSpecified": "Nie można edytować pliku, plik nie został wybrany"
   },
   "TfrmContacts": {
     "miAdd": "Dodaj",

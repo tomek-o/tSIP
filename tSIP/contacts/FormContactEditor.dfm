@@ -205,6 +205,6 @@ object frmContactEditor: TfrmContactEditor
   end
   object openDialog: TOpenDialog
     Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
-    Left = 280
+    Left = 272
   end
 end

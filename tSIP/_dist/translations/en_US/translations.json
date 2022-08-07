@@ -9,7 +9,8 @@
       "lblNote" : "Note",
       "lblNumber1" : "Number #1",
       "lblNumber2" : "Number #2",
-      "lblNumber3" : "Number #3"
+      "lblNumber3" : "Number #3",
+      "msgFileNotSpecified": "Could not edit file, file is not specified"
    },
    "TfrmContacts" : {
       "miAdd" : "Add",
