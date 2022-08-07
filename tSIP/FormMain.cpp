@@ -3784,7 +3784,7 @@ void __fastcall TfrmMain::miRefreshTranslationFromFileClick(TObject *Sender)
 void TfrmMain::LoadTranslation(void)
 {
 	int status = LoadTranslations(appSettings.Translation.language, appSettings.Translation.logMissingKeys);
-	if (appSettings.Translation.language != "")
+	if (appSettings.Translation.language != "" && status != 0)
 	{
 		AnsiString msg;
 		msg.sprintf("Failed to load %s translation", appSettings.Translation.language.c_str());
