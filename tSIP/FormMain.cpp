@@ -1924,12 +1924,17 @@ void TfrmMain::PollCallbackQueue(void)
 							appSettings.uaConf.accounts[0].user.c_str(),
 							appSettings.uaConf.accounts[0].reg_server.c_str());
 					}
+					if (appSettings.uaConf.accounts[0].reg_expires == 0)
+					{
+						SetStatus(text);
+						HandleCommandLine();
+					}
 				}
-				if (appSettings.uaConf.accounts[0].reg_expires == 0)
+				else
 				{
-					HandleCommandLine();
+					SetStatus(text);
+					HandleCommandLine();					
 				}
-				SetStatus(text);
 				// update software volume
 				{
 					TTrackBar* tr = trbarSoftvolMic;
