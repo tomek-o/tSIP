@@ -18,7 +18,6 @@
 
 struct ausrc_st {
 	struct ausrc *as;  /* base class / inheritance */
-	struct tmr tmr;
 	uint32_t ptime;
 	size_t sampc;
 	bool run;
@@ -43,8 +42,6 @@ static void ausrc_destructor(void *arg)
 		Sleep(10);
 		CloseHandle(st->thread);
 	}
-
-	tmr_cancel(&st->tmr);
 
 	mem_deref(st->as);
 }

@@ -88,12 +88,6 @@ struct ua* ua_cur(void) {
 static bool appRestart = false;
 static bool appQuit = false;
 
-static void ua_exit_handler(int err)
-{
-	(void)err;
-	re_cancel();
-}
-
 static void ua_event_handler(struct ua *ua, enum ua_event ev,
 	struct call *call, const char *prm, void *arg)
 {

@@ -16,7 +16,6 @@
 
 struct auplay_st {
 	struct auplay *ap;      /* inheritance */
-	struct tmr tmr;
 	uint32_t ptime;
 	size_t sampc;
 	bool run;
@@ -39,8 +38,6 @@ static void auplay_destructor(void *arg)
 		Sleep(10);
 		CloseHandle(st->thread);
 	}
-
-	tmr_cancel(&st->tmr);
 
 	mem_deref(st->ap);
 }
