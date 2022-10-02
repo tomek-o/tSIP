@@ -409,6 +409,11 @@ static void call_event_handler(struct call *call, enum call_event ev,
 		}
 		break;
 
+	case CALL_EVENT_TRANSFER_FAILED:
+		ua_printf(ua, "Call transfer failed: %s\n", peeruri);
+		ua_event(ua, UA_EVENT_CALL_TRANSFER_FAILED, call, peeruri);
+		break;
+
 	case CALL_EVENT_REINVITE_RECEIVED:
 		ua_event(ua, UA_EVENT_CALL_REINVITE_RECEIVED, call, peeruri);	
 		break;
