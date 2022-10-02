@@ -1705,7 +1705,7 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			}
 			default:
-				assert(!"Unhandled call state");
+				LOG("Unhandled call state = %d\n", static_cast<int>(cb.state));
 				break;
 			}
 
