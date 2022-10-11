@@ -79,6 +79,25 @@ Carsten Bormann
 
 
 =============================================
+G.722 license:
+=============================================
+
+Written by Steve Underwood <steveu@coppice.org>
+
+Copyright (C) 2005 Steve Underwood
+
+All rights reserved.
+
+Despite my general liking of the GPL, I place my own contributions to this code in the public domain for the benefit of all mankind - even the slimy ones who might try to proprietize my work and use it to my detriment.
+
+Based on a single channel 64kbps only G.722 codec which is:
+
+*****    Copyright (c) CMU    1993      *****
+Computer Science, Speech Group
+Chengxiang Lu and Alex Hauptmann
+
+
+=============================================
 G.726 license:
 =============================================
 
