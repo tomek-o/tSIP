@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsNetwork
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2778,7 +2778,7 @@ object frmSettings: TfrmSettings
       end
     end
     object tsPhones: TTabSheet
-      Caption = 'Phones'
+      Caption = 'Plugins / phones'
       ImageIndex = 13
     end
     object tsTrayNotifier: TTabSheet
