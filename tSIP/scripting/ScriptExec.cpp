@@ -1679,11 +1679,11 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SetButtonImage, "SetButtonImage", "Set button bitmap", "");
 	lua_register2(L, ScriptImp::l_PluginSendMessageText, "PluginSendMessageText", "Send text to specified plugin", "");
 	lua_register2(L, ScriptImp::l_PluginEnable, "PluginEnable", "Enable/disable specified plugin", "Example: PluginEnable(\"TTS.dll\", 0/1)");
-	lua_register2(L, ScriptImp::l_GetExecSourceType, "GetExecSourceType", "Get type of event that triggered script execution", "");
-	lua_register2(L, ScriptImp::l_GetExecSourceId, "GetExecSourceId", "Get ID of object that triggered script (depending on trigger type)", "");
+	lua_register2(L, ScriptImp::l_GetExecSourceType, "GetExecSourceType", "Get type of event that triggered script execution", "See also: GetExecSourceId().");
+	lua_register2(L, ScriptImp::l_GetExecSourceId, "GetExecSourceId", "Get ID of object that triggered script (depending on trigger type)", "See also: GetExecSourceType().");
 	lua_register2(L, ScriptImp::l_GetRecordFile, "GetRecordFile", "Get name of recording file from current call or call that ended", "");
 	lua_register2(L, ScriptImp::l_GetContactId, "GetContactId", "Get contact ID for specified number/URI", "");
-	lua_register2(L, ScriptImp::l_GetBlfState, "GetBlfState", "Get BLF state of specified contact (by contact ID)", "To be used in \"on BLF change\" or together with GetContactId(number).");
+	lua_register2(L, ScriptImp::l_GetBlfState, "GetBlfState", "Get BLF state of specified contact (by contact ID)", "To be used in \"on BLF change\" (GetExecSourceId() as contact id / argument) or together with GetContactId(number).\nReturning number, state, remote identity number/URI, remote identity display name and call direction.");
 	lua_register2(L, ScriptImp::l_RecordStart, "RecordStart", "Start recording", "");
 	lua_register2(L, ScriptImp::l_GetExeName, "GetExeName", "Get name and full path of this executable",  "");
 	lua_register2(L, ScriptImp::l_GetProfileDir, "GetProfileDir", "Get folder name where settings and other files are stored", "");
