@@ -141,6 +141,7 @@ void __fastcall TfrmLog::chbLogMessagesClick(TObject *Sender)
 	if (updatingUi)
 		return;
 	appSettings.uaConf.logMessages = chbLogMessages->Checked;
+	chbLogMessagesOnlyFirstLines->Visible = appSettings.uaConf.logMessages;
 	appSettings.uaConf.logMessagesOnlyFirstLine = chbLogMessagesOnlyFirstLines->Checked;
 	UA->SetMsgLogging(appSettings.uaConf.logMessages, appSettings.uaConf.logMessagesOnlyFirstLine);
 }
@@ -156,6 +157,7 @@ void TfrmLog::UpdateUi(void)
 {
 	updatingUi = true;
 	chbLogMessages->Checked = appSettings.uaConf.logMessages;
+	chbLogMessagesOnlyFirstLines->Visible = appSettings.uaConf.logMessages;
 	chbLogMessagesOnlyFirstLines->Checked = appSettings.uaConf.logMessagesOnlyFirstLine;
 	chbLogToFile->Checked = appSettings.Logging.bLogToFile;
 	redMain->Font->Name = appSettings.Logging.consoleFont.name;
