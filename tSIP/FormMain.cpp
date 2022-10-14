@@ -41,7 +41,7 @@
 #include "ScriptExec.h"
 #include "HotKeys.h"
 #include "FormMessage.h"
-#include "common\Utils.h"
+#include "common\TelecomUtils.h"
 #include "common\Unicode.h"
 #include "common\OS.h"
 #include "Branding.h"

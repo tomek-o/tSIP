@@ -9,7 +9,7 @@
 #include "lua.hpp"
 #include "AudioDevicesList.h"
 #include "Paths.h"
-#include "common/Utils.h"
+#include "common/TelecomUtils.h"
 #include "ButtonConf.h"
 #include "Call.h"
 #include "Recorder.h"

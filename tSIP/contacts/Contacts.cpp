@@ -5,7 +5,7 @@
 
 #include "Contacts.h"
 #include "ContactsXmlImport.h"
-#include "common/Utils.h"
+#include "common/TelecomUtils.h"
 #include "common/Utilities.h"
 #include <SysUtils.hpp>
 #include <assert.h>
