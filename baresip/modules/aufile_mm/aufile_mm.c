@@ -17,6 +17,7 @@
 #define DEBUG_MODULE "aufile_mm"
 #define DEBUG_LEVEL 6
 #include <re_dbg.h>
+#define LOG_PROMPT DEBUG_MODULE": "
 
 /**
  * @defgroup aufile_mm aufile_mm
@@ -92,13 +93,13 @@ void __stdcall mmTimerCallback(UINT uTimerID, UINT uMsg, DWORD_PTR dwUser, DWORD
 						st->sampv, &out_length);
 	#if 0
 		if (in_length != st->in_samples_per_frame) {
-			DEBUG_INFO("aufile_mm: in_length = %u, in_samples_per_frame = %d\n", in_length, st->in_samples_per_frame);
+			DEBUG_INFO(LOG_PROMPT"in_length = %u, in_samples_per_frame = %d\n", in_length, st->in_samples_per_frame);
 		}
 	#endif
 		assert(in_length == st->in_samples_per_frame);
 	#if 0
 		if (out_length != st->out_samples_per_frame) {
-			DEBUG_INFO("aufile_mm: in_length = %d, in_samples_per_frame = %d, out_length = %d, out_samples_per_frame = %d",
+			DEBUG_INFO(LOG_PROMPT"in_length = %d, in_samples_per_frame = %d, out_length = %d, out_samples_per_frame = %d",
 				in_length, st->in_samples_per_frame, out_length, st->out_samples_per_frame);
 		}
 	#endif
@@ -124,7 +125,7 @@ static void timeout(void *arg)
 	/* check if audio buffer is empty */
 	if (aubuf_cur_size(st->aubuf) < (2 * st->in_samples_per_frame)) {
 
-		DEBUG_INFO("aufile_mm: end of wave file, calling error handler\n");
+		DEBUG_INFO(LOG_PROMPT"end of wave file, calling error handler\n");
 
 		/* error handler must be called from re_main thread */
 		if (st->errh) {
@@ -132,7 +133,7 @@ static void timeout(void *arg)
 			return;	/* not rescheduling timer */
 		}
 	} else {
-    	//DEBUG_INFO("aufile_mm: timer: audio buffer is not empty\n");
+    	//DEBUG_INFO(LOG_PROMPT"timer: audio buffer is not empty\n");
 	}
 
 	tmr_start(&st->tmr, TIMER_TEST_EOF, timeout, st);
@@ -156,7 +157,8 @@ static int read_file(struct ausrc_st *st)
 			break;
 
 		if (mb->end == 0) {
-			DEBUG_INFO("aufile_mm: end of file\n");
+			DEBUG_INFO(LOG_PROMPT"end of file\n");
+			aubuf_stop_buffering(st->aubuf);
 			break;
 		}
 
@@ -165,7 +167,7 @@ static int read_file(struct ausrc_st *st)
 		mb = mem_deref(mb);
 	}
 
-	DEBUG_INFO("aufile_mm: loaded %zu bytes\n", aubuf_cur_size(st->aubuf));
+	DEBUG_INFO(LOG_PROMPT"loaded %zu bytes\n", aubuf_cur_size(st->aubuf));
 
 	mem_deref(mb);
 	return err;
@@ -185,7 +187,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	if (!stp || !as || !prm || !rh)
 		return EINVAL;
 
-	DEBUG_INFO("aufile_mm: loading input file '%s'\n", dev);
+	DEBUG_INFO(LOG_PROMPT"loading input file '%s'\n", dev);
 
 	st = mem_zalloc(sizeof(*st), destructor);
 	if (!st)
@@ -198,19 +200,19 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 
 	err = aufile_open(&st->aufile, &fprm, dev, AUFILE_READ);
 	if (err) {
-		DEBUG_WARNING("aufile_mm: failed to open file '%s' (%m)\n", dev, err);
+		DEBUG_WARNING(LOG_PROMPT"failed to open file '%s' (%m)\n", dev, err);
 		goto out;
 	}
 
-	DEBUG_INFO("aufile_mm: %s: %u Hz, %d channels\n", dev, fprm.srate, fprm.channels);
+	DEBUG_INFO(LOG_PROMPT"%s: %u Hz, %d channels\n", dev, fprm.srate, fprm.channels);
 
 	if (fprm.channels != prm->ch) {
-		DEBUG_WARNING("aufile_mm: input file (%s) must have channels = %d\n", dev, prm->ch);
+		DEBUG_WARNING(LOG_PROMPT"input file (%s) must have channels = %d\n", dev, prm->ch);
 		err = ENODEV;
 		goto out;
 	}
 	if (fprm.fmt != AUFMT_S16LE) {
-		DEBUG_WARNING("aufile_mm: input file must have format S16LE\n");
+		DEBUG_WARNING(LOG_PROMPT"input file must have format S16LE\n");
 		err = ENODEV;
 		goto out;
 	}
@@ -219,7 +221,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	st->out_samples_per_frame = prm->frame_size; //prm->srate / (fprm.srate / prm->frame_size);
 
 	if (fprm.srate != prm->srate) {
-		DEBUG_WARNING("aufile_mm: using speex resampler\n");
+		DEBUG_WARNING(LOG_PROMPT"using speex resampler\n");
 		st->speex_state = speex_resampler_init(prm->ch, fprm.srate, prm->srate, SPEEX_RESAMP_QUALITY, &err);
 		if (st->speex_state == NULL || err != RESAMPLER_ERR_SUCCESS) {
 			err = ENOMEM;
@@ -236,13 +238,13 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 
 	st->ptime = prm->frame_size * 1000 / prm->srate / prm->ch; //prm->ptime;
 
-	DEBUG_INFO("aufile_mm: audio ptime=%u sampc=%zu aubuf=[%u:%u]\n",
+	DEBUG_INFO(LOG_PROMPT"audio ptime=%u sampc=%zu aubuf=[%u:%u]\n",
 		 st->ptime, st->sampc,
 		 prm->srate * prm->ch * 2,
 		 prm->srate * prm->ch * 40);
 
 	/* 1 - inf seconds of audio */
-	err = aubuf_alloc(&st->aubuf, prm->srate * prm->ch * 2, 0);
+	err = aubuf_alloc(&st->aubuf, fprm.srate * prm->ch * 2, 0);
 	if (err)
 		goto out;
 
@@ -260,7 +262,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 
 	st->timer_id = timeSetEvent(st->ptime, 0, mmTimerCallback, (unsigned long)st, TIME_PERIODIC | TIME_CALLBACK_FUNCTION | TIME_KILL_SYNCHRONOUS);
 	if (st->timer_id == 0) {
-		DEBUG_WARNING("aufile_mm: failed to create multimedia timer\n");
+		DEBUG_WARNING(LOG_PROMPT"failed to create multimedia timer\n");
 		err = ENODEV;
 		goto out;
 	}
