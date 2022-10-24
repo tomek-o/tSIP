@@ -36,7 +36,7 @@ const AudioModuleDef audioModuleDefs [] =
 {
 	{ true, true, portaudio, "PortAudio / DirectSound" },
 	{ true, true, winwave, "WaveIn, WaveOut" },
-	{ true, true, winwave2, "WaveIn, WaveOut (2) - experimental" },
+	{ true, true, winwave2, "WaveIn, WaveOut v2" },
 	{ true, false, aufile, "Wave file" },
 	{ true, false, aufileMm, "Wave file - with MM timer" },
 	{ true, true, nullaudio, "Null" },
