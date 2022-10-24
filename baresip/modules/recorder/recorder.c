@@ -372,6 +372,12 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		// this would effectively insert some silence into one of the directions
 		cnt += delta/2;
 
+		if (cnt + (delta/2) <= sizeof(bufrx))
+		{
+			// this would effectively insert some silence into one of the directions
+			cnt += delta/2;
+		}		
+
 		aubuf_read(rec->abrx, bufrx, cnt);
 		aubuf_read(rec->abtx, buftx, cnt);
 
