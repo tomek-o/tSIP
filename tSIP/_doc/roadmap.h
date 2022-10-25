@@ -22,7 +22,6 @@ No particular order. Might be outdated.
 
 Call recording:
 - fixme: possible hazards when starting recording
-- other output formats, compression
 - settings: record incoming/outgoing
 - semi-automatic record mode: record call by default, delete file if not "saved" by user
 - UID for file names to avoid conflicts with very short (<1 s) recordings
@@ -36,7 +35,7 @@ Call recording:
 - different ringtones for different contacts
 - detect: no input snd dev
 - handle "Call completed elsewhere" disconnection reason - do not add this call to history (or add to history with special mark)
-- call history: master/detail view, copying number to clipboard, adding to phonebook
+- call history: master/detail view, adding to phonebook
 - number processing / "LCR" / dialplan
 
 - user definable Call/Hangup buttons (horizontal configurable button container? buttons from basic container used?)

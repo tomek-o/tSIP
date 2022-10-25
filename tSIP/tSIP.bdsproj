@@ -418,8 +418,8 @@
         </optionset>
       </project>
       <FILELIST>
-        <FILE FILENAME="_doc\roadmap.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="_doc\changelog.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="_doc\roadmap.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="scripting\ScriptExec.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScriptExec" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\ScriptExec.h"/>
         <FILE FILENAME="phone\PhoneInterface.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PhoneInterface" FORMNAME="" DESIGNCLASS="" ADDITIONAL="phone\PhoneInterface.h"/>
         <FILE FILENAME="contacts\FormContactsCsvImport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactsCsvImport" FORMNAME="frmContactsCsvImport" DESIGNCLASS="" ADDITIONAL="contacts\FormContactsCsvImport.h"/>
@@ -511,7 +511,7 @@
           <VersionInfo Name="AutoIncBuild">False</VersionInfo>
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">2</VersionInfo>
-          <VersionInfo Name="Release">9</VersionInfo>
+          <VersionInfo Name="Release">10</VersionInfo>
           <VersionInfo Name="Build">0</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
@@ -524,7 +524,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.2.9.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.2.10.0</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

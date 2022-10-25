@@ -988,5 +988,16 @@ Version 0.2.09
 		- Lua StartRecording(): new optional parameter selecting recording format (0 = WAVE, 1 = Opus/OGG)
 		- note: selecting very low bitrate for Opus would switch it to mono mode even if recording is configured as stereo
 	- updated French translation file - thanks to lyonelf
+
+Version 0.2.10
+	- FIXED: possible buffer overrun / crash in call recording, observed (mainly?) when ending the call with L16/48000/1 codec
+	- FIXED: confusing missing "Registering" status of startup that should be visible in case of any problems with registration 
+	- added human-readable names to network adapters list (binding to network interface)
+	- added MessageBox if loading translation from file fails (e.g. due to invalid JSON)
+	- added MessageBox if file edit button in contact editor was pressed but file was not specified
+	- updated distributed OpenSSL DLLs to version 1.1.1g
+	- unified aufile and aufile_mm source, fixing playback of short wave files in aufile_mm
+	- renamed Settings "Phones" page to "Plugins / phones" and "WaveIn, WaveOut (2) - experimental" to "WaveIn, WaveOut v2"
+	- few other minor changes
 */
 
