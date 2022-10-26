@@ -33,6 +33,7 @@ struct ausrc_st {
 	struct tmr tmr;
 	struct aufile *aufile;
 	struct aubuf *aubuf;
+	struct aufile_prm fprm;	
 	uint32_t ptime;
 	size_t sampc;
 	bool run;
@@ -226,7 +227,11 @@ static int read_file(struct ausrc_st *st)
 		if (!mb)
 			return ENOMEM;
 
-		mb->end = mb->size;
+		if (st->fprm.fmt == AUFMT_S16LE) {
+			mb->end = mb->size;
+		} else if (st->fprm.fmt == AUFMT_PCMA || st->fprm.fmt == AUFMT_PCMU) {
+        	mb->end = mb->size / sizeof(short);
+		}
 
 		err = aufile_read(st->aufile, mb->buf, &mb->end);
 		if (err)
@@ -236,6 +241,22 @@ static int read_file(struct ausrc_st *st)
 			DEBUG_INFO(LOG_PROMPT"end of file\n");
 			aubuf_stop_buffering(st->aubuf);
 			break;
+		}
+
+		if (st->fprm.fmt == AUFMT_PCMA) {
+			int i;
+			for (i=mb->end - 1; i>=0; i--) {
+				short val = g711_alaw2pcm(mb->buf[i]);
+				memcpy(&mb->buf[i*2], &val, sizeof(val));
+			}
+			mb->end *= sizeof(short);
+		} else if (st->fprm.fmt == AUFMT_PCMU) {
+			int i;
+			for (i=mb->end - 1; i>=0; i--) {
+				short val = g711_ulaw2pcm(mb->buf[i]);
+				memcpy(&mb->buf[i*2], &val, sizeof(val));
+			}
+			mb->end *= sizeof(short);
 		}
 
 		aubuf_append(st->aubuf, mb);
@@ -255,7 +276,6 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 			 ausrc_read_h *rh, ausrc_error_h *errh, void *arg)
 {
 	struct ausrc_st *st;
-	struct aufile_prm fprm;
 	int err;
 	DWORD dwtid;
 	(void)ctx;
@@ -274,31 +294,31 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	st->errh = errh;
 	st->arg  = arg;
 
-	err = aufile_open(&st->aufile, &fprm, dev, AUFILE_READ);
+	err = aufile_open(&st->aufile, &st->fprm, dev, AUFILE_READ);
 	if (err) {
 		DEBUG_WARNING(LOG_PROMPT"failed to open file '%s' (%m)\n", dev, err);
 		goto out;
 	}
 
-	DEBUG_INFO(LOG_PROMPT"%s: %u Hz, %d channels\n", dev, fprm.srate, fprm.channels);
+	DEBUG_INFO(LOG_PROMPT"%s: %u Hz, %d channels\n", dev, st->fprm.srate, st->fprm.channels);
 
-	if (fprm.channels != prm->ch) {
+	if (st->fprm.channels != prm->ch) {
 		DEBUG_WARNING(LOG_PROMPT"input file (%s) must have channels = %d\n", dev, prm->ch);
 		err = ENODEV;
 		goto out;
 	}
-	if (fprm.fmt != AUFMT_S16LE) {
-		DEBUG_WARNING(LOG_PROMPT"input file must have format S16LE\n");
+	if (st->fprm.fmt != AUFMT_S16LE && st->fprm.fmt != AUFMT_PCMA && st->fprm.fmt != AUFMT_PCMU) {
+		DEBUG_WARNING(LOG_PROMPT"input file must have S16LE, G.711a or G.711u format\n");
 		err = ENODEV;
 		goto out;
 	}
 
-	st->in_samples_per_frame = prm->frame_size * fprm.srate / prm->srate; //prm->frame_size;
+	st->in_samples_per_frame = prm->frame_size * st->fprm.srate / prm->srate; //prm->frame_size;
 	st->out_samples_per_frame = prm->frame_size; //prm->srate / (fprm.srate / prm->frame_size);
 
-	if (fprm.srate != prm->srate) {
+	if (st->fprm.srate != prm->srate) {
 		DEBUG_WARNING(LOG_PROMPT"using speex resampler\n");
-		st->speex_state = speex_resampler_init(prm->ch, fprm.srate, prm->srate, SPEEX_RESAMP_QUALITY, &err);
+		st->speex_state = speex_resampler_init(prm->ch, st->fprm.srate, prm->srate, SPEEX_RESAMP_QUALITY, &err);
 		if (st->speex_state == NULL || err != RESAMPLER_ERR_SUCCESS) {
 			err = ENOMEM;
 			goto out;
@@ -315,7 +335,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	     prm->srate * prm->ch * 40);
 
 	/* 1 - inf seconds of audio */
-	err = aubuf_alloc(&st->aubuf, fprm.srate * prm->ch * 2, 0);
+	err = aubuf_alloc(&st->aubuf, st->fprm.srate * prm->ch * 2, 0);
 	if (err)
 		goto out;
 
