@@ -7,6 +7,7 @@
 #include <baresip.h>
 #include <stdio.h>
 #include <assert.h>
+#include <limits.h>
 #include "baresip_recorder.h"
 #include "wavfile.h"
 #include "opusenc.h"
@@ -415,7 +416,14 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 				} else {
 					// default: both parties mixed
 					for (i=0; i<cnt/sizeof(short); i++) {
-						dst[i] += src[i];
+						// saturate to prevent roll-off
+						int val = dst[i] + src[i];
+						if (val < SHRT_MIN) {
+							val = SHRT_MIN;
+						} else if (val > SHRT_MAX) {
+							val = SHRT_MAX;
+						}
+						dst[i] = val;
 					}
 					if (rec->pFile) {
 						fwrite(bufrx, cnt, 1, rec->pFile);
