@@ -851,3 +851,13 @@ const int16_t g711_A2l[256] = {
 	   688,   656,   752,   720,   560,   528,   624,   592,
 	   944,   912,  1008,   976,   816,   784,   880,   848,
 };
+
+int16_t g711_ulaw2pcm(uint8_t u)
+{
+	return g711_u2l[u];
+}
+
+int16_t g711_alaw2pcm(uint8_t a)
+{
+	return g711_A2l[a];
+}
