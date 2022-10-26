@@ -551,7 +551,7 @@ void __fastcall TfrmButtonEdit::cbSoundInputModChange(TObject *Sender)
 		lblSoundInputDevice->Visible = true;
 		AudioDevicesList::FillComboBox(cbSoundInputDev, mod, false, cfg->audioRxDev.c_str());
 	}
-	else if (mod == AudioModules::aufile)
+	else if (mod == AudioModules::aufile || mod == AudioModules::aufileMm)
 	{
 		btnSelectWaveFile->Visible = true;
 		edSoundInputWave->Visible = true;
