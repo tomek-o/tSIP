@@ -49,6 +49,8 @@ public:
 		int lastScode;				///< last SIP code from received reply (on disconnected)
 		AnsiString lastReplyLine;
 
+		AnsiString recordFile;
+
 		Entry(void):
 			incoming(false),
 			time(0),

@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "History.h"
+#include "Branding.h"
 #include <assert.h>
 #include <algorithm>
 #include <fstream> 
@@ -99,6 +100,8 @@ int History::Read(CallbackGetContactName callbackGetContactName)
 		entry.timestamp.sec = ts.get("sec", 0).asInt();
 		entry.timestamp.msec = ts.get("msec", 0).asInt();
 
+		call.getAString("recordFile", entry.recordFile);
+
 		entries.push_back(entry);
 	}
 
@@ -139,6 +142,10 @@ int History::Write(void)
 		jEntry["timestamp"]["min"] = entry.timestamp.min;
 		jEntry["timestamp"]["sec"] = entry.timestamp.sec;
 		jEntry["timestamp"]["msec"] = entry.timestamp.msec;
+		if (Branding::recording)
+		{
+			jEntry["recordFile"] = entry.recordFile;
+		}
 	}
 
 	std::string outputConfig = writer.write( root );

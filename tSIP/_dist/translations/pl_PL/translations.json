@@ -30,13 +30,16 @@
     "miCopyNumber": "Skopiuj numer",
     "miHttpQuery": "Zapytanie HTTP",
     "miMessage": "Wyślij wiadomość",
+    "miOpenInExplorer": "Otwórz w menedżerze plików",
+    "miRecordFile": "Nagranie",
+    "miRecordFileOpen": "Otwórz w domyślnej aplikacji",
     "nameNumber": "Nazwa/numer",
     "notCompletedText": "(nieodebrane)",
     "outgoingCallText": "Połączenie wychodzące",
-    "timestamp": "Czas",
-    "unansweredText": "(nieodebrane)",
     "replyCode": "Kod odpowiedzi SIP:",
-    "replyLine": "Odpowiedź SIP:"
+    "replyLine": "Odpowiedź SIP:",
+    "timestamp": "Czas",
+    "unansweredText": "(nieodebrane)"
   },
   "TfrmMain": {
     "btnHangup": "Zakończ",

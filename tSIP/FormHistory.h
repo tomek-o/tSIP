@@ -32,6 +32,9 @@ __published:	// IDE-managed Components
 	TMenuItem *miAddEditPhonebook;
 	TMenuItem *miHttpQuery;
 	TMenuItem *miMessage;
+	TMenuItem *miRecordFile;
+	TMenuItem *miRecordFileOpen;
+	TMenuItem *miOpenInExplorer;
 	void __fastcall lvHistoryData(TObject *Sender, TListItem *Item);
 	void __fastcall lvHistoryDblClick(TObject *Sender);
 	void __fastcall edFilterChange(TObject *Sender);
@@ -42,6 +45,9 @@ __published:	// IDE-managed Components
 	void __fastcall lvHistoryInfoTip(TObject *Sender, TListItem *Item,
           AnsiString &InfoTip);
 	void __fastcall miMessageClick(TObject *Sender);
+	void __fastcall miRecordFileOpenClick(TObject *Sender);
+	void __fastcall miOpenInExplorerClick(TObject *Sender);
+	void __fastcall popupHistoryPopup(TObject *Sender);
 public:
 	typedef void (__closure *CallbackCall)(AnsiString uri);
 	typedef void (__closure *CallbackPhonebookEdit)(AnsiString uri);

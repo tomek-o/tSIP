@@ -1686,6 +1686,7 @@ void TfrmMain::PollCallbackQueue(void)
 				entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
 				entry.lastScode = call.lastScode;
 				entry.lastReplyLine = call.lastReplyLine;
+				entry.recordFile = call.recordFile;
 
 				history.AddEntry(entry);
 				UpdateCallHistory();

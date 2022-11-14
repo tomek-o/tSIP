@@ -513,6 +513,7 @@ object frmHistory: TfrmHistory
       000000000000}
   end
   object popupHistory: TPopupMenu
+    OnPopup = popupHistoryPopup
     Left = 272
     Top = 272
     object miAddEditPhonebook: TMenuItem
@@ -530,6 +531,17 @@ object frmHistory: TfrmHistory
     object miMessage: TMenuItem
       Caption = 'Message'
       OnClick = miMessageClick
+    end
+    object miRecordFile: TMenuItem
+      Caption = 'Record file'
+      object miRecordFileOpen: TMenuItem
+        Caption = 'Open in default application'
+        OnClick = miRecordFileOpenClick
+      end
+      object miOpenInExplorer: TMenuItem
+        Caption = 'Open in file manager'
+        OnClick = miOpenInExplorerClick
+      end
     end
   end
 end

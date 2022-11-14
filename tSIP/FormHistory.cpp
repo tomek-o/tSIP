@@ -8,6 +8,7 @@
 #include "History.h"
 #include "SIMPLE_Messages.h"
 #include "Translate.h"
+#include "Branding.h"
 #include <assert.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -25,6 +26,7 @@ AnsiString callTimeText = "Call time:";
 AnsiString codecText = "Codec:";
 AnsiString replyCodeText = "Reply code:";
 AnsiString replyLineText = "Reply line:";
+AnsiString recordFileText = "Record file";
 
 }
 
@@ -37,6 +39,9 @@ void TfrmHistory::TranslateForm(void* obj)
 	TRANSLATE_TMP("TfrmHistory.miCopyNumber", frm->miCopyNumber->Caption);
 	TRANSLATE_TMP("TfrmHistory.miHttpQuery", frm->miHttpQuery->Caption);
 	TRANSLATE_TMP("TfrmHistory.miMessage", frm->miMessage->Caption);
+	TRANSLATE_TMP("TfrmHistory.miRecordFile", frm->miRecordFile->Caption);
+	TRANSLATE_TMP("TfrmHistory.miRecordFileOpen", frm->miRecordFileOpen->Caption);
+	TRANSLATE_TMP("TfrmHistory.miOpenInExplorer", frm->miOpenInExplorer->Caption);
 	if (frm->lvHistory->Columns->Count > 0)
 		TRANSLATE_TMP("TfrmHistory.timestamp", frm->lvHistory->Columns->Items[0]->Caption);
 	if (frm->lvHistory->Columns->Count > 1)
@@ -50,6 +55,7 @@ void TfrmHistory::TranslateForm(void* obj)
 	Translate("TfrmHistory.codecText", codecText);
 	Translate("TfrmHistory.replyCode", replyCodeText);
 	Translate("TfrmHistory.replyLine", replyLineText);
+	Translate("TfrmHistory.recordFile", recordFileText);
 }
 
 __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
@@ -409,6 +415,14 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 		hint.cat_sprintf("\n%s %s", replyLineText.c_str(), entry.lastReplyLine.c_str());
 	}
 
+	if (Branding::recording)
+	{
+		if (entry.recordFile != "")
+		{
+        	hint.cat_sprintf("\n%s: %s", recordFileText.c_str(), ExtractFileName(entry.recordFile).c_str());
+		}
+	}
+
 	return hint;
 }
 
@@ -487,6 +501,44 @@ void __fastcall TfrmHistory::miMessageClick(TObject *Sender)
 	AnsiString uri = getDefaultUri(entry);
 
 	SIMPLE_Messages::Send(uri, "", false);	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmHistory::miRecordFileOpenClick(TObject *Sender)
+{
+	History::Entry* entry = getSelectedEntry();
+	if (entry == NULL)
+	{
+		return;
+	}
+	ShellExecute(NULL, "open", entry->recordFile.c_str(), NULL, NULL, SW_SHOWNORMAL);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmHistory::miOpenInExplorerClick(TObject *Sender)
+{
+	History::Entry* entry = getSelectedEntry();
+	if (entry == NULL)
+	{
+		return;
+	}
+	AnsiString params;
+	params.sprintf("/e, /select, %s", entry->recordFile.c_str());
+	ShellExecute(NULL, "open", "explorer.exe", params.c_str(), NULL, SW_SHOWNORMAL);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmHistory::popupHistoryPopup(TObject *Sender)
+{
+	History::Entry* entry = getSelectedEntry();
+	if (entry == NULL)
+	{
+		miRecordFile->Visible = false;
+	}
+	else
+	{
+		miRecordFile->Visible = Branding::recording && (entry->recordFile != "");
+	}
 }
 //---------------------------------------------------------------------------
 
