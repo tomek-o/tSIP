@@ -9,6 +9,7 @@
 #include "AudioDevicesList.h"
 #include "ProgrammableButtons.h"
 #include "Globals.h"
+#include "NetInterfaces.h"
 
 #include <re.h>
 #include <baresip.h>
@@ -150,6 +151,25 @@ namespace {
 		{
 			if (adl.winwaveDevsOut.empty())
 				return true;
+		}
+		return false;
+	}
+
+	bool CheckNetworkInterface(void)
+	{
+		if (appSettings.uaConf.ifname != "")
+		{
+			std::vector<NetInterface> interfaces;
+			int status = GetNetInterfaces(interfaces);
+			if (status == 0)
+			{
+				for (unsigned int i=0; i<interfaces.size(); i++)
+				{
+					if (interfaces[i].name == appSettings.uaConf.ifname.c_str())
+						return false;
+				}
+			}
+			return true;
 		}
 		return false;
 	}
@@ -301,6 +321,10 @@ namespace {
 
 	struct ItemTypeData itemTypeData[] =
 	{
+		{ LevelError, "No specified network interface",
+			"Network interface / adapter specified in configuration (Settings / Network tab) was not found.\r\n"
+            "Select another (valid) interface or try default interface selection (empty string as network interface GUID)."
+			,CheckNetworkInterface },
 		{ LevelWarning, "No audio input device", "", CheckAudioInputDevice },
 		{ LevelWarning, "No audio output device", "", CheckAudioOutputDevice },
 		{ LevelWarning, "Missing wave file for audio input", "Audio file specified as input device does not exist.", NULL },
