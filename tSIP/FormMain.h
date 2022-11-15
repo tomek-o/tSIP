@@ -159,7 +159,6 @@ private:	// User declarations
 	TrayIcon *trIcon;
 
 	void UpdateLogConfig(void);
-	void UpdateHistoryConfig(void);
 	void SetSpeedDial(bool visible);
 	void UpdateCallHistory(void);
 	void ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming);

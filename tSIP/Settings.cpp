@@ -727,27 +727,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		jv.getBool("StoreNoteInSeparateFile", Contacts.storeNoteInSeparateFile);
 	}
 
-	{
-		const Json::Value &HistoryJson = root["History"];
-		History.bNoStoreToFile = HistoryJson.get("NoStoreToFile", History.bNoStoreToFile).asBool();
-		History.bUsePaiForDisplayIfAvailable = HistoryJson.get("UsePaiForDisplayIfAvailable", History.bUsePaiForDisplayIfAvailable).asBool();
-		History.bUsePaiForDialIfAvailable = HistoryJson.get("UsePaiForDialIfAvailable", History.bUsePaiForDialIfAvailable).asBool();
-		History.bShowHint = HistoryJson.get("ShowHint", History.bShowHint).asBool();
-		History.bFormatCallDurationAsHourMinSec = HistoryJson.get("FormatCallDurationAsHourMinSec", History.bFormatCallDurationAsHourMinSec).asBool();
-		HistoryJson.getBool("ShowCodecNameInHint", History.bShowCodecNameInHint);
-		HistoryJson.getBool("ShowLastCodeInHint", History.bShowLastCodeInHint);
-		HistoryJson.getBool("ShowLastReplyLineInHint", History.bShowLastReplyLineInHint);
-		{
-			const Json::Value &jlcw = HistoryJson["ListColumnWidths"];
-			if (jlcw.type() == Json::arrayValue)
-			{
-				for (unsigned int i=0; i<jlcw.size(); i++)
-				{
-					History.listColumnWidths.push_back(jlcw[i].asInt());
-				}
-			}
-		}
-	}
+	history.fromJson(root["History"]);
 
 	{
 		const Json::Value &MessagesJson = root["Messages"];
@@ -1024,24 +1004,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["StoreNoteInSeparateFile"] = Contacts.storeNoteInSeparateFile;
 	}
 
-	{
-		Json::Value &jv = root["History"];
-		jv["NoStoreToFile"] = History.bNoStoreToFile;
-		jv["UsePaiForDisplayIfAvailable"] = History.bUsePaiForDisplayIfAvailable;
-		jv["UsePaiForDialIfAvailable"] = History.bUsePaiForDialIfAvailable;
-		jv["ShowHint"] = History.bShowHint;
-		jv["FormatCallDurationAsHourMinSec"] = History.bFormatCallDurationAsHourMinSec;
-		jv["ShowCodecNameInHint"] = History.bShowCodecNameInHint;
-		jv["ShowLastCodeInHint"] = History.bShowLastCodeInHint;
-		jv["ShowLastReplyLineInHint"] = History.bShowLastReplyLineInHint;
-
-		Json::Value &jlcw = jv["ListColumnWidths"];
-		jlcw.resize(0);
-		for (unsigned int i=0; i<History.listColumnWidths.size(); i++)
-		{
-			jlcw.append(History.listColumnWidths[i]);
-		}
-	}
+	history.toJson(root["History"]);
 
 	{
 		Json::Value &MessagesJson = root["Messages"];

@@ -6,6 +6,7 @@
 #include "Clipbrd.hpp"
 #include "FormHistory.h"
 #include "History.h"
+#include "HistoryConf.h"
 #include "SIMPLE_Messages.h"
 #include "Translate.h"
 #include "Branding.h"
@@ -59,21 +60,16 @@ void TfrmHistory::TranslateForm(void* obj)
 }
 
 __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
+	const HistoryConf &historyConf,
 	CallbackCall callbackCall,
 	CallbackPhonebookEdit callbackPhonebookEdit,
 	CallbackHttpQuery callbackHttpQuery
 	)
-	: TForm(Owner), history(history),
+	: TForm(Owner), history(history), conf(historyConf),
 	callbackCall(callbackCall),
 	callbackPhonebookEdit(callbackPhonebookEdit),
 	callbackHttpQuery(callbackHttpQuery),
-	updateNeeded(false), updating(false),
-	usePaiForDisplayIfAvailable(true),
-	usePaiForDialIfAvailable(true),
-	formatCallDurationAsHourMinSec(true),
-	showCodecNameInHint(true),
-	showLastCodeInHint(true),
-	showLastReplyLineInHint(true)
+	updateNeeded(false), updating(false)
 {
 	assert(history);
 	assert(callbackCall);
@@ -84,6 +80,9 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 
 	history->addObserver(*this);
 	lvHistory->DoubleBuffered = true;
+
+	SetColumnWidths(conf.listColumnWidths);
+	UpdateShowHint();
 }
 //---------------------------------------------------------------------------
 
@@ -173,7 +172,7 @@ void __fastcall TfrmHistory::lvHistoryData(TObject *Sender, TListItem *Item)
 		entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec);
 	Item->Caption = ts;
 
-	if (usePaiForDisplayIfAvailable && entry.paiUri != "")
+	if (conf.usePaiForDisplayIfAvailable && entry.paiUri != "")
 	{
 		AnsiString contactName = entry.paiContactName;
 		if (contactName == "")
@@ -231,7 +230,7 @@ History::Entry* TfrmHistory::getSelectedEntry(void)
 AnsiString TfrmHistory::getDefaultUri(const History::Entry* entry)
 {
 	assert(entry);
-	if (usePaiForDisplayIfAvailable && entry->paiUri != "")
+	if (conf.usePaiForDisplayIfAvailable && entry->paiUri != "")
 	{
 		return entry->paiUri;
 	}
@@ -318,20 +317,6 @@ void TfrmHistory::Scale(int percentage)
     }
 }
 
-void TfrmHistory::UsePaiForDisplayIfAvailable(bool state)
-{
-	if (usePaiForDisplayIfAvailable != state)
-	{
-		usePaiForDisplayIfAvailable = state;
-		FilterHistory();
-	}
-}
-
-void TfrmHistory::UsePaiForDialIfAvailable(bool state)
-{
-	usePaiForDialIfAvailable = state;
-}
-
 AnsiString TfrmHistory::GetHint(TListItem *item)
 {
 	if (item == NULL)
@@ -351,7 +336,7 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 		);
 	hint += "\n";
 
-	if (usePaiForDisplayIfAvailable)
+	if (conf.usePaiForDisplayIfAvailable)
 	{
 		AddPaiToHint(hint, entry);
 	}
@@ -372,14 +357,14 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 		}
 	}
 
-	if (usePaiForDisplayIfAvailable == false && entry.uri != entry.paiUri)
+	if (conf.usePaiForDisplayIfAvailable == false && entry.uri != entry.paiUri)
 	{
 		AddPaiToHint(hint, entry);
 	}
 
 	if (entry.time > 0)
 	{
-		if (formatCallDurationAsHourMinSec)
+		if (conf.formatCallDurationAsHourMinSec)
 		{
 			int hours = entry.time/3600;
 			int mins = (entry.time - (hours*3600))/60;
@@ -400,27 +385,24 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 
 	}
 
-	if (showCodecNameInHint && entry.codecName != "")
+	if (conf.showCodecNameInHint && entry.codecName != "")
 	{
 		hint.cat_sprintf("\n%s %s", codecText.c_str(), entry.codecName.c_str());
 	}
 
-	if (showLastCodeInHint && entry.lastScode != 0)
+	if (conf.showLastCodeInHint && entry.lastScode != 0)
 	{
 		hint.cat_sprintf("\n%s %d", replyCodeText.c_str(), entry.lastScode);
 	}
 
-	if (showLastReplyLineInHint && entry.lastReplyLine != "")
+	if (conf.showLastReplyLineInHint && entry.lastReplyLine != "")
 	{
 		hint.cat_sprintf("\n%s %s", replyLineText.c_str(), entry.lastReplyLine.c_str());
 	}
 
-	if (Branding::recording)
+	if (conf.showRecordFileInHint && Branding::recording && entry.recordFile != "")
 	{
-		if (entry.recordFile != "")
-		{
-        	hint.cat_sprintf("\n%s: %s", recordFileText.c_str(), ExtractFileName(entry.recordFile).c_str());
-		}
+		hint.cat_sprintf("\n%s: %s", recordFileText.c_str(), ExtractFileName(entry.recordFile).c_str());
 	}
 
 	return hint;
@@ -457,16 +439,6 @@ void __fastcall TfrmHistory::lvHistoryInfoTip(TObject *Sender, TListItem *Item,
 	InfoTip = GetHint(Item);
 }
 //---------------------------------------------------------------------------
-
-void TfrmHistory::ShowHint(bool state)
-{
-	lvHistory->ShowHint = state;
-}
-
-void TfrmHistory::FormatCallDurationAsHourMinSec(bool state)
-{
-	this->formatCallDurationAsHourMinSec = state;
-}
 
 std::vector<int> TfrmHistory::GetColumnWidths(void)
 {
@@ -541,4 +513,18 @@ void __fastcall TfrmHistory::popupHistoryPopup(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+
+void TfrmHistory::UpdateShowHint(void)
+{
+	lvHistory->ShowHint = conf.showHint;
+}
+
+void TfrmHistory::UpdateConf(const HistoryConf &prev)
+{
+	if (conf.showHint != prev.showHint)
+		UpdateShowHint();
+	if (conf.usePaiForDisplayIfAvailable != prev.usePaiForDisplayIfAvailable)
+		FilterHistory();
+}
+
 

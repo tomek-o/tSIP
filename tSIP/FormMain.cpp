@@ -230,9 +230,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	lbl2ndParty->Caption = "";
 	lbl2ndPartyDesc->Caption = "";
 	lblCallState->Caption = "";
-	frmHistory = new TfrmHistory(this->tsHistory, &history, &OnCall, &OnPhonebookEdit, &OnHttpQuery);
+	frmHistory = new TfrmHistory(this->tsHistory, &history, appSettings.history, &OnCall, &OnPhonebookEdit, &OnHttpQuery);
 	frmHistory->Scale(appSettings.gui.scalingPct);
-	UpdateHistoryConfig();
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
 
@@ -476,10 +475,10 @@ void TfrmMain::Finalize(void)
 	appSettings.frmContactPopup.iWidth = frmContactPopup->Width;
 	appSettings.frmContactPopup.iHeight = frmContactPopup->Height;
 
-	appSettings.History.listColumnWidths = frmHistory->GetColumnWidths();
+	appSettings.history.listColumnWidths = frmHistory->GetColumnWidths();
 
 	appSettings.Write(Paths::GetConfig());
-	if (appSettings.History.bNoStoreToFile == false)
+	if (appSettings.history.noStoreToFile == false)
 	{
 		history.Write();
     }
@@ -641,7 +640,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
 	frmContacts->StoreNoteInSeparateFile(appSettings.Contacts.storeNoteInSeparateFile);
 
-	UpdateHistoryConfig();
+	if (prev.history != appSettings.history)
+	{
+		frmHistory->UpdateConf(prev.history);
+	}
 
 	UpdateBitmaps();
 	frmTrayNotifier->UpdateBackgroundImage();
@@ -2838,18 +2840,6 @@ void TfrmMain::UpdateLogConfig(void)
 	log->SetFlush(appSettings.Logging.bFlush);
 	log->SetMaxFileSize(appSettings.Logging.iMaxFileSize);
 	log->SetLogRotateCnt(appSettings.Logging.iLogRotate);
-}
-
-void TfrmMain::UpdateHistoryConfig(void)
-{
-	frmHistory->UsePaiForDisplayIfAvailable(appSettings.History.bUsePaiForDisplayIfAvailable);
-	frmHistory->UsePaiForDialIfAvailable(appSettings.History.bUsePaiForDialIfAvailable);
-	frmHistory->ShowHint(appSettings.History.bShowHint);
-	frmHistory->FormatCallDurationAsHourMinSec(appSettings.History.bFormatCallDurationAsHourMinSec);
-	frmHistory->ShowCodecNameInHint(appSettings.History.bShowCodecNameInHint);
-	frmHistory->ShowLastCodeInHint(appSettings.History.bShowLastCodeInHint);
-	frmHistory->ShowLastReplyLineInHint(appSettings.History.bShowLastReplyLineInHint);
-	frmHistory->SetColumnWidths(appSettings.History.listColumnWidths);
 }
 
 void TfrmMain::SetSpeedDial(bool visible)

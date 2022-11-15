@@ -126,7 +126,7 @@ update Lua to 5.3.x, remove CVS tags from Lua source
 - wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
 (=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)
 
-integrate RecordViewer.exe?
+integrate RecordViewer.exe? include in zip?
 
 TODO: TLS not working (UDP used instead) when outbound proxy is specified?
 

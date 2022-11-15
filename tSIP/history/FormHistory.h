@@ -19,6 +19,8 @@
 #include <Menus.hpp>
 #include <vector>
 
+struct HistoryConf;
+
 class TfrmHistory : public TForm, Observer
 {
 __published:	// IDE-managed Components
@@ -55,6 +57,7 @@ public:
 private:	// User declarations
 	static void TranslateForm(void* obj);
 	History *history;
+	const HistoryConf &conf;
 	CallbackCall callbackCall;
 	CallbackPhonebookEdit callbackPhonebookEdit;
 	CallbackHttpQuery callbackHttpQuery;
@@ -64,24 +67,19 @@ private:	// User declarations
 		History::Entry entry;
 	};
 	std::vector<FilteredEntry> filteredEntries;
-	void FilterHistory(void);
 	bool updateNeeded;
 	bool updating;					///< view needs to be updated on data change (window is visible)
-	bool usePaiForDisplayIfAvailable;
-	bool usePaiForDialIfAvailable;
-	bool formatCallDurationAsHourMinSec;
-	bool showCodecNameInHint;
-	bool showLastCodeInHint;
-	bool showLastReplyLineInHint;
 	History::Entry* getSelectedEntry(void);
 	AnsiString getDefaultUri(const History::Entry* entry);
 	AnsiString GetHint(TListItem *item);
 	void AddPaiToHint(AnsiString &hint, const History::Entry &entry);
+	void SetColumnWidths(const std::vector<int>& widths);
+	void FilterHistory(void);
 public:		// User declarations
-	__fastcall TfrmHistory(TComponent* Owner, History *history,
+	__fastcall TfrmHistory(TComponent* Owner, History *history, const HistoryConf &historyConf,
 		CallbackCall callbackCall,
 		CallbackPhonebookEdit callbackPhonebookEdit,
-		CallbackHttpQuery callbackHttpQuery		
+		CallbackHttpQuery callbackHttpQuery
 		);
 	void obsUpdate(Observable* o, Argument * arg);
 	/** Enable/disable immediate updating on data change.
@@ -92,28 +90,9 @@ public:		// User declarations
 	*/
 	void Scale(int percentage);
 
-	void UsePaiForDisplayIfAvailable(bool state);
-
-	void UsePaiForDialIfAvailable(bool state);
-
-	void FormatCallDurationAsHourMinSec(bool state);
-
-	void ShowHint(bool state);
-
-	void ShowCodecNameInHint(bool state) {
-    	showCodecNameInHint = state;
-	}
-
-	void ShowLastCodeInHint(bool state) {
-		showLastCodeInHint = state;
-	}
-
-	void ShowLastReplyLineInHint(bool state) {
-		showLastReplyLineInHint = state;
-	}
-
 	std::vector<int> GetColumnWidths(void);
-	void SetColumnWidths(const std::vector<int>& widths);
+	void UpdateShowHint(void);
+	void UpdateConf(const HistoryConf &prev);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmHistory *frmHistory;

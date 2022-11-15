@@ -82,6 +82,7 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	}
 
 	CreatePages();
+	chbHistoryShowRecordFileInHint->Visible = Branding::recording;
 }
 //---------------------------------------------------------------------------
 
@@ -482,14 +483,15 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edContactsCheckIfFileUpdated->Text = tmpSettings.Contacts.checkIfFileUpdatedPeriod;
 	chbContactFilterUsingNote->Checked = tmpSettings.Contacts.filterUsingNote;
 
-	chbHistoryNoStoreToFile->Checked = tmpSettings.History.bNoStoreToFile;
-	chbHistoryUsePaiForDisplayIfAvailable->Checked = tmpSettings.History.bUsePaiForDisplayIfAvailable;
-	chbHistoryUsePaiForDialIfAvailable->Checked = tmpSettings.History.bUsePaiForDialIfAvailable;
-	chbHistoryShowHint->Checked = tmpSettings.History.bShowHint;
-	chbHistoryFormatCallDurationAsHourMinSec->Checked = tmpSettings.History.bFormatCallDurationAsHourMinSec;
-	chbHistoryShowCodecNameInHint->Checked = tmpSettings.History.bShowCodecNameInHint;
-	chbHistoryShowLastReplyCodeInHint->Checked = tmpSettings.History.bShowLastCodeInHint;
-	chbHistoryShowLastReplyLineInHint->Checked = tmpSettings.History.bShowLastReplyLineInHint;
+	chbHistoryNoStoreToFile->Checked = tmpSettings.history.noStoreToFile;
+	chbHistoryUsePaiForDisplayIfAvailable->Checked = tmpSettings.history.usePaiForDisplayIfAvailable;
+	chbHistoryUsePaiForDialIfAvailable->Checked = tmpSettings.history.usePaiForDialIfAvailable;
+	chbHistoryShowHint->Checked = tmpSettings.history.showHint;
+	chbHistoryFormatCallDurationAsHourMinSec->Checked = tmpSettings.history.formatCallDurationAsHourMinSec;
+	chbHistoryShowCodecNameInHint->Checked = tmpSettings.history.showCodecNameInHint;
+	chbHistoryShowLastReplyCodeInHint->Checked = tmpSettings.history.showLastCodeInHint;
+	chbHistoryShowLastReplyLineInHint->Checked = tmpSettings.history.showLastReplyLineInHint;
+	chbHistoryShowRecordFileInHint->Checked = tmpSettings.history.showRecordFileInHint;
 
     edScriptOnMakeCallFile->Text = tmpSettings.Scripts.onMakeCall;
 	edScriptOnCallStateChangeFile->Text = tmpSettings.Scripts.onCallState;
@@ -886,14 +888,15 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Contacts.checkIfFileUpdatedPeriod = StrToIntDef(edContactsCheckIfFileUpdated->Text, tmpSettings.Contacts.checkIfFileUpdatedPeriod);
 	tmpSettings.Contacts.filterUsingNote = chbContactFilterUsingNote->Checked;
 
-	tmpSettings.History.bNoStoreToFile = chbHistoryNoStoreToFile->Checked;
-	tmpSettings.History.bUsePaiForDisplayIfAvailable = chbHistoryUsePaiForDisplayIfAvailable->Checked;
-	tmpSettings.History.bUsePaiForDialIfAvailable = chbHistoryUsePaiForDialIfAvailable->Checked;
-	tmpSettings.History.bShowHint = chbHistoryShowHint->Checked;
-	tmpSettings.History.bFormatCallDurationAsHourMinSec = chbHistoryFormatCallDurationAsHourMinSec->Checked;
-	tmpSettings.History.bShowCodecNameInHint = chbHistoryShowCodecNameInHint->Checked;
-	tmpSettings.History.bShowLastCodeInHint = chbHistoryShowLastReplyCodeInHint->Checked;
-	tmpSettings.History.bShowLastReplyLineInHint = chbHistoryShowLastReplyLineInHint->Checked;
+	tmpSettings.history.noStoreToFile = chbHistoryNoStoreToFile->Checked;
+	tmpSettings.history.usePaiForDisplayIfAvailable = chbHistoryUsePaiForDisplayIfAvailable->Checked;
+	tmpSettings.history.usePaiForDialIfAvailable = chbHistoryUsePaiForDialIfAvailable->Checked;
+	tmpSettings.history.showHint = chbHistoryShowHint->Checked;
+	tmpSettings.history.formatCallDurationAsHourMinSec = chbHistoryFormatCallDurationAsHourMinSec->Checked;
+	tmpSettings.history.showCodecNameInHint = chbHistoryShowCodecNameInHint->Checked;
+	tmpSettings.history.showLastCodeInHint = chbHistoryShowLastReplyCodeInHint->Checked;
+	tmpSettings.history.showLastReplyLineInHint = chbHistoryShowLastReplyLineInHint->Checked;
+	tmpSettings.history.showRecordFileInHint = chbHistoryShowRecordFileInHint->Checked;
 
 	tmpSettings.Scripts.onMakeCall = edScriptOnMakeCallFile->Text;
 	tmpSettings.Scripts.onCallState = edScriptOnCallStateChangeFile->Text;

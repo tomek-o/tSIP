@@ -13,6 +13,7 @@
 #include "SettingsAppVersion.h"
 #include "buttons/ButtonContainerConf.h"
 #include "DialpadConf.h"
+#include "history/HistoryConf.h"
 #include <deque>
 #include <list>
 
@@ -302,28 +303,9 @@ public:
 			storeNoteInSeparateFile(false)
 		{}
 	} Contacts;
-	struct _History
-	{
-		bool bNoStoreToFile;
-		bool bUsePaiForDisplayIfAvailable;
-		bool bUsePaiForDialIfAvailable;
-		bool bShowHint;
-		bool bFormatCallDurationAsHourMinSec;
-		bool bShowCodecNameInHint;
-		bool bShowLastCodeInHint;
-		bool bShowLastReplyLineInHint;
-		std::vector<int> listColumnWidths;
-		_History(void):
-			bNoStoreToFile(false),
-			bUsePaiForDisplayIfAvailable(true),
-			bUsePaiForDialIfAvailable(true),
-			bShowHint(true),
-			bFormatCallDurationAsHourMinSec(true),
-			bShowCodecNameInHint(true),
-			bShowLastCodeInHint(true),
-			bShowLastReplyLineInHint(true)
-		{}
-	} History;
+
+    struct HistoryConf history;
+
 	struct _Messages
 	{
     	AnsiString ring;
