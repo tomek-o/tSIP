@@ -1615,8 +1615,14 @@ void ScriptExec::Run(const char* script)
 	luaL_openlibs(L);
 	contexts[L] = this;
 
+#if 0
 	lua_register2(L, ScriptImp::LuaError, "_ALERT", "Send error message to log window (internal function)", "");
 	lua_register2(L, ScriptImp::LuaPrint, "print", "Send text to console / log window (standard function)", "");
+#else
+	// do not include internal/standard functions in help
+	lua_register(L, "_ALERT", ScriptImp::LuaError);
+	lua_register(L, "print", ScriptImp::LuaPrint);
+#endif
 	lua_register2(L, ScriptImp::l_ShowMessage, "ShowMessage", "Show simple message dialog", "Example: ShowMessage(\"text\")");
 	lua_register2(L, l_MessageBox, "MessageBox", "Show standard WinAPI MessageBox", "");
 	lua_register2(L, ScriptImp::l_InputQuery, "InputQuery", "Display modal dialog allowing to take text input from the user", "");
