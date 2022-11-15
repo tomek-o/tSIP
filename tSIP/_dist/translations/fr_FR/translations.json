@@ -9,7 +9,8 @@
     "lblNote": "Note",
     "lblNumber1": "Numéro #1",
     "lblNumber2": "Numéro #2",
-    "lblNumber3": "Numéro #3"
+    "lblNumber3": "Numéro #3",
+    "msgFileNotSpecified": "Impossible de modifier le fichier, le fichier n'est pas spécifié"
   },
   "TfrmContacts": {
     "miAdd": "Ajouter",
@@ -29,6 +30,9 @@
     "miCopyNumber": "Copier le numéro",
     "miHttpQuery": "Requête HTTP",
     "miMessage": "Message",
+    "miOpenInExplorer": "Ouvrir dans le gestionnaire de fichiers",
+    "miRecordFile": "Enregistrement d'appel",
+    "miRecordFileOpen": "Ouvrir dans l'application par défaut",
     "nameNumber": "Nom/numéro",
     "notCompletedText": "(incomplet)",
     "outgoingCallText": "Appel sortant",

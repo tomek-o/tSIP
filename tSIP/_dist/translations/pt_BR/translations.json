@@ -1,4 +1,46 @@
 {
+  "TfrmContactEditor": {
+    "btnApply": "Aplique",
+    "btnCancel": "Cancelar",
+    "caption": "Adicionar/editar contato",
+    "lblCompany": "Companhia",
+    "lblContactFile": "Arquivo",
+    "lblDescription": "Descrição",
+    "lblNote": "Observação",
+    "lblNumber1": "Número #1",
+    "lblNumber2": "Número #2",
+    "lblNumber3": "Número #3",
+    "msgFileNotSpecified": "Não foi possível editar o arquivo, o arquivo não foi especificado"
+  },
+  "TfrmContacts": {
+    "miAdd": "Adicionar",
+    "miDelete": "Excluir",
+    "miEdit": "Editar",
+    "multiItemCallText": "Ligar...",
+    "multiItemMessageText": "Envie uma mensagem...",
+    "noNumberUriText": "sem número/URI",
+    "singleItemCallText": "Ligar:",
+    "singleItemMessageText": "Envie uma mensagem:"
+  },
+  "TfrmHistory": {
+    "callTimeText": "Duração da chamada:",
+    "codecText": "Codec:",
+    "incomingCallText": "Chamada recebida",
+    "miAddEditPhonebook": "Adicionar/editar entrada da agenda telefônica",
+    "miCopyNumber": "Copiar número",
+    "miHttpQuery": "Consulta HTTP",
+    "miMessage": "Mensagem",
+    "miOpenInExplorer": "Abrir no gerenciador de arquivos",
+    "miRecordFile": "Gravação de chamada",
+    "miRecordFileOpen": "Abrir no aplicativo padrão",
+    "nameNumber": "Nome/número",
+    "notCompletedText": "(não completo)",
+    "outgoingCallText": "Chamada de saída",
+    "replyCode": "Código de resposta SIP",
+    "replyLine": "Linha de resposta SIP:",
+    "timestamp": "Data/hora",
+    "unansweredText": "(sem resposta)"
+  },
   "TfrmMain": {
     "btnHangup": "Desligar",
     "btnMakeCall": "Ligar / Atender",

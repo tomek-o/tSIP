@@ -1,4 +1,46 @@
 {
+  "TfrmContactEditor": {
+    "btnApply": "Anwenden",
+    "btnCancel": "Absagen",
+    "caption": "Kontakt hinzufügen/bearbeiten",
+    "lblCompany": "Gesellschaft",
+    "lblContactFile": "Datei",
+    "lblDescription": "Beschreibung",
+    "lblNote": "Notiz",
+    "lblNumber1": "Nummer #1",
+    "lblNumber2": "Nummer #2",
+    "lblNumber3": "Nummer #3",
+    "msgFileNotSpecified": "Datei konnte nicht bearbeitet werden, Datei ist nicht angegeben"
+  },
+  "TfrmContacts": {
+    "miAdd": "Hinzufügen",
+    "miDelete": "Löschen",
+    "miEdit": "Bearbeiten",
+    "multiItemCallText": "Anruf...",
+    "multiItemMessageText": "Nachricht senden...",
+    "noNumberUriText": "keine Nummer/URI",
+    "singleItemCallText": "Anruf:",
+    "singleItemMessageText": "Nachricht senden:"
+  },
+  "TfrmHistory": {
+    "callTimeText": "Zeit für Anrufe:",
+    "codecText": "Codec:",
+    "incomingCallText": "Eingehender Anruf",
+    "miAddEditPhonebook": "Telefonbucheintrag hinzufügen/bearbeiten",
+    "miCopyNumber": "Nummer kopieren",
+    "miHttpQuery": "HTTP-Abfrage",
+    "miMessage": "Nachricht",
+    "miOpenInExplorer": "Im Dateimanager öffnen",
+    "miRecordFile": "Anrufaufzeichnung",
+    "miRecordFileOpen": "In Standardanwendung öffnen",
+    "nameNumber": "Name/Nummer",
+    "notCompletedText": "(nicht vollständig)",
+    "outgoingCallText": "Ausgehender Anruf",
+    "replyCode": "SIP-Antwortcode:",
+    "replyLine": "SIP-Antwortleitung",
+    "timestamp": "Zeitstempel",
+    "unansweredText": "(unbeantwortet)"
+  },
   "TfrmMain": {
     "btnHangup": "Auflegen",
     "btnMakeCall": "Wahl und Annahme",

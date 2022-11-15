@@ -9,7 +9,8 @@
     "lblNote": "Notas",
     "lblNumber1": "Número #1",
     "lblNumber2": "Número #2",
-    "lblNumber3": "Número #3"
+    "lblNumber3": "Número #3",
+    "msgFileNotSpecified": "No se pudo editar el archivo, el archivo no está especificado"
   },
   "TfrmContacts": {
     "miAdd": "Añadir",
@@ -29,9 +30,14 @@
     "miCopyNumber": "Copiar número",
     "miHttpQuery": "Petición HTTP",
     "miMessage": "Mensaje",
+    "miOpenInExplorer": "Abierto en el administrador de archivos",
+    "miRecordFile": "Grabación",
+    "miRecordFileOpen": "Abrir en la aplicación predeterminada",
     "nameNumber": "Nombre/número",
     "notCompletedText": "(no contesta)",
     "outgoingCallText": "Llamada saliente",
+    "replyCode": "Código de respuesta SIP",
+    "replyLine": "Línea de respuesta SIP:",
     "timestamp": "Fecha/Hora",
     "unansweredText": "(perdida)"
   },

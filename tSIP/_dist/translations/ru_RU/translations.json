@@ -1,4 +1,46 @@
 {
+  "TfrmContactEditor": {
+    "btnApply": "Применять",
+    "btnCancel": "Отмена",
+    "caption": "Добавить/изменить контакт",
+    "lblCompany": "Компания",
+    "lblContactFile": "Файл",
+    "lblDescription": "Описание",
+    "lblNote": "Примечание",
+    "lblNumber1": "Номер #1",
+    "lblNumber2": "Номер #2",
+    "lblNumber3": "Номер #3",
+    "msgFileNotSpecified": "Не удалось отредактировать файл, файл не указан"
+  },
+  "TfrmContacts": {
+    "miAdd": "Добавлять",
+    "miDelete": "Удалить",
+    "miEdit": "Редактировать",
+    "multiItemCallText": "Позвонить...",
+    "multiItemMessageText": "Послать сообщение...",
+    "noNumberUriText": "без номера/URI",
+    "singleItemCallText": "Позвонить:",
+    "singleItemMessageText": "Послать сообщение:"
+  },
+  "TfrmHistory": {
+    "callTimeText": "Время звонка:",
+    "codecText": "Кодек:",
+    "incomingCallText": "Входящий звонок",
+    "miAddEditPhonebook": "Добавить/редактировать запись телефонной книги",
+    "miCopyNumber": "Копировать номер",
+    "miHttpQuery": "HTTP-запрос",
+    "miMessage": "Сообщение",
+    "miOpenInExplorer": "Oткрыть в файловом менеджере",
+    "miRecordFile": "Запись звонков",
+    "miRecordFileOpen": "Открыть в приложении по умолчанию",
+    "nameNumber": "Имя/номер",
+    "notCompletedText": "(не завершен)",
+    "outgoingCallText": "Исходящий вызов",
+    "replyCode": "SIP-код ответа",
+    "replyLine": "SIP-ответная линия:",
+    "timestamp": "Отметка времени",
+    "unansweredText": "(без ответа)"
+  },
   "TfrmMain": {
     "btnHangup": "Повесить трубку",
     "btnMakeCall": "Позвонить/Ответить",
