@@ -142,7 +142,7 @@ int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_ca
 
 	err |= mbuf_write_str(dialbuf, peer);
 
-	// assuming that if sip: is present than domain is present
+	/* Assuming that if sip: is present then domain is present */
 	if (0 != re_regex(peer, len, "sip:")) {
 #if HAVE_INET6
 		if (AF_INET6 == ua->acc->luri.af)
