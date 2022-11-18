@@ -175,6 +175,7 @@
         <FILE FILENAME="WindowsMessageFilter.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="WindowsMessageFilter" FORMNAME="" DESIGNCLASS="" ADDITIONAL="WindowsMessageFilter.h"/>
         <FILE FILENAME="MathUtils.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="MathUtils" FORMNAME="" DESIGNCLASS="" ADDITIONAL="MathUtils.h"/>
         <FILE FILENAME="StaticCheck.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="TrayIcon.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="TrayIcon" FORMNAME="" DESIGNCLASS="" ADDITIONAL="TrayIcon.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

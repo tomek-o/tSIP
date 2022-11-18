@@ -6,8 +6,8 @@
 #include "FormMain.h"
 #include "CommandLine.h"
 #include "Paths.h"
-#include "TrayIcon.h"
 #include "Bitmaps.h"
+#include "Branding.h"
 #include "AppStatus.h"
 #include "FormAbout.h"
 #include "FormSettings.h"
@@ -32,20 +32,12 @@
 #include "ControlQueue.h"
 #include "Callback.h"
 #include "CallbackQueue.h"
-#include <assert.h>
-#include <stdio.h>
-#include <math.h>
 #include "CustomDateUtils.hpp"
 #include "ProgrammableButton.h"
 #include "ProgrammableButtons.h"
 #include "ScriptExec.h"
 #include "HotKeys.h"
 #include "FormMessage.h"
-#include "common\TelecomUtils.h"
-#include "common\Unicode.h"
-#include "common\OS.h"
-#include "Branding.h"
-#include "common\base64.h"
 #include "PhoneInterface.h"
 #include "FormContactsCsvImport.h"
 #include "FormLuaScript.h"
@@ -57,7 +49,16 @@
 #include "Translate.h"
 #include "common\Utilities.h"
 #include "common\ScopedLock.h"
+#include "common\TelecomUtils.h"
+#include "common\Unicode.h"
+#include "common\OS.h"
+#include "common\TrayIcon.h"
+#include "common\base64.h"
+
 #include <Clipbrd.hpp>
+#include <assert.h>
+#include <stdio.h>
+#include <math.h>
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)

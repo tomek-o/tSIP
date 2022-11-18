@@ -2,7 +2,7 @@
 #pragma hdrstop
 
 #include "TrayIcon.h"
-#include "Log.h"
+//#include "Log.h"
 #pragma package(smart_init)
 
 #define WM_TRAYICON WM_USER + 1
