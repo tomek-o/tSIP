@@ -348,7 +348,6 @@ object frmMain: TfrmMain
     end
     object miSettings: TMenuItem
       Caption = 'Configuration'
-      Enabled = False
       object miCommonSettings: TMenuItem
         Action = actShowSettings
       end

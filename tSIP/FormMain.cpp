@@ -569,7 +569,6 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	if (appSettings.uaConf != prev.uaConf)
 	{
 		SetStatus("Restarting UA...");
-		miSettings->Enabled = false;		
 		Ua::Instance().Restart();
 	}
 	if (appSettings.uaConf.logMessages != prev.uaConf.logMessages ||
@@ -1415,7 +1414,6 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				pollCnt = 0;
 				SetStatus("Restarting UA (after init error)...");
-				miSettings->Enabled = false;
 				Ua::Instance().Restart();
 			}
 		}
@@ -1899,7 +1897,6 @@ void TfrmMain::PollCallbackQueue(void)
 			switch(cb.app_state)
 			{
 			case Callback::APP_INIT_FAILED:
-				miSettings->Enabled = true;
 				SetStatus("Failed to init application");
 				SetErrorIcon(true);
 				HandleCommandLine();
@@ -1910,7 +1907,6 @@ void TfrmMain::PollCallbackQueue(void)
 				HandleCommandLine();
 				break;
 			case Callback::APP_STARTED:
-				miSettings->Enabled = true;
 				UaCustomRequests::Clear();
 				SetErrorIcon(false);
 				text = "Initialized";
@@ -2695,7 +2691,6 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	case Button::UA_RESTART:
 		SetStatus("Restarting UA (manual restart)...");
-		miSettings->Enabled = false;
 		Ua::Instance().Restart();
 		break;
 	case Button::AUTO_ANSWER_DND:
