@@ -139,58 +139,10 @@ void __fastcall TfrmTextEditor::WMNotify(TMessage &Message)
 
 		default:
 		break;
-        }
+		}
 	}
 
-    TForm::Dispatch(&Message);
-#if 0
-SCN_STYLENEEDED:
-    doSciStyleNeeded(scn^.position);
-SCN_CHARADDED:
-    doSciCharAdded(scn^.ch);
-SCN_SAVEPOINTREACHED:
-    doSciSavePointReached;
-SCN_SAVEPOINTLEFT:
-    doSciSavePointLeft;
-SCN_MODIFYATTEMPTRO:
-    doSciModifyAttemptRO;
-SCN_DOUBLECLICK:
-    doSciDoubleClick;
-SCN_UPDATEUI:
-    doSciUpdateUI;
-SCN_MODIFIED:
-    doSciModified(scn^.position, scn^.modificationType, scn^.text, scn^.length, scn^.linesAdded, scn^.line, scn^.foldLevelNow, scn^.foldLevelPrev);
-SCN_MACRORECORD:
-    doSciMacroRecord(scn^.message, scn^.wParam, scn^.lParam);
-SCN_MARGINCLICK:
-    doSciMarginClick(scn^.modifiers, scn^.position, scn^.margin);
-SCN_NEEDSHOWN:
-    doSciNeedShown(scn^.position, scn^.length);
-SCN_PAINTED:
-    doSciPainted;
-SCN_USERLISTSELECTION:
-    doSciUserListSelection(scn^.listType, scn^.text);
-SCN_DWELLSTART:
-    doSciDwellStart(scn^.position,scn^.x,scn^.y);
-SCN_DWELLEND:
-    doSciDwellEnd(scn^.position,scn^.x,scn^.y);
-SCN_ZOOM:
-    doSciZoom;
-SCN_HOTSPOTCLICK:
-    doSciHotSpotClick(scn^.modifiers, scn^.position);
-SCN_HOTSPOTDOUBLECLICK:
-    doSciHotSpotDoubleClick(scn^.modifiers, scn^.position);
-SCN_CALLTIPCLICK:
-	doSciCallTipClick(scn^.position);
-SCN_AUTOCSELECTION:
-	doSciAutoCSelection(scn^.text);
-SCN_INDICATORCLICK:
-    doSciIndicatorClick(scn^.modifiers, scn^.position);
-SCN_INDICATORRELEASE:
-	doSciIndicatorRelease(scn^.modifiers, scn^.position);
-SCN_AUTOCCANCELLED:
-    doSciAutoCCancelled;
-#endif
+	TForm::Dispatch(&Message);
 }
 
 void TfrmTextEditor::UpdateMarginWidth(bool force)
