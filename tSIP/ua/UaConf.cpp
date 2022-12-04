@@ -30,6 +30,16 @@ bool UaConf::AudioAgc::operator==(const UaConf::AudioAgc& right) const {
 	);
 }
 
+bool UaConf::AudioGate::operator==(const UaConf::AudioGate& right) const {
+	return (
+		enabled == right.enabled &&
+		closeThreshold == right.closeThreshold &&
+		holdMs == right.holdMs &&
+		MathUtils::AlmostEqual(attackRate, right.attackRate) &&
+		MathUtils::AlmostEqual(releaseRate, right.releaseRate)
+	);
+}
+
 bool UaConf::AudioPortaudio::operator==(const UaConf::AudioPortaudio& right) const {
 	return (
 		MathUtils::AlmostEqual(inSuggestedLatency, right.inSuggestedLatency) &&
@@ -126,6 +136,15 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		jv.getDouble("maxGain", audioAgcRx.maxGain);
 		jv.getDouble("attackRate", audioAgcRx.attackRate);
 		jv.getDouble("releaseRate", audioAgcRx.releaseRate);
+	}
+
+	{
+		const Json::Value &jv = uaConfJson["audioGateTx"];
+		jv.getBool("enabled", audioGateTx.enabled);
+		jv.getUInt("closeThreshold", audioGateTx.closeThreshold);
+		jv.getUInt("holdMs", audioGateTx.holdMs);
+		jv.getDouble("attackRate", audioGateTx.attackRate);
+		jv.getDouble("releaseRate", audioGateTx.releaseRate);
 	}
 
 	uaConfJson.getBool("loopRingWithoutSilence", loopRingWithoutSilence);
@@ -295,6 +314,16 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		jv["attackRate"] = audioAgcRx.attackRate;
 		jv["releaseRate"] = audioAgcRx.releaseRate;
 	}
+
+	{
+		Json::Value &jv = uaConfJson["audioGateTx"];
+		jv["enabled"] = audioGateTx.enabled;
+		jv["closeThreshold"] = audioGateTx.closeThreshold;
+		jv["holdMs"] = audioGateTx.holdMs;
+		jv["attackRate"] = audioGateTx.attackRate;
+		jv["releaseRate"] = audioGateTx.releaseRate;
+	}
+
 
 	uaConfJson["loopRingWithoutSilence"] = loopRingWithoutSilence;
 	uaConfJson["startAudioSourceAtCallStart"] = startAudioSourceAtCallStart;

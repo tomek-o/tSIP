@@ -631,6 +631,12 @@ static int app_init(void)
 	cfg->audio.agc_rx.attack_rate = appSettings.uaConf.audioAgcRx.attackRate;
 	cfg->audio.agc_rx.release_rate = appSettings.uaConf.audioAgcRx.releaseRate;
 
+	cfg->audio.gate_tx.enabled = appSettings.uaConf.audioGateTx.enabled;
+	cfg->audio.gate_tx.close_threshold = appSettings.uaConf.audioGateTx.closeThreshold;
+	cfg->audio.gate_tx.hold_ms = appSettings.uaConf.audioGateTx.holdMs;
+	cfg->audio.gate_tx.attack_rate = appSettings.uaConf.audioGateTx.attackRate;
+	cfg->audio.gate_tx.release_rate = appSettings.uaConf.audioGateTx.releaseRate;
+
 	cfg->audio.portaudioInSuggestedLatency = appSettings.uaConf.audioPortaudio.inSuggestedLatency;
 	cfg->audio.portaudioOutSuggestedLatency = appSettings.uaConf.audioPortaudio.outSuggestedLatency;
 

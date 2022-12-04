@@ -486,6 +486,15 @@ __published:	// IDE-managed Components
 	TLabel *lblRecordingBitrate;
 	TEdit *edRecordingBitrate;
 	TCheckBox *chbHistoryShowRecordFileInHint;
+	TCheckBox *chbAudioTxGateEnabled;
+	TLabel *lblAudioTxGateCloseThreshold;
+	TLabel *lblAudioTxGateHoldMs;
+	TLabel *lblAudioTxGateAttackRate;
+	TLabel *lblAudioTxGateReleaseRate;
+	TEdit *edAudioTxGateReleaseRate;
+	TEdit *edAudioTxGateAttackRate;
+	TEdit *edAudioTxGateHoldMs;
+	TEdit *edAudioTxGateCloseThreshold;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsHistory
+    ActivePage = tsAudioProcessing
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1992,6 +1992,8 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
+      ExplicitLeft = 6
+      ExplicitTop = 20
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -2007,53 +2009,81 @@ object frmSettings: TfrmSettings
         Caption = 'WebRTC AEC'
       end
       object Label1: TLabel
-        Left = 82
+        Left = 103
         Top = 37
         Width = 101
         Height = 13
         Caption = 'ms in snd card buffer'
       end
       object lblWebRtcAecClockSkew: TLabel
-        Left = 290
+        Left = 321
         Top = 37
         Width = 50
         Height = 13
         Caption = 'clock skew'
       end
       object lblAudioPreprocessingTxAgcLevel: TLabel
-        Left = 135
-        Top = 125
+        Left = 176
+        Top = 114
         Width = 22
         Height = 13
         Caption = 'level'
       end
       object lblAudioAgcRxLevel: TLabel
         Left = 18
-        Top = 239
+        Top = 333
         Width = 55
         Height = 13
         Caption = 'target level'
       end
       object lblAudioAgcRxMaxGain: TLabel
         Left = 18
-        Top = 261
+        Top = 355
         Width = 43
         Height = 13
         Caption = 'max gain'
       end
       object lblAudioAgcRxAttackRate: TLabel
         Left = 18
-        Top = 283
+        Top = 377
         Width = 53
         Height = 13
         Caption = 'attack rate'
       end
       object lblAudioAgcRxReleaseRate: TLabel
         Left = 18
-        Top = 305
+        Top = 399
         Width = 58
         Height = 13
         Caption = 'release rate'
+      end
+      object lblAudioTxGateCloseThreshold: TLabel
+        Left = 18
+        Top = 213
+        Width = 72
+        Height = 13
+        Caption = 'close threshold'
+      end
+      object lblAudioTxGateHoldMs: TLabel
+        Left = 18
+        Top = 235
+        Width = 67
+        Height = 13
+        Caption = 'hold time (ms)'
+      end
+      object lblAudioTxGateAttackRate: TLabel
+        Left = 18
+        Top = 257
+        Width = 183
+        Height = 13
+        Caption = 'attack rate (gain increase per second)'
+      end
+      object lblAudioTxGateReleaseRate: TLabel
+        Left = 18
+        Top = 279
+        Width = 192
+        Height = 13
+        Caption = 'release rate (gain decrease per second)'
       end
       object cbAec: TComboBox
         Left = 122
@@ -2071,14 +2101,14 @@ object frmSettings: TfrmSettings
           'WebRTC')
       end
       object edWebRtcAecMsInSndCardBuf: TEdit
-        Left = 190
+        Left = 216
         Top = 34
         Width = 75
         Height = 21
         TabOrder = 1
       end
       object edWebRtcAecSkew: TEdit
-        Left = 346
+        Left = 387
         Top = 34
         Width = 75
         Height = 21
@@ -2086,7 +2116,7 @@ object frmSettings: TfrmSettings
       end
       object chbAudioPreprocessingTxEnabled: TCheckBox
         Left = 2
-        Top = 82
+        Top = 71
         Width = 494
         Height = 17
         Caption = 
@@ -2097,7 +2127,7 @@ object frmSettings: TfrmSettings
       end
       object chbAudioPreprocessingTxDenoiseEnabled: TCheckBox
         Left = 18
-        Top = 103
+        Top = 92
         Width = 494
         Height = 17
         Caption = 'Enable denoise'
@@ -2105,22 +2135,22 @@ object frmSettings: TfrmSettings
       end
       object chbAudioPreprocessingTxAgcEnabled: TCheckBox
         Left = 18
-        Top = 124
+        Top = 113
         Width = 105
         Height = 17
         Caption = 'Enable AGC'
         TabOrder = 5
       end
       object edAudioPreprocessingTxAgcLevel: TEdit
-        Left = 175
-        Top = 122
+        Left = 216
+        Top = 111
         Width = 49
         Height = 21
         TabOrder = 6
       end
       object chbAudioPreprocessingTxVadEnabled: TCheckBox
         Left = 18
-        Top = 145
+        Top = 134
         Width = 105
         Height = 17
         Caption = 'Enable VAD'
@@ -2128,7 +2158,7 @@ object frmSettings: TfrmSettings
       end
       object chbAudioPreprocessingTxDereverbEnabled: TCheckBox
         Left = 18
-        Top = 166
+        Top = 155
         Width = 105
         Height = 17
         Caption = 'Enable dereverb'
@@ -2136,39 +2166,75 @@ object frmSettings: TfrmSettings
       end
       object chbAudioRxAgcEnabled: TCheckBox
         Left = 3
-        Top = 216
+        Top = 310
         Width = 262
         Height = 17
         Caption = 'Enable AGC for RX (received audio) direction'
         TabOrder = 9
       end
       object edAudioRxAgcTarget: TEdit
-        Left = 98
-        Top = 236
+        Left = 216
+        Top = 330
         Width = 49
         Height = 21
         TabOrder = 10
       end
       object edAudioRxAgcMaxGain: TEdit
-        Left = 98
-        Top = 258
+        Left = 216
+        Top = 352
         Width = 49
         Height = 21
         TabOrder = 11
       end
       object edAudioRxAgcAttackRate: TEdit
-        Left = 98
-        Top = 280
+        Left = 216
+        Top = 374
         Width = 49
         Height = 21
         TabOrder = 12
       end
       object edAudioRxAgcReleaseRate: TEdit
-        Left = 98
-        Top = 302
+        Left = 216
+        Top = 396
         Width = 49
         Height = 21
         TabOrder = 13
+      end
+      object chbAudioTxGateEnabled: TCheckBox
+        Left = 3
+        Top = 190
+        Width = 398
+        Height = 17
+        Caption = 'Enable audio gate microphone path (transmitted audio) direction'
+        TabOrder = 14
+      end
+      object edAudioTxGateReleaseRate: TEdit
+        Left = 216
+        Top = 276
+        Width = 49
+        Height = 21
+        TabOrder = 15
+      end
+      object edAudioTxGateAttackRate: TEdit
+        Left = 216
+        Top = 254
+        Width = 49
+        Height = 21
+        TabOrder = 16
+      end
+      object edAudioTxGateHoldMs: TEdit
+        Left = 216
+        Top = 232
+        Width = 49
+        Height = 21
+        TabOrder = 17
+      end
+      object edAudioTxGateCloseThreshold: TEdit
+        Left = 216
+        Top = 210
+        Width = 49
+        Height = 21
+        TabOrder = 18
       end
     end
     object tsRecording: TTabSheet

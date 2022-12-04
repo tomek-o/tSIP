@@ -4,6 +4,7 @@
 #include <baresip.h>
 
 #include "agc.h"
+#include "gate.h"
 
 
 #define DEBUG_MODULE "softvol"
@@ -23,6 +24,7 @@ struct softvol_st {
 struct enc_st {
 	struct aufilt_enc_st af;  /* base class */
 	struct softvol_st *st;
+	struct gate_st gate_state;
 };
 
 struct dec_st {
@@ -94,6 +96,8 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 	struct enc_st *st;
 	int err;
 
+	struct config *cfg = conf_config();
+
 	if (!stp || !ctx || !af || !prm)
 		return EINVAL;
 
@@ -103,6 +107,8 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 	st = mem_zalloc(sizeof(*st), enc_destructor);
 	if (!st)
 		return ENOMEM;
+
+	gate_reset(&st->gate_state, prm->srate);
 
 	err = softvol_alloc(&st->st, ctx, prm);
 
@@ -164,7 +170,14 @@ static int encode(struct aufilt_enc_st *st, int16_t *sampv, size_t *sampc)
 	struct softvol_st *wr = est->st;
 	int status;
 	unsigned int i;
-	int softvol_tx = (int)(conf_config()->audio.softvol_tx);
+
+	struct config *cfg = conf_config();
+	int softvol_tx = (int)(cfg->audio.softvol_tx);
+	
+	if (cfg->audio.gate_tx.enabled) {
+		gate_process(&est->gate_state, sampv, *sampc,
+			cfg->audio.gate_tx.close_threshold, cfg->audio.gate_tx.hold_ms, cfg->audio.gate_tx.attack_rate, cfg->audio.gate_tx.release_rate);
+	}
 
 	(void)wr;
 
@@ -182,13 +195,15 @@ static int decode(struct aufilt_dec_st *st, int16_t *sampv, size_t *sampc)
 	struct softvol_st *softvol = dst->st;
 	int status = 0;
 	unsigned int i;
-	
-	int softvol_rx = (int)(conf_config()->audio.softvol_rx);
-	bool agc_enabled = conf_config()->audio.agc_rx.enabled;
-	uint16_t agc_target = conf_config()->audio.agc_rx.target;
-	float max_gain = conf_config()->audio.agc_rx.max_gain;
-	float attack_rate = conf_config()->audio.agc_rx.attack_rate;
-	float release_rate = conf_config()->audio.agc_rx.release_rate;
+
+	struct config *cfg = conf_config();
+
+	int softvol_rx = (int)(cfg->audio.softvol_rx);
+	bool agc_enabled = cfg->audio.agc_rx.enabled;
+	uint16_t agc_target = cfg->audio.agc_rx.target;
+	float max_gain = cfg->audio.agc_rx.max_gain;
+	float attack_rate = cfg->audio.agc_rx.attack_rate;
+	float release_rate = cfg->audio.agc_rx.release_rate;
 
 	/* Looking for peak values in 100 ms intervals */
 	for (i=0; i<*sampc; i++) {
@@ -207,7 +222,7 @@ static int decode(struct aufilt_dec_st *st, int16_t *sampv, size_t *sampc)
 	}
 
 	if (agc_enabled && agc_target != 0) {
-    	agc_process(&dst->agc_state, sampv, *sampc, agc_target, max_gain, attack_rate, release_rate);
+		agc_process(&dst->agc_state, sampv, *sampc, agc_target, max_gain, attack_rate, release_rate);
 	}
 
 	for (i=0; i<*sampc; i++) {

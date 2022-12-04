@@ -49,6 +49,7 @@ static struct config core_config = {
 		AUDIO_MODE_POLL,
 		128, 128,					// softvol tx, rx, \sa SOFTVOL_BASE
 		{ false, 12000, 6.0f, 0.01f, 0.01f },	// agc_rx: enabled, target, max gain, attack rate, release rate
+		{ false, 300, 1000, 20.0f, 1.0f },		// gate_tx: enabled, threshold_close, hold_ms, attack rate, release rate 
 		0.1, 0.1,					// portaudio suggested latency: in, out
         false						// loop_ring_without_silence
 	},

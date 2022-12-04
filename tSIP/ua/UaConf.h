@@ -252,9 +252,28 @@ public:
 		{}
 		bool operator==(const AudioAgc& right) const;
 		bool operator!=(const AudioAgc& right) const {
-        	return !(*this == right);
+			return !(*this == right);
 		}
 	} audioAgcRx;
+
+	struct AudioGate {
+		bool enabled;				/**< on/off */
+		unsigned int closeThreshold;	/**< raw sample value */
+		unsigned int holdMs;		/**< how long gate should be opened if signal is below close threshold */
+		double attackRate;			/**< gain increase ratio when opening: gain added per second; example: 10 => full gain in 100 ms */
+		double releaseRate;			/**< gain decreasing ration when closing: gain substracted per second */
+		AudioGate (void):
+			enabled(false),
+			closeThreshold(1000),	/**< of 32767 */
+			holdMs(1000),
+			attackRate(20.0),
+			releaseRate(1.0)
+		{}
+		bool operator==(const AudioGate& right) const;
+		bool operator!=(const AudioGate& right) const {
+			return !(*this == right);
+		}
+	} audioGateTx;
 
 	bool loopRingWithoutSilence;	
 
@@ -652,6 +671,8 @@ public:
 		if (recording != right.recording)
 			return false;
 		if (audioAgcRx != right.audioAgcRx)
+			return false;
+		if (audioGateTx != right.audioGateTx)
 			return false;
 		if (audioPortaudio != right.audioPortaudio)
 			return false;

@@ -433,6 +433,8 @@
         <FILE FILENAME="..\..\modules\srtp\sdes.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sdes" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\srtp\sdes.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\srtp\srtp_srtp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="srtp_srtp" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\softvol\gate.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="gate" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\softvol\gate.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

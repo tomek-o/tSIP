@@ -438,6 +438,15 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbAudioPreprocessingTxDereverbEnabled->Checked = tmpSettings.uaConf.audioPreprocTx.dereverbEnabled;
 	edAudioPreprocessingTxAgcLevel->Text = tmpSettings.uaConf.audioPreprocTx.agcLevel;
 
+	{
+		const UaConf::AudioGate &gate = tmpSettings.uaConf.audioGateTx;
+		chbAudioTxGateEnabled->Checked = gate.enabled;
+		edAudioTxGateCloseThreshold->Text = gate.closeThreshold;
+		edAudioTxGateHoldMs->Text = gate.holdMs;
+		edAudioTxGateAttackRate->Text = gate.attackRate;
+		edAudioTxGateReleaseRate->Text = gate.releaseRate;
+	}
+
 	chbAudioRxAgcEnabled->Checked = tmpSettings.uaConf.audioAgcRx.enabled;
 	edAudioRxAgcTarget->Text = tmpSettings.uaConf.audioAgcRx.target;
 	edAudioRxAgcMaxGain->Text = tmpSettings.uaConf.audioAgcRx.maxGain;
@@ -844,6 +853,15 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.audioPreprocTx.vadEnabled = chbAudioPreprocessingTxVadEnabled->Checked;
 	tmpSettings.uaConf.audioPreprocTx.dereverbEnabled = chbAudioPreprocessingTxDereverbEnabled->Checked;
 	tmpSettings.uaConf.audioPreprocTx.agcLevel = StrToIntDef(edAudioPreprocessingTxAgcLevel->Text, UaConf::AudioPreproc::AGC_LEVEL_DEFAULT);
+
+	{
+		UaConf::AudioGate &gate = tmpSettings.uaConf.audioGateTx;
+		gate.enabled = chbAudioTxGateEnabled->Checked;
+		gate.closeThreshold = StrToIntDef(edAudioTxGateCloseThreshold->Text, gate.closeThreshold);
+		gate.holdMs = StrToIntDef(edAudioTxGateHoldMs->Text, gate.holdMs);
+		gate.attackRate = StrToFloatDef(edAudioTxGateAttackRate->Text, gate.attackRate);
+		gate.releaseRate = StrToFloatDef(edAudioTxGateReleaseRate->Text, gate.releaseRate);
+	}
 
 	tmpSettings.uaConf.audioAgcRx.enabled = chbAudioRxAgcEnabled->Checked;
 	tmpSettings.uaConf.audioAgcRx.target = StrToIntDef(edAudioRxAgcTarget->Text, tmpSettings.uaConf.audioAgcRx.target);
