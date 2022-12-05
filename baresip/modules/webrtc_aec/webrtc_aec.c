@@ -88,12 +88,17 @@ static int aec_alloc(struct webrtc_st **stp, void **ctx, struct aufilt_prm *prm)
 	if (!stp || !ctx || !prm)
 		return EINVAL;
 
+	if (prm->srate != 8000 && prm->srate != 16000) {
+		DEBUG_WARNING("WebRTC AEC disabled: sampling = %u sps, only 8 ksps and 16 ksps is supported\n", prm->srate);
+		return EINVAL;
+	}
+
 	{
 		int nsamp = prm->ch * prm->frame_size;
 		if (nsamp % 80) {
-			DEBUG_WARNING("WebRTC AEC disabled - unsupported frame length = %u\n", nsamp);
-			return EFAULT;        
-        }
+			DEBUG_WARNING("WebRTC AEC disabled: unsupported frame length = %u\n", nsamp);
+			return EINVAL;
+		}
     }
 
 	if (*ctx) {
