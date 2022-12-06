@@ -18,7 +18,7 @@ void gate_reset(struct gate_st *st, unsigned int srate) {
 	st->srate = srate;
 }
 
-void gate_process(struct gate_st *st, int16_t *sampv, size_t sampc, uint16_t close_threshold, unsigned int hold_ms, float attack_rate, float release_rate) {
+void gate_process(struct gate_st *st, int16_t *sampv, size_t sampc, uint16_t close_threshold, unsigned int hold_ms, float attack_ms, float release_ms) {
 	unsigned int i;
 	unsigned int max_hold_samples;
 	float attack_per_sample, release_per_sample;
@@ -27,8 +27,16 @@ void gate_process(struct gate_st *st, int16_t *sampv, size_t sampc, uint16_t clo
 		return;
 
 	max_hold_samples = hold_ms * st->srate / 1000;
-	attack_per_sample = attack_rate / st->srate;
-	release_per_sample = release_rate / st->srate;
+	if (attack_ms == 0) {
+		attack_per_sample = 1.0f;
+	} else {
+		attack_per_sample = 1000.0f / (attack_ms * st->srate);
+	}
+	if (release_ms == 0) {
+		release_per_sample = 1.0f;
+	} else {
+		release_per_sample = 1000.0f / (release_ms * st->srate);
+	}
 
 	for (i = 0; i < sampc; i++) {
 		float val = sampv[i];

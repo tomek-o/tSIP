@@ -176,7 +176,7 @@ static int encode(struct aufilt_enc_st *st, int16_t *sampv, size_t *sampc)
 	
 	if (cfg->audio.gate_tx.enabled) {
 		gate_process(&est->gate_state, sampv, *sampc,
-			cfg->audio.gate_tx.close_threshold, cfg->audio.gate_tx.hold_ms, cfg->audio.gate_tx.attack_rate, cfg->audio.gate_tx.release_rate);
+			cfg->audio.gate_tx.close_threshold, cfg->audio.gate_tx.hold_ms, cfg->audio.gate_tx.attack_ms, cfg->audio.gate_tx.release_ms);
 	}
 
 	(void)wr;

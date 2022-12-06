@@ -208,8 +208,8 @@ struct config {
 			bool enabled;				/**< on/off */
 			uint16_t close_threshold;	/**< raw sample value */
 			unsigned int hold_ms;		/**< how long gate should be opened if signal is below close threshold */
-			float attack_rate;			/**< gain increase ratio when opening: gain added per second; example: 10 => full gain in 100 ms */
-			float release_rate;			/**< gain decreasing ration when closing: gain substracted per second */
+			float attack_ms;			/**< gain increase ratio when opening: gain added per second; example: 10 => full gain in 100 ms */
+			float release_ms;			/**< gain decreasing ration when closing: gain substracted per second */
 		} gate_tx;
 		double portaudioInSuggestedLatency;
 		double portaudioOutSuggestedLatency;

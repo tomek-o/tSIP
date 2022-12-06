@@ -489,10 +489,10 @@ __published:	// IDE-managed Components
 	TCheckBox *chbAudioTxGateEnabled;
 	TLabel *lblAudioTxGateCloseThreshold;
 	TLabel *lblAudioTxGateHoldMs;
-	TLabel *lblAudioTxGateAttackRate;
-	TLabel *lblAudioTxGateReleaseRate;
-	TEdit *edAudioTxGateReleaseRate;
-	TEdit *edAudioTxGateAttackRate;
+	TLabel *lblAudioTxGateAttackMs;
+	TLabel *lblAudioTxGateReleaseMs;
+	TEdit *edAudioTxGateReleaseMs;
+	TEdit *edAudioTxGateAttackMs;
 	TEdit *edAudioTxGateHoldMs;
 	TEdit *edAudioTxGateCloseThreshold;
 	void __fastcall FormShow(TObject *Sender);

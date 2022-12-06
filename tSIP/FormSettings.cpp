@@ -443,8 +443,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		chbAudioTxGateEnabled->Checked = gate.enabled;
 		edAudioTxGateCloseThreshold->Text = gate.closeThreshold;
 		edAudioTxGateHoldMs->Text = gate.holdMs;
-		edAudioTxGateAttackRate->Text = gate.attackRate;
-		edAudioTxGateReleaseRate->Text = gate.releaseRate;
+		edAudioTxGateAttackMs->Text = gate.attackMs;
+		edAudioTxGateReleaseMs->Text = gate.releaseMs;
 	}
 
 	chbAudioRxAgcEnabled->Checked = tmpSettings.uaConf.audioAgcRx.enabled;
@@ -859,8 +859,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		gate.enabled = chbAudioTxGateEnabled->Checked;
 		gate.closeThreshold = StrToIntDef(edAudioTxGateCloseThreshold->Text, gate.closeThreshold);
 		gate.holdMs = StrToIntDef(edAudioTxGateHoldMs->Text, gate.holdMs);
-		gate.attackRate = StrToFloatDef(edAudioTxGateAttackRate->Text, gate.attackRate);
-		gate.releaseRate = StrToFloatDef(edAudioTxGateReleaseRate->Text, gate.releaseRate);
+		gate.attackMs = StrToIntDef(edAudioTxGateAttackMs->Text, gate.attackMs);
+		gate.releaseMs = StrToIntDef(edAudioTxGateReleaseMs->Text, gate.releaseMs);
 	}
 
 	tmpSettings.uaConf.audioAgcRx.enabled = chbAudioRxAgcEnabled->Checked;

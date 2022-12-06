@@ -257,17 +257,17 @@ public:
 	} audioAgcRx;
 
 	struct AudioGate {
-		bool enabled;				/**< on/off */
+		bool enabled;					/**< on/off */
 		unsigned int closeThreshold;	/**< raw sample value */
-		unsigned int holdMs;		/**< how long gate should be opened if signal is below close threshold */
-		double attackRate;			/**< gain increase ratio when opening: gain added per second; example: 10 => full gain in 100 ms */
-		double releaseRate;			/**< gain decreasing ration when closing: gain substracted per second */
+		unsigned int holdMs;			/**< how long gate should be opened if signal is below close threshold */
+		unsigned int attackMs;			/**< time to gate fully open (gain 0 -> 1 transition) in ms */
+		unsigned int releaseMs;			/**< time to gete fully closed (gain 1 -> 0 transition) in ms */
 		AudioGate (void):
 			enabled(false),
-			closeThreshold(1000),	/**< of 32767 */
+			closeThreshold(1000),		/**< of 32767 */
 			holdMs(1000),
-			attackRate(20.0),
-			releaseRate(1.0)
+			attackMs(50),
+			releaseMs(1000)
 		{}
 		bool operator==(const AudioGate& right) const;
 		bool operator!=(const AudioGate& right) const {

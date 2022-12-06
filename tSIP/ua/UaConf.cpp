@@ -35,8 +35,8 @@ bool UaConf::AudioGate::operator==(const UaConf::AudioGate& right) const {
 		enabled == right.enabled &&
 		closeThreshold == right.closeThreshold &&
 		holdMs == right.holdMs &&
-		MathUtils::AlmostEqual(attackRate, right.attackRate) &&
-		MathUtils::AlmostEqual(releaseRate, right.releaseRate)
+		attackMs == right.attackMs &&
+		releaseMs == right.releaseMs
 	);
 }
 
@@ -143,8 +143,8 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		jv.getBool("enabled", audioGateTx.enabled);
 		jv.getUInt("closeThreshold", audioGateTx.closeThreshold);
 		jv.getUInt("holdMs", audioGateTx.holdMs);
-		jv.getDouble("attackRate", audioGateTx.attackRate);
-		jv.getDouble("releaseRate", audioGateTx.releaseRate);
+		jv.getUInt("attackMs", audioGateTx.attackMs);
+		jv.getUInt("releaseMs", audioGateTx.releaseMs);
 	}
 
 	uaConfJson.getBool("loopRingWithoutSilence", loopRingWithoutSilence);
@@ -320,8 +320,8 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		jv["enabled"] = audioGateTx.enabled;
 		jv["closeThreshold"] = audioGateTx.closeThreshold;
 		jv["holdMs"] = audioGateTx.holdMs;
-		jv["attackRate"] = audioGateTx.attackRate;
-		jv["releaseRate"] = audioGateTx.releaseRate;
+		jv["attackMs"] = audioGateTx.attackMs;
+		jv["releaseMs"] = audioGateTx.releaseMs;
 	}
 
 
