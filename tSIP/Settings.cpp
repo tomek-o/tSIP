@@ -145,13 +145,6 @@ Settings::_Branding::_Branding(void):
 
 Settings::Settings(void)
 {
-	int maxX = GetSystemMetrics(SM_CXSCREEN);
-	/** \todo Ugly fixed taskbar margin */
-	int maxY = GetSystemMetrics(SM_CYSCREEN) - 32;
-	
-	frmTrayNotifier.iPosX = maxX - frmTrayNotifier.iWidth;
-	frmTrayNotifier.iPosY = maxY - frmTrayNotifier.iHeight;
-
 	Display.bUserOnlyClip = false;
 	Display.bDecodeUtfDisplayToAnsi = false;
 	Display.bUsePAssertedIdentity = false;
