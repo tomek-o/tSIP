@@ -1001,14 +1001,17 @@ Version 0.2.10
 	- few other minor changes
 
 Version 0.2.11
+	- FIXED: WebRTC AEC was not working for 16 ksps codecs
 	- added support for G.711a/u playback as audio source (aufile/aufile_mm)
 	- programmable button config window: added missing handling of aufile_mm audio source module
 	- call recording: using saturation when recording in mono mode (both sides mixed)
 	- added access to call recordings from call history context menu
 	- new setting: History / Show record file in hint
-	- separated code related to call history to own folder, refactored history settings
-	- removed _ALERT and print (internal / standard functions) from Lua Help window (that is supposed to contain only custom functions)
 	- Help / Troubleshooting: added checking if network interface specified in Settings / Network is missing
 	- updated some translations
+	- do not lock "Settings" in main menu when UA is (re)starting
+		- this was initially added to prevent PortAudio crash when using by two threads at the same time (audio devices were enumerated when settings window was opened), later this problem fixed by adding PortAudioLock
+		- this fixes missing reenabling for this menu item for APP_START_FAILED state
+	- added configurable audio (noise) gate for TX direction (from local microphone)
 */
 

@@ -95,7 +95,7 @@ ping plugin: add context menu to history
 
 DEBUG_INFO: w³¹cznik
 
-aufile: required S16LE, 1ch
+aufile: required 1ch
 
 	
 latency tracker
