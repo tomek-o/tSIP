@@ -35,7 +35,7 @@ public:
 
 		bool operator<(const Entry &other) const
 		{
-		   return description.UpperCase() < other.description.UpperCase();
+		   return (description.AnsiCompareIC(other.description) < 0);
 		}
 
 		AnsiString GetMainUri(void) const;
