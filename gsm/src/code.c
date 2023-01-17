@@ -11,6 +11,9 @@
 
 #ifdef	HAS_STDLIB_H
 #include	<stdlib.h>
+#ifdef __BORLANDC__
+#include    <string.h>
+#endif
 #else
 #	include "proto.h"
 	extern char	* memcpy P((char *, char *, int));

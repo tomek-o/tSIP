@@ -17,6 +17,10 @@
 #	define	NeedFunctionPrototypes	1
 #endif
 
+#ifdef __BORLANDC__
+#	define	NeedFunctionPrototypes	1
+#endif
+
 #ifdef	_NO_PROTO
 #	undef	NeedFunctionPrototypes
 #endif
