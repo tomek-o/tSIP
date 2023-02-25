@@ -3,16 +3,30 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
 #include <re_types.h>
 #include <re_fmt.h>
 #include <re_mem.h>
+#include <re_net.h>
 #include <re_main.h>
 #include <re_mqueue.h>
 #include "mqueue.h"
 
+#define DEBUG_MODULE "mqueue"
+#define DEBUG_LEVEL 5
+#include <re_dbg.h>
 
 #define MAGIC 0x14553399
+
+
+#if defined(WIN32) || defined(__WIN32__)
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#define close closesocket
+#endif
+
 
 /**
  * Defines a Thread-safe Message Queue
@@ -22,15 +36,15 @@
  * incoming messages from other threads. The sender thread can be any thread.
  */
 struct mqueue {
-	int pfd[2];
+	re_sock_t pfd[2];
 	mqueue_h *h;
 	void *arg;
 };
 
 struct msg {
-	int id;
 	void *data;
 	uint32_t magic;
+	int id;
 };
 
 
@@ -38,11 +52,11 @@ static void destructor(void *arg)
 {
 	struct mqueue *q = arg;
 
-	if (q->pfd[0] >= 0) {
+	if (q->pfd[0] != RE_BAD_SOCK) {
 		fd_close(q->pfd[0]);
 		(void)close(q->pfd[0]);
 	}
-	if (q->pfd[1] >= 0)
+	if (q->pfd[1] != RE_BAD_SOCK)
 		(void)close(q->pfd[1]);
 }
 
@@ -61,13 +75,12 @@ static void event_handler(int flags, void *arg)
 		return;
 
 	if (n != sizeof(msg)) {
-		(void)re_fprintf(stderr, "mqueue: short read of %d bytes\n",
-				 n);
+		DEBUG_WARNING("mqueue: short read of %d bytes\n", n);
 		return;
 	}
 
 	if (msg.magic != MAGIC) {
-		(void)re_fprintf(stderr, "mqueue: bad magic on read (%08x)\n",
+		DEBUG_WARNING("mqueue: bad magic on read (%08x)\n",
 				 msg.magic);
 		return;
 	}
@@ -100,11 +113,19 @@ int mqueue_alloc(struct mqueue **mqp, mqueue_h *h, void *arg)
 	mq->h   = h;
 	mq->arg = arg;
 
-	mq->pfd[0] = mq->pfd[1] = -1;
+	mq->pfd[0] = mq->pfd[1] = RE_BAD_SOCK;
 	if (pipe(mq->pfd) < 0) {
-		err = errno;
+		err = RE_ERRNO_SOCK;
 		goto out;
 	}
+
+	err = net_sockopt_blocking_set(mq->pfd[0], false);
+	if (err)
+		goto out;
+
+	err = net_sockopt_blocking_set(mq->pfd[1], false);
+	if (err)
+		goto out;
 
 	err = fd_listen(mq->pfd[0], FD_READ, event_handler, mq);
 	if (err)

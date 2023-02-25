@@ -37,6 +37,17 @@ struct mem {
 #endif
 };
 
+static inline struct mem *get_mem(void *p)
+{
+	return (struct mem *)(void *)(((unsigned char *)p) - sizeof(struct mem));
+}
+
+
+static inline void *get_mem_data(struct mem *m)
+{
+	return (void *)(((unsigned char *)m) + sizeof(struct mem));
+}
+
 #if MEM_DEBUG
 /* Memory debugging */
 static struct list meml = LIST_INIT;
@@ -68,6 +79,8 @@ static inline void mem_unlock(void)
 #define mem_unlock()  /**< Stub */
 
 #endif
+
+
 
 /** Update statistics for mem_zalloc() */
 #define STAT_ALLOC(m, size) \
@@ -266,6 +279,25 @@ void *mem_reallocarray(void *ptr, size_t nmemb, size_t membsize,
 	}
 }
 
+/**
+ * Set or unset a destructor for a memory object
+ *
+ * @param data Memory object
+ * @param dh   called when destroyed, NULL for remove
+ */
+void mem_destructor(void *data, mem_destroy_h *dh)
+{
+	struct mem *m;
+
+	if (!data)
+		return;
+
+	m = get_mem(data);
+
+	MAGIC_CHECK(m);
+
+	m->dh = dh;
+}
 
 /**
  * Reference a reference-counted memory object

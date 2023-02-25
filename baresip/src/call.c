@@ -60,6 +60,7 @@ struct call {
 #ifdef USE_VIDEO
 	struct video *video;      /**< Video stream                         */
 	struct bfcp *bfcp;        /**< BFCP Client                          */
+	void *vidisp_parent_handle;	/**< Parent handle for video display    */
 #endif
 	enum state state;         /**< Call state                           */
 	char *local_uri;          /**< Local SIP uri                        */
@@ -166,7 +167,7 @@ static void call_stream_start(struct call *call, bool active)
 		err |= video_decoder_set(call->video, sc->data, sc->pt,
 					 sc->rparams);
 		if (!err) {
-			err = video_start(call->video, call->peer_uri);
+			err = video_start(call->video, call->vidisp_parent_handle, call->peer_uri);
 		}
 		if (err) {
 			DEBUG_WARNING("video stream: %m\n", err);
@@ -777,7 +778,7 @@ int call_progress(struct call *call)
 }
 
 
-int call_answer(struct call *call, uint16_t scode, const char *audio_mod, const char *audio_dev)
+int call_answer(struct call *call, uint16_t scode, const char *audio_mod, const char *audio_dev, enum vidmode vmode)
 {
 	struct mbuf *desc;
 	int err;
@@ -795,7 +796,14 @@ int call_answer(struct call *call, uint16_t scode, const char *audio_mod, const 
 	if (audio_mod && audio_dev && audio_mod[0] != '\0') {
 		audio_set_rx_device(call->audio, audio_mod, audio_dev);
 	}
-
+#ifdef USE_VIDEO
+	if (vmode == VIDMODE_OFF && call->video) {
+		if (call_has_video(call)) {
+			(void)re_printf("answering call: video is disabled\n");
+		}
+		call->video = mem_deref(call->video);
+	}
+#endif
 	if (call->got_offer) {
 
 		err = update_media(call);
@@ -849,6 +857,16 @@ bool call_has_video(const struct call *call)
 #else
 	return false;
 #endif
+}
+
+int  call_set_vidisp_parent_handle(struct call *call, void *handle)
+{
+	if (!call)
+		return EINVAL;
+#ifdef USE_VIDEO
+	call->vidisp_parent_handle = handle;
+#endif
+	return 0;
 }
 
 
@@ -1307,8 +1325,7 @@ static void sipsess_info_handler(struct sip *sip, const struct sip_msg *msg,
 		}
 	}
 #ifdef USE_VIDEO
-	else if (!pl_strcasecmp(&msg->ctype,
-				"application/media_control+xml")) {
+	else if (msg_ctype_cmp(&msg->ctyp, "application", "media_control+xml")) {
 		call_handle_info_req(call, msg);
 		(void)sip_reply(sip, msg, 200, "OK");
 	}

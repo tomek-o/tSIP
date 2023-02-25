@@ -116,7 +116,7 @@
           <property category="win32.*.win32b.bcc32" name="option.Vmd.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.Vmm.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.Vms.enabled" value="0"/>
-          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.b.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.noregistervars.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.rd.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.sysdefines.arg.1" value="_RTLDLL"/>

@@ -183,7 +183,7 @@ int  call_accept(struct call *call, struct sipsess_sock *sess_sock,
 		 const struct sip_msg *msg);
 int  call_hangup(struct call *call, uint16_t scode, const char *reason);
 int  call_progress(struct call *call);
-int  call_answer(struct call *call, uint16_t scode, const char *audio_mod, const char *audio_dev);
+int  call_answer(struct call *call, uint16_t scode, const char *audio_mod, const char *audio_dev, enum vidmode vmode);
 int  call_sdp_get(const struct call *call, struct mbuf **descp, bool offer);
 int  call_jbuf_stat(struct re_printf *pf, const struct call *call);
 int  call_info(struct re_printf *pf, const struct call *call);
@@ -349,15 +349,6 @@ bool u32mask_enabled(uint32_t mask, uint8_t bit);
  * Video Display
  */
 
-struct vidisp {
-	struct le        le;
-	const char      *name;
-	vidisp_alloc_h  *alloch;
-	vidisp_update_h *updateh;
-	vidisp_disp_h   *disph;
-	vidisp_hide_h   *hideh;
-};
-
 struct vidisp *vidisp_get(struct vidisp_st *st);
 
 
@@ -386,7 +377,7 @@ int  video_alloc(struct video **vp, const struct config *cfg,
 		 const struct mnat *mnat, struct mnat_sess *mnat_sess,
 		 const struct menc *menc, struct menc_sess *menc_sess,
 		 const char *content, const struct list *vidcodecl);
-int  video_start(struct video *v, const char *peer);
+int  video_start(struct video *v, void* vidisp_parent_handle, const char *peer);
 void video_stop(struct video *v);
 int  video_encoder_set(struct video *v, struct vidcodec *vc,
 		       int pt_tx, const char *params);

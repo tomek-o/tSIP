@@ -261,8 +261,14 @@ static int video_codecs_decode(struct account *acc, const struct pl *prm)
 
 		while (0 == csl_parse(&vcs, cname, sizeof(cname))) {
 			struct vidcodec *vc;
+			const char *cvariant = NULL;
+			char *c = strchr(cname, '/');
+			if (c) {
+				*c = '\0';
+				cvariant = c+1;
+			}
 
-			vc = (struct vidcodec *)vidcodec_find(cname, NULL);
+			vc = (struct vidcodec *)vidcodec_find(cname, cvariant);
 			if (!vc) {
 				DEBUG_WARNING("video codec not found: %s\n",
 					      cname);

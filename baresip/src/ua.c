@@ -321,7 +321,7 @@ static void call_event_handler(struct call *call, enum call_event ev,
 			break;
 
 		case ANSWERMODE_AUTO:
-			(void)call_answer(call, 200, "", "");
+			(void)call_answer(call, 200, "", "", VIDMODE_OFF);	/**< \todo video auto answer */
 			break;
 
 		case ANSWERMODE_MANUAL:
@@ -736,7 +736,7 @@ int ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuse
  */
 int ua_connect(struct ua *ua, struct call **callp,
 	       const char *from_uri, const char *uri,
-	       const char *params, enum vidmode vmode, const char* extra_hdr_lines)
+	       const char *params, enum vidmode vmode, void *vidisp_parent_handle, const char* extra_hdr_lines)
 {
 	struct call *call = NULL;
 	struct mbuf *dialbuf;
@@ -811,6 +811,8 @@ int ua_connect(struct ua *ua, struct call **callp,
 	if (err)
 		goto out;
 
+	call_set_vidisp_parent_handle(call, vidisp_parent_handle);
+
 	pl.p = (char *)dialbuf->buf;
 	pl.l = dialbuf->end;
 
@@ -868,7 +870,7 @@ void ua_hangup(struct ua *ua, struct call *call,
  *
  * @return 0 if success, otherwise errorcode
  */
-int ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const char *audio_dev)
+int ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const char *audio_dev, enum vidmode vmode, void *vidisp_parent_handle)
 {
 	if (!ua)
 		return EINVAL;
@@ -886,7 +888,9 @@ int ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const cha
 
 	ua->play = mem_deref(ua->play);
 
-	return call_answer(call, 200, audio_mod, audio_dev);
+	call_set_vidisp_parent_handle(call, vidisp_parent_handle);	
+
+	return call_answer(call, 200, audio_mod, audio_dev, vmode);
 }
 
 

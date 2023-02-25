@@ -3,7 +3,7 @@ object frmAbout: TfrmAbout
   Top = 108
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 378
+  ClientHeight = 408
   ClientWidth = 537
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,7 +22,7 @@ object frmAbout: TfrmAbout
     Left = 0
     Top = 0
     Width = 537
-    Height = 342
+    Height = 369
     BevelInner = bvRaised
     BevelOuter = bvLowered
     ParentColor = True
@@ -273,12 +273,12 @@ object frmAbout: TfrmAbout
     end
     object Copyright: TLabel
       Left = 8
-      Top = 300
-      Width = 510
+      Top = 325
+      Width = 493
       Height = 13
       Caption = 
-        'Copyright '#169' 2011 - 2023 Tomasz Ostrowski, distributed under the ' +
-        'same BSD-style license as re/rem/baresip.'
+        'Copyright '#169' 2011 - 2023 Tomasz Ostrowski, distributed under BSD ' +
+        '2-Clause License like re/rem/baresip.'
       IsControl = True
     end
     object lblVersion: TLabel
@@ -290,7 +290,7 @@ object frmAbout: TfrmAbout
     end
     object lblUrl: TLabel
       Left = 8
-      Top = 320
+      Top = 344
       Width = 186
       Height = 13
       Cursor = crHandPoint
@@ -323,7 +323,7 @@ object frmAbout: TfrmAbout
     end
     object lblBaresipLicense: TLabel
       Left = 8
-      Top = 86
+      Top = 100
       Width = 332
       Height = 13
       Caption = 
@@ -331,16 +331,16 @@ object frmAbout: TfrmAbout
         ' from '
     end
     object lblCodeguard: TLabel
-      Left = 309
-      Top = 8
+      Left = 252
+      Top = 46
       Width = 54
       Height = 13
       Caption = 'CodeGuard'
       IsControl = True
     end
     object lblCodeGuardState: TLabel
-      Left = 369
-      Top = 8
+      Left = 312
+      Top = 46
       Width = 16
       Height = 13
       Caption = 'NO'
@@ -348,16 +348,16 @@ object frmAbout: TfrmAbout
       IsControl = True
     end
     object lblDebug: TLabel
-      Left = 309
-      Top = 25
+      Left = 159
+      Top = 46
       Width = 32
       Height = 13
       Caption = 'Debug'
       IsControl = True
     end
     object lblDebugState: TLabel
-      Left = 369
-      Top = 25
+      Left = 197
+      Top = 46
       Width = 16
       Height = 13
       Caption = 'NO'
@@ -365,14 +365,14 @@ object frmAbout: TfrmAbout
     end
     object Label1: TLabel
       Left = 8
-      Top = 101
+      Top = 115
       Width = 271
       Height = 13
       Caption = 'and other projects used with respect to following licenses:'
     end
     object Label2: TLabel
       Left = 344
-      Top = 86
+      Top = 100
       Width = 127
       Height = 13
       Cursor = crHandPoint
@@ -389,7 +389,7 @@ object frmAbout: TfrmAbout
     end
     object lblExeLocation: TLabel
       Left = 159
-      Top = 46
+      Top = 65
       Width = 368
       Height = 13
       Cursor = crHandPoint
@@ -407,7 +407,7 @@ object frmAbout: TfrmAbout
     end
     object lblLocation: TLabel
       Left = 88
-      Top = 46
+      Top = 65
       Width = 41
       Height = 13
       Caption = 'Location'
@@ -415,7 +415,7 @@ object frmAbout: TfrmAbout
     end
     object lblProfileDir: TLabel
       Left = 88
-      Top = 65
+      Top = 84
       Width = 43
       Height = 13
       Caption = 'Profile dir'
@@ -423,7 +423,7 @@ object frmAbout: TfrmAbout
     end
     object lblProfileDirLocation: TLabel
       Left = 159
-      Top = 65
+      Top = 84
       Width = 368
       Height = 13
       Cursor = crHandPoint
@@ -439,11 +439,36 @@ object frmAbout: TfrmAbout
       ParentFont = False
       OnClick = lblProfileDirLocationClick
     end
+    object Label3: TLabel
+      Left = 88
+      Top = 46
+      Width = 55
+      Height = 13
+      Caption = 'Build config'
+      IsControl = True
+    end
+    object lblVideo: TLabel
+      Left = 370
+      Top = 46
+      Width = 27
+      Height = 13
+      Caption = 'Video'
+      IsControl = True
+    end
+    object lblVideoState: TLabel
+      Left = 403
+      Top = 46
+      Width = 16
+      Height = 13
+      Caption = 'NO'
+      OnClick = lblCodeGuardStateClick
+      IsControl = True
+    end
     object Memo: TMemo
       Left = 8
-      Top = 118
+      Top = 134
       Width = 519
-      Height = 174
+      Height = 185
       Color = clBtnFace
       Lines.Strings = (
         '============================================='
@@ -1892,7 +1917,253 @@ object frmAbout: TfrmAbout
           '      of your accepting any such warranty or additional liabilit' +
           'y.'
         ''
-        '   END OF TERMS AND CONDITIONS')
+        '   END OF TERMS AND CONDITIONS'
+        '   '
+        ''
+        
+          '================================================================' +
+          '============='
+        'FFmpeg (LGPL version):'
+        
+          '================================================================' +
+          '============='
+        '   '
+        
+          'This program is free software: you can redistribute it and/or mo' +
+          'dify it under the terms of the GNU Lesser '
+        
+          'General Public License as published by the Free Software Foundat' +
+          'ion, either version 3 of the License, or '
+        '(at your option) any later version.'
+        ''
+        
+          'This program is distributed in the hope that it will be useful, ' +
+          'but WITHOUT ANY WARRANTY; without '
+        
+          'even the implied warranty of MERCHANTABILITY or FITNESS FOR A PA' +
+          'RTICULAR PURPOSE.  See '
+        'the GNU General Public License for more details.'
+        ''
+        
+          'You should have received a copy of the GNU General Public Licens' +
+          'e along with this program.  If not, see '
+        '<http://www.gnu.org/licenses/>.'
+        ''
+        ''
+        
+          '================================================================' +
+          '============='
+        'SDL:'
+        
+          '================================================================' +
+          '============='
+        ''
+        'Simple DirectMedia Layer'
+        'Copyright (C) 1997-2020 Sam Lantinga <slouken@libsdl.org>'
+        ''
+        
+          'This software is provided '#39'as-is'#39', without any express or implie' +
+          'd warranty.  In no event will the authors be '
+        
+          'held liable for any damages arising from the use of this softwar' +
+          'e.'
+        ''
+        
+          'Permission is granted to anyone to use this software for any pur' +
+          'pose, including commercial applications, '
+        
+          'and to alter it and redistribute it freely, subject to the follo' +
+          'wing restrictions:'
+        ''
+        
+          '1. The origin of this software must not be misrepresented; you m' +
+          'ust not claim that you wrote the original '
+        
+          'software. If you use this software in a product, an acknowledgme' +
+          'nt in the product documentation would '
+        'be appreciated but is not required. '
+        
+          '2. Altered source versions must be plainly marked as such, and m' +
+          'ust not be misrepresented as being the '
+        'original software.'
+        
+          '3. This notice may not be removed or altered from any source dis' +
+          'tribution.'
+        ''
+        
+          '================================================================' +
+          '============='
+        'http://www.openh264.org/BINARY_LICENSE.txt'
+        
+          '================================================================' +
+          '============='
+        '-------------------------------------------------------'
+        'About The Cisco-Provided Binary of OpenH264 Video Codec'
+        '-------------------------------------------------------'
+        ''
+        
+          'Cisco provides this program under the terms of the BSD license. ' +
+          ' '
+        ''
+        
+          'Additionally, this binary is licensed under Cisco'#8217's AVC/H.264 Pa' +
+          'tent Portfolio License from MPEG LA, at '
+        
+          'no cost to you, provided that the requirements and conditions sh' +
+          'own below in the AVC/H.264 Patent '
+        'Portfolio sections are met.  '
+        ''
+        
+          'As with all AVC/H.264 codecs, you may also obtain your own paten' +
+          't license from MPEG LA or from the '
+        
+          'individual patent owners, or proceed at your own risk.  Your rig' +
+          'hts from Cisco under the BSD license are '
+        'not affected by this choice.  '
+        ''
+        
+          'For more information on the OpenH264 binary licensing, please se' +
+          'e the OpenH264 FAQ found at '
+        'http://www.openh264.org/faq.html#binary '
+        ''
+        
+          'A corresponding source code to this binary program is available ' +
+          'under the same BSD terms, which can be '
+        'found at http://www.openh264.org'
+        ''
+        '-----------'
+        'BSD License'
+        '-----------'
+        ''
+        'Copyright '#169' 2014 Cisco Systems, Inc.'
+        ''
+        'All rights reserved.'
+        ''
+        
+          'Redistribution and use in source and binary forms, with or witho' +
+          'ut modification, are permitted provided that '
+        'the following conditions are met:'
+        ''
+        
+          '1. Redistributions of source code must retain the above copyrigh' +
+          't notice, this list of conditions and the '
+        'following disclaimer.'
+        ''
+        
+          '2. Redistributions in binary form must reproduce the above copyr' +
+          'ight notice, this list of conditions and the '
+        
+          'following disclaimer in the documentation and/or other materials' +
+          ' provided with the distribution.'
+        ''
+        
+          'THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUT' +
+          'ORS '#8220'AS IS'#8221' '
+        
+          'AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITE' +
+          'D TO, THE '
+        
+          'IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICUL' +
+          'AR PURPOSE '
+        
+          'ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTR' +
+          'IBUTORS BE '
+        
+          'LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,' +
+          ' OR CONSEQUENTIAL '
+        
+          'DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUT' +
+          'E GOODS OR '
+        
+          'SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTIO' +
+          'N) HOWEVER '
+        
+          'CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRI' +
+          'CT LIABILITY, OR '
+        
+          'TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT ' +
+          'OF THE USE OF '
+        
+          'THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE' +
+          '.'
+        ''
+        '-----------------------------------------'
+        'AVC/H.264 Patent Portfolio License Notice'
+        '-----------------------------------------'
+        ''
+        
+          'The binary form of this Software is distributed by Cisco under t' +
+          'he AVC/H.264 Patent Portfolio License from '
+        
+          'MPEG LA, and is subject to the following requirements, which may' +
+          ' or may not be applicable to your use of '
+        'this software: '
+        ''
+        
+          'THIS PRODUCT IS LICENSED UNDER THE AVC PATENT PORTFOLIO LICENSE ' +
+          'FOR THE '
+        
+          'PERSONAL USE OF A CONSUMER OR OTHER USES IN WHICH IT DOES NOT RE' +
+          'CEIVE '
+        
+          'REMUNERATION TO (i) ENCODE VIDEO IN COMPLIANCE WITH THE AVC STAN' +
+          'DARD ('#8220'AVC '
+        
+          'VIDEO'#8221') AND/OR (ii) DECODE AVC VIDEO THAT WAS ENCODED BY A CONSU' +
+          'MER ENGAGED IN A '
+        
+          'PERSONAL ACTIVITY AND/OR WAS OBTAINED FROM A VIDEO PROVIDER LICE' +
+          'NSED TO '
+        
+          'PROVIDE AVC VIDEO.  NO LICENSE IS GRANTED OR SHALL BE IMPLIED FO' +
+          'R ANY OTHER USE.  '
+        'ADDITIONAL INFORMATION MAY BE OBTAINED FROM MPEG LA, L.L.C. SEE '
+        'HTTP://WWW.MPEGLA.COM'
+        ''
+        
+          'Accordingly, please be advised that content providers and broadc' +
+          'asters using AVC/H.264 in their service '
+        
+          'may be required to obtain a separate use license from MPEG LA, r' +
+          'eferred to as "(b) sublicenses" in the '
+        'SUMMARY OF AVC/H.264 LICENSE TERMS from MPEG LA found at '
+        'http://www.openh264.org/mpegla'
+        ''
+        '---------------------------------------------'
+        'AVC/H.264 Patent Portfolio License Conditions'
+        '---------------------------------------------'
+        ''
+        
+          'In addition, the Cisco-provided binary of this Software is licen' +
+          'sed under Cisco'#39's license from MPEG LA '
+        'only if the following conditions are met:'
+        ''
+        
+          '1. The Cisco-provided binary is separately downloaded to an end ' +
+          'user'#8217's device, and not integrated into or '
+        
+          'combined with third party software prior to being downloaded to ' +
+          'the end user'#8217's device;'
+        ''
+        
+          '2. The end user must have the ability to control (e.g., to enabl' +
+          'e, disable, or re-enable) the use of the '
+        'Cisco-provided binary;'
+        ''
+        
+          '3. Third party software, in the location where end users can con' +
+          'trol the use of the Cisco-provided binary, '
+        'must display the following text:'
+        ''
+        '       "OpenH264 Video Codec provided by Cisco Systems, Inc."'
+        ''
+        
+          '4.  Any third-party software that makes use of the Cisco-provide' +
+          'd binary must reproduce all of the above '
+        
+          'text, as well as this last condition, in the EULA and/or in anot' +
+          'her location where licensing information is to '
+        'be presented to the end user.  ')
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
@@ -1900,7 +2171,7 @@ object frmAbout: TfrmAbout
   end
   object OKButton: TButton
     Left = 227
-    Top = 348
+    Top = 375
     Width = 75
     Height = 25
     Caption = 'OK'

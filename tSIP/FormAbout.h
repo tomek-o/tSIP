@@ -39,6 +39,9 @@ __published:
 	TLabel *lblLocation;
 	TLabel *lblProfileDir;
 	TLabel *lblProfileDirLocation;
+	TLabel *Label3;
+	TLabel *lblVideo;
+	TLabel *lblVideoState;
 	void __fastcall lblUrlClick(TObject *Sender);
 	void __fastcall lblCodeGuardStateClick(TObject *Sender);
 	void __fastcall lblExeLocationClick(TObject *Sender);

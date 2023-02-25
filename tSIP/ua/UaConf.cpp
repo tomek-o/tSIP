@@ -284,6 +284,33 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 
 	customUserAgent = uaConfJson.get("customUserAgent", customUserAgent).asBool();
 	userAgent = uaConfJson.get("userAgent", userAgent).asString();
+
+	{
+		const Json::Value &jv = uaConfJson["video"];
+		{
+			const Json::Value &jSource = jv["videoSource"];
+			if (jSource.type() == Json::objectValue)
+			{
+				jSource.getString("mod", video.videoSource.mod);
+				jSource.getString("dev", video.videoSource.dev);
+			}
+		}
+		jv.getUInt("width", video.width);
+		jv.getUInt("height", video.height);
+		jv.getUInt("bitrate", video.bitrate);
+		jv.getUInt("fps", video.fps);
+		{
+			const Json::Value &jsv = jv["selfview"];
+			Video::Selfview &selfview = video.selfview;
+			jsv.getBool("enabled", selfview.enabled);
+			jsv.getBool("pip", selfview.pip);
+		}
+		{
+			const Json::Value &j = jv["dshow"];
+			Video::Dshow &dshow = video.dshow;
+			j.getBool("skipReadingBackMediaFormat", dshow.skipReadingBackMediaFormat);
+		}
+	}
 }
 
 void UaConf::toJson(Json::Value& uaConfJson) const
@@ -423,6 +450,31 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		jv["caFile"] = tls.caFile;
 		jv["useWindowsRootCaStore"] = tls.useWindowsRootCaStore;
 		jv["verifyServer"] = tls.verifyServer;
+	}
+
+	{
+		Json::Value &jv = uaConfJson["video"];
+		{
+			Json::Value &jSource = jv["videoSource"];
+			const Video::Device &device = video.videoSource;
+			jSource["mod"] = device.mod;
+			jSource["dev"] = device.dev;
+		}
+		jv["width"] = video.width;
+		jv["height"] = video.height;
+		jv["bitrate"] = video.bitrate;
+		jv["fps"] = video.fps;
+		{
+			Json::Value &jsv = jv["selfview"];
+			const Video::Selfview &selfview = video.selfview;
+			jsv["enabled"] = selfview.enabled;
+			jsv["pip"] = selfview.pip;
+		}
+		{
+			Json::Value &j = jv["dshow"];
+			const Video::Dshow &dshow = video.dshow;
+			j["skipReadingBackMediaFormat"] = dshow.skipReadingBackMediaFormat;
+		}
 	}
 
 }

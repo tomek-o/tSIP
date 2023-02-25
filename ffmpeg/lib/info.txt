@@ -1,0 +1,2 @@
+Lib files generated with:
+implib -a avcodec-59.lib avcodec-59.dll

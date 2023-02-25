@@ -33,6 +33,9 @@ namespace {
 	std::vector<AnsiString> audioCodecs;
 	volatile bool audioCodecsAvailable = false;
 
+	std::vector<AnsiString> videoCodecs;
+	volatile bool videoCodecsAvailable = false;
+
 	/** Escaping text to be added as display name
 		Rules:
 		\ -> \\
@@ -641,7 +644,17 @@ static int app_init(void)
 	cfg->audio.portaudioOutSuggestedLatency = appSettings.uaConf.audioPortaudio.outSuggestedLatency;
 
 	cfg->audio.loop_ring_without_silence = appSettings.uaConf.loopRingWithoutSilence;
-
+#ifdef USE_VIDEO
+	strncpyz(cfg->video.src_mod, appSettings.uaConf.video.videoSource.mod.c_str(), sizeof(cfg->video.src_mod));
+	strncpyz(cfg->video.src_dev, appSettings.uaConf.video.videoSource.dev.c_str(), sizeof(cfg->video.src_dev));
+	cfg->video.width = appSettings.uaConf.video.width;
+	cfg->video.height = appSettings.uaConf.video.height;
+	cfg->video.bitrate = appSettings.uaConf.video.bitrate;
+	cfg->video.fps = appSettings.uaConf.video.fps;
+	cfg->video.selfview.enabled = appSettings.uaConf.video.selfview.enabled;
+	cfg->video.selfview.pip = appSettings.uaConf.video.selfview.pip;
+	cfg->video.dshow.skip_reading_back_media_format = appSettings.uaConf.video.dshow.skipReadingBackMediaFormat;
+#endif
 	configure();
 
 	/* Initialise User Agents */
@@ -788,6 +801,18 @@ static int app_start(void)
 			}
 		}
 
+		{
+			addr.cat_printf(";video_codecs=");
+			for (unsigned int i=0; i<acc.video_codecs.size(); i++)
+			{
+				addr.cat_printf("%s", acc.video_codecs[i].c_str());
+				if (i < acc.video_codecs.size() - 1)
+				{
+					addr.cat_printf(",");
+				}
+			}
+		}
+
 		pl pl_addr;
 		pl_set_str(&pl_addr, addr.c_str());
 		std::string cuser = acc.cuser;
@@ -881,6 +906,24 @@ static int app_start(void)
 	n = list_count(aufilt_list());
 	LOG("Populated %u audio filter%s\n", n, 1==n?"":"s");	
 
+	if (videoCodecsAvailable == false) {
+		struct le *le;
+		for (le = vidcodec_list()->head; le; le=le->next) {
+			struct vidcodec *vc = (struct vidcodec*)le->data;
+			AnsiString tmp;
+			if (vc->variant) {
+				tmp.sprintf("%s/%s", vc->name, vc->variant);
+			} else {
+            	tmp = vc->name;
+			}
+			videoCodecs.push_back(tmp);
+		}
+		videoCodecsAvailable = true;
+	}
+
+	n = list_count(vidfilt_list());
+	LOG("Populated %u video filter%s\n", n, 1==n?"":"s");
+
 	return 0;
 }
 
@@ -961,7 +1004,9 @@ extern "C" void control_handler(void)
 	{
 	case Command::CALL:
 		err = ua_connect(ua_cur(), &app.callp, NULL /*from*/,
-			cmd.target.c_str(), NULL, VIDMODE_OFF, cmd.extraHeaderLines.c_str());
+			cmd.target.c_str(), NULL,
+			cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle,
+			cmd.extraHeaderLines.c_str());
 		if (err)
 		{
 			DEBUG_WARNING("connect failed: %m\n", err);
@@ -970,7 +1015,7 @@ extern "C" void control_handler(void)
 		break;
 	case Command::ANSWER:
         LOG("Answering...\n");
-		err = ua_answer(ua_cur(), app.callp, cmd.audioMod.c_str(), cmd.audioDev.c_str());
+		err = ua_answer(ua_cur(), app.callp, cmd.audioMod.c_str(), cmd.audioDev.c_str(), cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle);
 		if (err)
 		{
         	DEBUG_WARNING("ua_answer failed: %m\n", err);
@@ -1314,6 +1359,16 @@ int Ua::GetAudioCodecList(std::vector<AnsiString> &codecs)
 unsigned int Ua::GetAudioRxSignalLevel(void)
 {
 	return softvol_get_rx_level();
+}
+
+int Ua::GetVideoCodecList(std::vector<AnsiString> &codecs)
+{
+	if (videoCodecsAvailable == false)
+	{
+		return -1;
+	}
+	codecs = videoCodecs;
+	return 0;
 }
 
 

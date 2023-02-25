@@ -11,6 +11,7 @@
 #include <mem.h>
 
 #include "AudioModules.h"
+#include "VideoModules.h"
 #include "baresip_dialog_info_direction.h"
 
 #include <stdint.h>
@@ -46,6 +47,7 @@ public:
 		bool answer_any;
 		int dtmf_tx_format;
 		std::vector<std::string> audio_codecs;
+		std::vector<std::string> video_codecs;
 
 		bool hide_reg_server;	// hide in settings and not store in settings file
 		bool hide_user;
@@ -87,6 +89,7 @@ public:
 				hide_cuser == right.hide_cuser &&
 
 				audio_codecs == right.audio_codecs &&
+				video_codecs == right.video_codecs &&
 				ptime == right.ptime &&
 				stun_server == right.stun_server &&
 				outbound1 == right.outbound1 &&
@@ -121,7 +124,13 @@ public:
 		{
 			audio_codecs.push_back("PCMU/8000/1");
 			audio_codecs.push_back("PCMA/8000/1");
+
+			video_codecs.push_back("H264/packetization-mode=0");
+			video_codecs.push_back("H264/packetization-mode=1");
+			//video_codecs.push_back("H263");
+			video_codecs.push_back("MP4V-ES");
 		}
+
 		const char* const getTransportStr(void) const {
 			switch (transport)
 			{
@@ -496,10 +505,9 @@ public:
 			);
 		}
 		bool operator!=(const Tls& right) const {
-        	return !(*this == right);
+			return !(*this == right);
 		}
 	} tls;
-
 
 	std::string local;
 	std::string ifname;	///< baresip config_net.ifname
@@ -612,6 +620,89 @@ public:
 	bool customUserAgent;
 	std::string userAgent;
 
+	struct Video {
+		struct Device {
+			std::string mod;       	/**< module */
+			std::string dev;		/**< device */
+			Device(void):
+				mod(VideoModules::dshow)
+			{
+			}
+			bool operator==(const Device& right) const {
+				if (
+					mod != right.mod ||
+					dev != right.dev
+				) {
+                	return false;
+				}
+				return true;
+			}
+			bool operator!=(const Device& right) const {
+				return !(*this == right);
+			}
+		} videoSource;
+
+		unsigned int width, height;
+		unsigned int bitrate;
+		unsigned int fps;
+
+		struct Selfview {
+			bool enabled;
+			bool pip;
+			Selfview(void):
+				enabled(true),
+				pip(true)
+			{}
+			bool operator==(const Selfview& right) const {
+				return (
+					enabled == right.enabled &&
+					pip == right.pip
+				);
+			}
+			bool operator!=(const Selfview& right) const {
+				return !(*this == right);
+			}
+		} selfview;
+
+		struct Dshow {
+			bool skipReadingBackMediaFormat;
+			Dshow(void):
+				skipReadingBackMediaFormat(false)
+			{}
+			bool operator==(const Dshow& right) const {
+				return (
+                	skipReadingBackMediaFormat == right.skipReadingBackMediaFormat
+				);
+			}
+			bool operator!=(const Dshow& right) const {
+            	return !(*this == right);
+			}
+		} dshow;
+
+		Video(void):
+			width(640),
+			height(480),
+			bitrate(512000),
+			fps(25)
+		{
+		}
+
+		bool operator==(const Video& right) const {
+			return (
+				videoSource == right.videoSource &&
+				width == right.width &&
+				height == right.height &&
+				bitrate == right.bitrate &&
+				fps == right.fps &&
+				selfview == right.selfview &&
+				dshow == right.dshow
+			);
+		}
+		bool operator!=(const Video& right) const {
+			return !(*this == right);
+		}
+	} video;
+
 	UaConf() {
  		disableUa = false;
 		aec = AEC_NONE;
@@ -699,6 +790,8 @@ public:
 		if (customUserAgent != right.customUserAgent)
 			return false;
 		if (customUserAgent == true && (userAgent != right.userAgent))
+			return false;
+		if (video != right.video)
 			return false;
 		return true;
 	}

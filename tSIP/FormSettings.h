@@ -24,6 +24,7 @@ class TfrmHotkeys;
 class TfrmPhones;
 class TfrmUaConfOpus;
 class TfrmDialpadConf;
+class TfrmVideoConf;
 
 class TfrmSettings : public TForm
 {
@@ -495,6 +496,16 @@ __published:	// IDE-managed Components
 	TEdit *edAudioTxGateAttackMs;
 	TEdit *edAudioTxGateHoldMs;
 	TEdit *edAudioTxGateCloseThreshold;
+	TTabSheet *tsVideoCodecs;
+	TLabel *lblVideoCodecsAvailable;
+	TLabel *lblVideoCodecsEnabled;
+	TListBox *lboxVideoCodecsAvailable;
+	TButton *btnVideoCodecEnable;
+	TButton *btnVideoCodecDisable;
+	TListBox *lboxVideoCodecsEnabled;
+	TLabel *lblVideoCodecsInfo;
+	TLabel *lblVideoCodecsInfo2;
+	TTabSheet *tsVideo;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -533,6 +544,16 @@ __published:	// IDE-managed Components
 	void __fastcall btnSelectContactsFileClick(TObject *Sender);
 	void __fastcall btnMessagesSelectRingClick(TObject *Sender);
 	void __fastcall btnSelectTlsClick(TObject *Sender);
+	void __fastcall lboxVideoCodecsAvailableDblClick(TObject *Sender);
+	void __fastcall lboxVideoCodecsEnabledDblClick(TObject *Sender);
+	void __fastcall btnVideoCodecEnableClick(TObject *Sender);
+	void __fastcall btnVideoCodecDisableClick(TObject *Sender);
+	void __fastcall lboxVideoCodecsEnabledStartDrag(TObject *Sender,
+          TDragObject *&DragObject);
+	void __fastcall lboxVideoCodecsEnabledDragDrop(TObject *Sender,
+          TObject *Source, int X, int Y);
+	void __fastcall lboxVideoCodecsEnabledDragOver(TObject *Sender,
+          TObject *Source, int X, int Y, TDragState State, bool &Accept);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
 	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, int moduleIndex, AnsiString selected);
@@ -540,10 +561,13 @@ private:	// User declarations
 	TfrmPhones *frmPhones;
 	TfrmUaConfOpus *frmConfOpus;
 	TfrmDialpadConf *frmDialpadConf;
+	TfrmVideoConf *frmVideoConf;
 	TTabSheet *lastTab;
 	void AudioCodecEnableSelected(void);
 	void AudioCodecDisableSelected(void);
 	void AudioPreprocessingUpdate(void);
+	void VideoCodecEnableSelected(void);
+	void VideoCodecDisableSelected(void);
 	void ShowFonts(void);
 	void UpdateNetworkInterface(void);
 	TTreeNode* CreatePagesNode(TTreeNode *parent, TTabSheet *tab);

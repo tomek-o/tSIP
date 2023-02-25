@@ -28,7 +28,11 @@ USEFORM("buttons\FormButtonCopy.cpp", frmButtonCopy);
 USEFORM("buttons\ButtonsDataModule.cpp", dmButtons); /* TDataModule: File Type */
 USEFORM("FormDialpadConf.cpp", frmDialpadConf);
 USEFORM("scripting\FormLuaScriptHelp.cpp", frmLuaScriptHelp);
+USEFORM("FormVideoConf.cpp", frmVideoConf);
 //---------------------------------------------------------------------------
+
+#include "baresip_base_config.h"
+
 #pragma link "re.lib"
 #pragma link "rem.lib"
 #pragma link "baresip.lib"
@@ -47,6 +51,15 @@ USEFORM("scripting\FormLuaScriptHelp.cpp", frmLuaScriptHelp);
 #pragma link "libcrypto-1_1.lib"
 #pragma link "libssl-1_1.lib"
 #pragma link "crypt32.lib"
+
+#ifdef USE_VIDEO
+#pragma link "avformat-59.lib"
+#pragma link "avcodec-59.lib"
+#pragma link "avutil-57.lib"
+
+#pragma link "strmiids.lib"
+#pragma link "SDL2.lib"
+#endif
 
 #include "Settings.h"
 #include "Paths.h"

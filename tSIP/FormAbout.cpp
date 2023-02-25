@@ -6,6 +6,7 @@
 #include "common\Utilities.h"
 #include "Paths.h"
 #include "Settings.h"
+#include "baresip_base_config.h"
 //---------------------------------------------------------------------
 #pragma resource "*.dfm"
 TfrmAbout *frmAbout;
@@ -17,6 +18,12 @@ __fastcall TfrmAbout::TfrmAbout(TComponent* AOwner)
 	lblVersion->Caption = GetFileVer(Application->ExeName);
 	lblBuildTimestamp->Caption = (AnsiString)__DATE__ + ", " __TIME__;
 	ProductName->Caption = Application->Title;
+
+#ifdef USE_VIDEO
+	lblVideoState->Caption = "YES";
+#else
+	lblVideoState->Caption = "NO";
+#endif
 
 #ifdef __CODEGUARD__
 	lblCodeGuardState->Caption = "YES";

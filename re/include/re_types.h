@@ -261,5 +261,17 @@ enum
 	E_AUDIO_OUTPUT_DEV_OPEN_ERROR,
 };
 
+/* Socket helpers */
+#if defined(WIN32) || defined(__BORLANDC__)
+#define RE_ERRNO_SOCK WSAGetLastError()
+#define RE_BAD_SOCK INVALID_SOCKET
+typedef size_t re_sock_t;
+#else
+#define RE_ERRNO_SOCK errno
+#define RE_BAD_SOCK -1
+typedef int re_sock_t;
+#endif
+
+
 #endif
 

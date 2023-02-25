@@ -1,7 +1,7 @@
 /**
  * @file baresip.h  Public Interface to Baresip
  *
- * Copyright (C) 2010 Creytiv.com
+ * Copyright (C) 2010 Alfred E. Heggestad
  */
 
 #ifndef BARESIP_H__
@@ -15,6 +15,7 @@ extern "C" {
 /** Defines the Baresip version string */
 #define BARESIP_VERSION "0.4.6"
 
+#include "baresip_base_config.h"
 #include "baresip_dialog_info_status.h"
 #include "baresip_dialog_info_direction.h"
 #include "baresip_presence_status.h"
@@ -79,6 +80,7 @@ int  call_stop_tone(struct call *call, unsigned int tone_id);
 int  call_start_audio_extra_source(struct call *call);
 bool call_has_audio(const struct call *call);
 bool call_has_video(const struct call *call);
+int  call_set_vidisp_parent_handle(struct call *call, void *handle);
 int  call_transfer(struct call *call, const char *uri);
 int  call_status(struct re_printf *pf, const struct call *call);
 int  call_debug(struct re_printf *pf, const struct call *call);
@@ -221,10 +223,27 @@ struct config {
 	struct config_video {
 		char src_mod[16];       /**< Video source module            */
 		char src_dev[128];      /**< Video source device            */
+		char disp_mod[16];      /**< Video display module           */
+		char disp_dev[128];     /**< Video display device           */
 		unsigned width, height; /**< Video resolution               */
 		uint32_t bitrate;       /**< Encoder bitrate in [bit/s]     */
 		uint32_t fps;           /**< Video framerate                */
+		bool fullscreen;        /**< Enable fullscreen display      */
+		int enc_fmt;            /**< Encoder pixelfmt (enum vidfmt) */
+
+		struct {
+			bool enabled;
+			bool pip;
+		} selfview;
+
+		struct {
+			/* OBS virtual cam bug? reading back returns 1920x1080 after 640x360 was set
+			   and its data callback still returns 640x360.
+			*/
+			bool skip_reading_back_media_format;
+		} dshow;
 	} video;
+
 #endif
 
 	/** Audio/Video Transport */
@@ -595,10 +614,10 @@ typedef void (options_resp_h)(int err, const struct sip_msg *msg, void *arg);
 int  ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuser);
 int  ua_connect(struct ua *ua, struct call **callp,
 		const char *from_uri, const char *uri,
-		const char *params, enum vidmode vmode, const char* extra_hdr_lines);
+		const char *params, enum vidmode vmode, void *vidisp_parent_handle, const char* extra_hdr_lines);
 void ua_hangup(struct ua *ua, struct call *call,
 	       uint16_t scode, const char *reason);
-int  ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const char *audio_dev);
+int  ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const char *audio_dev, enum vidmode vmode, void *vidisp_parent_handle);
 int  ua_options_send(struct ua *ua, const char *uri,
 		     options_resp_h *resph, void *arg);
 int  ua_sipfd(const struct ua *ua);
@@ -721,20 +740,30 @@ struct vidisp_st;
 
 /** Video Display parameters */
 struct vidisp_prm {
-	void *view;  /**< Optional view (set by application or module) */
+	void *parent_handle;		/**< Optional parent handle (Windows: HWND) */
+	bool fullscreen;			/**< Enable fullscreen display                    */
 };
 
 typedef void (vidisp_resize_h)(const struct vidsz *size, void *arg);
 
 typedef int  (vidisp_alloc_h)(struct vidisp_st **vp,
-			      struct vidisp *vd, struct vidisp_prm *prm,
+			      const struct vidisp *vd, struct vidisp_prm *prm,
 			      const char *dev,
 			      vidisp_resize_h *resizeh, void *arg);
 typedef int  (vidisp_update_h)(struct vidisp_st *st, bool fullscreen,
 			       int orient, const struct vidrect *window);
 typedef int  (vidisp_disp_h)(struct vidisp_st *st, const char *title,
-			     const struct vidframe *frame);
+			     const struct vidframe *frame, uint64_t timestamp);
 typedef void (vidisp_hide_h)(struct vidisp_st *st);
+
+struct vidisp {
+	struct le        le;
+	const char      *name;
+	vidisp_alloc_h  *alloch;
+	vidisp_update_h *updateh;
+	vidisp_disp_h   *disph;
+	vidisp_hide_h   *hideh;
+};
 
 int vidisp_register(struct vidisp **vp, const char *name,
 		    vidisp_alloc_h *alloch, vidisp_update_h *updateh,
@@ -743,7 +772,7 @@ int vidisp_alloc(struct vidisp_st **stp, const char *name,
 		 struct vidisp_prm *prm, const char *dev,
 		 vidisp_resize_h *resizeh, void *arg);
 int vidisp_display(struct vidisp_st *st, const char *title,
-		   const struct vidframe *frame);
+		   const struct vidframe *frame, uint64_t timestamp);
 const struct vidisp *vidisp_find(const char *name);
 
 
@@ -846,6 +875,8 @@ struct vidcodec {
 void vidcodec_register(struct vidcodec *vc);
 void vidcodec_unregister(struct vidcodec *vc);
 const struct vidcodec *vidcodec_find(const char *name, const char *variant);
+const struct vidcodec *vidcodec_find_encoder(const char *name);
+const struct vidcodec *vidcodec_find_decoder(const char *name);
 struct list *vidcodec_list(void);
 
 
@@ -920,7 +951,6 @@ const char* audio_get_rx_aucodec_name(const struct audio *a);
 struct video;
 
 void  video_mute(struct video *v, bool muted);
-void *video_view(const struct video *v);
 int   video_set_fullscreen(struct video *v, bool fs);
 int   video_set_orient(struct video *v, int orient);
 void  video_vidsrc_set_device(struct video *v, const char *dev);

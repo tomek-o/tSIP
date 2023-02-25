@@ -9,6 +9,7 @@
 #include "FormPhones.h"
 #include "FormUaConfOpus.h"
 #include "FormDialpadConf.h"
+#include "FormVideoConf.h"
 #include "AudioDevicesList.h"
 #include "AudioModules.h"
 #include "ProgrammableButtons.h"
@@ -19,6 +20,7 @@
 #include "Registry.hpp"
 #include "Branding.h"
 #include "Translate.h"
+#include "baresip_base_config.h"
 #include <FileCtrl.hpp>
 #include <assert.h>
 #include <stdio.h>
@@ -30,6 +32,7 @@ TfrmSettings *frmSettings;
 namespace
 {
 	int audioCodecsEnabledDraggedIndex = -1;
+	int videoCodecsEnabledDraggedIndex = -1;
 
     inline void strncpyz(char* dst, const char* src, int dstsize)
 	{
@@ -68,6 +71,10 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	frmDialpadConf = new TfrmDialpadConf(tsDialpad);
 	frmDialpadConf->Parent = tsDialpad;
 	frmDialpadConf->Visible = true;
+
+	frmVideoConf = new TfrmVideoConf(tsVideo);
+	frmVideoConf->Parent = tsVideo;
+	frmVideoConf->Visible = true;
 
 	AudioModules::FillInputSelectorCb(cbSoundInputMod);
 	AudioModules::FillOutputSelectorCb(cbSoundOutputMod);
@@ -138,6 +145,10 @@ void TfrmSettings::CreatePages(void)
 		CreatePagesNode(NULL, tsRecording);
 	TTreeNode *nodeCodecs = CreatePagesNode(NULL, tsCodecs);
 	CreatePagesNode(nodeCodecs, tsUaConfOpus);
+#ifdef USE_VIDEO
+	CreatePagesNode(NULL, tsVideo);
+	TTreeNode *nodeCodecsVideo = CreatePagesNode(NULL, tsVideoCodecs);
+#endif
 	CreatePagesNode(NULL, tsIntegration);
 	CreatePagesNode(NULL, tsHotkeys);
 	CreatePagesNode(NULL, tsContacts);
@@ -366,16 +377,32 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	cbSipAccessUrlMode->ItemIndex = tmpSettings.SipAccessUrl.accessMode;
 
-	lboxAudioCodecsAvailable->Clear();
-	std::vector<AnsiString> codecs;
-	if (Ua::Instance().GetAudioCodecList(codecs) == 0)
 	{
-		for (unsigned int i=0; i<codecs.size(); i++)
+		lboxAudioCodecsAvailable->Clear();
+		std::vector<AnsiString> codecs;
+		if (Ua::Instance().GetAudioCodecList(codecs) == 0)
 		{
-			lboxAudioCodecsAvailable->Items->Add(codecs[i]);
+			for (unsigned int i=0; i<codecs.size(); i++)
+			{
+				lboxAudioCodecsAvailable->Items->Add(codecs[i]);
+			}
 		}
+		lboxAudioCodecsEnabled->Clear();
 	}
-	lboxAudioCodecsEnabled->Clear();
+
+	{
+		lboxVideoCodecsAvailable->Clear();
+		std::vector<AnsiString> codecs;
+		if (Ua::Instance().GetVideoCodecList(codecs) == 0)
+		{
+			for (unsigned int i=0; i<codecs.size(); i++)
+			{
+				lboxVideoCodecsAvailable->Items->Add(codecs[i]);
+			}
+		}
+		lboxVideoCodecsEnabled->Clear();
+	}
+
 	if (tmpSettings.uaConf.accounts.size() > 0)
 	{
         /** \todo multiple accounts */
@@ -388,6 +415,19 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 				{
 					lboxAudioCodecsAvailable->Items->Delete(codec);
 					lboxAudioCodecsEnabled->Items->Add(name);
+					break;
+				}
+			}
+		}
+		for (unsigned int i=0; i<tmpSettings.uaConf.accounts[0].video_codecs.size(); i++)
+		{
+			AnsiString name = tmpSettings.uaConf.accounts[0].video_codecs[i].c_str();
+			for (int codec = 0; codec < lboxVideoCodecsAvailable->Items->Count; codec++)
+			{
+				if (lboxVideoCodecsAvailable->Items->Strings[codec] == name)
+				{
+					lboxVideoCodecsAvailable->Items->Delete(codec);
+					lboxVideoCodecsEnabled->Items->Add(name);
 					break;
 				}
 			}
@@ -543,6 +583,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	frmUaConfOpus->SetCfg(&tmpSettings.uaConf.opus);
 
 	frmDialpadConf->SetCfg(&tmpSettings.dialpad);
+
+	frmVideoConf->SetCfg(&tmpSettings.video, &tmpSettings.uaConf);
 
 	if (tmpSettings.locking.hiddenSettingsPages != previousHiddenSettingsPages)
 	{
@@ -801,6 +843,15 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		}
 	}
 
+	if (lboxVideoCodecsAvailable->Items->Count > 0 || lboxVideoCodecsEnabled->Items->Count > 0)	// both lists may be empty if UA failed to initialize
+	{
+		tmpSettings.uaConf.accounts[0].video_codecs.clear();
+		for (int i=0; i<lboxVideoCodecsEnabled->Items->Count; i++)
+		{
+			tmpSettings.uaConf.accounts[0].video_codecs.push_back(lboxVideoCodecsEnabled->Items->Strings[i].c_str());
+		}
+	}
+
 	tmpSettings.uaConf.recording.enabled = chbRecordingEnabled->Checked;
 	tmpSettings.uaConf.recording.recDir = static_cast<UaConf::RecordingCfg::RecDir>(cbRecDirType->ItemIndex);
 	tmpSettings.uaConf.recording.customRecDir = edCustomRecDir->Text.c_str();
@@ -950,6 +1001,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	frmUaConfOpus->Apply();
 
 	frmDialpadConf->Apply();
+
+	frmVideoConf->Apply();
 
 	{
 		tmpSettings.locking.hiddenSettingsPages.clear();
@@ -1824,3 +1877,81 @@ void __fastcall TfrmSettings::btnSelectTlsClick(TObject *Sender)
 //---------------------------------------------------------------------------
 
 
+void __fastcall TfrmSettings::lboxVideoCodecsAvailableDblClick(TObject *Sender)
+{
+	VideoCodecEnableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::lboxVideoCodecsEnabledDblClick(TObject *Sender)
+{
+	VideoCodecDisableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::btnVideoCodecEnableClick(TObject *Sender)
+{
+	VideoCodecEnableSelected();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::btnVideoCodecDisableClick(TObject *Sender)
+{
+	VideoCodecDisableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::lboxVideoCodecsEnabledStartDrag(TObject *Sender,
+      TDragObject *&DragObject)
+{
+	videoCodecsEnabledDraggedIndex = lboxVideoCodecsEnabled->ItemIndex;	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::lboxVideoCodecsEnabledDragDrop(TObject *Sender,
+      TObject *Source, int X, int Y)
+{
+	TListBox *lbox = lboxVideoCodecsEnabled;
+	int dropIndex = lbox->ItemAtPos(Point(X,Y), false);
+	if (dropIndex >= lbox->Items->Count)
+	{
+		dropIndex--;
+	}
+	if (dropIndex >= 0)
+	{
+		lbox->Items->Move(videoCodecsEnabledDraggedIndex, dropIndex);
+		lbox->ItemIndex = dropIndex;
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::lboxVideoCodecsEnabledDragOver(TObject *Sender,
+      TObject *Source, int X, int Y, TDragState State, bool &Accept)
+{
+	Accept = true;	
+}
+//---------------------------------------------------------------------------
+
+void TfrmSettings::VideoCodecEnableSelected(void)
+{
+	for (int i=0; i<lboxVideoCodecsAvailable->Items->Count; i++)
+	{
+		if (lboxVideoCodecsAvailable->Selected[i])
+		{
+			lboxVideoCodecsEnabled->Items->Add(lboxVideoCodecsAvailable->Items->Strings[i]);
+		}
+	}
+	lboxVideoCodecsAvailable->DeleteSelected();
+}
+
+void TfrmSettings::VideoCodecDisableSelected(void)
+{
+	for (int i=0; i<lboxVideoCodecsEnabled->Items->Count; i++)
+	{
+		if (lboxVideoCodecsEnabled->Selected[i])
+		{
+			lboxVideoCodecsAvailable->Items->Add(lboxVideoCodecsEnabled->Items->Strings[i]);
+		}
+	}
+	lboxVideoCodecsEnabled->DeleteSelected();
+}

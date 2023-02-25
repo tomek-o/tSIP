@@ -1,0 +1,6 @@
+Indeed, there seems to be a bug in IMPLIB (possibly in ILINK32, too).
+
+I solved the problem by an intermediate IMPDEF step:
+
+IMPDEF -a SDL.def SDL.dll
+IMPLIB -c SDL.lib SDL.def

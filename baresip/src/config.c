@@ -57,10 +57,22 @@ static struct config core_config = {
 #ifdef USE_VIDEO
 	/** Video */
 	{
-		"", "",
+		"dshow", "",						// src dev/mod
+		"sdl", "",							// disp dev/mod
 		352, 288,
 		512000,
 		25,
+		false,
+		VID_FMT_UYVY422,
+		/* selfview */
+		{
+			true,	/* enabled */
+			true,	/* pip */
+		},
+		/* dshow */
+		{
+        	false	/* skip reading back media type */
+		}
 	},
 #endif
 

@@ -311,6 +311,20 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 				}
 			}
 
+			const Json::Value &video_codecs = acc["video_codecs"];
+			if (video_codecs.type() == Json::arrayValue)
+			{
+				new_acc.video_codecs.resize(video_codecs.size());
+				for (int i=0; i<video_codecs.size(); i++)
+				{
+					const Json::Value &codec = video_codecs[i];
+					if (codec.type() == Json::stringValue)
+					{
+						new_acc.video_codecs[i] = codec.asString();
+					}
+				}
+			}
+
 			uaConf.accounts[0] = new_acc;
 		}
 	}
@@ -795,6 +809,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 	}
 
 	dialpad.fromJson(root["dialpad"]);
+	video.fromJson(root["video"]);
 
 	{
 		const Json::Value &jv = root["branding"];
@@ -1065,6 +1080,10 @@ int Settings::Write(AnsiString asFileName)
 		{
 			cfgAcc["audio_codecs"][j] = acc.audio_codecs[j];
 		}
+		for (unsigned int j=0; j<acc.video_codecs.size(); j++)
+		{
+			cfgAcc["video_codecs"][j] = acc.video_codecs[j];
+		}
 		cfgAcc["mediaenc"] = acc.mediaenc;
 	}
 
@@ -1132,6 +1151,7 @@ int Settings::Write(AnsiString asFileName)
 	}
 
 	dialpad.toJson(root["dialpad"]);
+	video.toJson(root["video"]);
 
 	{
 		Json::Value &jv = root["branding"];

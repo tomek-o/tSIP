@@ -14,6 +14,7 @@
 #include "buttons/ButtonContainerConf.h"
 #include "DialpadConf.h"
 #include "history/HistoryConf.h"
+#include "VideoConf.h"
 #include <deque>
 #include <list>
 
@@ -375,6 +376,8 @@ public:
 	{
 		std::vector<AnsiString> hiddenSettingsPages;
 	} locking;
+
+	struct VideoConf video;
 
 	Settings(void);
 

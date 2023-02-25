@@ -31,6 +31,7 @@ struct Call
 	AnsiString paiPeerUri;
 	AnsiString paiPeerName;
 	AnsiString codecName;
+	void* displayParentHandle;
 
 	struct Zrtp {
 		int sessionId;
@@ -54,7 +55,8 @@ struct Call
 		state(0),
 		lastScode(0),
 		recording(false),
-		ringStarted(false)
+		ringStarted(false),
+		displayParentHandle(NULL)
 	{}
 	void reset(void);
 };

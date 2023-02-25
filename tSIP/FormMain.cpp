@@ -184,6 +184,28 @@ namespace {
 	{
 		SetAppStatus("FormMain", 0, text);
 	}
+
+	void* GetDisplayParentHandle(void)
+	{
+		if (appSettings.video.enabled)
+		{
+			switch (appSettings.video.displayParentType)
+			{
+			case VideoConf::DISPLAY_PARENT_NONE:
+				break;
+			case VideoConf::DISPLAY_PARENT_BUTTON:
+			{
+				TProgrammableButton *btn = buttons.GetBtn(appSettings.video.displayParentId);
+				if (btn)
+					return btn->Handle;
+				break;
+			}
+			default:
+				break;
+			}
+		}
+		return NULL;
+	}
 }
 
 void TfrmMain::TranslateForm(void* obj)
@@ -922,7 +944,8 @@ void TfrmMain::MakeCall(AnsiString target)
 		}
 	}
 
-	UA->Call(0, call.initialTarget, appSettings.Calls.extraHeaderLines);
+	call.displayParentHandle = GetDisplayParentHandle();
+	UA->Call(0, call.initialTarget, appSettings.Calls.extraHeaderLines, appSettings.video.enabled, call.displayParentHandle);
 }
 
 void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
@@ -942,7 +965,8 @@ void TfrmMain::Answer(void)
 {
 	if (call.incoming)
 	{
-		UA->Answer(0);
+		call.displayParentHandle = GetDisplayParentHandle();
+		UA->Answer(0, "", "", appSettings.video.enabled, call.displayParentHandle);
 		if (appSettings.frmMain.bShowWhenAnsweringCall)
 		{
 			if (!Visible)
@@ -3024,7 +3048,7 @@ void TfrmMain::AutoAnswer(void)
 	if (autoAnswerCode == 200) {
 		if (autoAnswerIntercom) {
 			LOG("Answering with module %s, device %s\n", appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
-			UA->Answer(0, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
+			UA->Answer(0, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str(), appSettings.video.enabled, GetDisplayParentHandle());
 		} else {
 			Answer();
 		}

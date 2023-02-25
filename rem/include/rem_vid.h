@@ -13,9 +13,10 @@ enum vidfmt {
 	VID_FMT_RGB32,        /* packed RGBA 8:8:8:8 32bpp (native endian) */
 	VID_FMT_ARGB,         /* packed RGBA 8:8:8:8 32bpp (big endian)    */
 	VID_FMT_RGB565,       /* packed RGB  5:6:5   16bpp (native endian) */
-	VID_FMT_RGB555,       /* packed RGB  5:5:5   16bpp (native endian) */
 	VID_FMT_NV12,         /* planar YUV  4:2:0   12bpp UV interleaved  */
 	VID_FMT_NV21,         /* planar YUV  4:2:0   12bpp VU interleaved  */
+	VID_FMT_YUV444P,      /* planar YUV  4:4:4   24bpp                 */
+	VID_FMT_YUV422P,      /* planar YUV  4:2:2   16bpp                 */
 	/* marker */
 	VID_FMT_N
 };
@@ -122,6 +123,7 @@ void vidframe_init_buf(struct vidframe *vf, enum vidfmt fmt,
 int  vidframe_alloc(struct vidframe **vfp, enum vidfmt fmt,
 		    const struct vidsz *sz);
 void vidframe_fill(struct vidframe *vf, uint32_t r, uint32_t g, uint32_t b);
+void vidframe_copy(struct vidframe *dst, const struct vidframe *src);
 
 
 const char *vidfmt_name(enum vidfmt fmt);
@@ -138,7 +140,7 @@ extern const struct vidfmt_desc vidfmt_descv[VID_FMT_N];
 
 /* draw */
 void vidframe_draw_point(struct vidframe *f, unsigned x, unsigned y,
-			 uint8_t cy, uint8_t cu, uint8_t cv);
+			 uint8_t r, uint8_t g, uint8_t b);
 void vidframe_draw_hline(struct vidframe *f,
 			 unsigned x0, unsigned y0, unsigned w,
 			 uint8_t r, uint8_t g, uint8_t b);

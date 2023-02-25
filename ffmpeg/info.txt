@@ -1,0 +1,108 @@
+Minimal FFMpeg binaries with OpenH264 support was built from current git sources 2023.01.29.
+Building on Windows 7 was pretty messy, here is my attempt to list required steps.
+
+Media-autobuild_suite was used to install msys64 (latest version of msys64 cannot be installed on Windows 7 directly, but this way still works) and build ffmpeg once, fetching dependencies.
+
+OpenH264 was installed: pacman -S mingw-w64-i686-openh264
+
+OpenH264 includes "wels" copied to /mingw32/include/vc.
+File openh264-2.3.1-win32.dll renamed to openh264.dll.
+File openh264.lib generated from openh264.dll using dll2lib.bat and copied to D:\MinGW.
+
+yasm copied from MINGW/msys32 to msys64 (just to solve some problem with paths)
+
+Started Command Prompt for VS2017
+Run: set LIB=D:\MinGW;%LIB%
+Run: D: and D:\MinGW\msys64\msys2_shell.cmd -full-path -mingw -where ..
+
+In msys shell:
+Run: cd /build/ffmpeg-git
+Run: ./configure --toolchain=msvc --disable-everything --disable-encoders --disable-muxers --disable-debug --enable-shared --arch=x86 --enable-shared --enable-decoder=h263 --enable-encoder=h263 --enable-decoder=h264 --enable-libopenh264 --enable-encoder=libopenh264 --enable-decoder=mpeg4 --enable-encoder=mpeg4 --shlibdir=/local32/bin-video --enable-w32threads --enable-version3 --extra-ldflags="-DEBUG" --extra-cflags="-Zi -I/mingw32/include/vc"
+Run: make
+
+
+Configuration details:
+
+install prefix            /usr/local
+source path               .
+C compiler                cl.exe
+C library                 msvcrt
+ARCH                      x86 (generic)
+big-endian                no
+runtime cpu detection     yes
+standalone assembly       yes
+x86 assembler             yasm
+MMX enabled               yes
+MMXEXT enabled            yes
+3DNow! enabled            yes
+3DNow! extended enabled   yes
+SSE enabled               yes
+SSSE3 enabled             yes
+AESNI enabled             yes
+AVX enabled               yes
+AVX2 enabled              yes
+AVX-512 enabled           yes
+AVX-512ICL enabled        yes
+XOP enabled               yes
+FMA3 enabled              yes
+FMA4 enabled              yes
+i686 features enabled     yes
+CMOV is fast              no
+EBX available             no
+EBP available             no
+debug symbols             no
+strip symbols             no
+optimize for size         no
+optimizations             yes
+static                    no
+shared                    yes
+postprocessing support    no
+network support           yes
+threading support         w32threads
+safe bitstream reader     yes
+texi2html enabled         no
+perl enabled              yes
+pod2man enabled           yes
+makeinfo enabled          yes
+makeinfo supports HTML    yes
+xmllint enabled           yes
+
+External libraries:
+libopenh264             mediafoundation         schannel
+
+External libraries providing hardware acceleration:
+d3d11va                 dxva2
+
+Libraries:
+avcodec                 avfilter                avutil                  swscale
+avdevice                avformat                swresample
+
+Programs:
+ffmpeg                  ffprobe
+
+Enabled decoders:
+h263                    h264                    mpeg4
+
+Enabled encoders:
+h263                    libopenh264             mpeg4
+
+Enabled hwaccels:
+
+Enabled parsers:
+h263                    mpeg4video
+
+Enabled demuxers:
+
+Enabled muxers:
+
+Enabled protocols:
+
+Enabled filters:
+aformat                 atrim                   hflip                   transpose               vflip
+anull                   format                  null                    trim
+
+Enabled bsfs:
+
+Enabled indevs:
+
+Enabled outdevs:

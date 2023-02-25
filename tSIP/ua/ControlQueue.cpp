@@ -63,7 +63,7 @@ void ControlQueue::UnRegister(int accountId)
 	fifo.push();
 }
 
-void ControlQueue::Call(int accountId, AnsiString target, AnsiString extraHeaderLines)
+void ControlQueue::Call(int accountId, AnsiString target, AnsiString extraHeaderLines, bool video, void *vidispParentHandle)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
@@ -88,10 +88,12 @@ void ControlQueue::Call(int accountId, AnsiString target, AnsiString extraHeader
         }
     }
 	cmd->extraHeaderLines = extraHeaderLines;
+	cmd->video = video;
+	cmd->vidispParentHandle = vidispParentHandle;
 	fifo.push();
 }
 
-void ControlQueue::Answer(int callId, AnsiString audioRxMod, AnsiString audioRxDev)
+void ControlQueue::Answer(int callId, AnsiString audioRxMod, AnsiString audioRxDev, bool video, void *vidispParentHandle)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
@@ -101,6 +103,8 @@ void ControlQueue::Answer(int callId, AnsiString audioRxMod, AnsiString audioRxD
 	cmd->audioMod = audioRxMod;
 	cmd->audioDev = audioRxDev;
 	cmd->callId = callId;
+	cmd->video = video;
+	cmd->vidispParentHandle = vidispParentHandle;
 	fifo.push();
 }
 

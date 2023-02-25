@@ -46,6 +46,7 @@
 #include "re_sys.h"
 #include "re_tcp.h"
 #include "re_telev.h"
+#include "re_thread.h"
 #include "re_tmr.h"
 #include "re_tls.h"
 #include "re_turn.h"

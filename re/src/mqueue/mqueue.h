@@ -6,17 +6,17 @@
 
 
 #if defined(WIN32) || defined(__WIN32__)
-int pipe(int fds[2]);
-ssize_t pipe_read(int s, void *buf, size_t len);
-ssize_t pipe_write(int s, const void *buf, size_t len);
+int pipe(re_sock_t fds[2]);
+ssize_t pipe_read(re_sock_t s, void *buf, size_t len);
+ssize_t pipe_write(re_sock_t s, const void *buf, size_t len);
 #else
-static inline ssize_t pipe_read(int s, void *buf, size_t len)
+static inline ssize_t pipe_read(re_sock_t s, void *buf, size_t len)
 {
 	return read(s, buf, len);
 }
 
 
-static inline ssize_t pipe_write(int s, const void *buf, size_t len)
+static inline ssize_t pipe_write(re_sock_t s, const void *buf, size_t len)
 {
 	return write(s, buf, len);
 }

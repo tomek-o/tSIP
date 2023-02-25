@@ -194,5 +194,21 @@ int configure(void)
 	pl_set_str(&modname, "srtp");
 	load_module2(NULL, &modname);
 
+#ifdef USE_VIDEO
+	pl_set_str(&modname, "avcodec");
+	load_module2(NULL, &modname);
+
+	pl_set_str(&modname, "dshow");
+	load_module2(NULL, &modname);
+
+	pl_set_str(&modname, "sdl");
+	load_module2(NULL, &modname);
+
+	if (cfg->video.selfview.enabled) {
+		pl_set_str(&modname, "selfview");
+		load_module2(NULL, &modname);
+	}
+#endif
+
 	return err;
 }

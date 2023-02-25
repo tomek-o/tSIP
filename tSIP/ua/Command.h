@@ -59,6 +59,8 @@ public:
 	unsigned int recFileFormat;
 	unsigned int bitrate;
 	unsigned int softvol;
+	bool video;
+	void *vidispParentHandle;
 
 	int requestId;					///< sending custom messages and sending MESSAGE messages
 	AnsiString method;				///< SEND_CUSTOM_REQUEST
@@ -87,6 +89,8 @@ public:
 		recFileFormat(0),
 		bitrate(64000),
 		softvol(0),
+		video(false),
+		vidispParentHandle(NULL),
 		requestId(-1)
 	{}
 };

@@ -25,6 +25,8 @@ public:
 	void Quit(void);
 	int GetAudioCodecList(std::vector<AnsiString> &codecs);
 	unsigned int GetAudioRxSignalLevel(void);
+
+	int GetVideoCodecList(std::vector<AnsiString> &codecs);
 };
 
 #endif
