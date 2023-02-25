@@ -278,7 +278,7 @@ object frmAbout: TfrmAbout
       Height = 13
       Caption = 
         'Copyright '#169' 2011 - 2023 Tomasz Ostrowski, distributed under BSD ' +
-        '2-Clause License like re/rem/baresip.'
+        '3-Clause License like re/rem/baresip.'
       IsControl = True
     end
     object lblVersion: TLabel
@@ -363,14 +363,14 @@ object frmAbout: TfrmAbout
       Caption = 'NO'
       IsControl = True
     end
-    object Label1: TLabel
+    object lblLicenses: TLabel
       Left = 8
       Top = 115
       Width = 271
       Height = 13
       Caption = 'and other projects used with respect to following licenses:'
     end
-    object Label2: TLabel
+    object lblUrlBaresip: TLabel
       Left = 344
       Top = 100
       Width = 127
@@ -439,7 +439,7 @@ object frmAbout: TfrmAbout
       ParentFont = False
       OnClick = lblProfileDirLocationClick
     end
-    object Label3: TLabel
+    object lblBuildConfig: TLabel
       Left = 88
       Top = 46
       Width = 55

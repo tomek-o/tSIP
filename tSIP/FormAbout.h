@@ -33,13 +33,13 @@ __published:
 	TLabel *lblCodeGuardState;
 	TLabel *lblDebug;
 	TLabel *lblDebugState;
-	TLabel *Label1;
-	TLabel *Label2;
+	TLabel *lblLicenses;
+	TLabel *lblUrlBaresip;
 	TLabel *lblExeLocation;
 	TLabel *lblLocation;
 	TLabel *lblProfileDir;
 	TLabel *lblProfileDirLocation;
-	TLabel *Label3;
+	TLabel *lblBuildConfig;
 	TLabel *lblVideo;
 	TLabel *lblVideoState;
 	void __fastcall lblUrlClick(TObject *Sender);
