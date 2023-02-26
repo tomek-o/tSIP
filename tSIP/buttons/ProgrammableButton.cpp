@@ -562,8 +562,20 @@ void TProgrammableButton::SetLines(int cnt)
 	{
 		if (cnt == 2)
 		{
-			label->Top = (Height - label->Height - label2->Height)/3;
-			label2->Top = label->Top + label->Height + label->Top;
+			int spacing = (Height - label->Height - label2->Height)/3;
+			if (spacing > 0)
+			{
+				label->Top = spacing;
+				label2->Top = label->Top + label->Height + spacing;
+			}
+			else
+			{
+				// not enough vertical space, lets cram it a little
+				// this is oversimplification (not handling actual text content that may or may not contain e.g. 'y')
+				// but it still seems to better than regular spacing above for e.g. "DTMF" button with label = "2" and label2 = "ABC"
+				label->Top = spacing;
+				label2->Top = Height - label2->Height;
+			}
 			label2->Visible = true;
 		}
 		else
