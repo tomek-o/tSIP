@@ -9,6 +9,9 @@
 #include <re.h>
 #include <rem.h>
 #include <baresip.h>
+
+#ifdef USE_VIDEO
+
 #include <comutil.h>
 #include <commctrl.h>
 #include <dshow.h>
@@ -567,3 +570,5 @@ extern "C" const struct mod_export DECL_EXPORTS(dshow) = {
 	module_init,
 	module_close
 };
+
+#endif	/* USE_VIDEO */
