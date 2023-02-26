@@ -798,6 +798,8 @@ void ProgrammableButtons::SetInitialDialpad(void)
 		cfg.type = Button::DTMF;
 		cfg.font.size = 22;
 		cfg.labelCenterHorizontally = true;
+		cfg.captionLines = 2;
+		cfg.label2CenterHorizontally = true;
 	}
 
 	unsigned int id = START_BTN;
@@ -813,56 +815,68 @@ void ProgrammableButtons::SetInitialDialpad(void)
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "2";
+	cfg->caption2 = "ABC";
 	cfg->left = LEFT2;
 	cfg->top = TOP1;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "3";
+	cfg->caption2 = "DEF";
 	cfg->left = LEFT3;
 	cfg->top = TOP1;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "4";
+	cfg->caption2 = "GHI";
 	cfg->left = LEFT1;
 	cfg->top = TOP2;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "5";
+	cfg->caption2 = "JKL";
 	cfg->left = LEFT2;
 	cfg->top = TOP2;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "6";
+	cfg->caption2 = "MNO";
 	cfg->left = LEFT3;
 	cfg->top = TOP2;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "7";
+	cfg->caption2 = "PQRS";
 	cfg->left = LEFT1;
 	cfg->top = TOP3;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "8";
+	cfg->caption2 = "TUV";
 	cfg->left = LEFT2;
 	cfg->top = TOP3;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "9";
+	cfg->caption2 = "WXYZ";
 	cfg->left = LEFT3;
 	cfg->top = TOP3;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "*";
+	cfg->caption2 = "";
 	cfg->left = LEFT1;
 	cfg->top = TOP4;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "0";
+	cfg->caption2 = "OPER";
+	cfg->fontLabel2.size = cfg->fontLabel2.size - 1;
 	cfg->left = LEFT2;
 	cfg->top = TOP4;
 
 	cfg = &btnConf[id++];
 	cfg->caption = cfg->number = "#";
+	cfg->caption2 = "";
 	cfg->left = LEFT3;
 	cfg->top = TOP4;
 
