@@ -406,7 +406,9 @@ static int video_stream_decode(struct vrx *vrx, const struct rtp_header *hdr,
     	int TODO__TIMESTAMP;
 	}
 
-	err = vidisp_display(vrx->vidisp, v->peer, &frame, 0 /* timestamp */);
+	if (vrx->vidisp) {
+		err = vidisp_display(vrx->vidisp, v->peer, &frame, 0 /* timestamp */);
+	}
 
 	++vrx->frames;
 
