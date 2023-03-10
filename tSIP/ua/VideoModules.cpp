@@ -19,6 +19,7 @@ using namespace VideoModules;
 
 const char* VideoModules::dshow = "dshow";
 const char* VideoModules::sdl = "sdl";
+const char* VideoModules::fakevideo = "fakevideo";
 
 struct VideoModuleDef
 {
@@ -32,6 +33,7 @@ const VideoModuleDef videoModuleDefs [] =
 {
 	{ true, false, dshow, "DirectShow" },
 	{ false, true, sdl, "SDL" },
+	{ true, true, fakevideo, "fakevideo" },
 };
 	
 

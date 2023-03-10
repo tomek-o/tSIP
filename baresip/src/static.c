@@ -30,6 +30,7 @@ extern const struct mod_export exports_srtp;
 extern const struct mod_export exports_avcodec;
 extern const struct mod_export exports_dshow;
 extern const struct mod_export exports_sdl;
+extern const struct mod_export exports_fakevideo;
 extern const struct mod_export exports_selfview;
 #endif
 
@@ -62,6 +63,7 @@ const struct mod_export *mod_table[] = {
 	&exports_avcodec,
 	&exports_dshow,
 	&exports_sdl,
+	&exports_fakevideo,
 	&exports_selfview,
 #endif
 	NULL

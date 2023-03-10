@@ -204,6 +204,9 @@ int configure(void)
 	pl_set_str(&modname, "sdl");
 	load_module2(NULL, &modname);
 
+	pl_set_str(&modname, "fakevideo");
+	load_module2(NULL, &modname);
+
 	if (cfg->video.selfview.enabled) {
 		pl_set_str(&modname, "selfview");
 		load_module2(NULL, &modname);

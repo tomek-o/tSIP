@@ -88,6 +88,13 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 		lblInputDevice->Visible = true;
 		VideoDevicesList::FillComboBox(cbInputDev, mod, false, uaCfg->video.videoSource.dev.c_str());
 	}
+	else if (mod == VideoModules::fakevideo)
+	{
+		btnSelectInputFile->Visible = false;
+		edInputFile->Visible = false;
+		cbInputDev->Visible = false;
+		lblInputDevice->Visible = false;
+	}
 	else
 	{
 		assert(!"Unhandled cbSoundInputMod item index!");

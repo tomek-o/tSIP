@@ -22,6 +22,17 @@ extern "C" {
 #include "baresip_recorder.h"
 #include "baresip_zrtp.h"
 
+/*
+ * Clock-rate for audio timestamp
+ */
+#define AUDIO_TIMEBASE 1000000U
+
+/*
+ * Clock-rate for video timestamp
+ */
+#define VIDEO_TIMEBASE 1000000U
+
+
 /* forward declarations */
 struct sa;
 struct sdp_media;

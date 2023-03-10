@@ -16,6 +16,7 @@ namespace VideoModules
 
 	extern const char* dshow;
 	extern const char* sdl;
+	extern const char* fakevideo;
 
 	void FillInputSelectorCb(Stdctrls::TComboBox *cb);
 	void FillOutputSelectorCb(Stdctrls::TComboBox *cb);
