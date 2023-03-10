@@ -206,7 +206,7 @@ public:
 		std::string dev;		/**< Audio source device            */
 		std::string wavefile;
 		AudioCfg(void) {
-			mod = AudioModules::winwave;
+			mod = AudioModules::winwave2;
 		}
 		bool operator==(const AudioCfg& right) const {
 			if (mod != right.mod)
