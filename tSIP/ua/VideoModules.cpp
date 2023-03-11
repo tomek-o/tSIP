@@ -19,7 +19,8 @@ using namespace VideoModules;
 
 const char* VideoModules::dshow = "dshow";
 const char* VideoModules::sdl = "sdl";
-const char* VideoModules::fakevideo = "fakevideo";
+const char* VideoModules::nullvideo = "nullvideo";
+const char* VideoModules::colorbar_generator = "colorbar_generator";
 
 struct VideoModuleDef
 {
@@ -33,7 +34,8 @@ const VideoModuleDef videoModuleDefs [] =
 {
 	{ true, false, dshow, "DirectShow" },
 	{ false, true, sdl, "SDL" },
-	{ true, true, fakevideo, "fakevideo" },
+	{ true, true, nullvideo, "nullvideo" },
+	{ true, false, colorbar_generator, "Colorbar generator" },
 };
 	
 

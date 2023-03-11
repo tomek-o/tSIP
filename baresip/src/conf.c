@@ -204,7 +204,10 @@ int configure(void)
 	pl_set_str(&modname, "sdl");
 	load_module2(NULL, &modname);
 
-	pl_set_str(&modname, "fakevideo");
+	pl_set_str(&modname, "nullvideo");
+	load_module2(NULL, &modname);
+
+	pl_set_str(&modname, "colorbar_generator");
 	load_module2(NULL, &modname);
 
 	if (cfg->video.selfview.enabled) {

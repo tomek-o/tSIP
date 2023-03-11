@@ -1,5 +1,5 @@
 /**
- * @file fakevideo.c Fake video source and video display
+ * @file colorbar_generator.c Video source: colorbar generator
  *
  * Copyright (C) 2010 Alfred E. Heggestad
  */
@@ -13,22 +13,6 @@
 #include <baresip.h>
 
 
-/**
- * @defgroup fakevideo fakevideo
- *
- * Fake video source and display module
- *
- * This module can be used to generate fake video input frames, and to
- * send output video frames to a fake non-existant display.
- *
- * Example config:
- \verbatim
-  video_source    fakevideo,nil
-  video_display   fakevideo,nil
- \endverbatim
- */
-
-
 struct vidsrc_st {
 	struct vidframe *frame;
 	thrd_t thread;
@@ -40,13 +24,8 @@ struct vidsrc_st {
 	void *arg;
 };
 
-struct vidisp_st {
-	int dummy;
-};
-
 
 static struct vidsrc *vidsrc;
-static struct vidisp *vidisp;
 
 
 static void process_frame(struct vidsrc_st *st)
@@ -168,7 +147,7 @@ static int src_alloc(struct vidsrc_st **stp, struct vidsrc *vs,
 	}
 
 	st->run = true;
-	err = thread_create_name(&st->thread, "fakevideo", read_thread, st);
+	err = thread_create_name(&st->thread, "colorbar_generator", read_thread, st);
 	if (err) {
 		st->run = false;
 		goto out;
@@ -184,46 +163,11 @@ static int src_alloc(struct vidsrc_st **stp, struct vidsrc *vs,
 }
 
 
-static int disp_alloc(struct vidisp_st **stp, const struct vidisp *vd,
-		      struct vidisp_prm *prm, const char *dev,
-		      vidisp_resize_h *resizeh, void *arg)
-{
-	struct vidisp_st *st;
-	(void)prm;
-	(void)dev;
-	(void)resizeh;
-	(void)arg;
-
-	if (!stp || !vd)
-		return EINVAL;
-
-	st = mem_zalloc(sizeof(*st), disp_destructor);
-	if (!st)
-		return ENOMEM;
-
-	*stp = st;
-
-	return 0;
-}
-
-
-static int display(struct vidisp_st *st, const char *title,
-		   const struct vidframe *frame, uint64_t timestamp)
-{
-	(void)st;
-	(void)title;
-	(void)frame;
-	(void)timestamp;
-
-	return 0;
-}
-
 
 static int module_init(void)
 {
 	int err = 0;
-	err |= vidsrc_register(&vidsrc, "fakevideo", src_alloc, NULL);
-	err |= vidisp_register(&vidisp, "fakevideo", disp_alloc, NULL, display, NULL);
+	err |= vidsrc_register(&vidsrc, "colorbar_generator", src_alloc, NULL);
 	return err;
 }
 
@@ -231,14 +175,13 @@ static int module_init(void)
 static int module_close(void)
 {
 	vidsrc = mem_deref(vidsrc);
-	vidisp = mem_deref(vidisp);
 	return 0;
 }
 
 
-EXPORT_SYM const struct mod_export DECL_EXPORTS(fakevideo) = {
-	"fakevideo",
-	"fakevideo",
+EXPORT_SYM const struct mod_export DECL_EXPORTS(colorbar_generator) = {
+	"colorbar_generator",
+	"colorbar_generator",
 	module_init,
 	module_close
 };
