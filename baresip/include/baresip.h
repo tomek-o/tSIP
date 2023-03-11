@@ -194,13 +194,13 @@ struct config {
 
 	/** Audio */
 	struct config_audio {
-		char src_mod[16];       /**< Audio source module            */
+		char src_mod[32];       /**< Audio source module            */
 		char src_dev[128];      /**< Audio source device            */
-		char play_mod[16];      /**< Audio playback module          */
+		char play_mod[32];      /**< Audio playback module          */
 		char play_dev[128];     /**< Audio playback device          */
-		char alert_mod[16];     /**< Audio alert module             */
+		char alert_mod[32];     /**< Audio alert module             */
 		char alert_dev[128];    /**< Audio alert device             */
-		char ring_mod[16];      /**< Audio module for incoming ring */
+		char ring_mod[32];      /**< Audio module for incoming ring */
 		char ring_dev[128];     /**< Audio device for incoming ring */
 		struct range srate;     /**< Audio sampling rate in [Hz]    */
 		struct range channels;  /**< Nr. of audio channels (1=mono) */
@@ -232,9 +232,9 @@ struct config {
 #ifdef USE_VIDEO
 	/** Video */
 	struct config_video {
-		char src_mod[16];       /**< Video source module            */
+		char src_mod[32];       /**< Video source module            */
 		char src_dev[128];      /**< Video source device            */
-		char disp_mod[16];      /**< Video display module           */
+		char disp_mod[32];      /**< Video display module           */
 		char disp_dev[128];     /**< Video display device           */
 		unsigned width, height; /**< Video resolution               */
 		uint32_t bitrate;       /**< Encoder bitrate in [bit/s]     */
