@@ -468,3 +468,8 @@ void vidframe_copy(struct vidframe *dst, const struct vidframe *src)
 		break;
 	}
 }
+
+bool vidframe_isvalid(const struct vidframe *f)
+{
+	return f ? f->data[0] != NULL : false;
+}

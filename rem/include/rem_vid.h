@@ -129,11 +129,7 @@ void vidframe_copy(struct vidframe *dst, const struct vidframe *src);
 const char *vidfmt_name(enum vidfmt fmt);
 
 
-static inline bool vidframe_isvalid(const struct vidframe *f)
-{
-	return f ? f->data[0] != NULL : false;
-}
-
+bool vidframe_isvalid(const struct vidframe *f);
 
 extern const struct vidfmt_desc vidfmt_descv[VID_FMT_N];
 
