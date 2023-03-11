@@ -39,7 +39,10 @@ __published:	// IDE-managed Components
 	TLabel *lblFps;
 	TEdit *edFps;
 	TCheckBox *chbDshowSkipReadingBackMediaFormat;
+	TLabel *lblDisplayModule;
+	TComboBox *cbOutputMod;
 	void __fastcall cbInputModChange(TObject *Sender);
+	void __fastcall cbOutputModChange(TObject *Sender);
 private:	// User declarations
 	VideoConf *cfg;
 	UaConf *uaCfg;

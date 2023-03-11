@@ -24,6 +24,8 @@ __fastcall TfrmVideoConf::TfrmVideoConf(TComponent* Owner)
 	{
 		cbDisplayParentType->Items->Add(VideoConf::getDisplayParentTypeName(static_cast<VideoConf::DisplayParentType>(i)));
 	}
+
+	VideoModules::FillOutputSelectorCb(cbOutputMod);
 }
 //---------------------------------------------------------------------------
 
@@ -38,6 +40,9 @@ void TfrmVideoConf::SetCfg(VideoConf *cfg, UaConf *uaCfg)
 
 	cbInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(uaCfg->video.videoSource.mod.c_str());
 	cbInputModChange(NULL);
+
+	cbOutputMod->ItemIndex = VideoModules::GetOutputModuleCbIndex(uaCfg->video.videoDisplay.mod.c_str());
+    cbOutputModChange(NULL);
 
 	cbDisplayParentType->ItemIndex = cfg->displayParentType;
 	edDisplayParentId->Text = cfg->displayParentId;
@@ -62,6 +67,8 @@ void TfrmVideoConf::Apply(void)
 	{
 		uaCfg->video.videoSource.dev = cbInputDev->Text.c_str();
 	}
+
+    uaCfg->video.videoDisplay.mod = VideoModules::GetOutputModuleFromCbIndex(cbOutputMod->ItemIndex);
 
 	cfg->displayParentType = static_cast<VideoConf::DisplayParentType>(cbDisplayParentType->ItemIndex);
 	cfg->displayParentId = StrToIntDef(edDisplayParentId->Text, cfg->displayParentId);
@@ -105,3 +112,23 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+void __fastcall TfrmVideoConf::cbOutputModChange(TObject *Sender)
+{
+	AnsiString mod = VideoModules::GetInputModuleFromCbIndex(cbOutputMod->ItemIndex);
+	if (mod == VideoModules::dshow)
+	{
+		lblDisplayParentType->Visible = true;
+		cbDisplayParentType->Visible = true;
+		lblDisplayParentId->Visible = true;
+		edDisplayParentId->Visible = true;
+	}
+	else
+	{
+		lblDisplayParentType->Visible = false;
+		cbDisplayParentType->Visible = false;
+		lblDisplayParentId->Visible = false;
+		edDisplayParentId->Visible = false;
+	}
+}
+//---------------------------------------------------------------------------
+

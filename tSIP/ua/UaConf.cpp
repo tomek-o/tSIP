@@ -295,6 +295,14 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 				jSource.getString("dev", video.videoSource.dev);
 			}
 		}
+		{
+			const Json::Value &jSource = jv["videoDisplay"];
+			if (jSource.type() == Json::objectValue)
+			{
+				jSource.getString("mod", video.videoDisplay.mod);
+				jSource.getString("dev", video.videoDisplay.dev);
+			}
+		}
 		jv.getUInt("width", video.width);
 		jv.getUInt("height", video.height);
 		jv.getUInt("bitrate", video.bitrate);
@@ -457,6 +465,12 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		{
 			Json::Value &jSource = jv["videoSource"];
 			const Video::Device &device = video.videoSource;
+			jSource["mod"] = device.mod;
+			jSource["dev"] = device.dev;
+		}
+		{
+			Json::Value &jSource = jv["videoDisplay"];
+			const Video::Device &device = video.videoDisplay;
 			jSource["mod"] = device.mod;
 			jSource["dev"] = device.dev;
 		}

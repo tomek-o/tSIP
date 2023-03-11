@@ -1,7 +1,7 @@
 /**
  * @file vidisp.c  Video Display
  *
- * Copyright (C) 2010 Creytiv.com
+ * Copyright (C) 2010 Alfred E. Heggestad
  */
 #include <re.h>
 #include <baresip.h>
@@ -127,6 +127,9 @@ int vidisp_display(struct vidisp_st *st, const char *title,
 	vd = st->vd;
 
 	//re_printf("%s/%04d frame %p\n", __FILE__, __LINE__, frame);
+
+	if (vd == NULL)
+		return EINVAL;
 
 	return vd->disph(st, title, frame, timestamp);
 }

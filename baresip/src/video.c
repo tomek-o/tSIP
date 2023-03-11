@@ -642,13 +642,13 @@ static void vidisp_resize_handler(const struct vidsz *sz, void *arg)
 
 
 /* Set the video display - can be called multiple times */
-static int set_vidisp(struct vrx *vrx)
+static int set_vidisp(struct vrx *vrx, const char *mod)
 {
 	struct vidisp *vd;
 
 	vrx->vidisp = mem_deref(vrx->vidisp);
 
-	vd = (struct vidisp *)vidisp_find(NULL);
+	vd = (struct vidisp *)vidisp_find(mod);
 	if (!vd)
 		return ENOENT;
 
@@ -731,7 +731,7 @@ int video_start(struct video *v, void* vidisp_parent_handle, const char *peer)
 
 	v->vrx.vidisp_prm.parent_handle = vidisp_parent_handle;
 
-	err = set_vidisp(&v->vrx);
+	err = set_vidisp(&v->vrx, v->cfg.disp_mod);
 	if (err) {
 		DEBUG_WARNING("could not set vidisp: %m\n", err);
 	}

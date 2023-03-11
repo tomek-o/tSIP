@@ -647,6 +647,8 @@ static int app_init(void)
 #ifdef USE_VIDEO
 	strncpyz(cfg->video.src_mod, appSettings.uaConf.video.videoSource.mod.c_str(), sizeof(cfg->video.src_mod));
 	strncpyz(cfg->video.src_dev, appSettings.uaConf.video.videoSource.dev.c_str(), sizeof(cfg->video.src_dev));
+	strncpyz(cfg->video.disp_mod, appSettings.uaConf.video.videoDisplay.mod.c_str(), sizeof(cfg->video.disp_mod));
+	strncpyz(cfg->video.disp_dev, appSettings.uaConf.video.videoDisplay.dev.c_str(), sizeof(cfg->video.disp_dev));
 	cfg->video.width = appSettings.uaConf.video.width;
 	cfg->video.height = appSettings.uaConf.video.height;
 	cfg->video.bitrate = appSettings.uaConf.video.bitrate;

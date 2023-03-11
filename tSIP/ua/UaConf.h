@@ -624,8 +624,7 @@ public:
 		struct Device {
 			std::string mod;       	/**< module */
 			std::string dev;		/**< device */
-			Device(void):
-				mod(VideoModules::dshow)
+			Device(void)
 			{
 			}
 			bool operator==(const Device& right) const {
@@ -640,7 +639,7 @@ public:
 			bool operator!=(const Device& right) const {
 				return !(*this == right);
 			}
-		} videoSource;
+		} videoSource, videoDisplay;
 
 		unsigned int width, height;
 		unsigned int bitrate;
@@ -685,11 +684,14 @@ public:
 			bitrate(512000),
 			fps(25)
 		{
+			videoSource.mod = VideoModules::dshow;
+			videoDisplay.mod = VideoModules::sdl;
 		}
 
 		bool operator==(const Video& right) const {
 			return (
 				videoSource == right.videoSource &&
+				videoDisplay == right.videoDisplay &&
 				width == right.width &&
 				height == right.height &&
 				bitrate == right.bitrate &&
