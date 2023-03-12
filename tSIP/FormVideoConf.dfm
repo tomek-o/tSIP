@@ -13,6 +13,8 @@ object frmVideoConf: TfrmVideoConf
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object lblDisplayParentType: TLabel
@@ -106,7 +108,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 240
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 1
   end
   object edDisplayParentId: TEdit
@@ -138,7 +140,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 240
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 5
   end
   object cbInputMod: TComboBox
@@ -147,7 +149,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 240
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 6
     OnChange = cbInputModChange
   end
@@ -212,7 +214,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 240
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 14
     OnChange = cbOutputModChange
   end

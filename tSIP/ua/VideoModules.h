@@ -18,6 +18,7 @@ namespace VideoModules
 	extern const char* sdl;
 	extern const char* nullvideo;
 	extern const char* colorbar_generator;
+	extern const char* colorbar_generator_animated;
 
 	void FillInputSelectorCb(Stdctrls::TComboBox *cb);
 	void FillOutputSelectorCb(Stdctrls::TComboBox *cb);

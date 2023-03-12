@@ -1,5 +1,5 @@
 /**
- * @file colorbar_generator.c Video source: colorbar generator
+ * @file colorbar_generator_animated.c Video source: colorbar generator, animated
  *
  * Copyright (C) 2010 Alfred E. Heggestad
  */
@@ -12,6 +12,9 @@
 #include <rem.h>
 #include <baresip.h>
 
+enum { SQUARE_SIZE = 30 };
+enum { STEP_X = 5 };
+enum { STEP_Y = 10 };
 
 struct vidsrc_st {
 	struct vidframe *frame;
@@ -22,6 +25,9 @@ struct vidsrc_st {
 	double fps;
 	vidsrc_frame_h *frameh;
 	void *arg;
+	struct vidsz size;
+	unsigned int square_x, square_y;
+	bool reverse;
 };
 
 
@@ -30,7 +36,50 @@ static struct vidsrc *vidsrc;
 
 static void process_frame(struct vidsrc_st *st)
 {
+	unsigned y;
+    struct vidsz *size = &st->size;
+
 	st->ts += (VIDEO_TIMEBASE / st->fps);
+
+	/* Pattern of three horizontal bars in RGB */
+	for (y=0; y<size->h; y++) {
+
+		uint8_t r=0, g=0, b=0;
+
+		if (y < size->h/3)
+			r = 255;
+		else if (y < size->h*2/3)
+			g = 255;
+		else
+			b = 255;
+
+		vidframe_draw_hline(st->frame, 0, y, size->w, r, g, b);
+	}
+
+	if (size->w >= SQUARE_SIZE && size->h >= SQUARE_SIZE) {
+		bool next_line = false;
+		vidframe_draw_filled_rect(st->frame, st->square_x, st->square_y, SQUARE_SIZE, SQUARE_SIZE, 0, 0, 0);
+		if (st->reverse == false) {
+			if (st->square_x + SQUARE_SIZE + STEP_X <= size->w) {
+				st->square_x += STEP_X;
+			} else {
+				next_line = true;
+			}
+		} else {
+			if (st->square_x >= STEP_X) {
+				st->square_x -= STEP_X;
+			} else {
+				next_line = true;
+			}
+		}
+		if (next_line) {
+			st->reverse = !st->reverse;
+			st->square_y += STEP_Y;
+			if (st->square_y + SQUARE_SIZE >= size->h) {
+				st->square_y = 0;
+			}
+		}
+	}
 
 	st->frameh(st->frame, /*st->ts, */ st->arg);
 }
@@ -102,7 +151,6 @@ static int src_alloc(struct vidsrc_st **stp, struct vidsrc *vs,
 		 vidsrc_error_h *errorh, void *arg)
 {
 	struct vidsrc_st *st;
-	unsigned x;
 	int err;
 
 	(void)fmt;
@@ -120,25 +168,11 @@ static int src_alloc(struct vidsrc_st **stp, struct vidsrc *vs,
 	st->fps    = prm->fps;
 	st->frameh = frameh;
 	st->arg    = arg;
+	st->size   = *size;
 
 	err = vidframe_alloc(&st->frame, VID_FMT_YUV420P, size);
 	if (err)
 		goto out;
-
-	/* Pattern of three vertical bars in RGB */
-	for (x=0; x<size->w; x++) {
-
-		uint8_t r=0, g=0, b=0;
-
-		if (x < size->w/3)
-			r = 255;
-		else if (x < size->w*2/3)
-			g = 255;
-		else
-			b = 255;
-
-		vidframe_draw_vline(st->frame, x, 0, size->h, r, g, b);
-	}
 
 	err = mtx_init(&st->mutex, mtx_plain) != thrd_success;
 	if (err) {
@@ -167,7 +201,7 @@ static int src_alloc(struct vidsrc_st **stp, struct vidsrc *vs,
 static int module_init(void)
 {
 	int err = 0;
-	err |= vidsrc_register(&vidsrc, "colorbar_generator", src_alloc, NULL);
+	err |= vidsrc_register(&vidsrc, "colorbar_generator_animated", src_alloc, NULL);
 	return err;
 }
 
@@ -179,9 +213,9 @@ static int module_close(void)
 }
 
 
-EXPORT_SYM const struct mod_export DECL_EXPORTS(colorbar_generator) = {
-	"colorbar_generator",
-	"colorbar_generator",
+EXPORT_SYM const struct mod_export DECL_EXPORTS(colorbar_generator_animated) = {
+	"colorbar_generator_animated",
+	"colorbar_generator_animated",
 	module_init,
 	module_close
 };

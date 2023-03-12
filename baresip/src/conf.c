@@ -210,6 +210,9 @@ int configure(void)
 	pl_set_str(&modname, "colorbar_generator");
 	load_module2(NULL, &modname);
 
+	pl_set_str(&modname, "colorbar_generator_animated");
+	load_module2(NULL, &modname);
+
 	if (cfg->video.selfview.enabled) {
 		pl_set_str(&modname, "selfview");
 		load_module2(NULL, &modname);

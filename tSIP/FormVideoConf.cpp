@@ -95,7 +95,10 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 		lblInputDevice->Visible = true;
 		VideoDevicesList::FillComboBox(cbInputDev, mod, false, uaCfg->video.videoSource.dev.c_str());
 	}
-	else if (mod == VideoModules::nullvideo || mod == VideoModules::colorbar_generator)
+	else if (mod == VideoModules::nullvideo ||
+		mod == VideoModules::colorbar_generator ||
+        mod == VideoModules::colorbar_generator_animated
+		)
 	{
 		btnSelectInputFile->Visible = false;
 		edInputFile->Visible = false;
