@@ -252,3 +252,28 @@ void vidframe_draw_rect(struct vidframe *f, unsigned x0, unsigned y0,
 	vidframe_draw_vline(f, x0,     y0,     h, r, g, b);
 	vidframe_draw_vline(f, x0+w-1, y0,     h, r, g, b);
 }
+
+/**
+ * Draw a filled rectangle
+ *
+ * @param f   Video frame
+ * @param x0  Origin X-position
+ * @param y0  Origin Y-position
+ * @param w   Rectangle width
+ * @param h   Rectangle height
+ * @param r   Red color component
+ * @param g   Green color component
+ * @param b   Blue color component
+ */
+void vidframe_draw_filled_rect(struct vidframe *f, unsigned x0, unsigned y0,
+			unsigned w, unsigned h,
+			uint8_t r, uint8_t g, uint8_t b)
+{
+	unsigned x, y;
+	if (!f)
+		return;
+
+	for (y = 0; y < h; y++) {
+		vidframe_draw_hline(f, x0, y0 + y, w, r, g, b);
+	}
+}

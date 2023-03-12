@@ -146,3 +146,6 @@ void vidframe_draw_vline(struct vidframe *f,
 void vidframe_draw_rect(struct vidframe *f,
 			unsigned x0, unsigned y0, unsigned w, unsigned h,
 			uint8_t r, uint8_t g, uint8_t b);
+void vidframe_draw_filled_rect(struct vidframe *f, unsigned x0, unsigned y0,
+			unsigned w, unsigned h,
+			uint8_t r, uint8_t g, uint8_t b);
