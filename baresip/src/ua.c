@@ -336,33 +336,33 @@ static void call_event_handler(struct call *call, enum call_event ev,
 				(void)play_file(&ua->play, "ring.wav", -1);
 			}
         #endif
-			ua_event(ua, UA_EVENT_CALL_INCOMING, call, peeruri);
+			ua_event(ua, UA_EVENT_CALL_INCOMING, call, "%s", peeruri);
 			break;
 		}
 		break;
 
 	case CALL_EVENT_TRYING:
-		ua_event(ua, UA_EVENT_CALL_TRYING, call, peeruri);
+		ua_event(ua, UA_EVENT_CALL_TRYING, call, "%s", peeruri);
 		break;
 
 	case CALL_EVENT_RINGING:
 		(void)play_file(&ua->play, cfg->audio.alert_mod, cfg->audio.alert_dev, "ringback.wav", -1, false);
 
-		ua_event(ua, UA_EVENT_CALL_RINGING, call, peeruri);
+		ua_event(ua, UA_EVENT_CALL_RINGING, call, "%s", peeruri);
 		break;
 
 	case CALL_EVENT_OUTGOING:
-		ua_event(ua, UA_EVENT_CALL_OUTGOING, call, peeruri);
+		ua_event(ua, UA_EVENT_CALL_OUTGOING, call, "%s", peeruri);
 		break;
 
 	case CALL_EVENT_PROGRESS:
 		ua_printf(ua, "Call in-progress: %s\n", peeruri);
-		ua_event(ua, UA_EVENT_CALL_PROGRESS, call, peeruri);
+		ua_event(ua, UA_EVENT_CALL_PROGRESS, call, "%s", peeruri);
 		break;
 
 	case CALL_EVENT_ESTABLISHED:
 		ua_printf(ua, "Call established: %s\n", peeruri);
-		ua_event(ua, UA_EVENT_CALL_ESTABLISHED, call, peeruri);
+		ua_event(ua, UA_EVENT_CALL_ESTABLISHED, call, "%s", peeruri);
 		break;
 
 	case CALL_EVENT_CLOSED:
@@ -372,7 +372,7 @@ static void call_event_handler(struct call *call, enum call_event ev,
 			if (tone)
 				(void)play_file(&ua->play, cfg->audio.alert_mod, cfg->audio.alert_dev, tone, 1, false);
 		}
-		ua_event(ua, UA_EVENT_CALL_CLOSED, call, str);
+		ua_event(ua, UA_EVENT_CALL_CLOSED, call, "%s", str);
 		mem_deref(call);
 		break;
 
@@ -399,7 +399,7 @@ static void call_event_handler(struct call *call, enum call_event ev,
 				DEBUG_WARNING("transfer: connect error: %m\n",
 					      err);
 			} else {
-				ua_event(ua, UA_EVENT_CALL_TRANSFER, call2, str);
+				ua_event(ua, UA_EVENT_CALL_TRANSFER, call2, "%s", str);
             }
 		}
 
@@ -411,11 +411,11 @@ static void call_event_handler(struct call *call, enum call_event ev,
 
 	case CALL_EVENT_TRANSFER_FAILED:
 		ua_printf(ua, "Call transfer failed: %s\n", peeruri);
-		ua_event(ua, UA_EVENT_CALL_TRANSFER_FAILED, call, peeruri);
+		ua_event(ua, UA_EVENT_CALL_TRANSFER_FAILED, call, "%s", peeruri);
 		break;
 
 	case CALL_EVENT_REINVITE_RECEIVED:
-		ua_event(ua, UA_EVENT_CALL_REINVITE_RECEIVED, call, peeruri);	
+		ua_event(ua, UA_EVENT_CALL_REINVITE_RECEIVED, call, "%s", peeruri);	
 		break;
 
 	}
@@ -433,7 +433,7 @@ static void call_dtmf_handler(struct call *call, char key, void *arg)
 		key_str[0] = key;
 		key_str[1] = '\0';
 
-		ua_event(ua, UA_EVENT_CALL_DTMF_START, call, key_str);
+		ua_event(ua, UA_EVENT_CALL_DTMF_START, call, "%s", key_str);
 	}
 	else {
 		ua_event(ua, UA_EVENT_CALL_DTMF_END, call, NULL);
@@ -536,7 +536,7 @@ static void handle_refer(struct ua *ua, const struct sip_msg *msg)
 	}
 
 	(void)re_snprintf(refer_target, sizeof(refer_target), "%r", &hdr->val);
-	ua_event(ua, UA_EVENT_CALL_TRANSFER_OOD, NULL, refer_target);
+	ua_event(ua, UA_EVENT_CALL_TRANSFER_OOD, NULL, "%s", refer_target);
 }
 
 
