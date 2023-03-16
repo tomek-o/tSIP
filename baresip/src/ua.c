@@ -314,31 +314,17 @@ static void call_event_handler(struct call *call, enum call_event ev,
 	switch (ev) {
 
 	case CALL_EVENT_INCOMING:
-		switch (ua->acc->answermode) {
-
-		case ANSWERMODE_EARLY:
-			(void)call_progress(call);
-			break;
-
-		case ANSWERMODE_AUTO:
-			(void)call_answer(call, 200, "", "", VIDMODE_OFF);	/**< \todo video auto answer */
-			break;
-
-		case ANSWERMODE_MANUAL:
-		default:
-		#if 0	// ring generation moved to upper layer
-			if (list_count(&ua->calls) > 1) {
-				(void)play_file(&ua->play,
-							"callwaiting.wav", 3);
-			}
-			else {
-				/* Alert user */
-				(void)play_file(&ua->play, "ring.wav", -1);
-			}
-        #endif
-			ua_event(ua, UA_EVENT_CALL_INCOMING, call, "%s", peeruri);
-			break;
+	#if 0	// ring generation moved to upper layer
+		if (list_count(&ua->calls) > 1) {
+			(void)play_file(&ua->play,
+						"callwaiting.wav", 3);
 		}
+		else {
+			/* Alert user */
+			(void)play_file(&ua->play, "ring.wav", -1);
+		}
+	#endif
+		ua_event(ua, UA_EVENT_CALL_INCOMING, call, "%s", peeruri);
 		break;
 
 	case CALL_EVENT_TRYING:

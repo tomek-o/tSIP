@@ -29,14 +29,6 @@ enum {
  * Account
  */
 
-
-/** Defines the answermodes */
-enum answermode {
-	ANSWERMODE_MANUAL = 0,
-	ANSWERMODE_EARLY,
-	ANSWERMODE_AUTO
-};
-
 enum dtmf_fmt {
 	DTMF_FMT_RFC2833 = 0,
 	DTMF_FMT_SIP_INFO,
@@ -52,7 +44,6 @@ struct account {
 	char *aor;                   /**< Local SIP uri                      */
 
 	/* parameters: */
-	enum answermode answermode;  /**< Answermode for incoming calls      */
 	struct le acv[16];           /**< List elements for aucodecl         */
 	struct list aucodecl;        /**< List of preferred audio-codecs     */
 	char *auth_user;             /**< Authentication username            */

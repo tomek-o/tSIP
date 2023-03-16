@@ -144,30 +144,6 @@ static int media_decode(struct account *acc, const struct pl *prm)
 }
 
 
-/* Decode answermode parameter */
-static void answermode_decode(struct account *prm, const struct pl *pl)
-{
-	struct pl amode;
-
-	if (0 == msg_param_decode(pl, "answermode", &amode)) {
-
-		if (0 == pl_strcasecmp(&amode, "manual")) {
-			prm->answermode = ANSWERMODE_MANUAL;
-		}
-		else if (0 == pl_strcasecmp(&amode, "early")) {
-			prm->answermode = ANSWERMODE_EARLY;
-		}
-		else if (0 == pl_strcasecmp(&amode, "auto")) {
-			prm->answermode = ANSWERMODE_AUTO;
-		}
-		else {
-			DEBUG_WARNING("answermode: unknown (%r)\n", &amode);
-			prm->answermode = ANSWERMODE_MANUAL;
-		}
-	}
-}
-
-
 static int csl_parse(struct pl *pl, char *str, size_t sz)
 {
 	struct pl ws = PL_INIT, val, ws2 = PL_INIT, cma = PL_INIT;
@@ -425,7 +401,6 @@ int account_alloc(struct account **accp, const char *sipaddr, const char *pwd)
 	/* Decode parameters */
 	acc->ptime = 20;
 	err |= sip_params_decode(acc, &acc->laddr);
-	       answermode_decode(acc, &acc->laddr.params);
 	err |= audio_codecs_decode(acc, &acc->laddr.params);
 #ifdef USE_VIDEO
 	err |= video_codecs_decode(acc, &acc->laddr.params);
@@ -531,18 +506,6 @@ struct list *account_vidcodecl(const struct account *acc)
 #endif
 
 
-static const char *answermode_str(enum answermode mode)
-{
-	switch (mode) {
-
-	case ANSWERMODE_MANUAL: return "manual";
-	case ANSWERMODE_EARLY:  return "early";
-	case ANSWERMODE_AUTO:   return "auto";
-	default: return "???";
-	}
-}
-
-
 /**
  * Print the account debug information
  *
@@ -567,8 +530,6 @@ int account_debug(struct re_printf *pf, const struct account *acc)
 			  uri_encode, &acc->luri);
 	err |= re_hprintf(pf, " aor:          %s\n", acc->aor);
 	err |= re_hprintf(pf, " dispname:     %s\n", acc->dispname);
-	err |= re_hprintf(pf, " answermode:   %s\n",
-			  answermode_str(acc->answermode));
 	if (!list_isempty(&acc->aucodecl)) {
 		err |= re_hprintf(pf, " audio_codecs:");
 		for (le = list_head(&acc->aucodecl); le; le = le->next) {
