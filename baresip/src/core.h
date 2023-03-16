@@ -282,7 +282,6 @@ int sip_req_send(struct ua *ua, const char *method, const char *uri,
  */
 
 int sdp_decode_multipart(const struct pl *ctype, struct mbuf *mb);
-const struct sdp_format *sdp_media_format_cycle(struct sdp_media *m);
 
 
 /*

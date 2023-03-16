@@ -119,30 +119,6 @@ int sdp_media_find_unused_pt(const struct sdp_media *m)
 }
 
 
-const struct sdp_format *sdp_media_format_cycle(struct sdp_media *m)
-{
-	struct sdp_format *sf;
-	struct list *lst;
-
- again:
-	sf = (struct sdp_format *)sdp_media_rformat(m, NULL);
-	if (!sf)
-		return NULL;
-
-	lst = sf->le.list;
-
-	/* move top-most codec to end of list */
-	list_unlink(&sf->le);
-	list_append(lst, &sf->le, sf);
-
-	sf = (struct sdp_format *)sdp_media_rformat(m, NULL);
-	if (!str_casecmp(sf->name, telev_rtpfmt))
-		goto again;
-
-	return sf;
-}
-
-
 static void decode_part(const struct pl *part, struct mbuf *mb)
 {
 	struct pl hdrs, body;

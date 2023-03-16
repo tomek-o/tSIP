@@ -1418,28 +1418,6 @@ int audio_decoder_set(struct audio *a, const struct aucodec *ac,
 }
 
 
-/**
- * Use the next audio encoder in the local list of negotiated codecs
- *
- * @param audio  Audio object
- */
-void audio_encoder_cycle(struct audio *audio)
-{
-	const struct sdp_format *rc = NULL;
-
-	if (!audio)
-		return;
-
-	rc = sdp_media_format_cycle(stream_sdpmedia(audio_strm(audio)));
-	if (!rc) {
-		(void)re_printf("cycle audio: no remote codec found\n");
-		return;
-	}
-
-	(void)audio_encoder_set(audio, rc->data, rc->pt, rc->params);
-}
-
-
 struct stream *audio_strm(const struct audio *a)
 {
 	return a ? a->strm : NULL;
