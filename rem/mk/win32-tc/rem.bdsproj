@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -97,21 +97,22 @@
           <property category="win32.*.win32b.bcc32" name="option.H=.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.H=.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Hc.enabled" value="1"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="..\..\src\vidmix"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\..\src\aumix"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\..\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\..\src\aubuf"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="$(BDS)\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="$(BDS)\include\dinkumware"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="$(BDS)\include\vcl"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="..\..\src\vidconv"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\..\src\vid"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\src\aufile"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\..\..\re\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\src\g711"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\src\fir"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="..\..\src\autone"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="..\..\src\auresamp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="..\..\src\au"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.10" value="..\..\src\auresamp"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.11" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.12" value="..\..\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.13" value="..\..\src\aubuf"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.14" value="$(BDS)\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.15" value="$(BDS)\include\dinkumware"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.16" value="$(BDS)\include\vcl"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="..\..\src\vidmix"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\..\src\vidconv"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\src\vid"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="..\..\src\aufile"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.6" value="..\..\..\re\include"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.7" value="..\..\src\g711"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.8" value="..\..\src\fir"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.9" value="..\..\src\autone"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.Q.enabled" value="1"/>
@@ -132,73 +133,78 @@
           <property category="win32.*.win32b.bcc32" name="option.waus.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.wcsu.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.wpch.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="..\..\src\vidmix"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="..\..\src\aubuf"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.11" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="..\..\src\vidconv"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="..\..\src\vid"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="..\..\src\aufile"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\..\src\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\..\src\fir"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\..\src\autone"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="..\..\src\auresamp"/>
-          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="..\..\src\au"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.10" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.11" value="..\..\src\aubuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.12" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="..\..\src\vidmix"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.3" value="..\..\src\vidconv"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.4" value="..\..\src\vid"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.5" value="..\..\src\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.6" value="..\..\src\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.7" value="..\..\src\fir"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.8" value="..\..\src\autone"/>
+          <property category="win32.*.win32b.dcc32" name="option.I.arg.9" value="..\..\src\auresamp"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.I.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="..\..\src\vidmix"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="..\..\src\aubuf"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.11" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="..\..\src\vidconv"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="..\..\src\vid"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="..\..\src\aufile"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\..\src\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\..\src\fir"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\..\src\autone"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="..\..\src\auresamp"/>
-          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.1" value="..\..\src\au"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.10" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.11" value="..\..\src\aubuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.12" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.2" value="..\..\src\vidmix"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.3" value="..\..\src\vidconv"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.4" value="..\..\src\vid"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.5" value="..\..\src\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.6" value="..\..\src\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.7" value="..\..\src\fir"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.8" value="..\..\src\autone"/>
+          <property category="win32.*.win32b.dcc32" name="option.O.arg.9" value="..\..\src\auresamp"/>
           <property category="win32.*.win32b.dcc32" name="option.O.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.O.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="..\..\src\vidmix"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="..\..\src\aubuf"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.11" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="..\..\src\vidconv"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="..\..\src\vid"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="..\..\src\aufile"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\..\src\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\..\src\fir"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\..\src\autone"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="..\..\src\auresamp"/>
-          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.1" value="..\..\src\au"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.10" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.11" value="..\..\src\aubuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.12" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.2" value="..\..\src\vidmix"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.3" value="..\..\src\vidconv"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.4" value="..\..\src\vid"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.5" value="..\..\src\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.6" value="..\..\src\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.7" value="..\..\src\fir"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.8" value="..\..\src\autone"/>
+          <property category="win32.*.win32b.dcc32" name="option.R.arg.9" value="..\..\src\auresamp"/>
           <property category="win32.*.win32b.dcc32" name="option.R.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.R.enabled" value="0"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="..\..\src\vidmix"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="..\..\src\aubuf"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="..\..\..\..\..\Borland Studio Projects"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="$(BDS)\lib"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.14" value="$(BDS)\lib\obj"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="..\..\src\vidconv"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="..\..\src\vid"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="..\..\src\aufile"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\..\src\g711"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\src\fir"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="..\..\src\autone"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="..\..\src\auresamp"/>
-          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.1" value="..\..\src\au"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.10" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.11" value="..\..\src\aubuf"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.12" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.13" value="..\..\..\..\..\Borland Studio Projects"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.14" value="$(BDS)\lib"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.15" value="$(BDS)\lib\obj"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.2" value="..\..\src\vidmix"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.3" value="..\..\src\vidconv"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.4" value="..\..\src\vid"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.5" value="..\..\src\aufile"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.6" value="..\..\src\g711"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.7" value="..\..\src\fir"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.8" value="..\..\src\autone"/>
+          <property category="win32.*.win32b.dcc32" name="option.U.arg.9" value="..\..\src\auresamp"/>
           <property category="win32.*.win32b.dcc32" name="option.U.arg.merge" value="1"/>
           <property category="win32.*.win32b.dcc32" name="option.U.enabled" value="1"/>
           <property category="win32.*.win32b.dcc32" name="param.filenames.merge" value="1"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="..\..\src\vidmix"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="..\..\src\aubuf"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="..\..\src\vidconv"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="..\..\src\vid"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="..\..\src\aufile"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\..\src\g711"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\..\src\fir"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\..\src\autone"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="..\..\src\auresamp"/>
-          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.1" value="..\..\src\au"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.10" value="..\..\src\aumix"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.11" value="..\..\src\aubuf"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.12" value="..\_PROJEKTY\libre\rem-0.3.0\mk\win32-tc"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.2" value="..\..\src\vidmix"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.3" value="..\..\src\vidconv"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.4" value="..\..\src\vid"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.5" value="..\..\src\aufile"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.6" value="..\..\src\g711"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.7" value="..\..\src\fir"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.8" value="..\..\src\autone"/>
+          <property category="win32.*.win32b.idl2cpp" name="option.I.arg.9" value="..\..\src\auresamp"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.idl2cpp" name="option.I.enabled" value="1"/>
           <property category="win32.*.win32b.ilink32" name="option.Gi.enabled" value="0"/>
@@ -249,6 +255,8 @@
         <FILE FILENAME="..\..\src\vid\frame.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="frame" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\vidconv\vconv.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="vconv" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\vidmix\vidmix.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="vidmix" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\au\au_fmt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="au_fmt" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\au\au_util.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="au_util" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

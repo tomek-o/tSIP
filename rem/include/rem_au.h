@@ -14,5 +14,11 @@ enum aufmt {
 	AUFMT_PCMU,   /**< G.711 U-law       */
 };
 
+size_t      aufmt_sample_size(enum aufmt fmt);
+const char *aufmt_name(enum aufmt fmt);
+
+uint32_t calc_nsamp(uint32_t srate, uint8_t channels, uint16_t ptime);
+
+
 #endif
 
