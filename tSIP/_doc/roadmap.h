@@ -132,7 +132,6 @@ TODO: TLS not working (UDP used instead) when outbound proxy is specified?
 
 CRM application communicating through TCPServer plugin
 
-- colorbar generator as a video source
 - H.264 config: profile
 - avformat video source
 - video recording
@@ -142,5 +141,4 @@ CRM application communicating through TCPServer plugin
 - RTSP as video source
 
 */
-
 
