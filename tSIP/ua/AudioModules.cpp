@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "AudioModules.h"
+#include "baresip_base_config.h"
 
 #include <Classes.hpp>
 #include <Controls.hpp>
@@ -23,6 +24,7 @@ const char* AudioModules::winwave2 = "winwave2";
 const char* AudioModules::aufile = "aufile";
 const char* AudioModules::aufileMm = "aufile_mm";
 const char* AudioModules::nullaudio = "nullaudio";
+const char* AudioModules::avformat = "avformat";
 
 struct AudioModuleDef
 {
@@ -39,6 +41,9 @@ const AudioModuleDef audioModuleDefs [] =
 	{ true, true, winwave2, "WaveIn, WaveOut v2" },
 	{ true, false, aufile, "Wave file" },
 	{ true, false, aufileMm, "Wave file - with MM timer" },
+#ifdef USE_VIDEO
+	{ true, false, avformat, "FFmpeg avformat" },
+#endif
 	{ true, true, nullaudio, "Null" },
 };
 	

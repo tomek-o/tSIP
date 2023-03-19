@@ -34,6 +34,7 @@ extern const struct mod_export exports_nullvideo;
 extern const struct mod_export exports_colorbar_generator;
 extern const struct mod_export exports_colorbar_generator_animated;
 extern const struct mod_export exports_selfview;
+extern const struct mod_export exports_avformat;
 #endif
 
 
@@ -69,6 +70,7 @@ const struct mod_export *mod_table[] = {
 	&exports_colorbar_generator,
 	&exports_colorbar_generator_animated,
 	&exports_selfview,
+	&exports_avformat,
 #endif
 	NULL
 };

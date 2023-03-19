@@ -20,6 +20,7 @@ namespace AudioModules
 	extern const char* aufile;
 	extern const char* aufileMm;
 	extern const char* nullaudio;
+	extern const char* avformat;
 
 	void FillInputSelectorCb(Stdctrls::TComboBox *cb);
 	void FillOutputSelectorCb(Stdctrls::TComboBox *cb);

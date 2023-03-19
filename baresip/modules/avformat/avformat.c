@@ -425,14 +425,22 @@ int avformat_shared_alloc(struct shared **shp, const char *dev,
 
 		case AVMEDIA_TYPE_AUDIO:
 			err = open_codec(&st->au, strm, i, ctx, true);
-			if (err)
-				goto out;
+			if (err) {
+				DEBUG_WARNING("avformat: failed to open audio codec, err = %d\n", err);
+				if (video == false) {
+					goto out;
+				}
+			}
 			break;
 
 		case AVMEDIA_TYPE_VIDEO:
 			err = open_codec(&st->vid, strm, i, ctx, true /*!st->is_pass_through*/);
-			if (err)
-				goto out;
+			if (err) {
+				DEBUG_WARNING("avformat: failed to open video codec, err = %d\n", err);
+				if (video == true) {
+					goto out;
+				}
+			}
 			break;
 
 		default:

@@ -123,7 +123,7 @@ object frmButtonEdit: TfrmButtonEdit
     Top = 81
     Width = 659
     Height = 408
-    ActivePage = tsVisual
+    ActivePage = tsBehavior
     TabOrder = 4
     object tsVisual: TTabSheet
       Caption = 'Visual'
@@ -759,7 +759,7 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 0
         Width = 651
         Height = 380
-        ActivePage = tsBehaviorAutoAnswer
+        ActivePage = tsBehaviorSwitchAudioSource
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0

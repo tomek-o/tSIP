@@ -59,6 +59,15 @@ namespace {
 		}
 		return ret;
 	}
+
+	AnsiString GetFullPath(AnsiString file)
+	{
+		AnsiString full;
+		full.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), file.c_str());
+		if (FileExists(full) == false)
+			full = file;
+		return full;
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -509,17 +518,16 @@ static int app_init(void)
 	struct config * cfg = conf_config();
 
 	strncpyz(cfg->audio.src_mod, appSettings.uaConf.audioCfgSrc.mod.c_str(), sizeof(cfg->audio.src_mod));
+
 	if (appSettings.uaConf.audioCfgSrc.mod != AudioModules::aufile &&
-		appSettings.uaConf.audioCfgSrc.mod != AudioModules::aufileMm)
+		appSettings.uaConf.audioCfgSrc.mod != AudioModules::aufileMm &&
+		appSettings.uaConf.audioCfgSrc.mod != AudioModules::avformat)
 	{
 		strncpyz(cfg->audio.src_dev, appSettings.uaConf.audioCfgSrc.dev.c_str(), sizeof(cfg->audio.src_dev));
 	}
 	else
 	{
-        // aufile / aufile_mm
-		AnsiString fileFull;
-		fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), appSettings.uaConf.audioCfgSrc.wavefile.c_str());
-		strncpyz(cfg->audio.src_dev, fileFull.c_str(), sizeof(cfg->audio.src_dev));
+		strncpyz(cfg->audio.src_dev, GetFullPath(appSettings.uaConf.audioCfgSrc.wavefile.c_str()).c_str(), sizeof(cfg->audio.src_dev));
 	}
 	strncpyz(cfg->audio.play_mod, appSettings.uaConf.audioCfgPlay.mod.c_str(), sizeof(cfg->audio.play_mod));
 	strncpyz(cfg->audio.play_dev, appSettings.uaConf.audioCfgPlay.dev.c_str(), sizeof(cfg->audio.play_dev));
@@ -646,7 +654,14 @@ static int app_init(void)
 	cfg->audio.loop_ring_without_silence = appSettings.uaConf.loopRingWithoutSilence;
 #ifdef USE_VIDEO
 	strncpyz(cfg->video.src_mod, appSettings.uaConf.video.videoSource.mod.c_str(), sizeof(cfg->video.src_mod));
-	strncpyz(cfg->video.src_dev, appSettings.uaConf.video.videoSource.dev.c_str(), sizeof(cfg->video.src_dev));
+	if (appSettings.uaConf.video.videoSource.mod == AudioModules::avformat)
+	{
+		strncpyz(cfg->video.src_dev, GetFullPath(appSettings.uaConf.video.videoSource.dev.c_str()).c_str(), sizeof(cfg->video.src_dev));
+	}
+	else
+	{
+		strncpyz(cfg->video.src_dev, appSettings.uaConf.video.videoSource.dev.c_str(), sizeof(cfg->video.src_dev));
+	}
 	strncpyz(cfg->video.disp_mod, appSettings.uaConf.video.videoDisplay.mod.c_str(), sizeof(cfg->video.disp_mod));
 	strncpyz(cfg->video.disp_dev, appSettings.uaConf.video.videoDisplay.dev.c_str(), sizeof(cfg->video.disp_dev));
 	cfg->video.width = appSettings.uaConf.video.width;

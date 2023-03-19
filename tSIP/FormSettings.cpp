@@ -1080,7 +1080,7 @@ void __fastcall TfrmSettings::cbSoundInputModChange(TObject *Sender)
 		lblSoundInputDevice->Visible = true;
 		AudioDevicesList::FillComboBox(cbSoundInputDev, mod, false, tmpSettings.uaConf.audioCfgSrc.dev.c_str());
 	}
-	else if (mod == AudioModules::aufile || mod == AudioModules::aufileMm)
+	else if (mod == AudioModules::aufile || mod == AudioModules::aufileMm || mod == AudioModules::avformat)
 	{
 		btnSelectWaveFile->Visible = true;
 		edSoundInputWave->Visible = true;
@@ -1260,16 +1260,17 @@ void __fastcall TfrmSettings::btnRingSelectClick(TObject *Sender)
 		edit = edRingBellcoreDr8;
 		str = &tmpSettings.Ring.bellcore[7];
 	}
-	dlgOpenRing->InitialDir = Paths::GetProfileDir();
-	dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edit->Text;
-	if (dlgOpenRing->Execute())
+	dlgOpenDeviceFile->InitialDir = Paths::GetProfileDir();
+	dlgOpenDeviceFile->Filter = "WAVE files (*.wav)|*.wav|All files|*.*";
+	dlgOpenDeviceFile->FileName = Paths::GetProfileDir() + "\\" + edit->Text;
+	if (dlgOpenDeviceFile->Execute())
 	{
-		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenDeviceFile->FileName)))
 		{
 			MessageBox(this->Handle, "Ring file was not updated.\nFor portability ring WAVE files must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
 			return;
 		}
-		*str = ExtractFileName(dlgOpenRing->FileName);
+		*str = ExtractFileName(dlgOpenDeviceFile->FileName);
 		edit->Text = *str;
 	}
 }
@@ -1330,19 +1331,30 @@ void __fastcall TfrmSettings::btnSelectCustomRecDirClick(TObject *Sender)
 
 void __fastcall TfrmSettings::btnSelectWaveFileClick(TObject *Sender)
 {
-	dlgOpenRing->InitialDir = Paths::GetProfileDir();
+	int TODO__INITIAL_DIR_FAILS_ON_WIN10; // https://stackoverflow.com/questions/71595750/why-does-delphi-topendialog-fail-to-open-in-the-initial-directory
+	dlgOpenDeviceFile->InitialDir = Paths::GetProfileDir();
+	dlgOpenDeviceFile->Filter = "WAVE files (*.wav)|*.wav|All files|*.*";
 	if (edSoundInputWave->Text != "")
 	{
-		dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edSoundInputWave->Text;
-	}
-	if (dlgOpenRing->Execute())
-	{
-		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
+		if (FileExists(Paths::GetProfileDir() + "\\" + edSoundInputWave->Text))
 		{
-			MessageBox(this->Handle, "File was not updated.\nFor portability source WAVE files must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
-			return;
+			dlgOpenDeviceFile->FileName = Paths::GetProfileDir() + "\\" + edSoundInputWave->Text;
 		}
-		edSoundInputWave->Text = ExtractFileName(dlgOpenRing->FileName);
+		else
+		{
+			dlgOpenDeviceFile->FileName = edSoundInputWave->Text;
+		}
+	}
+	if (dlgOpenDeviceFile->Execute())
+	{
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenDeviceFile->FileName)))
+		{
+			edSoundInputWave->Text = dlgOpenDeviceFile->FileName;
+		}
+		else
+		{
+			edSoundInputWave->Text = ExtractFileName(dlgOpenDeviceFile->FileName);
+		}
 	}
 }
 //---------------------------------------------------------------------------
@@ -1827,16 +1839,17 @@ void __fastcall TfrmSettings::btnMessagesSelectRingClick(TObject *Sender)
 		assert(!"Unhandled Sender!");
 		return;
 	}
-	dlgOpenRing->InitialDir = Paths::GetProfileDir();
-	dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edit->Text;
-	if (dlgOpenRing->Execute())
+	dlgOpenDeviceFile->InitialDir = Paths::GetProfileDir();
+	dlgOpenDeviceFile->Filter = "WAVE files (*.wav)|*.wav|All files|*.*";
+	dlgOpenDeviceFile->FileName = Paths::GetProfileDir() + "\\" + edit->Text;
+	if (dlgOpenDeviceFile->Execute())
 	{
-		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenDeviceFile->FileName)))
 		{
 			MessageBox(this->Handle, "Audio file was not updated.\nFor portability ring WAVE files must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
 			return;
 		}
-		*str = ExtractFileName(dlgOpenRing->FileName);
+		*str = ExtractFileName(dlgOpenDeviceFile->FileName);
 		edit->Text = *str;
 	}
 }

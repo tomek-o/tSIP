@@ -22,6 +22,7 @@ const char* VideoModules::sdl = "sdl";
 const char* VideoModules::nullvideo = "nullvideo";
 const char* VideoModules::colorbar_generator = "colorbar_generator";
 const char* VideoModules::colorbar_generator_animated = "colorbar_generator_animated";
+const char* VideoModules::avformat = "avformat";
 
 struct VideoModuleDef
 {
@@ -38,6 +39,7 @@ const VideoModuleDef videoModuleDefs [] =
 	{ true, true, nullvideo, "nullvideo" },
 	{ true, false, colorbar_generator, "Colorbar generator, static" },
 	{ true, false, colorbar_generator_animated, "Colorbar generator, animated" },
+	{ true, false, avformat, "FFmpeg avformat" },
 };
 	
 

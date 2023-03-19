@@ -551,7 +551,7 @@ void __fastcall TfrmButtonEdit::cbSoundInputModChange(TObject *Sender)
 		lblSoundInputDevice->Visible = true;
 		AudioDevicesList::FillComboBox(cbSoundInputDev, mod, false, cfg->audioRxDev.c_str());
 	}
-	else if (mod == AudioModules::aufile || mod == AudioModules::aufileMm)
+	else if (mod == AudioModules::aufile || mod == AudioModules::aufileMm || mod == AudioModules::avformat)
 	{
 		btnSelectWaveFile->Visible = true;
 		edSoundInputWave->Visible = true;
@@ -576,18 +576,29 @@ void __fastcall TfrmButtonEdit::cbSoundInputModChange(TObject *Sender)
 void __fastcall TfrmButtonEdit::btnSelectWaveFileClick(TObject *Sender)
 {
 	dlgOpenRing->InitialDir = Paths::GetProfileDir();
+	dlgOpenRing->Filter = "WAVE files (*.wav)|*.wav|All files|*.*";
+
 	if (edSoundInputWave->Text != "")
 	{
-		dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edSoundInputWave->Text;
+		if (FileExists(Paths::GetProfileDir() + "\\" + edSoundInputWave->Text))
+		{
+			dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edSoundInputWave->Text;
+		}
+		else
+		{
+			dlgOpenRing->FileName = edSoundInputWave->Text;
+		}
 	}
 	if (dlgOpenRing->Execute())
 	{
 		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenRing->FileName)))
 		{
-			MessageBox(this->Handle, "File was not updated.\nFor portability source WAVE files must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
-			return;
+			edSoundInputWave->Text = dlgOpenRing->FileName;
 		}
-		edSoundInputWave->Text = ExtractFileName(dlgOpenRing->FileName);
+		else
+		{
+			edSoundInputWave->Text = ExtractFileName(dlgOpenRing->FileName);
+		}
 	}	
 }
 //---------------------------------------------------------------------------

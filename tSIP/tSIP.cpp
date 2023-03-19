@@ -56,6 +56,8 @@ USEFORM("FormVideoConf.cpp", frmVideoConf);
 #pragma link "avformat-59.lib"
 #pragma link "avcodec-59.lib"
 #pragma link "avutil-57.lib"
+#pragma link "avdevice-59.lib"
+#pragma link "swresample-4.lib"
 
 #pragma link "strmiids.lib"
 #pragma link "SDL2.lib"

@@ -8,6 +8,7 @@
 #include "ua/UaConf.h"
 #include "ua/VideoModules.h"
 #include "VideoDevicesList.h"
+#include "Paths.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -41,6 +42,11 @@ void TfrmVideoConf::SetCfg(VideoConf *cfg, UaConf *uaCfg)
 	cbInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(uaCfg->video.videoSource.mod.c_str());
 	cbInputModChange(NULL);
 
+	if (uaCfg->video.videoSource.mod == VideoModules::avformat)
+	{
+		edInputFile->Text = uaCfg->video.videoSource.dev.c_str();
+	}
+
 	cbOutputMod->ItemIndex = VideoModules::GetOutputModuleCbIndex(uaCfg->video.videoDisplay.mod.c_str());
     cbOutputModChange(NULL);
 
@@ -63,12 +69,19 @@ void TfrmVideoConf::Apply(void)
 	cfg->enabled = chbEnabled->Checked;
 
 	uaCfg->video.videoSource.mod = VideoModules::GetInputModuleFromCbIndex(cbInputMod->ItemIndex);
-	if (cbInputDev->Tag == 0 || cbInputDev->ItemIndex != cbInputDev->Items->Count - 1)
+	if (uaCfg->video.videoSource.mod == VideoModules::avformat)
 	{
-		uaCfg->video.videoSource.dev = cbInputDev->Text.c_str();
+		uaCfg->video.videoSource.dev = edInputFile->Text.c_str();
+	}
+	else
+	{
+		if (cbInputDev->Tag == 0 || cbInputDev->ItemIndex != cbInputDev->Items->Count - 1)
+		{
+			uaCfg->video.videoSource.dev = cbInputDev->Text.c_str();
+		}
 	}
 
-    uaCfg->video.videoDisplay.mod = VideoModules::GetOutputModuleFromCbIndex(cbOutputMod->ItemIndex);
+	uaCfg->video.videoDisplay.mod = VideoModules::GetOutputModuleFromCbIndex(cbOutputMod->ItemIndex);
 
 	cfg->displayParentType = static_cast<VideoConf::DisplayParentType>(cbDisplayParentType->ItemIndex);
 	cfg->displayParentId = StrToIntDef(edDisplayParentId->Text, cfg->displayParentId);
@@ -105,6 +118,13 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 		cbInputDev->Visible = false;
 		lblInputDevice->Visible = false;
 	}
+	else if (mod == VideoModules::avformat)
+	{
+		btnSelectInputFile->Visible = true;
+		edInputFile->Visible = true;
+		cbInputDev->Visible = false;
+		lblInputDevice->Visible = false;
+	}
 	else
 	{
 		assert(!"Unhandled cbSoundInputMod item index!");
@@ -132,6 +152,37 @@ void __fastcall TfrmVideoConf::cbOutputModChange(TObject *Sender)
 		lblDisplayParentId->Visible = false;
 		edDisplayParentId->Visible = false;
 	}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TfrmVideoConf::btnSelectInputFileClick(TObject *Sender)
+{
+	int TODO__INITIAL_DIR_FAILS_ON_WIN10; // https://stackoverflow.com/questions/71595750/why-does-delphi-topendialog-fail-to-open-in-the-initial-directory
+	dlgOpenDeviceFile->InitialDir = Paths::GetProfileDir();
+	dlgOpenDeviceFile->Filter = "Video files|*.mp4;*.mkv;*.avi;*.mpg;*.wmv;*.flv;*.mov;*.rmvb;*.webm;*.3gp;*.asf|All files|*.*";
+	if (edInputFile->Text != "")
+	{
+		if (FileExists(Paths::GetProfileDir() + "\\" + edInputFile->Text))
+		{
+			dlgOpenDeviceFile->FileName = Paths::GetProfileDir() + "\\" + edInputFile->Text;
+		}
+		else
+		{
+			dlgOpenDeviceFile->FileName = edInputFile->Text;
+		}
+	}
+	if (dlgOpenDeviceFile->Execute())
+	{
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenDeviceFile->FileName)))
+		{
+			edInputFile->Text = dlgOpenDeviceFile->FileName;
+		}
+		else
+		{
+			edInputFile->Text = ExtractFileName(dlgOpenDeviceFile->FileName);
+		}
+	}	
 }
 //---------------------------------------------------------------------------
 

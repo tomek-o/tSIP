@@ -217,6 +217,9 @@ int configure(void)
 		pl_set_str(&modname, "selfview");
 		load_module2(NULL, &modname);
 	}
+
+	pl_set_str(&modname, "avformat");
+	load_module2(NULL, &modname);
 #endif
 
 	return err;

@@ -1,4 +1,4 @@
-Minimal FFMpeg binaries with OpenH264 support was built from current git sources 2023.01.29.
+Medium-size FFMpeg binaries with OpenH264 support was built from current git sources 2023.01.29.
 Building on Windows 7 was pretty messy, here is my attempt to list required steps.
 
 Media-autobuild_suite was used to install msys64 (latest version of msys64 cannot be installed on Windows 7 directly, but this way still works) and build ffmpeg once, fetching dependencies.
@@ -17,12 +17,11 @@ Run: D: and D:\MinGW\msys64\msys2_shell.cmd -full-path -mingw -where ..
 
 In msys shell:
 Run: cd /build/ffmpeg-git
-Run: ./configure --toolchain=msvc --disable-everything --disable-encoders --disable-muxers --disable-debug --enable-shared --arch=x86 --enable-shared --enable-decoder=h263 --enable-encoder=h263 --enable-decoder=h264 --enable-libopenh264 --enable-encoder=libopenh264 --enable-decoder=mpeg4 --enable-encoder=mpeg4 --shlibdir=/local32/bin-video --enable-w32threads --enable-version3 --extra-ldflags="-DEBUG" --extra-cflags="-Zi -I/mingw32/include/vc"
+Run: ./configure --toolchain=msvc --disable-everything --disable-doc --disable-programs --disable-encoders --disable-muxers --disable-debug --enable-shared --arch=x86 --enable-shared --enable-decoder=aac,aac_fixed,aac_latm,ac3,ac3_fixed,adpcm_g722,av1,eac3,h261,h263,h264,hevc,libopenh264,mp1,mp2,mp3,mp3adu,mjpeg,mpeg1video,mpeg2video,mpeg4,mpegvideo,opus,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --enable-encoder=h263 --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=mpeg4 --enable-network --enable-protocol=file,tcp,udp,rtp,rtsp,http --enable-demuxer=aac,ac3,asf,avi,g722,h261,h263,h264,hevc,matroska,mjpeg,mov,mp3,mpegts,mpegvideo,ogg,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --shlibdir=/local32/bin-video --enable-w32threads --enable-version3 --extra-ldflags="-DEBUG" --extra-cflags="-Zi -I/mingw32/include/vc"
 Run: make
 
 
-Configuration details:
-
+$ ./configure --toolchain=msvc --disable-everything --disable-doc --disable-programs --disable-encoders --disable-muxers --disable-debug --enable-shared --arch=x86 --enable-shared --enable-decoder=aac,aac_fixed,aac_latm,ac3,ac3_fixed,adpcm_g722,av1,eac3,h261,h263,h264,hevc,libopenh264,mp1,mp2,mp3,mp3adu,mjpeg,mpeg1video,mpeg2video,mpeg4,mpegvideo,opus,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --enable-encoder=h263 --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=mpeg4 --enable-network --enable-protocol=file,tcp,udp,rtp,rtsp,http --enable-demuxer=aac,ac3,asf,avi,g722,h261,h263,h264,hevc,matroska,mjpeg,mov,mp3,mpegts,mpegvideo,ogg,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --shlibdir=/local32/bin-video --enable-w32threads --enable-version3 --extra-ldflags="-DEBUG" --extra-cflags="-Zi -I/mingw32/include/vc"
 install prefix            /usr/local
 source path               .
 C compiler                cl.exe
@@ -78,10 +77,14 @@ avcodec                 avfilter                avutil                  swscale
 avdevice                avformat                swresample
 
 Programs:
-ffmpeg                  ffprobe
 
 Enabled decoders:
-h263                    h264                    mpeg4
+aac                     av1                     libopenh264             mpeg1video              pcm_s16le
+aac_fixed               eac3                    mjpeg                   mpeg2video              vp8
+aac_latm                h261                    mp1                     mpeg4                   vp9
+ac3                     h263                    mp2                     mpegvideo
+ac3_fixed               h264                    mp3                     opus
+adpcm_g722              hevc                    mp3adu                  pcm_alaw
 
 Enabled encoders:
 h263                    libopenh264             mpeg4
@@ -89,20 +92,27 @@ h263                    libopenh264             mpeg4
 Enabled hwaccels:
 
 Enabled parsers:
-h263                    mpeg4video
+aac_latm                h263                    mpegaudio
+ac3                     mpeg4video              vp9
 
 Enabled demuxers:
+aac                     g722                    hevc                    mp3                     pcm_alaw
+ac3                     h261                    matroska                mpegts                  pcm_s16le
+asf                     h263                    mjpeg                   mpegvideo
+avi                     h264                    mov                     ogg
 
 Enabled muxers:
 
 Enabled protocols:
+file                    http                    rtp                     tcp                     udp
 
 Enabled filters:
-aformat                 atrim                   hflip                   transpose               vflip
-anull                   format                  null                    trim
 
 Enabled bsfs:
+av1_frame_split         h264_mp4toannexb        vp9_superframe_split
 
 Enabled indevs:
 
 Enabled outdevs:
+
+License: LGPL version 3 or later
