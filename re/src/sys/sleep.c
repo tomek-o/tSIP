@@ -44,3 +44,8 @@ void sys_usleep(unsigned int us)
 	(void)usleep(us);
 #endif
 }
+
+void sys_msleep(unsigned int ms)
+{
+	sys_usleep(ms * 1000);
+}
