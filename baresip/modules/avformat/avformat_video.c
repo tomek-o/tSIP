@@ -15,11 +15,14 @@
 #include <libavutil/pixdesc.h>
 #include "mod_avformat.h"
 
+#define DEBUG_MODULE "avformat"
+#define DEBUG_LEVEL 5
+#include <re_dbg.h>
 
 struct vidsrc_st {
+	struct vidsrc *vs;  /* inheritance */
 	struct shared *shared;
 	vidsrc_frame_h *frameh;
-	vidsrc_packet_h *packeth;
 	void *arg;
 };
 
@@ -30,6 +33,7 @@ static void video_destructor(void *arg)
 
 	avformat_shared_set_video(st->shared, NULL);
 	mem_deref(st->shared);
+	mem_deref(st->vs);	
 }
 
 
@@ -52,12 +56,12 @@ static enum vidfmt avpixfmt_to_vidfmt(enum AVPixelFormat pix_fmt)
 }
 
 
-int avformat_video_alloc(struct vidsrc_st **stp, const struct vidsrc *vs,
-			 struct vidsrc_prm *prm,
-			 const struct vidsz *size, const char *fmt,
-			 const char *dev, vidsrc_frame_h *frameh,
-			 vidsrc_packet_h *packeth,
-			 vidsrc_error_h *errorh, void *arg)
+int  avformat_video_alloc(struct vidsrc_st **stp, struct vidsrc *vs,
+		 struct media_ctx **ctx, struct vidsrc_prm *prm,
+		 const struct vidsz *size,
+		 const char *fmt, const char *dev,
+		 vidsrc_frame_h *frameh,
+		 vidsrc_error_h *errorh, void *arg)
 {
 	struct vidsrc_st *st;
 	struct shared *sh;
@@ -69,14 +73,14 @@ int avformat_video_alloc(struct vidsrc_st **stp, const struct vidsrc *vs,
 	if (!stp || !vs || !prm || !size || !frameh)
 		return EINVAL;
 
-	debug("avformat: video: alloc dev='%s'\n", dev);
+	DEBUG_INFO("avformat: video: alloc dev='%s'\n", dev);
 
 	st = mem_zalloc(sizeof(*st), video_destructor);
 	if (!st)
 		return ENOMEM;
 
+	st->vs = (struct vidsrc *)mem_ref(vs);		
 	st->frameh = frameh;
-	st->packeth = packeth;
 	st->arg    = arg;
 
 	sh = avformat_shared_lookup(dev);
@@ -91,7 +95,7 @@ int avformat_video_alloc(struct vidsrc_st **stp, const struct vidsrc *vs,
 	}
 
 	if (st->shared->vid.idx < 0 || !st->shared->vid.ctx) {
-		info("avformat: video: media file has no video stream\n");
+		DEBUG_INFO("avformat: video: media file has no video stream\n");
 		err = ENOENT;
 		goto out;
 	}
@@ -107,7 +111,7 @@ int avformat_video_alloc(struct vidsrc_st **stp, const struct vidsrc *vs,
 	return err;
 }
 
-
+#if 0
 void avformat_video_copy(struct shared *st, AVPacket *pkt)
 {
 	struct vidpacket vp;
@@ -121,6 +125,7 @@ void avformat_video_copy(struct shared *st, AVPacket *pkt)
 	vp.buf = pkt->data;
 	vp.size = pkt->size;
 	vp.timestamp = pkt->pts * VIDEO_TIMEBASE * tb.num / tb.den;
+	vp.keyframe = !!(pkt->flags & AV_PKT_FLAG_KEY);
 
 	mtx_lock(&st->lock);
 
@@ -130,6 +135,7 @@ void avformat_video_copy(struct shared *st, AVPacket *pkt)
 
 	mtx_unlock(&st->lock);
 }
+#endif
 
 
 void avformat_video_decode(struct shared *st, AVPacket *pkt)
@@ -137,7 +143,7 @@ void avformat_video_decode(struct shared *st, AVPacket *pkt)
 	AVRational tb;
 	struct vidframe vf;
 	AVFrame *frame = 0;
-	uint64_t timestamp;
+	/* uint64_t timestamp; */
 	unsigned i;
 	int ret;
 
@@ -184,7 +190,7 @@ void avformat_video_decode(struct shared *st, AVPacket *pkt)
 
 	vf.fmt = avpixfmt_to_vidfmt(frame->format);
 	if (vf.fmt == (enum vidfmt)-1) {
-		warning("avformat: decode: bad pixel format"
+		DEBUG_WARNING("avformat: decode: bad pixel format"
 			" (%i) (%s)\n",
 			frame->format,
 			av_get_pix_fmt_name(frame->format));
@@ -200,12 +206,12 @@ void avformat_video_decode(struct shared *st, AVPacket *pkt)
 	}
 
 	/* convert timestamp */
-	timestamp = frame->pts * VIDEO_TIMEBASE * tb.num / tb.den;
+	/* timestamp = frame->pts * VIDEO_TIMEBASE * tb.num / tb.den; */
 
 	mtx_lock(&st->lock);
 
 	if (st->vidsrc_st && st->vidsrc_st->frameh)
-		st->vidsrc_st->frameh(&vf, timestamp, st->vidsrc_st->arg);
+		st->vidsrc_st->frameh(&vf, /* timestamp, */ st->vidsrc_st->arg);
 
 	mtx_unlock(&st->lock);
 

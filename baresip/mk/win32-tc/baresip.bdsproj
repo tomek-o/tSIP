@@ -517,6 +517,10 @@
         <FILE FILENAME="..\..\modules\colorbar_generator\colorbar_generator.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="colorbar_generator" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\baresip_base_config.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\colorbar_generator_animated\colorbar_generator_animated.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="colorbar_generator_animated" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\avformat\avformat.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="avformat" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\avformat\avformat_audio.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="avformat_audio" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\avformat\avformat_video.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="avformat_video" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\avformat\mod_avformat.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

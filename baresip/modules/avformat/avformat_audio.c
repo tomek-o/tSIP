@@ -13,8 +13,12 @@
 #include <libswresample/swresample.h>
 #include "mod_avformat.h"
 
+#define DEBUG_MODULE "avformat"
+#define DEBUG_LEVEL 5
+#include <re_dbg.h>
 
 struct ausrc_st {
+	struct ausrc *as;  /* base class */
 	struct shared *shared;
 	struct ausrc_prm prm;
 	SwrContext *swr;
@@ -33,6 +37,8 @@ static void audio_destructor(void *arg)
 
 	if (st->swr)
 		swr_free(&st->swr);
+
+	mem_deref(st->as);		
 }
 
 
@@ -41,40 +47,43 @@ static enum AVSampleFormat aufmt_to_avsampleformat(enum aufmt fmt)
 	switch (fmt) {
 
 	case AUFMT_S16LE: return AV_SAMPLE_FMT_S16;
-	case AUFMT_FLOAT: return AV_SAMPLE_FMT_FLT;
+	//case AUFMT_FLOAT: return AV_SAMPLE_FMT_FLT;
 	default:          return AV_SAMPLE_FMT_NONE;
 	}
 }
 
 
-int avformat_audio_alloc(struct ausrc_st **stp, const struct ausrc *as,
-			 struct ausrc_prm *prm, const char *dev,
+int avformat_audio_alloc(struct ausrc_st **stp, struct ausrc *as,
+			 struct media_ctx **ctx,
+			 struct ausrc_prm *prm, const char *device,
 			 ausrc_read_h *readh, ausrc_error_h *errh, void *arg)
 {
 	struct ausrc_st *st;
 	struct shared *sh;
 	int err = 0;
+	int channels;
 
 	if (!stp || !as || !prm || !readh)
 		return EINVAL;
 
-	info("avformat: audio: loading input file '%s'\n", dev);
+	DEBUG_INFO("avformat: audio: loading input file '%s'\n", device);
 
 	st = mem_zalloc(sizeof(*st), audio_destructor);
 	if (!st)
 		return ENOMEM;
 
+	st->as   = mem_ref(as);		
 	st->readh = readh;
 	st->errh  = errh;
 	st->arg   = arg;
 	st->prm   = *prm;
 
-	sh = avformat_shared_lookup(dev);
+	sh = avformat_shared_lookup(device);
 	if (sh) {
 		st->shared = mem_ref(sh);
 	}
 	else {
-		err = avformat_shared_alloc(&st->shared, dev,
+		err = avformat_shared_alloc(&st->shared, device,
 					    0.0, NULL, false);
 		if (err)
 			goto out;
@@ -83,7 +92,7 @@ int avformat_audio_alloc(struct ausrc_st **stp, const struct ausrc *as,
 	sh = st->shared;
 
 	if (st->shared->au.idx < 0 || !st->shared->au.ctx) {
-		info("avformat: audio: media file has no audio stream\n");
+		DEBUG_INFO("avformat: audio: media file has no audio stream\n");
 		err = ENOENT;
 		goto out;
 	}
@@ -97,12 +106,12 @@ int avformat_audio_alloc(struct ausrc_st **stp, const struct ausrc *as,
 	avformat_shared_set_audio(st->shared, st);
 
 #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 37, 100)
-	int channels = sh->au.ctx->ch_layout.nb_channels;
+	channels = sh->au.ctx->ch_layout.nb_channels;
 #else
-	int channels = sh->au.ctx->channels;
+	channels = sh->au.ctx->channels;
 #endif
 
-	info("avformat: audio: converting %u/%u %s -> %u/%u %s\n",
+	DEBUG_INFO("avformat: audio: converting %u/%u %s -> %u/%u %s\n",
 	     sh->au.ctx->sample_rate, channels,
 	     av_get_sample_fmt_name(sh->au.ctx->sample_fmt),
 	     prm->srate, prm->ch, aufmt_name(prm->fmt));
@@ -144,7 +153,6 @@ void avformat_audio_decode(struct shared *st, AVPacket *pkt)
 	if (st->ausrc_st && st->ausrc_st->readh) {
 
 		const AVRational tb = st->au.time_base;
-		struct auframe af;
 		int channels = st->ausrc_st->prm.ch;
 
 #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 37, 100)
@@ -163,17 +171,21 @@ void avformat_audio_decode(struct shared *st, AVPacket *pkt)
 
 		ret = swr_convert_frame(st->ausrc_st->swr, &frame2, &frame);
 		if (ret) {
-			warning("avformat: swr_convert_frame failed (%d)\n",
+			DEBUG_WARNING("avformat: swr_convert_frame failed (%d)\n",
 				ret);
 			goto unlock;
 		}
 
+	#if 0
 		auframe_init(&af, st->ausrc_st->prm.fmt, frame2.data[0],
-			     frame2.nb_samples * channels,
-			     st->ausrc_st->prm.srate, st->ausrc_st->prm.ch);
+				 frame2.nb_samples * channels,
+				 st->ausrc_st->prm.srate, st->ausrc_st->prm.ch);
 		af.timestamp = frame.pts * AUDIO_TIMEBASE * tb.num / tb.den;
 
 		st->ausrc_st->readh(&af, st->ausrc_st->arg);
+	#else
+		st->ausrc_st->readh(frame2.data[0], frame2.nb_samples * channels * sizeof(int16_t), st->ausrc_st->arg);
+	#endif
 	}
 
  unlock:
