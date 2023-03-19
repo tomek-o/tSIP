@@ -22,6 +22,11 @@
 #define DEBUG_LEVEL 5
 #include <re_dbg.h>
 
+static char *av_err_str(char *errbuf, size_t errbuf_size, int errnum)
+{
+	av_strerror(errnum, errbuf, errbuf_size);
+	return errbuf;
+}
 
 struct viddec_state {
 	const AVCodec *codec;
@@ -155,7 +160,7 @@ static int ffdecode(struct viddec_state *st, struct vidframe *frame,
 		char err_buf[AV_ERROR_MAX_STRING_SIZE] = {0};
 		DEBUG_WARNING("avcodec: decode: avcodec_send_packet error,"
 			" packet=%zu bytes, ret=%d (%s)\n",
-			st->mb->end, ret, av_make_error_string(err_buf, AV_ERROR_MAX_STRING_SIZE, ret));
+			st->mb->end, ret, av_err_str(err_buf, AV_ERROR_MAX_STRING_SIZE, ret));
 		err = EBADMSG;
 		goto out;
 	}
