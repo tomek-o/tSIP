@@ -523,7 +523,7 @@ public:
 		enum { DEF_JBUF_DELAY_MIN = 5 };
 		enum { DEF_JBUF_DELAY_MAX = 10 };
 		enum { JBUF_DELAY_CFG_LIMIT = 1000 };
-		enum { DEF_RTP_TIMEOUT = 0 };
+		enum { DEF_RTP_TIMEOUT = 300 };
 		Avt(void):
 			portMin(DEF_PORT_MIN),
 			portMax(DEF_PORT_MAX),
