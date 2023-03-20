@@ -88,7 +88,7 @@ static inline AVRational av_make_q(int num, int den)
  *         - -1 if `a < b`
  *         - `INT_MIN` if one of the values is of the form `0 / 0`
  */
-static inline int av_cmp_q(AVRational a, AVRational b){
+static int av_cmp_q(AVRational a, AVRational b){
     const int64_t tmp= a.num * (int64_t)b.den - b.num * (int64_t)a.den;
 
     if(tmp) return (int)((tmp ^ a.den ^ b.den)>>63)|1;
@@ -103,7 +103,7 @@ static inline int av_cmp_q(AVRational a, AVRational b){
  * @return `a` in floating-point form
  * @see av_d2q()
  */
-static inline double av_q2d(AVRational a){
+static double av_q2d(AVRational a){
     return a.num / (double) a.den;
 }
 
