@@ -17,11 +17,11 @@ Run: D: and D:\MinGW\msys64\msys2_shell.cmd -full-path -mingw -where ..
 
 In msys shell:
 Run: cd /build/ffmpeg-git
-Run: ./configure --toolchain=msvc --disable-everything --disable-doc --disable-programs --disable-encoders --disable-muxers --disable-debug --enable-shared --arch=x86 --enable-shared --enable-decoder=aac,aac_fixed,aac_latm,ac3,ac3_fixed,adpcm_g722,av1,eac3,h261,h263,h264,hevc,libopenh264,mp1,mp2,mp3,mp3adu,mjpeg,mpeg1video,mpeg2video,mpeg4,mpegvideo,opus,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --enable-encoder=h263 --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=mpeg4 --enable-network --enable-protocol=file,tcp,udp,rtp,rtsp,http --enable-demuxer=aac,ac3,asf,avi,g722,h261,h263,h264,hevc,matroska,mjpeg,mov,mp3,mpegts,mpegvideo,ogg,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --shlibdir=/local32/bin-video --enable-w32threads --enable-version3 --extra-ldflags="-DEBUG" --extra-cflags="-Zi -I/mingw32/include/vc"
+Run: ./configure --toolchain=msvc --disable-everything --disable-doc --disable-programs --disable-encoders --disable-muxers --disable-debug --enable-shared --arch=x86 --enable-shared --enable-decoder=aac,aac_fixed,aac_latm,ac3,ac3_fixed,adpcm_g722,av1,eac3,h261,h263,h264,hevc,libopenh264,mp1,mp2,mp3,mp3adu,mjpeg,mpeg1video,mpeg2video,mpeg4,mpegvideo,opus,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --enable-encoder=h263 --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=mpeg4 --enable-network --enable-protocol=file,tcp,udp,rtp,http --enable-demuxer=aac,ac3,asf,avi,g722,h261,h263,h264,hevc,matroska,mjpeg,mov,mp3,mpegts,mpegvideo,ogg,pcm_alaw,pcm_ulaw,pcm_s16le,rtsp,vp8,vp9 --shlibdir=/local32/bin-video --enable-w32threads --enable-version3 --extra-ldflags="-DEBUG" --extra-cflags="-Zi -I/mingw32/include/vc"
 Run: make
 
 
-$ ./configure --toolchain=msvc --disable-everything --disable-doc --disable-programs --disable-encoders --disable-muxers --disable-debug --enable-shared --arch=x86 --enable-shared --enable-decoder=aac,aac_fixed,aac_latm,ac3,ac3_fixed,adpcm_g722,av1,eac3,h261,h263,h264,hevc,libopenh264,mp1,mp2,mp3,mp3adu,mjpeg,mpeg1video,mpeg2video,mpeg4,mpegvideo,opus,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --enable-encoder=h263 --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=mpeg4 --enable-network --enable-protocol=file,tcp,udp,rtp,rtsp,http --enable-demuxer=aac,ac3,asf,avi,g722,h261,h263,h264,hevc,matroska,mjpeg,mov,mp3,mpegts,mpegvideo,ogg,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --shlibdir=/local32/bin-video --enable-w32threads --enable-version3 --extra-ldflags="-DEBUG" --extra-cflags="-Zi -I/mingw32/include/vc"
+$ ./configure --toolchain=msvc --disable-everything --disable-doc --disable-programs --disable-encoders --disable-muxers --disable-debug --enable-shared --arch=x86 --enable-shared --enable-decoder=aac,aac_fixed,aac_latm,ac3,ac3_fixed,adpcm_g722,av1,eac3,h261,h263,h264,hevc,libopenh264,mp1,mp2,mp3,mp3adu,mjpeg,mpeg1video,mpeg2video,mpeg4,mpegvideo,opus,pcm_alaw,pcm_ulaw,pcm_s16le,vp8,vp9 --enable-encoder=h263 --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=mpeg4 --enable-network --enable-protocol=file,tcp,udp,rtp,http --enable-demuxer=aac,ac3,asf,avi,g722,h261,h263,h264,hevc,matroska,mjpeg,mov,mp3,mpegts,mpegvideo,ogg,pcm_alaw,pcm_ulaw,pcm_s16le,rtsp,vp8,vp9 --shlibdir=/local32/bin-video --enable-w32threads --enable-version3 --extra-ldflags="-DEBUG" --extra-cflags="-Zi -I/mingw32/include/vc"
 install prefix            /usr/local
 source path               .
 C compiler                cl.exe
@@ -98,8 +98,8 @@ ac3                     mpeg4video              vp9
 Enabled demuxers:
 aac                     g722                    hevc                    mp3                     pcm_alaw
 ac3                     h261                    matroska                mpegts                  pcm_s16le
-asf                     h263                    mjpeg                   mpegvideo
-avi                     h264                    mov                     ogg
+asf                     h263                    mjpeg                   mpegvideo               rm
+avi                     h264                    mov                     ogg                     rtsp
 
 Enabled muxers:
 
