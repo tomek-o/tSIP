@@ -208,7 +208,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		}
 		else
 		{
-			LOG("Ignoring UA_EVENT_CALL_CLOSED (call transferred?)\n");
+			LOG("Ignoring UA_EVENT_CALL_CLOSED (no current call), prm = %s\n", prm?prm:"NULL");
 		}
 		break;
 	case UA_EVENT_CALL_DTMF_START:
