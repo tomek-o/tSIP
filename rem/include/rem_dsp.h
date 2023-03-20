@@ -4,6 +4,7 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#include <stdint.h>
 
 #ifndef UINT8_MAX
 #define UINT8_MAX (255U)
