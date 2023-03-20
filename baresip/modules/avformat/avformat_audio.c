@@ -158,16 +158,12 @@ void avformat_audio_decode(struct shared *st, AVPacket *pkt)
 #if LIBAVCODEC_VERSION_INT >= AV_VERSION_INT(59, 37, 100)
 		av_channel_layout_default(&frame2.ch_layout, channels);
 #else
-		frame.channel_layout =
-			av_get_default_channel_layout(frame.channels);
-
+		frame.channel_layout  = av_get_default_channel_layout(frame.channels);
 		frame2.channels       = channels;
-		frame2.channel_layout =
-			av_get_default_channel_layout(st->ausrc_st->prm.ch);
+		frame2.channel_layout =	av_get_default_channel_layout(st->ausrc_st->prm.ch);
 #endif
 		frame2.sample_rate    = st->ausrc_st->prm.srate;
-		frame2.format         =
-			aufmt_to_avsampleformat(st->ausrc_st->prm.fmt);
+		frame2.format         = aufmt_to_avsampleformat(st->ausrc_st->prm.fmt);
 
 		ret = swr_convert_frame(st->ausrc_st->swr, &frame2, &frame);
 		if (ret) {
