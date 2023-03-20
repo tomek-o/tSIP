@@ -7,6 +7,7 @@
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
+#include <Dialogs.hpp>
 //---------------------------------------------------------------------------
 
 struct VideoConf;
@@ -41,8 +42,10 @@ __published:	// IDE-managed Components
 	TCheckBox *chbDshowSkipReadingBackMediaFormat;
 	TLabel *lblDisplayModule;
 	TComboBox *cbOutputMod;
+	TOpenDialog *dlgOpenDeviceFile;
 	void __fastcall cbInputModChange(TObject *Sender);
 	void __fastcall cbOutputModChange(TObject *Sender);
+	void __fastcall btnSelectInputFileClick(TObject *Sender);
 private:	// User declarations
 	VideoConf *cfg;
 	UaConf *uaCfg;

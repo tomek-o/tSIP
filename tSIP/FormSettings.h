@@ -125,7 +125,7 @@ __published:	// IDE-managed Components
 	TLabel *lblRingBellcoreDr8;
 	TEdit *edRingBellcoreDr8;
 	TButton *btnRingSelectBellcoreDr8;
-	TOpenDialog *dlgOpenRing;
+	TOpenDialog *dlgOpenDeviceFile;
 	TCheckBox *chbXBtnMinimize;
 	TTabSheet *tsHotkeys;
 	TTabSheet *tsContacts;

@@ -13,8 +13,6 @@ object frmVideoConf: TfrmVideoConf
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object lblDisplayParentType: TLabel
@@ -108,7 +106,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 240
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 1
   end
   object edDisplayParentId: TEdit
@@ -140,7 +138,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 240
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 5
   end
   object cbInputMod: TComboBox
@@ -149,7 +147,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 240
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 6
     OnChange = cbInputModChange
   end
@@ -169,6 +167,7 @@ object frmVideoConf: TfrmVideoConf
     Caption = '...'
     TabOrder = 8
     Visible = False
+    OnClick = btnSelectInputFileClick
   end
   object edWidth: TEdit
     Left = 152
@@ -214,8 +213,13 @@ object frmVideoConf: TfrmVideoConf
     Width = 240
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 14
     OnChange = cbOutputModChange
+  end
+  object dlgOpenDeviceFile: TOpenDialog
+    Options = [ofEnableSizing]
+    Left = 424
+    Top = 48
   end
 end

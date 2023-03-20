@@ -584,7 +584,7 @@ void __fastcall TfrmButtonEdit::btnSelectWaveFileClick(TObject *Sender)
 		{
 			dlgOpenRing->FileName = Paths::GetProfileDir() + "\\" + edSoundInputWave->Text;
 		}
-		else
+		else if (FileExists(edSoundInputWave->Text))
 		{
 			dlgOpenRing->FileName = edSoundInputWave->Text;
 		}

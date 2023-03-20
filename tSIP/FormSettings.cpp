@@ -1340,7 +1340,7 @@ void __fastcall TfrmSettings::btnSelectWaveFileClick(TObject *Sender)
 		{
 			dlgOpenDeviceFile->FileName = Paths::GetProfileDir() + "\\" + edSoundInputWave->Text;
 		}
-		else
+		else if (FileExists(edSoundInputWave->Text))
 		{
 			dlgOpenDeviceFile->FileName = edSoundInputWave->Text;
 		}
