@@ -85,7 +85,7 @@ struct vtx {
 	struct vidframe *mute_frame;       /**< Frame with muted video    */
 	struct mbuf *mb;                   /**< Packetization buffer      */
 	struct list filtl;                 /**< Filters in encoding order */
-	char device[64];
+	char device[256];
 	int muted_frames;                  /**< # of muted frames sent    */
 	uint32_t ts_tx;                    /**< Outgoing RTP timestamp    */
 	bool picup;                        /**< Send picture update       */
@@ -120,7 +120,7 @@ struct vrx {
 	struct lock *lock;                 /**< Lock for decoder          */
 	struct list filtl;                 /**< Filters in decoding order */
 	enum vidorient orient;             /**< Display orientation       */
-	char device[64];
+	char device[256];
 	bool fullscreen;                   /**< Fullscreen flag           */
 	int pt_rx;                         /**< Incoming RTP payload type */
 	int frames;                        /**< Number of frames received */
