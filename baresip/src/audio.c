@@ -326,6 +326,14 @@ static void poll_aubuf_tx(struct audio *a)
 	if (aubuf_get_samp(tx->ab, tx->ptime, tx->sampv, sampc))
 		return;
 
+#if 0
+	{
+		char buf[64];
+		/* debugging exact timing of read handler calls */
+		(void)re_printf("[%s] tx->ab %p got %u\n", sys_time(buf, sizeof(buf)), tx->ab, sampc);
+	}
+#endif
+
 	/* optional resampler */
 	if (tx->resamp) {
 		size_t sampc_rs = AUDIO_SAMPSZ;
@@ -413,7 +421,7 @@ static bool auplay_write_handler(uint8_t *buf, size_t sz, void *arg)
 	{
 		char buf[64];
 		/* debugging exact timing of read handler calls */
-		(void)re_printf("[%s] auplay %u\n", sys_time(buf, sizeof(buf)), sz);
+		(void)re_printf("[%s] ab %p auplay %u\n", sys_time(buf, sizeof(buf)), rx->ab, sz);
 	}
 #endif
 
@@ -440,8 +448,16 @@ static void ausrc_read_handler(const uint8_t *buf, size_t sz, void *arg)
 
 	(void)aubuf_write(tx->ab, buf, sz);
 
-	if (a->cfg.txmode == AUDIO_MODE_POLL)
-		poll_aubuf_tx(a);
+	if (a->cfg.txmode == AUDIO_MODE_POLL) {
+		int i;
+		/* avformat call read handler only once per 30 ms or so - need multiple writes to avoid overrun here */
+		/* baresip loops up to 16 times here, but isn't it overkil? */
+		for (i=0; i<4; i++) {
+			if (aubuf_cur_size(tx->ab) < tx->psize)
+				break;
+			poll_aubuf_tx(a);
+		}
+	}
 
 	/* Exact timing: send Telephony-Events from here */
 	check_telev(a, tx);
