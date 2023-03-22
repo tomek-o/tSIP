@@ -1476,6 +1476,7 @@ static bool have_common_audio_codecs(const struct call *call)
 
 static bool have_common_video_codecs(const struct call *call)
 {
+#ifdef USE_VIDEO
 	const struct sdp_format *sc;
 	struct vidcodec *vc;
 
@@ -1486,6 +1487,9 @@ static bool have_common_video_codecs(const struct call *call)
 	vc = sc->data;
 
 	return vc != NULL;
+#else
+	return false;
+#endif
 }
 
 
@@ -1567,8 +1571,11 @@ int call_accept(struct call *call, struct sipsess_sock *sess_sock,
 		 *
 		 * See RFC 6157
 		 */
-		if (!valid_addressfamily(call, audio_strm(call->audio)) ||
-		    !valid_addressfamily(call, video_strm(call->video))) {
+		if (!valid_addressfamily(call, audio_strm(call->audio))
+#ifdef USE_VIDEO
+			|| !valid_addressfamily(call, video_strm(call->video))
+#endif			
+			) {
 			sip_treply(NULL, uag_sip(), msg, 488,
 				   "Not Acceptable Here");
 
