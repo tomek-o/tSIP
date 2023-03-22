@@ -613,6 +613,27 @@ static int l_SwitchAudioSource(lua_State* L)
 	return 0;
 }
 
+#if 0
+static int l_SwitchVideoSource(lua_State* L)
+{
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	GetContext(L)->onSwitchVideoSource(mod, dev);
+	return 0;
+}
+#endif
+
 static int l_SendDtmf(lua_State* L)
 {
 	const char* str = lua_tostring( L, -1 );
@@ -1615,19 +1636,15 @@ void ScriptExec::Run(const char* script)
 	luaL_openlibs(L);
 	contexts[L] = this;
 
-#if 0
-	lua_register2(L, ScriptImp::LuaError, "_ALERT", "Send error message to log window (internal function)", "");
-	lua_register2(L, ScriptImp::LuaPrint, "print", "Send text to console / log window (standard function)", "");
-#else
 	// do not include internal/standard functions in help
 	lua_register(L, "_ALERT", ScriptImp::LuaError);
 	lua_register(L, "print", ScriptImp::LuaPrint);
-#endif
+
 	lua_register2(L, ScriptImp::l_ShowMessage, "ShowMessage", "Show simple message dialog", "Example: ShowMessage(\"text\")");
 	lua_register2(L, l_MessageBox, "MessageBox", "Show standard WinAPI MessageBox", "");
 	lua_register2(L, ScriptImp::l_InputQuery, "InputQuery", "Display modal dialog allowing to take text input from the user", "");
-	lua_register2(L, ScriptImp::l_Sleep, "Sleep", "Pause script for specified time (miliseconds)", "");
-	lua_register2(L, l_Beep, "Beep", "Equivalent of WinAPI Beep(frequency, time)", "");
+	lua_register2(L, ScriptImp::l_Sleep, "Sleep", "Pause script for specified time (miliseconds)", "Function returns non-zero if it exited due to user break, zero if full delay passed. Example: Sleep(100).");
+	lua_register2(L, l_Beep, "Beep", "Equivalent of WinAPI Beep(frequency, time)", "Example: Beep(400, 250).");
 	lua_register2(L, ScriptImp::l_CheckBreak, "CheckBreak", "Check if \"Break\" button was pressed by the user", "Allowing to interrupt scripts");
 	lua_register2(L, ScriptImp::l_GetClipboardText, "GetClipboardText", "Get clipboard content as text", "");
 	lua_register2(L, ScriptImp::l_SetClipboardText, "SetClipboardText", "Copy text to clipboard", "");
@@ -1638,7 +1655,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer incoming call", "");
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");
 	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
-	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "");
+	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "Example: SwitchAudioSource(\"aufile\", \"file.wav\").");
 	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbos during the call", "Accepts single DTMF or whole string");
 	lua_register2(L, ScriptImp::l_GenerateTones, "GenerateTones", "Generate up to 4 tones with specified amplitude and frequency", "");
 	lua_register2(L, ScriptImp::l_BlindTransfer, "BlindTransfer", "Send REFER during the call", "");
@@ -1653,9 +1670,9 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetStreamingState, "GetStreamingState", "Get current state of RTP streaming", "");
 	lua_register2(L, ScriptImp::l_GetAudioErrorCount, "GetAudioErrorCount", "Get number of audio device erros during the call", "Used to detect end-of-file event for wave input files");
 
-	lua_register2(L, ScriptImp::l_SetVariable, "SetVariable", "Set value for variable with specified name", "");
-	lua_register2(L, ScriptImp::l_GetVariable, "GetVariable", "Get variable value and isSet flag for variable with specified name", "");
-	lua_register2(L, ScriptImp::l_ClearVariable, "ClearVariable", "Delete/unset variable with specified name", "");
+	lua_register2(L, ScriptImp::l_SetVariable, "SetVariable", "Set value for variable with specified name", "Example: SetVariable(\"runcount\", count).");
+	lua_register2(L, ScriptImp::l_GetVariable, "GetVariable", "Get variable value and isSet flag for variable with specified name", "Example: local count, var_isset = GetVariable(\"runcount\")");
+	lua_register2(L, ScriptImp::l_ClearVariable, "ClearVariable", "Delete/unset variable with specified name", "Example: ClearVariable(\"runcount\")");
 	lua_register2(L, ScriptImp::l_ClearAllVariables, "ClearAllVariables", "Delete/unset all variables", "");
 
 	// QueuePush(queueName, stringValue)
@@ -1676,8 +1693,8 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetRegistrationState, "GetRegistrationState", "Check if softphone is registered", "");
 	lua_register2(L, ScriptImp::l_SetButtonCaption, "SetButtonCaption", "Set text for the first line of the button", "");
 	lua_register2(L, ScriptImp::l_SetButtonCaption2, "SetButtonCaption2", "Set text for the second line of the button", "");
-	lua_register2(L, ScriptImp::l_SetButtonDown, "SetButtonDown", "Change button state to down/pressed", "");
-	lua_register2(L, ScriptImp::l_GetButtonDown, "GetButtonDown", "Check if button is down", "");
+	lua_register2(L, ScriptImp::l_SetButtonDown, "SetButtonDown", "Change button state to down/pressed", "Example: SetButtonDown(buttonId, buttoState).");
+	lua_register2(L, ScriptImp::l_GetButtonDown, "GetButtonDown", "Check if button is down", "Example state = GetButtonDown(buttonId) -- returning 0 or 1.");
 	lua_register2(L, ScriptImp::l_GetButtonMouseDown, "GetButtonMouseDown", "Check is mouse button is pressed on programmable button", "");
 	lua_register2(L, ScriptImp::l_GetButtonBlfState, "GetButtonBlfState", "Get BLF state from the button", "");
 	lua_register2(L, ScriptImp::l_SetButtonInactive, "SetButtonInactive", "Prevent button from being pressed, set its state to inactive", "");
@@ -1721,7 +1738,7 @@ void ScriptExec::Run(const char* script)
 
 	lua_register2(L, ScriptImp::l_GetAudioRxSignalLevel, "GetAudioRxSignalLevel", "Get amplitude of received audio from the call", "Lenny/IVR-like applications");
 
-	lua_register2(L, ScriptImp::l_ReadContacts, "ReadContacts", "Read again contacts from default JSON file", "E.g. after provisioning");
+	lua_register2(L, ScriptImp::l_ReadContacts, "ReadContacts", "Read again contacts from default JSON file", "This function can be used to reload phonebook from file after provisioning, e.g. after fetching JSON file using curl using provisioning script.");
 	lua_register2(L, ScriptImp::l_ReadXmlContacts, "ReadXmlContacts", "Read contacts from XML Yealink-like file", "");
 	lua_register2(L, ScriptImp::l_AppendContactNoteText, "AppendContactNoteText", "Add text to note from currently opened contact popup", "");
 
@@ -1734,9 +1751,10 @@ void ScriptExec::Run(const char* script)
 
 	if (!globalsSetComplete)
 	{
+        // symbols from tsip_winapi
 		AddSymbol("winapi.FindWindow", "WinAPI FindWindow equivalent", "");
 		AddSymbol("winapi.SendMessage", "WinAPI SendMessage equivalent", "Example use: sending WM_CLOSE to other application");
-		AddSymbol("winapi.Beep", "WinAPI Beep equivalent", "Also same as Beep");
+		AddSymbol("winapi.Beep", "WinAPI Beep equivalent", "Same as Beep, example: Beep(frequencyHz, timeMs)");
 		AddSymbol("winapi.MessageBox", "WinAPI MessageBox equivalent", "");
 		AddSymbol("winapi.GetAsyncKeyState", "WinAPI GetAsyncKeyState equivalent", "Example use: modify button behavior depending on Ctrl/Alt/Shift state.");
 		AddSymbol("winapi.PlaySound", "WinAPI PlaySound equivalent", "");
