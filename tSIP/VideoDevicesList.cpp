@@ -3,6 +3,7 @@
 
 #include "VideoDevicesList.h"
 #include "VideoModules.h"
+#include "baresip_base_config.h"
 #include "Log.h"
 
 #include <Classes.hpp>
@@ -25,6 +26,7 @@ VideoDevicesList::VideoDevicesList(void)
 
 void VideoDevicesList::Refresh(void)
 {
+#ifdef USE_VIDEO
 	dshowDevsIn.clear();
 
 	ICreateDevEnum *dev_enum;
@@ -88,12 +90,14 @@ void VideoDevicesList::Refresh(void)
 
 		mon->Release();
 	}
+#endif	
 }
 
 void VideoDevicesList::FillComboBox(Stdctrls::TComboBox *target, AnsiString module, bool out, AnsiString selected)
 {
     target->Tag = 0;
 	target->Items->Clear();
+#ifdef USE_VIDEO
 	std::vector<AnsiString> *v = NULL;
 	if (module == VideoModules::dshow)
 	{
@@ -126,4 +130,5 @@ void VideoDevicesList::FillComboBox(Stdctrls::TComboBox *target, AnsiString modu
 		target->ItemIndex = target->Items->Count - 1;
 		target->Tag = 1;
 	}
+#endif	
 }
