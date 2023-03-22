@@ -97,6 +97,9 @@ void ButtonConf::Reset(void)
 	audioRxMod = "winwave";
 	audioRxDev = "";
 
+	videoRxMod = "colorbar_generator_animated";
+	videoRxDev = "";
+
 	fontLabel2 = font;
 }
 

@@ -235,6 +235,9 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				cfg.audioTxMod = btnJson.get("audioTxMod", cfg.audioTxMod).asString();
 				cfg.audioTxDev = btnJson.get("audioTxDev", cfg.audioTxDev).asString();
 
+				btnJson.getString("videoRxMod", cfg.videoRxMod);
+				btnJson.getString("videoRxDev", cfg.videoRxDev);
+
 				{
 					const Json::Value &font = btnJson["font"];
 					cfg.font.name = font.get("name", cfg.font.name).asString();
@@ -592,6 +595,10 @@ int ProgrammableButtons::Write(void)
 		case Button::SWITCH_AUDIO_PLAYER:
 			jsonBtn["audioTxMod"] = cfg.audioTxMod;
 			jsonBtn["audioTxDev"] = cfg.audioTxDev;
+			break;
+		case Button::SWITCH_VIDEO_SOURCE:
+			jsonBtn["videoRxMod"] = cfg.videoRxMod;
+			jsonBtn["videoRxDev"] = cfg.videoRxDev;
 			break;
 		default:
 			break;

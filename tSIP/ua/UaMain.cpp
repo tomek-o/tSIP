@@ -1216,6 +1216,26 @@ extern "C" void control_handler(void)
 		}
 		break;
 	}
+	case Command::SWITCH_VIDEO_SOURCE: {
+	#ifdef USE_VIDEO
+		struct video* v = NULL;
+		if (app.callp)
+		{
+			v = call_video(app.callp);
+		}
+		if (v)
+		{
+			err = video_set_source(v, cmd.videoMod.c_str(), cmd.videoDev.c_str());
+			if (err) {
+				DEBUG_WARNING("failed to set video source (%m)\n", err);
+				break;
+			}
+		}
+	#else
+		DEBUG_WARNING("Switch video source: this build does not support video!\n");
+	#endif
+		break;
+	}
 	case Command::UPDATE_SOFTVOL_TX: {
 		struct config * cfg = conf_config();
 		cfg->audio.softvol_tx = cmd.softvol;

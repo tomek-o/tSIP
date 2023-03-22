@@ -83,6 +83,8 @@ const char* Button::TypeName(enum Type type)
 		return "ZRTP: verify SAS";
 	case ZRTP_UNVERIFY_SAS:
 		return "ZRTP: unverify SAS";
+	case SWITCH_VIDEO_SOURCE:
+		return "Switch video source";
 
 	default:
 		return "???";
@@ -160,6 +162,8 @@ const char* Button::TypeDescription(enum Type type)
 		return "Verify SAS (Short Authentication String) for current ZRTP session";
 	case ZRTP_UNVERIFY_SAS:
 		return "Remove SAS (Short Authentication String) verification for current ZRTP session";
+	case SWITCH_VIDEO_SOURCE:
+		return "Switch video source (module + device) for the current call";
 	default:
 		return "???";
 	}

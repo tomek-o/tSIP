@@ -12,7 +12,10 @@
 #include "common\Colors.h"
 #include "AudioDevicesList.h"
 #include "AudioModules.h"
+#include "VideoModules.h"
+#include "VideoDevicesList.h"
 #include "UaConf.h"
+#include "baresip_base_config.h"
 #include <stdio.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -65,6 +68,12 @@ __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
 
 	AudioModules::FillInputSelectorCb(cbSoundInputMod);
 	AudioModules::FillOutputSelectorCb(cbSoundOutputMod);
+
+	VideoModules::FillInputSelectorCb(cbVideoInputMod);
+
+#ifndef USE_VIDEO
+	lblNoVideo->Visible = true;
+#endif
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmButtonEdit::FormShow(TObject *Sender)
@@ -78,6 +87,7 @@ void __fastcall TfrmButtonEdit::ShowModal(ButtonConf *cfg, int btnId)
 	this->cfg = cfg;
 	this->btnId = btnId;
 	refreshAudioDevList = true;	
+	refreshVideoDevList = true;	
 	ApplyConf();
 	TForm::ShowModal();
 }
@@ -184,6 +194,10 @@ void TfrmButtonEdit::ApplyConf(void)
 	cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod.c_str());
 	cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod.c_str());
 
+	cbVideoInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(cfg->videoRxMod.c_str());
+	cbVideoInputModChange(NULL);
+	edVideoInputFile->Text = cfg->videoRxMod.c_str();
+
 	SetType(cfg->type);
 }
 
@@ -284,6 +298,19 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	if (cbSoundOutputDev->Tag == 0 || cbSoundOutputDev->ItemIndex != cbSoundOutputDev->Items->Count - 1)
 	{
 		cfg->audioTxDev = cbSoundOutputDev->Text.c_str();
+	}
+
+	cfg->videoRxMod = VideoModules::GetInputModuleFromCbIndex(cbVideoInputMod->ItemIndex);
+	if (cfg->videoRxMod == VideoModules::avformat)
+	{
+		cfg->videoRxDev = edVideoInputFile->Text.c_str();
+	}
+	else
+	{
+		if (cbVideoInputDev->Tag == 0 || cbVideoInputDev->ItemIndex != cbVideoInputDev->Items->Count - 1)
+		{
+			cfg->videoRxDev = cbVideoInputDev->Text.c_str();
+		}
 	}
 
 	Close();
@@ -397,6 +424,20 @@ void TfrmButtonEdit::SetType(Button::Type type)
 		tsBehaviorAutoAnswer->Visible = true;
 		edNumber->Visible = false;
 		lblNumber->Visible = false;		
+		break;
+
+	case Button::SWITCH_VIDEO_SOURCE:
+		tsBehaviorSwitchVideoSource->Visible = true;
+		edNumber->Visible = false;
+		lblNumber->Visible = false;
+
+		if (refreshVideoDevList)
+		{
+			refreshVideoDevList = false;
+			VideoDevicesList::Instance().Refresh();
+		}
+		cbVideoInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(cfg->videoRxMod.c_str());
+		cbVideoInputModChange(NULL);	
 		break;
 
 	default:
@@ -834,4 +875,43 @@ void TfrmButtonEdit::UpdateLabelsTopVisibility(void)
 	lblLabel2Top->Visible = state;
 	edLabel2Top->Visible = state;
 }
+
+void __fastcall TfrmButtonEdit::cbVideoInputModChange(TObject *Sender)
+{
+	AnsiString mod = VideoModules::GetInputModuleFromCbIndex(cbVideoInputMod->ItemIndex);
+	if (mod == VideoModules::dshow)
+	{
+		btnSelectVideoInputFile->Visible = false;
+		edVideoInputFile->Visible = false;
+		cbVideoInputDev->Visible = true;
+		lblVideoInputDevice->Visible = true;
+		VideoDevicesList::FillComboBox(cbVideoInputDev, mod, false, cfg->videoRxDev.c_str());
+	}
+	else if (mod == VideoModules::nullvideo ||
+		mod == VideoModules::colorbar_generator ||
+        mod == VideoModules::colorbar_generator_animated
+		)
+	{
+		btnSelectVideoInputFile->Visible = false;
+		edVideoInputFile->Visible = false;
+		cbVideoInputDev->Visible = false;
+		lblVideoInputDevice->Visible = false;
+	}
+	else if (mod == VideoModules::avformat)
+	{
+		btnSelectVideoInputFile->Visible = true;
+		edVideoInputFile->Visible = true;
+		cbVideoInputDev->Visible = false;
+		lblVideoInputDevice->Visible = false;
+	}
+	else
+	{
+		assert(!"Unhandled cbVideoInputMod item index!");
+		btnSelectVideoInputFile->Visible = false;
+		edVideoInputFile->Visible = false;
+		cbVideoInputDev->Visible = false;
+		lblVideoInputDevice->Visible = false;
+	}
+}
+//---------------------------------------------------------------------------
 

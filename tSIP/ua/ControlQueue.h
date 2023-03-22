@@ -49,6 +49,7 @@ public:
 	/** \brief Change audio player device for call
 	*/
 	void SwitchAudioPlayer(int callId, AnsiString audioMod, AnsiString audioDev);
+	void SwitchVideoSource(int callId, AnsiString videoMod, AnsiString videoDev);
 	void UpdateSoftvolTx(unsigned int val);
 	void UpdateSoftvolRx(unsigned int val);
 	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines);

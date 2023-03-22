@@ -116,6 +116,8 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 		btnDst.audioTxDev = btnSrc.audioTxDev;
 		btnDst.audioRxMod = btnSrc.audioRxMod;
 		btnDst.audioRxDev = btnSrc.audioRxDev;
+		btnDst.videoRxMod = btnSrc.videoRxMod;
+		btnDst.videoRxDev = btnSrc.videoRxDev;
 	}
 	if (chbFont->Checked)
 	{

@@ -163,6 +163,15 @@ __published:	// IDE-managed Components
 	TLabel *lblAutoAnswerSipReason;
 	TEdit *edAutoAnswerSipReason;
 	TLabel *lblAutoAnswerSipReasonInfo;
+	TTabSheet *tsBehaviorSwitchVideoSource;
+	TLabel *lblVideoInputModule;
+	TLabel *lblVideoInputDevice;
+	TEdit *edVideoInputFile;
+	TComboBox *cbVideoInputMod;
+	TButton *btnSelectVideoInputFile;
+	TOpenDialog *dlgOpenDeviceFile;
+	TComboBox *cbVideoInputDev;
+	TLabel *lblNoVideo;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
@@ -184,9 +193,11 @@ __published:	// IDE-managed Components
 	void __fastcall chbLabelCenterVerticallyClick(TObject *Sender);
 	void __fastcall chbLabel2CenterHorizontallyClick(TObject *Sender);
 	void __fastcall chbSpaceLabelsYEquallyClick(TObject *Sender);
+	void __fastcall cbVideoInputModChange(TObject *Sender);
 private:	// User declarations
 	bool confirmed;
 	bool refreshAudioDevList;
+	bool refreshVideoDevList;
 	ButtonConf *cfg;
 	int btnId;
 	void SetType(Button::Type type);

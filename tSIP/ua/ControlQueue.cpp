@@ -313,6 +313,19 @@ void ControlQueue::SwitchAudioPlayer(int callId, AnsiString audioMod, AnsiString
 	fifo.push();
 }
 
+void ControlQueue::SwitchVideoSource(int callId, AnsiString videoMod, AnsiString videoDev)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::SWITCH_VIDEO_SOURCE;
+	cmd->videoMod = videoMod;
+	cmd->videoDev = videoDev;
+	cmd->callId = callId;
+	fifo.push();
+}
+
 void ControlQueue::UpdateSoftvolTx(unsigned int val)
 {
 	ScopedLock<Mutex> lock(mutex);

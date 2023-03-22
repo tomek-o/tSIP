@@ -94,6 +94,10 @@ public:
 	std::string audioRxMod;
 	std::string audioRxDev;
 
+	/* Switching video source during call */
+	std::string videoRxMod;
+	std::string videoRxDev;
+
 	/** Overrides default number when BLF button is pressed
 		(calls to other number than subscribed)
 	*/

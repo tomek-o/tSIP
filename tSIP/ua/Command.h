@@ -36,6 +36,7 @@ public:
 		RECORD_PAUSE,
 		GENERATE_TONES,
 		ZRTP_VERIFY_SAS,
+		SWITCH_VIDEO_SOURCE,
 
 		TYPE__LIMITER
 	} type;
@@ -51,6 +52,8 @@ public:
 	bool bParam;
 	AnsiString audioMod;
 	AnsiString audioDev;
+	AnsiString videoMod;
+	AnsiString videoDev;
 	AnsiString pagingTxWaveFile;	///< source wave file for paging TX; default audio source is used if empty
 	AnsiString pagingTxCodec;
 	unsigned int pagingTxPtime;
