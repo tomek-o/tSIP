@@ -1636,6 +1636,8 @@ int audio_set_source(struct audio *au, const char *mod, const char *device)
 	/* stop the audio device first */
 	tx->ausrc = mem_deref(tx->ausrc);
 
+	aubuf_flush(tx->ab);
+
 	err = ausrc_alloc(&tx->ausrc, NULL, mod, &tx->ausrc_prm, device,
 			  ausrc_read_handler, ausrc_error_handler, au);
 	if (err) {
