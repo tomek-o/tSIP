@@ -995,16 +995,6 @@ void TfrmMain::OnSetDial(std::string number)
 	cbCallURI->Text = number.c_str();
 }
 
-void TfrmMain::OnSwitchAudioSource(std::string mod, std::string dev)
-{
-	UA->SwitchAudioSource(0, mod.c_str(), dev.c_str());
-}
-
-void TfrmMain::OnBlindTransfer(const std::string& target)
-{
-	UA->Transfer(0, target.c_str());
-}
-
 Call* TfrmMain::OnGetCall(void)
 {
 	return &call;
@@ -2452,11 +2442,6 @@ void TfrmMain::OnCall(AnsiString uri)
 	MakeCall(uri);
 }
 
-void TfrmMain::OnCall2(const char* uri)
-{
-    OnCall(uri);
-}
-
 void TfrmMain::OnPhonebookEdit(AnsiString uri)
 {
 	bool adding = false;
@@ -2672,6 +2657,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::SWITCH_AUDIO_PLAYER:
 		UA->SwitchAudioPlayer(0, cfg.audioTxMod.c_str(), cfg.audioTxDev.c_str());
 		break;
+	case Button::SWITCH_VIDEO_SOURCE:
+		UA->SwitchVideoSource(0, cfg.videoRxMod.c_str(), cfg.videoRxDev.c_str());
+		break;
 	case Button::HANGUP:
 		Hangup(cfg.sipCode, cfg.sipReason.c_str());
 		break;
@@ -2804,8 +2792,8 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 {
 	ScriptExec scriptExec(
 		static_cast<enum ScriptSource>(srcType), srcId, breakRequest, handled,
-		&OnAddOutputText, &OnCall2, &Hangup, &Answer, &OnGetDial, &OnSetDial,
-		&OnSwitchAudioSource, &DialString, &OnBlindTransfer,
+		&OnCall, &Hangup, &Answer, &OnGetDial, &OnSetDial,
+		&DialString,
 		&OnGetCall,
 		&OnResetCall,
 		&OnGetPreviousCall,
@@ -3504,11 +3492,6 @@ int TfrmMain::OnQueueClear(const char* name)
 int TfrmMain::OnQueueGetSize(const char* name)
 {
     return ScriptExec::QueueGetSize(name);
-}
-
-void TfrmMain::OnAddOutputText(const char* text)
-{
-	LOG("%s", text);
 }
 
 void __fastcall TfrmMain::FormCloseQuery(TObject *Sender, bool &CanClose)

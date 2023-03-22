@@ -304,7 +304,8 @@ static int LuaPrint(lua_State *L)
 		lua_pop(L, 1);
 	};
 	//ret.append("\n");
-	GetContext(L)->onAddOutputText(ret.c_str());
+	//GetContext(L)->onAddOutputText(ret.c_str());
+	LOG("%s", ret.c_str());
 	return 0;
 }
 
@@ -313,7 +314,8 @@ static int LuaError( lua_State *L )
 	const char* str = lua_tostring( L, -1 );
 	lua_pop(L, 1);
 	//send string to console
-	GetContext(L)->onAddOutputText(str);
+	//GetContext(L)->onAddOutputText(str);
+	LOG("%s", str);	
 	return 0;
 }
 
@@ -609,11 +611,10 @@ static int l_SwitchAudioSource(lua_State* L)
 		LOG("Lua error: dev == NULL\n");
 		return 0;
 	}
-	GetContext(L)->onSwitchAudioSource(mod, dev);
+	UA->SwitchAudioSource(0, mod, dev);
 	return 0;
 }
 
-#if 0
 static int l_SwitchVideoSource(lua_State* L)
 {
 	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
@@ -629,10 +630,9 @@ static int l_SwitchVideoSource(lua_State* L)
 		LOG("Lua error: dev == NULL\n");
 		return 0;
 	}
-	GetContext(L)->onSwitchVideoSource(mod, dev);
+	UA->SwitchVideoSource(0, mod, dev);
 	return 0;
 }
-#endif
 
 static int l_SendDtmf(lua_State* L)
 {
@@ -665,7 +665,7 @@ static int l_BlindTransfer(lua_State* L)
         LOG("Lua BlindTransfer error: str == NULL\n");
 		return 0;
 	}
-	GetContext(L)->onBlindTransfer(str);
+	UA->Transfer(0, str);
 	return 0;
 }
 
@@ -1522,15 +1522,12 @@ ScriptExec::ScriptExec(
 	int srcId,
 	bool &breakReq,
 	bool &handled,
-	CallbackAddOutputText onAddOutputText,
 	CallbackCall onCall,
 	CallbackHangup onHangup,
 	CallbackAnswer onAnswer,
 	CallbackGetDial onGetDial,
 	CallbackSetDial onSetDial,
-	CallbackSwitchAudioSource onSwitchAudioSource,
 	CallbackSendDtmf onSendDtmf,
-	CallbackBlindTransfer onBlindTransfer,
 	CallbackGetCall onGetCall,
 	CallbackResetCall onResetCall,
 	CallbackGetPreviousCall onGetPreviousCall,
@@ -1560,15 +1557,12 @@ ScriptExec::ScriptExec(
 	srcId(srcId),
 	breakReq(breakReq),
 	handled(handled),
-	onAddOutputText(onAddOutputText),
 	onCall(onCall),
 	onHangup(onHangup),
 	onAnswer(onAnswer),
 	onGetDial(onGetDial),
 	onSetDial(onSetDial),
-	onSwitchAudioSource(onSwitchAudioSource),
 	onSendDtmf(onSendDtmf),
-	onBlindTransfer(onBlindTransfer),
 	onGetCall(onGetCall),
 	onResetCall(onResetCall),
 	onGetPreviousCall(onGetPreviousCall),
@@ -1596,8 +1590,8 @@ ScriptExec::ScriptExec(
 
 	running(false)
 {
-	assert(onAddOutputText && onCall && onHangup && onAnswer && onGetDial && onSetDial &&
-		onSwitchAudioSource && onSendDtmf && onBlindTransfer &&
+	assert(onCall && onHangup && onAnswer && onGetDial && onSetDial &&
+		onSendDtmf &&
 		onGetCall &&
 		onResetCall &&
 		onGetPreviousCall &&
@@ -1656,6 +1650,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");
 	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "Example: SwitchAudioSource(\"aufile\", \"file.wav\").");
+	lua_register2(L, ScriptImp::l_SwitchVideoSource, "SwitchVideoSource", "Change video source during the call", "Example: SwitchAudioSource(\"avformat\", \"file.mp4\").");
 	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbos during the call", "Accepts single DTMF or whole string");
 	lua_register2(L, ScriptImp::l_GenerateTones, "GenerateTones", "Generate up to 4 tones with specified amplitude and frequency", "");
 	lua_register2(L, ScriptImp::l_BlindTransfer, "BlindTransfer", "Send REFER during the call", "");

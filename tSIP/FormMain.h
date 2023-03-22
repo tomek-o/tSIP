@@ -171,8 +171,6 @@ private:	// User declarations
 	void Answer(void);
 	std::string OnGetDial(void);
 	void OnSetDial(std::string number);
-	void OnSwitchAudioSource(std::string mod, std::string dev);
-	void OnBlindTransfer(const std::string& target);
 	Call* OnGetCall(void);
 	void OnResetCall(void);
 	Call* OnGetPreviousCall(void);	
@@ -227,7 +225,6 @@ private:	// User declarations
 	int OnQueuePop(const char* name, AnsiString &value);
 	int OnQueueClear(const char* name);
 	int OnQueueGetSize(const char* name);
-	void OnAddOutputText(const char* text);
 
 	void ToggleVisibility(void);
 	void ToggleSpeedDial(void);
@@ -259,7 +256,6 @@ public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
 	__fastcall ~TfrmMain();
 	void OnCall(AnsiString uri);
-	void OnCall2(const char* uri);
 	void OnPhonebookEdit(AnsiString uri);
 	void OnHttpQuery(AnsiString uri);
 	AnsiString OnGetContactName(AnsiString uri);	
