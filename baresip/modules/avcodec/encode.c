@@ -4,6 +4,7 @@
  * Copyright (C) 2010 - 2013 Creytiv.com
  */
 #include <re.h>
+#include <re_h264.h>
 #include <stdint.h>
 #include <rem.h>
 #include <baresip.h>
@@ -315,7 +316,6 @@ int decode_sdpparam_h264(struct videnc_state *st, const struct pl *name,
 	return 0;
 }
 
-
 static void param_handler(const struct pl *name, const struct pl *val,
 			  void *arg)
 {
@@ -528,7 +528,10 @@ int encode(struct videnc_state *st, bool update, const struct vidframe *frame,
 		break;
 
 	case AV_CODEC_ID_H264:
-		err = h264_packetize(&mb, st->encprm.pktsize, pkth, arg);
+		{
+        	int TODO__H264_TS__ZERO;
+		}
+		err = h264_packetize(0, pkt->data, pkt->size, st->encprm.pktsize, pkth, arg);
 		break;
 
 	case AV_CODEC_ID_MPEG4:

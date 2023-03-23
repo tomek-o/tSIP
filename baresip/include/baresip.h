@@ -866,8 +866,14 @@ typedef int (videnc_encode_h)(struct videnc_state *ves, bool update,
 
 typedef int (viddec_update_h)(struct viddec_state **vdsp,
 			      const struct vidcodec *vc, const char *fmtp);
+#if 0
 typedef int (viddec_decode_h)(struct viddec_state *vds, struct vidframe *frame,
 			      bool marker, uint16_t seq, struct mbuf *mb);
+#else
+typedef int (viddec_decode_h)(struct viddec_state *vds, struct vidframe *frame,
+                              bool *intra, bool marker, uint16_t seq,
+                              struct mbuf *mb);
+#endif
 
 struct vidcodec {
 	struct le le;

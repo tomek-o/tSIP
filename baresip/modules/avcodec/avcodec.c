@@ -83,7 +83,7 @@ static struct vidcodec h264_0 = {
 	encode_update,
 	encode,
 	decode_update,
-	decode_h264,
+	avcodec_decode_h264,
 	avcodec_h264_fmtp_enc,
 	avcodec_h264_fmtp_cmp,
 #else
@@ -92,7 +92,7 @@ static struct vidcodec h264_0 = {
 	.encupdh   = encode_update,
 	.ench      = encode,
 	.decupdh   = decode_update,
-	.dech      = decode_h264,
+	.dech      = avcodec_decode_h264,
 	.fmtp_ench = avcodec_h264_fmtp_enc,
 	.fmtp_cmph = avcodec_h264_fmtp_cmp,
 #endif
@@ -107,7 +107,7 @@ static struct vidcodec h264_1 = {
 	encode_update,
 	encode,
 	decode_update,
-	decode_h264,
+	avcodec_decode_h264,
 	avcodec_h264_fmtp_enc,
 	avcodec_h264_fmtp_cmp
 };
@@ -136,7 +136,7 @@ static struct vidcodec h263 = {
 	encode_update,	/* encupdh */
 	encode,			/* ench */
 	decode_update,	/* decupdh */
-	decode_h263,	/* dech */
+	avcodec_decode_h263,	/* dech */
 	h263_fmtp_enc,	/* fmtp_ench */
 	NULL			/* fmtp_cmph */
 #else
@@ -145,7 +145,7 @@ static struct vidcodec h263 = {
 	.encupdh   = encode_update,
 	.ench      = encode,
 	.decupdh   = decode_update,
-	.dech      = decode_h263,
+	.dech      = avcodec_decode_h263,
 	.fmtp_ench = h263_fmtp_enc,
 #endif
 };
@@ -160,7 +160,7 @@ static struct vidcodec mpg4 = {
 	encode_update,	/* encupdh */
 	encode,			/* ench */
 	decode_update,	/* decupdh */
-	decode_mpeg4,	/* dech */
+	avcodec_decode_mpeg4,	/* dech */
 	mpg4_fmtp_enc,	/* fmtp_ench */
 	NULL			/* fmtp_cmph */
 #else
@@ -168,7 +168,7 @@ static struct vidcodec mpg4 = {
 	.encupdh   = encode_update,
 	.ench      = encode,
 	.decupdh   = decode_update,
-	.dech      = decode_mpeg4,
+	.dech      = avcodec_decode_mpeg4,
 	.fmtp_ench = mpg4_fmtp_enc,
 #endif
 };

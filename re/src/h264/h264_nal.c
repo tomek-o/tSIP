@@ -198,7 +198,7 @@ static int rtp_send_data(const uint8_t *hdr, size_t hdr_sz,
 			 bool eof, uint64_t rtp_ts,
 			 h264_packet_h *pkth, void *arg)
 {
-	return pkth(eof, rtp_ts, hdr, hdr_sz, buf, sz, arg);
+	return pkth(eof, /*rtp_ts,*/ hdr, hdr_sz, buf, sz, arg);
 }
 
 
@@ -257,8 +257,7 @@ int h264_nal_send(bool first, bool last,
  *
  * @return 0 if success, otherwise errorcode
  */
-int h264_packetize(uint64_t rtp_ts, const uint8_t *buf, size_t len,
-		   size_t pktsize, h264_packet_h *pkth, void *arg)
+int h264_packetize(uint64_t rtp_ts, const uint8_t *buf, size_t len, size_t pktsize, h264_packet_h *pkth, void *arg)
 {
 	const uint8_t *start = buf;
 	const uint8_t *end   = buf + len;

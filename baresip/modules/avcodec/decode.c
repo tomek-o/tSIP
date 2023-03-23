@@ -4,6 +4,7 @@
  * Copyright (C) 2010 - 2013 Creytiv.com
  */
 #include <re.h>
+#include <re_h264.h>
 #include <stdint.h>
 #include <rem.h>
 #include <baresip.h>
@@ -22,6 +23,15 @@
 #define DEBUG_LEVEL 5
 #include <re_dbg.h>
 
+#ifndef AV_INPUT_BUFFER_PADDING_SIZE
+#define AV_INPUT_BUFFER_PADDING_SIZE 64
+#endif
+
+
+enum {
+	DECODE_MAXSZ = 524288,
+};
+
 static char *av_err_str(char *errbuf, size_t errbuf_size, int errnum)
 {
 	av_strerror(errnum, errbuf, errbuf_size);
@@ -34,12 +44,24 @@ struct viddec_state {
 	AVFrame *pict;
 	struct mbuf *mb;
 	bool got_keyframe;
+	size_t frag_start;
+	bool frag;
+	uint16_t frag_seq;
+
+	struct {
+		unsigned n_key;
+		unsigned n_lost;
+	} stats;
 };
 
 
 static void destructor(void *arg)
 {
 	struct viddec_state *st = arg;
+
+	DEBUG_WARNING("avcodec: decoder stats"
+	      " (keyframes:%u, lost_fragments:%u)\n",
+	      st->stats.n_key, st->stats.n_lost);
 
 	mem_deref(st->mb);
 
@@ -53,6 +75,12 @@ static void destructor(void *arg)
 		av_free(st->pict);
 }
 
+
+static void fragment_rewind(struct viddec_state *vds)
+{
+	vds->mb->pos = vds->frag_start;
+	vds->mb->end = vds->frag_start;
+}
 
 static int init_decoder(struct viddec_state *st, const char *name)
 {
@@ -122,29 +150,18 @@ int decode_update(struct viddec_state **vdsp, const struct vidcodec *vc,
 }
 
 
-/*
- * TODO: check input/output size
- */
 static int ffdecode(struct viddec_state *st, struct vidframe *frame,
-		    bool eof, struct mbuf *src)
+		    bool *intra)
 {
-	int i, got_picture, ret, err;
 	AVPacket *avpkt;
+	int i, got_picture, ret;
+	int err = 0;
 
-	/* assemble packets in "mbuf" */
-	err = mbuf_write_mem(st->mb, mbuf_buf(src), mbuf_get_left(src));
+
+	err = mbuf_fill(st->mb, 0x00, AV_INPUT_BUFFER_PADDING_SIZE);
 	if (err)
 		return err;
-
-	if (!eof)
-		return 0;
-
-	st->mb->pos = 0;
-
-	if (!st->got_keyframe) {
-		err = EPROTO;
-		goto out;
-	}
+	st->mb->end -= AV_INPUT_BUFFER_PADDING_SIZE;
 
 	avpkt = av_packet_alloc();
 	if (!avpkt) {
@@ -177,8 +194,6 @@ static int ffdecode(struct viddec_state *st, struct vidframe *frame,
 
 	got_picture = true;
 
-	mbuf_skip_to_end(src);
-
 	if (got_picture) {
 		for (i=0; i<4; i++) {
 			frame->data[i]     = st->pict->data[i];
@@ -187,116 +202,236 @@ static int ffdecode(struct viddec_state *st, struct vidframe *frame,
 		frame->size.w = st->ctx->width;
 		frame->size.h = st->ctx->height;
 		frame->fmt    = VID_FMT_YUV420P;
+
+		if (st->pict->key_frame) {
+
+			*intra = true;
+			st->got_keyframe = true;
+			++st->stats.n_key;
+		}
 	}
 
  out:
-	if (eof)
-		mbuf_rewind(st->mb);
 	av_packet_free(&avpkt);
 	return err;
 }
 
-
-int h264_decode(struct viddec_state *st, struct mbuf *src)
+int avcodec_decode_h264(struct viddec_state *st, struct vidframe *frame,
+			bool *intra, bool marker, uint16_t seq,
+			struct mbuf *src)
 {
-	struct h264_hdr h264_hdr;
+	struct h264_nal_header h264_hdr;
 	const uint8_t nal_seq[3] = {0, 0, 1};
 	int err;
 
-	err = h264_hdr_decode(&h264_hdr, src);
+	if (!st || !frame || !intra || !src)
+		return EINVAL;
+
+	*intra = false;
+
+	err = h264_nal_header_decode(&h264_hdr, src);
 	if (err)
 		return err;
 
+#if 0
+	re_printf("avcodec: decode: %s %s type=%2d %s  \n",
+		  marker ? "[M]" : "   ",
+		  h264_is_keyframe(h264_hdr.type) ? "<KEY>" : "     ",
+		  h264_hdr.type,
+		  h264_nal_unit_name(h264_hdr.type));
+#endif
+
+	if (h264_hdr.type == H264_NALU_SLICE && !st->got_keyframe) {
+		DEBUG_WARNING("avcodec: decoder waiting for keyframe\n");
+		return EPROTO;
+	}
+
 	if (h264_hdr.f) {
-		DEBUG_WARNING("H264 forbidden bit set!\n");
+		DEBUG_WARNING("avcodec: H264 forbidden bit set!\n");
 		return EBADMSG;
+	}
+
+	if (st->frag && h264_hdr.type != H264_NALU_FU_A) {
+		DEBUG_WARNING("avcodec: lost fragments; discarding previous NAL\n");
+		fragment_rewind(st);
+		st->frag = false;
+		++st->stats.n_lost;
 	}
 
 	/* handle NAL types */
 	if (1 <= h264_hdr.type && h264_hdr.type <= 23) {
 
-		if (!st->got_keyframe) {
-			switch (h264_hdr.type) {
-
-			case H264_NAL_PPS:
-			case H264_NAL_SPS:
-				st->got_keyframe = true;
-				break;
-			}
-		}
+		--src->pos;
 
 		/* prepend H.264 NAL start sequence */
-		mbuf_write_mem(st->mb, nal_seq, 3);
+		err  = mbuf_write_mem(st->mb, nal_seq, 3);
 
-		/* encode NAL header back to buffer */
-		err = h264_hdr_encode(&h264_hdr, st->mb);
+		err |= mbuf_write_mem(st->mb, mbuf_buf(src),
+				      mbuf_get_left(src));
+		if (err)
+			goto out;
 	}
-	else if (H264_NAL_FU_A == h264_hdr.type) {
-		struct fu fu;
+	else if (H264_NALU_FU_A == h264_hdr.type) {
+		struct h264_fu fu;
 
-		err = fu_hdr_decode(&fu, src);
+		err = h264_fu_hdr_decode(&fu, src);
 		if (err)
 			return err;
 		h264_hdr.type = fu.type;
 
 		if (fu.s) {
+			if (st->frag) {
+				DEBUG_WARNING("avcodec: start: lost fragments;"
+				      " ignoring previous NAL\n");
+				fragment_rewind(st);
+				++st->stats.n_lost;
+			}
+
+			st->frag_start = st->mb->pos;
+			st->frag = true;
+
 			/* prepend H.264 NAL start sequence */
 			mbuf_write_mem(st->mb, nal_seq, 3);
 
 			/* encode NAL header back to buffer */
-			err = h264_hdr_encode(&h264_hdr, st->mb);
+			err = h264_nal_header_encode(st->mb, &h264_hdr);
+			if (err)
+				goto out;
+		}
+		else {
+			if (!st->frag) {
+				DEBUG_WARNING("avcodec: ignoring fragment"
+				      " (nal=%u)\n", fu.type);
+				++st->stats.n_lost;
+				return 0;
+			}
+
+			if (rtp_seq_diff(st->frag_seq, seq) != 1) {
+				DEBUG_WARNING("avcodec: lost fragments detected\n");
+				fragment_rewind(st);
+				st->frag = false;
+				++st->stats.n_lost;
+				return 0;
+			}
+		}
+
+		err = mbuf_write_mem(st->mb, mbuf_buf(src),
+				     mbuf_get_left(src));
+		if (err)
+			goto out;
+
+		if (fu.e)
+			st->frag = false;
+
+		st->frag_seq = seq;
+	}
+	else if (H264_NALU_STAP_A == h264_hdr.type) {
+
+		while (mbuf_get_left(src) >= 2) {
+
+			const uint16_t len = ntohs(mbuf_read_u16(src));
+			struct h264_nal_header lhdr;
+
+			if (mbuf_get_left(src) < len)
+				return EBADMSG;
+
+			err = h264_nal_header_decode(&lhdr, src);
+			if (err)
+				return err;
+
+			--src->pos;
+
+			err  = mbuf_write_mem(st->mb, nal_seq, 3);
+			err |= mbuf_write_mem(st->mb, mbuf_buf(src), len);
+			if (err)
+				goto out;
+
+			src->pos += len;
 		}
 	}
 	else {
-		DEBUG_WARNING("unknown NAL type %u\n", h264_hdr.type);
+		DEBUG_WARNING("avcodec: decode: unknown NAL type %u\n",
+			h264_hdr.type);
 		return EBADMSG;
 	}
+
+	if (!marker) {
+
+		if (st->mb->end > DECODE_MAXSZ) {
+			DEBUG_WARNING("avcodec: decode buffer size exceeded\n");
+			err = ENOMEM;
+			goto out;
+		}
+
+		return 0;
+	}
+
+	if (st->frag) {
+		err = EPROTO;
+		goto out;
+	}
+
+	err = ffdecode(st, frame, intra);
+	if (err)
+		goto out;
+
+ out:
+	mbuf_rewind(st->mb);
+	st->frag = false;
+
+	return err;
+} 
+
+
+int avcodec_decode_mpeg4(struct viddec_state *st, struct vidframe *frame,
+		 bool *intra, bool marker, uint16_t seq, struct mbuf *src)
+{
+	int err;
+
+	if (!src)
+		return 0;
+
+	(void)seq;
+
+	*intra = false;
+
+	err = mbuf_write_mem(st->mb, mbuf_buf(src),
+			     mbuf_get_left(src));
+	if (err)
+		goto out;
+
+	if (!marker) {
+
+		if (st->mb->end > DECODE_MAXSZ) {
+			DEBUG_WARNING("avcodec: decode buffer size exceeded\n");
+			err = ENOMEM;
+			goto out;
+		}
+
+		return 0;
+	}
+
+	err = ffdecode(st, frame, intra);
+	if (err)
+		goto out;
+
+ out:
+	mbuf_rewind(st->mb);
 
 	return err;
 }
 
 
-int decode_h264(struct viddec_state *st, struct vidframe *frame,
-		bool eof, uint16_t seq, struct mbuf *src)
-{
-	int err;
-
-	(void)seq;
-
-	if (!src)
-		return 0;
-
-	err = h264_decode(st, src);
-	if (err)
-		return err;
-
-	return ffdecode(st, frame, eof, src);
-}
-
-
-int decode_mpeg4(struct viddec_state *st, struct vidframe *frame,
-		 bool eof, uint16_t seq, struct mbuf *src)
-{
-	if (!src)
-		return 0;
-
-	(void)seq;
-
-	/* let the decoder handle this */
-	st->got_keyframe = true;
-
-	return ffdecode(st, frame, eof, src);
-}
-
-
-int decode_h263(struct viddec_state *st, struct vidframe *frame,
-		bool marker, uint16_t seq, struct mbuf *src)
+int avcodec_decode_h263(struct viddec_state *st, struct vidframe *frame,
+		bool *intra, bool marker, uint16_t seq, struct mbuf *src)
 {
 	struct h263_hdr hdr;
 	int err;
 
-	if (!st || !frame)
+	if (!st || !frame || !intra)
 		return EINVAL;
+
+	*intra = false;
 
 	if (!src)
 		return 0;
@@ -307,26 +442,26 @@ int decode_h263(struct viddec_state *st, struct vidframe *frame,
 	if (err)
 		return err;
 
-#if 0
-	re_printf(".....[%s seq=%5u ] MODE %s -"
-		  " SBIT=%u EBIT=%u I=%s"
-		  " (%5u/%5u bytes)\n",
-		  marker ? "M" : " ", seq,
-		  h263_hdr_mode(&hdr) == H263_MODE_A ? "A" : "B",
-		  hdr.sbit, hdr.ebit, hdr.i ? "Inter" : "Intra",
-		  mbuf_get_left(src), st->mb->end);
-#endif
+	if (hdr.i && !st->got_keyframe)
+		return EPROTO;
 
-	if (!hdr.i)
-		st->got_keyframe = true;
+#if 0
+	debug(".....[%s seq=%5u ] MODE %s -"
+	      " SBIT=%u EBIT=%u I=%s"
+	      " (%5u/%5u bytes)\n",
+	      marker ? "M" : " ", seq,
+	      h263_hdr_mode(&hdr) == H263_MODE_A ? "A" : "B",
+	      hdr.sbit, hdr.ebit, hdr.i ? "Inter" : "Intra",
+	      mbuf_get_left(src), st->mb->end);
+#endif
 
 #if 0
 	if (st->mb->pos == 0) {
 		uint8_t *p = mbuf_buf(src);
 
 		if (p[0] != 0x00 || p[1] != 0x00) {
-			re_printf("invalid PSC detected (%02x %02x)\n",
-				  p[0], p[1]);
+			warning("invalid PSC detected (%02x %02x)\n",
+				p[0], p[1]);
 			return EPROTO;
 		}
 	}
@@ -355,5 +490,28 @@ int decode_h263(struct viddec_state *st, struct vidframe *frame,
 		st->mb->buf[st->mb->end - 1] |= sbyte;
 	}
 
-	return ffdecode(st, frame, marker, src);
+	err = mbuf_write_mem(st->mb, mbuf_buf(src),
+			     mbuf_get_left(src));
+	if (err)
+		goto out;
+
+	if (!marker) {
+
+		if (st->mb->end > DECODE_MAXSZ) {
+			DEBUG_WARNING("avcodec: decode buffer size exceeded\n");
+			err = ENOMEM;
+			goto out;
+		}
+
+		return 0;
+	}
+
+	err = ffdecode(st, frame, intra);
+	if (err)
+		goto out;
+
+ out:
+	mbuf_rewind(st->mb);
+
+	return err;
 }

@@ -720,6 +720,10 @@
         <FILE FILENAME="..\..\src\thread\thread.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="thread" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\thread\thread_win32.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="thread_win32" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\mqueue\mqueue.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mqueue" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\h264\getbit.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="getbit" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\h264\h264.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\h264\h264_nal.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="h264_nal" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\h264\sps.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sps" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

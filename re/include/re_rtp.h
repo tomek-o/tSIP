@@ -237,6 +237,17 @@ int   rtcp_sdes_encode(struct mbuf *mb, uint32_t src, uint32_t itemc, ...);
 const char *rtcp_type_name(enum rtcp_type type);
 const char *rtcp_sdes_name(enum rtcp_sdes_type sdes);
 
+
+/**
+ * Calculate difference between two sequence numbers
+ *
+ * @param x First sequence number
+ * @param y Second sequence number
+ *
+ * @return Difference between the two sequence numbers
+ */
+int16_t rtp_seq_diff(uint16_t x, uint16_t y);
+
 #ifdef __cplusplus
 }
 #endif

@@ -596,3 +596,8 @@ int rtp_debug(struct re_printf *pf, const struct rtp_sock *rs)
 
 	return err;
 }
+
+int16_t rtp_seq_diff(uint16_t x, uint16_t y)
+{
+	return (int16_t)(y - x);
+}

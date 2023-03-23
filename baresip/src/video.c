@@ -352,6 +352,7 @@ static int video_stream_decode(struct vrx *vrx, const struct rtp_header *hdr,
 	struct video *v = vrx->video;
 	struct vidframe frame;
 	struct le *le;
+	bool intra;
 	int err = 0;
 
 	if (!hdr || !mbuf_get_left(mb))
@@ -366,7 +367,7 @@ static int video_stream_decode(struct vrx *vrx, const struct rtp_header *hdr,
 	}
 
 	frame.data[0] = NULL;
-	err = vrx->vc->dech(vrx->dec, &frame, hdr->m, hdr->seq, mb);
+	err = vrx->vc->dech(vrx->dec, &frame, &intra, hdr->m, hdr->seq, mb);
 	{
     	int TODO__VID_FMT;
 	}

@@ -506,7 +506,6 @@
         <FILE FILENAME="..\..\modules\avcodec\encode.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="encode" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\avcodec\h26x.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\avcodec\h263.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="h263" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\modules\avcodec\h264.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="h264" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\dshow\dshow.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dshow" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\sdl\sdl.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sdl" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\avcodec\avcodec_sdp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="avcodec_sdp" FORMNAME="" DESIGNCLASS=""/>
