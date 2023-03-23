@@ -73,8 +73,6 @@ and whether it can be addressed?
 
 - blinking tray icon while in call
 
-- aufile: accept mp3 files
-
 - "BLF" p2p: subscription server
 
 button: mouse down event
@@ -105,7 +103,6 @@ tSIP: directory import from vcard
 tSIP: verify wave file format when selecting for wave source audio device
 tSIP: RecordViewer: play multiple files one by one (multiple selection list)
 multiple accounts; disable / set as default for outgoing
-lepsze informowanie o problemach: brak kompatybilnego kodeka
 RecordViewer: keep sorting column/dir after restart
 
 tSIP scripting: Unregister, Reregister
@@ -133,12 +130,10 @@ TODO: TLS not working (UDP used instead) when outbound proxy is specified?
 CRM application communicating through TCPServer plugin
 
 - H.264 config: profile
-- avformat video source
 - video recording
 - direction selection (sendonly/recvonly/sendrecv)
-- camera mute
 - VP8, VP9 - could ffmpeg be used?
-- RTSP as video source
+- RTSP as video source - needs testing
 
 */
 

@@ -1013,5 +1013,50 @@ Version 0.2.11
 		- this was initially added to prevent PortAudio crash when using by two threads at the same time (audio devices were enumerated when settings window was opened), later this problem fixed by adding PortAudioLock
 		- this fixes missing reenabling for this menu item for APP_START_FAILED state
 	- added configurable audio (noise) gate for TX direction (from local microphone)
+	
+Version 0.2.12
+	- splitting binaries into separate "regular" and "video" versions
+	- "audio only" version should be preferred if you don't need video and don't need avformat audio input capabilities
+	- video support (moved back from tSIP-video), enabled by compile-time USE_VIDEO switch:
+		- separate binaries with some drawbacks
+			- LGPL licensing for FFmpeg
+			- openh264.dll needs to be downloaded separately from Cisco page due to licensing reasons (download http://ciscobinary.openh264.org/openh264-2.3.1-win32.dll.bz2 and extract it (using e.g. 7-zip), rename openh264-2.3.1-win32.dll to openh264.dll and put it next to application executable)
+			- larger size (for this version 13 MB more, heavily depending on options used for FFmpeg compilation)
+			- lots of linked third-party code, not tested at the moment for compatibility with Win98/2000/XP or Wine
+			- some known issues and limitations, probably more of them unknown
+		- video source modules:
+			- DirectShow (regular cameras)
+			- FFmpeg avformat (common mp4 files with e.g. H.264+AAC, possibly rtsp cameras)
+			- colorbar generator: two versions, with and without animation
+			- nullvideo (black screen)
+		- video output modules:
+			- SDL, displaying in separate window or on specified programmable button (note that button sizes/layout are customizable)
+			- nullvideo (discarding received video stream)
+		- selfview module with picture-in-picture option
+		- codecs:
+			- H.264 with packetization modes 0 and 1
+			- H.263
+			- MP4V-ES
+		- new programmable button type, switching video source module and device during the call
+			- switching between cameras or camera/video file/colorbar generator
+			- might be used for video "mute" function, switching to e.g. animated colorbar generator
+			- this button type would be visible also in "audio only" build, but would not take effect
+		- new Lua function: SwitchVideoSource(module, device)
+		- FFmpeg avformat module can be also used as audio input, adding support for e.g.:
+			- mp3 files
+			- audio from mp4 and other video files
+			- internet radio stations (http-based, https is not supported with my current FFmpeg build)
+	- "About" window shows whether binary was compiled with or without video support; if video is enabled there are also additional configuration options in settings window 
+	- audio source device/file and newly added video source device/file
+		- can now be used with relative path (taking precedence) or with absolute path, allowing e.g. to use big mp4 file as video or audio source without copying it to application folder
+		- audio/video source device does not have to be file now as avformat accepts also http or rtsp protocols, e.g. internet radio link
+	- default configuration: added "ABC", "DEF", "GHI", etc. letters to "DTMF" buttons
+	- small change for programmable button labels automatic vertical spacing in situation when button height is smaller than a sum of labels height
+	- contacts: locale-aware comparing/sorting using AnsiCompareIC (e.g. L and Ł should be next to each other)
+	- winwave2 is now the default audio input module (due to winwave issue with detaching audio device while this device is in use)
+	- default configuration: RTP timeout is now enabled with 300 s time
+	- incoming call: tSIP now responds with 488 instead of accepting "silent" call when there are no common codecs
+	- removed inline definition for C files, hopefully this would help with related compiler issue
+	- fixed INT64_MIN/INT64_MAX/UINT64_MAX definitions in TC++ stdint.h (tSIP/_doc folder)
 */
 
