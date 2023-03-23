@@ -11,8 +11,16 @@
 
 #if defined(_MSC_VER) || defined(__BORLANDC__)
 #if defined(__BORLANDC__)
-#include <stddef.h>	// ssize_t
-#define inline __inline
+#include <stddef.h>	/* ssize_t */
+/*
+	It seems hard to believe, but BC compiler randomly creates invalid binaries when compiling
+	inline functions, often calling completely different function instead of expanding the code.
+	So far I was modifying fuctions to non-inline whenever I saw the problem.
+	Would removing inline (or rather not defining it to BC __inline) modifier be better solution?
+*/
+#ifndef __cplusplus
+#define inline
+#endif
 #define ENOSYS 38
 #endif
 #include <stdlib.h>
