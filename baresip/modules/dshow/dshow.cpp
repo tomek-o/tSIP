@@ -328,7 +328,6 @@ static int config_pin(struct vidsrc_st *st, IPin *pin)
 
 	vih = (VIDEOINFOHEADER *) mt->pbFormat;
 	hr = stream_conf->SetFormat(mt);
-	mt = free_mt(mt);
 	if (FAILED(hr)) {
 		err = ERANGE;
 		goto out;
