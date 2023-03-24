@@ -150,13 +150,16 @@ static int read_thread(void *data)
 			}
 
 			if (pkt->stream_index == st->au.idx) {
-
 				if (pkt->pts == AV_NOPTS_VALUE) {
-					DEBUG_WARNING("no audio pts\n");
+					/* this happens with internet AAC radio */
+					if (++st->no_audio_pts_cnt < 10) {
+						DEBUG_WARNING("no audio pts, using decoded number of samples as reference\n");
+					}
+					auts = 1000.0 * st->audio_multichannel_samples_decoded / avformat_audio_get_srate(st);
+				} else {
+					double time_base = st->au.time_base.num / (double) st->au.time_base.den; //av_q2d(st->au.time_base);
+					auts = 1000.0 * pkt->pts * time_base;
 				}
-
-				auts = 1000 * pkt->pts *
-					av_q2d(st->au.time_base);
 
 				avformat_audio_decode(st, pkt);
 			}

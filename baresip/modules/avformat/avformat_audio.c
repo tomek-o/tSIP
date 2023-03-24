@@ -182,6 +182,7 @@ void avformat_audio_decode(struct shared *st, AVPacket *pkt)
 	#else
 		st->ausrc_st->readh(frame2.data[0], frame2.nb_samples * channels * sizeof(int16_t), st->ausrc_st->arg);
 	#endif
+		st->audio_multichannel_samples_decoded += frame2.nb_samples;
 	}
 
  unlock:
@@ -189,4 +190,9 @@ void avformat_audio_decode(struct shared *st, AVPacket *pkt)
 
 	av_frame_unref(&frame2);
 	av_frame_unref(&frame);
+}
+
+uint32_t avformat_audio_get_srate(struct shared *st)
+{
+	return st->ausrc_st->prm.srate;
 }

@@ -22,6 +22,9 @@ struct shared {
 		AVCodecContext *ctx;
 		int idx;
 	} au, vid;
+
+	unsigned int no_audio_pts_cnt;
+	uint64_t audio_multichannel_samples_decoded;	/* counting all channels set (e.g. L+R) as single sample */
 };
 
 
@@ -50,3 +53,5 @@ void avformat_video_decode(struct shared *st, AVPacket *pkt);
 
 /*add avformat_video_copy function which passes packets to packet handler*/
 void avformat_video_copy(struct shared *st, AVPacket *pkt);
+
+uint32_t avformat_audio_get_srate(struct shared *st);
