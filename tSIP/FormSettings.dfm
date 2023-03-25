@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsAudioIO
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -405,7 +405,7 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Client certificate'
       end
-      object Label8: TLabel
+      object lblTslCaFile: TLabel
         Left = 5
         Top = 26
         Width = 31
@@ -1755,12 +1755,14 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Output'
       end
-      object Label3: TLabel
+      object lblSoundOutputModule: TLabel
         Left = 30
         Top = 84
         Width = 34
         Height = 13
         Caption = 'Module'
+        ParentShowHint = False
+        ShowHint = False
       end
       object lblSoundOutputDev: TLabel
         Left = 30
@@ -1776,7 +1778,7 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Alert output (call progress, ringback, busy signals)'
       end
-      object Label6: TLabel
+      object lblSoundAlertModule: TLabel
         Left = 30
         Top = 147
         Width = 34
@@ -1797,7 +1799,7 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Output for paging/intercom'
       end
-      object Label2: TLabel
+      object lblSoundOutputIntercomMod: TLabel
         Left = 30
         Top = 271
         Width = 34
@@ -1818,7 +1820,7 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Ring output (on incoming call)'
       end
-      object Label9: TLabel
+      object lblSoundRingOutputMod: TLabel
         Left = 30
         Top = 208
         Width = 34
@@ -1839,7 +1841,7 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'PortAudio suggested latency'
       end
-      object lblPoraudioIn: TLabel
+      object lblPortaudioIn: TLabel
         Left = 184
         Top = 344
         Width = 28
@@ -2006,7 +2008,7 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'WebRTC AEC'
       end
-      object Label1: TLabel
+      object lblWebRtcSndInCardBuffer: TLabel
         Left = 95
         Top = 37
         Width = 101
@@ -2729,7 +2731,7 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Open file associated with contact if set'
       end
-      object Label7: TLabel
+      object lblContactsFile: TLabel
         Left = 3
         Top = 3
         Width = 378
@@ -2943,14 +2945,14 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Background image'
       end
-      object Label4: TLabel
+      object lblTrayNotifierGuiScaling: TLabel
         Left = 3
         Top = 96
         Width = 53
         Height = 13
         Caption = 'GUI scaling'
       end
-      object Label5: TLabel
+      object lblTrayNotifierGuiScalingPercent: TLabel
         Left = 275
         Top = 96
         Width = 11
