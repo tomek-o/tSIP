@@ -42,9 +42,9 @@ const AudioModuleDef audioModuleDefs [] =
 	{ true, false, aufile, "Wave file" },
 	{ true, false, aufileMm, "Wave file - with MM timer" },
 #ifdef USE_VIDEO
-	{ true, false, avformat, "FFmpeg avformat" },
+	{ true, false, avformat, "FFmpeg avformat (mp3, aac, http radio, ...)" },
 #endif
-	{ true, true, nullaudio, "Null" },
+	{ true, true, nullaudio, "Null (silence)" },
 };
 	
 

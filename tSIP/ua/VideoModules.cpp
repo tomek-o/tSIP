@@ -34,12 +34,12 @@ struct VideoModuleDef
 
 const VideoModuleDef videoModuleDefs [] =
 {
-	{ true, false, dshow, "DirectShow" },
-	{ false, true, sdl, "SDL" },
-	{ true, true, nullvideo, "nullvideo" },
-	{ true, false, colorbar_generator, "Colorbar generator, static" },
+	{ true, false, dshow, "DirectShow camera" },
+	{ false, true, sdl, "SDL renderer" },
+	{ true, true, nullvideo, "Black screen (nullvideo)" },
+	{ true, false, colorbar_generator, "Colorbar generator, static image" },
 	{ true, false, colorbar_generator_animated, "Colorbar generator, animated" },
-	{ true, false, avformat, "FFmpeg avformat" },
+	{ true, false, avformat, "FFmpeg avformat (mp4, mkv)" },
 };
 	
 
