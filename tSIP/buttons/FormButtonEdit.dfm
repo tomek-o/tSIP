@@ -759,7 +759,7 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 0
         Width = 651
         Height = 380
-        ActivePage = tsBehaviorSwitchVideoSource
+        ActivePage = tsBehaviorSwitchAudioSource
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -1054,7 +1054,7 @@ object frmButtonEdit: TfrmButtonEdit
           object cbSoundInputMod: TComboBox
             Left = 81
             Top = 0
-            Width = 240
+            Width = 320
             Height = 21
             Style = csDropDownList
             ItemHeight = 13
@@ -1064,12 +1064,12 @@ object frmButtonEdit: TfrmButtonEdit
           object edSoundInputWave: TEdit
             Left = 81
             Top = 25
-            Width = 240
+            Width = 320
             Height = 21
             TabOrder = 1
           end
           object btnSelectWaveFile: TButton
-            Left = 328
+            Left = 407
             Top = 26
             Width = 21
             Height = 19
@@ -1080,7 +1080,7 @@ object frmButtonEdit: TfrmButtonEdit
           object cbSoundInputDev: TComboBox
             Left = 81
             Top = 25
-            Width = 240
+            Width = 320
             Height = 21
             Style = csDropDownList
             ItemHeight = 13
@@ -1090,7 +1090,7 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioPlayer: TTabSheet
           Caption = 'tsBehaviorSwitchAudioPlayer'
           ImageIndex = 5
-          object Label3: TLabel
+          object lblSoundOutputMod: TLabel
             Left = 3
             Top = 3
             Width = 34
@@ -1107,7 +1107,7 @@ object frmButtonEdit: TfrmButtonEdit
           object cbSoundOutputMod: TComboBox
             Left = 81
             Top = 0
-            Width = 240
+            Width = 320
             Height = 21
             Style = csDropDownList
             ItemHeight = 13
@@ -1117,11 +1117,81 @@ object frmButtonEdit: TfrmButtonEdit
           object cbSoundOutputDev: TComboBox
             Left = 81
             Top = 25
-            Width = 240
+            Width = 320
             Height = 21
             Style = csDropDownList
             ItemHeight = 13
             TabOrder = 1
+          end
+        end
+        object tsBehaviorSwitchVideoSource: TTabSheet
+          Caption = 'tsBehaviorSwitchVideoSource'
+          ImageIndex = 7
+          object lblVideoInputModule: TLabel
+            Left = 3
+            Top = 3
+            Width = 34
+            Height = 13
+            Caption = 'Module'
+          end
+          object lblVideoInputDevice: TLabel
+            Left = 3
+            Top = 27
+            Width = 32
+            Height = 13
+            Caption = 'Device'
+          end
+          object lblNoVideo: TLabel
+            Left = 3
+            Top = 88
+            Width = 594
+            Height = 13
+            Caption = 
+              'This build does not support video, video settings are left only ' +
+              'to avoid issues when swapping executables.'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+            Visible = False
+          end
+          object edVideoInputFile: TEdit
+            Left = 148
+            Top = 24
+            Width = 320
+            Height = 21
+            TabOrder = 0
+            Visible = False
+          end
+          object cbVideoInputMod: TComboBox
+            Left = 148
+            Top = 0
+            Width = 320
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 1
+            OnChange = cbVideoInputModChange
+          end
+          object btnSelectVideoInputFile: TButton
+            Left = 474
+            Top = 25
+            Width = 21
+            Height = 19
+            Caption = '...'
+            TabOrder = 2
+            Visible = False
+          end
+          object cbVideoInputDev: TComboBox
+            Left = 148
+            Top = 24
+            Width = 320
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 3
           end
         end
         object tsBehaviorAutoAnswer: TTabSheet
@@ -1163,76 +1233,6 @@ object frmButtonEdit: TfrmButtonEdit
             Height = 21
             TabOrder = 1
             Text = 'OK'
-          end
-        end
-        object tsBehaviorSwitchVideoSource: TTabSheet
-          Caption = 'tsBehaviorSwitchVideoSource'
-          ImageIndex = 7
-          object lblVideoInputModule: TLabel
-            Left = 3
-            Top = 3
-            Width = 34
-            Height = 13
-            Caption = 'Module'
-          end
-          object lblVideoInputDevice: TLabel
-            Left = 3
-            Top = 27
-            Width = 32
-            Height = 13
-            Caption = 'Device'
-          end
-          object lblNoVideo: TLabel
-            Left = 3
-            Top = 88
-            Width = 594
-            Height = 13
-            Caption = 
-              'This build does not support video, video settings are left only ' +
-              'to avoid issues when swapping executables.'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = [fsBold]
-            ParentFont = False
-            Visible = False
-          end
-          object edVideoInputFile: TEdit
-            Left = 148
-            Top = 24
-            Width = 240
-            Height = 21
-            TabOrder = 0
-            Visible = False
-          end
-          object cbVideoInputMod: TComboBox
-            Left = 148
-            Top = 0
-            Width = 240
-            Height = 21
-            Style = csDropDownList
-            ItemHeight = 13
-            TabOrder = 1
-            OnChange = cbVideoInputModChange
-          end
-          object btnSelectVideoInputFile: TButton
-            Left = 394
-            Top = 26
-            Width = 21
-            Height = 19
-            Caption = '...'
-            TabOrder = 2
-            Visible = False
-          end
-          object cbVideoInputDev: TComboBox
-            Left = 148
-            Top = 24
-            Width = 240
-            Height = 21
-            Style = csDropDownList
-            ItemHeight = 13
-            TabOrder = 3
           end
         end
       end

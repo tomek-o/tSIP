@@ -69,7 +69,7 @@ __published:	// IDE-managed Components
 	TLabel *lblSoundInputDevice;
 	TEdit *edSoundInputWave;
 	TButton *btnSelectWaveFile;
-	TLabel *Label3;
+	TLabel *lblSoundOutputMod;
 	TComboBox *cbSoundOutputMod;
 	TLabel *lblSoundOutputDev;
 	TComboBox *cbSoundOutputDev;

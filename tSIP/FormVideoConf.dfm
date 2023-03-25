@@ -103,7 +103,7 @@ object frmVideoConf: TfrmVideoConf
   object cbDisplayParentType: TComboBox
     Left = 152
     Top = 223
-    Width = 240
+    Width = 320
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
@@ -135,7 +135,7 @@ object frmVideoConf: TfrmVideoConf
   object cbInputDev: TComboBox
     Left = 152
     Top = 52
-    Width = 240
+    Width = 320
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
@@ -144,7 +144,7 @@ object frmVideoConf: TfrmVideoConf
   object cbInputMod: TComboBox
     Left = 152
     Top = 28
-    Width = 240
+    Width = 320
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
@@ -154,14 +154,14 @@ object frmVideoConf: TfrmVideoConf
   object edInputFile: TEdit
     Left = 152
     Top = 52
-    Width = 240
+    Width = 320
     Height = 21
     TabOrder = 7
     Visible = False
   end
   object btnSelectInputFile: TButton
-    Left = 398
-    Top = 54
+    Left = 478
+    Top = 53
     Width = 21
     Height = 19
     Caption = '...'
@@ -210,7 +210,7 @@ object frmVideoConf: TfrmVideoConf
   object cbOutputMod: TComboBox
     Left = 152
     Top = 199
-    Width = 240
+    Width = 320
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
@@ -219,7 +219,7 @@ object frmVideoConf: TfrmVideoConf
   end
   object dlgOpenDeviceFile: TOpenDialog
     Options = [ofEnableSizing]
-    Left = 424
+    Left = 504
     Top = 48
   end
 end

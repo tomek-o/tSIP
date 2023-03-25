@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsGeneral
+    ActivePage = tsAudioIO
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1858,7 +1858,7 @@ object frmSettings: TfrmSettings
       object cbSoundInputMod: TComboBox
         Left = 121
         Top = 17
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1868,7 +1868,7 @@ object frmSettings: TfrmSettings
       object cbSoundInputDev: TComboBox
         Left = 121
         Top = 41
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1877,7 +1877,7 @@ object frmSettings: TfrmSettings
       object cbSoundOutputMod: TComboBox
         Left = 121
         Top = 81
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1887,7 +1887,7 @@ object frmSettings: TfrmSettings
       object cbSoundOutputDev: TComboBox
         Left = 121
         Top = 105
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1896,7 +1896,7 @@ object frmSettings: TfrmSettings
       object cbSoundAlertOutputMod: TComboBox
         Left = 121
         Top = 144
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1906,7 +1906,7 @@ object frmSettings: TfrmSettings
       object cbSoundAlertOutputDev: TComboBox
         Left = 121
         Top = 168
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1915,7 +1915,7 @@ object frmSettings: TfrmSettings
       object cbSoundOutputIntercomMod: TComboBox
         Left = 121
         Top = 268
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1925,15 +1925,15 @@ object frmSettings: TfrmSettings
       object cbSoundOutputIntercomDev: TComboBox
         Left = 121
         Top = 292
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         TabOrder = 7
       end
       object btnSelectWaveFile: TButton
-        Left = 367
-        Top = 43
+        Left = 447
+        Top = 42
         Width = 21
         Height = 19
         Caption = '...'
@@ -1943,14 +1943,14 @@ object frmSettings: TfrmSettings
       object edSoundInputWave: TEdit
         Left = 121
         Top = 41
-        Width = 240
+        Width = 320
         Height = 21
         TabOrder = 9
       end
       object cbSoundRingOutputDev: TComboBox
         Left = 121
         Top = 229
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -1959,7 +1959,7 @@ object frmSettings: TfrmSettings
       object cbSoundRingOutputMod: TComboBox
         Left = 121
         Top = 205
-        Width = 240
+        Width = 320
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
