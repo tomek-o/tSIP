@@ -206,7 +206,6 @@ struct config {
 		struct range channels;  /**< Nr. of audio channels (1=mono) */
 		uint32_t srate_play;    /**< Opt. sampling rate for player  */
 		uint32_t srate_src;     /**< Opt. sampling rate for source  */
-		bool src_first;         /**< Audio source opened first      */
 		enum audio_mode txmode; /**< Audio transmit mode            */
 		unsigned int softvol_tx;/**< Software volume control for TX; formula: sample = (sample * volume)/128 */
 		unsigned int softvol_rx;/**< Software volume control for RX; formula: sample = (sample * volume)/128 */

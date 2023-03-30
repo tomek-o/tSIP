@@ -966,8 +966,6 @@ static int start_player(struct aurx *rx, struct audio *a)
 	uint32_t srate_dsp = get_srate(ac);
 	int err;
 
-	DEBUG_WARNING("start_player\n");
-
 	if (!ac)
 		return 0;
 
@@ -1009,12 +1007,10 @@ static int start_player(struct aurx *rx, struct audio *a)
 				return err;
 		}
 
-		DEBUG_WARNING("auplay_alloc\n");
 		err = auplay_alloc(&rx->auplay,
 					rx->mod[0]?rx->mod:a->cfg.play_mod,
 				   &prm, rx->device,
 				   auplay_write_handler, a);
-		DEBUG_WARNING("auplay_alloc status = %d\n", err);
 		if (err) {
 			DEBUG_WARNING("start_player failed (%s.%s): %m\n",
 				      a->cfg.play_mod, rx->device, err);
@@ -1022,8 +1018,6 @@ static int start_player(struct aurx *rx, struct audio *a)
 		}
 		rx->auplay_prm = prm;
 	}
-
-	DEBUG_WARNING("start_player: end\n");
 
 	return 0;
 }
@@ -1034,8 +1028,6 @@ static int start_source(struct autx *tx, struct audio *a)
 	const struct aucodec *ac = tx->ac;
 	uint32_t srate_dsp = get_srate(tx->ac);
 	int err;
-
-	DEBUG_WARNING("start_source\n");
 
 	if (!ac)
 		return 0;
@@ -1079,11 +1071,9 @@ static int start_source(struct autx *tx, struct audio *a)
 				return err;
 		}
 
-		DEBUG_WARNING("ausrc_alloc\n");
 		err = ausrc_alloc(&tx->ausrc, NULL, a->cfg.src_mod,
 				  &prm, tx->device,
 				  ausrc_read_handler, ausrc_error_handler, a);
-		DEBUG_WARNING("ausrc_alloc status = %d\n", err);
 		if (err) {
 			DEBUG_WARNING("start_source failed: %m\n", err);
 			return err;
@@ -1115,8 +1105,6 @@ static int start_source(struct autx *tx, struct audio *a)
 
 		tx->ausrc_prm = prm;
 	}
-
-	DEBUG_WARNING("start_source: end\n");
 
 	return 0;
 }
@@ -1152,7 +1140,6 @@ static int start_extra_source(struct autx *tx, struct audio *a)
 		err = ausrc_alloc(&tx->ausrc_extra, NULL, a->cfg.src_mod,
 				  &prm, tx->device,
 				  ausrc_extra_read_handler, ausrc_extra_error_handler, a);
-		DEBUG_WARNING("ausrc_extra_alloc status = %d\n", err);
 		if (err) {
 			DEBUG_WARNING("start_extra_source failed: %m\n", err);
 			return err;
@@ -1184,8 +1171,6 @@ static int start_extra_source(struct autx *tx, struct audio *a)
 
 		tx->ausrc_prm = prm;
 	}
-
-	DEBUG_WARNING("start_extra_source: end\n");
 
 	return 0;
 }
@@ -1231,25 +1216,13 @@ int audio_start(struct audio *a)
 		}
 	}
 
-	/* configurable order of play/src start */
-	if (a->cfg.src_first) {
-		DEBUG_WARNING("starting source...\n");
-		err  = start_source(&a->tx, a);
+	err  = start_player(&a->rx, a);
+	if (err) {
+		DEBUG_WARNING("audio: start_player failed: %m\n", err);
+	} else {
+		err = start_source(&a->tx, a);
 		if (err) {
-			DEBUG_WARNING("start_source failed: %m\n", err);
-		} else {
-			DEBUG_WARNING("starting player...\n");
-			err = start_player(&a->rx, a);
-		}
-	}
-	else {
-		DEBUG_WARNING("starting player...\n");
-		err  = start_player(&a->rx, a);
-		if (err) {
-			DEBUG_WARNING("start_player failed: %m\n", err);
-		} else {
-			DEBUG_WARNING("starting source...\n");
-			err = start_source(&a->tx, a);
+			DEBUG_WARNING("audio: start_source failed: %m\n", err);
 		}
 	}
 #if 0
@@ -1405,15 +1378,11 @@ int audio_decoder_set(struct audio *a, const struct aucodec *ac,
 	}
 
 	if (ac->decupdh) {
-		DEBUG_WARNING("ac: decupdh\n");
 		err = ac->decupdh(&rx->dec, ac, params);
-		DEBUG_WARNING("ac: decupdh done\n");
 		if (err) {
 			DEBUG_WARNING("alloc decoder: %m\n", err);
 			return err;
 		}
-	} else {
-		DEBUG_WARNING("ac: no decupdh\n");
 	}
 
 	stream_set_srate(a->strm, get_srate(ac), get_srate(ac));
@@ -1425,11 +1394,9 @@ int audio_decoder_set(struct audio *a, const struct aucodec *ac,
 		/* Reset audio filter chain */
 		list_flush(&rx->filtl);
 
-		DEBUG_WARNING("audio_decoder_set: audio_start\n");
 		err |= audio_start(a);
 	}
 
-	DEBUG_WARNING("audio_decoder_set: status = %d\n", err);
 	return err;
 }
 
