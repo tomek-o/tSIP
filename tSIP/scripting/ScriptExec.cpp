@@ -5,6 +5,7 @@
 
 #include "ScriptExec.h"
 #include "Log.h"
+#include "LogUnit.h"
 #include "LuaState.h"
 #include "lua.hpp"
 #include "AudioDevicesList.h"
@@ -1514,6 +1515,15 @@ static int l_SetAppStatus(lua_State* L)
 	return 0;
 }
 
+static int l_ShowLogWindow(lua_State* L)
+{
+	if (!frmLog->Visible)
+		frmLog->Show();
+	frmLog->WindowState = wsNormal;
+	frmLog->BringToFront();
+	return 0;
+}
+
 };	// ScriptImp
 
 
@@ -1740,6 +1750,8 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SendTextMessage, "SendTextMessage", "Send SIP SIMPLE message", "");
 
 	lua_register2(L, ScriptImp::l_SetAppStatus, "SetAppStatus", "Set status visible as hint in system tray", "");
+
+	lua_register2(L, ScriptImp::l_ShowLogWindow, "ShowLogWindow", "Show and bring to front log window", "");
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);
