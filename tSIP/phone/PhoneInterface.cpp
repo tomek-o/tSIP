@@ -153,10 +153,9 @@ void PollAppStatusQueue(void)
 
 void PhoneInterface::EnumerateDlls(AnsiString dir)
 {
-	LOG("Enumerating phone device dlls...\n");
 	if (dir[dir.Length()] != '\\')
-		dir += "\\";	
-	LOG("Directory: %s\n", dir.c_str());
+		dir += "\\";
+	LOG("Enumerating plugin/phone dlls from %s...\n", dir.c_str());
 	asDllDir = dir;
 	dlls.clear();
 	WIN32_FIND_DATA file;
