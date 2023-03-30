@@ -223,13 +223,15 @@ public:
 		unsigned int iMaxUiLogLines;		
 
 		Font consoleFont;
+		unsigned int windowWidth, windowHeight;
 
-        _Logging(void):
-            bLogToFile(false),
-            bFlush(false),
-            iMaxFileSize(Settings::_Logging::DEF_MAX_FILE_SIZE),
-            iLogRotate(Settings::_Logging::DEF_LOGROTATE),
-            iMaxUiLogLines(5000)
+		_Logging(void):
+			bLogToFile(false),
+			bFlush(false),
+			iMaxFileSize(Settings::_Logging::DEF_MAX_FILE_SIZE),
+			iLogRotate(Settings::_Logging::DEF_LOGROTATE),
+			iMaxUiLogLines(5000),
+			windowWidth(630), windowHeight(400)
 		{
 			consoleFont.name = "Courier New";
         }

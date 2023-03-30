@@ -645,6 +645,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			Logging.iLogRotate = iLogRotate;
 		}
 		Logging.iMaxUiLogLines = LoggingJson.get("MaxUiLogLines", Logging.iMaxUiLogLines).asInt();
+		LoggingJson.getUInt("WindowWidth", Logging.windowWidth);
+		LoggingJson.getUInt("WindowHeight", Logging.windowHeight);
 		{
 			const Json::Value &jv = LoggingJson["ConsoleFont"];
 			struct Font &font = Logging.consoleFont;
@@ -963,6 +965,8 @@ int Settings::Write(AnsiString asFileName)
 		jLogging["MaxFileSize"] = Logging.iMaxFileSize;
 		jLogging["LogRotate"] = Logging.iLogRotate;
 		jLogging["MaxUiLogLines"] = Logging.iMaxUiLogLines;
+		jLogging["WindowWidth"] = Logging.windowWidth;
+		jLogging["WindowHeight"] = Logging.windowHeight;
 		{
 			Json::Value &jFont = jLogging["ConsoleFont"];
 			const struct Font &font = Logging.consoleFont;

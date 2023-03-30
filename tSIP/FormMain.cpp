@@ -500,6 +500,9 @@ void TfrmMain::Finalize(void)
 
 	appSettings.history.listColumnWidths = frmHistory->GetColumnWidths();
 
+	appSettings.Logging.windowWidth = frmLog->Width;
+	appSettings.Logging.windowHeight = frmLog->Height;
+
 	appSettings.Write(Paths::GetConfig());
 	if (appSettings.history.noStoreToFile == false)
 	{

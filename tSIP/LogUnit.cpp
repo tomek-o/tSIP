@@ -28,6 +28,8 @@ __fastcall TfrmLog::TfrmLog(TComponent* Owner)
 	updatingUi(false)
 {
 	callbackClose = NULL;
+	Width = appSettings.Logging.windowWidth;
+	Height = appSettings.Logging.windowHeight;
 }
 //---------------------------------------------------------------------------
 

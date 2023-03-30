@@ -2,8 +2,8 @@ object frmLog: TfrmLog
   Left = 0
   Top = 0
   Caption = 'Log'
-  ClientHeight = 294
-  ClientWidth = 635
+  ClientHeight = 373
+  ClientWidth = 622
   Color = clBtnFace
   Constraints.MinHeight = 80
   Constraints.MinWidth = 200
@@ -25,22 +25,26 @@ object frmLog: TfrmLog
   object redMain: TRichEdit
     Left = 0
     Top = 0
-    Width = 635
-    Height = 248
+    Width = 622
+    Height = 327
     Align = alClient
     PopupMenu = pmenuRichEdit
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
+    ExplicitWidth = 635
+    ExplicitHeight = 248
   end
   object pnlBottom: TPanel
     Left = 0
-    Top = 248
-    Width = 635
+    Top = 327
+    Width = 622
     Height = 46
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
+    ExplicitTop = 248
+    ExplicitWidth = 635
     object btnClear: TButton
       Left = 5
       Top = 6
