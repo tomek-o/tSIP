@@ -14,10 +14,6 @@
 #include <re_dbg.h>
 
 
-#undef MOD_PRE
-#define MOD_PRE ""  /**< Module prefix */
-
-
 /** Core Run-time Configuration - populated from config file */
 /* todo: move parsing/decoding to a module */
 static struct config core_config = {
@@ -135,13 +131,6 @@ static struct config core_config = {
 	{
 		""
 	},
-
-#ifdef USE_VIDEO
-	/* BFCP */
-	{
-		""
-	},
-#endif
 
 	/* messages */
 	{

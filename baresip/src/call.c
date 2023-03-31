@@ -59,7 +59,6 @@ struct call {
 	struct audio *audio;      /**< Audio stream                         */
 #ifdef USE_VIDEO
 	struct video *video;      /**< Video stream                         */
-	struct bfcp *bfcp;        /**< BFCP Client                          */
 	void *vidisp_parent_handle;	/**< Parent handle for video display    */
 #endif
 	enum state state;         /**< Call state                           */
@@ -175,13 +174,6 @@ static void call_stream_start(struct call *call, bool active)
 	}
 	else if (call->video) {
 		(void)re_printf("call: video stream is disabled (no rformat)...\n");
-	}
-
-	if (call->bfcp) {
-		err = bfcp_start(call->bfcp);
-		if (err) {
-			DEBUG_WARNING("bfcp_start() error: %m\n", err);
-		}
 	}
 #endif
 
@@ -395,7 +387,6 @@ static void call_destructor(void *arg)
 	mem_deref(call->audio);
 #ifdef USE_VIDEO
 	mem_deref(call->video);
-	mem_deref(call->bfcp);
 #endif
 	mem_deref(call->sdp);
 	mem_deref(call->mnats);
@@ -606,15 +597,6 @@ int call_alloc(struct call **callp, const struct config *cfg, struct list *lst,
 		if (err)
 			goto out;
  	}
-
-	if (str_isset(cfg->bfcp.proto)) {
-
-		err = bfcp_alloc(&call->bfcp, call->sdp,
-				 cfg->bfcp.proto, !got_offer,
-				 acc->mnat, call->mnats);
-		if (err)
-			goto out;
-	}
 #else
 	(void)use_video;
 	(void)vidmode;

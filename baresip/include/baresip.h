@@ -333,13 +333,6 @@ struct config {
 		char ifname[64];        /**< Bind to interface (optional)   */
 	} net;
 
-#ifdef USE_VIDEO
-	/* BFCP */
-	struct config_bfcp {
-		char proto[16];         /**< BFCP Transport (optional)      */
-	} bfcp;
-#endif
-
 	struct {
 		int reply_code;			/**< SIP code used when replying to incoming MESSAGE */
 		char reply_reason[64];	/**< Text sent in reply for incoming MESSAGE */

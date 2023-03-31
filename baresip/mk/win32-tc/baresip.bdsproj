@@ -403,7 +403,6 @@
         <FILE FILENAME="..\..\src\aufilt.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="aufilt" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\auplay.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="auplay" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\ausrc.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ausrc" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\bfcp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bfcp" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\call.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="call" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\cmd.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="cmd" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\conf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="conf" FORMNAME="" DESIGNCLASS=""/>

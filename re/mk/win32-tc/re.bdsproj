@@ -499,8 +499,6 @@
       <FILELIST>
         <FILE FILENAME="re.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="re" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\base64\b64.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="b64" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\bfcp\attr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="attr" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\bfcp\msg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="msg" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\conf\conf.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="conf" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\crc32\crc32.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="crc32" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\dbg\dbg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dbg" FORMNAME="" DESIGNCLASS=""/>
@@ -631,7 +629,6 @@
         <FILE FILENAME="..\..\include\re_uri.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\re.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\re_base64.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\include\re_bfcp.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\re_bitv.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\re_conf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\include\re_crc32.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
@@ -675,9 +672,6 @@
         <FILE FILENAME="..\..\src\sipevent\notify.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="notify" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\sipevent\sipevent_listen.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sipevent_listen" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\sipevent\sipevent_msg.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sipevent_msg" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\bfcp\conn.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="conn" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\bfcp\bfcp_request.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bfcp_request" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\bfcp\bfcp_reply.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="bfcp_reply" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\fmt\str_error.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="str_error" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\sa\printaddr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="printaddr" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\stun\stunstr.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stunstr" FORMNAME="" DESIGNCLASS=""/>
