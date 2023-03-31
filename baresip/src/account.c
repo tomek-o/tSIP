@@ -322,37 +322,6 @@ static int encode_uri_user(struct re_printf *pf, const struct uri *uri)
 	return uri_encode(pf, &uuri);
 }
 
-#if 0
-static int password_prompt(struct account *acc)
-{
-	char pwd[64];
-	char *nl;
-	int err;
-
-	(void)re_printf("Please enter password for %r@%r: ",
-			&acc->luri.user, &acc->luri.host);
-
-	/* note: blocking UI call */
-	fgets(pwd, sizeof(pwd), stdin);
-	pwd[sizeof(pwd) - 1] = '\0';
-
-	nl = strchr(pwd, '\n');
-	if (nl == NULL) {
-		(void)re_printf("Invalid password (0 - 63 characters"
-				" followed by newline)\n");
-		return EINVAL;
-	}
-
-	*nl = '\0';
-
-	err = str_dup(&acc->auth_pass, pwd);
-	if (err)
-		return err;
-
-	return 0;
-}
-#endif
-
 
 /**
  * Create a SIP account from a sip address string
@@ -409,15 +378,7 @@ int account_alloc(struct account **accp, const char *sipaddr, const char *pwd)
 	if (err)
 		goto out;
 
-	if (!pl_isset(&acc->laddr.uri.password)) {
-#if 0
-		/* optional password prompt */
-		err = password_prompt(acc);
-		if (err)
-			goto out;
-#endif			
-	}
-	else {
+	if (pl_isset(&acc->laddr.uri.password)) {
 		err = pl_strdup(&acc->auth_pass, &acc->laddr.uri.password);
 		if (err)
 			goto out;
