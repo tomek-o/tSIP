@@ -168,6 +168,7 @@ Settings::Settings(void)
 	uaConf.accounts.clear();
 
 	struct UaConf::Account new_acc;
+	new_acc.answer_any = true;
 	uaConf.accounts.push_back(new_acc);
 
 	ScriptWindow.ClearMruItems();
