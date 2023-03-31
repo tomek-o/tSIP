@@ -623,7 +623,6 @@ void ua_hangup(struct ua *ua, struct call *call,
 int  ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const char *audio_dev, enum vidmode vmode, void *vidisp_parent_handle);
 int  ua_options_send(struct ua *ua, const char *uri,
 		     options_resp_h *resph, void *arg);
-int  ua_sipfd(const struct ua *ua);
 int  ua_debug(struct re_printf *pf, const struct ua *ua);
 int  ua_print_calls(struct re_printf *pf, const struct ua *ua);
 int  ua_print_status(struct re_printf *pf, const struct ua *ua);
