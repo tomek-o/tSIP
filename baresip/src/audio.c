@@ -451,8 +451,7 @@ static void ausrc_read_handler(const uint8_t *buf, size_t sz, void *arg)
 	if (a->cfg.txmode == AUDIO_MODE_POLL) {
 		int i;
 		/* avformat call read handler only once per 30 ms or so - need multiple writes to avoid overrun here */
-		/* baresip loops up to 16 times here, but isn't it overkil? */
-		for (i=0; i<4; i++) {
+		for (i=0; i<16; i++) {
 			if (aubuf_cur_size(tx->ab) < tx->psize)
 				break;
 			poll_aubuf_tx(a);
@@ -1341,6 +1340,27 @@ int audio_encoder_set(struct audio *a, const struct aucodec *ac,
 
 	stream_set_srate(a->strm, get_srate(ac), get_srate(ac));
 	stream_update_encoder(a->strm, pt_tx);
+
+	/* use a codec-specific ptime */
+	/* 	Ugly hardcoded L16 ptime: baresip does that at codec registration but
+		I'm still using old API for this that is unfortunately also part of DLL mod interface.
+		I don't want to	change binary interface with DLL modules or add their versioning at the moment.
+	*/
+	if (strcmp(ac->name, "L16") == 0) {
+		unsigned int ptime = 20;
+		unsigned int bytes_per_20ms = ac->srate * ac->ch * 2 / 50;
+		enum { LIMIT = 1400 };
+		if (bytes_per_20ms / 2 > LIMIT)
+			ptime = 4;
+		else if (bytes_per_20ms > LIMIT)
+			ptime = 10;
+		if (ptime < tx->ptime)
+		{
+			DEBUG_WARNING("audio: limiting L16 ptime to %u ms\n", ptime);
+			tx->ptime = ptime;
+			tx->psize = 2 * calc_nsamp(ac->srate, ac->ch, ptime);
+		}
+	}
 
 	if (!tx->ausrc) {
 		err |= audio_start(a);
