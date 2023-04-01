@@ -29,6 +29,32 @@ static char *av_err_str(char *errbuf, size_t errbuf_size, int errnum)
 	return errbuf;
 }
 
+#ifdef __BORLANDC__
+static char* ANSI_to_UTF8(const char* ansi)
+{ 
+	int outlen;
+	char* utf8;
+	int inlen = ::MultiByteToWideChar(CP_ACP, NULL, ansi, strlen(ansi), NULL, 0);
+	wchar_t* wszString = malloc(sizeof(wchar_t) * (inlen + 1));
+	::MultiByteToWideChar(CP_ACP, NULL, ansi, strlen(ansi), wszString, inlen);
+	wszString[inlen] = '\0';
+
+	outlen = ::WideCharToMultiByte(CP_UTF8, NULL, wszString, wcslen(wszString), NULL, 0, NULL, NULL);
+	utf8 = malloc(outlen + 1);
+	::WideCharToMultiByte(CP_UTF8, NULL, wszString, wcslen(wszString), utf8, outlen, NULL, NULL);
+	utf8[outlen] = '\0';
+
+	free(wszString);
+	return utf8;
+}
+
+/*  duplicated becase Borland C sometimes generates invalid code for inlined functions
+	from headers */
+static double av_q2d_local(AVRational a){
+    return a.num / (double) a.den;
+}
+#endif
+
 /**
  * @defgroup avformat avformat
  *
@@ -157,7 +183,7 @@ static int read_thread(void *data)
 					}
 					auts = 1000.0 * st->audio_multichannel_samples_decoded / avformat_audio_get_srate(st);
 				} else {
-					double time_base = st->au.time_base.num / (double) st->au.time_base.den; //av_q2d(st->au.time_base);
+					double time_base = av_q2d_local(st->au.time_base);
 					auts = 1000.0 * pkt->pts * time_base;
 				}
 
@@ -169,8 +195,7 @@ static int read_thread(void *data)
 					DEBUG_WARNING("no video pts\n");
 				}
 
-				vidts = 1000 * pkt->pts *
-					av_q2d(st->vid.time_base);
+				vidts = 1000 * pkt->pts * av_q2d_local(st->vid.time_base);
 			#if 0
 				if (st->is_pass_through) {
 					avformat_video_copy(st, pkt);
@@ -397,7 +422,15 @@ int avformat_shared_alloc(struct shared **shp, const char *dev,
 		}
 	}
 
+#ifdef	__BORLANDC__
+	{
+		char* utf8_dev = ANSI_to_UTF8(dev);
+		ret = avformat_open_input(&st->ic, utf8_dev, input_format, &format_opts);
+		free(utf8_dev);
+	}
+#else
 	ret = avformat_open_input(&st->ic, dev, input_format, &format_opts);
+#endif
 	if (ret < 0) {
 		char err_buf[AV_ERROR_MAX_STRING_SIZE] = {0};	
 		DEBUG_WARNING("avformat: avformat_open_input(%s) failed (ret=%s)\n",
