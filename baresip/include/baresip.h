@@ -167,8 +167,6 @@ struct range {
 enum audio_mode {
 	AUDIO_MODE_POLL = 0,         /**< Polling mode                  */
 	AUDIO_MODE_THREAD,           /**< Use dedicated thread          */
-	AUDIO_MODE_THREAD_REALTIME,  /**< Use dedicated realtime-thread */
-	AUDIO_MODE_TMR               /**< Use timer                     */
 };
 
 enum e_opus_application {

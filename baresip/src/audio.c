@@ -102,15 +102,13 @@ struct autx {
 	bool muted;                   /**< Audio source is muted           */
 	int cur_key;                  /**< Currently transmitted event     */
 
-	union {
-		struct tmr tmr;       /**< Timer for sending RTP packets   */
 #ifdef HAVE_PTHREAD
-		struct {
-			pthread_t tid;/**< Audio transmit thread           */
-			bool run;     /**< Audio transmit thread running   */
-		} thr;
+	struct {
+		pthread_t tid;/**< Audio transmit thread           */
+		bool run;     /**< Audio transmit thread running   */
+	} thr;
 #endif
-	} u;
+
 	struct dtmf_generator dtmfgen;	/**< DTMF generator state	    */
 	struct tone_generator tonegen;	/**< tone generator state       */
 	struct ausrc_st *ausrc_extra;
@@ -710,9 +708,6 @@ int audio_alloc(struct audio **ap, const struct config *cfg,
 	a->errh    = errh;
 	a->arg     = arg;
 
-	if (a->cfg.txmode == AUDIO_MODE_TMR)
-		tmr_init(&tx->u.tmr);
-
 	tone_generator_init(&a->tx.tonegen);
 
  out:
@@ -787,9 +782,6 @@ int audio_alloc2(struct audio **ap, const struct config *cfg,
 	a->errh    = errh;
 	a->arg     = arg;
 
-	if (a->cfg.txmode == AUDIO_MODE_TMR)
-		tmr_init(&tx->u.tmr);
-
 	tone_generator_init(&a->tx.tonegen);
 
  out:
@@ -807,11 +799,7 @@ static void *tx_thread(void *arg)
 {
 	struct audio *a = arg;
 
-	/* Enable Real-time mode for this thread, if available */
-	if (a->cfg.txmode == AUDIO_MODE_THREAD_REALTIME)
-		(void)realtime_enable(true, 1);
-
-	while (a->tx.u.thr.run) {
+	while (a->tx.thr.run) {
 
 		poll_aubuf_tx(a);
 
@@ -821,16 +809,6 @@ static void *tx_thread(void *arg)
 	return NULL;
 }
 #endif
-
-
-static void timeout_tx(void *arg)
-{
-	struct audio *a = arg;
-
-	tmr_start(&a->tx.u.tmr, 5, timeout_tx, a);
-
-	poll_aubuf_tx(a);
-}
 
 
 static void aufilt_param_set(struct aufilt_prm *prm,
@@ -1081,22 +1059,17 @@ static int start_source(struct autx *tx, struct audio *a)
 		switch (a->cfg.txmode) {
 #ifdef HAVE_PTHREAD
 		case AUDIO_MODE_THREAD:
-		case AUDIO_MODE_THREAD_REALTIME:
-			if (!tx->u.thr.run) {
-				tx->u.thr.run = true;
-				err = pthread_create(&tx->u.thr.tid, NULL,
+			if (!tx->thr.run) {
+				tx->thr.run = true;
+				err = pthread_create(&tx->thr.tid, NULL,
 						     tx_thread, a);
 				if (err) {
-					tx->u.thr.tid = false;
+					tx->thr.tid = false;
 					return err;
 				}
 			}
 			break;
 #endif
-
-		case AUDIO_MODE_TMR:
-			tmr_start(&tx->u.tmr, 1, timeout_tx, a);
-			break;
 
 		default:
 			break;
@@ -1147,22 +1120,17 @@ static int start_extra_source(struct autx *tx, struct audio *a)
 		switch (a->cfg.txmode) {
 #ifdef HAVE_PTHREAD
 		case AUDIO_MODE_THREAD:
-		case AUDIO_MODE_THREAD_REALTIME:
-			if (!tx->u.thr.run) {
-				tx->u.thr.run = true;
-				err = pthread_create(&tx->u.thr.tid, NULL,
+			if (!tx->thr.run) {
+				tx->thr.run = true;
+				err = pthread_create(&tx->thr.tid, NULL,
 						     tx_thread, a);
 				if (err) {
-					tx->u.thr.tid = false;
+					tx->thr.tid = false;
 					return err;
 				}
 			}
 			break;
 #endif
-
-		case AUDIO_MODE_TMR:
-			tmr_start(&tx->u.tmr, 1, timeout_tx, a);
-			break;
 
 		default:
 			break;
@@ -1268,16 +1236,12 @@ void audio_stop(struct audio *a)
 
 #ifdef HAVE_PTHREAD
 	case AUDIO_MODE_THREAD:
-	case AUDIO_MODE_THREAD_REALTIME:
-		if (tx->u.thr.run) {
-			tx->u.thr.run = false;
-			pthread_join(tx->u.thr.tid, NULL);
+		if (tx->thr.run) {
+			tx->thr.run = false;
+			pthread_join(tx->thr.tid, NULL);
 		}
 		break;
 #endif
-	case AUDIO_MODE_TMR:
-		tmr_cancel(&tx->u.tmr);
-		break;
 
 	default:
 		break;
