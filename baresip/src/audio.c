@@ -999,8 +999,8 @@ static int start_player(struct aurx *rx, struct audio *a)
 		prm.frame_size = calc_nsamp(prm.srate, prm.ch, rx->ptime);
 
 		if (!rx->ab) {
-			const size_t psize = 2 * prm.frame_size;
-
+			const size_t psize = 2 * prm.frame_size * (prm.srate>16000?(prm.srate/16000):1);
+			DEBUG_WARNING("audio: rx buf min = %u, max = %u\n", psize * 1, psize * 8);
 			err = aubuf_alloc(&rx->ab, psize * 1, psize * 8);
 			if (err)
 				return err;
