@@ -90,6 +90,10 @@ void __fastcall TfrmLuaScriptHelp::edFilterChange(TObject *Sender)
 {
 	Filter();
 	lvSymbols->ClearSelection();
+	if (lvSymbols->Items->Count == 1)
+	{
+    	lvSymbols->Items->Item[0]->Selected = true;
+	}	
 	if (!lvSymbols->Selected)
 		memoDescription->Clear();
 }
