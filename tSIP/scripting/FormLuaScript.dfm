@@ -37,6 +37,12 @@ object frmLuaScript: TfrmLuaScript
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 0
+      object lblExecutionTime: TLabel
+        Left = 301
+        Top = 13
+        Width = 3
+        Height = 13
+      end
       object btnExecute: TButton
         Left = 8
         Top = 8

@@ -46,6 +46,7 @@ __published:	// IDE-managed Components
 	TListView *lvValidation;
 	TMenuItem *miCustomLuaFunctions;
 	TMenuItem *miFileNew;
+	TLabel *lblExecutionTime;
 	void __fastcall btnExecuteClick(TObject *Sender);
 	void __fastcall btnBreakClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);

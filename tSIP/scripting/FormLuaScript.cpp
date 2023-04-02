@@ -8,6 +8,7 @@
 #include "FormLuaScriptHelp.h"
 #include "ScriptExec.h"
 #include "common/BtnController.h"
+#include "common/TimeCounter.h" 
 #include "LuaExamples.h"
 #include "Settings.h"
 #include "ScriptSource.h"
@@ -137,12 +138,21 @@ void TfrmLuaScript::SetScript(AnsiString asString)
 
 void __fastcall TfrmLuaScript::btnExecuteClick(TObject *Sender)
 {
+	double timeMs;
 	BtnController btnCtrl(dynamic_cast<TButton*>(Sender));
-	breakRequest = false;
-	running = true;
-	bool handled = true;
-	callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, frmEditor->GetText().c_str(), breakRequest, handled);
-	running = false;
+	lblExecutionTime->Caption = "";
+	{
+		TimeCounter tc("frmLuaScript::btnExecuteClick", false);
+		breakRequest = false;
+		running = true;
+		bool handled = true;
+		callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, frmEditor->GetText().c_str(), breakRequest, handled);
+		running = false;
+		timeMs = tc.getTimeMs();
+	}
+	AnsiString tmp;
+	tmp.sprintf("Executed in %.03f ms", timeMs);
+	lblExecutionTime->Caption = tmp;
 }
 //---------------------------------------------------------------------------
 
