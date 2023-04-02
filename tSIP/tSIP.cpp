@@ -160,7 +160,25 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		CLog::Instance()->SetLevel(E_LOG_TRACE);
 		CLog::Instance()->callbackLog = frmLog->OnLog;
-		LOG("\n===================\nApplication started\n");
+
+		LOG("\n===================\nApplication started, build config: DEBUG: %s, CODEGUARD: %s, VIDEO: %s\n",
+	#ifdef _DEBUG
+			"YES",
+	#else
+			"NO",
+	#endif
+	#ifdef __CODEGUARD__
+			"YES",
+	#else
+			"NO",
+	#endif
+	#ifdef USE_VIDEO
+			"YES"
+	#else
+			"NO"
+	#endif
+			);
+
 		LOG("Main config file: %s\n", Paths::GetConfig().c_str());
 #if 0
 		frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
