@@ -110,7 +110,6 @@ void opus_mirror_params(const char *x)
 
 static int module_init(void)
 {
-	//struct conf *conf = conf_cur();
 	const struct config *cfg = conf_config();
 	uint32_t value;
 

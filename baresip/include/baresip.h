@@ -135,21 +135,9 @@ struct audio *paging_audio(const struct paging_tx *paging);
  * Conf (utils)
  */
 
-
-/** Defines the configuration line handler */
-typedef int (confline_h)(const struct pl *addr);
-
-int  conf_configure(void);
-int  conf_modules(void);
 int configure(void);
 int load_module2(struct mod **modp, const struct pl *name);
 int load_module_dynamic(struct mod **modp, const struct pl *modpath, const struct pl *name);
-void conf_path_set(const char *path);
-int  conf_path_get(char *path, size_t sz);
-int  conf_parse(const char *filename, confline_h *ch);
-int  conf_get_vidsz(const struct conf *conf, const char *name,
-		    struct vidsz *sz);
-bool conf_fileexist(const char *path);
 struct conf *conf_cur(void);
 
 
@@ -338,9 +326,6 @@ struct config {
 	} messages;
 };
 
-int config_parse_conf(struct config *cfg, const struct conf *conf);
-int config_print(struct re_printf *pf, const struct config *cfg);
-int config_write_template(const char *file, const struct config *cfg);
 struct config *conf_config(void);
 
 
@@ -990,12 +975,6 @@ typedef int (mnat_update_h)(struct mnat_sess *sess);
 int mnat_register(struct mnat **mnatp, const char *id, const char *ftag,
 		  mnat_sess_h *sessh, mnat_media_h *mediah,
 		  mnat_update_h *updateh);
-
-
-/*
- * Real-time
- */
-int realtime_enable(bool enable, int fps);
 
 
 /*

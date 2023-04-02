@@ -42,50 +42,6 @@ static void print_populated(const char *what, uint32_t n)
 
 
 /**
- * Load all modules from config file
- *
- * @return 0 if success, otherwise errorcode
- */
-int conf_modules(void)
-{
-#if 0
-	char path[256], file[256];
-	int err;
-
-	err = conf_path_get(path, sizeof(path));
-	if (err)
-		return err;
-
-	if (re_snprintf(file, sizeof(file), "%s/config", path) < 0)
-		return ENOMEM;
-
-	err = conf_alloc(&conf_obj, file);
-	if (err)
-		goto out;
-
-	err = module_init(conf_obj);
-	if (err) {
-		DEBUG_WARNING("configure module parse error (%m)\n", err);
-		goto out;
-	}
-
-	print_populated("audio codec",  list_count(aucodec_list()));
-	print_populated("audio filter", list_count(aufilt_list()));
-#ifdef USE_VIDEO
-	print_populated("video codec",  list_count(vidcodec_list()));
-	print_populated("video filter", list_count(vidfilt_list()));
-#endif
-
- out:
-	conf_obj = mem_deref(conf_obj);
-	return err;
-#else
-	return 0;
-#endif
-}
-
-
-/**
  * Get the current configuration object
  *
  * @return Config object
