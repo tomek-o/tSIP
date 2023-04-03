@@ -596,6 +596,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		SetStatus("Restarting UA...");
 		Ua::Instance().Restart();
 	}
+	UA->UpdateVolume();
 	if (appSettings.uaConf.logMessages != prev.uaConf.logMessages ||
         appSettings.uaConf.logMessagesOnlyFirstLine != prev.uaConf.logMessagesOnlyFirstLine)
 	{
@@ -1951,15 +1952,6 @@ void TfrmMain::PollCallbackQueue(void)
 				{
 					SetStatus(text);
 					HandleCommandLine();					
-				}
-				// update software volume
-				{
-					TTrackBar* tr = trbarSoftvolMic;
-					UA->UpdateSoftvolTx(tr->Max - tr->Position + tr->Min);
-				}
-				{
-					TTrackBar* tr = trbarSoftvolSpeaker;
-					UA->UpdateSoftvolRx(tr->Max - tr->Position + tr->Min);
 				}
 				break;
 			default:
@@ -3607,10 +3599,10 @@ void __fastcall TfrmMain::trbarSoftvolMicChange(TObject *Sender)
 {
 	TTrackBar* tr = trbarSoftvolMic;
 	AnsiString asHint;
-	int value = tr->Max - tr->Position + tr->Min;
-	asHint.sprintf("%d%%", value*100/128);
+	appSettings.uaConf.audioSoftVol.tx = tr->Max - tr->Position + tr->Min;
+	asHint.sprintf("%d%%", appSettings.uaConf.audioSoftVol.tx*100/128);
 	tr->Hint = asHint;
-	UA->UpdateSoftvolTx(value);
+	UA->UpdateVolume();
 }
 //---------------------------------------------------------------------------
 
@@ -3618,10 +3610,10 @@ void __fastcall TfrmMain::trbarSoftvolSpeakerChange(TObject *Sender)
 {
 	TTrackBar* tr = trbarSoftvolSpeaker;
 	AnsiString asHint;
-	int value = tr->Max - tr->Position + tr->Min;
-	asHint.sprintf("%d%%", value*100/128);
+	appSettings.uaConf.audioSoftVol.rx = tr->Max - tr->Position + tr->Min;
+	asHint.sprintf("%d%%", appSettings.uaConf.audioSoftVol.rx*100/128);
 	tr->Hint = asHint;
-	UA->UpdateSoftvolRx(value);
+	UA->UpdateVolume();
 }
 //---------------------------------------------------------------------------
 

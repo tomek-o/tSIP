@@ -186,8 +186,10 @@ struct config {
 		char play_dev[128];     /**< Audio playback device          */
 		char alert_mod[32];     /**< Audio alert module             */
 		char alert_dev[128];    /**< Audio alert device             */
+		float alert_volume;
 		char ring_mod[32];      /**< Audio module for incoming ring */
 		char ring_dev[128];     /**< Audio device for incoming ring */
+		float ring_volume;
 		struct range srate;     /**< Audio sampling rate in [Hz]    */
 		struct range channels;  /**< Nr. of audio channels (1=mono) */
 		uint32_t srate_play;    /**< Opt. sampling rate for player  */
@@ -545,8 +547,8 @@ struct dnsc     *net_dnsc(void);
 
 struct play;
 
-int  play_file(struct play **playp, const char *mod, const char *dev, const char *filename, int repeat, bool loop_without_silence);
-int  play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf *tone,
+int  play_file(struct play **playp, const char *mod, const char *dev, const char *filename, float *volume, int repeat, bool loop_without_silence);
+int  play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf *tone, float *volume,
 	       uint32_t srate, uint8_t ch, int repeat, bool loop_without_silence);
 void play_init(const struct config *cfg);
 void play_close(void);
@@ -615,10 +617,10 @@ void ua_unregister(struct ua *ua);
 bool ua_isregistered(const struct ua *ua);
 unsigned int ua_regint(const struct ua *ua);
 int	ua_reregister(struct ua *ua);
-int ua_play_file(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, int repeat, bool loop_without_silence);
+int ua_play_file(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, float *volume, int repeat, bool loop_without_silence);
 int ua_play_stop(struct ua *ua);
 /** Start playing another, separate "ring", with no options to repeat/cancel */
-int ua_play_file2(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename);
+int ua_play_file2(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, float *volume);
 const char     *ua_aor(const struct ua *ua);
 const char     *ua_cuser(const struct ua *ua);
 struct account *ua_account(const struct ua *ua);

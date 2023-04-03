@@ -20,6 +20,18 @@ namespace
 	}
 }
 
+bool UaConf::AudioCfg::operator==(const UaConf::AudioCfg& right) const {
+	if (mod != right.mod)
+		return false;
+	if (dev != right.dev)
+		return false;
+	if (wavefile != right.wavefile)
+		return false;
+	//if (!MathUtils::AlmostEqual(volume, right.volume))
+	//	return false;
+	return true;
+}
+
 bool UaConf::AudioAgc::operator==(const UaConf::AudioAgc& right) const {
 	return (
 		enabled == right.enabled &&
@@ -81,6 +93,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 			audioCfgAlert.mod = str;
 		}
 		uaConfAudioCfgAlertJson.getString("dev", audioCfgAlert.dev);
+		uaConfAudioCfgAlertJson.getFloat("volume", audioCfgAlert.volume);
 	}
 
 	{
@@ -103,6 +116,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 				audioCfgRing.mod = str;
 			}
 			uaConfAudioCfgRingJson.getString("dev", audioCfgRing.dev);
+			uaConfAudioCfgRingJson.getFloat("volume", audioCfgRing.volume);
 		}
 	}
 
@@ -330,8 +344,10 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	uaConfJson["audioCfgPlay"]["dev"] = audioCfgPlay.dev;
 	uaConfJson["audioCfgAlert"]["mod"] = audioCfgAlert.mod;
 	uaConfJson["audioCfgAlert"]["dev"] = audioCfgAlert.dev;
+	uaConfJson["audioCfgAlert"]["volume"] = audioCfgAlert.volume;
 	uaConfJson["audioCfgRing"]["mod"] = audioCfgRing.mod;
 	uaConfJson["audioCfgRing"]["dev"] = audioCfgRing.dev;
+	uaConfJson["audioCfgRing"]["volume"] = audioCfgRing.volume;
 	uaConfJson["audioCfgPlayIntercom"]["mod"] = audioCfgPlayIntercom.mod;
 	uaConfJson["audioCfgPlayIntercom"]["dev"] = audioCfgPlayIntercom.dev;
 

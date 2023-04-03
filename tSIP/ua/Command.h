@@ -29,8 +29,7 @@ public:
 		PAGING_TX,
 		SWITCH_AUDIO_SOURCE,///< change source audio device for current call (audioMod/audioDev)
 		SWITCH_AUDIO_PLAYER,///<                                             (audioMod/audioDev)
-		UPDATE_SOFTVOL_TX,
-		UPDATE_SOFTVOL_RX,
+		UPDATE_VOLUME,
 		SEND_CUSTOM_REQUEST,
 		SEND_MESSAGE,
 		RECORD_PAUSE,

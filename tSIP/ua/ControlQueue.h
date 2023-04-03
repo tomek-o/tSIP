@@ -50,8 +50,7 @@ public:
 	*/
 	void SwitchAudioPlayer(int callId, AnsiString audioMod, AnsiString audioDev);
 	void SwitchVideoSource(int callId, AnsiString videoMod, AnsiString videoDev);
-	void UpdateSoftvolTx(unsigned int val);
-	void UpdateSoftvolRx(unsigned int val);
+	void UpdateVolume(void);
 	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines);
 	int SendMessage(int requestId, int accountId, AnsiString target, AnsiString text);
 	int ZrtpVerifySas(bool state);

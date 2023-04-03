@@ -506,6 +506,10 @@ __published:	// IDE-managed Components
 	TLabel *lblVideoCodecsInfo;
 	TLabel *lblVideoCodecsInfo2;
 	TTabSheet *tsVideo;
+	TTrackBar *trbarSoundAlertVolume;
+	TLabel *lblSoundAlertVolume;
+	TLabel *lblSoundRingVolume;
+	TTrackBar *trbarSoundRingVolume;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -556,7 +560,7 @@ __published:	// IDE-managed Components
           TObject *Source, int X, int Y, TDragState State, bool &Accept);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
-	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, int moduleIndex, AnsiString selected);
+	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, TLabel *label2, TTrackBar *trbar, int moduleIndex, AnsiString selected);
 	TfrmHotkeys *frmHotkeys;
 	TfrmPhones *frmPhones;
 	TfrmUaConfOpus *frmConfOpus;

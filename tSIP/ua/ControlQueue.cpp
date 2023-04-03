@@ -326,25 +326,13 @@ void ControlQueue::SwitchVideoSource(int callId, AnsiString videoMod, AnsiString
 	fifo.push();
 }
 
-void ControlQueue::UpdateSoftvolTx(unsigned int val)
+void ControlQueue::UpdateVolume(void)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
 	if (!cmd)
 		return;
-	cmd->type = Command::UPDATE_SOFTVOL_TX;
-	cmd->softvol = val;
-	fifo.push();
-}
-
-void ControlQueue::UpdateSoftvolRx(unsigned int val)
-{
-	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
-	if (!cmd)
-		return;
-	cmd->type = Command::UPDATE_SOFTVOL_RX;
-	cmd->softvol = val;
+	cmd->type = Command::UPDATE_VOLUME;
 	fifo.push();
 }
 

@@ -533,8 +533,13 @@ static int app_init(void)
 	strncpyz(cfg->audio.play_dev, appSettings.uaConf.audioCfgPlay.dev.c_str(), sizeof(cfg->audio.play_dev));
 	strncpyz(cfg->audio.alert_mod, appSettings.uaConf.audioCfgAlert.mod.c_str(), sizeof(cfg->audio.alert_mod));
 	strncpyz(cfg->audio.alert_dev, appSettings.uaConf.audioCfgAlert.dev.c_str(), sizeof(cfg->audio.alert_dev));
+	cfg->audio.alert_volume = appSettings.uaConf.audioCfgAlert.volume;
 	strncpyz(cfg->audio.ring_mod, appSettings.uaConf.audioCfgRing.mod.c_str(), sizeof(cfg->audio.ring_mod));
 	strncpyz(cfg->audio.ring_dev, appSettings.uaConf.audioCfgRing.dev.c_str(), sizeof(cfg->audio.ring_dev));
+	cfg->audio.ring_volume = appSettings.uaConf.audioCfgRing.volume;
+
+	cfg->audio.softvol_tx = appSettings.uaConf.audioSoftVol.tx;
+	cfg->audio.softvol_rx = appSettings.uaConf.audioSoftVol.rx;
 
 	cfg->aec = (config::e_aec)appSettings.uaConf.aec;
 
@@ -1105,7 +1110,7 @@ extern "C" void control_handler(void)
 		struct ua* ua = ua_cur();
 		struct config * cfg = conf_config();
 		//LOG("UaMain: START_RING\n");
-		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), -1, cfg->audio.loop_ring_without_silence);
+		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), &cfg->audio.ring_volume, -1, cfg->audio.loop_ring_without_silence);
 		break;
 	}
 	case Command::PLAY_STOP: {
@@ -1118,7 +1123,7 @@ extern "C" void control_handler(void)
 		struct ua* ua = ua_cur();
 		struct config * cfg = conf_config();
 		//LOG("UaMain: START_RING2\n");
-		(void)ua_play_file2(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str());
+		(void)ua_play_file2(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), &cfg->audio.ring_volume);
 		break;
 	}
 	case Command::RECORD: {
@@ -1236,14 +1241,12 @@ extern "C" void control_handler(void)
 	#endif
 		break;
 	}
-	case Command::UPDATE_SOFTVOL_TX: {
+	case Command::UPDATE_VOLUME: {
 		struct config * cfg = conf_config();
-		cfg->audio.softvol_tx = cmd.softvol;
-		break;
-	}
-	case Command::UPDATE_SOFTVOL_RX: {
-		struct config * cfg = conf_config();	
-		cfg->audio.softvol_rx = cmd.softvol;
+		cfg->audio.softvol_tx = appSettings.uaConf.audioSoftVol.tx;
+		cfg->audio.softvol_rx = appSettings.uaConf.audioSoftVol.rx;
+		cfg->audio.alert_volume = appSettings.uaConf.audioCfgAlert.volume;
+		cfg->audio.ring_volume = appSettings.uaConf.audioCfgRing.volume;
 		break;
 	}
 	case Command::SEND_CUSTOM_REQUEST: {

@@ -205,18 +205,13 @@ public:
 		std::string mod;       	/**< Audio source module            */
 		std::string dev;		/**< Audio source device            */
 		std::string wavefile;
-		AudioCfg(void) {
+		float volume;
+		AudioCfg(void):
+			volume(1.0f)
+		{
 			mod = AudioModules::winwave2;
 		}
-		bool operator==(const AudioCfg& right) const {
-			if (mod != right.mod)
-				return false;
-			if (dev != right.dev)
-				return false;
-			if (wavefile != right.wavefile)
-				return false;
-			return true;
-		}
+		bool operator==(const AudioCfg& right) const;
 		bool operator!=(const AudioCfg& right) const {
 			return !(*this == right);
 		}

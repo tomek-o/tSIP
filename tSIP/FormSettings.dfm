@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsAudioProcessing
+    ActivePage = tsAudioIO
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1794,66 +1794,80 @@ object frmSettings: TfrmSettings
       end
       object lblAudioOutputIntercom: TLabel
         Left = 3
-        Top = 252
+        Top = 307
         Width = 131
         Height = 13
         Caption = 'Output for paging/intercom'
       end
       object lblSoundOutputIntercomMod: TLabel
         Left = 30
-        Top = 271
+        Top = 326
         Width = 34
         Height = 13
         Caption = 'Module'
       end
       object lblSoundOutputIntercomDev: TLabel
         Left = 30
-        Top = 295
+        Top = 350
         Width = 32
         Height = 13
         Caption = 'Device'
       end
       object lblAudioRingOutput: TLabel
         Left = 3
-        Top = 189
+        Top = 219
         Width = 141
         Height = 13
         Caption = 'Ring output (on incoming call)'
       end
       object lblSoundRingOutputMod: TLabel
         Left = 30
-        Top = 208
+        Top = 238
         Width = 34
         Height = 13
         Caption = 'Module'
       end
       object lblSoundRingOutputDev: TLabel
         Left = 30
-        Top = 232
+        Top = 259
         Width = 32
         Height = 13
         Caption = 'Device'
       end
       object lblPortaudio: TLabel
         Left = 3
-        Top = 344
+        Top = 406
         Width = 138
         Height = 13
         Caption = 'PortAudio suggested latency'
       end
       object lblPortaudioIn: TLabel
         Left = 184
-        Top = 344
+        Top = 406
         Width = 28
         Height = 13
         Caption = 'in [s]:'
       end
       object lblPortaudioOut: TLabel
         Left = 288
-        Top = 344
+        Top = 406
         Width = 36
         Height = 13
         Caption = 'out [s]:'
+      end
+      object lblSoundAlertVolume: TLabel
+        Left = 30
+        Top = 197
+        Width = 34
+        Height = 13
+        Caption = 'Volume'
+      end
+      object lblSoundRingVolume: TLabel
+        Left = 30
+        Top = 285
+        Width = 34
+        Height = 13
+        Caption = 'Volume'
       end
       object cbSoundInputMod: TComboBox
         Left = 121
@@ -1914,7 +1928,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundOutputIntercomMod: TComboBox
         Left = 121
-        Top = 268
+        Top = 323
         Width = 320
         Height = 21
         Style = csDropDownList
@@ -1924,7 +1938,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundOutputIntercomDev: TComboBox
         Left = 121
-        Top = 292
+        Top = 347
         Width = 320
         Height = 21
         Style = csDropDownList
@@ -1949,7 +1963,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundRingOutputDev: TComboBox
         Left = 121
-        Top = 229
+        Top = 259
         Width = 320
         Height = 21
         Style = csDropDownList
@@ -1958,7 +1972,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundRingOutputMod: TComboBox
         Left = 121
-        Top = 205
+        Top = 235
         Width = 320
         Height = 21
         Style = csDropDownList
@@ -1968,27 +1982,49 @@ object frmSettings: TfrmSettings
       end
       object edPortaudioInSuggestedLatency: TEdit
         Left = 218
-        Top = 341
+        Top = 403
         Width = 49
         Height = 21
         TabOrder = 12
       end
       object edPortaudioOutSuggestedLatency: TEdit
         Left = 330
-        Top = 341
+        Top = 403
         Width = 49
         Height = 21
         TabOrder = 13
       end
       object chbStartAudioSourceAtCallStart: TCheckBox
         Left = 3
-        Top = 367
+        Top = 428
         Width = 534
         Height = 17
         Caption = 
           'Start audio input (e.g. microphone) before call is confirmed (mi' +
           'ght help with some Bluetooth devices delay)'
         TabOrder = 14
+      end
+      object trbarSoundAlertVolume: TTrackBar
+        Left = 121
+        Top = 191
+        Width = 320
+        Height = 25
+        Max = 100
+        Frequency = 10
+        TabOrder = 15
+        ThumbLength = 15
+        TickMarks = tmTopLeft
+      end
+      object trbarSoundRingVolume: TTrackBar
+        Left = 121
+        Top = 280
+        Width = 320
+        Height = 25
+        Max = 100
+        Frequency = 10
+        TabOrder = 16
+        ThumbLength = 15
+        TickMarks = tmTopLeft
       end
     end
     object tsAudioProcessing: TTabSheet

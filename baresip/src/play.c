@@ -6,6 +6,7 @@
 #include <re.h> 
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <rem.h>
 #include <baresip.h>
 #include "core.h"
@@ -29,6 +30,7 @@ struct play {
 	int repeat;
 	bool eof;
 	bool loop_without_silence;
+	float *volume;
 };
 
 
@@ -83,6 +85,9 @@ static void tmr_polling(void *arg)
 	lock_rel(play->lock);
 }
 
+static float roundToNearest(float num) {
+	return (num > 0.0f) ? floor(num + 0.5f) : ceil(num - 0.5f);
+}
 
 /**
  * NOTE: DSP cannot be destroyed inside handler
@@ -106,7 +111,18 @@ static bool write_handler(uint8_t *buf, size_t sz, void *arg)
 		play->eof = true;
 	}
 	else {
+		size_t i;
+		short *ptr = (short*)buf;
 		(void)mbuf_read_mem(play->mb, buf, sz);
+		for (i=0; i<sz/sizeof(short); i++) {
+			float val = (float)*ptr * (*play->volume);
+			if (val < -32768)
+				val = -32768;
+			else if (val > 32767)
+				val = 32767;
+			*ptr = roundToNearest(val);
+			ptr++;
+		}
 	}
 
  silence:
@@ -212,12 +228,15 @@ static int aufile_load(struct mbuf *mb, const char *filename,
  *
  * @return 0 if success, otherwise errorcode
  */
-int play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf *tone, uint32_t srate,
+int play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf *tone, float *volume, uint32_t srate,
 		  uint8_t ch, int repeat, bool loop_without_silence)
 {
 	struct auplay_prm wprm;
 	struct play *play;
 	int err;
+
+	if (!volume)
+		return EINVAL;
 
 	if (playp && *playp)
 		return EALREADY;
@@ -230,6 +249,7 @@ int play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf
 	play->repeat = repeat;
 	play->loop_without_silence = loop_without_silence;
 	play->mb     = mem_ref(tone);
+	play->volume = volume;
 
 	err = lock_alloc(&play->lock);
 	if (err)
@@ -268,12 +288,13 @@ int play_tone(struct play **playp, const char *mod, const char *dev, struct mbuf
  * @param mod      Audio module type used for playing
  * @param dev      Audio device name used for playing 
  * @param filename Name of WAV file to play
+ * @param volume   Volume to play with; value might change during playback
  * @param repeat   Number of times to repeat
  * @param loop_without_silence Concatenate samples when looping, without additional silence
  *
  * @return 0 if success, otherwise errorcode
  */
-int play_file(struct play **playp, const char *mod, const char *dev, const char *filename, int repeat, bool loop_without_silence)
+int play_file(struct play **playp, const char *mod, const char *dev, const char *filename, float *volume, int repeat, bool loop_without_silence)
 {
 	struct mbuf *mb;
 	char path[768];
@@ -298,7 +319,7 @@ int play_file(struct play **playp, const char *mod, const char *dev, const char 
 		goto out;
 	}
 
-	err = play_tone(playp, mod, dev, mb, srate, ch, repeat, loop_without_silence);
+	err = play_tone(playp, mod, dev, mb, volume, srate, ch, repeat, loop_without_silence);
 
  out:
 	mem_deref(mb);

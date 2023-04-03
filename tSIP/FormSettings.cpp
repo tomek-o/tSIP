@@ -187,9 +187,11 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	cbSoundAlertOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgAlert.mod);
 	cbSoundAlertOutputModChange(NULL);
+	trbarSoundAlertVolume->Position = tmpSettings.uaConf.audioCfgAlert.volume * 100;
 
 	cbSoundRingOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgRing.mod);
 	cbSoundRingOutputModChange(NULL);
+	trbarSoundRingVolume->Position = tmpSettings.uaConf.audioCfgRing.volume * 100;
 
 	cbSoundOutputIntercomMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgPlayIntercom.mod);
 	cbSoundOutputIntercomModChange(NULL);
@@ -784,12 +786,14 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	{
 		tmpSettings.uaConf.audioCfgAlert.dev = cbSoundAlertOutputDev->Text.c_str();
 	}
+	tmpSettings.uaConf.audioCfgAlert.volume = static_cast<float>(trbarSoundAlertVolume->Position) / 100.0f;
 
 	tmpSettings.uaConf.audioCfgRing.mod = AudioModules::GetOutputModuleFromCbIndex(cbSoundRingOutputMod->ItemIndex);
 	if (cbSoundRingOutputDev->Tag == 0 || cbSoundRingOutputDev->ItemIndex != cbSoundRingOutputDev->Items->Count - 1)
 	{
 		tmpSettings.uaConf.audioCfgRing.dev = cbSoundRingOutputDev->Text.c_str();
 	}
+	tmpSettings.uaConf.audioCfgRing.volume = static_cast<float>(trbarSoundRingVolume->Position) / 100.0f;
 
 	tmpSettings.uaConf.audioCfgPlayIntercom.mod = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputIntercomMod->ItemIndex);
 	if (cbSoundOutputIntercomDev->Tag == 0 || cbSoundOutputIntercomDev->ItemIndex != cbSoundOutputIntercomDev->Items->Count - 1)
@@ -1101,19 +1105,27 @@ void __fastcall TfrmSettings::cbSoundInputModChange(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void TfrmSettings::ChangeSoundOutputMod(TComboBox *target, TLabel *label, int moduleIndex, AnsiString selected)
+void TfrmSettings::ChangeSoundOutputMod(TComboBox *target, TLabel *label, TLabel *label2, TTrackBar *trbar, int moduleIndex, AnsiString selected)
 {
 	AnsiString mod = AudioModules::GetOutputModuleFromCbIndex(moduleIndex);
 	if (mod == AudioModules::portaudio || mod == AudioModules::winwave || mod == AudioModules::winwave2)
 	{
 		target->Visible = true;
 		label->Visible = true;
+		if (label2)
+			label2->Visible = true;
+		if (trbar)
+			trbar->Visible = true;
 		AudioDevicesList::FillComboBox(target, mod, true, selected);
 	}
 	else if (mod == AudioModules::nullaudio)
 	{
 		target->Visible = false;
 		label->Visible = false;
+		if (label2)
+			label2->Visible = false;
+		if (trbar)
+			trbar->Visible = false;
 	}
 	else
 	{
@@ -1123,25 +1135,25 @@ void TfrmSettings::ChangeSoundOutputMod(TComboBox *target, TLabel *label, int mo
 
 void __fastcall TfrmSettings::cbSoundOutputModChange(TObject *Sender)
 {
-	ChangeSoundOutputMod(cbSoundOutputDev, lblSoundOutputDev, cbSoundOutputMod->ItemIndex, tmpSettings.uaConf.audioCfgPlay.dev.c_str());
+	ChangeSoundOutputMod(cbSoundOutputDev, lblSoundOutputDev, NULL, NULL, cbSoundOutputMod->ItemIndex, tmpSettings.uaConf.audioCfgPlay.dev.c_str());
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmSettings::cbSoundAlertOutputModChange(TObject *Sender)
 {
-	ChangeSoundOutputMod(cbSoundAlertOutputDev, lblSoundAlertOutputDev, cbSoundAlertOutputMod->ItemIndex, tmpSettings.uaConf.audioCfgAlert.dev.c_str());
+	ChangeSoundOutputMod(cbSoundAlertOutputDev, lblSoundAlertOutputDev, lblSoundAlertVolume, trbarSoundAlertVolume, cbSoundAlertOutputMod->ItemIndex, tmpSettings.uaConf.audioCfgAlert.dev.c_str());
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmSettings::cbSoundRingOutputModChange(TObject *Sender)
 {
-	ChangeSoundOutputMod(cbSoundRingOutputDev, lblSoundRingOutputDev, cbSoundRingOutputMod->ItemIndex, tmpSettings.uaConf.audioCfgRing.dev.c_str());
+	ChangeSoundOutputMod(cbSoundRingOutputDev, lblSoundRingOutputDev, lblSoundAlertVolume, trbarSoundAlertVolume, cbSoundRingOutputMod->ItemIndex, tmpSettings.uaConf.audioCfgRing.dev.c_str());
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmSettings::cbSoundOutputIntercomModChange(TObject *Sender)
 {
-	ChangeSoundOutputMod(cbSoundOutputIntercomDev, lblSoundOutputIntercomDev, cbSoundOutputIntercomMod->ItemIndex, tmpSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
+	ChangeSoundOutputMod(cbSoundOutputIntercomDev, lblSoundOutputIntercomDev, NULL, NULL, cbSoundOutputIntercomMod->ItemIndex, tmpSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
 }
 //---------------------------------------------------------------------------
 
