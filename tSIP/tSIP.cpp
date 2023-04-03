@@ -180,13 +180,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			);
 
 		LOG("Main config file: %s\n", Paths::GetConfig().c_str());
-#if 0
-		frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
-		frmLog->BorderStyle = bsNone;
-		frmLog->Align = alClient;
-		frmLog->Parent = tsLog;
-		frmLog->Visible = true;
-#endif
+		
 		Application->Run();
 	}
 	catch (Exception &exception)
