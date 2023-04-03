@@ -52,7 +52,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsAudioIO
+    ActivePage = tsAudioProcessing
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2117,11 +2117,11 @@ object frmSettings: TfrmSettings
       object chbAudioPreprocessingTxEnabled: TCheckBox
         Left = 2
         Top = 71
-        Width = 494
+        Width = 551
         Height = 17
         Caption = 
-          'Enable audio preprocessing for microphone path (transmitted audi' +
-          'o) [UNSTABLE/EXPERIMENTAL]'
+          'Enable audio preprocessing using speex for microphone path (tran' +
+          'smitted audio) [UNSTABLE/EXPERIMENTAL]'
         TabOrder = 3
         OnClick = chbAudioPreprocessingTxEnabledClick
       end
