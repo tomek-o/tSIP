@@ -1225,6 +1225,11 @@ void Value::getDouble(const char* key, double &val) const
 	val = get(key, val).asDouble();
 }
 
+void Value::getFloat(const char* key, float &val) const
+{
+	val = get(key, val).asDouble();
+}
+
 
 Value
 Value::removeMember( const char* key )
