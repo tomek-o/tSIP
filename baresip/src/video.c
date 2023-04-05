@@ -80,7 +80,7 @@ struct vtx {
 	struct vidsrc_prm vsrc_prm;        /**< Video source parameters   */
 	struct vidsz vsrc_size;            /**< Video source size         */
 	struct vidsrc_st *vsrc;            /**< Video source              */
-	struct lock *lock;                 /**< Lock for encoder          */
+	struct lock *lock_enc;             /**< Lock for encoder          */
 	struct vidframe *frame;            /**< Source frame              */
 	struct vidframe *mute_frame;       /**< Frame with muted video    */
 	struct mbuf *mb;                   /**< Packetization buffer      */
@@ -149,14 +149,14 @@ static void video_destructor(void *arg)
 
 	/* transmit */
 	mem_deref(vtx->vsrc);
-	lock_write_get(vtx->lock);
+	lock_write_get(vtx->lock_enc);
 	mem_deref(vtx->frame);
 	mem_deref(vtx->mute_frame);
 	mem_deref(vtx->enc);
 	mem_deref(vtx->mb);
 	list_flush(&vtx->filtl);
-	lock_rel(vtx->lock);
-	mem_deref(vtx->lock);
+	lock_rel(vtx->lock_enc);
+	mem_deref(vtx->lock_enc);
 
 	/* receive */
 	lock_write_get(vrx->lock);
@@ -223,7 +223,7 @@ static void encode_rtp_send(struct vtx *vtx, struct vidframe *frame)
 	if (!vtx->enc)
 		return;
 
-	lock_write_get(vtx->lock);
+	lock_write_get(vtx->lock_enc);
 
 	/* Convert image */
 	if (frame->fmt != VID_FMT_YUV420P) {
@@ -235,7 +235,7 @@ static void encode_rtp_send(struct vtx *vtx, struct vidframe *frame)
 			err = vidframe_alloc(&vtx->frame, VID_FMT_YUV420P,
 					     &vtx->vsrc_size);
 			if (err)
-				goto unlock;
+				goto out;
 		}
 
 		vidconv(vtx->frame, frame, 0);
@@ -251,21 +251,21 @@ static void encode_rtp_send(struct vtx *vtx, struct vidframe *frame)
 			err |= st->vf->ench(st, frame);
 	}
 
- unlock:
-	lock_rel(vtx->lock);
-
 	if (err)
-		return;
+		goto out;
 
 	/* Encode the whole picture frame */
 	err = vtx->vc->ench(vtx->enc, vtx->picup, frame, packet_handler, vtx);
 	if (err) {
 		DEBUG_WARNING("video encode: %m\n", err);
-		return;
+		goto out;
 	}
 
 	vtx->ts_tx += (SRATE/vtx->vsrc_prm.fps);
 	vtx->picup = false;
+
+ out:
+	lock_rel(vtx->lock_enc);
 }
 
 
@@ -307,7 +307,7 @@ static int vtx_alloc(struct vtx *vtx, struct video *video)
 {
 	int err;
 
-	err = lock_alloc(&vtx->lock);
+	err = lock_alloc(&vtx->lock_enc);
 	if (err)
 		return err;
 
