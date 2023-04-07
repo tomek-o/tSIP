@@ -246,7 +246,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	muteRing(false),
 	notificationIconState(false),
 	errorIconState(false),
-	appState(Callback::APP_STATE_UNKNOWN)
+	appState(Callback::APP_STATE_UNKNOWN),
+	appStartFailCount(0)
 {
 	srand(time(0));
 	RegisterTranslationCb(this, TranslateForm);
@@ -1425,13 +1426,15 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 
 	{
 		static int pollCnt = 0;
+
 		if ((appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED) && !frmSettings->Visible)
 		{
 			pollCnt++;
-			if (pollCnt > 18000)
+			if (pollCnt > (appStartFailCount * 15 * 1000 / tmrCallbackPoll->Interval))
 			{
 				pollCnt = 0;
 				SetStatus("Restarting UA (after init error)...");
+				LOG("Restarting UA (after init error), app start fail count = %u\n", appStartFailCount);
 				Ua::Instance().Restart();
 			}
 		}
@@ -1918,16 +1921,19 @@ void TfrmMain::PollCallbackQueue(void)
 				SetStatus("Failed to init application");
 				SetErrorIcon(true);
 				HandleCommandLine();
+				appStartFailCount++;
 				break;
 			case Callback::APP_START_FAILED:
 				SetStatus("Failed to start application");
 				SetErrorIcon(true);
 				HandleCommandLine();
+				appStartFailCount++;
 				break;
 			case Callback::APP_STARTED:
 				UaCustomRequests::Clear();
 				SetErrorIcon(false);
 				text = "Initialized";
+				appStartFailCount = 0;
 				if (appSettings.uaConf.accounts.size())
 				{
 					if (appSettings.uaConf.accounts[0].user.length())
