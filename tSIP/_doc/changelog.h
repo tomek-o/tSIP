@@ -1058,5 +1058,14 @@ Version 0.2.12
 	- incoming call: tSIP now responds with 488 instead of accepting "silent" call when there are no common codecs
 	- removed inline definition for C files, hopefully this would help with related compiler issue
 	- fixed INT64_MIN/INT64_MAX/UINT64_MAX definitions in TC++ stdint.h (tSIP/_doc folder)
+
+Version 0.2.13
+	- fixed distorted audio / incorrect audio timing at the start of the call if using AAC internet radio as audio source
+	- fixed crash when name of the file used as avformat source contained non-ASCII characters
+	- L16/44100 (and up) no longer should require manual ptime limiting through account settings
+	- fixed timing and audio buffer sizing for L16 codecs with high sampling rate, low ptime like L16/48000/2
+	- add volume control (Settings / Audio IO) for alerting and ring audio
+	- changed start failure handling: faster initial restart, slowing for subsequent errors (better handling of e.g. slow to connect WiFi or detached network cable when starting PC)
+	- bunch of minor changes and code cleanup 	
 */
 
