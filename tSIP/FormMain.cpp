@@ -1430,7 +1430,8 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		if ((appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED) && !frmSettings->Visible)
 		{
 			pollCnt++;
-			if (pollCnt > (appStartFailCount * 15 * 1000 / tmrCallbackPoll->Interval))
+			unsigned int timeToRestart = std::min(appStartFailCount * 15, 600u);
+			if (pollCnt > (timeToRestart * 1000 / tmrCallbackPoll->Interval))
 			{
 				pollCnt = 0;
 				SetStatus("Restarting UA (after init error)...");
