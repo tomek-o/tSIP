@@ -21,7 +21,6 @@ No particular order. Might be outdated.
 - DTMF local playback
 
 Call recording:
-- fixme: possible hazards when starting recording
 - settings: record incoming/outgoing
 - semi-automatic record mode: record call by default, delete file if not "saved" by user
 - UID for file names to avoid conflicts with very short (<1 s) recordings

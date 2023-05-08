@@ -1133,6 +1133,12 @@ struct ua *call_get_ua(const struct call *call)
 	return call ? call->ua : NULL;
 }
 
+struct recorder_st* call_get_recorder(const struct call *call)
+{
+	if (call == NULL)
+		return NULL;
+	return audio_get_recorder(call->audio);	
+}
 
 static int auth_handler(char **username, char **password,
 			const char *realm, void *arg)

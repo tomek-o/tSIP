@@ -1066,6 +1066,11 @@ Version 0.2.13
 	- fixed timing and audio buffer sizing for L16 codecs with high sampling rate, low ptime like L16/48000/2
 	- add volume control (Settings / Audio IO) for alerting and ring audio
 	- changed start failure handling: faster initial restart, slowing for subsequent errors (better handling of e.g. slow to connect WiFi or detached network cable when starting PC)
-	- bunch of minor changes and code cleanup 	
+	- bunch of minor changes and code cleanup
+
+Version 0.2.14
+	- limited maximum auto-restart time (no network) to 600 seconds
+	- audio recorder code is now reentrant / capable of handling multiple calls
+	
 */
 

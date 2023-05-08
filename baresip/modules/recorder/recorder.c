@@ -16,19 +16,9 @@
 #define DEBUG_LEVEL 5
 #include <re_dbg.h>
 
-/** \todo Handle multiple calls */
+static recorder_state_h *recorder_state_handler = NULL;
 
 static DWORD WINAPI ThreadRecWrite(LPVOID data);
-
-static struct lock* rec_lock = NULL;
-static bool filename_set = false;
-static char filename[512];
-static unsigned int channels = 1;
-static enum recorder_side side = RECORDER_SIDE_BOTH;
-static enum recorder_file_format format = RECORDER_FILE_FORMAT_OPUS_OGG;
-unsigned int bitrate = 64000;
-static bool pause = false;
-static recorder_state_h *recorder_state_handler = NULL;
 
 void recorder_init(recorder_state_h *state_h) {
 	recorder_state_handler = state_h;
@@ -49,36 +39,44 @@ struct recorder_st {
 	OggOpusComments *comments;
 	HANDLE thread;
 
+	struct lock* rec_lock;
+	bool filename_set;
+	char filename[512];
+	unsigned int channels;
+	enum recorder_side side;
+	enum recorder_file_format format;
+	unsigned int bitrate;
+	bool pause_request;
+
 	unsigned frame_size;
 	unsigned int srate;
 	struct aubuf *abrx;
 	struct aubuf *abtx;
 };
 
-int recorder_start(const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate) {
-	if (rec_lock == NULL)
+int recorder_start(struct recorder_st *st, const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate) {
+	if (st->rec_lock == NULL)
 		return -1;
-	lock_write_get(rec_lock);
-	if (filename_set == false) {
-		channels = rec_channels;
-		side = rec_side;
-		format = rec_format;
-		bitrate = rec_bitrate;
-		strncpy(filename, file, sizeof(filename));
-		filename[sizeof(filename)-1] = '\0';
-		filename_set = true;
+	lock_write_get(st->rec_lock);
+	if (st->filename_set == false) {
+		st->channels = rec_channels;
+		st->side = rec_side;
+		st->format = rec_format;
+		st->bitrate = rec_bitrate;
+		str_ncpy(st->filename, file, sizeof(st->filename));
+		st->filename_set = true;
 	}
-	lock_rel(rec_lock);
-	pause = false;	
+	st->pause_request = false;
+	lock_rel(st->rec_lock);
 	return 0;
 }
 
-void recorder_pause_resume(void) {
-	pause = !pause;
+void recorder_pause_resume(struct recorder_st *st) {
+	st->pause_request = !st->pause_request;
 }
 
-void recorder_pause(void) {
-	pause = true;
+void recorder_pause(struct recorder_st *st) {
+	st->pause_request = true;
 }
 
 struct enc_st {
@@ -138,7 +136,10 @@ static void recorder_destructor(void *arg)
 		ope_comments_destroy(st->comments);
 		st->comments = NULL;
 	}
-	filename_set = false;
+	if (st->rec_lock) {
+		lock_rel(st->rec_lock);
+		st->rec_lock = NULL;
+	}	
 }
 
 
@@ -147,8 +148,6 @@ static int recorder_alloc(struct recorder_st **stp, void **ctx, struct aufilt_pr
 	DWORD dwtid;
 	struct recorder_st *st;
 	int err = 0, tmp, fl;
-
-    filename_set = false;
 
 	if (!stp || !ctx || !prm)
 		return EINVAL;
@@ -165,6 +164,15 @@ static int recorder_alloc(struct recorder_st **stp, void **ctx, struct aufilt_pr
 	st = mem_zalloc(sizeof(*st), recorder_destructor);
 	if (!st)
 		return ENOMEM;
+
+	err = lock_alloc(&st->rec_lock);
+	if (err)
+		goto out;
+	st->channels = prm->ch;
+	st->side = RECORDER_SIDE_BOTH;
+	st->format = RECORDER_FILE_FORMAT_OPUS_OGG;
+	st->bitrate = 64000;
+	st->pause_request = false;
 
 	st->srate = prm->srate;
 
@@ -271,6 +279,19 @@ static int decode(struct aufilt_dec_st *st, int16_t *sampv, size_t *sampc)
 	return 0;
 }
 
+struct recorder_st* baresip_recorder_st_from_enc(struct aufilt_enc_st *enc)
+{
+	struct enc_st *est = (struct enc_st *)enc;
+	return est->st;
+}
+
+struct recorder_st* baresip_recorder_st_from_dec(struct aufilt_dec_st *dec)
+{
+	struct dec_st *dst = (struct dec_st *)dec;
+	return dst->st;
+}
+
+
 static struct aufilt recorder = {
 	LE_INIT, "recorder", encode_update, encode, decode_update, decode
 };
@@ -278,9 +299,6 @@ static struct aufilt recorder = {
 
 static int module_init(void)
 {
-	int err = lock_alloc(&rec_lock);
-	if (err)
-		return err;
 	aufilt_register(&recorder);
 	return 0;
 }
@@ -288,7 +306,6 @@ static int module_init(void)
 
 static int module_close(void)
 {
-    mem_deref(rec_lock);
 	aufilt_unregister(&recorder);
 	return 0;
 }
@@ -320,9 +337,9 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		//DEBUG_WARNING("sizerx=%d, sizetx=%d\n", (int)sizerx, (int)sizetx);
 
 		if (rec->pFile == NULL && rec->enc == NULL) {
-			lock_write_get(rec_lock);
-			if (filename_set) {
-				if (format == RECORDER_FILE_FORMAT_OPUS_OGG) {
+			lock_write_get(rec->rec_lock);
+			if (rec->filename_set) {
+				if (rec->format == RECORDER_FILE_FORMAT_OPUS_OGG) {
 					int error;
 					/** \todo VBR? */
 					rec->comments = ope_comments_create();
@@ -331,24 +348,24 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 					ope_comments_add(rec->comments, "ARTIST", "Someone");
 					ope_comments_add(rec->comments, "TITLE", "Some track");
 				#endif
-					rec->enc = ope_encoder_create_file(filename, rec->comments, rec->srate, channels, 0, &error);
+					rec->enc = ope_encoder_create_file(rec->filename, rec->comments, rec->srate, rec->channels, 0, &error);
 					if (!rec->enc) {
 						DEBUG_WARNING("recorder: failed to create Opus/OGG file\n");
-						lock_rel(rec_lock);
+						lock_rel(rec->rec_lock);
 						break;
 					}
-					ope_encoder_ctl(rec->enc, OPUS_SET_BITRATE_REQUEST, bitrate);
+					ope_encoder_ctl(rec->enc, OPUS_SET_BITRATE_REQUEST, rec->bitrate);
 				} else {
-					rec->pFile = wavfile_open(filename, channels, rec->srate);
+					rec->pFile = wavfile_open(rec->filename, rec->channels, rec->srate);
 					if (!rec->pFile) {
 						DEBUG_WARNING("recorder: failed to create WAVE file\n");
-						lock_rel(rec_lock);
+						lock_rel(rec->rec_lock);
 						break;
 					}
 				}
 				notify_state(rec, RECORDER_STATE_ACTIVE);
 			}
-			lock_rel(rec_lock);
+			lock_rel(rec->rec_lock);
 			Sleep(50);
 			continue;
 		}
@@ -386,8 +403,8 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		sizetx = aubuf_cur_size(rec->abrx);
 		//DEBUG_WARNING("AFTER: sizerx=%d, sizetx=%d\n", (int)sizerx, (int)sizetx);
 
-		if (rec->paused != pause) {
-			rec->paused = pause;
+		if (rec->paused != rec->pause_request) {
+			rec->paused = rec->pause_request;
 			if (rec->paused) {
 				notify_state(rec, RECORDER_STATE_PAUSED);
 			} else {
@@ -395,19 +412,19 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 			}
 		}
 
-		if (pause == false) {
-			if (channels == 1) {
+		if (rec->paused == false) {
+			if (rec->channels == 1) {
 				//DEBUG_WARNING("write %d\n", cnt);
 				// single channel: either one of the sides or both sides mixed (sum)
 				short *dst = (short*)bufrx;
 				short *src = (short*)buftx;
-				if (side == RECORDER_SIDE_LOCAL) {
+				if (rec->side == RECORDER_SIDE_LOCAL) {
 					if (rec->pFile) {
 						fwrite(bufrx, cnt, 1, rec->pFile);
 					} else if (rec->enc) {
 						ope_encoder_write(rec->enc, (const opus_int16*)bufrx, cnt/sizeof(short));
 					}
-				} else if (side == RECORDER_SIDE_REMOTE) {
+				} else if (rec->side == RECORDER_SIDE_REMOTE) {
 					if (rec->pFile) {
 						fwrite(buftx, cnt, 1, rec->pFile);
 					} else  if (rec->enc) {
@@ -431,18 +448,18 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 						ope_encoder_write(rec->enc, (const opus_int16*)bufrx, cnt/sizeof(short));
 					}
 				}
-			} else if (channels == 2) {
+			} else if (rec->channels == 2) {
 				short bufstereo[8000];
 				short *srcA = (short*)bufrx;
 				short *srcB = (short*)buftx;
-				for (i=0; i<cnt/sizeof(short)*channels; i += channels) {
+				for (i=0; i<cnt/sizeof(short)*rec->channels; i += rec->channels) {
 					bufstereo[i]     = *srcA++;
 					bufstereo[i + 1] = *srcB++;
 				}
 				if (rec->pFile) {
 					fwrite(bufstereo, cnt * sizeof(short), 1, rec->pFile);
 				} else if (rec->enc) {
-					ope_encoder_write(rec->enc, (const opus_int16*)bufstereo, cnt/channels);
+					ope_encoder_write(rec->enc, (const opus_int16*)bufstereo, cnt/rec->channels);
 				}
 			} else {
 				assert(!"Unhandled channel count");
@@ -451,7 +468,7 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		Sleep(50);
 	}
 	rec->terminated = true;
-	filename_set = false;
+	rec->filename_set = false;
 	return 0;
 }
 

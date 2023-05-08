@@ -1127,15 +1127,25 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::RECORD: {
-		recorder_start(cmd.target.c_str(), cmd.channels,
-			static_cast<enum recorder_side>(cmd.recSide),\
-			static_cast<enum recorder_file_format>(cmd.recFileFormat),
-			cmd.bitrate
-		);
+		if (app.callp) {
+			struct recorder_st *rec = call_get_recorder(app.callp);
+			if (rec) {
+				recorder_start(rec, cmd.target.c_str(), cmd.channels,
+					static_cast<enum recorder_side>(cmd.recSide),\
+					static_cast<enum recorder_file_format>(cmd.recFileFormat),
+					cmd.bitrate
+				);
+			}
+		}
 		break;
 	}
 	case Command::RECORD_PAUSE: {
-        recorder_pause();
+		if (app.callp) {
+			struct recorder_st *rec = call_get_recorder(app.callp);
+			if (rec) {
+				recorder_pause(rec);
+			}
+		}
 		break;
 	}
 	case Command::PAGING_TX: {

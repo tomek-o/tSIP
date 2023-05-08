@@ -1637,3 +1637,28 @@ const char* audio_get_rx_aucodec_name(const struct audio *a)
 		return "";
 	return a->rx.ac->name;
 }
+
+struct recorder_st* audio_get_recorder(const struct audio *a)
+{
+	struct le *le;
+	if (a == NULL)
+		return NULL;
+	for (le = a->tx.filtl.head; le; le = le->next) {
+		struct aufilt_enc_st *st = le->data;
+		if (st->af) {
+			if (strcmp(st->af->name, "recorder") == 0) {
+				return baresip_recorder_st_from_enc(st);
+			}
+		}
+	}
+	for (le = a->rx.filtl.head; le; le = le->next) {
+		struct aufilt_dec_st *st = le->data;
+		if (st->af) {
+			if (strcmp(st->af->name, "recorder") == 0) {
+				return baresip_recorder_st_from_dec(st);
+			}
+		}
+	}
+	return NULL;
+}
+

@@ -113,6 +113,8 @@ struct audio *call_audio(const struct call *call);
 struct video *call_video(const struct call *call);
 struct list  *call_streaml(const struct call *call);
 void          call_enable_rtp_timeout(struct call *call, uint32_t timeout_ms);
+struct recorder_st* call_get_recorder(const struct call *call);
+
 
 /*
  * Paging TX
@@ -934,6 +936,7 @@ int  audio_set_player(struct audio *au, const char *mod, const char *device);
 int  audio_debug(struct re_printf *pf, const struct audio *a);
 /* Get name of the codec used in RX direction */
 const char* audio_get_rx_aucodec_name(const struct audio *a);
+struct recorder_st* audio_get_recorder(const struct audio *a);
 
 
 /*
