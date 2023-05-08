@@ -147,7 +147,7 @@ static int recorder_alloc(struct recorder_st **stp, void **ctx, struct aufilt_pr
 {
 	DWORD dwtid;
 	struct recorder_st *st;
-	int err = 0, tmp, fl;
+	int err = 0;
 
 	if (!stp || !ctx || !prm)
 		return EINVAL;
@@ -398,11 +398,11 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 
 		aubuf_read(rec->abrx, bufrx, cnt);
 		aubuf_read(rec->abtx, buftx, cnt);
-
+	#if 0
 		sizerx = aubuf_cur_size(rec->abrx);
 		sizetx = aubuf_cur_size(rec->abrx);
-		//DEBUG_WARNING("AFTER: sizerx=%d, sizetx=%d\n", (int)sizerx, (int)sizetx);
-
+		DEBUG_WARNING("AFTER: sizerx=%d, sizetx=%d\n", (int)sizerx, (int)sizetx);
+	#endif
 		if (rec->paused != rec->pause_request) {
 			rec->paused = rec->pause_request;
 			if (rec->paused) {

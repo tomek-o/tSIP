@@ -11,7 +11,7 @@ class Ua
 private:
 	Ua() {
 	};
-	Ua(const Ua& source) {};
+	Ua(const Ua& source);
 	Ua& operator=(const Ua&);
 	TThread *thread;
 public:

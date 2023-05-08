@@ -10,7 +10,7 @@ class CommandLine
 {
 private:
 	CommandLine(void);
-	CommandLine(const CommandLine& source) {};
+	CommandLine(const CommandLine& source);
 	CommandLine& operator=(const CommandLine&);
 	static CommandLine instance;
 public:

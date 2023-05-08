@@ -78,7 +78,7 @@ AnsiString Color::IdToText(Id id)
 {
 	for (unsigned int i=0; i<sizeof(entries)/sizeof(entries[0]); i++)
 	{
-		Entry &entry = entries[i];
+		const Entry &entry = entries[i];
 		if (entry.id == id)
 		{
 			return entry.name;
@@ -91,7 +91,7 @@ int Color::IdToIntTColor(Id id)
 {
 	for (unsigned int i=0; i<sizeof(entries)/sizeof(entries[0]); i++)
 	{
-		Entry &entry = entries[i];
+		const Entry &entry = entries[i];
 		if (entry.id == id)
 		{
 			return entry.color;
@@ -104,7 +104,7 @@ int Color::IntTColorToId(int color)
 {
 	for (unsigned int i=0; i<sizeof(entries)/sizeof(entries[0]); i++)
 	{
-		Entry &entry = entries[i];
+		const Entry &entry = entries[i];
 		if (entry.color == color)
 		{
 			return entry.id;

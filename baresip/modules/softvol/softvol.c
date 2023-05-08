@@ -61,9 +61,7 @@ static void softvol_destructor(void *arg)
 static int softvol_alloc(struct softvol_st **stp, void **ctx, struct aufilt_prm *prm)
 {
 	struct softvol_st *st;
-	int err = 0, tmp;
-	int status;
-	//const struct config *cfg = conf_config();
+	int err = 0;
 
 	if (!stp || !ctx || !prm)
 		return EINVAL;
@@ -95,8 +93,6 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 {
 	struct enc_st *st;
 	int err;
-
-	struct config *cfg = conf_config();
 
 	if (!stp || !ctx || !af || !prm)
 		return EINVAL;

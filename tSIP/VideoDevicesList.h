@@ -16,7 +16,7 @@ class VideoDevicesList
 {
 private:
 	VideoDevicesList();
-	VideoDevicesList(const VideoDevicesList& source) {};
+	VideoDevicesList(const VideoDevicesList& source);
 	VideoDevicesList& operator=(const VideoDevicesList&);
 public:
 	static VideoDevicesList& Instance(void)

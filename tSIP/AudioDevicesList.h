@@ -16,7 +16,7 @@ class AudioDevicesList
 {
 private:
 	AudioDevicesList();
-	AudioDevicesList(const AudioDevicesList& source) {};
+	AudioDevicesList(const AudioDevicesList& source);
 	AudioDevicesList& operator=(const AudioDevicesList&);
 public:
 	static AudioDevicesList& Instance(void)

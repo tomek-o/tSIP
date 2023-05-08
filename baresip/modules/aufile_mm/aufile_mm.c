@@ -201,7 +201,6 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 {
 	struct ausrc_st *st;
 	int err;
-	DWORD dwtid;
 	(void)ctx;
 
 	if (!stp || !as || !prm || !rh)

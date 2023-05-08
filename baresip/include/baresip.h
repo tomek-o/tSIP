@@ -638,7 +638,7 @@ void ua_close(void);
 void ua_stop_all(bool forced);
 int  uag_reset_transp(bool reg, bool reinvite);
 int  uag_event_register(ua_event_h *eh, void *arg);
-void uag_event_unregister(ua_event_h *eh);
+void uag_event_unregister(const ua_event_h *eh);
 int  ua_print_sip_status(struct re_printf *pf, void *unused);
 struct ua   *uag_find(const struct pl *cuser);
 struct ua   *uag_find_aor(const char *aor);

@@ -720,7 +720,7 @@ int audio_alloc(struct audio **ap, const struct config *cfg,
 }
 
 int audio_alloc2(struct audio **ap, const struct config *cfg,
-		const char* forced_src_mod, const char* forced_dev_name,
+		const char* forced_src_mod, const char* forced_src_dev,
 		struct sdp_media * sdp,
 		uint32_t ptime,
 		audio_event_h *eventh, audio_err_h *errh, void *arg)
@@ -728,7 +728,6 @@ int audio_alloc2(struct audio **ap, const struct config *cfg,
 	struct audio *a;
 	struct autx *tx;
 	struct aurx *rx;
-	struct le *le;
 	int err;
 
 	if (!ap || !cfg)
@@ -744,8 +743,8 @@ int audio_alloc2(struct audio **ap, const struct config *cfg,
 	if (forced_src_mod) {
 		str_ncpy(a->cfg.src_mod, forced_src_mod, sizeof(a->cfg.src_mod));
 	}
-	if (forced_dev_name) {
-    	str_ncpy(a->cfg.src_dev, forced_dev_name, sizeof(a->cfg.src_dev));
+	if (forced_src_dev) {
+    	str_ncpy(a->cfg.src_dev, forced_src_dev, sizeof(a->cfg.src_dev));
 	}
 
 	tx = &a->tx;

@@ -230,14 +230,13 @@ static int encode(struct aufilt_enc_st *st, int16_t *sampv, size_t *sampc)
 {
 	struct enc_st *est = (struct enc_st *)st;
 	struct webrtc_st *wr = est->st;
-	int status;
 
 	if (*sampc == wr->nsamp) {
 		unsigned int i;
 		// cancel echo (modify samples)
 		for (i=0; i<wr->nsamp; i += wr->subframe_len) {
 			/* Process echo cancellation */
-			status = WebRtcAec_Process(
+			int status = WebRtcAec_Process(
 				wr->AEC_inst,
 				sampv + i, NULL,
 				wr->tmp_frame2 + i, NULL,

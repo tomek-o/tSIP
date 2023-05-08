@@ -42,8 +42,10 @@ class SRTPStat {
 public:
 	SRTPStat(const Stream *st, bool srtcp, uint64_t threshold);
 	void update(int ret_code, bool quiet = false);
-	void reset();
-	uint64_t ok() { return m_ok; }
+	void reset(void);
+	uint64_t ok(void) const {
+		return m_ok;
+	}
 private:
 	const Stream *m_stream;
 	const bool m_control;

@@ -153,7 +153,7 @@ void SRTPStat::update(int ret_code, bool quiet)
 }
 
 
-void SRTPStat::reset()
+void SRTPStat::reset(void)
 {
 	m_ok = 0;
 	m_decode = 0; m_auth = 0; m_replay = 0;

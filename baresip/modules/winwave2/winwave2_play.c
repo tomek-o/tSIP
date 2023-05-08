@@ -209,7 +209,7 @@ int winwave2_play_alloc(struct auplay_st **stp, struct auplay *ap,
                         struct auplay_prm *prm, const char *device,
                         auplay_write_h *wh, void *arg) {
 	struct auplay_st *st;
-	int i, err;
+	int err;
 	(void)device;
 
 	if (!stp || !ap || !prm)

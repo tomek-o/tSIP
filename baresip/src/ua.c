@@ -1808,7 +1808,7 @@ int uag_event_register(ua_event_h *h, void *arg)
  *
  * @param h   Event handler
  */
-void uag_event_unregister(ua_event_h *h)
+void uag_event_unregister(const ua_event_h *h)
 {
 	struct le *le;
 

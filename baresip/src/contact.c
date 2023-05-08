@@ -162,7 +162,6 @@ const char *contact_presence_str(enum presence_status status)
 
 void contact_set_dialog_info(struct contact *c, const struct dialog_data *ddata, unsigned int ddata_cnt)
 {
-	int len;
 	if (!c)
 		return;
 #if 0
