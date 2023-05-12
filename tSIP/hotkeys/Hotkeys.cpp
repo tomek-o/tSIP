@@ -174,12 +174,7 @@ void HotKeys::Unregister(HWND hwnd)
 int HotKeys::FindNextId(void)
 {
 	//LOG("Hotkeys: FindNextId, nextId = %d, globalHotKeys size = %u\n", nextId, globalHotKeys.size());
-#if 1
 	for (int i=MIN_ID; i<=MAX_ID; i++)
-#else
-	int TODO__RESTORE_DEBUG;
-	for (int i=MIN_ID; i<=MIN_ID + 20; i++)
-#endif
 	{
 		std::list<GlobalHotKey>::iterator it;
 		for (it = globalHotKeys.begin(); it != globalHotKeys.end(); ++it)

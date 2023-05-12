@@ -27,6 +27,9 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     ExplicitHeight = 239
     object tsConfigureCsv: TTabSheet
       Caption = 'tsConfigureCsv'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 208
       object lblSeparator: TLabel
         Left = 80
@@ -108,6 +111,10 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     object tsReadCsv: TTabSheet
       Caption = 'tsReadCsv'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label2: TLabel
         Left = 8
         Top = 8
@@ -159,6 +166,9 @@ object frmContactsCsvImport: TfrmContactsCsvImport
     object tsGenerateJson: TTabSheet
       Caption = 'tsGenerateJson'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 208
       object Label7: TLabel
         Left = 8
@@ -221,7 +231,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
         Width = 160
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 0
       end
       object chbSkipFirstRow: TCheckBox
@@ -240,7 +250,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
         Width = 160
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 2
       end
       object chbSkipDuplicatedNumbers: TCheckBox
@@ -259,7 +269,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
         Width = 160
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 4
       end
       object cbNumberColumn3: TComboBox
@@ -268,7 +278,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
         Width = 160
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 5
       end
       object cbCompanyColumn: TComboBox
@@ -277,7 +287,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
         Width = 160
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 6
       end
       object cbNoteColumn: TComboBox
@@ -286,7 +296,7 @@ object frmContactsCsvImport: TfrmContactsCsvImport
         Width = 160
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 7
       end
     end

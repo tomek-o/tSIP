@@ -1182,6 +1182,12 @@ void ProgrammableButtons::UpdateAutoAnswer(bool enabled, int sipCode, AnsiString
 void ProgrammableButtons::Edit(int id)
 {
 	ButtonConf cfg = btnConf[id];	// copy
+
+	if (frmButtonEdit == NULL)
+	{
+		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
+	}
+
 	AnsiString caption;
 	caption.sprintf("Edit button #%02d", id);
 	frmButtonEdit->Caption = caption;

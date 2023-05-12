@@ -180,6 +180,10 @@ void __fastcall TfrmButtonContainer::miClearBackgroundClick(TObject *Sender)
 
 void __fastcall TfrmButtonContainer::miCopyPanelClick(TObject *Sender)
 {
+	if (frmButtonCopy == NULL)
+	{
+		Application->CreateForm(__classid(TfrmButtonCopy), &frmButtonCopy);
+	}
 	frmButtonCopy->SetButtons(&buttons);
 	callbackSetKeepForeground(false);
 	frmButtonCopy->ShowModal();

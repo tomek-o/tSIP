@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmButtonCopy *frmButtonCopy;
+TfrmButtonCopy *frmButtonCopy = NULL;
 
 //---------------------------------------------------------------------------
 __fastcall TfrmButtonCopy::TfrmButtonCopy(TComponent* Owner)

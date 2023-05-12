@@ -1071,6 +1071,7 @@ Version 0.2.13
 Version 0.2.14
 	- limited maximum auto-restart time (no network) to 600 seconds
 	- audio recorder code is now reentrant / capable of handling multiple calls
-	
+	- clarified description in windows patching main settings and button settings
+	- delayed creation of most of the windows until they are needed
 */
 

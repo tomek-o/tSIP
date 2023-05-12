@@ -10,7 +10,7 @@
 
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmTroubleshooting *frmTroubleshooting;
+TfrmTroubleshooting *frmTroubleshooting = NULL;
 //---------------------------------------------------------------------------
 
 using namespace Troubleshooting;

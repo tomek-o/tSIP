@@ -11,7 +11,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmContactsCsvImport *frmContactsCsvImport;
+TfrmContactsCsvImport *frmContactsCsvImport = NULL;
 
 
 //---------------------------------------------------------------------------

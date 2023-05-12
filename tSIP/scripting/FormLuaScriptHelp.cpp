@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmLuaScriptHelp *frmLuaScriptHelp;
+TfrmLuaScriptHelp *frmLuaScriptHelp = NULL;
 
 namespace
 {

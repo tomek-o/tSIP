@@ -524,6 +524,8 @@ void TfrmMain::Finalize(void)
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::actShowAboutExecute(TObject *Sender)
 {
+	if (frmAbout == NULL)
+		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
 	frmAbout->ShowModal();
 }
 //---------------------------------------------------------------------------
@@ -531,6 +533,10 @@ void __fastcall TfrmMain::actShowAboutExecute(TObject *Sender)
 void __fastcall TfrmMain::actShowSettingsExecute(TObject *Sender)
 {
 	Settings prev = appSettings;	// keep track what is changed
+	if (frmSettings == NULL)
+	{
+		Application->CreateForm(__classid(TfrmSettings), &frmSettings);
+	}
 	frmSettings->ShowModal();
 	appSettings.UpdateFromText(Branding::fixedSettings);	// not checking status: this may fail, resource may be empty
 	UpdateSettings(prev);
@@ -3522,6 +3528,10 @@ void __fastcall TfrmMain::actContactsCsvImportExecute(TObject *Sender)
 	openDialog->Title = "Open CSV file";
 	if (openDialog->Execute())
 	{
+		if (frmContactsCsvImport == NULL)
+		{
+			Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
+		}
 		frmContactsCsvImport->Load(openDialog->FileName, &contacts);
 		if (frmContactsCsvImport->ModalResult == mrOk)
 		{
@@ -3706,6 +3716,8 @@ void __fastcall TfrmMain::miTroubleshootingClick(TObject *Sender)
 	}
 	else
 	{
+		if (frmTroubleshooting == NULL)
+			Application->CreateForm(__classid(TfrmTroubleshooting), &frmTroubleshooting);			
 		frmTroubleshooting->ShowModal();
 	}
 }
@@ -3736,6 +3748,8 @@ void __fastcall TfrmMain::miMessagesClick(TObject *Sender)
 
 void __fastcall TfrmMain::miSettingsPatchClick(TObject *Sender)
 {
+	if (frmSettingsPatch == NULL)
+		Application->CreateForm(__classid(TfrmSettingsPatch), &frmSettingsPatch);
 	frmSettingsPatch->Caption = "Patch/update main settings";
 	frmSettingsPatch->onUpdateSettings = UpdateSettingsFromJson;
 	frmSettingsPatch->ShowModal();
@@ -3744,6 +3758,8 @@ void __fastcall TfrmMain::miSettingsPatchClick(TObject *Sender)
 
 void __fastcall TfrmMain::miPatchButtonSettingsClick(TObject *Sender)
 {
+	if (frmSettingsPatch == NULL)
+		Application->CreateForm(__classid(TfrmSettingsPatch), &frmSettingsPatch);
 	frmSettingsPatch->Caption = "Patch/update button settings";
 	frmSettingsPatch->onUpdateSettings = UpdateButtonsFromJson;
 	frmSettingsPatch->ShowModal();

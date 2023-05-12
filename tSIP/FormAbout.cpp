@@ -9,7 +9,7 @@
 #include "baresip_base_config.h"
 //---------------------------------------------------------------------
 #pragma resource "*.dfm"
-TfrmAbout *frmAbout;
+TfrmAbout *frmAbout = NULL;
 
 //--------------------------------------------------------------------- 
 __fastcall TfrmAbout::TfrmAbout(TComponent* AOwner)

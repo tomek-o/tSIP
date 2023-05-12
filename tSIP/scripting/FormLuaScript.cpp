@@ -734,7 +734,11 @@ void __fastcall TfrmLuaScript::lvValidationDblClick(TObject *Sender)
 
 void __fastcall TfrmLuaScript::miCustomLuaFunctionsClick(TObject *Sender)
 {
-	frmLuaScriptHelp->Show();	
+	if (frmLuaScriptHelp == NULL)
+	{
+		Application->CreateForm(__classid(TfrmLuaScriptHelp), &frmLuaScriptHelp);
+	}
+	frmLuaScriptHelp->Show();
 }
 //---------------------------------------------------------------------------
 

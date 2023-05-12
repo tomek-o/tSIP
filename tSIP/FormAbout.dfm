@@ -525,7 +525,8 @@ object frmAbout: TfrmAbout
           'OR PROFITS; OR '
         
           'BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABI' +
-          'LITY, WHETHER '
+          'LITY, '
+        'WHETHER '
         
           'IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR ' +
           'OTHERWISE) '
@@ -587,7 +588,8 @@ object frmAbout: TfrmAbout
         'the following non-binding requests: '
         
           'Any person wishing to distribute modifications to the Software i' +
-          's requested to send the modifications to the '
+          's requested to send the modifications to '
+        'the '
         
           'original developer so that they can be incorporated into the can' +
           'onical version. It is also requested that '
@@ -878,7 +880,8 @@ object frmAbout: TfrmAbout
           'IABILITY, '
         
           'WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FRO' +
-          'M, OUT OF OR IN '
+          'M, OUT OF OR '
+        'IN '
         
           'CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE' +
           ' SOFTWARE. '
@@ -1481,7 +1484,8 @@ object frmAbout: TfrmAbout
           'IABILITY, '
         
           'WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FRO' +
-          'M, OUT OF OR IN '
+          'M, OUT OF OR '
+        'IN '
         
           'CONNECTION WITH THIS SOFTWARE OR THE USE OR OTHER DEALINGS IN TH' +
           'IS SOFTWARE.'
@@ -2093,7 +2097,8 @@ object frmAbout: TfrmAbout
         ''
         
           'The binary form of this Software is distributed by Cisco under t' +
-          'he AVC/H.264 Patent Portfolio License from '
+          'he AVC/H.264 Patent Portfolio License '
+        'from '
         
           'MPEG LA, and is subject to the following requirements, which may' +
           ' or may not be applicable to your use of '

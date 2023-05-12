@@ -30,7 +30,6 @@ USEFORM("FormDialpadConf.cpp", frmDialpadConf);
 USEFORM("scripting\FormLuaScriptHelp.cpp", frmLuaScriptHelp);
 USEFORM("FormVideoConf.cpp", frmVideoConf);
 //---------------------------------------------------------------------------
-
 #include "baresip_base_config.h"
 
 #pragma link "re.lib"
@@ -129,17 +128,10 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
 		Application->CreateForm(__classid(TfrmLog), &frmLog);
-		Application->CreateForm(__classid(TfrmSettings), &frmSettings);
-		Application->CreateForm(__classid(TfrmAbout), &frmAbout);
 		Application->CreateForm(__classid(TfrmTrayNotifier), &frmTrayNotifier);
-		Application->CreateForm(__classid(TfrmTroubleshooting), &frmTroubleshooting);
 		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
 		Application->CreateForm(__classid(TfrmContactPopup), &frmContactPopup);
-		Application->CreateForm(__classid(TfrmContactsCsvImport), &frmContactsCsvImport);
-		Application->CreateForm(__classid(TfrmButtonEdit), &frmButtonEdit);
-		Application->CreateForm(__classid(TfrmSettingsPatch), &frmSettingsPatch);
-		Application->CreateForm(__classid(TfrmButtonCopy), &frmButtonCopy);
-		Application->CreateForm(__classid(TfrmLuaScriptHelp), &frmLuaScriptHelp);
+		
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
 		frmContactPopup->Width = appSettings.frmContactPopup.iWidth;

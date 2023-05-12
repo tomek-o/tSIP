@@ -20,7 +20,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmButtonEdit *frmButtonEdit;
+TfrmButtonEdit *frmButtonEdit = NULL;
 
 namespace {
 	ButtonConf::Color colors[ButtonConf::EL_LIMITER];

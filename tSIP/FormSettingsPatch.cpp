@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TfrmSettingsPatch *frmSettingsPatch;
+TfrmSettingsPatch *frmSettingsPatch = NULL;
 //---------------------------------------------------------------------------
 __fastcall TfrmSettingsPatch::TfrmSettingsPatch(TComponent* Owner)
 	: TForm(Owner),
