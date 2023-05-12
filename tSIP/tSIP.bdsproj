@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="0"/>
+        <property category="build.config" name="active" value="1"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -572,6 +572,10 @@
           <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
         </Parameters>
         <Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dcldb100.bpl">Borland Database Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dcldbx100.bpl">Borland dbExpress Components</Excluded_Packages>
+          <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dclmid100.bpl">Borland MyBase DataAccess Components</Excluded_Packages>
+          <Excluded_Packages Name="C:\Program Files (x86)\Borland\BDS\4.0\Bin\dbx100.bpl">Borland SQL Explorer UI Package</Excluded_Packages>
           <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\bin\dclado100.bpl">Borland ADO DB Components</Excluded_Packages>
           <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dclsoap100.bpl">Borland SOAP Components</Excluded_Packages>
           <Excluded_Packages Name="c:\program files (x86)\borland\bds\4.0\Bin\dcldbxcds100.bpl">Borland SimpleDataset Component (DBX)</Excluded_Packages>
@@ -592,10 +596,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>
