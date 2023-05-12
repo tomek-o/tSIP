@@ -26,8 +26,6 @@ object frmSettingsPatch: TfrmSettingsPatch
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 224
-    ExplicitWidth = 358
     DesignSize = (
       422
       38)
@@ -40,32 +38,25 @@ object frmSettingsPatch: TfrmSettingsPatch
       Caption = 'Apply'
       TabOrder = 0
       OnClick = btnApplyClick
-      ExplicitLeft = 278
     end
   end
-  object pnlTop: TPanel
+  object memo: TMemo
     Left = 0
     Top = 0
     Width = 422
-    Height = 42
+    Height = 49
     Align = alTop
-    BevelOuter = bvNone
+    Color = clBtnFace
+    Lines.Strings = (
+      
+        'Update settings with JSON - text may contain whole configuration' +
+        ' or only selected '
+      'configuration elements.'
+      'File with JSON "patch" may be dropped into this window.')
+    ReadOnly = True
     TabOrder = 1
-    object lblInfo: TLabel
-      Left = 8
-      Top = 4
-      Width = 401
-      Height = 13
-      Caption = 
-        'Update settings with JSON - text may contain only selected confi' +
-        'guration elements.'
-    end
-    object Label1: TLabel
-      Left = 8
-      Top = 23
-      Width = 271
-      Height = 13
-      Caption = 'File with JSON "patch" may be dropped into this window.'
-    end
+    ExplicitLeft = 8
+    ExplicitTop = 8
+    ExplicitWidth = 393
   end
 end
