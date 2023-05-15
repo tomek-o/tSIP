@@ -69,6 +69,7 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 	callbackCall(callbackCall),
 	callbackPhonebookEdit(callbackPhonebookEdit),
 	callbackHttpQuery(callbackHttpQuery),
+	scalingPercentage(100),
 	updateNeeded(false), updating(false)
 {
 	assert(history);
@@ -310,6 +311,7 @@ void __fastcall TfrmHistory::edFilterKeyPress(TObject *Sender, char &Key)
 
 void TfrmHistory::Scale(int percentage)
 {
+	scalingPercentage = percentage;
 	TListView *lv = lvHistory;
 	for (int i=0; i<lv->Columns->Count; i++)
 	{
@@ -445,7 +447,7 @@ std::vector<int> TfrmHistory::GetColumnWidths(void)
 	std::vector<int> widths;
 	for (int i=0; i<lvHistory->Columns->Count; i++)
 	{
-    	widths.push_back(lvHistory->Columns->Items[i]->Width);
+    	widths.push_back(lvHistory->Columns->Items[i]->Width * 100.0f / scalingPercentage);
 	}
 	return widths;
 }

@@ -61,6 +61,7 @@ private:	// User declarations
 	CallbackCall callbackCall;
 	CallbackPhonebookEdit callbackPhonebookEdit;
 	CallbackHttpQuery callbackHttpQuery;
+	unsigned int scalingPercentage;
 	struct FilteredEntry
 	{
 		int id;

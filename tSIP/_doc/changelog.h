@@ -1073,5 +1073,8 @@ Version 0.2.14
 	- audio recorder code is now reentrant / capable of handling multiple calls
 	- clarified description in windows patching main settings and button settings
 	- delayed creation of most of the windows until they are needed
+	- fixed position and sizes of dialpad elements (volume trackbars and buttons, transfer edit) if GUI scaling was used
+		- WARNING: this might break your settings if you have already moved/resized them manually
+	- fixed call history column sizes changing each run if GUI scaling was used
 */
 
