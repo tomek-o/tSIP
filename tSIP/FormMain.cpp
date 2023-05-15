@@ -1435,7 +1435,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 	{
 		static int pollCnt = 0;
 
-		if ((appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED) && !frmSettings->Visible)
+		if ((appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED) && (!frmSettings || !frmSettings->Visible))
 		{
 			pollCnt++;
 			unsigned int timeToRestart = std::min(appStartFailCount * 15, 600u);
