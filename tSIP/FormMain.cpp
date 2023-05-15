@@ -1330,7 +1330,13 @@ void TfrmMain::UpdateSize(void)
 
 void TfrmMain::UpdateDialpad(void)
 {
-	const float scale = static_cast<float>(appSettings.gui.scalingPct) / 100.0f;
+	static float scale;
+	static bool once = false;
+	if (!once)
+	{
+		once = true;
+		scale = static_cast<float>(appSettings.gui.scalingPct) / 100.0f;
+	}
 	
 	{
 		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_ED_TRANSFER];
