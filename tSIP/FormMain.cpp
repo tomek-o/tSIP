@@ -1330,45 +1330,47 @@ void TfrmMain::UpdateSize(void)
 
 void TfrmMain::UpdateDialpad(void)
 {
+	const float scale = static_cast<float>(appSettings.gui.scalingPct) / 100.0f;
+	
 	{
 		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_ED_TRANSFER];
 		edTransfer->Visible = el.visible;
-		edTransfer->Left = el.left;
-		edTransfer->Top = el.top;
-		edTransfer->Width = el.width;
-		edTransfer->Height = el.height;
+		edTransfer->Left = el.left * scale;
+		edTransfer->Top = el.top * scale;
+		edTransfer->Width = el.width * scale;
+		edTransfer->Height = el.height * scale;
 	}
 	{
 		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_TRBAR_MIC_VOLUME];
 		trbarSoftvolMic->Visible = el.visible;
-		trbarSoftvolMic->Left = el.left;
-		trbarSoftvolMic->Top = el.top;
-		trbarSoftvolMic->Width = el.width;
-		trbarSoftvolMic->Height = el.height;
+		trbarSoftvolMic->Left = el.left * scale;
+		trbarSoftvolMic->Top = el.top * scale;
+		trbarSoftvolMic->Width = el.width * scale;
+		trbarSoftvolMic->Height = el.height * scale;
 	}
 	{
 		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_BTN_RESET_MIC_VOLUME];
 		btnResetMicVolume->Visible = el.visible;
-		btnResetMicVolume->Left = el.left;
-		btnResetMicVolume->Top = el.top;
-		btnResetMicVolume->Width = el.width;
-		btnResetMicVolume->Height = el.height;
+		btnResetMicVolume->Left = el.left * scale;
+		btnResetMicVolume->Top = el.top * scale;
+		btnResetMicVolume->Width = el.width * scale;
+		btnResetMicVolume->Height = el.height * scale;
 	}
 	{
 		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_TRBAR_SPEAKER_VOLUME];
 		trbarSoftvolSpeaker->Visible = el.visible;
-		trbarSoftvolSpeaker->Left = el.left;
-		trbarSoftvolSpeaker->Top = el.top;
-		trbarSoftvolSpeaker->Width = el.width;
-		trbarSoftvolSpeaker->Height = el.height;
+		trbarSoftvolSpeaker->Left = el.left * scale;
+		trbarSoftvolSpeaker->Top = el.top * scale;
+		trbarSoftvolSpeaker->Width = el.width * scale;
+		trbarSoftvolSpeaker->Height = el.height * scale;
 	}
 	{
 		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_BTN_RESET_SPEAKER_VOLUME];
 		btnResetSpeakerVolume->Visible = el.visible;
-		btnResetSpeakerVolume->Left = el.left;
-		btnResetSpeakerVolume->Top = el.top;
-		btnResetSpeakerVolume->Width = el.width;
-		btnResetSpeakerVolume->Height = el.height;
+		btnResetSpeakerVolume->Left = el.left * scale;
+		btnResetSpeakerVolume->Top = el.top * scale;
+		btnResetSpeakerVolume->Width = el.width * scale;
+		btnResetSpeakerVolume->Height = el.height * scale;
 	}
 }
 
