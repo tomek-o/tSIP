@@ -812,6 +812,28 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 	}
 
 	dialpad.fromJson(root["dialpad"]);
+
+	{
+		// dealing with transition to version 0.2.14 when proper scaling for dialpad elements was added
+		// assuming that user fixed it in previos version manually and settings in file
+		// have to be scaled back to keep user settings
+		SettingsAppVersion verNew;
+		verNew.FileVersionMS = 2;
+		verNew.FileVersionLS = 14;
+		if (info.appVersion < verNew)
+		{
+			float scale = static_cast<float>(appSettings.gui.scalingPct) / 100.0f;
+			for (unsigned int i=0; i<sizeof(dialpad.elements)/sizeof(dialpad.elements[0]); i++)
+			{
+				DialpadConf::ElementConf &el = appSettings.dialpad.elements[i];
+				el.left /= scale;
+				el.top /= scale;
+				el.width /= scale;
+				el.height /= scale;
+			}
+		}
+	}
+
 	video.fromJson(root["video"]);
 
 	{
