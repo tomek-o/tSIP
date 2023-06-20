@@ -284,6 +284,8 @@ public:
 			accessModeAlwaysPassive = 0,
 			accessModeFromMsg,
 			accessModeAlwaysActive,
+			accessModeFromMsgOnConfirmed,
+			accessModeAlwaysActiveOnConfirmed,
 
 			accessModeLimiter
 		} accessMode;

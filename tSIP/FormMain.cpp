@@ -1648,6 +1648,10 @@ void TfrmMain::PollCallbackQueue(void)
 				{
 					HttpQuery();
 				}
+				if (appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeAlwaysActiveOnConfirmed ||
+					(appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeFromMsgOnConfirmed && call.accessUrlMode == 2)) {
+					AccessCallUrl();
+				}				
 				break;
 			case Callback::CALL_STATE_TRANSFER:
 				call.uri = cb.caller;

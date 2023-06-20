@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsAudioIO
+    ActivePage = tsIntegration
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2694,7 +2694,7 @@ object frmSettings: TfrmSettings
       object cbSipAccessUrlMode: TComboBox
         Left = 127
         Top = 200
-        Width = 322
+        Width = 394
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
@@ -2704,7 +2704,11 @@ object frmSettings: TfrmSettings
         Items.Strings = (
           'always passive (only using "Access-URL" button)'
           'as specified by "mode" parameter in received message'
-          'always active (always automatic)')
+          'always active (always automatic)'
+          
+            'as specified by "mode" parameter in received message, if answere' +
+            'd'
+          'always active (always automatic), if answered')
       end
       object chbDoNotUseSipPrefixForDirectIpCalls: TCheckBox
         Left = 26
