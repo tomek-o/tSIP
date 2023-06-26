@@ -795,6 +795,20 @@ static int l_GetRegistrationState(lua_State* L)
 	return 1;
 }
 
+static int l_Unregister(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	UA->UnRegister(id);
+	return 0;
+}
+
+static int l_Reregister(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	UA->ReRegister(id);
+	return 0;
+}
+
 static int l_SetButtonCaption(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
@@ -1696,6 +1710,8 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_ShellExecute, "ShellExecute", "Run another application (WinAPI equivalent)", "");
 	lua_register2(L, ScriptImp::l_SetTrayIcon, "SetTrayIcon", "Change tray icon bitmap", "");
 	lua_register2(L, ScriptImp::l_GetRegistrationState, "GetRegistrationState", "Check if softphone is registered", "");
+	lua_register2(L, ScriptImp::l_Unregister, "Unregister", "Unregister SIP account", "");
+	lua_register2(L, ScriptImp::l_Reregister, "Reregister", "Re-register SIP account", "");
 	lua_register2(L, ScriptImp::l_SetButtonCaption, "SetButtonCaption", "Set text for the first line of the button", "");
 	lua_register2(L, ScriptImp::l_SetButtonCaption2, "SetButtonCaption2", "Set text for the second line of the button", "");
 	lua_register2(L, ScriptImp::l_SetButtonDown, "SetButtonDown", "Change button state to down/pressed", "Example: SetButtonDown(buttonId, buttoState).");
