@@ -1074,8 +1074,10 @@ Version 0.2.14
 	- clarified description in windows patching main settings and button settings
 	- delayed creation of most of the windows until they are needed
 	- fixed position and sizes of dialpad elements (volume trackbars and buttons, transfer edit) if GUI scaling was used
-		- WARNING: this might break your settings if you have already moved/resized them manually
 	- fixed call history column sizes changing each run if GUI scaling was used
 	- added two extra modes for handling Access-URL: delaying automatic URL opening until call is confirmed
+	- added Lua GenerateTones() example
+	- added Lua (SIP account) Unregister() and Reregister() functions
+	- troubleshooting: added warning if wave file selected as audio source does not exist
 */
 
