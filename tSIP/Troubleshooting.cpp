@@ -10,6 +10,7 @@
 #include "ProgrammableButtons.h"
 #include "Globals.h"
 #include "NetInterfaces.h"
+#include "Paths.h"
 
 #include <re.h>
 #include <baresip.h>
@@ -124,7 +125,7 @@ namespace {
 		adl.Refresh();
 		if (cfg.mod == AudioModules::portaudio)
 		{
-            // one default entry is always present (?)
+			// one default entry is always present (?)
 			if (adl.portaudioDevsIn.size() <= 1)
 				return true;
 		}
@@ -132,6 +133,21 @@ namespace {
 		{
 			if (adl.winwaveDevsIn.empty())
 				return true;
+		}
+		return false;
+	}
+
+	bool CheckAudioInputFile(void)
+	{
+		const UaConf::AudioCfg &cfg = appSettings.uaConf.audioCfgSrc;
+		if (cfg.mod == AudioModules::aufile || cfg.mod == AudioModules::aufileMm)
+		{
+			AnsiString dir = Paths::GetProfileDir();
+			AnsiString fileName = dir + "\\" + cfg.dev.c_str();
+			if (FileExists(fileName) == false)
+			{
+				return true;
+			}
 		}
 		return false;
 	}
@@ -328,6 +344,7 @@ namespace {
             "Select another (valid) interface or try default interface selection (empty string as network interface GUID)."
 			,CheckNetworkInterface },
 		{ LevelWarning, "No audio input device", "", CheckAudioInputDevice },
+		{ LevelWarning, "No audio input source file found", "", CheckAudioInputFile },		
 		{ LevelWarning, "No audio output device", "", CheckAudioOutputDevice },
 		{ LevelWarning, "Missing wave file for audio input", "Audio file specified as input device does not exist.", NULL },
 		{ LevelWarning, "Incorrect wav file format", "Invalid file format for input device.", NULL },
