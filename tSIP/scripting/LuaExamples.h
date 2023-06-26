@@ -858,4 +858,18 @@ const LuaExample luaExamples [] =
 	"SetButtonCaption2(btn1Id, line2)\n"
 	"SetButtonCaption(btn2Id, line3)"
 	}
+	,
+	{
+	"Generate tones"
+	,
+	"for i=1, 10 do\n"
+	"\tif CheckBreak() ~= 0 then\n"
+	"\t\tbreak;\n"
+	"\tend\n"
+	"\t-- takes up to 4 pairs of amplitude + frequency\n"
+	"\tGenerateTones(0.1, i * 300)\n"
+	"\tSleep(1000)\n"
+	"end\n"
+	"GenerateTones()"
+	}
 };
