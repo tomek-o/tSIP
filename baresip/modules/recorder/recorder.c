@@ -138,6 +138,7 @@ static void recorder_destructor(void *arg)
 	}
 	if (st->rec_lock) {
 		lock_rel(st->rec_lock);
+		mem_deref(st->rec_lock);
 		st->rec_lock = NULL;
 	}	
 }
