@@ -26,6 +26,7 @@
 #include "LogUnit.h"
 #include "Log.h"
 #include "UaMain.h"
+#include "UaGlobals.h"
 #include "Call.h"
 #include "Recorder.h"
 #include "UaCustomRequests.h"
@@ -1696,6 +1697,10 @@ void TfrmMain::PollCallbackQueue(void)
 				{
 					asStateText = "";
 				}
+
+				AnsiString sipReason = cb.caller;
+                bool completedElsewhere = (sipReason.UpperCase() == CALL_COMPLETED_ELSEWHERE); 
+
 				History::Entry entry;
 				DecodeDateTime(call.timestamp,
 					entry.timestamp.year, entry.timestamp.month, entry.timestamp.day,
@@ -1714,7 +1719,7 @@ void TfrmMain::PollCallbackQueue(void)
 				else
 				{
 					entry.time = 0;
-					if (entry.incoming && !call.disconnecting)
+					if (entry.incoming && !call.disconnecting && !completedElsewhere)
 					{
 						SetNotificationIcon(true);
 					}
@@ -1728,9 +1733,13 @@ void TfrmMain::PollCallbackQueue(void)
 				entry.lastScode = call.lastScode;
 				entry.lastReplyLine = call.lastReplyLine;
 				entry.recordFile = call.recordFile;
+				entry.reason = sipReason;
 
-				history.AddEntry(entry);
-				UpdateCallHistory();
+				if (!(appSettings.history.ignoreCallsCompletedElsewhere && completedElsewhere))
+				{
+					history.AddEntry(entry);
+					UpdateCallHistory();
+				}
 
 				AnsiString recordFile = call.recordFile;
 				call.reset();

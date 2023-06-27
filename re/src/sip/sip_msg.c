@@ -255,6 +255,10 @@ static inline int hdr_add(struct sip_msg *msg, const struct pl *name,
 		err = sip_access_url_decode(name, &msg->access_url, &hdr->val);
 		break;
 
+	case SIP_HDR_REASON:
+		err = sip_reason_decode(name, &msg->s_reason, &hdr->val);
+		break;
+
 	case SIP_HDR_P_ASSERTED_IDENTITY:
 		err = sip_addr_decode((struct sip_addr *)&msg->p_asserted_identity, &hdr->val);
 		if (err == 0) {

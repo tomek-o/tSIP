@@ -15,6 +15,7 @@
 
 HistoryConf::HistoryConf(void):
 			noStoreToFile(false),
+			ignoreCallsCompletedElsewhere(false),
 			usePaiForDisplayIfAvailable(true),
 			usePaiForDialIfAvailable(true),
 			showHint(true),
@@ -22,6 +23,7 @@ HistoryConf::HistoryConf(void):
 			showCodecNameInHint(true),
 			showLastCodeInHint(true),
 			showLastReplyLineInHint(true),
+			showReasonInHint(true),
 			showRecordFileInHint(true)
 {
 }
@@ -31,6 +33,7 @@ void HistoryConf::fromJson(const Json::Value &jv)
 	if (jv.type() != Json::objectValue)
 		return;
 	jv.getBool("NoStoreToFile", noStoreToFile);
+	jv.getBool("IgnoreCallsCompletedElsewhere", ignoreCallsCompletedElsewhere);
 	jv.getBool("UsePaiForDisplayIfAvailable", usePaiForDisplayIfAvailable);
 	jv.getBool("UsePaiForDialIfAvailable", usePaiForDialIfAvailable);
 	jv.getBool("ShowHint", showHint);
@@ -38,6 +41,7 @@ void HistoryConf::fromJson(const Json::Value &jv)
 	jv.getBool("ShowCodecNameInHint", showCodecNameInHint);
 	jv.getBool("ShowLastCodeInHint", showLastCodeInHint);
 	jv.getBool("ShowLastReplyLineInHint", showLastReplyLineInHint);
+	jv.getBool("ShowReasonInHint", showReasonInHint);
 	jv.getBool("ShowRecordFileInHint", showRecordFileInHint);
 	{
 		const Json::Value &jlcw = jv["ListColumnWidths"];
@@ -56,6 +60,7 @@ void HistoryConf::toJson(Json::Value &jv)
 {
 	jv = Json::Value(Json::objectValue);
 	jv["NoStoreToFile"] = noStoreToFile;
+	jv["IgnoreCallsCompletedElsewhere"] = ignoreCallsCompletedElsewhere;
 	jv["UsePaiForDisplayIfAvailable"] = usePaiForDisplayIfAvailable;
 	jv["UsePaiForDialIfAvailable"] = usePaiForDialIfAvailable;
 	jv["ShowHint"] = showHint;
@@ -63,6 +68,7 @@ void HistoryConf::toJson(Json::Value &jv)
 	jv["ShowCodecNameInHint"] = showCodecNameInHint;
 	jv["ShowLastCodeInHint"] = showLastCodeInHint;
 	jv["ShowLastReplyLineInHint"] = showLastReplyLineInHint;
+	jv["ShowReasonInHint"] = showReasonInHint;
 	jv["ShowRecordFileInHint"] = showRecordFileInHint;
 
 	Json::Value &jlcw = jv["ListColumnWidths"];
@@ -77,6 +83,7 @@ bool HistoryConf::operator==(const HistoryConf &right) const
 {
 	return (
 		noStoreToFile == right.noStoreToFile &&
+		ignoreCallsCompletedElsewhere == right.ignoreCallsCompletedElsewhere &&
 		usePaiForDisplayIfAvailable == right.usePaiForDisplayIfAvailable &&
 		usePaiForDialIfAvailable == right.usePaiForDialIfAvailable &&
 		showHint == right.showHint &&
@@ -84,6 +91,7 @@ bool HistoryConf::operator==(const HistoryConf &right) const
 		showCodecNameInHint == right.showCodecNameInHint &&
 		showLastCodeInHint == right.showLastCodeInHint &&
 		showLastReplyLineInHint == right.showLastReplyLineInHint &&
+		showReasonInHint == right.showReasonInHint &&
 		showRecordFileInHint == right.showRecordFileInHint &&
 		listColumnWidths == right.listColumnWidths
 	);

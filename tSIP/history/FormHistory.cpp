@@ -8,6 +8,7 @@
 #include "History.h"
 #include "HistoryConf.h"
 #include "SIMPLE_Messages.h"
+#include "UaGlobals.h"
 #include "Translate.h"
 #include "Branding.h"
 #include <assert.h>
@@ -27,6 +28,7 @@ AnsiString callTimeText = "Call time:";
 AnsiString codecText = "Codec:";
 AnsiString replyCodeText = "Reply code:";
 AnsiString replyLineText = "Reply line:";
+AnsiString reasonText = "Reason";
 AnsiString recordFileText = "Record file";
 
 }
@@ -56,6 +58,7 @@ void TfrmHistory::TranslateForm(void* obj)
 	Translate("TfrmHistory.codecText", codecText);
 	Translate("TfrmHistory.replyCode", replyCodeText);
 	Translate("TfrmHistory.replyLine", replyLineText);
+	Translate("TfrmHistory.reason", reasonText);
 	Translate("TfrmHistory.recordFile", recordFileText);
 }
 
@@ -205,7 +208,16 @@ void __fastcall TfrmHistory::lvHistoryData(TObject *Sender, TListItem *Item)
 		if (entry.time > 0)
 			Item->ImageIndex = 0;
 		else
-			Item->ImageIndex = 1;
+		{
+			if (entry.reason.UpperCase() != CALL_COMPLETED_ELSEWHERE)
+			{
+				Item->ImageIndex = 1;
+			}
+			else
+			{
+            	Item->ImageIndex = 4;
+			}
+		}
 	}
 	else
 	{
@@ -400,6 +412,11 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 	if (conf.showLastReplyLineInHint && entry.lastReplyLine != "")
 	{
 		hint.cat_sprintf("\n%s %s", replyLineText.c_str(), entry.lastReplyLine.c_str());
+	}
+
+	if (conf.showReasonInHint && entry.reason != "")
+	{
+		hint.cat_sprintf("\n%s: %s", reasonText.c_str(), entry.reason.c_str());
 	}
 
 	if (conf.showRecordFileInHint && Branding::recording && entry.recordFile != "")

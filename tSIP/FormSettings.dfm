@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsIntegration
+    ActivePage = tsHistory
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2909,7 +2909,7 @@ object frmSettings: TfrmSettings
       end
       object chbHistoryUsePaiForDisplayIfAvailable: TCheckBox
         Left = 3
-        Top = 26
+        Top = 47
         Width = 446
         Height = 17
         Caption = 
@@ -2919,7 +2919,7 @@ object frmSettings: TfrmSettings
       end
       object chbHistoryUsePaiForDialIfAvailable: TCheckBox
         Left = 3
-        Top = 49
+        Top = 70
         Width = 446
         Height = 17
         Caption = 
@@ -2929,7 +2929,7 @@ object frmSettings: TfrmSettings
       end
       object chbHistoryShowHint: TCheckBox
         Left = 3
-        Top = 72
+        Top = 93
         Width = 446
         Height = 17
         Caption = 'Show hint with additional information for history entries'
@@ -2937,7 +2937,7 @@ object frmSettings: TfrmSettings
       end
       object chbHistoryFormatCallDurationAsHourMinSec: TCheckBox
         Left = 3
-        Top = 181
+        Top = 223
         Width = 446
         Height = 17
         Caption = 'Format call duration time as hours:minutes:seconds'
@@ -2945,7 +2945,7 @@ object frmSettings: TfrmSettings
       end
       object chbHistoryShowCodecNameInHint: TCheckBox
         Left = 21
-        Top = 95
+        Top = 116
         Width = 446
         Height = 17
         Caption = 'Show codec name in hint'
@@ -2953,7 +2953,7 @@ object frmSettings: TfrmSettings
       end
       object chbHistoryShowLastReplyCodeInHint: TCheckBox
         Left = 21
-        Top = 117
+        Top = 138
         Width = 446
         Height = 17
         Caption = 'Show last SIP reply code code in hint'
@@ -2961,19 +2961,37 @@ object frmSettings: TfrmSettings
       end
       object chbHistoryShowLastReplyLineInHint: TCheckBox
         Left = 21
-        Top = 139
+        Top = 160
         Width = 446
         Height = 17
         Caption = 'Show last SIP reply line in hint'
         TabOrder = 7
       end
+      object chbHistoryShowReasonInHint: TCheckBox
+        Left = 21
+        Top = 182
+        Width = 446
+        Height = 17
+        Caption = 'Show disconnection reason in hint'
+        TabOrder = 8
+      end
+      object chbHistoryIgnoreCallsCompletedElsewhere: TCheckBox
+        Left = 3
+        Top = 25
+        Width = 398
+        Height = 17
+        Caption = 
+          'Do not add calls with reason "Call completed elsewhere" to histo' +
+          'ry'
+        TabOrder = 9
+      end
       object chbHistoryShowRecordFileInHint: TCheckBox
         Left = 21
-        Top = 160
+        Top = 203
         Width = 446
         Height = 17
         Caption = 'Show record file in hint'
-        TabOrder = 8
+        TabOrder = 10
       end
     end
     object tsPhones: TTabSheet

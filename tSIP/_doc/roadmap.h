@@ -28,7 +28,6 @@ No particular order. Might be outdated.
 - contact groups
 - different ringtones for different contacts
 - detect: no input snd dev
-- handle "Call completed elsewhere" disconnection reason - do not add this call to history (or add to history with special mark)
 - call history: master/detail view, adding to phonebook
 - number processing / "LCR" / dialplan
 
@@ -37,8 +36,6 @@ No particular order. Might be outdated.
 - combine regular number edit and transfer number edit into one 
 
 - settings: time for hotkey anti-repeat timer
-
-- separate icon for recorviewer
 
 - BLF list
 
@@ -80,13 +77,9 @@ ping plugin: add context menu to history
 
 - RTP stats: call quality testing
 
-
 DEBUG_INFO: w³¹cznik
 
 aufile: required 1ch
-
-	
-latency tracker
 
 tSIP: help on button types (+ images)
 tSIP: directory import from vcard

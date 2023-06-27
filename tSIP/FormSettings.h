@@ -486,7 +486,7 @@ __published:	// IDE-managed Components
 	TComboBox *cbRecordingFileFormat;
 	TLabel *lblRecordingBitrate;
 	TEdit *edRecordingBitrate;
-	TCheckBox *chbHistoryShowRecordFileInHint;
+	TCheckBox *chbHistoryShowReasonInHint;
 	TCheckBox *chbAudioTxGateEnabled;
 	TLabel *lblAudioTxGateCloseThreshold;
 	TLabel *lblAudioTxGateHoldMs;
@@ -510,6 +510,8 @@ __published:	// IDE-managed Components
 	TLabel *lblSoundAlertVolume;
 	TLabel *lblSoundRingVolume;
 	TTrackBar *trbarSoundRingVolume;
+	TCheckBox *chbHistoryIgnoreCallsCompletedElsewhere;
+	TCheckBox *chbHistoryShowRecordFileInHint;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

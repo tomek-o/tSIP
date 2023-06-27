@@ -718,6 +718,8 @@
         <FILE FILENAME="..\..\src\h264\h264.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\h264\h264_nal.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="h264_nal" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\h264\sps.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sps" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sip\sip_reason.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip_reason" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\src\sipsess\sipsess.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

@@ -9,26 +9,6 @@
 
 static const char* HEADER_NAME = "Access-URL";
 
-static int sip_answer_after_decode(const struct pl *pl, const char *name, struct pl *val)
-{
-	char expr[128];
-	struct pl v;
-
-	if (!pl || !name || !val)
-		return EINVAL;
-
-	(void)re_snprintf(expr, sizeof(expr),
-			  "[ \t\r\n]*%s[ \t\r\n]*=[ \t\r\n]*[~ \t\r\n;]+",
-			  name);
-
-	if (re_regex(pl->p, pl->l, expr, NULL, NULL, NULL, &v))
-		return ENOENT;
-
-	*val = v;
-
-	return 0;
-}
-
 /**
  * Decode a pointer-length string into a SIP Access-URL header
  * @param name Full header name

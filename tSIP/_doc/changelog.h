@@ -1079,5 +1079,10 @@ Version 0.2.14
 	- added Lua GenerateTones() example
 	- added Lua (SIP account) Unregister() and Reregister() functions
 	- troubleshooting: added warning if wave file selected as audio source does not exist
+	- recognizing "Call completed elsewhere" reason in received CANCEL
+		- application tray icon is not changed for these calls like for unanswered calls
+		- option to not store calls with this reason in call history
+		- new icon in call history for this call type - like for regular call unanswered but grayed out
+	- option to show disconnection reason text received with CANCEL in call history
 */
 

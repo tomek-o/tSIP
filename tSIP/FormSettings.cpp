@@ -535,6 +535,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbContactFilterUsingNote->Checked = tmpSettings.Contacts.filterUsingNote;
 
 	chbHistoryNoStoreToFile->Checked = tmpSettings.history.noStoreToFile;
+	chbHistoryIgnoreCallsCompletedElsewhere->Checked = tmpSettings.history.ignoreCallsCompletedElsewhere;
 	chbHistoryUsePaiForDisplayIfAvailable->Checked = tmpSettings.history.usePaiForDisplayIfAvailable;
 	chbHistoryUsePaiForDialIfAvailable->Checked = tmpSettings.history.usePaiForDialIfAvailable;
 	chbHistoryShowHint->Checked = tmpSettings.history.showHint;
@@ -542,6 +543,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHistoryShowCodecNameInHint->Checked = tmpSettings.history.showCodecNameInHint;
 	chbHistoryShowLastReplyCodeInHint->Checked = tmpSettings.history.showLastCodeInHint;
 	chbHistoryShowLastReplyLineInHint->Checked = tmpSettings.history.showLastReplyLineInHint;
+	chbHistoryShowReasonInHint->Checked = tmpSettings.history.showReasonInHint;
 	chbHistoryShowRecordFileInHint->Checked = tmpSettings.history.showRecordFileInHint;
 
     edScriptOnMakeCallFile->Text = tmpSettings.Scripts.onMakeCall;
@@ -962,6 +964,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Contacts.filterUsingNote = chbContactFilterUsingNote->Checked;
 
 	tmpSettings.history.noStoreToFile = chbHistoryNoStoreToFile->Checked;
+	tmpSettings.history.ignoreCallsCompletedElsewhere = chbHistoryIgnoreCallsCompletedElsewhere->Checked;
 	tmpSettings.history.usePaiForDisplayIfAvailable = chbHistoryUsePaiForDisplayIfAvailable->Checked;
 	tmpSettings.history.usePaiForDialIfAvailable = chbHistoryUsePaiForDialIfAvailable->Checked;
 	tmpSettings.history.showHint = chbHistoryShowHint->Checked;
@@ -969,6 +972,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.history.showCodecNameInHint = chbHistoryShowCodecNameInHint->Checked;
 	tmpSettings.history.showLastCodeInHint = chbHistoryShowLastReplyCodeInHint->Checked;
 	tmpSettings.history.showLastReplyLineInHint = chbHistoryShowLastReplyLineInHint->Checked;
+	tmpSettings.history.showReasonInHint = chbHistoryShowReasonInHint->Checked;
 	tmpSettings.history.showRecordFileInHint = chbHistoryShowRecordFileInHint->Checked;
 
 	tmpSettings.Scripts.onMakeCall = edScriptOnMakeCallFile->Text;

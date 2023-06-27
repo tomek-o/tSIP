@@ -51,6 +51,8 @@ public:
 
 		AnsiString recordFile;
 
+		AnsiString reason;
+
 		Entry(void):
 			incoming(false),
 			time(0),

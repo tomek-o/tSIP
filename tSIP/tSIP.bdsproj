@@ -522,6 +522,7 @@
         <FILE FILENAME="FormVideoConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormVideoConf" FORMNAME="frmVideoConf" DESIGNCLASS="" ADDITIONAL="FormVideoConf.h"/>
         <FILE FILENAME="VideoDevicesList.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VideoDevicesList" FORMNAME="" DESIGNCLASS="" ADDITIONAL="VideoDevicesList.h"/>
         <FILE FILENAME="ua\VideoModules.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VideoModules" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\VideoModules.h"/>
+        <FILE FILENAME="ua\UaGlobals.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="UaGlobals" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\UaGlobals.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

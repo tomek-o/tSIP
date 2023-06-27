@@ -275,7 +275,7 @@ static void mnat_handler(int err, uint16_t scode, const char *reason,
 		break;
 
 	case STATE_INCOMING:
-		call_event_handler(call, CALL_EVENT_INCOMING, call->peer_uri);
+		call_event_handler(call, CALL_EVENT_INCOMING, "%s", call->peer_uri);
 		break;
 
 	default:
@@ -666,7 +666,7 @@ int call_connect(struct call *call, const struct pl *paddr, const struct pl *ext
 	}
 
 	set_state(call, STATE_OUTGOING);
-	call_event_handler(call, CALL_EVENT_OUTGOING, call->peer_uri);	
+	call_event_handler(call, CALL_EVENT_OUTGOING, "%s", call->peer_uri);	
 
 	/* If we are using asyncronous medianat like STUN/TURN, then
 	 * wait until completed before sending the INVITE */
@@ -1176,7 +1176,7 @@ static int sipsess_offer_handler(struct mbuf **descp,
 
 	call_update_pai(call, msg);
 
-	call_event_handler(call, CALL_EVENT_REINVITE_RECEIVED, call->peer_uri);
+	call_event_handler(call, CALL_EVENT_REINVITE_RECEIVED, "%s", call->peer_uri);
 
 	return status;
 }
@@ -1239,7 +1239,7 @@ static void sipsess_estab_handler(const struct sip_msg *msg, void *arg)
 	call_update_pai(call, msg);
 
 	/* must be done last, the handler might deref this call */
-	call_event_handler(call, CALL_EVENT_ESTABLISHED, call->peer_uri);
+	call_event_handler(call, CALL_EVENT_ESTABLISHED, "%s", call->peer_uri);
 }
 
 
@@ -1418,7 +1418,12 @@ static void sipsess_close_handler(int err, const struct sip_msg *msg,
 	}
 
 	call_stream_stop(call);
-	call_event_handler(call, CALL_EVENT_CLOSED, reason);
+
+	if (msg->s_reason.text.l != 0) {
+		str_ncpy(reason, msg->s_reason.text.p, min(sizeof(reason), msg->s_reason.text.l + 1));
+	}
+
+	call_event_handler(call, CALL_EVENT_CLOSED, "%s", reason);
 }
 
 static const struct sdp_format *sdp_media_rcodec(const struct sdp_media *m)
@@ -1619,7 +1624,7 @@ int call_accept(struct call *call, struct sipsess_sock *sess_sock,
 	tmr_start(&call->tmr_inv, LOCAL_TIMEOUT*1000, invite_timeout, call);
 
 	if (!call->acc->mnat)
-		call_event_handler(call, CALL_EVENT_INCOMING, call->peer_uri);
+		call_event_handler(call, CALL_EVENT_INCOMING, "%s", call->peer_uri);
 
 	return err;
 }
@@ -1636,7 +1641,7 @@ static void sipsess_progr_handler(const struct sip_msg *msg, void *arg)
 	     msg->scode, &msg->reason, &msg->ctyp.type, &msg->ctyp.subtype);
 
 	if (msg->scode == 100) {
-		call_event_handler(call, CALL_EVENT_TRYING, call->peer_uri);
+		call_event_handler(call, CALL_EVENT_TRYING, "%s", call->peer_uri);
 	}
 
 	if (msg->scode <= 100)
@@ -1675,9 +1680,9 @@ static void sipsess_progr_handler(const struct sip_msg *msg, void *arg)
 	}
 
 	if (media)
-		call_event_handler(call, CALL_EVENT_PROGRESS, call->peer_uri);
+		call_event_handler(call, CALL_EVENT_PROGRESS, "%s", call->peer_uri);
 	else
-		call_event_handler(call, CALL_EVENT_RINGING, call->peer_uri);
+		call_event_handler(call, CALL_EVENT_RINGING, "%s", call->peer_uri);
 
 	call_stream_stop(call);
 

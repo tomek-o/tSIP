@@ -203,6 +203,12 @@ struct sip_access_url {
 	int32_t expires;
 };
 
+struct sip_reason {
+	struct pl protocol;
+	int32_t cause;
+	struct pl text;
+};
+
 /** SIP Header */
 struct sip_hdr {
 	struct le le;          /**< Linked-list element    */
@@ -231,6 +237,7 @@ struct sip_msg {
 	struct sip_call_info call_info;
 	struct sip_alert_info alert_info;
 	struct sip_access_url access_url;
+	struct sip_reason s_reason;
     bool p_asserted_identity_present;
 	struct sip_taddr p_asserted_identity;
 	struct pl callid;
@@ -265,7 +272,7 @@ typedef bool(sip_msg_h)(const struct sip_msg *msg, void *arg);
 typedef int(sip_send_h)(enum sip_transp tp, const struct sa *src,
 			const struct sa *dst, struct mbuf *mb, void *arg);
 typedef void(sip_resp_h)(int err, const struct sip_msg *msg, void *arg);
-typedef void(sip_cancel_h)(void *arg);
+typedef void(sip_cancel_h)(void *arg, const struct sip_msg *msg);
 typedef void(sip_exit_h)(void *arg);
 typedef int(sip_auth_h)(char **username, char **password, const char *realm,
 			void *arg);
@@ -396,6 +403,7 @@ int sip_cseq_decode(struct sip_cseq *cseq, const struct pl *pl);
 int sip_call_info_decode(struct sip_call_info *call_info, const struct pl *pl);
 int sip_alert_info_decode(struct sip_alert_info *alert_info, const struct pl *pl);
 int sip_access_url_decode(const struct pl *name, struct sip_access_url *access_url, const struct pl *pl);
+int sip_reason_decode(const struct pl *name, struct sip_reason *reason, const struct pl *pl);
 
 /* keepalive */
 int sip_keepalive_start(struct sip_keepalive **kap, struct sip *sip,

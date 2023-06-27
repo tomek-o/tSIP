@@ -18,7 +18,7 @@
 #include "sipsess.h"
 
 
-static void cancel_handler(void *arg)
+static void cancel_handler(void *arg, const struct sip_msg *msg)
 {
 	struct sipsess *sess = arg;
 
@@ -30,7 +30,7 @@ static void cancel_handler(void *arg)
 	if (sess->terminated)
 		return;
 
-	sipsess_terminate(sess, E_SIP_SESSION_CLOSED_CANCEL, NULL);
+	sipsess_terminate(sess, E_SIP_SESSION_CLOSED_CANCEL, msg);
 }
 
 

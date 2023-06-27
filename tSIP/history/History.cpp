@@ -102,6 +102,8 @@ int History::Read(CallbackGetContactName callbackGetContactName)
 
 		call.getAString("recordFile", entry.recordFile);
 
+		call.getAString("reason", entry.reason);
+
 		entries.push_back(entry);
 	}
 
@@ -146,6 +148,7 @@ int History::Write(void)
 		{
 			jEntry["recordFile"] = entry.recordFile;
 		}
+		jEntry["reason"] = entry.reason;
 	}
 
 	std::string outputConfig = writer.write( root );

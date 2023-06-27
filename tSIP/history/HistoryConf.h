@@ -13,6 +13,7 @@ namespace Json
 struct HistoryConf
 {
 	bool noStoreToFile;
+	bool ignoreCallsCompletedElsewhere;
 	bool usePaiForDisplayIfAvailable;
 	bool usePaiForDialIfAvailable;
 	bool showHint;
@@ -20,6 +21,7 @@ struct HistoryConf
 	bool showCodecNameInHint;
 	bool showLastCodeInHint;
 	bool showLastReplyLineInHint;
+	bool showReasonInHint;
 	bool showRecordFileInHint;
 	std::vector<int> listColumnWidths;
 
