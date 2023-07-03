@@ -1419,7 +1419,7 @@ static void sipsess_close_handler(int err, const struct sip_msg *msg,
 
 	call_stream_stop(call);
 
-	if (msg->s_reason.text.l != 0) {
+	if (msg && msg->s_reason.text.l != 0) {
 		str_ncpy(reason, msg->s_reason.text.p, min(sizeof(reason), msg->s_reason.text.l + 1));
 	}
 
