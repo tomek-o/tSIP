@@ -1084,5 +1084,9 @@ Version 0.2.14
 		- option to not store calls with this reason in call history
 		- new icon in call history for this call type - like for regular call unanswered but grayed out
 	- option to show disconnection reason text received with CANCEL in call history
+
+Version 0.2.14.1
+	- fixed crash from v0.2.14 when call was disconnected by the other party
+	- passing BYE message from handler, potentially allowing to use Reason from it
 */
 
