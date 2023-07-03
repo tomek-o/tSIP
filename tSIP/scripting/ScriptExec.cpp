@@ -16,6 +16,7 @@
 #include "Recorder.h"
 #include "UaCustomRequests.h"
 #include "UaMain.h"
+#include "Calls.h"
 #include "AppStatus.h"
 #include "Globals.h"
 #include "Contacts.h"
@@ -479,6 +480,12 @@ static int l_Call(lua_State* L)
 
 static int l_Hangup(lua_State* L)
 {
+	Call* call = Calls::GetCurrentCall();
+	if (call == NULL)
+	{
+		return 0;
+	}
+
 	int argCount = lua_gettop(L);
 	enum { DEFAULT_CODE = 486 };
 	int sipCode = DEFAULT_CODE;
@@ -493,13 +500,18 @@ static int l_Hangup(lua_State* L)
 	{
 		reason = lua_tostring(L, 2);
 	}
-	GetContext(L)->onHangup(sipCode, reason);
+	GetContext(L)->onHangup(call->uid, sipCode, reason);
 	return 0;
 }
 
 static int l_Answer(lua_State* L)
 {
-	GetContext(L)->onAnswer();
+	Call* call = Calls::GetCurrentCall();
+	if (call == NULL)
+	{
+		return 0;
+	}
+	GetContext(L)->onAnswer(call->uid);
 	return 0;
 }
 
@@ -530,7 +542,7 @@ static int l_SetInitialCallTarget(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		call->initialTarget = str;
@@ -550,7 +562,7 @@ static int l_SetCallTarget(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
         call->uri = str;
@@ -565,7 +577,7 @@ static int l_SetCallTarget(lua_State* L)
 
 static int l_GetInitialCallTarget(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		std::string num = call->initialTarget.c_str();
@@ -577,13 +589,15 @@ static int l_GetInitialCallTarget(lua_State* L)
 
 static int l_ResetCall(lua_State* L)
 {
-	GetContext(L)->onResetCall();
+	Call* call = Calls::GetCurrentCall();
+	if (call)
+		call->reset();
 	return 0;
 }
 
 static int l_GetPreviousCallStatusCode(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetPreviousCall();
+	Call *call = Calls::GetPreviousCall();
 	if (call == NULL)
 		return 0;
 	lua_pushinteger( L, call->lastScode );
@@ -592,7 +606,7 @@ static int l_GetPreviousCallStatusCode(lua_State* L)
 
 static int l_GetPreviousCallReplyLine(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetPreviousCall();
+	Call *call = Calls::GetPreviousCall();
 	if (call == NULL)
 		return 0;
 	lua_pushstring( L, call->lastReplyLine.c_str() );
@@ -674,7 +688,8 @@ static int l_BlindTransfer(lua_State* L)
 
 static int l_GetCallState(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		lua_pushinteger( L, call->state );
@@ -697,7 +712,8 @@ static int l_GetRecorderState(lua_State* L)
 
 static int l_GetZrtpState(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		const Call::Zrtp &zrtp = call->zrtp;
@@ -713,7 +729,8 @@ static int l_GetZrtpState(lua_State* L)
 
 static int l_IsCallIncoming(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		lua_pushinteger( L, call->incoming );
@@ -724,7 +741,8 @@ static int l_IsCallIncoming(lua_State* L)
 
 static int l_GetCallPeer(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
 	if (call == NULL)
 		return 0;
 
@@ -743,7 +761,8 @@ static int l_GetCallPeer(lua_State* L)
 
 static int l_GetCallInitialRxInvite(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		lua_pushstring( L, call->initialRxInvite.c_str() );
@@ -754,7 +773,8 @@ static int l_GetCallInitialRxInvite(lua_State* L)
 
 static int l_GetCallCodecName(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		lua_pushstring( L, call->codecName.c_str() );
@@ -785,7 +805,13 @@ static int l_GetStreamingState(lua_State* L)
 
 static int l_GetAudioErrorCount(lua_State* L)
 {
-	unsigned int count = GetContext(L)->onGetAudioErrorCount();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
+	unsigned int count = 0;
+	if (call)
+	{
+		count = call->audioErrorCount;
+	}
 	lua_pushinteger( L, count );
 	return 1;
 }
@@ -1137,7 +1163,8 @@ static int l_GetExecSourceId(lua_State* L)
 
 static int l_GetRecordFile(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		lua_pushstring( L, call->recordFile.c_str() );
@@ -1189,7 +1216,8 @@ static int l_RecordStart(lua_State* L)
 
 static int l_GetRecordingState(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	int TODO__OPTIONAL_CALL_ID_PARAMETER;
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		lua_pushinteger( L, call->recording );
@@ -1670,7 +1698,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SetClipboardText, "SetClipboardText", "Copy text to clipboard", "");
 	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "Equivalent of VCL function with same name.");
 	lua_register2(L, ScriptImp::l_FindWindowByCaptionAndExeName, "FindWindowByCaptionAndExeName", "Search for window by caption and executable name", "");
-	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "");
+	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns allocated call ID.");
 	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect current call, reject incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer incoming call", "");
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");

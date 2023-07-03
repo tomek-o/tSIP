@@ -55,6 +55,22 @@ Call* Calls::GetFirstCall(void)
 	return NULL;
 }
 
+Call* Calls::GetCurrentCall(void)
+{
+    int TODO__GET_CURRENT_CALL;
+	if (!entries.empty())
+		return &entries.begin()->second;
+	return NULL;
+}
+
+Call* Calls::GetCurrentCall(void)
+{
+    int TODO__GET_PREVIOUS_CALL;
+	if (!entries.empty())
+		return &entries.begin()->second;
+	return NULL;
+}
+
 void Calls::Clear(void)
 {
 	entries.clear();
