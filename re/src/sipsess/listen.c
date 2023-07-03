@@ -135,7 +135,7 @@ static void bye_handler(struct sipsess_sock *sock, const struct sip_msg *msg)
 				 487, "Request Terminated");
 	}
 
-	sipsess_terminate(sess, E_SIP_SESSION_CLOSED_BYE, NULL);
+	sipsess_terminate(sess, E_SIP_SESSION_CLOSED_BYE, msg);
 }
 
 
