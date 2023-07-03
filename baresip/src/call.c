@@ -51,6 +51,7 @@ struct call {
 	struct le le;             /**< Linked list element                  */
 	struct ua *ua;            /**< SIP User-agent                       */
 	struct account *acc;      /**< Account (ref.)                       */
+	int uid;
 	struct sipsess *sess;     /**< SIP Session                          */
 	struct sdp_session *sdp;  /**< SDP Session                          */
 	struct sipsub *sub;       /**< Call transfer REFER subscription     */
@@ -2015,4 +2016,18 @@ void call_enable_rtp_timeout(struct call *call, uint32_t timeout_ms)
 		return;
 
 	call->rtp_timeout_ms = timeout_ms;
+}
+
+void call_set_uid(struct call *call, int uid)
+{
+	if (!call)
+		return;
+	call->uid = uid;
+}
+
+int call_get_uid(struct call *call)
+{
+	if (!call)
+		return 0;
+	return call->uid;
 }

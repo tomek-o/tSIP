@@ -1050,12 +1050,14 @@ extern "C" void control_handler(void)
 	case Command::TRANSFER:
 		if (app.callp)
 		{
+			int TODO__USE_CALLID;
 			call_transfer(app.callp, cmd.target.c_str());
 		}
 		break;
 	case Command::SEND_DIGIT:
 		if (app.callp)
 		{
+			int TODO__USE_CALLID;
 			if (call_send_digit(app.callp, cmd.key) == 0)
 			{
 				call_send_digit(app.callp, 0x00);
@@ -1128,6 +1130,7 @@ extern "C" void control_handler(void)
 	}
 	case Command::RECORD: {
 		if (app.callp) {
+			int TODO__CALL_ID;
 			struct recorder_st *rec = call_get_recorder(app.callp);
 			if (rec) {
 				recorder_start(rec, cmd.target.c_str(), cmd.channels,
@@ -1141,6 +1144,7 @@ extern "C" void control_handler(void)
 	}
 	case Command::RECORD_PAUSE: {
 		if (app.callp) {
+			int TODO__CALL_ID;
 			struct recorder_st *rec = call_get_recorder(app.callp);
 			if (rec) {
 				recorder_pause(rec);

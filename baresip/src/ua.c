@@ -720,7 +720,7 @@ int ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuse
  *
  * @return 0 if success, otherwise errorcode
  */
-int ua_connect(struct ua *ua, struct call **callp,
+int ua_connect(struct ua *ua, int callUid, struct call **callp,
 	       const char *from_uri, const char *uri,
 	       const char *params, enum vidmode vmode, void *vidisp_parent_handle, const char* extra_hdr_lines)
 {
@@ -797,6 +797,7 @@ int ua_connect(struct ua *ua, struct call **callp,
 	if (err)
 		goto out;
 
+	call_set_uid(call, callUid);
 	call_set_vidisp_parent_handle(call, vidisp_parent_handle);
 
 	pl.p = (char *)dialbuf->buf;

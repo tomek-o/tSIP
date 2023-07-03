@@ -27,8 +27,8 @@ __published:	// IDE-managed Components
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 private:	// User declarations
 	static void TranslateForm(void* obj);
-	typedef void(__closure *CallbackHangup)(int sipCode, AnsiString reason);
-	typedef void(__closure *CallbackAnswer)(void);
+	typedef void(__closure *CallbackHangup)(int uid, int sipCode, AnsiString reason);
+	typedef void(__closure *CallbackAnswer)(int uid);
 	void __fastcall Close(void);
 	void __fastcall CreateParams(TCreateParams &Params);	
 public:		// User declarations

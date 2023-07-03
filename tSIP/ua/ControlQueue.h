@@ -17,7 +17,7 @@ private:
 public:
 	int GetCommand(Command& cmd);
 
-	void Call(int accountId, AnsiString target, AnsiString extraHeaderLines, bool video, void *vidispParentHandle);
+	void Call(int accountId, int callUid, AnsiString target, AnsiString extraHeaderLines, bool video, void *vidispParentHandle);
 	void Answer(int callId, AnsiString audioRxMod="", AnsiString audioRxDev="", bool video = true, void *vidispParentHandle = NULL);
 	void Transfer(int callId, AnsiString target);
 	void SendDigit(int callId, char key);
@@ -28,7 +28,7 @@ public:
 		float amplitude4 = 0.0f, float frequency4 = 0.0f);
 	void Hold(int callId, bool state);
 	void Mute(int callId, bool state);
-	void Hangup(int callId, int code=0, AnsiString reason = "Busy Here");
+	void Hangup(int callUid, int code=0, AnsiString reason = "Busy Here");
 	void SetMsgLogging(bool enabled, bool onlyFirstLines);
 	void SetAubufLogging(bool enabled);	
 	void ReRegister(int accountId);
@@ -36,8 +36,8 @@ public:
 	void StartRing(AnsiString wavFile);
 	void PlayStop(void);
 	void StartRing2(AnsiString wavFile);
-	void Record(AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate);
-	void RecordPause(void);
+	void Record(int callUid, AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate);
+	void RecordPause(int callUid);
 	/** \brief Start transmitting RTP to specified targee
 		\param target address IP + port
 		\param pagingTxWaveFile audio file to be transmitted; if not specified default audio source is used

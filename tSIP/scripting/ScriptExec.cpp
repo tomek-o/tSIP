@@ -471,8 +471,10 @@ static int l_Call(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	GetContext(L)->onCall(str);
-	return 0;
+	int callId;
+	GetContext(L)->onCall(str, callId);
+    lua_pushnumber(L, callId);
+	return 1;
 }
 
 static int l_Hangup(lua_State* L)

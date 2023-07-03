@@ -50,13 +50,14 @@ void CallbackQueue::SetCallData(AnsiString initialRxInvite)
 	fifo.push();
 }
 
-void CallbackQueue::ChangeCallState(Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name)
+void CallbackQueue::ChangeCallState(int uid, Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::CALL_STATE;
+	cb->callId = uid;
 	cb->state = state;
 	cb->caller = caller;
 	cb->callerName = caller_name;
@@ -206,13 +207,14 @@ void CallbackQueue::NotifyEventTalk(void)
 	fifo.push();
 }
 
-void CallbackQueue::NotifyAudioError(void)
+void CallbackQueue::NotifyAudioError(int callUid)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::AUDIO_ERROR;
+	cb->callId = callUid;
 	fifo.push();
 }
 

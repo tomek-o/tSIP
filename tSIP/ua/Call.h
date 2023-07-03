@@ -4,11 +4,14 @@
 #define CallH
 //---------------------------------------------------------------------------
 
+#include "Recorder.h"
+
 #include <System.hpp>
 #include <deque>
 
 struct Call
 {
+	unsigned int uid;
 	bool incoming;
 	bool progress;	// early media
 	bool connected;
@@ -32,6 +35,9 @@ struct Call
 	AnsiString paiPeerName;
 	AnsiString codecName;
 	void* displayParentHandle;
+	unsigned int audioErrorCount;
+
+	Recorder recorder;	
 
 	struct Zrtp {
 		int sessionId;
@@ -47,6 +53,7 @@ struct Call
 	} zrtp;	
 
 	Call(void):
+		uid(0),
 		incoming(false),
 		progress(false),
 		connected(false),
@@ -56,7 +63,8 @@ struct Call
 		lastScode(0),
 		recording(false),
 		ringStarted(false),
-		displayParentHandle(NULL)
+		displayParentHandle(NULL),
+		audioErrorCount(0)
 	{}
 	void reset(void);
 };

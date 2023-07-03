@@ -27,8 +27,7 @@
 #include "Log.h"
 #include "UaMain.h"
 #include "UaGlobals.h"
-#include "Call.h"
-#include "Recorder.h"
+#include "Calls.h"
 #include "UaCustomRequests.h"
 #include "ControlQueue.h"
 #include "Callback.h"
@@ -72,10 +71,7 @@ TfrmMain *frmMain;
 namespace {
 	AnsiString asTransferHint = "Transfer to ... [Enter]";
 	bool useOwnTrayIcon = false;
-	unsigned int audioErrorCount;
 
-	Call call;
-	Call previousCall;
 	struct PagingTx {
 		bool active;
 		int state;				///< as in Callback
@@ -90,7 +86,6 @@ namespace {
 			state(0)
 		{}
 	} registration;
-	Recorder recorder;
 
 	Contacts::Entry *lastContactEntry = NULL;
 	void ShowContactPopup(Contacts::Entry *entry)
@@ -130,7 +125,7 @@ namespace {
 			return displayName;
 	}
 
-	AnsiString GetCallPeerUri(void)
+	AnsiString GetCallPeerUri(const struct Call &call)
 	{
 		if (appSettings.Display.bUsePAssertedIdentity)
 		{
@@ -140,7 +135,7 @@ namespace {
 		return call.uri;
 	}
 
-	AnsiString GetCallPeerName(void)
+	AnsiString GetCallPeerName(const struct Call &call)
 	{
 		if (appSettings.Display.bUsePAssertedIdentity)
 		{
@@ -903,6 +898,7 @@ void TfrmMain::HideTrayNotifier(void)
 
 void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
 {
+#if 0
 	if (call.uri == "" && call.incoming == false && !pagingTx.active)
 	{
 		AnsiString target = cbCallURI->Text.Trim();
@@ -916,12 +912,18 @@ void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
 		Answer();
 		//UA->Answer(0, appSettings.uaConf.audioCfgPlayIntercom.mod, appSettings.uaConf.audioCfgPlayIntercom.dev);
 	}
+#else
+	int TODO__BTN_MAKE_CALL;
+#endif
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::MakeCall(AnsiString target)
+void TfrmMain::MakeCall(AnsiString target, int &callUid)
 {
-	call.reset();
+	Call* newCall = Calls::Alloc();
+	Call& call = *newCall;
+
+	callUid = call.uid;
 	call.timestamp = Now();
 	call.incoming = false;
 	call.uri = target;
@@ -957,28 +959,38 @@ void TfrmMain::MakeCall(AnsiString target)
 	}
 
 	call.displayParentHandle = GetDisplayParentHandle();
-	UA->Call(0, call.initialTarget, appSettings.Calls.extraHeaderLines, appSettings.video.enabled, call.displayParentHandle);
+	UA->Call(0, call.uid, call.initialTarget, appSettings.Calls.extraHeaderLines, appSettings.video.enabled, call.displayParentHandle);
 }
 
 void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
 {
+#if 0
 	Hangup();
 	UA->PlayStop();
+#else
+	int TODO__BTN_HANGUP;
+#endif
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::Hangup(int sipCode, AnsiString reason)
+void TfrmMain::Hangup(int uid, int sipCode, AnsiString reason)
 {
-	call.disconnecting = true;
-	UA->Hangup(0, sipCode, reason);
+	Call *c = Calls::FindByUid(uid);
+	if (c == NULL)
+		return;
+	c->disconnecting = true;
+	UA->Hangup(uid, sipCode, reason);
 }
 
-void TfrmMain::Answer(void)
+void TfrmMain::Answer(int uid)
 {
-	if (call.incoming)
+	Call *call = Calls::FindByUid(uid);
+	if (call == NULL)
+		return;
+	if (call->incoming)
 	{
-		call.displayParentHandle = GetDisplayParentHandle();
-		UA->Answer(0, "", "", appSettings.video.enabled, call.displayParentHandle);
+		call->displayParentHandle = GetDisplayParentHandle();
+		UA->Answer(uid, "", "", appSettings.video.enabled, call->displayParentHandle);
 		if (appSettings.frmMain.bShowWhenAnsweringCall)
 		{
 			if (!Visible)
@@ -993,7 +1005,7 @@ void TfrmMain::Answer(void)
 	}
 	else
 	{
-    	LOG("Answer: no incoming call, current call.state = %d\n", call.state);
+    	LOG("Answer: call with UID = %u is not in incoming state, current state = %d\n", uid, call->state);
 	}
 }
 
@@ -1005,30 +1017,6 @@ std::string TfrmMain::OnGetDial(void)
 void TfrmMain::OnSetDial(std::string number)
 {
 	cbCallURI->Text = number.c_str();
-}
-
-Call* TfrmMain::OnGetCall(void)
-{
-	return &call;
-}
-
-void TfrmMain::OnResetCall(void)
-{
-	call.reset();
-}
-
-Call* TfrmMain::OnGetPreviousCall(void)
-{
-	return &previousCall;
-}
-
-Recorder* TfrmMain::OnGetRecorder(int id)
-{
-	if (id == recorder.id)
-	{
-		return &recorder;
-	}
-	return NULL;
 }
 
 int TfrmMain::OnGetContactId(const char* user)
@@ -1059,11 +1047,6 @@ int TfrmMain::OnGetBlfState(int contactId, std::string &number, std::string &rem
 int TfrmMain::OnGetStreamingState(void)
 {
 	return pagingTx.state;
-}
-
-unsigned int TfrmMain::OnGetAudioErrorCount(void)
-{
-	return audioErrorCount;
 }
 
 int TfrmMain::OnGetRegistrationState(void)
@@ -1156,30 +1139,39 @@ int TfrmMain::OnPluginEnable(const char* dllName, bool state)
 	return -1;
 }
 
-int TfrmMain::OnRecordStart(const char* file, int channels, int side, int fileFormat, unsigned int bitrate)
+int TfrmMain::OnRecordStart(int uid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate)
 {
 	if (appSettings.uaConf.recording.enabled == false)
 	{
 		LOG("OnRecordStart: recording is not enabled in configuration!\n");
 		return -1;
 	}
-	if (call.connected == false && call.progress == false)
+	Call *call = Calls::FindByUid(uid);
+	if (call == NULL)
 	{
-		LOG("OnRecordStart: no current call with active media\n");
+		LOG("OnRecordStart: call with UID %u not found\n", uid);
 		return -2;
 	}
-	UA->Record(file, channels, side, fileFormat, bitrate);
-	call.recordFile = file;
-	call.recording = true;
+	if (call->connected == false && call->progress == false)
+	{
+		LOG("OnRecordStart: call %u with no active media\n", uid);
+		return -2;
+	}
+	UA->Record(uid, file, channels, side, fileFormat, bitrate);
+	call->recordFile = file;
+	call->recording = true;
 	return 0;
 }
 
-std::string TfrmMain::OnGetRxDtmf(void)
+std::string TfrmMain::OnGetRxDtmf(int callUid)
 {
-	if (call.dtmfRxQueue.empty())
+	Call *call = Calls::FindByUid(callUid);
+	if (call == NULL)
 		return "";
-	std::string ret(1, call.dtmfRxQueue[0]);
-	call.dtmfRxQueue.pop_front();
+	if (call->dtmfRxQueue.empty())
+		return "";
+	std::string ret(1, call->dtmfRxQueue[0]);
+	call->dtmfRxQueue.pop_front();
 	return ret;
 }
 
@@ -1246,10 +1238,13 @@ AnsiString TfrmMain::GetClip(AnsiString uri)
 	}
 }
 
-void TfrmMain::UpdateClip(void)
+void TfrmMain::UpdateClip(int callUid)
 {
-	lbl2ndParty->Caption = GetClip(GetCallPeerUri());
-	lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri()));
+	Call *call = Calls::FindByUid(callUid);
+	if (call == NULL)
+		return;
+	lbl2ndParty->Caption = GetClip(GetCallPeerUri(*call));
+	lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri(*call)));
 	if (lastContactEntry)
 	{
 		lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -1266,7 +1261,7 @@ void TfrmMain::UpdateClip(void)
 	}
 	else
 	{
-		lbl2ndPartyDesc->Caption = GetCallPeerName();
+		lbl2ndPartyDesc->Caption = GetCallPeerName(*call);
 	}
 }
 
@@ -1398,9 +1393,10 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		pollCnt++;
 		if ((pollCnt % 20) == 0)
 		{
-			if (call.connected)
+			Call *call = Calls::GetFirstCall();
+			if (call && call->connected)
 			{
-				unsigned int delta = SecondsBetween(Now(), call.timeTalkStart);
+				unsigned int delta = SecondsBetween(Now(), call->timeTalkStart);
 				AnsiString caption;
 				caption.sprintf("Connected, %02d:%02d", delta/60, delta%60);
 				lblCallState->Caption = caption;
@@ -1476,21 +1472,24 @@ void TfrmMain::PollCallbackQueue(void)
 		{
 			AnsiString asStateText;
 			tmrClearCallState->Enabled = false;
+			LOG("Callback::CALL_STATE, call uid = %d, state = %d\n", cb.callId, static_cast<int>(cb.state));
 			switch(cb.state)
 			{
-			case Callback::CALL_STATE_INCOMING:
+			case Callback::CALL_STATE_INCOMING: {
 				asStateText = "Incoming call";
-				call.incoming = true;
-				call.timestamp = Now();
-				call.uri = cb.caller;
-				call.peerName = GetPeerName(cb.callerName);
-				call.recordFile = "";
-				call.dtmfRxQueue.clear();
-				call.paiPeerUri = cb.paiPeerUri;
-				call.paiPeerName = GetPeerName(cb.paiPeerName);
+				Call *call = Calls::Alloc();
+				call->incoming = true;
+				call->timestamp = Now();
+				call->uri = cb.caller;
+				call->peerName = GetPeerName(cb.callerName);
+				call->recordFile = "";
+				call->dtmfRxQueue.clear();
+				call->paiPeerUri = cb.paiPeerUri;
+				call->paiPeerName = GetPeerName(cb.paiPeerName);
 				autoAnswerIntercom = false;
 				if (appSettings.uaConf.autoAnswerCallInfo && cb.callAnswerAfter >= 0)
 				{
+                    int TODO__MULTIPLE_AUTO_ANSWER_TIMERS;
 					LOG("Intercom/paging auto answer, answer-after = %d\n", cb.callAnswerAfter);
 					autoAnswerCode = 200;
 					autoAnswerIntercom = true;
@@ -1501,7 +1500,7 @@ void TfrmMain::PollCallbackQueue(void)
 					}
 					if (time == 0)
 					{
-						AutoAnswer();
+						AutoAnswer(call->uid);
 						answered = true;
 					}
 					else
@@ -1524,7 +1523,7 @@ void TfrmMain::PollCallbackQueue(void)
 					autoAnswerCode = appSettings.uaConf.autoAnswerCode;
 					if (time == 0)
 					{
-						AutoAnswer();
+						AutoAnswer(call->uid);
 						answered = true;
 						if (appSettings.uaConf.autoAnswerCode >= 400)
 						{
@@ -1543,8 +1542,8 @@ void TfrmMain::PollCallbackQueue(void)
 				{
 					StartRing(RingFile(cb.alertInfo));
 				}
-				lbl2ndParty->Caption = GetClip(GetCallPeerUri());
-				lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri()));
+				lbl2ndParty->Caption = GetClip(GetCallPeerUri(*call));
+				lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri(*call)));
 				if (lastContactEntry)
 				{
 					lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -1562,27 +1561,30 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 				else
 				{
-					lbl2ndPartyDesc->Caption = GetCallPeerName();
+					lbl2ndPartyDesc->Caption = GetCallPeerName(*call);
 				}
-				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(GetCallPeerUri()).c_str()); //CleanUri(cb.caller).c_str());
+				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(GetCallPeerUri(*call)).c_str()); //CleanUri(cb.caller).c_str());
 				if (appSettings.HttpQuery.openMode == Settings::_HttpQuery::openAutomaticOnIncoming)
 				{
-					HttpQuery();
+					HttpQuery(call);
 				}
 
-				call.accessUrl = cb.accessUrl;
-				call.accessUrlMode = cb.accessUrlMode;
+				call->accessUrl = cb.accessUrl;
+				call->accessUrlMode = cb.accessUrlMode;
 				if (appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeAlwaysActive ||
-					(appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeFromMsg && call.accessUrlMode == 2)) {
-					AccessCallUrl();
+					(appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeFromMsg && call->accessUrlMode == 2)) {
+					AccessCallUrl(call);
 				}
 
 				break;
-			case Callback::CALL_STATE_OUTGOING:
+			}
+			case Callback::CALL_STATE_OUTGOING: {
 				asStateText = "Calling...";
 				lbl2ndParty->Caption = GetClip(cb.caller);
 				lastContactEntry = contacts.GetEntry(CleanUri(cb.caller));
-				call.recordFile = "";
+				Call *call = Calls::FindByUid(cb.callId);
+				if (call)
+					call->recordFile = "";
 				if (lastContactEntry)
 				{
 					lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -1605,69 +1607,92 @@ void TfrmMain::PollCallbackQueue(void)
 
 				if (Visible == false && appSettings.frmTrayNotifier.showOnOutgoing)
 				{
-					ShowTrayNotifier(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call.incoming);
+                    int TODO__PASS_CALL_UID;
+					if (call)
+						ShowTrayNotifier(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call->incoming);
 				}
 				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(cb.caller).c_str()); // CleanUri(cb.caller).c_str());
 
 				break;
+			}
 			case Callback::CALL_STATE_TRYING:
 				asStateText = "Trying...";
 				break;
 			case Callback::CALL_STATE_RINGING:
 				asStateText = "Ringback";
 				break;
-			case Callback::CALL_STATE_PROGRESS:
-				call.progress = true;
+			case Callback::CALL_STATE_PROGRESS: {
 				asStateText = "Call state progress";
-				if (appSettings.uaConf.recording.enabled && call.recording == false && (appSettings.uaConf.recording.recStart == UaConf::RecordingCfg::RecStartCallEarly))
+				Call *call = Calls::FindByUid(cb.callId);
+				if (call)
 				{
-					StartRecording();
+					call->progress = true;
+					if (appSettings.uaConf.recording.enabled && call->recording == false && (appSettings.uaConf.recording.recStart == UaConf::RecordingCfg::RecStartCallEarly))
+					{
+						StartRecording(*call);
+					}
 				}
 				break;
-			case Callback::CALL_STATE_ESTABLISHED:
+			}
+			case Callback::CALL_STATE_ESTABLISHED: {
 				asStateText = "Connected";
-				call.connected = true;
-				call.timeTalkStart = Now();
-				call.ringStarted = false;
-				call.paiPeerUri = cb.paiPeerUri;
-				call.paiPeerName = GetPeerName(cb.paiPeerName);
-				call.codecName = cb.codecName;
-				call.lastScode = 200;
-				call.lastReplyLine = "200 OK";
-
-				UpdateClip();
-
-				PhoneInterface::UpdateRing(0);
-				tmrAutoAnswer->Enabled = false;
-				if (appSettings.uaConf.recording.enabled && call.recording == false &&
-					((appSettings.uaConf.recording.recStart == UaConf::RecordingCfg::RecStartCallEarly) || (appSettings.uaConf.recording.recStart == UaConf::RecordingCfg::RecStartCallConfirmed))
-					)
+				Call *call = Calls::FindByUid(cb.callId);
+				if (call)
 				{
-					StartRecording();
+					call->connected = true;
+					call->timeTalkStart = Now();
+					call->ringStarted = false;
+					call->paiPeerUri = cb.paiPeerUri;
+					call->paiPeerName = GetPeerName(cb.paiPeerName);
+					call->codecName = cb.codecName;
+					call->lastScode = 200;
+					call->lastReplyLine = "200 OK";
+
+					UpdateClip(cb.callId);
+
+					PhoneInterface::UpdateRing(0);
+					tmrAutoAnswer->Enabled = false;
+					if (appSettings.uaConf.recording.enabled && call->recording == false &&
+						((appSettings.uaConf.recording.recStart == UaConf::RecordingCfg::RecStartCallEarly) || (appSettings.uaConf.recording.recStart == UaConf::RecordingCfg::RecStartCallConfirmed))
+						)
+					{
+						StartRecording(*call);
+					}
+					if (call->incoming == true && appSettings.HttpQuery.openMode == Settings::_HttpQuery::openAutomaticOnIncomingAnswer)
+					{
+						HttpQuery(call);
+					}
+					if (appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeAlwaysActiveOnConfirmed ||
+						(appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeFromMsgOnConfirmed && call->accessUrlMode == 2)) {
+						AccessCallUrl(call);
+					}				
 				}
-				if (call.incoming == true && appSettings.HttpQuery.openMode == Settings::_HttpQuery::openAutomaticOnIncomingAnswer)
+				break;
+			}
+			case Callback::CALL_STATE_TRANSFER: {
+				Call *call = Calls::FindByUid(cb.callId);
+				if (call)
 				{
-					HttpQuery();
+					call->uri = cb.caller;
+					call->peerName = GetPeerName(cb.callerName);
 				}
-				if (appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeAlwaysActiveOnConfirmed ||
-					(appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeFromMsgOnConfirmed && call.accessUrlMode == 2)) {
-					AccessCallUrl();
-				}				
 				break;
-			case Callback::CALL_STATE_TRANSFER:
-				call.uri = cb.caller;
-				call.peerName = GetPeerName(cb.callerName);
-				break;
+			}
 			case Callback::CALL_STATE_TRANSFER_OOD:
 				if (appSettings.uaConf.handleOodRefer)
 				{
-					if (call.uri == "" && call.incoming == false && !pagingTx.active)
+					Call *call = Calls::GetFirstCall();
+					if (call)
 					{
-						int TODO__EXTRACT_NUMBER_FROM_URI_IF_SERVER_IS_MATCHING;	// otherwise full URI goes into history
-						AnsiString target = cb.caller;
-						if (target != "")
+						if (call->uri == "" && call->incoming == false && !pagingTx.active)
 						{
-							MakeCall(target);
+							int TODO__EXTRACT_NUMBER_FROM_URI_IF_SERVER_IS_MATCHING;	// otherwise full URI goes into history
+							AnsiString target = cb.caller;
+							if (target != "")
+							{
+								int callUid;
+								MakeCall(target, callUid);
+							}
 						}
 					}
 				}
@@ -1677,82 +1702,86 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 				break;
 			case Callback::CALL_STATE_CLOSED: {
-				//LOG("Callback::CALL_STATE_CLOSED\n");
-				if (cb.scode != 0)
+				Call * call = Calls::FindByUid(cb.callId);
+				if (call)
 				{
-					call.lastScode = cb.scode;
-					call.lastReplyLine = cb.caller;
-				}
-				previousCall = call;
-				if (call.ringStarted) {
-					UA->PlayStop();
-					call.ringStarted = false;
-				}
-				if (cb.scode != 0 || cb.caller != "")
-				{
-					asStateText = cb.caller;	// here it's filled with e.g. "488 Not Acceptable Here" or local error string
-					tmrClearCallState->Enabled = true;
-				}
-				else
-				{
-					asStateText = "";
-				}
-
-				AnsiString sipReason = cb.caller;
-                bool completedElsewhere = (sipReason.UpperCase() == CALL_COMPLETED_ELSEWHERE); 
-
-				History::Entry entry;
-				DecodeDateTime(call.timestamp,
-					entry.timestamp.year, entry.timestamp.month, entry.timestamp.day,
-					entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec,
-					entry.timestamp.msec);
-				entry.uri = call.uri.c_str();
-				entry.peerName = call.peerName.c_str();
-				entry.paiUri = call.paiPeerUri.c_str();
-				entry.paiPeerName = call.paiPeerName.c_str();
-				entry.incoming = call.incoming;
-				entry.codecName = call.codecName;
-				if (call.connected)
-				{
-					entry.time = SecondsBetween(Now(), call.timeTalkStart) + 1;
-				}
-				else
-				{
-					entry.time = 0;
-					if (entry.incoming && !call.disconnecting && !completedElsewhere)
+					if (cb.scode != 0)
 					{
-						SetNotificationIcon(true);
+						call->lastScode = cb.scode;
+						call->lastReplyLine = cb.caller;
 					}
-				}
-				if (entry.incoming)
-				{
-					entry.uri = ExtractNumberFromUri(entry.uri.c_str()).c_str();
-				}
-				// trying to extract number from PAI URI for any call
-				entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
-				entry.lastScode = call.lastScode;
-				entry.lastReplyLine = call.lastReplyLine;
-				entry.recordFile = call.recordFile;
-				entry.reason = sipReason;
+					int TODO__PREVIOUS_CALL;
+					//¹previousCall = call;
+					if (call->ringStarted) {
+						UA->PlayStop();
+						call->ringStarted = false;
+					}
+					if (cb.scode != 0 || cb.caller != "")
+					{
+						asStateText = cb.caller;	// here it's filled with e.g. "488 Not Acceptable Here" or local error string
+						tmrClearCallState->Enabled = true;
+					}
+					else
+					{
+						asStateText = "";
+					}
 
-				if (!(appSettings.history.ignoreCallsCompletedElsewhere && completedElsewhere))
-				{
-					history.AddEntry(entry);
-					UpdateCallHistory();
+					AnsiString sipReason = cb.caller;
+					bool completedElsewhere = (sipReason.UpperCase() == CALL_COMPLETED_ELSEWHERE);
+
+					History::Entry entry;
+					DecodeDateTime(call->timestamp,
+						entry.timestamp.year, entry.timestamp.month, entry.timestamp.day,
+						entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec,
+						entry.timestamp.msec);
+					entry.uri = call->uri.c_str();
+					entry.peerName = call->peerName.c_str();
+					entry.paiUri = call->paiPeerUri.c_str();
+					entry.paiPeerName = call->paiPeerName.c_str();
+					entry.incoming = call->incoming;
+					entry.codecName = call->codecName;
+					if (call->connected)
+					{
+						entry.time = SecondsBetween(Now(), call->timeTalkStart) + 1;
+					}
+					else
+					{
+						entry.time = 0;
+						if (entry.incoming && !call->disconnecting && !completedElsewhere)
+						{
+							SetNotificationIcon(true);
+						}
+					}
+					if (entry.incoming)
+					{
+						entry.uri = ExtractNumberFromUri(entry.uri.c_str()).c_str();
+					}
+					// trying to extract number from PAI URI for any call
+					entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
+					entry.lastScode = call->lastScode;
+					entry.lastReplyLine = call->lastReplyLine;
+					entry.recordFile = call->recordFile;
+					entry.reason = sipReason;
+
+					if (!(appSettings.history.ignoreCallsCompletedElsewhere && completedElsewhere))
+					{
+						history.AddEntry(entry);
+						UpdateCallHistory();
+					}
+
+					AnsiString recordFile = call->recordFile;
+					call->reset();
+					call->recordFile = recordFile;	// should be preserved after the call to be used in script
+
+					buttons.UpdateBtnState(Button::HOLD, false);
+					buttons.UpdateBtnState(Button::MUTE, false);
+					tmrAutoAnswer->Enabled = false;
+					frmTrayNotifier->HideWindow();
+					lbl2ndParty->Caption = "";
+					lbl2ndPartyDesc->Caption = "";
+					PhoneInterface::UpdateCallState(0, "");
+					PhoneInterface::UpdateRing(0);
 				}
-
-				AnsiString recordFile = call.recordFile;
-				call.reset();
-				call.recordFile = recordFile;	// should be preserved after the call to be used in script
-
-				buttons.UpdateBtnState(Button::HOLD, false);
-				buttons.UpdateBtnState(Button::MUTE, false);
-				tmrAutoAnswer->Enabled = false;
-				frmTrayNotifier->HideWindow();
-				lbl2ndParty->Caption = "";
-				lbl2ndPartyDesc->Caption = "";
-				PhoneInterface::UpdateCallState(0, "");
-				PhoneInterface::UpdateRing(0);
 				break;
 			}
 			default:
@@ -1760,7 +1789,12 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			}
 
-			call.state = cb.state;
+			Call *call = Calls::FindByUid(cb.callId);
+
+			if (call)
+			{
+				call->state = cb.state;
+			}
 
 			lblCallState->Caption = asStateText;
 
@@ -1773,7 +1807,11 @@ void TfrmMain::PollCallbackQueue(void)
 						((answered && appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically) == false)
 						)
 					{
-						ShowTrayNotifier(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call.incoming);
+						if (call)
+						{
+							int TODO__PASS_CALL_UID;
+							ShowTrayNotifier(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call->incoming);
+						}
 					}
 				}
 				if (appSettings.frmMain.bRestoreOnIncomingCall)
@@ -1804,35 +1842,51 @@ void TfrmMain::PollCallbackQueue(void)
 				AnsiString asScriptFile;
 				bool handled = true;
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onCallState.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, -1, asScriptFile.c_str(), handled);
+				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, cb.callId, asScriptFile.c_str(), handled);
+			}
+
+			if (cb.state == Callback::CALL_STATE_CLOSED)
+			{
+				Calls::RemoveByUid(cb.callId);
 			}
 
 			break;
 		}
 		case Callback::CALL_REINVITE_RECEIVED:
 		{
-			call.uri = cb.caller;
-			call.peerName = GetPeerName(cb.callerName);
-			call.paiPeerUri = cb.paiPeerUri;
-			call.paiPeerName = GetPeerName(cb.paiPeerName);
+			Call *call = Calls::FindByUid(cb.callId);
+			if (call)
+			{
+				call->uri = cb.caller;
+				call->peerName = GetPeerName(cb.callerName);
+				call->paiPeerUri = cb.paiPeerUri;
+				call->paiPeerName = GetPeerName(cb.paiPeerName);
 
-			UpdateClip();
+				UpdateClip(cb.callId);
 
-			frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);
-
+				frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);
+			}
 			break;
 		}
 		case Callback::CALL_DTMF_STATE:
 		{
 			if (cb.dtmfActive == true)
 			{
-				call.dtmfRxQueue.push_back(cb.dtmf[1]);
+				Call *call = Calls::FindByUid(cb.callId);
+				if (call)
+				{
+					call->dtmfRxQueue.push_back(cb.dtmf[1]);
+				}
 			}
 			break;
 		}
 		case Callback::SET_CALL_DATA:
 		{
-			call.initialRxInvite = cb.initialRxInvite;
+			Call *call = Calls::FindByUid(cb.callId);
+			if (call)
+			{
+				call->initialRxInvite = cb.initialRxInvite;
+			}
 			break;
 		}
 		case Callback::REG_STATE:
@@ -1910,31 +1964,41 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::RECORDER_STATE:
 		{
-			recorder.id = cb.recorderId;
-			recorder.state = cb.rec_state;
-
-			if (appSettings.Scripts.onRecorderState != "")
+			Call *call = Calls::FindByUid(cb.callId);
+			if (call)
 			{
-				AnsiString asScriptFile;
-				bool handled = true;
-				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onRecorderState.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_RECORDER_STATE, recorder.id, asScriptFile.c_str(), handled);
+				Recorder &recorder = call->recorder;
+				recorder.id = cb.recorderId;
+				recorder.state = cb.rec_state;
+
+				if (appSettings.Scripts.onRecorderState != "")
+				{
+					AnsiString asScriptFile;
+					bool handled = true;
+					asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onRecorderState.c_str());
+					RunScriptFile(SCRIPT_SRC_ON_RECORDER_STATE, recorder.id, asScriptFile.c_str(), handled);
+				}
 			}
 			break;
 		}
 		case Callback::ENCRYPTION_STATE:
 		{
-			call.zrtp.sessionId = cb.zrtp.sessionId;
-			call.zrtp.active = cb.zrtp.active;
-			call.zrtp.sas = cb.zrtp.sas;
-			call.zrtp.cipher = cb.zrtp.cipher;
-			call.zrtp.verified = cb.zrtp.verified;
-			if (appSettings.Scripts.onEncryptionState != "")
+			Call *call = Calls::FindByUid(cb.callId);
+			if (call)
 			{
-				AnsiString asScriptFile;
-				bool handled = true;
-				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onEncryptionState.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_ENCRYPTION_STATE, cb.zrtp.sessionId, asScriptFile.c_str(), handled);
+				call->zrtp.sessionId = cb.zrtp.sessionId;
+				call->zrtp.active = cb.zrtp.active;
+				call->zrtp.sas = cb.zrtp.sas;
+				call->zrtp.cipher = cb.zrtp.cipher;
+				call->zrtp.verified = cb.zrtp.verified;
+				if (appSettings.Scripts.onEncryptionState != "")
+				{
+					AnsiString asScriptFile;
+					bool handled = true;
+					asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onEncryptionState.c_str());
+                    int TODO__SESSION_ID_VS_CALL_ID;
+					RunScriptFile(SCRIPT_SRC_ON_ENCRYPTION_STATE, cb.zrtp.sessionId, asScriptFile.c_str(), handled);
+				}
 			}
 			break;
 		}
@@ -2146,11 +2210,12 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::EVENT_TALK:
 		{
-			if (call.incoming)
+			Call *call = Calls::GetFirstCall();
+			if (call && call->incoming)
 			{
 				if (appSettings.uaConf.answerOnEventTalk)
 				{
-					Answer();
+					Answer(call->uid);
 				}
 				else
 				{
@@ -2161,19 +2226,24 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::AUDIO_ERROR:
 		{
-			audioErrorCount++;
-			if (appSettings.Scripts.onAudioDeviceError != "")
+			int TODO__MAKE_SURE_CALL_ID_IS_SET;
+			Call *call = Calls::FindByUid(cb.callId);
+			if (call)
 			{
-				AnsiString asScriptFile;
-				bool handled = true;
-				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onAudioDeviceError.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_AUDIO_ERROR, -1, asScriptFile.c_str(), handled);
-			}
-			PhoneInterface::UpdateAudioError();
-			if (appSettings.Calls.bDisconnectCallOnAudioError)
-			{
-				LOG("Disconnecting call on audio error\n");
-				Hangup();
+				call->audioErrorCount++;
+				if (appSettings.Scripts.onAudioDeviceError != "")
+				{
+					AnsiString asScriptFile;
+					bool handled = true;
+					asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onAudioDeviceError.c_str());
+					RunScriptFile(SCRIPT_SRC_ON_AUDIO_ERROR, -1, asScriptFile.c_str(), handled);
+				}
+				PhoneInterface::UpdateAudioError();
+				if (appSettings.Calls.bDisconnectCallOnAudioError)
+				{
+					LOG("Disconnecting call %u on audio error\n", call->uid);
+					Hangup(call->uid);
+				}
 			}
 			break;
 		}
@@ -2224,9 +2294,12 @@ void TfrmMain::PollCallbackQueue(void)
 
 void TfrmMain::Dial(char digit)
 {
-	if (call.connected || call.progress)
+	int TODO__GET_CURRENT_CALL;
+	Call *call = Calls::GetFirstCall();
+
+	if (call && (call->connected || call->progress))
 	{
-		UA->SendDigit(0, digit);
+		UA->SendDigit(call->uid, digit);
 	}
 	else
 	{
@@ -2255,13 +2328,14 @@ void TfrmMain::DialString(const std::string& digits, bool runScript)
 				AnsiString asScriptFile;
 				bool handled = true;
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onDial.c_str());
+                int TODO__ON_DIAL_PASS_CALL_UID_TO_SCRIPT;
 				RunScriptFile(SCRIPT_SRC_ON_DIAL, digit, asScriptFile.c_str(), handled);
 			}
 		}
 	}
 }
 
-void TfrmMain::StartRecording(void)
+void TfrmMain::StartRecording(Call &call)
 {
 	if (appSettings.uaConf.recording.enabled == false)
 	{
@@ -2292,7 +2366,7 @@ void TfrmMain::StartRecording(void)
 			AnsiString uri;
 			if (call.incoming)
 			{
-				uri = ExtractNumberFromUri(GetCallPeerUri().c_str()).c_str();
+				uri = ExtractNumberFromUri(GetCallPeerUri(call).c_str()).c_str();
 			}
 			else
 			{
@@ -2322,7 +2396,7 @@ void TfrmMain::StartRecording(void)
 			{
 				LOG("Record file: %s\n", file.c_str());
 			}
-			UA->Record(file, appSettings.uaConf.recording.channels, appSettings.uaConf.recording.side,
+			UA->Record(call.uid, file, appSettings.uaConf.recording.channels, appSettings.uaConf.recording.side,
 				appSettings.uaConf.recording.fileFormat, appSettings.uaConf.recording.bitrate);
 			call.recordFile = file;
 			call.recording = true;
@@ -2370,30 +2444,28 @@ void __fastcall TfrmMain::btnAutoAnswerClick(TObject *Sender)
 
 void TfrmMain::Redial(void)
 {
-	if (call.uri == "")
+	const std::deque<History::Entry>& entries = history.GetEntries();
+	for (unsigned int i=0; i<entries.size(); i++)
 	{
-		const std::deque<History::Entry>& entries = history.GetEntries();
-		for (unsigned int i=0; i<entries.size(); i++)
+		const History::Entry &entry = entries[i];
+		if (entry.incoming == false)
 		{
-			const History::Entry &entry = entries[i];
-			if (entry.incoming == false)
-			{
-				MakeCall(entry.uri.c_str());
-				break;
-			}
+			int callId;
+			MakeCall(entry.uri.c_str(), callId);
+			break;
 		}
 	}
 }
 
-void TfrmMain::HttpQuery(void)
+void TfrmMain::HttpQuery(const Call *call)
 {
 	AnsiString target;
-	if (call.uri != "" && call.incoming)
+	if (call && call->uri != "" && call->incoming)
 	{
-		target = ExtractNumberFromUri(call.uri);
+		target = ExtractNumberFromUri(call->uri);
 		if (target == "")
 		{
-			target = CleanUri(call.uri);
+			target = CleanUri(call->uri);
 		}
 	}
 	else
@@ -2415,11 +2487,11 @@ void TfrmMain::HttpQuery(void)
 	}
 }
 
-void TfrmMain::AccessCallUrl(void)
+void TfrmMain::AccessCallUrl(const Call *call)
 {
-	if (call.accessUrl == "")
+	if (call == NULL || call->accessUrl == "")
 		return;
-	ShellExecute(NULL, "open", call.accessUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
+	ShellExecute(NULL, "open", call->accessUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void TfrmMain::OnHttpQuery(AnsiString target)
@@ -2433,10 +2505,13 @@ void TfrmMain::OnHttpQuery(AnsiString target)
 
 void TfrmMain::ExecuteApp(AnsiString cmd, AnsiString params)
 {
+	int TODO__GET_CURRENT_CALL;
+	Call *call = Calls::GetFirstCall();
+
 	AnsiString target;
-	if (call.uri != "")
+	if (call && call->uri != "")
 	{
-		target = call.uri;
+		target = call->uri;
 	}
 	else
 	{
@@ -2462,13 +2537,10 @@ void TfrmMain::ExecuteApp(AnsiString cmd, AnsiString params)
 	ShellExecute(NULL, "open", cmd.c_str(), params.c_str(), NULL, SW_SHOWNORMAL);
 }
 
-void TfrmMain::OnCall(AnsiString uri)
+void TfrmMain::OnCall(AnsiString uri, int &callUid)
 {
-	if (call.uri != "")
-	{
-    	return;
-	}
-	MakeCall(uri);
+	int TODO__LIMIT_NUMBER_OF_CALLS;
+	MakeCall(uri, callUid);
 }
 
 void TfrmMain::OnPhonebookEdit(AnsiString uri)
@@ -2532,12 +2604,14 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::DISABLED:
 		LOG("Button with id = %d is disabled\n", id);	
 		break;
-	case Button::MWI:
-		OnCall(cfg.number.c_str());
+	case Button::MWI: {
+		int callUid;
+		OnCall(cfg.number.c_str(), callUid);
 		break;
-	case Button::BLF: {
+	}
+	case Button::BLF:
 	case Button::PRESENCE:
-	case Button::SPEED_DIAL:
+	case Button::SPEED_DIAL: {
 		std::string dial = cfg.number;
 		if (cfg.type == Button::BLF) {
 			// possible override of default number depending on state
@@ -2562,7 +2636,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 				break;
 			}
 		}
-		if (call.connected)
+		int TODO__GET_CURRENT_CALL__MAKING_NEW_CALL_INTENTIONALLY;
+		Call *call = Calls::GetFirstCall();
+		if (call && call->connected)
 		{
 			switch (cfg.blfActionDuringCall)
 			{
@@ -2574,7 +2650,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 				DialString(dial, false);
 				break;
 			case ButtonConf::BLF_IN_CALL_TRANSFER:
-				UA->Transfer(0, dial.c_str()); 			
+				UA->Transfer(call->uid, dial.c_str()); 			
 				break;
 			default:
 				assert(0);
@@ -2583,49 +2659,67 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		else
 		{
-			OnCall(dial.c_str());
+			int callUid;
+			OnCall(dial.c_str(), callUid);
 		}
 		break;
 	}
 	case Button::REDIAL:
 		Redial();
 		break;
-	case Button::DTMF:
+	case Button::DTMF: {
 		DialString(cfg.number, true);
 		break;
+	}
 	case Button::TRANSFER:
 		if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
 			return;
 		UA->Transfer(0, edTransfer->Text);	
 		break;
-	case Button::HOLD:
-		if (call.connected == false && call.progress == false)
-			down = false;
+	case Button::HOLD: {
+		int TODO__CONTROL_HOLD_BTN_DOWN_STATE;
+		//if (call.connected == false && call.progress == false)
+		//	down = false;
 		buttons.UpdateBtnState(cfg.type, down);
-		UA->Hold(0, down);		
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		if (call) {
+			UA->Hold(call->uid, down);
+		}
 		break;
+	}
 	case Button::REREGISTER:
-		UA->ReRegister(0);	
+		UA->ReRegister(0);
 		break;
 	case Button::UNREGISTER:
 		UA->UnRegister(0);
 		break;
-	case Button::MUTE:
-		if (call.connected == false && call.progress == false)
-			down = false;
+	case Button::MUTE: {
+		int TODO__CONTROL_MUTE_BTN_DOWN_STATE;
+		//if (call.connected == false && call.progress == false)
+		//	down = false;
 		buttons.UpdateBtnState(cfg.type, down);
-		UA->Mute(0, down);
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		if (call) {
+			UA->Mute(call->uid, down);
+		}
 		break;
+	}
 	case Button::MUTE_RING:
 		buttons.UpdateBtnState(cfg.type, down);
 		muteRing = down;
 		if (muteRing)
 		{
-			if (call.incoming)
+			int TODO__GET_CURRENT_CALL;
+			Call *call = Calls::GetFirstCall();
+			if (call->incoming)
 			{
+                int TODO__MULTIPLE_CALLS_MULTIPLE_RINGS;
 				UA->PlayStop();
+				int TODO__PHONE_INT_CALL_ID;
 				PhoneInterface::UpdateRing(0);
-				call.ringStarted = false;
+				call->ringStarted = false;
 			}
 		}
 		break;
@@ -2636,10 +2730,15 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		else
 		{
-			AnsiString num = GetCallPeerUri();
-			if (num != "")
+			int TODO__GET_CURRENT_CALL;
+			Call *call = Calls::GetFirstCall();
+			if (call)
 			{
-            	OnPhonebookEdit(num);
+				AnsiString num = GetCallPeerUri(*call);
+				if (num != "")
+				{
+					OnPhonebookEdit(num);
+				}
 			}
 		}
 		break;
@@ -2649,16 +2748,19 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 			OpenContactFile(lastContactEntry);
 		}
 		break;
-	case Button::HTTP_QUERY:
-		HttpQuery();
+	case Button::HTTP_QUERY: {
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		HttpQuery(call);
 		break;
+	}
 	case Button::EXECUTE:
 		ExecuteApp(cfg.number.c_str(), cfg.arg1.c_str());
 		break;
 	case Button::PAGING_TX:
-		if (call.uri != "" || pagingTx.active)
+		if (pagingTx.active)
 		{
-			LOG("Could not start streaming - call or streaming already running\n");
+			LOG("Could not start streaming - streaming already running\n");
 			break;
 		}
 		UA->PagingTx(cfg.number.c_str(), cfg.pagingTxWaveFile.c_str(), cfg.pagingTxCodec.c_str(), cfg.pagingTxPtime);
@@ -2677,21 +2779,48 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		RunScriptFile(SCRIPT_SRC_BUTTON, id, asScriptFile.c_str(), handled);
 		break;
 	}
-	case Button::SIP_ACCESS_URL:
-		AccessCallUrl();
+	case Button::SIP_ACCESS_URL: {
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		AccessCallUrl(call);
 		break;
-	case Button::SWITCH_AUDIO_SOURCE:
-		UA->SwitchAudioSource(0, cfg.audioRxMod.c_str(), cfg.audioRxDev.c_str());
+	}
+	case Button::SWITCH_AUDIO_SOURCE: {
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		if (call)
+		{
+			UA->SwitchAudioSource(call->uid, cfg.audioRxMod.c_str(), cfg.audioRxDev.c_str());
+		}
 		break;
-	case Button::SWITCH_AUDIO_PLAYER:
-		UA->SwitchAudioPlayer(0, cfg.audioTxMod.c_str(), cfg.audioTxDev.c_str());
+	}
+	case Button::SWITCH_AUDIO_PLAYER: {
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		if (call)
+		{
+			UA->SwitchAudioPlayer(call->uid, cfg.audioTxMod.c_str(), cfg.audioTxDev.c_str());
+		}
 		break;
-	case Button::SWITCH_VIDEO_SOURCE:
-		UA->SwitchVideoSource(0, cfg.videoRxMod.c_str(), cfg.videoRxDev.c_str());
+	}
+	case Button::SWITCH_VIDEO_SOURCE: {
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		if (call)
+		{
+			UA->SwitchVideoSource(call->uid, cfg.videoRxMod.c_str(), cfg.videoRxDev.c_str());
+		}
 		break;
-	case Button::HANGUP:
-		Hangup(cfg.sipCode, cfg.sipReason.c_str());
+	}
+	case Button::HANGUP: {
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		if (call)
+		{
+			Hangup(call->uid, cfg.sipCode, cfg.sipReason.c_str());
+		}
 		break;
+	}
 	case Button::SEND_TEXT_MESSAGE: {
 		AnsiString target = cfg.number.c_str();
 		if (target == "")
@@ -2701,20 +2830,32 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		SIMPLE_Messages::Send(target, "", false);
 		break;
 	}
-	case Button::RECORD:
-		StartRecording();
-		break;
-	case Button::RECORD_PAUSE:
-		if (call.recording)
+	case Button::RECORD: {
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		if (call)
 		{
-            LOG("Pause recording\n");
-			UA->RecordPause();
-		}
-		else
-		{
-			LOG("RECORD_PAUSE: not recording\n");
+			StartRecording(*call);
 		}
 		break;
+	}
+	case Button::RECORD_PAUSE: {
+		int TODO__GET_CURRENT_CALL;
+		Call *call = Calls::GetFirstCall();
+		if (call)
+		{
+			if (call->recording)
+			{
+				LOG("Pause recording\n");
+				UA->RecordPause(call->uid);
+			}
+			else
+			{
+				LOG("RECORD_PAUSE: not recording\n");
+			}
+		}
+		break;
+	}
 	case Button::SHOW_SETTINGS:
 		if (appSettings.frmMain.bHideSettings == false)
 		{
@@ -2823,13 +2964,8 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		static_cast<enum ScriptSource>(srcType), srcId, breakRequest, handled,
 		&OnCall, &Hangup, &Answer, &OnGetDial, &OnSetDial,
 		&DialString,
-		&OnGetCall,
-		&OnResetCall,
-		&OnGetPreviousCall,
-		&OnGetRecorder,
 		&OnGetContactName,
 		&OnGetStreamingState,
-		&OnGetAudioErrorCount,
 		&OnSetTrayIcon,
 		&OnGetRegistrationState,
 		&OnPluginSendMessageText, &OnPluginEnable,
