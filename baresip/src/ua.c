@@ -720,7 +720,7 @@ int ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuse
  *
  * @return 0 if success, otherwise errorcode
  */
-int ua_connect(struct ua *ua, int callUid, struct call **callp,
+int ua_connect(struct ua *ua, unsigned int callUid, struct call **callp,
 	       const char *from_uri, const char *uri,
 	       const char *params, enum vidmode vmode, void *vidisp_parent_handle, const char* extra_hdr_lines)
 {

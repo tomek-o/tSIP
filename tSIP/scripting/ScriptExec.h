@@ -25,9 +25,9 @@ class ScriptExec
 private:
 	friend class LuaState;
 
-	typedef void (__closure *CallbackCall)(AnsiString number, int &callUid);
-	typedef void (__closure *CallbackHangup)(int callUid, int sipCode, AnsiString reason);
-	typedef void (__closure *CallbackAnswer)(int callUid);
+	typedef void (__closure *CallbackCall)(AnsiString number, unsigned int &callUid);
+	typedef void (__closure *CallbackHangup)(unsigned int callUid, int sipCode, AnsiString reason);
+	typedef void (__closure *CallbackAnswer)(unsigned int callUid);
 	typedef std::string (__closure *CallbackGetDial)(void);
 	typedef void (__closure *CallbackSetDial)(std::string number);
 	typedef void (__closure *CallbackSendDtmf)(const std::string& digits, bool runScript);
@@ -39,10 +39,10 @@ private:
 	typedef int (__closure *CallbackPluginEnable)(const char* dllName, bool state);
 	typedef int (__closure *CallbackGetContactId)(const char* user);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction);
-	typedef int (__closure *CallbackRecordStart)(int callUid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
+	typedef int (__closure *CallbackRecordStart)(unsigned int callUid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
 	// pop single DTMF character from RX queue
-	typedef std::string (__closure *CallbackGetRxDtmf)(int callUid);
-	typedef void (__closure *CallbackShowTrayNotifier)(AnsiString description, AnsiString uri, bool incoming);
+	typedef std::string (__closure *CallbackGetRxDtmf)(unsigned int callUid);
+	typedef void (__closure *CallbackShowTrayNotifier)(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	typedef void (__closure *CallbackHideTrayNotifier)(void);
 	typedef std::string (__closure *CallbackGetUserName)(void);
 	typedef void (__closure *CallbackProgrammableButtonClick)(int id);

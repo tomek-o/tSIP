@@ -40,6 +40,9 @@ struct recorder_st {
 	HANDLE thread;
 
 	struct lock* rec_lock;
+
+	unsigned int call_uid;
+
 	bool filename_set;
 	char filename[512];
 	unsigned int channels;
@@ -54,10 +57,11 @@ struct recorder_st {
 	struct aubuf *abtx;
 };
 
-int recorder_start(struct recorder_st *st, const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate) {
+int recorder_start(struct recorder_st *st, unsigned int call_uid, const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate) {
 	if (st->rec_lock == NULL)
 		return -1;
 	lock_write_get(st->rec_lock);
+	st->call_uid = call_uid;
 	if (st->filename_set == false) {
 		st->channels = rec_channels;
 		st->side = rec_side;
@@ -77,6 +81,11 @@ void recorder_pause_resume(struct recorder_st *st) {
 
 void recorder_pause(struct recorder_st *st) {
 	st->pause_request = true;
+}
+
+unsigned int recorder_get_call_uid(struct recorder_st *st) {
+	assert(st);
+	return st->call_uid;
 }
 
 struct enc_st {

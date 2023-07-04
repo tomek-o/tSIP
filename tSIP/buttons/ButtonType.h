@@ -42,6 +42,7 @@ namespace Button
 		ZRTP_VERIFY_SAS,
 		ZRTP_UNVERIFY_SAS,
 		SWITCH_VIDEO_SOURCE,
+		LINE,
 		
 		TYPE_LIMITER
 	};

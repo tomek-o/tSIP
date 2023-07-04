@@ -114,8 +114,8 @@ struct video *call_video(const struct call *call);
 struct list  *call_streaml(const struct call *call);
 void          call_enable_rtp_timeout(struct call *call, uint32_t timeout_ms);
 struct recorder_st* call_get_recorder(const struct call *call);
-void call_set_uid(struct call *call, int uid);
-int call_get_uid(struct call *call);
+void call_set_uid(struct call *call, unsigned int uid);
+unsigned int call_get_uid(struct call *call);
 
 /*
  * Paging TX
@@ -603,7 +603,7 @@ typedef void (options_resp_h)(int err, const struct sip_msg *msg, void *arg);
 
 /* Multiple instances */
 int  ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuser);
-int  ua_connect(struct ua *ua, int callUid, struct call **callp,
+int  ua_connect(struct ua *ua, unsigned int callUid, struct call **callp,
 		const char *from_uri, const char *uri,
 		const char *params, enum vidmode vmode, void *vidisp_parent_handle, const char* extra_hdr_lines);
 void ua_hangup(struct ua *ua, struct call *call,

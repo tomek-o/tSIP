@@ -43,7 +43,7 @@ enum recorder_file_format
 	\param rec_side which call side (local/remote) to record; used only if recording as mono/single channel
 	\return 0 on success
 */
-int recorder_start(struct recorder_st *st, const char* const filename, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate);
+int recorder_start(struct recorder_st *st, unsigned int call_uid, const char* const filename, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate);
 
 /** \brief Toggle recorder active/paused
 */
@@ -53,6 +53,8 @@ void recorder_pause(struct recorder_st *st);
 
 struct recorder_st* baresip_recorder_st_from_enc(struct aufilt_enc_st *enc);
 struct recorder_st* baresip_recorder_st_from_dec(struct aufilt_dec_st *dec);
+
+unsigned int recorder_get_call_uid(struct recorder_st *st);
 
 #ifdef __cplusplus
 }

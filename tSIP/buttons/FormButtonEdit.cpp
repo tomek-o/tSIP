@@ -362,6 +362,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::REREGISTER:
 	case Button::MUTE_RING:
 	case Button::MUTE:
+	case Button::LINE:
 		edNumber->Visible = false;
 		lblNumber->Visible = false;
 		break;

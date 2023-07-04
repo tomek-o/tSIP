@@ -127,7 +127,8 @@ void __fastcall TfrmContacts::lvContactsDblClick(TObject *Sender)
 	}
 	int id = item->Index;
 	const Contacts::Entry &entry = filteredContacts[id].entry;
-	callbackCall(entry.GetMainUri().c_str());
+	unsigned int callUid;
+	callbackCall(entry.GetMainUri().c_str(), callUid);
 }
 //---------------------------------------------------------------------------
 
@@ -154,7 +155,8 @@ void __fastcall TfrmContacts::miCallItemClick(TObject *Sender)
 	TMenuItem *item = dynamic_cast<TMenuItem*>(Sender);
 	if (item == NULL)
 		return;
-	callbackCall(item->Caption.c_str());
+	unsigned int callUid;
+	callbackCall(item->Caption.c_str(), callUid);
 }
 
 void __fastcall TfrmContacts::miMessageItemClick(TObject *Sender)
@@ -174,7 +176,8 @@ void __fastcall TfrmContacts::miCallSingleItemClick(TObject *Sender)
 	AnsiString needle = singleItemCallText + " ";
 	if (strncmp(text.c_str(), needle.c_str(), needle.Length()) == 0)
 	{
-		callbackCall(text.c_str() + needle.Length());
+		unsigned int callUid;
+		callbackCall(text.c_str() + needle.Length(), callUid);
 	}
 }
 

@@ -14,6 +14,7 @@
 #include "SettingsAppVersion.h"
 #include "Settings.h"	// just for transition from column-based version < 0.2
 #include "Sizes.h"
+#include "ua/Calls.h"
 #include "common/TimeCounter.h" 
 #include <assert.h>
 #include <algorithm>
@@ -1113,6 +1114,8 @@ void ProgrammableButtons::ApplyButtonCfg(int id, const ButtonConf &cfg)
 		{
         	callbackRestartUa();
 		}
+
+		Calls::OnButtonConfigChange();
 	}
 	else
 	{

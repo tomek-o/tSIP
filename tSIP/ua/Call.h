@@ -50,7 +50,9 @@ struct Call
 			active(false),
 			verified(false)
 		{}
-	} zrtp;	
+	} zrtp;
+
+	int btnId;
 
 	Call(void):
 		uid(0),
@@ -64,7 +66,8 @@ struct Call
 		recording(false),
 		ringStarted(false),
 		displayParentHandle(NULL),
-		audioErrorCount(0)
+		audioErrorCount(0),
+		btnId(-1)
 	{}
 	void reset(void);
 };

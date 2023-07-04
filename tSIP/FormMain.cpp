@@ -347,6 +347,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	pnlDialpad->DoubleBuffered = true;
 
 	SetMainWindowLayout(appSettings.frmMain.layout);
+
+	Calls::OnButtonConfigChange();
 }
 
 __fastcall TfrmMain::~TfrmMain()
@@ -727,6 +729,7 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 		{
         	LOG("Failed to write button configuration!\n");
 		}
+		Calls::OnButtonConfigChange();
 	}
 	if (restartUa)
 	{
@@ -885,9 +888,9 @@ void TfrmMain::UpdateCallHistory(void)
 	}
 }
 
-void TfrmMain::ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming)
+void TfrmMain::ShowTrayNotifier(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming)
 {
-	frmTrayNotifier->SetData(description, uri, incoming);
+	frmTrayNotifier->SetData(callUid, description, uri, incoming);
 	frmTrayNotifier->ShowWithoutFocus();
 }
 
@@ -898,27 +901,26 @@ void TfrmMain::HideTrayNotifier(void)
 
 void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
 {
-#if 0
-	if (call.uri == "" && call.incoming == false && !pagingTx.active)
+	if (pagingTx.active)
+		return;
+	Call* call = Calls::GetCurrentCall();
+	if (call == NULL)
 	{
 		AnsiString target = cbCallURI->Text.Trim();
 		if (target != "")
 		{
-			MakeCall(target);
+			unsigned int callUid;
+			MakeCall(target, callUid);
 		}
 	}
-	else if (call.incoming)
+	else if (call->incoming)
 	{
-		Answer();
-		//UA->Answer(0, appSettings.uaConf.audioCfgPlayIntercom.mod, appSettings.uaConf.audioCfgPlayIntercom.dev);
+		Answer(call->uid);
 	}
-#else
-	int TODO__BTN_MAKE_CALL;
-#endif
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::MakeCall(AnsiString target, int &callUid)
+void TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 {
 	Call* newCall = Calls::Alloc();
 	Call& call = *newCall;
@@ -964,39 +966,39 @@ void TfrmMain::MakeCall(AnsiString target, int &callUid)
 
 void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
 {
-#if 0
-	Hangup();
-	UA->PlayStop();
-#else
-	int TODO__BTN_HANGUP;
-#endif
+	Call* call = Calls::GetCurrentCall();
+	if (call)
+	{
+		Hangup(call->uid);
+		UA->PlayStop();
+	}
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::Hangup(int uid, int sipCode, AnsiString reason)
+void TfrmMain::Hangup(unsigned int callUid, int sipCode, AnsiString reason)
 {
-	Call *c = Calls::FindByUid(uid);
+	Call *c = Calls::FindByUid(callUid);
 	if (c == NULL)
 		return;
 	c->disconnecting = true;
-	UA->Hangup(uid, sipCode, reason);
+	UA->Hangup(callUid, sipCode, reason);
 }
 
-void TfrmMain::Answer(int uid)
+void TfrmMain::Answer(unsigned int callUid)
 {
-	Call *call = Calls::FindByUid(uid);
+	Call *call = Calls::FindByUid(callUid);
 	if (call == NULL)
 		return;
 	if (call->incoming)
 	{
 		call->displayParentHandle = GetDisplayParentHandle();
-		UA->Answer(uid, "", "", appSettings.video.enabled, call->displayParentHandle);
+		UA->Answer(callUid, "", "", appSettings.video.enabled, call->displayParentHandle);
 		if (appSettings.frmMain.bShowWhenAnsweringCall)
 		{
 			if (!Visible)
 			{
                 ToggleVisibility();
-            }
+			}
 		}
 		if (appSettings.frmTrayNotifier.hideWhenAnsweringCall)
 		{
@@ -1005,7 +1007,7 @@ void TfrmMain::Answer(int uid)
 	}
 	else
 	{
-    	LOG("Answer: call with UID = %u is not in incoming state, current state = %d\n", uid, call->state);
+    	LOG("Answer: call with UID = %u is not in incoming state, current state = %d\n", callUid, call->state);
 	}
 }
 
@@ -1139,31 +1141,31 @@ int TfrmMain::OnPluginEnable(const char* dllName, bool state)
 	return -1;
 }
 
-int TfrmMain::OnRecordStart(int uid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate)
+int TfrmMain::OnRecordStart(unsigned int callUid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate)
 {
 	if (appSettings.uaConf.recording.enabled == false)
 	{
 		LOG("OnRecordStart: recording is not enabled in configuration!\n");
 		return -1;
 	}
-	Call *call = Calls::FindByUid(uid);
+	Call *call = Calls::FindByUid(callUid);
 	if (call == NULL)
 	{
-		LOG("OnRecordStart: call with UID %u not found\n", uid);
+		LOG("OnRecordStart: call with UID %u not found\n", callUid);
 		return -2;
 	}
 	if (call->connected == false && call->progress == false)
 	{
-		LOG("OnRecordStart: call %u with no active media\n", uid);
+		LOG("OnRecordStart: call %u with no active media\n", callUid);
 		return -2;
 	}
-	UA->Record(uid, file, channels, side, fileFormat, bitrate);
+	UA->Record(callUid, file, channels, side, fileFormat, bitrate);
 	call->recordFile = file;
 	call->recording = true;
 	return 0;
 }
 
-std::string TfrmMain::OnGetRxDtmf(int callUid)
+std::string TfrmMain::OnGetRxDtmf(unsigned int callUid)
 {
 	Call *call = Calls::FindByUid(callUid);
 	if (call == NULL)
@@ -1238,7 +1240,7 @@ AnsiString TfrmMain::GetClip(AnsiString uri)
 	}
 }
 
-void TfrmMain::UpdateClip(int callUid)
+void TfrmMain::UpdateClip(unsigned int callUid)
 {
 	Call *call = Calls::FindByUid(callUid);
 	if (call == NULL)
@@ -1393,7 +1395,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		pollCnt++;
 		if ((pollCnt % 20) == 0)
 		{
-			Call *call = Calls::GetFirstCall();
+			Call *call = Calls::GetCurrentCall();
 			if (call && call->connected)
 			{
 				unsigned int delta = SecondsBetween(Now(), call->timeTalkStart);
@@ -1472,7 +1474,7 @@ void TfrmMain::PollCallbackQueue(void)
 		{
 			AnsiString asStateText;
 			tmrClearCallState->Enabled = false;
-			LOG("Callback::CALL_STATE, call uid = %d, state = %d\n", cb.callId, static_cast<int>(cb.state));
+			LOG("Callback::CALL_STATE, call uid = %d, state = %d\n", cb.callUid, static_cast<int>(cb.state));
 			switch(cb.state)
 			{
 			case Callback::CALL_STATE_INCOMING: {
@@ -1540,7 +1542,7 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 				if (answered == false && muteRing == false)
 				{
-					StartRing(RingFile(cb.alertInfo));
+					StartRing(*call, RingFile(cb.alertInfo));
 				}
 				lbl2ndParty->Caption = GetClip(GetCallPeerUri(*call));
 				lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri(*call)));
@@ -1582,7 +1584,7 @@ void TfrmMain::PollCallbackQueue(void)
 				asStateText = "Calling...";
 				lbl2ndParty->Caption = GetClip(cb.caller);
 				lastContactEntry = contacts.GetEntry(CleanUri(cb.caller));
-				Call *call = Calls::FindByUid(cb.callId);
+				Call *call = Calls::FindByUid(cb.callUid);
 				if (call)
 					call->recordFile = "";
 				if (lastContactEntry)
@@ -1607,9 +1609,8 @@ void TfrmMain::PollCallbackQueue(void)
 
 				if (Visible == false && appSettings.frmTrayNotifier.showOnOutgoing)
 				{
-                    int TODO__PASS_CALL_UID;
 					if (call)
-						ShowTrayNotifier(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call->incoming);
+						ShowTrayNotifier(call->uid, lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call->incoming);
 				}
 				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(cb.caller).c_str()); // CleanUri(cb.caller).c_str());
 
@@ -1623,7 +1624,7 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			case Callback::CALL_STATE_PROGRESS: {
 				asStateText = "Call state progress";
-				Call *call = Calls::FindByUid(cb.callId);
+				Call *call = Calls::FindByUid(cb.callUid);
 				if (call)
 				{
 					call->progress = true;
@@ -1636,7 +1637,7 @@ void TfrmMain::PollCallbackQueue(void)
 			}
 			case Callback::CALL_STATE_ESTABLISHED: {
 				asStateText = "Connected";
-				Call *call = Calls::FindByUid(cb.callId);
+				Call *call = Calls::FindByUid(cb.callUid);
 				if (call)
 				{
 					call->connected = true;
@@ -1648,7 +1649,7 @@ void TfrmMain::PollCallbackQueue(void)
 					call->lastScode = 200;
 					call->lastReplyLine = "200 OK";
 
-					UpdateClip(cb.callId);
+					UpdateClip(cb.callUid);
 
 					PhoneInterface::UpdateRing(0);
 					tmrAutoAnswer->Enabled = false;
@@ -1670,7 +1671,7 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			}
 			case Callback::CALL_STATE_TRANSFER: {
-				Call *call = Calls::FindByUid(cb.callId);
+				Call *call = Calls::FindByUid(cb.callUid);
 				if (call)
 				{
 					call->uri = cb.caller;
@@ -1681,7 +1682,7 @@ void TfrmMain::PollCallbackQueue(void)
 			case Callback::CALL_STATE_TRANSFER_OOD:
 				if (appSettings.uaConf.handleOodRefer)
 				{
-					Call *call = Calls::GetFirstCall();
+					Call *call = Calls::GetCurrentCall();
 					if (call)
 					{
 						if (call->uri == "" && call->incoming == false && !pagingTx.active)
@@ -1690,7 +1691,7 @@ void TfrmMain::PollCallbackQueue(void)
 							AnsiString target = cb.caller;
 							if (target != "")
 							{
-								int callUid;
+								unsigned int callUid;
 								MakeCall(target, callUid);
 							}
 						}
@@ -1702,7 +1703,7 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 				break;
 			case Callback::CALL_STATE_CLOSED: {
-				Call * call = Calls::FindByUid(cb.callId);
+				Call * call = Calls::FindByUid(cb.callUid);
 				if (call)
 				{
 					if (cb.scode != 0)
@@ -1710,8 +1711,7 @@ void TfrmMain::PollCallbackQueue(void)
 						call->lastScode = cb.scode;
 						call->lastReplyLine = cb.caller;
 					}
-					int TODO__PREVIOUS_CALL;
-					//¹previousCall = call;
+					Calls::SetPreviousCall(*call);
 					if (call->ringStarted) {
 						UA->PlayStop();
 						call->ringStarted = false;
@@ -1789,7 +1789,7 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			}
 
-			Call *call = Calls::FindByUid(cb.callId);
+			Call *call = Calls::FindByUid(cb.callUid);
 
 			if (call)
 			{
@@ -1809,8 +1809,7 @@ void TfrmMain::PollCallbackQueue(void)
 					{
 						if (call)
 						{
-							int TODO__PASS_CALL_UID;
-							ShowTrayNotifier(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call->incoming);
+							ShowTrayNotifier(call->uid, lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call->incoming);
 						}
 					}
 				}
@@ -1842,19 +1841,19 @@ void TfrmMain::PollCallbackQueue(void)
 				AnsiString asScriptFile;
 				bool handled = true;
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onCallState.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, cb.callId, asScriptFile.c_str(), handled);
+				RunScriptFile(SCRIPT_SRC_ON_CALL_STATE, cb.callUid, asScriptFile.c_str(), handled);
 			}
 
 			if (cb.state == Callback::CALL_STATE_CLOSED)
 			{
-				Calls::RemoveByUid(cb.callId);
+				Calls::RemoveByUid(cb.callUid);
 			}
 
 			break;
 		}
 		case Callback::CALL_REINVITE_RECEIVED:
 		{
-			Call *call = Calls::FindByUid(cb.callId);
+			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
 				call->uri = cb.caller;
@@ -1862,9 +1861,9 @@ void TfrmMain::PollCallbackQueue(void)
 				call->paiPeerUri = cb.paiPeerUri;
 				call->paiPeerName = GetPeerName(cb.paiPeerName);
 
-				UpdateClip(cb.callId);
+				UpdateClip(cb.callUid);
 
-				frmTrayNotifier->SetData(lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);
+				frmTrayNotifier->SetData(call->uid, lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);
 			}
 			break;
 		}
@@ -1872,7 +1871,7 @@ void TfrmMain::PollCallbackQueue(void)
 		{
 			if (cb.dtmfActive == true)
 			{
-				Call *call = Calls::FindByUid(cb.callId);
+				Call *call = Calls::FindByUid(cb.callUid);
 				if (call)
 				{
 					call->dtmfRxQueue.push_back(cb.dtmf[1]);
@@ -1882,7 +1881,7 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::SET_CALL_DATA:
 		{
-			Call *call = Calls::FindByUid(cb.callId);
+			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
 				call->initialRxInvite = cb.initialRxInvite;
@@ -1964,7 +1963,7 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::RECORDER_STATE:
 		{
-			Call *call = Calls::FindByUid(cb.callId);
+			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
 				Recorder &recorder = call->recorder;
@@ -1983,7 +1982,7 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::ENCRYPTION_STATE:
 		{
-			Call *call = Calls::FindByUid(cb.callId);
+			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
 				call->zrtp.sessionId = cb.zrtp.sessionId;
@@ -2210,7 +2209,7 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::EVENT_TALK:
 		{
-			Call *call = Calls::GetFirstCall();
+			Call *call = Calls::GetCurrentCall();
 			if (call && call->incoming)
 			{
 				if (appSettings.uaConf.answerOnEventTalk)
@@ -2226,8 +2225,7 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::AUDIO_ERROR:
 		{
-			int TODO__MAKE_SURE_CALL_ID_IS_SET;
-			Call *call = Calls::FindByUid(cb.callId);
+			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
 				call->audioErrorCount++;
@@ -2294,8 +2292,7 @@ void TfrmMain::PollCallbackQueue(void)
 
 void TfrmMain::Dial(char digit)
 {
-	int TODO__GET_CURRENT_CALL;
-	Call *call = Calls::GetFirstCall();
+	Call *call = Calls::GetCurrentCall();
 
 	if (call && (call->connected || call->progress))
 	{
@@ -2450,7 +2447,7 @@ void TfrmMain::Redial(void)
 		const History::Entry &entry = entries[i];
 		if (entry.incoming == false)
 		{
-			int callId;
+			unsigned int callId;
 			MakeCall(entry.uri.c_str(), callId);
 			break;
 		}
@@ -2505,8 +2502,7 @@ void TfrmMain::OnHttpQuery(AnsiString target)
 
 void TfrmMain::ExecuteApp(AnsiString cmd, AnsiString params)
 {
-	int TODO__GET_CURRENT_CALL;
-	Call *call = Calls::GetFirstCall();
+	Call *call = Calls::GetCurrentCall();
 
 	AnsiString target;
 	if (call && call->uri != "")
@@ -2537,7 +2533,7 @@ void TfrmMain::ExecuteApp(AnsiString cmd, AnsiString params)
 	ShellExecute(NULL, "open", cmd.c_str(), params.c_str(), NULL, SW_SHOWNORMAL);
 }
 
-void TfrmMain::OnCall(AnsiString uri, int &callUid)
+void TfrmMain::OnCall(AnsiString uri, unsigned int &callUid)
 {
 	int TODO__LIMIT_NUMBER_OF_CALLS;
 	MakeCall(uri, callUid);
@@ -2605,7 +2601,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		LOG("Button with id = %d is disabled\n", id);	
 		break;
 	case Button::MWI: {
-		int callUid;
+		unsigned int callUid;
 		OnCall(cfg.number.c_str(), callUid);
 		break;
 	}
@@ -2637,7 +2633,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 			}
 		}
 		int TODO__GET_CURRENT_CALL__MAKING_NEW_CALL_INTENTIONALLY;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call && call->connected)
 		{
 			switch (cfg.blfActionDuringCall)
@@ -2659,7 +2655,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		else
 		{
-			int callUid;
+			unsigned int callUid;
 			OnCall(dial.c_str(), callUid);
 		}
 		break;
@@ -2681,8 +2677,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		//if (call.connected == false && call.progress == false)
 		//	down = false;
 		buttons.UpdateBtnState(cfg.type, down);
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call) {
 			UA->Hold(call->uid, down);
 		}
@@ -2699,8 +2694,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		//if (call.connected == false && call.progress == false)
 		//	down = false;
 		buttons.UpdateBtnState(cfg.type, down);
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call) {
 			UA->Mute(call->uid, down);
 		}
@@ -2711,13 +2705,12 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		muteRing = down;
 		if (muteRing)
 		{
-			int TODO__GET_CURRENT_CALL;
-			Call *call = Calls::GetFirstCall();
+			Call *call = Calls::GetCurrentCall();
 			if (call->incoming)
 			{
                 int TODO__MULTIPLE_CALLS_MULTIPLE_RINGS;
 				UA->PlayStop();
-				int TODO__PHONE_INT_CALL_ID;
+				int TODO__PHONE_INTERFACE_CALL_ID;
 				PhoneInterface::UpdateRing(0);
 				call->ringStarted = false;
 			}
@@ -2730,8 +2723,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		else
 		{
-			int TODO__GET_CURRENT_CALL;
-			Call *call = Calls::GetFirstCall();
+			Call *call = Calls::GetCurrentCall();
 			if (call)
 			{
 				AnsiString num = GetCallPeerUri(*call);
@@ -2749,8 +2741,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		break;
 	case Button::HTTP_QUERY: {
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		HttpQuery(call);
 		break;
 	}
@@ -2780,14 +2771,15 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::SIP_ACCESS_URL: {
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
-		AccessCallUrl(call);
+		Call *call = Calls::GetCurrentCall();
+		if (call)
+		{
+			AccessCallUrl(call);
+		}
 		break;
 	}
 	case Button::SWITCH_AUDIO_SOURCE: {
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call)
 		{
 			UA->SwitchAudioSource(call->uid, cfg.audioRxMod.c_str(), cfg.audioRxDev.c_str());
@@ -2795,8 +2787,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::SWITCH_AUDIO_PLAYER: {
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call)
 		{
 			UA->SwitchAudioPlayer(call->uid, cfg.audioTxMod.c_str(), cfg.audioTxDev.c_str());
@@ -2804,8 +2795,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::SWITCH_VIDEO_SOURCE: {
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call)
 		{
 			UA->SwitchVideoSource(call->uid, cfg.videoRxMod.c_str(), cfg.videoRxDev.c_str());
@@ -2813,8 +2803,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::HANGUP: {
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call)
 		{
 			Hangup(call->uid, cfg.sipCode, cfg.sipReason.c_str());
@@ -2831,8 +2820,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::RECORD: {
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call)
 		{
 			StartRecording(*call);
@@ -2840,8 +2828,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::RECORD_PAUSE: {
-		int TODO__GET_CURRENT_CALL;
-		Call *call = Calls::GetFirstCall();
+		Call *call = Calls::GetCurrentCall();
 		if (call)
 		{
 			if (call->recording)
@@ -2896,6 +2883,10 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::ZRTP_UNVERIFY_SAS:
 		UA->ZrtpVerifySas(false);
 		break;
+	case Button::LINE: {
+		Calls::OnLineButtonClick(id, btn);
+		break;
+	}
 
 	default:
 		LOG("Unhandled BTN type = %d\n", static_cast<int>(cfg.type));
@@ -3051,14 +3042,17 @@ void TfrmMain::ToggleSpeedDial(void)
 
 void __fastcall TfrmMain::cbCallURIKeyPress(TObject *Sender, char &Key)
 {
+	Call* call = Calls::GetCurrentCall();
+
 	if (Key == VK_RETURN)
 	{
-		if (call.uri == "" && call.incoming == false && !pagingTx.active)
+		if (call == NULL && !pagingTx.active)
 		{
 			AnsiString target = cbCallURI->Text.Trim();
 			if (target != "")
 			{
-				MakeCall(target);
+				unsigned int callId;
+				MakeCall(target, callId);
 			}
 		}
 		if (appSettings.frmMain.bNoBeepOnEnterKey)
@@ -3066,13 +3060,18 @@ void __fastcall TfrmMain::cbCallURIKeyPress(TObject *Sender, char &Key)
 			// this was unintentional, but it looks like Windows beep is meaning that [Enter] is not accepted by the control
 			Key = NULL;
 		}
+		return;
 	}
-	const char* dtmfKeys = "01234567890*#ABCDabcd";
-	if (strchr(dtmfKeys, Key))
+
+	if (call)
 	{
-		if (call.connected || call.progress)
+		const char* dtmfKeys = "01234567890*#ABCDabcd";
+		if (strchr(dtmfKeys, Key))
 		{
-			UA->SendDigit(0, toupper(Key));
+			if (call->connected || call->progress)
+			{
+				UA->SendDigit(call->uid, toupper(Key));
+			}
 		}
 	}
 
@@ -3196,27 +3195,35 @@ void __fastcall TfrmMain::actExitExecute(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::AutoAnswer(void)
+void TfrmMain::AutoAnswer(unsigned int callUid)
 {
 	if (autoAnswerCode == 200) {
 		if (autoAnswerIntercom) {
 			LOG("Answering with module %s, device %s\n", appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
-			UA->Answer(0, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str(), appSettings.video.enabled, GetDisplayParentHandle());
+			UA->Answer(callUid, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str(), appSettings.video.enabled, GetDisplayParentHandle());
 		} else {
-			Answer();
+			Answer(callUid);
 		}
 		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
 		{
 			frmTrayNotifier->HideWindow();
 		}
 	} else if (autoAnswerCode >= 400) {
-		UA->Hangup(0, autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
+		UA->Hangup(callUid, autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
 		lbl2ndParty->Caption = "";
 		lbl2ndPartyDesc->Caption = "";
 		lblCallState->Caption = "";
-		call.incoming = false;
-		call.progress = false;
-		call.connected = false;
+		Call* call = Calls::FindByUid(callUid);
+		if (call)
+		{
+			call->incoming = false;
+			call->progress = false;
+			call->connected = false;
+		}
+		else
+		{
+        	LOG("AutoAnswer: call %u not found!\n", callUid);
+		}
 		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
 		{
 			frmTrayNotifier->HideWindow();
@@ -3227,7 +3234,11 @@ void TfrmMain::AutoAnswer(void)
 void __fastcall TfrmMain::tmrAutoAnswerTimer(TObject *Sender)
 {
 	tmrAutoAnswer->Enabled = false;
+#if 0
 	AutoAnswer();
+#else
+	int TODO__AUTO_ANSWER_AFTER_TIME;
+#endif
 }
 //---------------------------------------------------------------------------
 
@@ -3242,7 +3253,7 @@ void __fastcall TfrmMain::edTransferKeyPress(TObject *Sender, char &Key)
 		if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
 			return;
 		UA->Transfer(0, edTransfer->Text);
-	}	
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -3299,20 +3310,29 @@ void TfrmMain::HandleCommandLine(void)
 	if (cmd.action == CommandLine::ACTION_HANGUP)
 	{
 		LOG("action = HANGUP\n");
-		Hangup();
+		Call* call = Calls::GetCurrentCall();
+		if (call)
+		{
+			Hangup(call->uid);
+		}
 	}
 	else if (cmd.action == CommandLine::ACTION_ANSWER)
 	{
 		LOG("action = ANSWER\n");
-		Answer();
+		Call* call = Calls::GetCurrentCall();
+		if (call)
+		{
+			Answer(call->uid);
+		}
 	}
 	else if (cmd.action == CommandLine::ACTION_CALL)
 	{
 		AnsiString target = cmd.asTarget.Trim();
 		LOG("action = CALL, target = %s\n", target.c_str());
-		if (target != "" && !pagingTx.active && call.uri == "")
+		if (target != "" && !pagingTx.active)
 		{
-			MakeCall(target);
+			unsigned int callUid;
+			MakeCall(target, callUid);
 		}
 		else
 		{
@@ -3351,18 +3371,30 @@ void TfrmMain::HandleCommandLine(void)
 	}
 	else if (cmd.action == CommandLine::ACTION_RECORD_START)
 	{
-		StartRecording();
+		Call* call = Calls::GetCurrentCall();
+		if (call)
+		{
+			StartRecording(*call);
+		}
 	}
 	else if (cmd.action == CommandLine::ACTION_RECORD_PAUSE)
 	{
-		if (call.recording)
+		Call* call = Calls::GetCurrentCall();
+		if (call)
 		{
-			LOG("Pause recording\n");
-			UA->RecordPause();
+			if (call->recording)
+			{
+				LOG("Pause recording\n");
+				UA->RecordPause(call->uid);
+			}
+			else
+			{
+				LOG("RECORD_PAUSE: not recording\n");
+			}
 		}
 		else
 		{
-			LOG("RECORD_PAUSE: not recording\n");
+			LOG("RECORD_PAUSE: no current call\n");
 		}
 	}
 	else if (cmd.action == CommandLine::ACTION_SCRIPT)
@@ -3405,7 +3437,7 @@ void TfrmMain::ProgrammableButtonClick(int buttonId)
 		btn->OnClick(btn);
 }
 
-void TfrmMain::StartRing(AnsiString wavFile)
+void TfrmMain::StartRing(Call &call, AnsiString wavFile)
 {
 	UA->StartRing(wavFile);
 	PhoneInterface::UpdateRing(1);
@@ -3478,37 +3510,51 @@ void TfrmMain::ExecAction(const struct Action& action)
 				btn->OnClick(btn);
 		}
 		break;
-	case Action::TYPE_ANSWER:
-		Answer();
+	case Action::TYPE_ANSWER: {
+		Call* call = Calls::GetCurrentCall();
+		if (call)
+		{
+			Answer(call->uid);
+		}
 		break;
-	case Action::TYPE_HANGUP:
-		Hangup();
+	}
+	case Action::TYPE_HANGUP: {
+		Call* call = Calls::GetCurrentCall();
+		if (call)
+		{
+			Hangup(call->uid);
+		}
 		break;
+	}
 	case Action::TYPE_REDIAL:
 		Redial();
 		break;
 	case Action::TYPE_CALL_CLIPBOARD:
-		if (call.uri == "" && !pagingTx.active)	///< \todo better way to check if there is no current call
+		if (!pagingTx.active)
 		{
 			AnsiString target = CleanNumber(Clipboard()->AsText);
 			if (target != "")
 			{
-				MakeCall(target);
+				unsigned int callUid;
+				MakeCall(target, callUid);
 			}
 		}
 		break;
 	case Action::TYPE_SHOWHIDE_SIDECAR:
 		ToggleSpeedDial();
 		break;
-	case Action::TYPE_ANSWER_HANGUP:
-		if (call.state != Callback::CALL_STATE_CLOSED)
+	case Action::TYPE_ANSWER_HANGUP: {
+		// answer incoming call, hangup if call state is other
+		Call* call = Calls::GetCurrentCall();
+		if (call)
 		{
-			if (call.state == Callback::CALL_STATE_INCOMING)
-				Answer();
+			if (call->state == Callback::CALL_STATE_INCOMING)
+				Answer(call->uid);
 			else
-				Hangup();
+				Hangup(call->uid);
 		}
 		break;
+	}
 	case Action::TYPE_SCRIPT_FILE:
 		if (action.scriptFile != "")
 		{
@@ -3551,11 +3597,15 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 	case KEY_HOOK:
 		if (state == 1)
 		{
-			Hangup();
+			Call* call = Calls::GetCurrentCall();
+			if (call)
+				Hangup(call->uid);
 		}
 		else
 		{
-			Answer();
+			Call* call = Calls::GetCurrentCall();
+			if (call)
+				Answer(call->uid);
 		}
 		break;
 	case KEY_0:
@@ -3576,26 +3626,31 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 	case KEY_HASH:
 		Dial('#');
 		break;
-	case KEY_OK:
-		if (call.uri == "" && call.incoming == false && !pagingTx.active)
+	case KEY_OK: {
+		Call* call = Calls::GetCurrentCall();	
+		if (call == NULL && !pagingTx.active)
 		{
 			AnsiString target = cbCallURI->Text.Trim();
 			if (target != "")
 			{
-				MakeCall(target);
+				unsigned int callUid;
+				MakeCall(target, callUid);
 			}
 		}
 		break;
-	case KEY_C:
-		if (call.incoming && !call.connected)
+	}
+	case KEY_C: {
+		Call* call = Calls::GetCurrentCall();
+		if (call && call->incoming && !call->connected)
 		{
-			Hangup();
+			Hangup(call->uid);
 		}
 		else
 		{
 			CallNumberBackspace();
 		}
 		break;
+	}
 	default:
 		break;
 	}
@@ -3603,7 +3658,8 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 
 int TfrmMain::OnPhonePagingTx(const char* target, const char* filename, const char* codecname)
 {
-	if (call.uri != "" || pagingTx.active)
+	Call* call = Calls::GetCurrentCall();
+	if (call != NULL || pagingTx.active)
 	{
 		LOG("Could not start streaming - call or streaming already running\n");
 		return -1;

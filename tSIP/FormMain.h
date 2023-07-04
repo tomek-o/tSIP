@@ -161,14 +161,14 @@ private:	// User declarations
 	void UpdateLogConfig(void);
 	void SetSpeedDial(bool visible);
 	void UpdateCallHistory(void);
-	void ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming);
+	void ShowTrayNotifier(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	void HideTrayNotifier(void);
 	AnsiString CleanUri(AnsiString uri);
 	AnsiString GetClip(AnsiString uri);
-	void MakeCall(AnsiString target, int &callUid);
+	void MakeCall(AnsiString target, unsigned int &callUid);
 	void CallNumberBackspace(void);
-	void Hangup(int uid, int sipCode = 486, AnsiString reason = "Busy Here");
-	void Answer(int uid);
+	void Hangup(unsigned int callUid, int sipCode = 486, AnsiString reason = "Busy Here");
+	void Answer(unsigned int callUid);
 	std::string OnGetDial(void);
 	void OnSetDial(std::string number);
 	int OnGetContactId(const char* user);
@@ -178,8 +178,8 @@ private:	// User declarations
 	void OnSetTrayIcon(const char* file);
 	int OnPluginSendMessageText(const char* dllName, const char* text);
 	int OnPluginEnable(const char* dllName, bool state);
-	int OnRecordStart(int uid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
-	std::string OnGetRxDtmf(int callUid);
+	int OnRecordStart(unsigned int callUid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
+	std::string OnGetRxDtmf(unsigned int callUid);
 	void OnShowBtnContainerStatusPanel(int id, bool state);
 	void OnSetBtnContainerBackground(int id, const char* file);
 	void OnDisableBringToFront(bool state);
@@ -192,9 +192,9 @@ private:	// User declarations
 	int autoAnswerCode;
 	bool autoAnswerIntercom;
 	bool muteRing;
-	void AutoAnswer(int callUid);
-	void ProgrammableButtonClick(int buttonId);	
-	void StartRing(AnsiString wavFile = "ring.wav");
+	void AutoAnswer(unsigned int callUid);
+	void ProgrammableButtonClick(int buttonId);
+	void StartRing(Call &call, AnsiString wavFile = "ring.wav");
 	AnsiString RingFile(AnsiString alertInfo);
 	void Redial(void);
 	void HttpQuery(const Call* call);
@@ -238,7 +238,7 @@ private:	// User declarations
 	void UpdateSettings(const Settings &prev);
 	int UpdateButtonsFromJson(AnsiString json);
 	void UpdateAutoAnswer(void);
-	void UpdateClip(int callUid);
+	void UpdateClip(unsigned int callUid);
 	void SetMainWindowLayout(int id);
 	void LoadTranslation(void);
 	void UpdateSize(void);
@@ -251,7 +251,7 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
 	__fastcall ~TfrmMain();
-	void OnCall(AnsiString uri, int &callUid);
+	void OnCall(AnsiString uri, unsigned int &callUid);
 	void OnPhonebookEdit(AnsiString uri);
 	void OnHttpQuery(AnsiString uri);
 	AnsiString OnGetContactName(AnsiString uri);	

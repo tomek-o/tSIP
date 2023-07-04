@@ -27,13 +27,14 @@ __published:	// IDE-managed Components
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 private:	// User declarations
 	static void TranslateForm(void* obj);
-	typedef void(__closure *CallbackHangup)(int uid, int sipCode, AnsiString reason);
-	typedef void(__closure *CallbackAnswer)(int uid);
+	typedef void(__closure *CallbackHangup)(unsigned int uid, int sipCode, AnsiString reason);
+	typedef void(__closure *CallbackAnswer)(unsigned int uid);
 	void __fastcall Close(void);
-	void __fastcall CreateParams(TCreateParams &Params);	
+	void __fastcall CreateParams(TCreateParams &Params);
+	unsigned int callUid;	
 public:		// User declarations
 	__fastcall TfrmTrayNotifier(TComponent* Owner);
-	void SetData(AnsiString description, AnsiString uri, bool incoming);
+	void SetData(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	void ShowWithoutFocus(void);
     void HideWindow(void);
 	void UpdateBackgroundImage(void);

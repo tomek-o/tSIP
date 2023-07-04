@@ -43,7 +43,7 @@ public:
 	AnsiString target;
 	AnsiString extraHeaderLines;	///< extra/custom header lines for outgoing calls and custom requests
 	int accountId;
-	int callId;
+	unsigned int callUid;
 	int code;
 	AnsiString reason;
 	char key;
@@ -80,7 +80,7 @@ public:
 	Command(void):
 		type(TYPE__LIMITER),
 		accountId(-1),
-		callId(-1),
+		callUid(0),
 		code(-1),
 		key('\0'),
 		bEnabled(false),

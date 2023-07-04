@@ -262,8 +262,8 @@ void __fastcall TfrmHistory::lvHistoryDblClick(TObject *Sender)
 	}
 
 	AnsiString uri = getDefaultUri(entry);
-
-	callbackCall(uri.c_str());
+	unsigned int callUid;
+	callbackCall(uri.c_str(), callUid);
 }
 //---------------------------------------------------------------------------
 
