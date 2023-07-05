@@ -36,8 +36,10 @@ struct Call
 	AnsiString codecName;
 	void* displayParentHandle;
 	unsigned int audioErrorCount;
+	int btnId;
+    bool holdState;
 
-	Recorder recorder;	
+	Recorder recorder;
 
 	struct Zrtp {
 		int sessionId;
@@ -52,8 +54,6 @@ struct Call
 		{}
 	} zrtp;
 
-	int btnId;
-
 	Call(void):
 		uid(0),
 		incoming(false),
@@ -67,9 +67,12 @@ struct Call
 		ringStarted(false),
 		displayParentHandle(NULL),
 		audioErrorCount(0),
-		btnId(-1)
+		btnId(-1),
+		holdState(false)
 	{}
 	void reset(void);
+
+	void hold(bool state);
 };
 
 #endif

@@ -22,6 +22,9 @@ namespace Calls
 
 	Recorder* FindRecorder(int recorderId);
 
+	/** \return 0 on success
+	*/
+	int AssignLineButton(Call *call, int &btnId);
 	void OnLineButtonClick(int id, TProgrammableButton* btn);
 	void OnButtonConfigChange(void);
 };

@@ -931,6 +931,16 @@ void TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 	call.uri = target;
 	call.initialTarget = call.uri;
 
+	int btnId;
+	if (Calls::AssignLineButton(newCall, btnId) != 0)
+	{
+		Calls::RemoveByUid(newCall->uid);
+		int TODO__FAILURE_STATUS_FOR_MAKE_CALL;
+		return;
+	}
+
+	int TODO__DISPLAY_CALL_ON_BUTTON;
+
 	if (appSettings.frmMain.bShowWhenMakingCall)
 	{
 		if (!Visible)
@@ -1479,7 +1489,17 @@ void TfrmMain::PollCallbackQueue(void)
 			{
 			case Callback::CALL_STATE_INCOMING: {
 				asStateText = "Incoming call";
-				Call *call = Calls::Alloc();
+				// call structure was allocated earlier by UaMain thread
+				Call *call = Calls::FindByUid(cb.callUid);
+				assert(call);
+				int btnId;
+				if (Calls::AssignLineButton(call, btnId) != 0)
+				{
+					LOG("Failed to assign LINE for incoming call %u, denying\n", cb.callUid);
+					call->disconnecting = true;
+					UA->Hangup(cb.callUid);
+					return;
+				}
 				call->incoming = true;
 				call->timestamp = Now();
 				call->uri = cb.caller;
@@ -1542,8 +1562,10 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 				if (answered == false && muteRing == false)
 				{
+					int TODO__QUIET_RING_IF_OTHER_CALL_IS_ACTIVE;
 					StartRing(*call, RingFile(cb.alertInfo));
 				}
+				int TODO__UPDATE_GUI_CALL_STATE_ONLY_IF_THERE_IS_NO_PREVIOUS_CALL;
 				lbl2ndParty->Caption = GetClip(GetCallPeerUri(*call));
 				lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri(*call)));
 				if (lastContactEntry)
@@ -1577,6 +1599,8 @@ void TfrmMain::PollCallbackQueue(void)
 					(appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeFromMsg && call->accessUrlMode == 2)) {
 					AccessCallUrl(call);
 				}
+
+				int TODO__DISPLAY_CALL_ON_THE_BUTTON;
 
 				break;
 			}
@@ -2885,6 +2909,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	case Button::LINE: {
 		Calls::OnLineButtonClick(id, btn);
+		int TODO__UPDATE_CALL_STATE_DISPLAY;
 		break;
 	}
 
@@ -4040,4 +4065,12 @@ void __fastcall TfrmMain::btnResetSpeakerVolumeMouseUp(TObject *Sender,
 	ActiveControl = NULL;	
 }
 //---------------------------------------------------------------------------
+
+void TfrmMain::ShowCallOnLineButton(const Call &call, int btnId)
+{
+	if (btnId < 0)
+		return;
+
+	int TODO__SHOW_CALL_ON_BUTTON;
+}
 

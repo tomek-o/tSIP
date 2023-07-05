@@ -5,6 +5,7 @@
 
 #include "Calls.h"
 #include "buttons/ProgrammableButtons.h"
+#include "buttons/ProgrammableButton.h"
 #include "Globals.h"
 #include "Settings.h"
 #include "ControlQueue.h"
@@ -26,7 +27,18 @@ namespace {
 
 	Call previousCall;
 
-	std::set<unsigned int> lineButtonIds;	
+	std::set<unsigned int> lineButtonIds;
+
+	Call* FindCallFromLineButton(unsigned int btnId)
+	{
+		for (std::map<unsigned int, Call>::iterator iter = entries.begin(); iter != entries.end(); ++iter)
+		{
+			Call &call = iter->second;
+			if (call.btnId == btnId)
+				return &call;
+		}
+		return NULL;
+	}
 }
 
 Call* Calls::Alloc(void)
@@ -95,6 +107,7 @@ void Calls::RemoveByUid(unsigned int uid)
 {
 	ScopedLock<Mutex> lock(mutex);
 	entries.erase(uid);
+	int TODO__DEACTIVATE_ASSOCIATED_LINE_BUTTON_OR_NOT;	// should it stay down?
 }
 
 std::vector<unsigned int> Calls::GetUids(void)
@@ -123,10 +136,65 @@ Recorder* Calls::FindRecorder(int recorderId)
 	return NULL;
 }
 
+int Calls::AssignLineButton(Call *call, int &btnId)
+{
+	int TODO__SINGLE_CALL__NO_BUTTONS;
+	if (lineButtonIds.empty())
+	{
+		btnId = -1;
+		return 0;	// single-call configuration; no button assigned
+	}
+	for (std::set<unsigned int>::iterator iter = lineButtonIds.begin(); iter != lineButtonIds.end(); ++iter)
+	{
+		unsigned int id = *iter;
+		Call *call = FindCallFromLineButton(id);
+		if (call == NULL)
+		{
+			int TODO__PREFER_EITHER_PRESSED_OR_NOT_PRESSED_BUTTON_TO_ASSIGN_TO_DEPENDING_ON_CALL_DIRECTION;
+			call->btnId == id;
+			btnId = call->btnId;
+			return 0;
+		}
+	}
+	// failed to assign LINE button for the call
+	return -1;
+}
+
 void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 {
 	ScopedLock<Mutex> lock(mutex);
+	assert(lineButtonIds.find(id) != lineButtonIds.end());	// sanity check
 
+    bool autoHold = true;
+
+	for (std::set<unsigned int>::iterator iter = lineButtonIds.begin(); iter != lineButtonIds.end(); ++iter)
+	{
+		if (*iter == id)
+			continue;
+		TProgrammableButton *btn = buttons.GetBtn(*iter);
+		if (btn->GetDown())
+		{
+			btn->SetDown(false);
+			if (autoHold)
+			{
+				Call *call = FindCallFromLineButton(*iter);
+				if (call)
+				{
+					call->hold(true);
+				}
+			}
+		}
+	}
+
+	btn->SetDown(true);
+    if (autoHold)
+	{
+		Call *call = FindCallFromLineButton(id);
+		if (call)
+		{
+			call->hold(false);
+		}
+	}
 }
 
 void Calls::OnButtonConfigChange(void)

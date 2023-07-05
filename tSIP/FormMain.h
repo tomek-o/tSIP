@@ -244,6 +244,7 @@ private:	// User declarations
 	void UpdateSize(void);
 	void UpdateDialpad(void);
 	void FocusCbCallUri(void);
+	void ShowCallOnLineButton(const Call &call, int btnId);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);
 	void __fastcall WMEndSession(TWMEndSession &Msg);	
