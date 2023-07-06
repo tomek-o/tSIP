@@ -197,6 +197,7 @@ int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 				{
 					call->btnId = id;
 					btnId = call->btnId;
+					currentCallUid = call->uid;
 					return 0;
 				}
 			}
@@ -210,6 +211,13 @@ int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 			{
 				call->btnId = id;
 				btnId = call->btnId;
+				if (Count() == 1)
+				{
+					TProgrammableButton *btn = buttons.GetBtn(*iter);
+					if (btn)
+						btn->SetDown(true);
+					currentCallUid = call->uid;
+				}
 				return 0;
 			}
 		}
