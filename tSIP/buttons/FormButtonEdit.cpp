@@ -362,9 +362,14 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::REREGISTER:
 	case Button::MUTE_RING:
 	case Button::MUTE:
+		edNumber->Visible = false;
+		lblNumber->Visible = false;
+		break;
+
 	case Button::LINE:
 		edNumber->Visible = false;
 		lblNumber->Visible = false;
+		cbCaptionLines->ItemIndex = 1;	// 2 caption lines
 		break;
 
 	case Button::SPEED_DIAL:

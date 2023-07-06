@@ -156,7 +156,6 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 
 			state = Callback::CALL_STATE_INCOMING;
 
-			int TODO__CONSIDER_CHECKING_IF_ANY_LINE_BUTTON_IS_EMPTY;
 			Call* appCall = Calls::Alloc();
 			calls[appCall->uid] = call;
 
@@ -178,6 +177,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 
 			if (appSettings.uaConf.startAudioSourceAtCallStart)
 			{
+				int TODO__MOVE_STARTING_EXTRA_SOURCE_TO_MAIN_MAYBE;
 				call_start_audio_extra_source(call);
 			}
 

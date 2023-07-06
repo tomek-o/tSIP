@@ -9,8 +9,15 @@
 #include <System.hpp>
 #include <deque>
 
+namespace Extctrls
+{
+	class TTimer;
+}
+
 struct Call
 {
+    enum { INVALID_UID = 0 };
+
 	unsigned int uid;
 	bool incoming;
 	bool progress;	// early media
@@ -37,7 +44,11 @@ struct Call
 	void* displayParentHandle;
 	unsigned int audioErrorCount;
 	int btnId;
-    bool holdState;
+	bool holdState;
+
+	Extctrls::TTimer *tmrAutoAnswer;
+	int autoAnswerCode;
+	bool autoAnswerIntercom;
 
 	Recorder recorder;
 
@@ -68,11 +79,17 @@ struct Call
 		displayParentHandle(NULL),
 		audioErrorCount(0),
 		btnId(-1),
-		holdState(false)
+		holdState(false),
+		tmrAutoAnswer(NULL),
+		autoAnswerCode(200),
+		autoAnswerIntercom(false)
 	{}
+	~Call(void);
 	void reset(void);
 
 	void hold(bool state);
+	AnsiString getPeerUri(void) const;
+	AnsiString getPeerName(void) const;
 };
 
 #endif

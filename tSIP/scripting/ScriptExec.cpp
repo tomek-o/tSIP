@@ -490,10 +490,11 @@ static int l_Call(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	unsigned int callUid;
-	GetContext(L)->onCall(str, callUid);
-    lua_pushnumber(L, callUid);
-	return 1;
+	unsigned int callUid = 0;
+	int ret = GetContext(L)->onCall(str, callUid);
+	lua_pushnumber(L, ret);
+	lua_pushnumber(L, callUid);
+	return 2;
 }
 
 static int l_Hangup(lua_State* L)
@@ -522,9 +523,61 @@ static int l_Hangup(lua_State* L)
 	return 0;
 }
 
+static int l_Hangup2(lua_State* L)
+{
+	Call* call = GetCall(L);
+	if (call == NULL)
+	{
+		return 0;
+	}
+
+	int argCount = lua_gettop(L);
+	enum { DEFAULT_CODE = 486 };
+	int sipCode = DEFAULT_CODE;
+	if (argCount >= 2)
+	{
+		sipCode = lua_tointeger(L, 2);
+		if (sipCode < 400 || sipCode > 699)
+			sipCode = DEFAULT_CODE;
+	}
+	AnsiString reason = "Busy Here";
+	if (argCount >= 3)
+	{
+		reason = lua_tostring(L, 3);
+	}
+	GetContext(L)->onHangup(call->uid, sipCode, reason);
+	return 0;
+}
+
+static int l_HangupAll(lua_State* L)
+{
+	int argCount = lua_gettop(L);
+	enum { DEFAULT_CODE = 486 };
+	int sipCode = DEFAULT_CODE;
+	if (argCount >= 1)
+	{
+		sipCode = lua_tointeger(L, 1);
+		if (sipCode < 400 || sipCode > 699)
+			sipCode = DEFAULT_CODE;
+	}
+	AnsiString reason = "Busy Here";
+	if (argCount >= 2)
+	{
+		reason = lua_tostring(L, 2);
+	}
+
+	std::vector<unsigned int> uids = Calls::GetUids();
+	for (unsigned int i=0; i<uids.size(); i++)
+	{
+		GetContext(L)->onHangup(uids[i], sipCode, reason);
+	}
+	return 0;
+}
+
+
 static int l_Answer(lua_State* L)
 {
-	Call* call = Calls::GetCurrentCall();
+	Call* call = GetCall(L);
 	if (call == NULL)
 	{
 		return 0;
@@ -698,6 +751,29 @@ static int l_BlindTransfer(lua_State* L)
 	}
 	UA->Transfer(0, str);
 	return 0;
+}
+
+static int l_GetCalls(lua_State* L)
+{
+	std::vector<unsigned int> uids = Calls::GetUids();
+	// returns table
+	lua_newtable(L);
+	int top = lua_gettop(L);
+
+	for (unsigned int i = 0; i < uids.size(); i++)
+	{
+		lua_pushnumber(L, i+1);		// push the index, starting from 1 in Lua
+		lua_pushnumber(L, uids[i]); // push the value at 'i'
+		lua_settable(L, top);
+	}
+	return 1;
+}
+
+static int l_GetCurrentCallUid(lua_State* L)
+{
+	unsigned int uid = Calls::GetCurrentCallUid();
+	lua_pushnumber(L, uid);
+	return 1;
 }
 
 static int l_GetCallState(lua_State* L)
@@ -1718,16 +1794,20 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SetClipboardText, "SetClipboardText", "Copy text to clipboard", "");
 	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "Equivalent of VCL function with same name.");
 	lua_register2(L, ScriptImp::l_FindWindowByCaptionAndExeName, "FindWindowByCaptionAndExeName", "Search for window by caption and executable name", "");
-	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns allocated call ID.");
-	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect or reject incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
-	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer incoming call", "");
+	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns status (0 on success) and allocated call ID. May fail if current call number reaches limit.");
+	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect or reject current incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
+	lua_register2(L, ScriptImp::l_Hangup2, "Hangup2", "Disconnect or reject specific incoming call", "Examples:\n    Hangup2(callUid)\n    Hangup2(callUid, sipCode, reasonText)");
+	lua_register2(L, ScriptImp::l_HangupAll, "HangupAll", "Disconnect all calls", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
+	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer current or specified incoming call", "Takes call UID as optional argument to answer specific call.");
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");
 	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "Example: SwitchAudioSource(\"aufile\", \"file.wav\").");
 	lua_register2(L, ScriptImp::l_SwitchVideoSource, "SwitchVideoSource", "Change video source during the call", "Example: SwitchAudioSource(\"avformat\", \"file.mp4\").");
-	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbos during the call", "Accepts single DTMF or whole string");
+	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbols during the call", "Accepts single DTMF or whole string");
 	lua_register2(L, ScriptImp::l_GenerateTones, "GenerateTones", "Generate up to 4 tones with specified amplitude and frequency", "Tone generator is able to generate up to 4 sine waves at the same time, each one with separate amplitude and frequency setting. Sum of sine waves is saturated. Tone generator is placed before softvol module (software volume control sliders) in transmit chain and replaces \"regular\" audio source when is activated.\nGenerateTones function takes up to 8 parameters (up to 4 pairs of amplitude + frequency). Amplitude is interpreted as a fraction of full-scale.\nCalling this function without arguments stops generator.\nExample generating 1000 Hz at 0.2 FS + 3000 Hz at 0.1 FS:\n\tGenerateTones(0.2, 1000, 0.1, 3000)");
 	lua_register2(L, ScriptImp::l_BlindTransfer, "BlindTransfer", "Send REFER during the call", "");
+	lua_register2(L, ScriptImp::l_GetCalls, "GetCalls", "Get a table with UIDs of currently active calls", "");
+	lua_register2(L, ScriptImp::l_GetCurrentCallUid, "GetCurrentCallUid", "Get UID of current call, 0 = invalid/none", "");
 	lua_register2(L, ScriptImp::l_GetCallState, "GetCallState", "Get state of current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetRecorderState, "GetRecorderState", "Check if recording is running for current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verfication state. Takes one, optional argument: call UID.");

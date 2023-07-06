@@ -25,7 +25,7 @@ class ScriptExec
 private:
 	friend class LuaState;
 
-	typedef void (__closure *CallbackCall)(AnsiString number, unsigned int &callUid);
+	typedef int (__closure *CallbackCall)(AnsiString number, unsigned int &callUid);
 	typedef void (__closure *CallbackHangup)(unsigned int callUid, int sipCode, AnsiString reason);
 	typedef void (__closure *CallbackAnswer)(unsigned int callUid);
 	typedef std::string (__closure *CallbackGetDial)(void);

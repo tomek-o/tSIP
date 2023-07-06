@@ -125,26 +125,6 @@ namespace {
 			return displayName;
 	}
 
-	AnsiString GetCallPeerUri(const struct Call &call)
-	{
-		if (appSettings.Display.bUsePAssertedIdentity)
-		{
-			if (call.paiPeerUri != "")
-				return call.paiPeerUri;
-		}
-		return call.uri;
-	}
-
-	AnsiString GetCallPeerName(const struct Call &call)
-	{
-		if (appSettings.Display.bUsePAssertedIdentity)
-		{
-			if (call.paiPeerUri != "")	// using uri to check if header line is present as it shouldn't be empty
-				return call.paiPeerName;
-		}
-		return call.peerName;
-	}
-
 	AnsiString GetContactsFileName(void)
 	{
 		AnsiString asContactsFile;
@@ -250,7 +230,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	lbl2ndParty->Caption = "";
 	lbl2ndPartyDesc->Caption = "";
 	lblCallState->Caption = "";
-	frmHistory = new TfrmHistory(this->tsHistory, &history, appSettings.history, &OnCall, &OnPhonebookEdit, &OnHttpQuery);
+	frmHistory = new TfrmHistory(this->tsHistory, &history, appSettings.history, &MakeCall, &OnPhonebookEdit, &OnHttpQuery);
 	frmHistory->Scale(appSettings.gui.scalingPct);
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
@@ -306,7 +286,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		);
 	buttons.UseContextMenu(appSettings.frmMain.bSpeedDialPopupMenu);
 
-	frmContacts = new TfrmContacts(this->tsContacts, &contacts, &OnCall);
+	frmContacts = new TfrmContacts(this->tsContacts, &contacts, &MakeCall);
 	frmContacts->Scale(appSettings.gui.scalingPct);
 	frmContacts->Parent = tsContacts;
 	frmContacts->Visible = true;
@@ -425,7 +405,6 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 		this->WindowState = wsMaximized;
 	UpdateLogConfig();
 
-	//btnAutoAnswer->Down = appSettings.uaConf.autoAnswer;
 	SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);
 	UpdateBitmaps();
 	miSettings->Visible = !appSettings.frmMain.bHideSettings;
@@ -920,7 +899,7 @@ void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
+int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 {
 	Call* newCall = Calls::Alloc();
 	Call& call = *newCall;
@@ -932,14 +911,13 @@ void TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 	call.initialTarget = call.uri;
 
 	int btnId;
-	if (Calls::AssignLineButton(newCall, btnId) != 0)
+	if (Calls::AssignLineButton(newCall, true, btnId) != 0)
 	{
 		Calls::RemoveByUid(newCall->uid);
-		int TODO__FAILURE_STATUS_FOR_MAKE_CALL;
-		return;
+		return -1;
 	}
 
-	int TODO__DISPLAY_CALL_ON_BUTTON;
+	ShowCallOnLineButton(call);
 
 	if (appSettings.frmMain.bShowWhenMakingCall)
 	{
@@ -966,12 +944,13 @@ void TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 		RunScriptFile(SCRIPT_SRC_ON_MAKING_CALL, -1, asScriptFile.c_str(), handled);
 		if (handled)
 		{
-			return;
+			return 0;
 		}
 	}
 
 	call.displayParentHandle = GetDisplayParentHandle();
 	UA->Call(0, call.uid, call.initialTarget, appSettings.Calls.extraHeaderLines, appSettings.video.enabled, call.displayParentHandle);
+	return 0;	
 }
 
 void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
@@ -1255,8 +1234,8 @@ void TfrmMain::UpdateClip(unsigned int callUid)
 	Call *call = Calls::FindByUid(callUid);
 	if (call == NULL)
 		return;
-	lbl2ndParty->Caption = GetClip(GetCallPeerUri(*call));
-	lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri(*call)));
+	lbl2ndParty->Caption = GetClip(call->getPeerUri());
+	lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 	if (lastContactEntry)
 	{
 		lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -1273,7 +1252,7 @@ void TfrmMain::UpdateClip(unsigned int callUid)
 	}
 	else
 	{
-		lbl2ndPartyDesc->Caption = GetCallPeerName(*call);
+		lbl2ndPartyDesc->Caption = call->getPeerName();
 	}
 }
 
@@ -1493,7 +1472,7 @@ void TfrmMain::PollCallbackQueue(void)
 				Call *call = Calls::FindByUid(cb.callUid);
 				assert(call);
 				int btnId;
-				if (Calls::AssignLineButton(call, btnId) != 0)
+				if (Calls::AssignLineButton(call, false, btnId) != 0)
 				{
 					LOG("Failed to assign LINE for incoming call %u, denying\n", cb.callUid);
 					call->disconnecting = true;
@@ -1508,13 +1487,12 @@ void TfrmMain::PollCallbackQueue(void)
 				call->dtmfRxQueue.clear();
 				call->paiPeerUri = cb.paiPeerUri;
 				call->paiPeerName = GetPeerName(cb.paiPeerName);
-				autoAnswerIntercom = false;
+				call->autoAnswerIntercom = false;
 				if (appSettings.uaConf.autoAnswerCallInfo && cb.callAnswerAfter >= 0)
 				{
-                    int TODO__MULTIPLE_AUTO_ANSWER_TIMERS;
 					LOG("Intercom/paging auto answer, answer-after = %d\n", cb.callAnswerAfter);
-					autoAnswerCode = 200;
-					autoAnswerIntercom = true;
+					call->autoAnswerCode = 200;
+					call->autoAnswerIntercom = true;
 					int time = cb.callAnswerAfter * 1000;
 					if (time < appSettings.uaConf.autoAnswerCallInfoDelayMin)
 					{
@@ -1522,15 +1500,23 @@ void TfrmMain::PollCallbackQueue(void)
 					}
 					if (time == 0)
 					{
-						AutoAnswer(call->uid);
+						AutoAnswer(*call);
 						answered = true;
 					}
 					else
 					{
 						LOG("Delayed auto answer, time = %u ms\n", time);
-						tmrAutoAnswer->Enabled = false;
-						tmrAutoAnswer->Interval = time;
-						tmrAutoAnswer->Enabled = true;
+						if (call->tmrAutoAnswer == NULL)
+						{
+							call->tmrAutoAnswer = new TTimer(NULL);
+						}
+						else
+						{
+                        	call->tmrAutoAnswer->Enabled = false;
+						}
+						call->tmrAutoAnswer->OnTimer = tmrAutoAnswerTimer;
+						call->tmrAutoAnswer->Interval = time;
+						call->tmrAutoAnswer->Enabled = true;
 					}
 				}
 				else if (appSettings.uaConf.autoAnswer)
@@ -1542,10 +1528,10 @@ void TfrmMain::PollCallbackQueue(void)
 					{
 						time += rand32 % delta;
 					}
-					autoAnswerCode = appSettings.uaConf.autoAnswerCode;
+					call->autoAnswerCode = appSettings.uaConf.autoAnswerCode;
 					if (time == 0)
 					{
-						AutoAnswer(call->uid);
+						AutoAnswer(*call);
 						answered = true;
 						if (appSettings.uaConf.autoAnswerCode >= 400)
 						{
@@ -1555,9 +1541,17 @@ void TfrmMain::PollCallbackQueue(void)
 					else
 					{
 						LOG("Delayed auto answer, time = %u ms\n", time);
-						tmrAutoAnswer->Enabled = false;
-						tmrAutoAnswer->Interval = time;
-						tmrAutoAnswer->Enabled = true;
+						if (call->tmrAutoAnswer == NULL)
+						{
+							call->tmrAutoAnswer = new TTimer(NULL);
+						}
+						else
+						{
+                        	call->tmrAutoAnswer->Enabled = false;
+						}
+						call->tmrAutoAnswer->OnTimer = tmrAutoAnswerTimer;
+						call->tmrAutoAnswer->Interval = time;
+						call->tmrAutoAnswer->Enabled = true;
 					}
 				}
 				if (answered == false && muteRing == false)
@@ -1566,8 +1560,8 @@ void TfrmMain::PollCallbackQueue(void)
 					StartRing(*call, RingFile(cb.alertInfo));
 				}
 				int TODO__UPDATE_GUI_CALL_STATE_ONLY_IF_THERE_IS_NO_PREVIOUS_CALL;
-				lbl2ndParty->Caption = GetClip(GetCallPeerUri(*call));
-				lastContactEntry = contacts.GetEntry(CleanUri(GetCallPeerUri(*call)));
+				lbl2ndParty->Caption = GetClip(call->getPeerUri());
+				lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 				if (lastContactEntry)
 				{
 					lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -1585,9 +1579,9 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 				else
 				{
-					lbl2ndPartyDesc->Caption = GetCallPeerName(*call);
+					lbl2ndPartyDesc->Caption = call->getPeerName();
 				}
-				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(GetCallPeerUri(*call)).c_str()); //CleanUri(cb.caller).c_str());
+				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(call->getPeerUri()).c_str()); //CleanUri(cb.caller).c_str());
 				if (appSettings.HttpQuery.openMode == Settings::_HttpQuery::openAutomaticOnIncoming)
 				{
 					HttpQuery(call);
@@ -1599,8 +1593,6 @@ void TfrmMain::PollCallbackQueue(void)
 					(appSettings.SipAccessUrl.accessMode == Settings::_SipAccessUrl::accessModeFromMsg && call->accessUrlMode == 2)) {
 					AccessCallUrl(call);
 				}
-
-				int TODO__DISPLAY_CALL_ON_THE_BUTTON;
 
 				break;
 			}
@@ -1676,7 +1668,10 @@ void TfrmMain::PollCallbackQueue(void)
 					UpdateClip(cb.callUid);
 
 					PhoneInterface::UpdateRing(0);
-					tmrAutoAnswer->Enabled = false;
+					if (call->tmrAutoAnswer)
+					{
+						call->tmrAutoAnswer->Enabled = false;
+					}
 					if (appSettings.uaConf.recording.enabled && call->recording == false &&
 						((appSettings.uaConf.recording.recStart == UaConf::RecordingCfg::RecStartCallEarly) || (appSettings.uaConf.recording.recStart == UaConf::RecordingCfg::RecStartCallConfirmed))
 						)
@@ -1793,13 +1788,12 @@ void TfrmMain::PollCallbackQueue(void)
 						UpdateCallHistory();
 					}
 
-					AnsiString recordFile = call->recordFile;
-					call->reset();
-					call->recordFile = recordFile;	// should be preserved after the call to be used in script
-
 					buttons.UpdateBtnState(Button::HOLD, false);
 					buttons.UpdateBtnState(Button::MUTE, false);
-					tmrAutoAnswer->Enabled = false;
+					if (call->tmrAutoAnswer)
+					{
+						call->tmrAutoAnswer->Enabled = false;
+					}
 					frmTrayNotifier->HideWindow();
 					lbl2ndParty->Caption = "";
 					lbl2ndPartyDesc->Caption = "";
@@ -1870,7 +1864,14 @@ void TfrmMain::PollCallbackQueue(void)
 
 			if (cb.state == Callback::CALL_STATE_CLOSED)
 			{
+				if (call)
+					ClearLineButton(call->btnId);
 				Calls::RemoveByUid(cb.callUid);
+			}
+			else
+			{
+				if (call)
+					ShowCallOnLineButton(*call);
 			}
 
 			break;
@@ -2387,7 +2388,7 @@ void TfrmMain::StartRecording(Call &call)
 			AnsiString uri;
 			if (call.incoming)
 			{
-				uri = ExtractNumberFromUri(GetCallPeerUri(call).c_str()).c_str();
+				uri = ExtractNumberFromUri(call.getPeerUri().c_str()).c_str();
 			}
 			else
 			{
@@ -2453,12 +2454,6 @@ void __fastcall TfrmMain::FormClose(TObject *Sender, TCloseAction &Action)
 	{
 		PostQuitMessage(0);
 	}
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmMain::btnAutoAnswerClick(TObject *Sender)
-{
-	//appSettings.uaConf.autoAnswer = btnAutoAnswer->Down;
 }
 //---------------------------------------------------------------------------
 
@@ -2557,12 +2552,6 @@ void TfrmMain::ExecuteApp(AnsiString cmd, AnsiString params)
 	ShellExecute(NULL, "open", cmd.c_str(), params.c_str(), NULL, SW_SHOWNORMAL);
 }
 
-void TfrmMain::OnCall(AnsiString uri, unsigned int &callUid)
-{
-	int TODO__LIMIT_NUMBER_OF_CALLS;
-	MakeCall(uri, callUid);
-}
-
 void TfrmMain::OnPhonebookEdit(AnsiString uri)
 {
 	bool adding = false;
@@ -2626,7 +2615,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	case Button::MWI: {
 		unsigned int callUid;
-		OnCall(cfg.number.c_str(), callUid);
+		MakeCall(cfg.number.c_str(), callUid);
 		break;
 	}
 	case Button::BLF:
@@ -2660,6 +2649,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		Call *call = Calls::GetCurrentCall();
 		if (call && call->connected)
 		{
+            int TODO__ATTENDED_TRANSFER_WITH_BLF;
 			switch (cfg.blfActionDuringCall)
 			{
 			case ButtonConf::BLF_IN_CALL_NONE:
@@ -2680,7 +2670,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		else
 		{
 			unsigned int callUid;
-			OnCall(dial.c_str(), callUid);
+			MakeCall(dial.c_str(), callUid);
 		}
 		break;
 	}
@@ -2750,7 +2740,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 			Call *call = Calls::GetCurrentCall();
 			if (call)
 			{
-				AnsiString num = GetCallPeerUri(*call);
+				AnsiString num = call->getPeerUri();
 				if (num != "")
 				{
 					OnPhonebookEdit(num);
@@ -2978,7 +2968,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 {
 	ScriptExec scriptExec(
 		static_cast<enum ScriptSource>(srcType), srcId, breakRequest, handled,
-		&OnCall, &Hangup, &Answer, &OnGetDial, &OnSetDial,
+		&MakeCall, &Hangup, &Answer, &OnGetDial, &OnSetDial,
 		&DialString,
 		&OnGetContactName,
 		&OnGetStreamingState,
@@ -3220,35 +3210,27 @@ void __fastcall TfrmMain::actExitExecute(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::AutoAnswer(unsigned int callUid)
+void TfrmMain::AutoAnswer(Call &call)
 {
-	if (autoAnswerCode == 200) {
-		if (autoAnswerIntercom) {
+	if (call.autoAnswerCode == 200) {
+		if (call.autoAnswerIntercom) {
 			LOG("Answering with module %s, device %s\n", appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
-			UA->Answer(callUid, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str(), appSettings.video.enabled, GetDisplayParentHandle());
+			UA->Answer(call.uid, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str(), appSettings.video.enabled, GetDisplayParentHandle());
 		} else {
-			Answer(callUid);
+			Answer(call.uid);
 		}
 		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
 		{
 			frmTrayNotifier->HideWindow();
 		}
-	} else if (autoAnswerCode >= 400) {
-		UA->Hangup(callUid, autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
+	} else if (call.autoAnswerCode >= 400) {
+		UA->Hangup(call.uid, call.autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
 		lbl2ndParty->Caption = "";
 		lbl2ndPartyDesc->Caption = "";
 		lblCallState->Caption = "";
-		Call* call = Calls::FindByUid(callUid);
-		if (call)
-		{
-			call->incoming = false;
-			call->progress = false;
-			call->connected = false;
-		}
-		else
-		{
-        	LOG("AutoAnswer: call %u not found!\n", callUid);
-		}
+		call.incoming = false;
+		call.progress = false;
+		call.connected = false;
 		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
 		{
 			frmTrayNotifier->HideWindow();
@@ -3258,12 +3240,13 @@ void TfrmMain::AutoAnswer(unsigned int callUid)
 
 void __fastcall TfrmMain::tmrAutoAnswerTimer(TObject *Sender)
 {
-	tmrAutoAnswer->Enabled = false;
-#if 0
-	AutoAnswer();
-#else
-	int TODO__AUTO_ANSWER_AFTER_TIME;
-#endif
+	TTimer *tmr = dynamic_cast<TTimer*>(Sender);
+	assert(tmr);
+	tmr->Enabled = false;
+
+	Call *call = Calls::FindByAutoAnswerTimer(tmr);
+	if (call)
+		AutoAnswer(*call);
 }
 //---------------------------------------------------------------------------
 
@@ -4066,11 +4049,28 @@ void __fastcall TfrmMain::btnResetSpeakerVolumeMouseUp(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 
-void TfrmMain::ShowCallOnLineButton(const Call &call, int btnId)
+void TfrmMain::ShowCallOnLineButton(const Call &call)
+{
+	if (call.btnId < 0)
+		return;
+
+	TProgrammableButton *btn = buttons.GetBtn(call.btnId);
+	if (btn == NULL)
+		return;
+	btn->SetCaption(call.getPeerUri());
+	btn->SetCaption2(call.getPeerName());
+}
+
+void TfrmMain::ClearLineButton(int btnId)
 {
 	if (btnId < 0)
 		return;
 
-	int TODO__SHOW_CALL_ON_BUTTON;
+	TProgrammableButton *btn = buttons.GetBtn(btnId);
+	if (btn == NULL)
+		return;
+	btn->SetCaption("LINE");
+	btn->SetCaption2(" - IDLE - ");
 }
+
 

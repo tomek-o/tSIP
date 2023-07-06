@@ -103,7 +103,7 @@ object frmButtonEdit: TfrmButtonEdit
     Height = 21
     Style = csDropDownList
     DropDownCount = 12
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 2
     OnChange = cbTypeChange
   end
@@ -550,7 +550,7 @@ object frmButtonEdit: TfrmButtonEdit
           Width = 140
           Height = 21
           Style = csDropDownList
-          ItemHeight = 13
+          ItemHeight = 0
           ParentShowHint = False
           ShowHint = True
           TabOrder = 8
@@ -758,10 +758,6 @@ object frmButtonEdit: TfrmButtonEdit
     object tsBehavior: TTabSheet
       Caption = 'Behavior'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object pcBehavior: TPageControl
         Left = 0
         Top = 0
@@ -872,7 +868,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 145
             Height = 21
             Style = csDropDownList
-            ItemHeight = 13
+            ItemHeight = 0
             ItemIndex = 2
             TabOrder = 1
             Text = 'blind transfer'
@@ -946,7 +942,7 @@ object frmButtonEdit: TfrmButtonEdit
             Top = 23
             Width = 145
             Height = 21
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 2
             Text = 'PCMA'
             Items.Strings = (
@@ -960,7 +956,7 @@ object frmButtonEdit: TfrmButtonEdit
             Top = 46
             Width = 71
             Height = 21
-            ItemHeight = 13
+            ItemHeight = 0
             ItemIndex = 1
             TabOrder = 3
             Text = '20'
@@ -1061,10 +1057,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioSource: TTabSheet
           Caption = 'tsBehaviorSwitchAudioSource'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lblSoundInputModule: TLabel
             Left = 3
             Top = 3
@@ -1085,7 +1077,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 320
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = cbSoundInputModChange
           end
@@ -1111,7 +1103,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 320
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
           end
         end

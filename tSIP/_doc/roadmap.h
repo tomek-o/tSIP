@@ -120,6 +120,12 @@ was triggered by attended transfer on the PABX. Initial offer from FPBX containe
 PCMA, G.722, second one same codecs in reverse order. Reported by A.T. 2023.03.31.
 
 test multiple calls capacity / performance
+test multiple calls recording
+automatic hold when switching lines - configurable?
+switch automatically to line with new incoming call if there is only one call
+switch automatically to line with new outgoing call if there is only one call
+use executable auto-answering incoming calls for testing outgoing calls
+add setting: do not auto-answer if there is already another call
 
 */
 

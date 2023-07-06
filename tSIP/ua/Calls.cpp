@@ -1,6 +1,4 @@
 //---------------------------------------------------------------------------
-
-
 #pragma hdrstop
 
 #include "Calls.h"
@@ -21,7 +19,7 @@
 
 namespace {
 	/** \note Call UID = 0 is reserved/invalid/not used */
-	unsigned int nextUid = 1;
+	unsigned int nextUid = Call::INVALID_UID + 1;
 	std::map<unsigned int, Call> entries;
 	Mutex mutex;
 
@@ -39,6 +37,8 @@ namespace {
 		}
 		return NULL;
 	}
+
+	unsigned int currentCallUid = Call::INVALID_UID;
 }
 
 Call* Calls::Alloc(void)
@@ -50,7 +50,7 @@ Call* Calls::Alloc(void)
 	{
 		newCall.uid = nextUid;
 		nextUid++;
-		if (nextUid == 0)
+		if (nextUid == Call::INVALID_UID)
 		{
 			nextUid = 1;
 		}
@@ -76,13 +76,35 @@ Call* Calls::FindByUid(unsigned int uid)
 		return &iter->second;
 }
 
+Call* Calls::FindByAutoAnswerTimer(Extctrls::TTimer *tmr)
+{
+	std::map<unsigned int, Call>::iterator iter;
+	for (iter = entries.begin(); iter != entries.end(); ++iter)
+	{
+		Call &call = iter->second;
+		if (call.tmrAutoAnswer == tmr)
+		{
+			return &call;
+		}
+	}
+	return NULL;
+}
+
 Call* Calls::GetCurrentCall(void)
 {
 	ScopedLock<Mutex> lock(mutex);
-    int TODO__GET_CURRENT_CALL;
-	if (!entries.empty())
-		return &entries.begin()->second;
+	if (currentCallUid != Call::INVALID_UID)
+	{
+		Call *call = FindByUid(currentCallUid);
+		return call;
+	}
 	return NULL;
+}
+
+unsigned int Calls::GetCurrentCallUid(void)
+{
+	ScopedLock<Mutex> lock(mutex);
+	return currentCallUid;
 }
 
 Call& Calls::GetPreviousCall(void)
@@ -107,7 +129,7 @@ void Calls::RemoveByUid(unsigned int uid)
 {
 	ScopedLock<Mutex> lock(mutex);
 	entries.erase(uid);
-	int TODO__DEACTIVATE_ASSOCIATED_LINE_BUTTON_OR_NOT;	// should it stay down?
+	// button "down" state is not changed
 }
 
 std::vector<unsigned int> Calls::GetUids(void)
@@ -120,6 +142,12 @@ std::vector<unsigned int> Calls::GetUids(void)
 		ret.push_back(iter->first);
 	}
 	return ret;
+}
+
+unsigned int Calls::Count(void)
+{
+	ScopedLock<Mutex> lock(mutex);
+	return entries.size();
 }
 
 Recorder* Calls::FindRecorder(int recorderId)
@@ -136,28 +164,58 @@ Recorder* Calls::FindRecorder(int recorderId)
 	return NULL;
 }
 
-int Calls::AssignLineButton(Call *call, int &btnId)
+int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 {
-	int TODO__SINGLE_CALL__NO_BUTTONS;
 	if (lineButtonIds.empty())
 	{
+		// single-call configuration
 		btnId = -1;
-		return 0;	// single-call configuration; no button assigned
-	}
-	for (std::set<unsigned int>::iterator iter = lineButtonIds.begin(); iter != lineButtonIds.end(); ++iter)
-	{
-		unsigned int id = *iter;
-		Call *call = FindCallFromLineButton(id);
-		if (call == NULL)
+		if (entries.size() == 1)
 		{
-			int TODO__PREFER_EITHER_PRESSED_OR_NOT_PRESSED_BUTTON_TO_ASSIGN_TO_DEPENDING_ON_CALL_DIRECTION;
-			call->btnId == id;
-			btnId = call->btnId;
-			return 0;
+            currentCallUid = call->uid;
+			return 0;	// no button assigned - none needed
+		}
+		else
+		{
+			// deny second call in single-call configuration
+			return -1;
 		}
 	}
-	// failed to assign LINE button for the call
-	return -1;
+	else
+	{
+		if (outgoing)
+		{
+			// try button in "down" state first
+			for (std::set<unsigned int>::iterator iter = lineButtonIds.begin(); iter != lineButtonIds.end(); ++iter)
+			{
+				unsigned int id = *iter;
+				TProgrammableButton *btn = buttons.GetBtn(*iter);
+				if (!btn || !btn->GetDown())
+					continue;
+				Call *callFromBtn = FindCallFromLineButton(id);
+				if (callFromBtn == NULL)
+				{
+					call->btnId = id;
+					btnId = call->btnId;
+					return 0;
+				}
+			}
+		}
+
+		for (std::set<unsigned int>::iterator iter = lineButtonIds.begin(); iter != lineButtonIds.end(); ++iter)
+		{
+			unsigned int id = *iter;
+			Call *callFromBtn = FindCallFromLineButton(id);
+			if (callFromBtn == NULL)
+			{
+				call->btnId = id;
+				btnId = call->btnId;
+				return 0;
+			}
+		}
+		// failed to assign LINE button for the call
+		return -1;
+	}
 }
 
 void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
@@ -172,7 +230,7 @@ void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 		if (*iter == id)
 			continue;
 		TProgrammableButton *btn = buttons.GetBtn(*iter);
-		if (btn->GetDown())
+		if (btn && btn->GetDown())
 		{
 			btn->SetDown(false);
 			if (autoHold)
@@ -187,19 +245,25 @@ void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 	}
 
 	btn->SetDown(true);
-    if (autoHold)
+	Call *call = FindCallFromLineButton(id);
+	if (call)
 	{
-		Call *call = FindCallFromLineButton(id);
-		if (call)
-		{
+		if (autoHold)
 			call->hold(false);
-		}
+		currentCallUid = call->uid;
+	}
+	else
+	{
+    	currentCallUid = Call::INVALID_UID;
 	}
 }
 
 void Calls::OnButtonConfigChange(void)
 {
 	ScopedLock<Mutex> lock(mutex);
+
+    std::set<unsigned int> prevLineButtonIds = lineButtonIds;
+
 	lineButtonIds.clear();
 	for (unsigned int i=0; i<buttons.btnConf.size(); i++)
 	{
@@ -209,19 +273,30 @@ void Calls::OnButtonConfigChange(void)
 		}
 	}
 
-	// check if any line button in use was removed, disconnect associated calls
-
-    int TODO__MORE_FISHY_CASES_LIKE_SINGLE_BUTTON;	// + removing all buttons; + adding new buttons, switching from single call to multi-call
-
 	std::map<unsigned int, Call>::iterator iter;
-	for (iter = entries.begin(); iter != entries.end(); ++iter)
+
+	// disconnect current call if switching from single-call to multi-call configuration
+	if (prevLineButtonIds.size() < 1 && lineButtonIds.size() > 1)
 	{
-		Call &call = iter->second;
-		if (call.btnId >= 0 && lineButtonIds.find(call.btnId) == lineButtonIds.end())
+		for (iter = entries.begin(); iter != entries.end(); ++iter)
 		{
-            LOG("Disconnecting call %u because associated LINE button %u was removed\n", call.uid, call.btnId);
+			Call &call = iter->second;
 			call.disconnecting = true;
 			UA->Hangup(call.uid);
+		}
+	}
+	else
+	{
+		// check if any line button in use was removed, disconnect associated calls
+		for (iter = entries.begin(); iter != entries.end(); ++iter)
+		{
+			Call &call = iter->second;
+			if (call.btnId >= 0 && lineButtonIds.find(call.btnId) == lineButtonIds.end())
+			{
+				LOG("Disconnecting call %u because associated LINE button %u was removed\n", call.uid, call.btnId);
+				call.disconnecting = true;
+				UA->Hangup(call.uid);
+			}
 		}
 	}
 }

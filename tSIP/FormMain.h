@@ -65,7 +65,6 @@ __published:	// IDE-managed Components
 	TPopupMenu *popupTray;
 	TMenuItem *miTrayExit;
 	TAction *actExit;
-	TTimer *tmrAutoAnswer;
 	TImageList *imgListButtons;
 	TTimer *tmrAntirepeat;
 	TAction *actContactsCsvImport;
@@ -110,7 +109,6 @@ __published:	// IDE-managed Components
 	void __fastcall tmrCallbackPollTimer(TObject *Sender);
 	void __fastcall btnBackspaceClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
-	void __fastcall btnAutoAnswerClick(TObject *Sender);
 	void __fastcall edTransferEnter(TObject *Sender);
 	void __fastcall btnSpeedDialPanelClick(TObject *Sender);
 	void __fastcall cbCallURIKeyPress(TObject *Sender, char &Key);
@@ -165,7 +163,7 @@ private:	// User declarations
 	void HideTrayNotifier(void);
 	AnsiString CleanUri(AnsiString uri);
 	AnsiString GetClip(AnsiString uri);
-	void MakeCall(AnsiString target, unsigned int &callUid);
+	int MakeCall(AnsiString target, unsigned int &callUid);
 	void CallNumberBackspace(void);
 	void Hangup(unsigned int callUid, int sipCode = 486, AnsiString reason = "Busy Here");
 	void Answer(unsigned int callUid);
@@ -189,10 +187,8 @@ private:	// User declarations
 	void MainMenuShow(bool state);
 	void ApplicationClose(void);
 
-	int autoAnswerCode;
-	bool autoAnswerIntercom;
 	bool muteRing;
-	void AutoAnswer(unsigned int callUid);
+	void AutoAnswer(Call &call);
 	void ProgrammableButtonClick(int buttonId);
 	void StartRing(Call &call, AnsiString wavFile = "ring.wav");
 	AnsiString RingFile(AnsiString alertInfo);
@@ -244,7 +240,8 @@ private:	// User declarations
 	void UpdateSize(void);
 	void UpdateDialpad(void);
 	void FocusCbCallUri(void);
-	void ShowCallOnLineButton(const Call &call, int btnId);
+	void ShowCallOnLineButton(const Call &call);
+	void ClearLineButton(int btnId);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);
 	void __fastcall WMEndSession(TWMEndSession &Msg);	
@@ -252,7 +249,6 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
 	__fastcall ~TfrmMain();
-	void OnCall(AnsiString uri, unsigned int &callUid);
 	void OnPhonebookEdit(AnsiString uri);
 	void OnHttpQuery(AnsiString uri);
 	AnsiString OnGetContactName(AnsiString uri);	
