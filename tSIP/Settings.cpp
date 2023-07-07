@@ -674,9 +674,10 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 
 	{
 		const Json::Value &CallsJson = root["Calls"];
-		Calls.extraHeaderLines = CallsJson.get("ExtraHeaderLines", Calls.extraHeaderLines.c_str()).asString().c_str();
-		Calls.bDisconnectCallOnAudioError = CallsJson.get("DisconnectCallOnAudioError", Calls.bDisconnectCallOnAudioError).asBool();
-    }
+		CallsJson.getAString("ExtraHeaderLines", Calls.extraHeaderLines);
+		CallsJson.getBool("DisconnectCallOnAudioError", Calls.bDisconnectCallOnAudioError);
+		CallsJson.getBool("EnableAutoAnswerEvenIfAnotherCallIsActive", Calls.enableAutoAnswerEvenIfAnotherCallIsActive);
+	}
 
 	{
 		const Json::Value &DisplayJson = root["Display"];
@@ -1001,8 +1002,13 @@ int Settings::Write(AnsiString asFileName)
 		}
 	}
 
-	root["Calls"]["ExtraHeaderLines"] = Calls.extraHeaderLines.c_str();
-	root["Calls"]["DisconnectCallOnAudioError"] = Calls.bDisconnectCallOnAudioError;
+	{
+		Json::Value &jv = root["Calls"];
+		jv["ExtraHeaderLines"] = Calls.extraHeaderLines.c_str();
+		jv["DisconnectCallOnAudioError"] = Calls.bDisconnectCallOnAudioError;
+		jv["EnableAutoAnswerEvenIfAnotherCallIsActive"] = Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
+	}
+
 
 	root["Display"]["UserOnlyClip"] = Display.bUserOnlyClip;
 	root["Display"]["DecodeUtfDisplayToAnsi"] = Display.bDecodeUtfDisplayToAnsi;

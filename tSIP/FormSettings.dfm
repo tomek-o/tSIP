@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsHistory
+    ActivePage = tsCalls
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -969,6 +969,15 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'reason'
       end
+      object lblMultipleCalls: TLabel
+        Left = 2
+        Top = 336
+        Width = 381
+        Height = 13
+        Caption = 
+          'Settings for configuration supporting multiple calls (with multi' +
+          'ple "LINE" buttons)'
+      end
       object edAutoAnswerCode: TEdit
         Left = 272
         Top = 26
@@ -1061,6 +1070,16 @@ object frmSettings: TfrmSettings
         Width = 148
         Height = 21
         TabOrder = 10
+      end
+      object CheckBox1: TCheckBox
+        Left = 22
+        Top = 355
+        Width = 462
+        Height = 17
+        Caption = 
+          'Auto answer incoming call if enabled in settings even if there i' +
+          's another call already active'
+        TabOrder = 11
       end
     end
     object tsMessages: TTabSheet

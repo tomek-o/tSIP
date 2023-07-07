@@ -1488,70 +1488,73 @@ void TfrmMain::PollCallbackQueue(void)
 				call->paiPeerUri = cb.paiPeerUri;
 				call->paiPeerName = GetPeerName(cb.paiPeerName);
 				call->autoAnswerIntercom = false;
-				if (appSettings.uaConf.autoAnswerCallInfo && cb.callAnswerAfter >= 0)
+				if (Calls::Count() == 1 || appSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive)
 				{
-					LOG("Intercom/paging auto answer, answer-after = %d\n", cb.callAnswerAfter);
-					call->autoAnswerCode = 200;
-					call->autoAnswerIntercom = true;
-					int time = cb.callAnswerAfter * 1000;
-					if (time < appSettings.uaConf.autoAnswerCallInfoDelayMin)
+					if (appSettings.uaConf.autoAnswerCallInfo && cb.callAnswerAfter >= 0)
 					{
-						time = appSettings.uaConf.autoAnswerCallInfoDelayMin;
-					}
-					if (time == 0)
-					{
-						AutoAnswer(*call);
-						answered = true;
-					}
-					else
-					{
-						LOG("Delayed auto answer, time = %u ms\n", time);
-						if (call->tmrAutoAnswer == NULL)
+						LOG("Intercom/paging auto answer, answer-after = %d\n", cb.callAnswerAfter);
+						call->autoAnswerCode = 200;
+						call->autoAnswerIntercom = true;
+						int time = cb.callAnswerAfter * 1000;
+						if (time < appSettings.uaConf.autoAnswerCallInfoDelayMin)
 						{
-							call->tmrAutoAnswer = new TTimer(NULL);
+							time = appSettings.uaConf.autoAnswerCallInfoDelayMin;
+						}
+						if (time == 0)
+						{
+							AutoAnswer(*call);
+							answered = true;
 						}
 						else
 						{
-                        	call->tmrAutoAnswer->Enabled = false;
-						}
-						call->tmrAutoAnswer->OnTimer = tmrAutoAnswerTimer;
-						call->tmrAutoAnswer->Interval = time;
-						call->tmrAutoAnswer->Enabled = true;
-					}
-				}
-				else if (appSettings.uaConf.autoAnswer)
-				{
-					int time = appSettings.uaConf.autoAnswerDelayMin;
-					int delta = appSettings.uaConf.autoAnswerDelayMax - appSettings.uaConf.autoAnswerDelayMin + 1;
-					unsigned int rand32 = (((unsigned int)rand()&0xFFFF)<<16) + (rand()&0xFFFF);
-					if (delta)
-					{
-						time += rand32 % delta;
-					}
-					call->autoAnswerCode = appSettings.uaConf.autoAnswerCode;
-					if (time == 0)
-					{
-						AutoAnswer(*call);
-						answered = true;
-						if (appSettings.uaConf.autoAnswerCode >= 400)
-						{
-							asStateText = "";
+							LOG("Delayed auto answer, time = %u ms\n", time);
+							if (call->tmrAutoAnswer == NULL)
+							{
+								call->tmrAutoAnswer = new TTimer(NULL);
+							}
+							else
+							{
+								call->tmrAutoAnswer->Enabled = false;
+							}
+							call->tmrAutoAnswer->OnTimer = tmrAutoAnswerTimer;
+							call->tmrAutoAnswer->Interval = time;
+							call->tmrAutoAnswer->Enabled = true;
 						}
 					}
-					else
+					else if (appSettings.uaConf.autoAnswer)
 					{
-						LOG("Delayed auto answer, time = %u ms\n", time);
-						if (call->tmrAutoAnswer == NULL)
+						int time = appSettings.uaConf.autoAnswerDelayMin;
+						int delta = appSettings.uaConf.autoAnswerDelayMax - appSettings.uaConf.autoAnswerDelayMin + 1;
+						unsigned int rand32 = (((unsigned int)rand()&0xFFFF)<<16) + (rand()&0xFFFF);
+						if (delta)
 						{
-							call->tmrAutoAnswer = new TTimer(NULL);
+							time += rand32 % delta;
+						}
+						call->autoAnswerCode = appSettings.uaConf.autoAnswerCode;
+						if (time == 0)
+						{
+							AutoAnswer(*call);
+							answered = true;
+							if (appSettings.uaConf.autoAnswerCode >= 400)
+							{
+								asStateText = "";
+							}
 						}
 						else
 						{
-                        	call->tmrAutoAnswer->Enabled = false;
+							LOG("Delayed auto answer, time = %u ms\n", time);
+							if (call->tmrAutoAnswer == NULL)
+							{
+								call->tmrAutoAnswer = new TTimer(NULL);
+							}
+							else
+							{
+								call->tmrAutoAnswer->Enabled = false;
+							}
+							call->tmrAutoAnswer->OnTimer = tmrAutoAnswerTimer;
+							call->tmrAutoAnswer->Interval = time;
+							call->tmrAutoAnswer->Enabled = true;
 						}
-						call->tmrAutoAnswer->OnTimer = tmrAutoAnswerTimer;
-						call->tmrAutoAnswer->Interval = time;
-						call->tmrAutoAnswer->Enabled = true;
 					}
 				}
 				if (answered == false && muteRing == false)
@@ -2234,16 +2237,19 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::EVENT_TALK:
 		{
-			Call *call = Calls::GetCurrentCall();
-			if (call && call->incoming)
+			if (Calls::Count() == 1 || appSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive)
 			{
-				if (appSettings.uaConf.answerOnEventTalk)
+				Call *call = Calls::GetCurrentCall();
+				if (call && call->incoming)
 				{
-					Answer(call->uid);
-				}
-				else
-				{
-					LOG("Ignoring \"Event: talk\" (enable in configuration)\n");
+					if (appSettings.uaConf.answerOnEventTalk)
+					{
+						Answer(call->uid);
+					}
+					else
+					{
+						LOG("Ignoring \"Event: talk\" (enable in configuration)\n");
+					}
 				}
 			}
 			break;

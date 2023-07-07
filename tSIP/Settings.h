@@ -240,8 +240,10 @@ public:
 	{
 		AnsiString extraHeaderLines;
 		bool bDisconnectCallOnAudioError;
+		bool enableAutoAnswerEvenIfAnotherCallIsActive;
 		_Calls(void):
-			bDisconnectCallOnAudioError(true)
+			bDisconnectCallOnAudioError(true),
+			enableAutoAnswerEvenIfAnotherCallIsActive(false)
 		{
 		}
 	} Calls;
