@@ -512,8 +512,9 @@ __published:	// IDE-managed Components
 	TTrackBar *trbarSoundRingVolume;
 	TCheckBox *chbHistoryIgnoreCallsCompletedElsewhere;
 	TCheckBox *chbHistoryShowRecordFileInHint;
+	TTabSheet *tsMultipleCalls;
 	TLabel *lblMultipleCalls;
-	TCheckBox *CheckBox1;
+	TCheckBox *chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

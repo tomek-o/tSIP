@@ -132,7 +132,8 @@ void TfrmSettings::CreatePages(void)
 	TTreeNode *nodeMainWindow = CreatePagesNode(NULL, tsMainWindow);
 	CreatePagesNode(nodeMainWindow, tsDialpad);
 	CreatePagesNode(NULL, tsSpeedDial);
-	CreatePagesNode(NULL, tsCalls);
+	TTreeNode *nodeCalls = CreatePagesNode(NULL, tsCalls);
+	CreatePagesNode(nodeCalls, tsMultipleCalls);
 	CreatePagesNode(NULL, tsMessages);
 	CreatePagesNode(NULL, tsDisplay);
 	TTreeNode *nodeLocking = CreatePagesNode(NULL, tsLocking);
@@ -469,6 +470,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	memoCallsExtraHeaderLines->Text = tmpSettings.Calls.extraHeaderLines;
 	chbDisconnectCallOnAudioError->Checked = tmpSettings.Calls.bDisconnectCallOnAudioError;
+	chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked = tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
 
 	edWebRtcAecMsInSndCardBuf->Text = tmpSettings.uaConf.webrtcAec.msInSndCardBuf;
 	edWebRtcAecSkew->Text = tmpSettings.uaConf.webrtcAec.skew;
@@ -897,6 +899,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.Calls.extraHeaderLines = memoCallsExtraHeaderLines->Text.Trim();
 	tmpSettings.Calls.bDisconnectCallOnAudioError = chbDisconnectCallOnAudioError->Checked;
+	tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive = chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked;
 
 	tmpSettings.uaConf.webrtcAec.msInSndCardBuf = StrToIntDef(edWebRtcAecMsInSndCardBuf->Text, 120);
 	if (tmpSettings.uaConf.webrtcAec.msInSndCardBuf < 0) {
