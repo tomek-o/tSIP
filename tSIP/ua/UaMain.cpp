@@ -158,6 +158,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 
 			Call* appCall = Calls::Alloc();
 			calls[appCall->uid] = call;
+			call_set_uid(call, appCall->uid);
 
 			const char* alert_info = call_alert_info(call);
 			if (alert_info == NULL)
@@ -232,7 +233,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		}
 		else
 		{
-			LOG("Ignoring UA_EVENT_CALL_CLOSED\n");
+			LOG("Ignoring UA_EVENT_CALL_CLOSED (callUid = %u)\n", callUid);
 		}
 		break;
 	case UA_EVENT_CALL_DTMF_START:
