@@ -19,7 +19,7 @@
 
 
 enum {
-	MAX_CALLS       =    1
+	MAX_CALLS       =    32
 };
 
 
