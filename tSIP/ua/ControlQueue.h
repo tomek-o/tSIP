@@ -20,6 +20,8 @@ public:
 	void Call(int accountId, unsigned int callUid, AnsiString target, AnsiString extraHeaderLines, bool video, void *vidispParentHandle);
 	void Answer(unsigned int callUid, AnsiString audioRxMod="", AnsiString audioRxDev="", bool video = true, void *vidispParentHandle = NULL);
 	void Transfer(unsigned int callUid, AnsiString target);
+	void TransferReplace(unsigned int callUid, unsigned int callReplaceUid);
+	void CallStartAudioExtraSource(unsigned int callUid);
 	void SendDigit(unsigned int callUid, char key);
 	void GenerateTone(unsigned int callUid,
 		float amplitude1 = 0.0f, float frequency1 = 0.0f,

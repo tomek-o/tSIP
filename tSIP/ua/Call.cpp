@@ -4,8 +4,12 @@
 #pragma hdrstop
 
 #include "Call.h"
+#include "Calls.h"
 #include "ControlQueue.h"
 #include "Settings.h"
+#include "buttons/ProgrammableButtons.h"
+#include "Globals.h"
+#include "Log.h"
 
 #include <ExtCtrls.hpp>
 
@@ -30,11 +34,37 @@ void Call::reset(void)
     *this = defaultCall;
 }
 
-void Call::hold(bool state)
+void Call::setHold(bool state)
 {
-	if (holdState == state)
+	if (connected == false && progress == false)
+		state = false;
+	if (hold == state)
+	{
+		LOG("Call %u: no need to change hold state to %d\n", uid, static_cast<int>(state));
 		return;
-	UA->Hold(uid, holdState);
+	}
+	LOG("Call %u: changing hold state to %d\n", uid, static_cast<int>(state));
+	hold = state;
+	UA->Hold(uid, state);
+	if (uid == Calls::GetCurrentCallUid())
+	{
+		buttons.UpdateBtnState(Button::HOLD, state);
+	}
+}
+
+void Call::setMute(bool state)
+{
+	if (connected == false && progress == false)
+		state = false;
+	if (mute == state)
+	{
+		LOG("Call %u: no need to change mute state to %d\n", uid, static_cast<int>(state));
+		return;
+	}
+	LOG("Call %u: changing mute state to %d\n", uid, static_cast<int>(state));
+	mute = state;
+	UA->Mute(uid, state);
+	buttons.UpdateBtnState(Button::MUTE, state);
 }
 
 AnsiString Call::getPeerUri(void) const
@@ -56,4 +86,15 @@ AnsiString Call::getPeerName(void) const
 	}
 	return peerName;
 }
+
+AnsiString Call::getStateName(void) const
+{
+	return Callback::GetCallStateName(state);
+}
+
+AnsiString Call::getStateDescription(void) const
+{
+	return Callback::GetCallStateDescription(state);
+}
+
 

@@ -50,6 +50,9 @@ public:
 		CALL_STATE__LIMITER
 	} state;
 
+	static const char* GetCallStateName(enum ua_state_e state);
+	static const char* GetCallStateDescription(enum ua_state_e state);
+
 	enum reg_state_e
 	{
 		REG_STATE_UNREGISTER_OK = 0,

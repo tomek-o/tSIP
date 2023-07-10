@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 
 #include "Recorder.h"
+#include "Callback.h"
 
 #include <System.hpp>
 #include <deque>
@@ -16,7 +17,7 @@ namespace Extctrls
 
 struct Call
 {
-    enum { INVALID_UID = 0 };
+	enum { INVALID_UID = 0 };
 
 	unsigned int uid;
 	bool incoming;
@@ -31,7 +32,7 @@ struct Call
 	AnsiString initialRxInvite;
 	TDateTime timestamp;
 	TDateTime timeTalkStart;
-	int state;				///< as in Callback::ua_state_e enum
+	Callback::ua_state_e state;
 	int lastScode;			///< last SIP code (on disconnected)
 	AnsiString lastReplyLine;
 	AnsiString recordFile;
@@ -44,7 +45,8 @@ struct Call
 	void* displayParentHandle;
 	unsigned int audioErrorCount;
 	int btnId;
-	bool holdState;
+	bool hold;
+	bool mute;
 
 	Extctrls::TTimer *tmrAutoAnswer;
 	int autoAnswerCode;
@@ -72,14 +74,15 @@ struct Call
 		connected(false),
 		disconnecting(false),
 		accessUrlMode(0),
-		state(0),
+		state(Callback::CALL_STATE_CLOSED),
 		lastScode(0),
 		recording(false),
 		ringStarted(false),
 		displayParentHandle(NULL),
 		audioErrorCount(0),
 		btnId(-1),
-		holdState(false),
+		hold(false),
+		mute(false),
 		tmrAutoAnswer(NULL),
 		autoAnswerCode(200),
 		autoAnswerIntercom(false)
@@ -87,9 +90,12 @@ struct Call
 	~Call(void);
 	void reset(void);
 
-	void hold(bool state);
+	void setHold(bool state);
+	void setMute(bool state);
 	AnsiString getPeerUri(void) const;
 	AnsiString getPeerName(void) const;
+	AnsiString getStateName(void) const;
+	AnsiString getStateDescription(void) const;
 };
 
 #endif

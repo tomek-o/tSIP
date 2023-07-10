@@ -93,6 +93,7 @@ bool call_has_audio(const struct call *call);
 bool call_has_video(const struct call *call);
 int  call_set_vidisp_parent_handle(struct call *call, void *handle);
 int  call_transfer(struct call *call, const char *uri);
+int  call_replace_transfer(struct call *target_call, struct call *source_call);
 int  call_status(struct re_printf *pf, const struct call *call);
 int  call_debug(struct re_printf *pf, const struct call *call);
 void call_set_handlers(struct call *call, call_event_h *eh,

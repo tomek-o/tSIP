@@ -210,12 +210,6 @@ private:	// User declarations
 	int OnPhonePagingTx(const char* target, const char* filename, const char* codecname);
 	void OnPhoneClearDial(void);
 	int OnGetNumberDescription(const char* number, char* description, int descriptionSize);
-	int OnSetVariable(const char* name, const char* value);
-	int OnClearVariable(const char* name);
-	void OnQueuePush(const char* name, const char* value);
-	int OnQueuePop(const char* name, AnsiString &value);
-	int OnQueueClear(const char* name);
-	int OnQueueGetSize(const char* name);
 
 	void ToggleVisibility(void);
 	void ToggleSpeedDial(void);
@@ -242,6 +236,7 @@ private:	// User declarations
 	void FocusCbCallUri(void);
 	void ShowCallOnLineButton(const Call &call);
 	void ClearLineButton(int btnId);
+	void UpdateMainCallDisplay(void);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);
 	void __fastcall WMEndSession(TWMEndSession &Msg);	

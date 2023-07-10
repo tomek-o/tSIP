@@ -176,12 +176,6 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			if (pai_peer_name == NULL)
 				pai_peer_name = "";
 
-			if (appSettings.uaConf.startAudioSourceAtCallStart)
-			{
-				int TODO__MOVE_STARTING_EXTRA_SOURCE_TO_MAIN_MAYBE;
-				call_start_audio_extra_source(call);
-			}
-
 			UA_CB->ChangeCallState(appCall->uid, state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name, "");
 			break;
 		}
@@ -517,7 +511,7 @@ static void zrtp_state_handler(int session_id, struct zrtp_st *st)
 	zrtp.sas = st->sas;
 	zrtp.cipher = st->cipher;
 	zrtp.verified = st->verified;
-int TODO__ZRTP_CALL_ID;
+int TODO__ZRTP_CALL_ID_ON_MULTIPLE_CALLS;
 	UA_CB->ChangeEncryptionState(zrtp);
 }
 
@@ -1090,6 +1084,28 @@ extern "C" void control_handler(void)
 			call_transfer(cmdCall, cmd.target.c_str());
 		}
 		break;
+	case Command::TRANSFER_REPLACE: {
+		if (cmdCall)
+		{
+			struct call* replaceCall = findCall(cmd.callReplaceUid);
+			if (replaceCall)
+			{
+				call_replace_transfer(cmdCall, replaceCall);
+			}
+			else
+			{
+				DEBUG_WARNING("Call %u to replace not found\n", cmd.callReplaceUid);
+			}
+		}
+		break;
+	}
+	case Command::CALL_START_AUDIO_EXTRA_SOURCE: {
+		if (cmdCall)
+		{
+			call_start_audio_extra_source(cmdCall);
+		}
+		break;
+	}
 	case Command::SEND_DIGIT:
 		if (cmdCall)
 		{
@@ -1329,7 +1345,7 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::ZRTP_VERIFY_SAS: {
-int TODO__ZRTP;
+int TODO__ZRTP_ON_MULTIPLE_CALLS;
     	baresip_zrtp_verify_sas(1, cmd.bParam);
 		break;
 	}

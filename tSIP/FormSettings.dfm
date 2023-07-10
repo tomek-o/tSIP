@@ -4243,6 +4243,14 @@ object frmSettings: TfrmSettings
           's another call already active'
         TabOrder = 0
       end
+      object chbCallsAutoHoldWhenSwitchingCalls: TCheckBox
+        Left = 3
+        Top = 45
+        Width = 438
+        Height = 17
+        Caption = 'Automatically hold/unhold when switching between calls'
+        TabOrder = 1
+      end
     end
   end
   object tvSelector: TTreeView

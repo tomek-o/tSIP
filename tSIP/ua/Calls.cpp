@@ -231,7 +231,7 @@ void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 	ScopedLock<Mutex> lock(mutex);
 	assert(lineButtonIds.find(id) != lineButtonIds.end());	// sanity check
 
-    bool autoHold = true;
+	bool autoHold = appSettings.Calls.autoHoldWhenSwitchingCalls;
 
 	for (std::set<unsigned int>::iterator iter = lineButtonIds.begin(); iter != lineButtonIds.end(); ++iter)
 	{
@@ -246,7 +246,7 @@ void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 				Call *call = FindCallFromLineButton(*iter);
 				if (call)
 				{
-					call->hold(true);
+					call->setHold(true);
 				}
 			}
 		}
@@ -256,13 +256,15 @@ void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 	Call *call = FindCallFromLineButton(id);
 	if (call)
 	{
-		if (autoHold)
-			call->hold(false);
 		currentCallUid = call->uid;
+		if (autoHold)
+			call->setHold(false);
 	}
 	else
 	{
-    	currentCallUid = Call::INVALID_UID;
+		currentCallUid = Call::INVALID_UID;
+		buttons.UpdateBtnState(Button::HOLD, false);
+		buttons.UpdateBtnState(Button::MUTE, false);
 	}
 }
 

@@ -677,6 +677,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		CallsJson.getAString("ExtraHeaderLines", Calls.extraHeaderLines);
 		CallsJson.getBool("DisconnectCallOnAudioError", Calls.bDisconnectCallOnAudioError);
 		CallsJson.getBool("EnableAutoAnswerEvenIfAnotherCallIsActive", Calls.enableAutoAnswerEvenIfAnotherCallIsActive);
+		CallsJson.getBool("AutoHoldWhenSwitchingCalls", Calls.autoHoldWhenSwitchingCalls);
 	}
 
 	{
@@ -1007,6 +1008,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["ExtraHeaderLines"] = Calls.extraHeaderLines.c_str();
 		jv["DisconnectCallOnAudioError"] = Calls.bDisconnectCallOnAudioError;
 		jv["EnableAutoAnswerEvenIfAnotherCallIsActive"] = Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
+		jv["AutoHoldWhenSwitchingCalls"] = Calls.autoHoldWhenSwitchingCalls;
 	}
 
 

@@ -785,12 +785,6 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackPagingTx = OnPhonePagingTx;
 	PhoneInterface::callbackClearDial = OnPhoneClearDial;
 	PhoneInterface::callbackGetNumberDescription = OnGetNumberDescription;
-	PhoneInterface::callbackSetVariable = OnSetVariable;
-	PhoneInterface::callbackClearVariable = OnClearVariable;
-	PhoneInterface::callbackQueuePush = OnQueuePush;
-	PhoneInterface::callbackQueuePop = OnQueuePop;
-	PhoneInterface::callbackQueueClear = OnQueueClear;
-	PhoneInterface::callbackQueueGetSize = OnQueueGetSize;
 	PhoneInterface::trayPopupMenu = popupTray;
 
 	PhoneInterface::EnumerateDlls(dir + "\\phone");
@@ -1488,6 +1482,12 @@ void TfrmMain::PollCallbackQueue(void)
 				call->paiPeerUri = cb.paiPeerUri;
 				call->paiPeerName = GetPeerName(cb.paiPeerName);
 				call->autoAnswerIntercom = false;
+
+				if (appSettings.uaConf.startAudioSourceAtCallStart)
+				{
+					UA->CallStartAudioExtraSource(call->uid);
+				}
+
 				if (Calls::Count() == 1 || appSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive)
 				{
 					if (appSettings.uaConf.autoAnswerCallInfo && cb.callAnswerAfter >= 0)
@@ -1535,6 +1535,7 @@ void TfrmMain::PollCallbackQueue(void)
 						{
 							AutoAnswer(*call);
 							answered = true;
+							int TODO__TEST_AUTO_REJECT;
 							if (appSettings.uaConf.autoAnswerCode >= 400)
 							{
 								asStateText = "";
@@ -1605,7 +1606,10 @@ void TfrmMain::PollCallbackQueue(void)
 				lastContactEntry = contacts.GetEntry(CleanUri(cb.caller));
 				Call *call = Calls::FindByUid(cb.callUid);
 				if (call)
+				{
+					call->uri = cb.caller;
 					call->recordFile = "";
+				}
 				if (lastContactEntry)
 				{
 					lbl2ndPartyDesc->Caption = lastContactEntry->description;
@@ -1668,7 +1672,7 @@ void TfrmMain::PollCallbackQueue(void)
 					call->lastScode = 200;
 					call->lastReplyLine = "200 OK";
 
-					UpdateClip(cb.callUid);
+					//UpdateClip(cb.callUid);
 
 					PhoneInterface::UpdateRing(0);
 					if (call->tmrAutoAnswer)
@@ -1810,14 +1814,17 @@ void TfrmMain::PollCallbackQueue(void)
 				break;
 			}
 
-			Call *call = Calls::FindByUid(cb.callUid);
+			lblCallState->Caption = asStateText;
 
+			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
 				call->state = cb.state;
+				if (call == Calls::GetCurrentCall())
+				{
+					UpdateMainCallDisplay();
+				}
 			}
-
-			lblCallState->Caption = asStateText;
 
 			if (cb.state == Callback::CALL_STATE_INCOMING)
 			{
@@ -1889,8 +1896,11 @@ void TfrmMain::PollCallbackQueue(void)
 				call->paiPeerUri = cb.paiPeerUri;
 				call->paiPeerName = GetPeerName(cb.paiPeerName);
 
-				UpdateClip(cb.callUid);
+				//UpdateClip(cb.callUid);
+				if (call == Calls::GetCurrentCall())
+					UpdateMainCallDisplay();
 
+                int TODO__TRAY_NOTIFIER_MULTIPLE_CALLS;
 				frmTrayNotifier->SetData(call->uid, lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, false);
 			}
 			break;
@@ -2693,13 +2703,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		UA->Transfer(0, edTransfer->Text);	
 		break;
 	case Button::HOLD: {
-		int TODO__CONTROL_HOLD_BTN_DOWN_STATE;
-		//if (call.connected == false && call.progress == false)
-		//	down = false;
-		buttons.UpdateBtnState(cfg.type, down);
 		Call *call = Calls::GetCurrentCall();
 		if (call) {
-			UA->Hold(call->uid, down);
+			call->setHold(down);
 		}
 		break;
 	}
@@ -2710,13 +2716,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		UA->UnRegister(0);
 		break;
 	case Button::MUTE: {
-		int TODO__CONTROL_MUTE_BTN_DOWN_STATE;
-		//if (call.connected == false && call.progress == false)
-		//	down = false;
-		buttons.UpdateBtnState(cfg.type, down);
 		Call *call = Calls::GetCurrentCall();
 		if (call) {
-			UA->Mute(call->uid, down);
+			call->setMute(down);
 		}
 		break;
 	}
@@ -2904,8 +2906,12 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		UA->ZrtpVerifySas(false);
 		break;
 	case Button::LINE: {
+		unsigned int prevUid = Calls::GetCurrentCallUid();
 		Calls::OnLineButtonClick(id, btn);
-		int TODO__UPDATE_CALL_STATE_DISPLAY;
+		if (prevUid != Calls::GetCurrentCallUid())
+		{
+			UpdateMainCallDisplay();
+		}
 		break;
 	}
 
@@ -3632,7 +3638,7 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 	case KEY_7:
 	case KEY_8:
 	case KEY_9:
-		Dial('0' + keyCode);
+		Dial('0' + keyCode - KEY_0);
 		break;
 	case KEY_STAR:
 		Dial('*');
@@ -3697,36 +3703,6 @@ int TfrmMain::OnGetNumberDescription(const char* number, char* description, int 
 		description[descriptionSize-1] = '\0';
 	}
 	return 0;
-}
-
-int TfrmMain::OnSetVariable(const char* name, const char* value)
-{
-	return ScriptExec::SetVariable(name, value);
-}
-
-int TfrmMain::OnClearVariable(const char* name)
-{
-	return ScriptExec::ClearVariable(name);
-}
-
-void TfrmMain::OnQueuePush(const char* name, const char* value)
-{
-	return ScriptExec::QueuePush(name, value);
-}
-
-int TfrmMain::OnQueuePop(const char* name, AnsiString &value)
-{
-	return ScriptExec::QueuePop(name, value);
-}
-
-int TfrmMain::OnQueueClear(const char* name)
-{
-	return ScriptExec::QueueClear(name);
-}
-
-int TfrmMain::OnQueueGetSize(const char* name)
-{
-    return ScriptExec::QueueGetSize(name);
 }
 
 void __fastcall TfrmMain::FormCloseQuery(TObject *Sender, bool &CanClose)
@@ -4063,8 +4039,27 @@ void TfrmMain::ShowCallOnLineButton(const Call &call)
 	TProgrammableButton *btn = buttons.GetBtn(call.btnId);
 	if (btn == NULL)
 		return;
-	btn->SetCaption(call.getPeerUri());
-	btn->SetCaption2(call.getPeerName());
+
+	AnsiString caption;
+	AnsiString clip = GetClip(call.getPeerUri());
+	AnsiString peer = call.getPeerName();
+	if (peer == "")
+	{
+		caption.sprintf("%s", clip.c_str());
+	}
+	else
+	{
+		caption.sprintf("%s, %s", clip.c_str(), peer.c_str());
+	}
+	btn->SetCaption(caption);
+
+	AnsiString caption2;
+	caption2.sprintf("%s", call.getStateName().c_str());
+	if (call.hold)
+		caption2 += ", HOLD";
+	if (call.mute)
+		caption2 += ", MUTE";
+	btn->SetCaption2(caption2);
 }
 
 void TfrmMain::ClearLineButton(int btnId)
@@ -4079,4 +4074,22 @@ void TfrmMain::ClearLineButton(int btnId)
 	btn->SetCaption2(" - IDLE - ");
 }
 
+void TfrmMain::UpdateMainCallDisplay(void)
+{
+	int TODO__UPDATE_MAIN_CALL_DISPLAY;
+
+	Call *call = Calls::GetCurrentCall();
+	if (call == NULL)
+	{
+		int TODO__SHOW_HANGUP_REASON_AFTER_THE_CALL;
+		lblCallState->Caption = "";
+		lbl2ndParty->Caption = "";
+		lbl2ndPartyDesc->Caption = "";
+	}
+	else
+	{
+		lblCallState->Caption = call->getStateDescription();	
+		UpdateClip(call->uid);
+	}
+}
 

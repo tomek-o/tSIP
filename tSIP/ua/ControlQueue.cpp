@@ -121,6 +121,29 @@ void ControlQueue::Transfer(unsigned int callUid, AnsiString target)
 	fifo.push();
 }
 
+void ControlQueue::TransferReplace(unsigned int callUid, unsigned int callReplaceUid)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::TRANSFER_REPLACE;
+	cmd->callUid = callUid;
+	cmd->callReplaceUid = callReplaceUid;
+	fifo.push();
+}
+
+void ControlQueue::CallStartAudioExtraSource(unsigned int callUid)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::CALL_START_AUDIO_EXTRA_SOURCE;
+	cmd->callUid = callUid;
+	fifo.push();
+}
+
 void ControlQueue::SendDigit(unsigned int callUid, char key)
 {
 	ScopedLock<Mutex> lock(mutex);

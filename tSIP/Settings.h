@@ -241,9 +241,11 @@ public:
 		AnsiString extraHeaderLines;
 		bool bDisconnectCallOnAudioError;
 		bool enableAutoAnswerEvenIfAnotherCallIsActive;
+		bool autoHoldWhenSwitchingCalls;				///< automatically hold inactive / unhold new active call when switching between calls
 		_Calls(void):
 			bDisconnectCallOnAudioError(true),
-			enableAutoAnswerEvenIfAnotherCallIsActive(false)
+			enableAutoAnswerEvenIfAnotherCallIsActive(false),
+			autoHoldWhenSwitchingCalls(true)
 		{
 		}
 	} Calls;
