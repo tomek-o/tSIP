@@ -103,12 +103,6 @@ private:
 	typedef int (__closure *CallbackPagingTx)(const char* target, const char* filename, const char* codecname);
 	typedef void (__closure *CallbackClearDial)(void);
 	typedef int (__closure *CallbackGetNumberDescription)(const char* number, char* description, int descriptionSize);
-	typedef int (__closure *CallbackSetVariable)(const char* name, const char* value);
-	typedef int (__closure *CallbackClearVariable)(const char* name);
-	typedef void (__closure *CallbackQueuePush)(const char* name, const char* value);
-	typedef int (__closure *CallbackQueuePop)(const char* name, AnsiString &value);
-	typedef int (__closure *CallbackQueueClear)(const char* name);
-	typedef int (__closure *CallbackQueueGetSize)(const char* name);
 
 	static std::list<PhoneConf> cfg;
 	static PhoneConf& FindCfg(AnsiString dllName);
@@ -158,12 +152,6 @@ public:
 	static CallbackPagingTx callbackPagingTx;
 	static CallbackClearDial callbackClearDial;
 	static CallbackGetNumberDescription callbackGetNumberDescription;
-	static CallbackSetVariable callbackSetVariable;
-	static CallbackClearVariable callbackClearVariable;
-	static CallbackQueuePush callbackQueuePush;
-	static CallbackQueuePop callbackQueuePop;
-	static CallbackQueueClear callbackQueueClear;
-	static CallbackQueueGetSize callbackQueueGetSize;
 	static TPopupMenu *trayPopupMenu;
 
 	// dll callbacks
