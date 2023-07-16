@@ -964,6 +964,7 @@ void TfrmMain::Hangup(unsigned int callUid, int sipCode, AnsiString reason)
 	if (c == NULL)
 		return;
 	c->disconnecting = true;
+	c->sipReason.sprintf("Local hangup, %d / %s", sipCode, reason.c_str());
 	UA->Hangup(callUid, sipCode, reason);
 }
 
@@ -1742,18 +1743,13 @@ void TfrmMain::PollCallbackQueue(void)
 						UA->PlayStop();
 						call->ringStarted = false;
 					}
-					if (cb.scode != 0 || cb.caller != "")
-					{
-						asStateText = cb.caller;	// here it's filled with e.g. "488 Not Acceptable Here" or local error string
-						tmrClearCallState->Enabled = true;
-					}
-					else
-					{
-						asStateText = "";
-					}
+					tmrClearCallState->Enabled = true;
 
-					AnsiString sipReason = cb.caller;
-					bool completedElsewhere = (sipReason.UpperCase() == CALL_COMPLETED_ELSEWHERE);
+					if (cb.caller != "")
+					{
+						call->sipReason = cb.caller;
+					}
+					bool completedElsewhere = (call->sipReason.UpperCase() == CALL_COMPLETED_ELSEWHERE);
 
 					History::Entry entry;
 					DecodeDateTime(call->timestamp,
@@ -1787,7 +1783,7 @@ void TfrmMain::PollCallbackQueue(void)
 					entry.lastScode = call->lastScode;
 					entry.lastReplyLine = call->lastReplyLine;
 					entry.recordFile = call->recordFile;
-					entry.reason = sipReason;
+					entry.reason = call->sipReason;
 
 					if (!(appSettings.history.ignoreCallsCompletedElsewhere && completedElsewhere))
 					{
@@ -2702,6 +2698,49 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 			return;
 		UA->Transfer(0, edTransfer->Text);	
 		break;
+	case Button::ATTENDED_TRANSFER: {
+		Call *call = Calls::GetCurrentCall();
+		int TODO__IS_CHECKING_STATE_REALLY_NEEDED;
+		if (call)
+		{
+			if (call->state == Callback::CALL_STATE_ESTABLISHED)
+			{
+				int TODO__ATT_TRANSFER_FOR_MORE_THAN_2_CALLS;
+				if (Calls::Count() == 2)
+				{
+					std::vector<unsigned int> ids = Calls::GetUids();
+					for (unsigned int i=0; i<ids.size(); i++)
+					{
+						if (ids[i] == call->uid)
+							continue;
+						Call *secondCall = Calls::FindByUid(ids[i]);
+						if (secondCall && secondCall->state == Callback::CALL_STATE_ESTABLISHED)
+						{
+							UA->TransferReplace(call->uid, secondCall->uid);
+							break;
+						}
+						else
+						{
+							LOG("Attended transfer: no second call or second call not established!\n");
+						}
+					}
+				}
+				else
+				{
+                	LOG("Attended transfer requires 2 simultaneous calls\n");
+				}
+			}
+			else
+			{
+				LOG("Attended transfer: current call is not established!\n");
+			}
+		}
+		else
+		{
+			LOG("Attended transfer: no current call!\n");
+		}
+		break;
+	}
 	case Button::HOLD: {
 		Call *call = Calls::GetCurrentCall();
 		if (call) {
@@ -2906,6 +2945,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		UA->ZrtpVerifySas(false);
 		break;
 	case Button::LINE: {
+		tmrClearCallState->Enabled = false;
 		unsigned int prevUid = Calls::GetCurrentCallUid();
 		Calls::OnLineButtonClick(id, btn);
 		if (prevUid != Calls::GetCurrentCallUid())
@@ -3898,6 +3938,8 @@ void __fastcall TfrmMain::miClearCallsHistoryClick(TObject *Sender)
 void __fastcall TfrmMain::tmrClearCallStateTimer(TObject *Sender)
 {
 	tmrClearCallState->Enabled = false;
+	lbl2ndParty->Caption = "";
+	lbl2ndPartyDesc->Caption = "";
 	lblCallState->Caption = "";
 }
 //---------------------------------------------------------------------------
@@ -4071,7 +4113,7 @@ void TfrmMain::ClearLineButton(int btnId)
 	if (btn == NULL)
 		return;
 	btn->SetCaption("LINE");
-	btn->SetCaption2(" - IDLE - ");
+	btn->SetCaption2(Callback::GetCallStateDescription(Callback::CALL_STATE_CLOSED));
 }
 
 void TfrmMain::UpdateMainCallDisplay(void)

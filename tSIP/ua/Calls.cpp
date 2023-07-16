@@ -215,7 +215,17 @@ int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 				{
 					TProgrammableButton *btn = buttons.GetBtn(*iter);
 					if (btn)
+					{
+						for (std::set<unsigned int>::iterator iter2 = lineButtonIds.begin(); iter2 != lineButtonIds.end(); ++iter2)
+						{
+							TProgrammableButton *btn2 = buttons.GetBtn(*iter2);
+							if (btn2 && btn2->GetDown())
+							{
+								btn2->SetDown(false);
+							}
+						}
 						btn->SetDown(true);
+					}
 					currentCallUid = call->uid;
 				}
 				return 0;

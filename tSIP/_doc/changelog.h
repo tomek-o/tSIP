@@ -1088,5 +1088,26 @@ Version 0.2.14
 Version 0.2.14.1
 	- fixed crash from v0.2.14 when call was disconnected by the other party
 	- passing BYE message from handler, potentially allowing to use Reason from it
+
+Version 0.3
+	- support for multiple simultaneous calls
+		- new button type: LINE
+			- more than one button of this type has to be defined to allow more than one call
+			- each call if there are multiple calls would be assigned to its own LINE button
+			- line buttons are displaying state of assigned calls and are used to switch between calls   
+		- if no LINE button was defined application should keep backward compatibility (being limited to a single call)
+		- state of HOLD and MUTE functions is separate for each call
+		- new, separate settings page related to multiple calls
+			- option to automatically hold/unhold calls when switching between them using LINE buttons
+			- option to allow auto answer even if another call is already active
+		- Lua:
+			- ability to operate on current call or specific call (using call ID parameter)
+			- many Lua functions have kept existing parameter list, but would operate on the current call
+			- added new Hangup2 function taking call ID as first argument
+			- added call ID as optional parameter to many other functions
+		- separate ring volume setting - used if there is already another call active to make ring more quiet
+		- new button type: Attended transfer
+		- if used with video, display output should be configured to used separate window, not button
+		- ZRTP is not supported at the moment for multiple calls
 */
 

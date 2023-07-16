@@ -556,6 +556,7 @@ static int app_init(void)
 	strncpyz(cfg->audio.ring_mod, appSettings.uaConf.audioCfgRing.mod.c_str(), sizeof(cfg->audio.ring_mod));
 	strncpyz(cfg->audio.ring_dev, appSettings.uaConf.audioCfgRing.dev.c_str(), sizeof(cfg->audio.ring_dev));
 	cfg->audio.ring_volume = appSettings.uaConf.audioCfgRing.volume;
+	cfg->audio.ring_volume_multi = appSettings.uaConf.audioCfgRing.volumeMulti;
 
 	cfg->audio.softvol_tx = appSettings.uaConf.audioSoftVol.tx;
 	cfg->audio.softvol_rx = appSettings.uaConf.audioSoftVol.rx;
@@ -1163,7 +1164,16 @@ extern "C" void control_handler(void)
 		struct ua* ua = ua_cur();
 		struct config * cfg = conf_config();
 		//LOG("UaMain: START_RING\n");
-		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), &cfg->audio.ring_volume, -1, cfg->audio.loop_ring_without_silence);
+		float *volume;
+		if (calls.size() <= 1)
+		{
+			volume = &cfg->audio.ring_volume;
+		}
+		else
+		{
+			volume = &cfg->audio.ring_volume_multi;
+		}
+		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), volume, -1, cfg->audio.loop_ring_without_silence);
 		break;
 	}
 	case Command::PLAY_STOP: {
@@ -1310,6 +1320,7 @@ extern "C" void control_handler(void)
 		cfg->audio.softvol_rx = appSettings.uaConf.audioSoftVol.rx;
 		cfg->audio.alert_volume = appSettings.uaConf.audioCfgAlert.volume;
 		cfg->audio.ring_volume = appSettings.uaConf.audioCfgRing.volume;
+		cfg->audio.ring_volume_multi = appSettings.uaConf.audioCfgRing.volumeMulti;
 		break;
 	}
 	case Command::SEND_CUSTOM_REQUEST: {

@@ -47,6 +47,7 @@ struct Call
 	int btnId;
 	bool hold;
 	bool mute;
+	AnsiString sipReason;
 
 	Extctrls::TTimer *tmrAutoAnswer;
 	int autoAnswerCode;

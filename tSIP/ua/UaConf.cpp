@@ -117,6 +117,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 			}
 			uaConfAudioCfgRingJson.getString("dev", audioCfgRing.dev);
 			uaConfAudioCfgRingJson.getFloat("volume", audioCfgRing.volume);
+			uaConfAudioCfgRingJson.getFloat("volumeMulti", audioCfgRing.volumeMulti);
 		}
 	}
 
@@ -348,6 +349,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	uaConfJson["audioCfgRing"]["mod"] = audioCfgRing.mod;
 	uaConfJson["audioCfgRing"]["dev"] = audioCfgRing.dev;
 	uaConfJson["audioCfgRing"]["volume"] = audioCfgRing.volume;
+	uaConfJson["audioCfgRing"]["volumeMulti"] = audioCfgRing.volumeMulti;
 	uaConfJson["audioCfgPlayIntercom"]["mod"] = audioCfgPlayIntercom.mod;
 	uaConfJson["audioCfgPlayIntercom"]["dev"] = audioCfgPlayIntercom.dev;
 

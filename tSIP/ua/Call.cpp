@@ -94,6 +94,8 @@ AnsiString Call::getStateName(void) const
 
 AnsiString Call::getStateDescription(void) const
 {
+	if (sipReason != "")
+		return sipReason;
 	return Callback::GetCallStateDescription(state);
 }
 

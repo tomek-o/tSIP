@@ -194,6 +194,7 @@ struct config {
 		char ring_mod[32];      /**< Audio module for incoming ring */
 		char ring_dev[128];     /**< Audio device for incoming ring */
 		float ring_volume;
+		float ring_volume_multi;/**< Ring volume if there is already another call */
 		struct range srate;     /**< Audio sampling rate in [Hz]    */
 		struct range channels;  /**< Nr. of audio channels (1=mono) */
 		uint32_t srate_play;    /**< Opt. sampling rate for player  */

@@ -42,7 +42,7 @@ const char* Callback::GetCallStateDescription(enum ua_state_e state)
 	switch (state)
 	{
 	case CALL_STATE_CLOSED:
-		return "- IDLE -";
+		return " - IDLE - ";
 	case CALL_STATE_INCOMING:
 		return "Incoming call";
 	case CALL_STATE_OUTGOING:
