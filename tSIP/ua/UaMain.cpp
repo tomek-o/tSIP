@@ -1356,8 +1356,12 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::ZRTP_VERIFY_SAS: {
-int TODO__ZRTP_ON_MULTIPLE_CALLS;
-    	baresip_zrtp_verify_sas(1, cmd.bParam);
+		int TODO__ZRTP_ON_MULTIPLE_CALLS;
+		baresip_zrtp_verify_sas(1, cmd.bParam);
+		break;
+	}
+	case Command::CONFERENCE_START: {
+		baresip_start_conference();
 		break;
 	}
 	default:

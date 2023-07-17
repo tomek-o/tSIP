@@ -363,6 +363,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::MUTE_RING:
 	case Button::MUTE:
 	case Button::ATTENDED_TRANSFER:
+	case Button::CONFERENCE_START:
 		edNumber->Visible = false;
 		lblNumber->Visible = false;
 		break;

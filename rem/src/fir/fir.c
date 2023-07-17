@@ -3,98 +3,65 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
- 
-#include <re.h>
+
 #include <string.h>
-#include <stdlib.h>
+#include <re.h>
 #include <rem_fir.h>
 
 
-/*
- * FIR -- Finite Impulse Response
- *
- * Inspiration:
- *
- *     http://sestevenson.files.wordpress.com/2009/10/firfixed.pdf
- */
-
-
 /**
- * Initialize the FIR-filter
+ * Reset the FIR-filter
  *
  * @param fir FIR-filter state
  */
-void fir_init(struct fir *fir)
+void fir_reset(struct fir *fir)
 {
-	memset(fir->insamp, 0, sizeof(fir->insamp));
+	if (!fir)
+		return;
+
+	memset(fir, 0, sizeof(*fir));
 }
 
 
 /**
- * Process PCM samples with the FIR filter
+ * Process samples with the FIR filter
  *
- * @param fir          FIR filter
- * @param coeffs       FIR Coefficients to use
- * @param input        Input PCM samples
- * @param output       Output PCM samples
- * @param length       Number of samples
- * @param filterLength Number of coefficients
- * @param channels     Number of channels
+ * @note product of channel and tap-count must be power of two
+ *
+ * @param fir  FIR filter
+ * @param outv Output samples
+ * @param inv  Input samples
+ * @param inc  Number of samples
+ * @param ch   Number of channels
+ * @param tapv Filter taps
+ * @param tapc Number of taps
  */
-void fir_process(struct fir *fir, const int16_t *coeffs,
-		 const int16_t *input, int16_t *output,
-		 size_t length, int filterLength, uint8_t channels)
+void fir_filter(struct fir *fir, int16_t *outv, const int16_t *inv, size_t inc,
+		unsigned ch, const int16_t *tapv, size_t tapc)
 {
-	const int16_t *inputx = input;
-	int32_t acc;
-	const int16_t *coeffp;
-	int16_t *inputp;
-	size_t n;
-	int k;
-	int ch;
+	const unsigned hmask = (ch * (unsigned)tapc) - 1;
 
-	/* put the new samples at the high end of the buffer */
-	for (n = 0; n < length; n++) {
+	if (!fir || !outv || !inv || !ch || !tapv || !tapc)
+		return;
 
-		for (ch = 0; ch < channels; ch++) {
+	if (hmask >= RE_ARRAY_SIZE(fir->history) || hmask & (hmask+1))
+		return;
 
-			fir->insamp[ch][filterLength - 1 + n] = *inputx++;
-		}
-	}
+	while (inc--) {
 
-	for (ch = 0; ch < channels; ch++) {
+		int64_t acc = 0;
+		unsigned i, j;
 
-		/* apply the filter to each input sample */
-		for ( n = 0; n < length; n++ ) {
+		fir->history[fir->index & hmask] = *inv++;
 
-			coeffp = coeffs;
-			inputp = &fir->insamp[ch][filterLength - 1 + n];
+		for (i=0, j=fir->index++; i<tapc; ++i, j-=ch)
+			acc += (int64_t)fir->history[j & hmask] * tapv[i];
 
-			/* load rounding constant */
-			acc = 1 << 14;
+		if (acc > 0x3fffffff)
+			acc = 0x3fffffff;
+		else if (acc < -0x40000000)
+			acc = -0x40000000;
 
-			/* perform the multiply-accumulate */
-			for ( k = 0; k < filterLength; k++ ) {
-				acc += (int32_t)(*coeffp++) *
-					(int32_t)(*inputp--);
-			}
-
-			/* saturate the result */
-			if ( acc > 0x3fffffff ) {
-				acc = 0x3fffffff;
-			}
-			else if ( acc < -0x40000000 ) {
-				acc = -0x40000000;
-			}
-
-			/* convert from Q30 to Q15 */
-			output[channels*n + ch] = (int16_t)(acc >> 15);
-		}
-	}
-
-	/* shift input samples back in time for next time */
-	for (ch = 0; ch < channels; ch++) {
-		memmove( &fir->insamp[ch][0], &fir->insamp[ch][length],
-			 (filterLength - 1) * sizeof(int16_t) );
+		*outv++ = (int16_t)(acc>>15);
 	}
 }

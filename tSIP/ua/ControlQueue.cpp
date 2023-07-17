@@ -419,6 +419,18 @@ int ControlQueue::ZrtpVerifySas(bool state)
 	return 0;
 }
 
+int ControlQueue::ConferenceStart(void)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return -1;
+	cmd->type = Command::CONFERENCE_START;
+	fifo.push();
+	return 0;
+}
+
+
 
 
 

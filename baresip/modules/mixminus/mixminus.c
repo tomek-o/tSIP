@@ -9,6 +9,11 @@
 #include <re.h>
 #include <rem.h>
 #include <baresip.h>
+#include <baresip_conference.h>
+
+#define DEBUG_MODULE "mixminus"
+#define DEBUG_LEVEL 5
+#include <re_dbg.h>
 
 enum {
 	MAX_SRATE       = 48000,  /* Maximum sample rate in [Hz] */
@@ -95,7 +100,6 @@ static void mix_destructor(void *arg)
 	struct mix *mix = arg;
 	mem_deref(mix->ab);
 }
-
 
 static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 			 const struct aufilt *af, struct aufilt_prm *prm,
@@ -242,23 +246,17 @@ static void read_samp(struct aubuf *ab, int16_t *sampv, size_t sampc,
 }
 
 
-static int encode(struct aufilt_enc_st *aufilt_enc_st, struct auframe *af)
+static int encode(struct aufilt_enc_st *aufilt_enc_st, int16_t *sampv, size_t *sampc)
 {
 	struct mixminus_enc *enc = (struct mixminus_enc *)aufilt_enc_st;
 	size_t i, inc, outc, stime;
 	struct le *lem;
 	struct mix *mix;
-	int16_t *sampv = af->sampv;
 	int16_t *sampv_mix = enc->sampv;
 	int32_t sample;
 	int err = 0;
 
-	stime = 1000 * af->sampc / (enc->prm.srate * enc->prm.ch);
-
-	if (enc->prm.fmt != AUFMT_S16LE) {
-		auconv_to_s16(enc->fsampv, enc->prm.fmt, af->sampv, af->sampc);
-		sampv = enc->fsampv;
-	}
+	stime = 1000 * (*sampc) / (enc->prm.srate * enc->prm.ch);
 
 	for (lem = list_head(&enc->mixers); lem; lem = lem->next) {
 		mix = lem->data;
@@ -279,7 +277,7 @@ static int encode(struct aufilt_enc_st *aufilt_enc_st, struct auframe *af)
 		err = auresamp_setup(&enc->resamp, mix->prm.srate, mix->prm.ch,
 				     enc->prm.srate, enc->prm.ch);
 		if (err) {
-			warning("mixminus/auresamp_setup error (%m)\n", err);
+			DEBUG_WARNING("mixminus/auresamp_setup error (%m)\n", err);
 			return err;
 		}
 
@@ -288,10 +286,10 @@ static int encode(struct aufilt_enc_st *aufilt_enc_st, struct auframe *af)
 			sampv_mix = enc->rsampv;
 
 			if (enc->prm.srate > mix->prm.srate) {
-				inc = af->sampc / enc->resamp.ratio;
+				inc = *sampc / enc->resamp.ratio;
 			}
 			else {
-				inc = af->sampc * enc->resamp.ratio;
+				inc = *sampc * enc->resamp.ratio;
 			}
 
 			if (enc->prm.ch == 2 && mix->prm.ch == 1) {
@@ -307,20 +305,19 @@ static int encode(struct aufilt_enc_st *aufilt_enc_st, struct auframe *af)
 			err = auresamp(&enc->resamp, sampv_mix, &outc,
 				       enc->sampv, inc);
 			if (err) {
-				warning("mixminus/auresamp error (%m)\n", err);
+				DEBUG_WARNING("mixminus/auresamp error (%m)\n", err);
 				return err;
 			}
-			if (outc != af->sampc) {
-				warning("mixminus/auresamp sample count "
-					"error\n");
+			if (outc != *sampc) {
+				DEBUG_WARNING("mixminus/auresamp sample count error\n");
 				return EINVAL;
 			}
 		}
 		else {
-			read_samp(mix->ab, sampv_mix, af->sampc, stime);
+			read_samp(mix->ab, sampv_mix, *sampc, stime);
 		}
 
-		for (i = 0; i < af->sampc; i++) {
+		for (i = 0; i < *sampc; i++) {
 			sample = sampv[i] + sampv_mix[i];
 
 			/* soft clipping */
@@ -332,23 +329,17 @@ static int encode(struct aufilt_enc_st *aufilt_enc_st, struct auframe *af)
 		}
 	}
 
-	if (enc->prm.fmt != AUFMT_S16LE) {
-		auconv_from_s16(enc->prm.fmt, af->sampv, sampv,
-				af->sampc);
-	}
-
 	return err;
 }
 
 
-static int decode(struct aufilt_dec_st *aufilt_dec_st, struct auframe *af)
+static int decode(struct aufilt_dec_st *aufilt_dec_st, int16_t *sampv, size_t *sampc)
 {
 	struct mixminus_dec *dec = (struct mixminus_dec *)aufilt_dec_st;
 	struct mixminus_enc *enc;
 	struct le *le;
 	struct le *lem;
 	struct mix *mix;
-	int16_t *sampv;
 
 	for (le = list_head(&encs); le; le = le->next) {
 		enc = le->data;
@@ -367,15 +358,7 @@ static int decode(struct aufilt_dec_st *aufilt_dec_st, struct auframe *af)
 			mix->prm.ch = dec->prm.ch;
 			mix->prm.srate = dec->prm.srate;
 
-			sampv = af->sampv;
-
-			if (dec->prm.fmt != AUFMT_S16LE) {
-				sampv = dec->fsampv;
-				auconv_to_s16(sampv, dec->prm.fmt,
-					      (void *)af->sampv, af->sampc);
-			}
-
-			aubuf_write_samp(mix->ab, sampv, af->sampc);
+			aubuf_write_samp(mix->ab, sampv, *sampc);
 		}
 	}
 
@@ -383,14 +366,12 @@ static int decode(struct aufilt_dec_st *aufilt_dec_st, struct auframe *af)
 }
 
 
-static int enable_conference(struct re_printf *pf, void *arg)
+int baresip_start_conference(void)
 {
 	struct le *le, *lec;
 	struct call *call;
 	struct ua *ua;
 	struct audio *au;
-	(void)pf;
-	(void)arg;
 
 	for (le = list_head(uag_list()); le; le = le->next) {
 		ua = le->data;
@@ -398,7 +379,7 @@ static int enable_conference(struct re_printf *pf, void *arg)
 
 		for (lec = list_head(ua_calls(ua)); lec; lec = lec->next) {
 			call = lec->data;
-			info("conference with %s\n", call_peeruri(call));
+			DEBUG_INFO("conference with %s\n", call_peeruri(call));
 			call_hold(call, false);
 			au = call_audio(call);
 			audio_set_conference(au, true);
@@ -409,29 +390,26 @@ static int enable_conference(struct re_printf *pf, void *arg)
 }
 
 
-static int debug_conference(struct re_printf *pf, void *arg)
+int baresip_debug_conference(void)
 {
 	struct mixminus_enc *enc;
 	struct mix *mix;
 	struct le *le, *lem;
-	(void)pf;
-	(void)arg;
 
 	for (le = list_head(&encs); le; le = le->next) {
 		enc = le->data;
 		if (!enc)
 			continue;
 
-		info("mixminus/enc au %x:"
-		     "ch %d srate %d fmt %s, is_conference (%s)\n",
-		     enc->au, enc->prm.ch, enc->prm.srate,
-		     aufmt_name(enc->prm.fmt),
-		     audio_is_conference(enc->au) ? "true" : "false");
+		DEBUG_INFO("mixminus/enc au %x:"
+			 "ch %d srate %d, is_conference (%s)\n",
+			 enc->au, enc->prm.ch, enc->prm.srate,
+			 audio_is_conference(enc->au) ? "true" : "false");
 
 		for (lem = list_head(&enc->mixers); lem; lem = lem->next) {
 			mix = lem->data;
 
-			info("\tmix au %x: ch %d srate %d %H\n", mix->au,
+			DEBUG_INFO("\tmix au %x: ch %d srate %d %H\n", mix->au,
 			     mix->prm.ch, mix->prm.srate, aubuf_debug,
 			     mix->ab);
 		}
@@ -446,18 +424,12 @@ static struct aufilt mixminus = {
 };
 
 
-static const struct cmd cmdv[] = {
-	{"conference", 'z', 0, "Start conference", enable_conference},
-	{"conference_debug", 'Z', 0, "Debug conference", debug_conference}
-};
-
 
 static int module_init(void)
 {
 	int err;
 
-	aufilt_register(baresip_aufiltl(), &mixminus);
-	err  = cmd_register(baresip_commands(), cmdv, RE_ARRAY_SIZE(cmdv));
+	aufilt_register(&mixminus);
 
 	return err;
 }
@@ -465,7 +437,6 @@ static int module_init(void)
 
 static int module_close(void)
 {
-	cmd_unregister(baresip_commands(), cmdv);
 	aufilt_unregister(&mixminus);
 	return 0;
 }

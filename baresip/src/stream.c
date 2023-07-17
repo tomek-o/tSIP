@@ -117,8 +117,8 @@ static void check_rtp_handler(void *arg)
 		}
 	}
 	else {
-		re_printf("check_rtp: not checking (dir=%s)\n",
-			  sdp_dir_name(sdp_media_dir(strm->sdp)));
+		re_printf("check_rtp: not checking strm %p (dir=%s)\n",
+			strm, sdp_dir_name(sdp_media_dir(strm->sdp)));
 	}
 }
 
@@ -632,7 +632,7 @@ void stream_hold(struct stream *s, bool hold)
 	if (!s)
 		return;
 
-	sdp_media_set_ldir(s->sdp, hold ? SDP_SENDONLY : SDP_SENDRECV);
+	sdp_media_set_ldir(s->sdp, hold ? SDP_INACTIVE : SDP_SENDRECV);
 }
 
 

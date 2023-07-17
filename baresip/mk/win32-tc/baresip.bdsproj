@@ -523,6 +523,7 @@
         <FILE FILENAME="..\..\modules\avformat\avformat_audio.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="avformat_audio" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\avformat\avformat_video.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="avformat_video" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\avformat\mod_avformat.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\mixminus\mixminus.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mixminus" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

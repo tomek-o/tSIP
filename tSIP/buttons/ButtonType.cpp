@@ -88,7 +88,9 @@ const char* Button::TypeName(enum Type type)
 	case LINE:
 		return "LINE - multiple calls";
 	case ATTENDED_TRANSFER:
-		return "Attended transfer";		
+		return "Attended transfer";
+	case CONFERENCE_START:
+		return "Start conference";
 
 	default:
 		return "???";
@@ -172,6 +174,8 @@ const char* Button::TypeDescription(enum Type type)
 		return "LINE buttons are used to manage multiple simultaneous calls. Each button represents single call and maximum call number would be limited by configured number of LINE buttons. If no button is defined, application is limited to single call.";
 	case ATTENDED_TRANSFER:
 		return "Make attended transfer using two already active calls.";
+	case CONFERENCE_START:
+		return "Create conference from current calls";
 
 	default:
 		return "???";

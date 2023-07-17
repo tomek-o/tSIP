@@ -124,7 +124,5 @@ test multiple calls recording
 switch automatically to line with new incoming call if there is only one call
 switch automatically to line with new outgoing call if there is only one call
 
-add gui for ring volumeMulti
-
 */
 

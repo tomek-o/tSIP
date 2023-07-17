@@ -17,6 +17,7 @@ namespace Calls
 	void RemoveByUid(unsigned int uid);
 	Call* GetCurrentCall(void);
 	unsigned int GetCurrentCallUid(void);
+	int SetCurrentCallUid(unsigned int uid);
 	Call& GetPreviousCall(void);
 	void SetPreviousCall(const Call &call);
 	void Clear(void);

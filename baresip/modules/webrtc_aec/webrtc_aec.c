@@ -173,7 +173,7 @@ out:
 
 
 static int encode_update(struct aufilt_enc_st **stp, void **ctx,
-			 const struct aufilt *af, struct aufilt_prm *prm)
+			 const struct aufilt *af, struct aufilt_prm *prm, const struct audio *au)
 {
 	struct enc_st *st;
 	int err;
@@ -200,7 +200,7 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 
 
 static int decode_update(struct aufilt_dec_st **stp, void **ctx,
-			 const struct aufilt *af, struct aufilt_prm *prm)
+			 const struct aufilt *af, struct aufilt_prm *prm, const struct audio *au)
 {
 	struct dec_st *st;
 	int err;

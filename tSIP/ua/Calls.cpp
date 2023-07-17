@@ -107,6 +107,22 @@ unsigned int Calls::GetCurrentCallUid(void)
 	return currentCallUid;
 }
 
+int Calls::SetCurrentCallUid(unsigned int uid)
+{
+	ScopedLock<Mutex> lock(mutex);
+	if (currentCallUid == uid)
+		return 0;
+	Call* call = FindByUid(uid);
+	if (call == NULL)
+		return -1;
+	if (call->btnId >= 0)
+	{
+		TProgrammableButton *btn = buttons.GetBtn(call->btnId);
+		OnLineButtonClick(call->btnId, btn);
+	}
+	return 0;
+}
+
 Call& Calls::GetPreviousCall(void)
 {
 	ScopedLock<Mutex> lock(mutex);

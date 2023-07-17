@@ -1094,20 +1094,31 @@ Version 0.3
 		- new button type: LINE
 			- more than one button of this type has to be defined to allow more than one call
 			- each call if there are multiple calls would be assigned to its own LINE button
-			- line buttons are displaying state of assigned calls and are used to switch between calls   
+			- line buttons are displaying state of assigned calls and are used to switch between calls
 		- if no LINE button was defined application should keep backward compatibility (being limited to a single call)
 		- state of HOLD and MUTE functions is separate for each call
 		- new, separate settings page related to multiple calls
 			- option to automatically hold/unhold calls when switching between them using LINE buttons
 			- option to allow auto answer even if another call is already active
-		- Lua:
-			- ability to operate on current call or specific call (using call ID parameter)
-			- many Lua functions have kept existing parameter list, but would operate on the current call
-			- added new Hangup2 function taking call ID as first argument
+		- calls have now semi-unique identifier, 32-bit unsigned integer with value = 0 being invalid
+		- Lua scripting:
+			- many Lua functions (e.g. Answer, GetCallState, GetCallPeer, GetCallInitialRxInvite, GetAudioErrorCount) have kept existing parameter list, but would operate on the current call (if no argument is passed) or call with specified ID
+			- added GetCurrentCallUid function (returning ID associated with call that has been assigned to active LINE button or 0)
+			- added SetCurrentCallUid function to switch between currently active calls
+			- added GetCalls function, returning table of call IDs
+			- added Hangup2 function taking call ID as first argument, SIP code and reason text as next arguments
+			- added HangupAll function, taking SIP code and reason text as arguments
+			- added BlindTransfer2 function taking call ID and transfer target as arguments
+			- added AttendedTransfer function, taking two call IDs as arguments
 			- added call ID as optional parameter to many other functions
+			- call ID is returned as second value from Call function
+			- call ID can be read as script source trigger id in "on call state", "on making call" and "on audio error" scripts
 		- separate ring volume setting - used if there is already another call active to make ring more quiet
 		- new button type: Attended transfer
+		- new button type: Start conference
 		- if used with video, display output should be configured to used separate window, not button
 		- ZRTP is not supported at the moment for multiple calls
+		- call hold switches now to "inactive" instead of "sendonly" state
+		- removed unused resampling from audio.c, rem resampler replaced with newer version needed by mixminus (conferencing) baresip module
 */
 

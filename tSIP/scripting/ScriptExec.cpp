@@ -749,7 +749,45 @@ static int l_BlindTransfer(lua_State* L)
         LOG("Lua BlindTransfer error: str == NULL\n");
 		return 0;
 	}
-	UA->Transfer(0, str);
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->Transfer(uid, str);
+	return 0;
+}
+
+static int l_BlindTransfer2(lua_State* L)
+{
+	int argCount = lua_gettop(L);
+	if (argCount >= 2)
+	{
+		unsigned int callUid = lua_tointegerx(L, 1, NULL);
+		const char* str = lua_tostring( L, 2 );
+		if (str == NULL)
+		{
+			LOG("Lua BlindTransfer error: str == NULL\n");
+			return 0;
+		}
+		UA->Transfer(callUid, str);
+	}
+	else
+	{
+		LOG("Lua BlindTransfer2 requires callUid and transfer target!\n");
+	}
+	return 0;
+}
+
+static int l_AttendedTransfer(lua_State* L)
+{
+	int argCount = lua_gettop(L);
+	if (argCount >= 2)
+	{
+		unsigned int callUid1 = lua_tointegerx(L, 1, NULL);
+		unsigned int callUid2 = lua_tointegerx(L, 2, NULL);
+		UA->TransferReplace(callUid1, callUid2);
+	}
+	else
+	{
+		LOG("Lua AttendedTransfer requires two call UIDs!\n");
+	}
 	return 0;
 }
 
@@ -773,6 +811,20 @@ static int l_GetCurrentCallUid(lua_State* L)
 {
 	unsigned int uid = Calls::GetCurrentCallUid();
 	lua_pushnumber(L, uid);
+	return 1;
+}
+
+static int l_SetCurrentCallUid(lua_State* L)
+{
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		unsigned int callUid = lua_tointegerx(L, 1, NULL);
+		int status = Calls::SetCurrentCallUid(callUid);
+		lua_pushnumber(L, status);
+		return 1;
+	}
+	lua_pushnumber(L, -1);
 	return 1;
 }
 
@@ -1806,8 +1858,11 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbols during the call", "Accepts single DTMF or whole string");
 	lua_register2(L, ScriptImp::l_GenerateTones, "GenerateTones", "Generate up to 4 tones with specified amplitude and frequency", "Tone generator is able to generate up to 4 sine waves at the same time, each one with separate amplitude and frequency setting. Sum of sine waves is saturated. Tone generator is placed before softvol module (software volume control sliders) in transmit chain and replaces \"regular\" audio source when is activated.\nGenerateTones function takes up to 8 parameters (up to 4 pairs of amplitude + frequency). Amplitude is interpreted as a fraction of full-scale.\nCalling this function without arguments stops generator.\nExample generating 1000 Hz at 0.2 FS + 3000 Hz at 0.1 FS:\n\tGenerateTones(0.2, 1000, 0.1, 3000)");
 	lua_register2(L, ScriptImp::l_BlindTransfer, "BlindTransfer", "Send REFER during the call", "");
+	lua_register2(L, ScriptImp::l_BlindTransfer2, "BlindTransfer2", "Send REFER for specific call", "Example: BlindTransfer(callUid, target)");
+	lua_register2(L, ScriptImp::l_AttendedTransfer, "AttendedTransfer", "Attended transfer using two already established calls", "Example: AttendedTransfer(callUid1, callUid2)");
 	lua_register2(L, ScriptImp::l_GetCalls, "GetCalls", "Get a table with UIDs of currently active calls", "");
 	lua_register2(L, ScriptImp::l_GetCurrentCallUid, "GetCurrentCallUid", "Get UID of current call, 0 = invalid/none", "");
+	lua_register2(L, ScriptImp::l_SetCurrentCallUid, "SetCurrentCallUid", "Set current call to call with specified UID", "Returns 0 on success.");
 	lua_register2(L, ScriptImp::l_GetCallState, "GetCallState", "Get state of current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetRecorderState, "GetRecorderState", "Check if recording is running for current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verfication state. Takes one, optional argument: call UID.");

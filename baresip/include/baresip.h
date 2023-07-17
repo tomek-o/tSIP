@@ -21,6 +21,7 @@ extern "C" {
 #include "baresip_presence_status.h"
 #include "baresip_recorder.h"
 #include "baresip_zrtp.h"
+#include "baresip_conference.h"
 
 /*
  * Clock-rate for audio timestamp
@@ -197,8 +198,6 @@ struct config {
 		float ring_volume_multi;/**< Ring volume if there is already another call */
 		struct range srate;     /**< Audio sampling rate in [Hz]    */
 		struct range channels;  /**< Nr. of audio channels (1=mono) */
-		uint32_t srate_play;    /**< Opt. sampling rate for player  */
-		uint32_t srate_src;     /**< Opt. sampling rate for source  */
 		enum audio_mode txmode; /**< Audio transmit mode            */
 		unsigned int softvol_tx;/**< Software volume control for TX; formula: sample = (sample * volume)/128 */
 		unsigned int softvol_rx;/**< Software volume control for RX; formula: sample = (sample * volume)/128 */
@@ -473,12 +472,14 @@ struct aufilt_prm {
 };
 
 typedef int (aufilt_encupd_h)(struct aufilt_enc_st **stp, void **ctx,
-			      const struct aufilt *af, struct aufilt_prm *prm);
+			      const struct aufilt *af, struct aufilt_prm *prm,
+			      const struct audio *au);
 typedef int (aufilt_encode_h)(struct aufilt_enc_st *st,
 			      int16_t *sampv, size_t *sampc);
 
 typedef int (aufilt_decupd_h)(struct aufilt_dec_st **stp, void **ctx,
-			      const struct aufilt *af, struct aufilt_prm *prm);
+			      const struct aufilt *af, struct aufilt_prm *prm,
+			      const struct audio *au);
 typedef int (aufilt_decode_h)(struct aufilt_dec_st *st,
 			      int16_t *sampv, size_t *sampc);
 
@@ -631,6 +632,7 @@ const char     *ua_cuser(const struct ua *ua);
 struct account *ua_account(const struct ua *ua);
 const char     *ua_outbound(const struct ua *ua);
 struct call    *ua_call(const struct ua *ua);
+struct list    *ua_calls(const struct ua *ua);
 struct account *ua_prm(const struct ua *ua);
 
 
@@ -940,6 +942,8 @@ int  audio_debug(struct re_printf *pf, const struct audio *a);
 /* Get name of the codec used in RX direction */
 const char* audio_get_rx_aucodec_name(const struct audio *a);
 struct recorder_st* audio_get_recorder(const struct audio *a);
+int  audio_set_conference(struct audio *au, bool conference);
+bool audio_is_conference(const struct audio *au);
 
 
 /*

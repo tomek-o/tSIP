@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{F0C559FB-00A4-4848-B2B0-DA5D99B5E4BE}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  <Projects>
+      <Projects Name="rem.lib">rem\mk\win32-tc\rem.bdsproj</Projects>
+      <Projects Name="baresip.lib">baresip\mk\win32-tc\baresip.bdsproj</Projects>
+      <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
+      <Projects Name="Targets">rem.lib baresip.lib tSIP.exe</Projects>
+    </Projects>
+    <Dependencies>
+      <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">
+        <Dependency GUID="{2F20C27F-EE96-4AC2-83B0-B3997AEB97ED}"/>
+        <Dependency GUID="{EE04A80D-3549-4554-880A-FDA45DFA6797}"/>
+      </Dependency>
+    </Dependencies>
+  </Default.Personality>
+</BorlandProject>

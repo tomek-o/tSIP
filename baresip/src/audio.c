@@ -86,13 +86,11 @@ struct autx {
 	const struct aucodec *ac;     /**< Current audio encoder           */
 	struct auenc_state *enc;      /**< Audio encoder state (optional)  */
 	struct aubuf *ab;             /**< Packetize outgoing stream       */
-	struct auresamp *resamp;      /**< Optional resampler for DSP      */
 	struct list filtl;            /**< Audio filters in encoding order */
 	struct mbuf *mb;              /**< Buffer for outgoing RTP packets */
     char mod[32];
 	char device[128];
 	int16_t *sampv;               /**< Sample buffer                   */
-	int16_t *sampv_rs;            /**< Sample buffer for resampler     */
 	uint32_t ptime;               /**< Packet time for sending         */
 	uint32_t ts;                  /**< Timestamp for outgoing RTP      */
 	uint32_t ts_tel;              /**< Timestamp for Telephony Events  */
@@ -157,6 +155,7 @@ struct audio {
 	struct telev *telev;          /**< Telephony events                */
 	struct config_audio cfg;      /**< Audio configuration             */
 	bool started;                 /**< Stream is started flag          */
+	bool conference;              /**< Local conference flag           */
 	audio_event_h *eventh;        /**< Event handler                   */
 	audio_err_h *errh;            /**< Audio error handler             */
 	void *arg;                    /**< Handler argument                */
@@ -176,10 +175,6 @@ static void audio_destructor(void *arg)
 	mem_deref(a->tx.sampv);
 	mem_deref(a->rx.sampv);
 	mem_deref(a->rx.ab);
-	mem_deref(a->tx.sampv_rs);
-	mem_deref(a->tx.resamp);
-	mem_deref(a->rx.sampv_rs);
-	mem_deref(a->rx.resamp);
 
 	list_flush(&a->tx.filtl);
 	list_flush(&a->rx.filtl);
@@ -331,20 +326,6 @@ static void poll_aubuf_tx(struct audio *a)
 		(void)re_printf("[%s] tx->ab %p got %u\n", sys_time(buf, sizeof(buf)), tx->ab, sampc);
 	}
 #endif
-
-	/* optional resampler */
-	if (tx->resamp) {
-		size_t sampc_rs = AUDIO_SAMPSZ;
-
-		err = auresamp_process(tx->resamp,
-				       tx->sampv_rs, &sampc_rs,
-				       tx->sampv, sampc);
-		if (err)
-			return;
-
-		sampv = tx->sampv_rs;
-		sampc = sampc_rs;
-	}
 
 	/* check if we should generate DTMF audio */
 	if (!dtmf_is_empty(&tx->dtmfgen)) {
@@ -551,20 +532,6 @@ static int aurx_stream_decode(struct aurx *rx, struct mbuf *mb)
 		goto out;
 
 	sampv = rx->sampv;
-
-	/* optional resampler */
-	if (rx->resamp) {
-		size_t sampc_rs = AUDIO_SAMPSZ;
-
-		err = auresamp_process(rx->resamp,
-				       rx->sampv_rs, &sampc_rs,
-				       rx->sampv, sampc);
-		if (err)
-			return err;
-
-		sampv = rx->sampv_rs;
-		sampc = sampc_rs;
-	}
 
 	err = aubuf_write_samp(rx->ab, sampv, sampc);
 	if (err)
@@ -906,7 +873,7 @@ static int aufilt_setup(struct audio *a)
 		int err = 0;		
 
 		if (af->encupdh) {
-			err |= af->encupdh(&encst, &ctx, af, &encprm);
+			err |= af->encupdh(&encst, &ctx, af, &encprm, a);
 			if (err) {
 				continue;
 			}
@@ -916,7 +883,7 @@ static int aufilt_setup(struct audio *a)
 		}
 
 		if (af->decupdh) {
-			err |= af->decupdh(&decst, &ctx, af, &decprm);
+			err |= af->decupdh(&decst, &ctx, af, &decprm, a);
 			if (err) {
 				continue;
 			}
@@ -944,26 +911,6 @@ static int start_player(struct aurx *rx, struct audio *a)
 
 	if (!ac)
 		return 0;
-
-	/* Optional resampler, if configured */
-	if (a->cfg.srate_play && a->cfg.srate_play != srate_dsp
-	    && !rx->resamp) {
-
-		srate_dsp = a->cfg.srate_play;
-
-		(void)re_printf("enable auplay resampler: %u --> %u Hz\n",
-				get_srate(ac), srate_dsp);
-
-		rx->sampv_rs = mem_zalloc(AUDIO_SAMPSZ * 2, NULL);
-		if (!rx->sampv_rs)
-			return ENOMEM;
-
-		err = auresamp_alloc(&rx->resamp, AUDIO_SAMPSZ,
-				     get_srate(ac), ac->ch,
-				     srate_dsp, ac->ch);
-		if (err)
-			return err;
-	}
 
 	/* Start Audio Player */
 	if (!rx->auplay && auplay_find(NULL)) {
@@ -1007,26 +954,6 @@ static int start_source(struct autx *tx, struct audio *a)
 
 	if (!ac)
 		return 0;
-
-	/* Optional resampler, if configured */
-	if (a->cfg.srate_src && a->cfg.srate_src != srate_dsp &&
-	    !tx->resamp) {
-
-		srate_dsp = a->cfg.srate_src;
-
-		(void)re_printf("enable ausrc resampler: %u --> %u Hz\n",
-				get_srate(ac), srate_dsp);
-
-		tx->sampv_rs = mem_zalloc(AUDIO_SAMPSZ * 2, NULL);
-		if (!tx->sampv_rs)
-			return ENOMEM;
-
-		err = auresamp_alloc(&tx->resamp, AUDIO_SAMPSZ,
-				     srate_dsp, ac->ch,
-				     get_srate(ac), ac->ch);
-		if (err)
-			return err;
-	}
 
 	/* Start Audio Source */
 	if (!tx->ausrc && ausrc_find(NULL)) {
@@ -1661,3 +1588,33 @@ struct recorder_st* audio_get_recorder(const struct audio *a)
 	return NULL;
 }
 
+/**
+ * Set the audio stream on conference
+ *
+ * @param au          Audio object
+ * @param conference  True for conference, false for not
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int audio_set_conference(struct audio *au, bool conference)
+{
+	if (!au)
+		return EINVAL;
+
+	au->conference = conference;
+
+	return 0;
+}
+
+
+/**
+ * Is audio on conference?
+ *
+ * @param au    Audio object
+ *
+ * @return true if on conference, false if not
+ */
+bool audio_is_conference(const struct audio *au)
+{
+	return au ? au->conference : false;
+}

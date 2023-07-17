@@ -997,6 +997,18 @@ struct call *ua_call(const struct ua *ua)
 	return NULL;
 }
 
+/**
+ * Get the list of call objects
+ *
+ * @param ua User-Agent
+ *
+ * @return List of call objects (struct call)
+ */
+struct list *ua_calls(const struct ua *ua)
+{
+	return ua ? (struct list *)&ua->calls : NULL;
+}
+
 
 /**
  * Print the user-agent debug information
