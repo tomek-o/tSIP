@@ -427,7 +427,7 @@ static struct aufilt mixminus = {
 
 static int module_init(void)
 {
-	int err;
+	int err = 0;
 
 	aufilt_register(&mixminus);
 
