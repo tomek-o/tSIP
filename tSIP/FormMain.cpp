@@ -1527,7 +1527,6 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 				if (answered == false && muteRing == false)
 				{
-					int TODO__QUIET_RING_IF_OTHER_CALL_IS_ACTIVE;
 					StartRing(*call, RingFile(cb.alertInfo));
 				}
 				lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
@@ -1696,7 +1695,6 @@ void TfrmMain::PollCallbackQueue(void)
 						UA->PlayStop();
 						call->ringStarted = false;
 					}
-					tmrClearCallState->Enabled = true;
 
 					if (cb.caller != "")
 					{
@@ -1772,6 +1770,10 @@ void TfrmMain::PollCallbackQueue(void)
 				if (call == Calls::GetCurrentCall())
 				{
 					UpdateMainCallDisplay();
+					if (cb.state == Callback::CALL_STATE_CLOSED)
+					{
+						tmrClearCallState->Enabled = true;
+					}
 				}
 			}
 
