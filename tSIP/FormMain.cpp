@@ -911,8 +911,6 @@ int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 		return -1;
 	}
 
-	ShowCallOnLineButton(call);
-
 	if (appSettings.frmMain.bShowWhenMakingCall)
 	{
 		if (!Visible)
@@ -991,7 +989,7 @@ void TfrmMain::Answer(unsigned int callUid)
 	}
 	else
 	{
-    	LOG("Answer: call with UID = %u is not in incoming state, current state = %d\n", callUid, call->state);
+    	LOG("Answer: call with UID = %u is not in incoming state, current state = %d\n", callUid, static_cast<int>(call->GetState()));
 	}
 }
 
@@ -1185,43 +1183,6 @@ void TfrmMain::MainMenuShow(bool state)
 void TfrmMain::ApplicationClose(void)
 {
 	actExit->Execute();
-}
-
-AnsiString TfrmMain::CleanUri(AnsiString uri)
-{
-	AnsiString res = uri;
-	int start = uri.Pos("<");
-	if (start == 0)
-		start = 1;
-	int end = uri.Pos(">");
-	if (end == 0 || (uri.Pos(";") < end))
-		end = uri.Pos(";");
-	if (start && end && end > start)
-	{
-		res = uri.SubString(start, end-start);
-	}
-	return res;
-}
-
-AnsiString TfrmMain::GetClip(AnsiString uri)
-{
-	AnsiString res;
-	if (appSettings.Display.bUserOnlyClip)
-	{
-		res = ExtractNumberFromUri(uri);
-		if (res != "")
-		{
-			return res;
-		}
-		else
-		{
-			return CleanUri(uri);
-		}
-	}
-	else
-	{
-		return CleanUri(uri);
-	}
 }
 
 void TfrmMain::SetMainWindowLayout(int id)
@@ -1561,7 +1522,7 @@ void TfrmMain::PollCallbackQueue(void)
 			}
 			case Callback::CALL_STATE_OUTGOING: {
 				AnsiString secondParty, secondPartyDesc;
-				secondParty = GetClip(cb.caller);
+				secondParty = GetClip(cb.caller, appSettings.Display.bUserOnlyClip);
 				lastContactEntry = contacts.GetEntry(CleanUri(cb.caller));
 				Call *call = Calls::FindByUid(cb.callUid);
 				if (call)
@@ -1766,7 +1727,7 @@ void TfrmMain::PollCallbackQueue(void)
 			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
-				call->state = cb.state;
+				call->SetState(cb.state);
 				if (call == Calls::GetCurrentCall())
 				{
 					UpdateMainCallDisplay();
@@ -1828,11 +1789,6 @@ void TfrmMain::PollCallbackQueue(void)
 				if (call)
 					ClearLineButton(call->btnId);
 				Calls::RemoveByUid(cb.callUid);
-			}
-			else
-			{
-				if (call)
-					ShowCallOnLineButton(*call);
 			}
 
 			break;
@@ -2658,7 +2614,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		int TODO__IS_CHECKING_STATE_REALLY_NEEDED;
 		if (call)
 		{
-			if (call->state == Callback::CALL_STATE_ESTABLISHED)
+			if (call->GetState() == Callback::CALL_STATE_ESTABLISHED)
 			{
 				int TODO__ATT_TRANSFER_FOR_MORE_THAN_2_CALLS;
 				if (Calls::Count() == 2)
@@ -2669,7 +2625,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 						if (ids[i] == call->uid)
 							continue;
 						Call *secondCall = Calls::FindByUid(ids[i]);
-						if (secondCall && secondCall->state == Callback::CALL_STATE_ESTABLISHED)
+						if (secondCall && secondCall->GetState() == Callback::CALL_STATE_ESTABLISHED)
 						{
 							UA->TransferReplace(call->uid, secondCall->uid);
 							break;
@@ -2704,6 +2660,12 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::CONFERENCE_START: {
+		// unhold all calls first
+		std::map<unsigned int, Call>& calls = Calls::GetCalls();
+		for(std::map<unsigned int, Call>::iterator iter = calls.begin(); iter != calls.end(); ++iter)
+		{
+        	iter->second.setHold(false);
+		}
 		UA->ConferenceStart();
 		break;
 	}
@@ -2827,6 +2789,14 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		if (call)
 		{
 			Hangup(call->uid, cfg.sipCode, cfg.sipReason.c_str());
+		}
+		break;
+	}
+	case Button::HANGUP_ALL: {
+		std::vector<unsigned int> uids = Calls::GetUids();
+		for (unsigned int i=0; i<uids.size(); i++)
+		{
+			Hangup(uids[i], cfg.sipCode, cfg.sipReason.c_str());
 		}
 		break;
 	}
@@ -3567,7 +3537,7 @@ void TfrmMain::ExecAction(const struct Action& action)
 		Call* call = Calls::GetCurrentCall();
 		if (call)
 		{
-			if (call->state == Callback::CALL_STATE_INCOMING)
+			if (call->GetState() == Callback::CALL_STATE_INCOMING)
 				Answer(call->uid);
 			else
 				Hangup(call->uid);
@@ -4030,38 +4000,7 @@ void __fastcall TfrmMain::btnResetSpeakerVolumeMouseUp(TObject *Sender,
 {
 	ActiveControl = NULL;	
 }
-//---------------------------------------------------------------------------
 
-void TfrmMain::ShowCallOnLineButton(const Call &call)
-{
-	if (call.btnId < 0)
-		return;
-
-	TProgrammableButton *btn = buttons.GetBtn(call.btnId);
-	if (btn == NULL)
-		return;
-
-	AnsiString caption;
-	AnsiString clip = GetClip(call.getPeerUri());
-	AnsiString peer = call.getPeerName();
-	if (peer == "")
-	{
-		caption.sprintf("%s", clip.c_str());
-	}
-	else
-	{
-		caption.sprintf("%s, %s", clip.c_str(), peer.c_str());
-	}
-	btn->SetCaption(caption);
-
-	AnsiString caption2;
-	caption2.sprintf("%s", call.getStateName().c_str());
-	if (call.hold)
-		caption2 += ", HOLD";
-	if (call.mute)
-		caption2 += ", MUTE";
-	btn->SetCaption2(caption2);
-}
 
 void TfrmMain::ClearLineButton(int btnId)
 {
@@ -4080,7 +4019,6 @@ void TfrmMain::UpdateMainCallDisplay(void)
 	Call *call = Calls::GetCurrentCall();
 	if (call == NULL)
 	{
-		int TODO__SHOW_HANGUP_REASON_AFTER_THE_CALL;
 		lblCallState->Caption = "";
 		lbl2ndParty->Caption = "";
 		lbl2ndPartyDesc->Caption = "";
@@ -4088,7 +4026,7 @@ void TfrmMain::UpdateMainCallDisplay(void)
 	else
 	{
 		lblCallState->Caption = call->getStateDescription();	
-		lbl2ndParty->Caption = GetClip(call->getPeerUri());
+		lbl2ndParty->Caption = GetClip(call->getPeerUri(), appSettings.Display.bUserOnlyClip);
 		lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 		if (lastContactEntry)
 		{

@@ -161,8 +161,6 @@ private:	// User declarations
 	void UpdateCallHistory(void);
 	void ShowTrayNotifier(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	void HideTrayNotifier(void);
-	AnsiString CleanUri(AnsiString uri);
-	AnsiString GetClip(AnsiString uri);
 	int MakeCall(AnsiString target, unsigned int &callUid);
 	void CallNumberBackspace(void);
 	void Hangup(unsigned int callUid, int sipCode = 486, AnsiString reason = "Busy Here");

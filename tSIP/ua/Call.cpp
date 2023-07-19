@@ -8,8 +8,10 @@
 #include "ControlQueue.h"
 #include "Settings.h"
 #include "buttons/ProgrammableButtons.h"
+#include "buttons/ProgrammableButton.h"
 #include "Globals.h"
 #include "Log.h"
+#include "common/TelecomUtils.h"
 
 #include <ExtCtrls.hpp>
 
@@ -50,6 +52,7 @@ void Call::setHold(bool state)
 	{
 		buttons.UpdateBtnState(Button::HOLD, state);
 	}
+	ShowOnLineButton();
 }
 
 void Call::setMute(bool state)
@@ -64,7 +67,11 @@ void Call::setMute(bool state)
 	LOG("Call %u: changing mute state to %d\n", uid, static_cast<int>(state));
 	mute = state;
 	UA->Mute(uid, state);
-	buttons.UpdateBtnState(Button::MUTE, state);
+	if (uid == Calls::GetCurrentCallUid())
+	{
+		buttons.UpdateBtnState(Button::MUTE, state);
+	}
+	ShowOnLineButton();
 }
 
 AnsiString Call::getPeerUri(void) const
@@ -99,4 +106,40 @@ AnsiString Call::getStateDescription(void) const
 	return Callback::GetCallStateDescription(state);
 }
 
+void Call::ShowOnLineButton(void)
+{
+	if (btnId < 0)
+		return;
+
+	TProgrammableButton *btn = buttons.GetBtn(btnId);
+	if (btn == NULL)
+		return;
+
+	AnsiString caption;
+	AnsiString clip = GetClip(getPeerUri(), appSettings.Display.bUserOnlyClip);
+	AnsiString peer = getPeerName();
+	if (peer == "")
+	{
+		caption.sprintf("%s", clip.c_str());
+	}
+	else
+	{
+		caption.sprintf("%s, %s", clip.c_str(), peer.c_str());
+	}
+	btn->SetCaption(caption);
+
+	AnsiString caption2;
+	caption2.sprintf("%s", getStateName().c_str());
+	if (hold)
+		caption2 += ", HOLD";
+	if (mute)
+		caption2 += ", MUTE";
+	btn->SetCaption2(caption2);
+}
+
+void Call::SetState(Callback::ua_state_e state)
+{
+	this->state = state;
+	ShowOnLineButton();
+}
 

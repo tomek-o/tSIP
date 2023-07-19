@@ -695,7 +695,90 @@ static int l_SwitchAudioSource(lua_State* L)
 		LOG("Lua error: dev == NULL\n");
 		return 0;
 	}
-	UA->SwitchAudioSource(0, mod, dev);
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->SwitchAudioSource(uid, mod, dev);
+	return 0;
+}
+
+static int l_SwitchAudioSource2(lua_State* L)
+{
+	unsigned int callUid;
+
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		callUid = lua_tointegerx(L, 1, NULL);
+	}
+	else
+	{
+		LOG("Lua error: missing call UID\n");
+		return 0;
+	}
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	UA->SwitchAudioSource(callUid, mod, dev);
+	return 0;
+}
+
+static int l_SwitchAudioPlayer(lua_State* L)
+{
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->SwitchAudioPlayer(uid, mod, dev);
+	return 0;
+}
+
+static int l_SwitchAudioPlayer2(lua_State* L)
+{
+	unsigned int callUid;
+
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		callUid = lua_tointegerx(L, 1, NULL);
+	}
+	else
+	{
+		LOG("Lua error: missing call UID\n");
+		return 0;
+	}
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	UA->SwitchAudioPlayer(callUid, mod, dev);
 	return 0;
 }
 
@@ -714,7 +797,39 @@ static int l_SwitchVideoSource(lua_State* L)
 		LOG("Lua error: dev == NULL\n");
 		return 0;
 	}
-	UA->SwitchVideoSource(0, mod, dev);
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->SwitchVideoSource(uid, mod, dev);
+	return 0;
+}
+
+static int l_SwitchVideoSource2(lua_State* L)
+{
+	unsigned int callUid;
+
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		callUid = lua_tointegerx(L, 1, NULL);
+	}
+	else
+	{
+		LOG("Lua error: missing call UID\n");
+		return 0;
+	}
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	UA->SwitchVideoSource(callUid, mod, dev);
 	return 0;
 }
 
@@ -732,7 +847,32 @@ static int l_SendDtmf(lua_State* L)
 
 static int l_GenerateTones(lua_State* L)
 {
-	UA->GenerateTone(0,
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->GenerateTone(uid,
+		lua_tonumber(L, 1), lua_tonumber(L, 2),	// amplitude, frequency
+		lua_tonumber(L, 3), lua_tonumber(L, 4),
+		lua_tonumber(L, 5), lua_tonumber(L, 6),
+		lua_tonumber(L, 7), lua_tonumber(L, 8)
+	);
+	return 0;
+}
+
+static int l_GenerateTones2(lua_State* L)
+{
+	unsigned int callUid;
+
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		callUid = lua_tointegerx(L, 1, NULL);
+	}
+	else
+	{
+		LOG("Lua error: missing call UID\n");
+		return 0;
+	}
+	UA->GenerateTone(callUid,
 		lua_tonumber(L, 1), lua_tonumber(L, 2),	// amplitude, frequency
 		lua_tonumber(L, 3), lua_tonumber(L, 4),
 		lua_tonumber(L, 5), lua_tonumber(L, 6),
@@ -833,7 +973,7 @@ static int l_GetCallState(lua_State* L)
 	Call *call = GetCall(L);
 	if (call)
 	{
-		lua_pushinteger( L, call->state );
+		lua_pushinteger( L, call->GetState() );
 		return 1;
 	}
 	return 0;
@@ -1854,9 +1994,14 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");
 	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "Example: SwitchAudioSource(\"aufile\", \"file.wav\").");
-	lua_register2(L, ScriptImp::l_SwitchVideoSource, "SwitchVideoSource", "Change video source during the call", "Example: SwitchAudioSource(\"avformat\", \"file.mp4\").");
+	lua_register2(L, ScriptImp::l_SwitchAudioSource2, "SwitchAudioSource2", "Change audio source for the specified call", "Example: SwitchAudioSource2(callUid, \"aufile\", \"file.wav\").");
+	lua_register2(L, ScriptImp::l_SwitchAudioPlayer, "SwitchAudioPlayer", "Change audio output during the call", "Example: SwitchAudioPlayer(\"winwave2\", \"Headphones\").");
+	lua_register2(L, ScriptImp::l_SwitchAudioPlayer2, "SwitchAudioPlayer2", "Change audio output for the specified call", "Example: SwitchAudioPlayer2(callUid, \"winwave2\", \"Headphones\").");
+	lua_register2(L, ScriptImp::l_SwitchVideoSource, "SwitchVideoSource", "Change video source during the call", "Example: SwitchVideoSource(\"avformat\", \"file.mp4\").");
+	lua_register2(L, ScriptImp::l_SwitchVideoSource2, "SwitchVideoSource2", "Change video source for the specified call", "Example: SwitchVideoSource(callUid, \"avformat\", \"file.mp4\").");
 	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbols during the call", "Accepts single DTMF or whole string");
 	lua_register2(L, ScriptImp::l_GenerateTones, "GenerateTones", "Generate up to 4 tones with specified amplitude and frequency", "Tone generator is able to generate up to 4 sine waves at the same time, each one with separate amplitude and frequency setting. Sum of sine waves is saturated. Tone generator is placed before softvol module (software volume control sliders) in transmit chain and replaces \"regular\" audio source when is activated.\nGenerateTones function takes up to 8 parameters (up to 4 pairs of amplitude + frequency). Amplitude is interpreted as a fraction of full-scale.\nCalling this function without arguments stops generator.\nExample generating 1000 Hz at 0.2 FS + 3000 Hz at 0.1 FS:\n\tGenerateTones(0.2, 1000, 0.1, 3000)");
+	lua_register2(L, ScriptImp::l_GenerateTones2, "GenerateTones2", "Second version of GenerateTones function, taking call ID as first argument", "Tone generator is able to generate up to 4 sine waves at the same time, each one with separate amplitude and frequency setting. Sum of sine waves is saturated. Tone generator is placed before softvol module (software volume control sliders) in transmit chain and replaces \"regular\" audio source when is activated.\nGenerateTones2 function takes up to 9 parameters (call ID + up to 4 pairs of amplitude + frequency). Amplitude is interpreted as a fraction of full-scale.\nCalling this function without arguments stops generator.\nExample generating 1000 Hz at 0.2 FS + 3000 Hz at 0.1 FS:\n\tGenerateTones2(callUid, 0.2, 1000, 0.1, 3000)");
 	lua_register2(L, ScriptImp::l_BlindTransfer, "BlindTransfer", "Send REFER during the call", "");
 	lua_register2(L, ScriptImp::l_BlindTransfer2, "BlindTransfer2", "Send REFER for specific call", "Example: BlindTransfer(callUid, target)");
 	lua_register2(L, ScriptImp::l_AttendedTransfer, "AttendedTransfer", "Attended transfer using two already established calls", "Example: AttendedTransfer(callUid1, callUid2)");

@@ -32,7 +32,14 @@ struct Call
 	AnsiString initialRxInvite;
 	TDateTime timestamp;
 	TDateTime timeTalkStart;
+private:
 	Callback::ua_state_e state;
+public:
+	void SetState(Callback::ua_state_e state);
+	Callback::ua_state_e GetState(void) const {
+		return state;
+	}
+	void ShowOnLineButton(void);
 	int lastScode;			///< last SIP code (on disconnected)
 	AnsiString lastReplyLine;
 	AnsiString recordFile;

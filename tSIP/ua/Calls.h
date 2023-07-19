@@ -6,6 +6,7 @@
 
 #include "Call.h"
 #include <vector>
+#include <map>
 
 class TProgrammableButton;
 
@@ -22,6 +23,7 @@ namespace Calls
 	void SetPreviousCall(const Call &call);
 	void Clear(void);
 	std::vector<unsigned int> GetUids(void);
+	std::map<unsigned int, Call>& GetCalls(void);
 	unsigned int Count(void);
 
 	Recorder* FindRecorder(int recorderId);

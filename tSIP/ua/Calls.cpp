@@ -160,6 +160,11 @@ std::vector<unsigned int> Calls::GetUids(void)
 	return ret;
 }
 
+std::map<unsigned int, Call>& Calls::GetCalls(void)
+{
+	return entries;
+}
+
 unsigned int Calls::Count(void)
 {
 	ScopedLock<Mutex> lock(mutex);
@@ -214,6 +219,7 @@ int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 					call->btnId = id;
 					btnId = call->btnId;
 					currentCallUid = call->uid;
+					call->ShowOnLineButton();
 					return 0;
 				}
 			}
@@ -244,6 +250,7 @@ int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 					}
 					currentCallUid = call->uid;
 				}
+				call->ShowOnLineButton();
 				return 0;
 			}
 		}
