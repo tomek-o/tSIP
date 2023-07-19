@@ -1025,14 +1025,4 @@ int video_set_source(struct video *v, const char *name, const char *dev)
 			  vidsrc_frame_handler, vidsrc_error_handler, vtx);
 }
 
-
-void video_set_devicename(struct video *v, const char *src, const char *disp)
-{
-	if (!v)
-		return;
-
-	str_ncpy(v->vtx.device, src, sizeof(v->vtx.device));
-	str_ncpy(v->vrx.device, disp, sizeof(v->vrx.device));
-}
-
 #endif	/* USE_VIDEO */
