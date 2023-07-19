@@ -12,7 +12,7 @@
 #include <baresip_conference.h>
 
 #define DEBUG_MODULE "mixminus"
-#define DEBUG_LEVEL 5
+#define DEBUG_LEVEL 3
 #include <re_dbg.h>
 
 enum {
@@ -53,6 +53,7 @@ struct mixminus_dec {
 };
 
 static struct list encs;
+static struct lock* mixminus_lock = NULL;
 
 
 static void enc_destructor(void *arg)
@@ -61,6 +62,10 @@ static void enc_destructor(void *arg)
 	struct mixminus_enc *enc;
 	struct le *le, *lem;
 	struct mix *mix;
+
+	lock_write_get(mixminus_lock);	
+
+	DEBUG_WARNING("mixminus: destructing enc %p\n", st);
 
 	list_flush(&st->mixers);
 	mem_deref(st->sampv);
@@ -83,21 +88,27 @@ static void enc_destructor(void *arg)
 
 			mix->ready = false;
 			list_unlink(&mix->le_priv);
-			sys_msleep(25);
 			mem_deref(mix);
 		}
 	}
+
+	DEBUG_WARNING("mixminus: destructed enc %p\n", st);
+	lock_rel(mixminus_lock);
+
 }
 
 static void dec_destructor(void *arg)
 {
 	struct mixminus_dec *st = arg;
+	DEBUG_WARNING("mixminus: destructing dec %p\n", st);
 	mem_deref(st->fsampv);
+	DEBUG_WARNING("mixminus: destructed dec %p\n", st);
 }
 
 static void mix_destructor(void *arg)
 {
 	struct mix *mix = arg;
+	DEBUG_WARNING("mixminus: destructing mix %p\n", mix);
 	mem_deref(mix->ab);
 }
 
@@ -122,19 +133,27 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 	if (!st)
 		return ENOMEM;
 
+	lock_write_get(mixminus_lock);
+
 	psize = AUDIO_SAMPSZ * sizeof(int16_t);
 
 	st->sampv = mem_zalloc(psize, NULL);
-	if (!st->sampv)
-		return ENOMEM;
+	if (!st->sampv) {
+		err = ENOMEM;
+		goto out;
+	}
 
 	st->rsampv = mem_zalloc(psize, NULL);
-	if (!st->rsampv)
-		return ENOMEM;
+	if (!st->rsampv) {
+		err = ENOMEM;
+		goto out;
+	}
 
 	st->fsampv = mem_zalloc(psize, NULL);
-	if (!st->fsampv)
-		return ENOMEM;
+	if (!st->fsampv) {
+		err = ENOMEM;
+		goto out;
+	}
 
 	st->prm = *prm;
 	st->au = au;
@@ -156,7 +175,7 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 		psize = st->prm.srate * st->prm.ch * 20 / 1000;
 		err = aubuf_alloc(&mix->ab, psize, 5 * psize);
 		if (err)
-			return err;
+			goto out;
 
 		mix->au = st->au; /* using audio object as id */
 		mix->ready = false;
@@ -173,13 +192,15 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 			continue;
 
 		mix = mem_zalloc(sizeof(*mix), mix_destructor);
-		if (!mix)
-			return ENOMEM;
+		if (!mix) {
+			err = ENOMEM;
+			goto out;
+		}
 
 		psize = enc->prm.srate * enc->prm.ch * 20 / 1000;
 		err = aubuf_alloc(&mix->ab, psize, 5 * psize);
 		if (err)
-			return err;
+			goto out;
 
 		mix->au = enc->au; /* using audio object as id */
 		mix->ready = false;
@@ -187,9 +208,16 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 		list_append(&st->mixers, &mix->le_priv, mix);
 	}
 
-	*stp = (struct aufilt_enc_st *) st;
+ out:
+	if (err)
+		mem_deref(st);
+	else {
+		*stp = (struct aufilt_enc_st *) st;
+	}
 
-	return 0;
+	lock_rel(mixminus_lock);
+
+	return err;
 }
 
 
@@ -380,7 +408,7 @@ int baresip_start_conference(void)
 		for (lec = list_head(ua_calls(ua)); lec; lec = lec->next) {
 			call = lec->data;
 			DEBUG_INFO("conference with %s\n", call_peeruri(call));
-			call_hold(call, false);
+			/* call_hold(call, false); */ /* managed by GUI part */
 			au = call_audio(call);
 			audio_set_conference(au, true);
 		}
@@ -418,7 +446,6 @@ int baresip_debug_conference(void)
 	return 0;
 }
 
-
 static struct aufilt mixminus = {
 	LE_INIT, "mixminus", encode_update, encode, decode_update, decode
 };
@@ -427,17 +454,20 @@ static struct aufilt mixminus = {
 
 static int module_init(void)
 {
-	int err = 0;
+	int err = lock_alloc(&mixminus_lock);
+	if (err)
+		return err;
 
 	aufilt_register(&mixminus);
 
-	return err;
+	return 0;
 }
 
 
 static int module_close(void)
 {
 	aufilt_unregister(&mixminus);
+	mixminus_lock = mem_deref(mixminus_lock);
 	return 0;
 }
 
