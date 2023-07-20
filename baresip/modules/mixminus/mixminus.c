@@ -12,7 +12,7 @@
 #include <baresip_conference.h>
 
 #define DEBUG_MODULE "mixminus"
-#define DEBUG_LEVEL 3
+#define DEBUG_LEVEL 7
 #include <re_dbg.h>
 
 enum {
@@ -65,7 +65,7 @@ static void enc_destructor(void *arg)
 
 	lock_write_get(mixminus_lock);	
 
-	DEBUG_WARNING("mixminus: destructing enc %p\n", st);
+	DEBUG_INFO("mixminus: destructing enc %p\n", st);
 
 	list_flush(&st->mixers);
 	mem_deref(st->sampv);
@@ -92,7 +92,7 @@ static void enc_destructor(void *arg)
 		}
 	}
 
-	DEBUG_WARNING("mixminus: destructed enc %p\n", st);
+	DEBUG_INFO("mixminus: destructed enc %p\n", st);
 	lock_rel(mixminus_lock);
 
 }
@@ -100,15 +100,15 @@ static void enc_destructor(void *arg)
 static void dec_destructor(void *arg)
 {
 	struct mixminus_dec *st = arg;
-	DEBUG_WARNING("mixminus: destructing dec %p\n", st);
+	DEBUG_INFO("mixminus: destructing dec %p\n", st);
 	mem_deref(st->fsampv);
-	DEBUG_WARNING("mixminus: destructed dec %p\n", st);
+	DEBUG_INFO("mixminus: destructed dec %p\n", st);
 }
 
 static void mix_destructor(void *arg)
 {
 	struct mix *mix = arg;
-	DEBUG_WARNING("mixminus: destructing mix %p\n", mix);
+	DEBUG_INFO("mixminus: destructing mix %p\n", mix);
 	mem_deref(mix->ab);
 }
 
@@ -120,7 +120,7 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 	struct mix *mix;
 	size_t psize;
 	struct le *le;
-	int err;
+	int err = 0;
 	(void)af;
 
 	if (!stp || !ctx || !prm)
@@ -284,6 +284,8 @@ static int encode(struct aufilt_enc_st *aufilt_enc_st, int16_t *sampv, size_t *s
 	int32_t sample;
 	int err = 0;
 
+	lock_write_get(mixminus_lock);
+
 	stime = 1000 * (*sampc) / (enc->prm.srate * enc->prm.ch);
 
 	for (lem = list_head(&enc->mixers); lem; lem = lem->next) {
@@ -306,7 +308,7 @@ static int encode(struct aufilt_enc_st *aufilt_enc_st, int16_t *sampv, size_t *s
 				     enc->prm.srate, enc->prm.ch);
 		if (err) {
 			DEBUG_WARNING("mixminus/auresamp_setup error (%m)\n", err);
-			return err;
+			goto out;
 		}
 
 		if (enc->resamp.resample) {
@@ -334,15 +336,17 @@ static int encode(struct aufilt_enc_st *aufilt_enc_st, int16_t *sampv, size_t *s
 				       enc->sampv, inc);
 			if (err) {
 				DEBUG_WARNING("mixminus/auresamp error (%m)\n", err);
-				return err;
+				goto out;
 			}
 			if (outc != *sampc) {
 				DEBUG_WARNING("mixminus/auresamp sample count error\n");
-				return EINVAL;
+				goto out;
 			}
 		}
 		else {
+            DEBUG_INFO("read_samp from mix %p\n", mix);
 			read_samp(mix->ab, sampv_mix, *sampc, stime);
+            DEBUG_INFO("read_samp from mix %p done\n", mix);
 		}
 
 		for (i = 0; i < *sampc; i++) {
@@ -357,6 +361,9 @@ static int encode(struct aufilt_enc_st *aufilt_enc_st, int16_t *sampv, size_t *s
 		}
 	}
 
+out:
+	lock_rel(mixminus_lock);
+
 	return err;
 }
 
@@ -368,6 +375,8 @@ static int decode(struct aufilt_dec_st *aufilt_dec_st, int16_t *sampv, size_t *s
 	struct le *le;
 	struct le *lem;
 	struct mix *mix;
+
+	lock_write_get(mixminus_lock);
 
 	for (le = list_head(&encs); le; le = le->next) {
 		enc = le->data;
@@ -390,6 +399,48 @@ static int decode(struct aufilt_dec_st *aufilt_dec_st, int16_t *sampv, size_t *s
 		}
 	}
 
+	lock_rel(mixminus_lock);
+
+	return 0;
+}
+
+
+int baresip_debug_conference(void)
+{
+	struct mixminus_enc *enc;
+	struct mix *mix;
+	struct le *le, *lem;
+	unsigned int encs_count = 0;
+
+	lock_write_get(mixminus_lock);
+
+	for (le = list_head(&encs); le; le = le->next) {
+		enc = le->data;
+		if (!enc)
+			continue;
+
+		encs_count++;
+
+		DEBUG_WARNING("mixminus/enc au %x:"
+			 "ch %d srate %d, is_conference (%s)\n",
+			 enc->au, enc->prm.ch, enc->prm.srate,
+			 audio_is_conference(enc->au) ? "true" : "false");
+
+		for (lem = list_head(&enc->mixers); lem; lem = lem->next) {
+			mix = lem->data;
+
+			DEBUG_WARNING("\tmix au %x: ch %d srate %d %H\n", mix->au,
+				 mix->prm.ch, mix->prm.srate, aubuf_debug,
+				 mix->ab);
+		}
+	}
+
+	if (encs_count == 0) {
+		DEBUG_WARNING("mixminus: no encs\n");
+	}
+
+	lock_rel(mixminus_lock);
+
 	return 0;
 }
 
@@ -407,41 +458,14 @@ int baresip_start_conference(void)
 
 		for (lec = list_head(ua_calls(ua)); lec; lec = lec->next) {
 			call = lec->data;
-			DEBUG_INFO("conference with %s\n", call_peeruri(call));
+			DEBUG_WARNING("conference with %s\n", call_peeruri(call));
 			/* call_hold(call, false); */ /* managed by GUI part */
 			au = call_audio(call);
 			audio_set_conference(au, true);
 		}
 	}
 
-	return 0;
-}
-
-
-int baresip_debug_conference(void)
-{
-	struct mixminus_enc *enc;
-	struct mix *mix;
-	struct le *le, *lem;
-
-	for (le = list_head(&encs); le; le = le->next) {
-		enc = le->data;
-		if (!enc)
-			continue;
-
-		DEBUG_INFO("mixminus/enc au %x:"
-			 "ch %d srate %d, is_conference (%s)\n",
-			 enc->au, enc->prm.ch, enc->prm.srate,
-			 audio_is_conference(enc->au) ? "true" : "false");
-
-		for (lem = list_head(&enc->mixers); lem; lem = lem->next) {
-			mix = lem->data;
-
-			DEBUG_INFO("\tmix au %x: ch %d srate %d %H\n", mix->au,
-			     mix->prm.ch, mix->prm.srate, aubuf_debug,
-			     mix->ab);
-		}
-	}
+	baresip_debug_conference();
 
 	return 0;
 }
