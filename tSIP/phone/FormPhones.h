@@ -32,7 +32,7 @@ private:	// User declarations
 	void ToggleActivation(void);
 public:		// User declarations
 	__fastcall TfrmPhones(TComponent* Owner);
-	void SetCfg(std::list<PhoneConf> *hotkeyCfg);
+	void SetCfg(std::list<PhoneConf> *phoneCfg);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmPhones *frmPhones;

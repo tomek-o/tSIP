@@ -17,7 +17,7 @@ void ButtonContainerConf::FromJson(const Json::Value &jv)
 	jv.getAString("backgroundImage", backgroundImage);
 }
 
-void ButtonContainerConf::ToJson(Json::Value &jv)
+void ButtonContainerConf::ToJson(Json::Value &jv) const
 {
 	jv = Json::Value(Json::objectValue);
 	jv["backgroundImage"] = backgroundImage;

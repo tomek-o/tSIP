@@ -27,7 +27,7 @@ struct HistoryConf
 
 	HistoryConf(void);
 	void fromJson(const Json::Value &jv);
-	void toJson(Json::Value &jv);
+	void toJson(Json::Value &jv) const;
 
 	bool operator==(const HistoryConf &right) const;
 	bool operator!=(const HistoryConf &right) const
