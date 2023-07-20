@@ -429,6 +429,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 		
 	case Button::AUTO_ANSWER_DND:
 	case Button::HANGUP:
+	case Button::HANGUP_ALL:
 		tsBehaviorAutoAnswer->Visible = true;
 		edNumber->Visible = false;
 		lblNumber->Visible = false;		
