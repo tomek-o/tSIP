@@ -1390,7 +1390,6 @@ void TfrmMain::PollCallbackQueue(void)
 	{
 		case Callback::CALL_STATE:
 		{
-			tmrClearCallState->Enabled = false;
 			LOG("Callback::CALL_STATE, call uid = %d, state = %d\n", cb.callUid, static_cast<int>(cb.state));
 			switch(cb.state)
 			{
@@ -1734,6 +1733,10 @@ void TfrmMain::PollCallbackQueue(void)
 					if (cb.state == Callback::CALL_STATE_CLOSED)
 					{
 						tmrClearCallState->Enabled = true;
+					}
+					else
+					{
+						tmrClearCallState->Enabled = false;
 					}
 				}
 			}
