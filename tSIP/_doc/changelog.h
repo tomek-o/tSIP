@@ -1095,7 +1095,7 @@ Version 0.3
 			- more than one button of this type has to be defined to allow more than one call
 			- each call if there are multiple calls would be assigned to its own LINE button
 			- line buttons are displaying state of assigned calls and are used to switch between calls
-		- if no LINE button was defined application should keep backward compatibility (being limited to a single call)
+			- if no LINE button was defined application should keep backward compatibility (being limited to a single call)
 		- new button type: Hangup all calls
 		- state of HOLD and MUTE functions is separate for each call
 		- new, separate settings page related to multiple calls
