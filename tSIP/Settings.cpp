@@ -1178,8 +1178,6 @@ int Settings::Write(AnsiString asFileName)
 		jv = Json::Value(Json::arrayValue);
 		for (unsigned int i=0; i<buttonContainers.size(); i++)
 		{
-			if (i >= buttonContainers.size())
-				break;
 			jv.append(Json::Value(Json::objectValue));
 			buttonContainers[i].ToJson(jv[i]);
 		}
