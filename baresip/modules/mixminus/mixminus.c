@@ -12,7 +12,7 @@
 #include <baresip_conference.h>
 
 #define DEBUG_MODULE "mixminus"
-#define DEBUG_LEVEL 7
+#define DEBUG_LEVEL 5
 #include <re_dbg.h>
 
 enum {
