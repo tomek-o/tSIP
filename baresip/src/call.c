@@ -1968,25 +1968,76 @@ int call_transfer(struct call *call, const char *uri)
 int call_replace_transfer(struct call *call, struct call *source_call)
 {
 	int err;
+	struct sip_dialog *dialog;
+	const char *callid, *ltag, *rtag;
+	struct mbuf mb, mbenc;
+	struct pl pl;	
 
-	if (call->sess == NULL || sipsess_dialog(call->sess) == NULL) {
-		DEBUG_WARNING("call: no session or dialog on attended transfer attempt\n");
+	if (call->sess == NULL) {
+		DEBUG_WARNING("call: no session on attended transfer attempt\n");
 		return EINVAL;
 	}
 
-	(void)re_printf("transferring (replacing / attended) call %s to %s\n",
-		sip_dialog_callid(sipsess_dialog(call->sess)), source_call->peer_uri);
+	dialog = sipsess_dialog(call->sess);
+	if (dialog == NULL) {
+		DEBUG_WARNING("call: no dialog on attended transfer attempt\n");
+		return EINVAL;
+	}
+
+	callid = sip_dialog_callid(dialog);
+	ltag = sip_dialog_ltag(dialog);
+	rtag = sip_dialog_rtag(dialog);
+
+	if (callid == NULL) {
+		DEBUG_WARNING("call: no callid on attended transfer attempt\n");
+		return EINVAL;
+	}
+	if (ltag == NULL) {
+		DEBUG_WARNING("call: no ltag on attended transfer attempt\n");
+		return EINVAL;
+	}
+	if (rtag == NULL) {
+		DEBUG_WARNING("call: no rtag on attended transfer attempt\n");
+		return EINVAL;
+	}
+
+	/*
+	Example from RFC 3515:
+	Refer-To: <sip:dave@denver.example.org?Replaces=12345%40192.168.118.3%3Bto-tag%3D12345%3Bfrom-tag%3D5FFE-3994>
+	==> 12345@192.168.118.3;to-tag=12345;from-tag=5FFE-3994
+	*/
+
+	mbuf_init(&mb);
+	mbuf_init(&mbenc);
+	err = mbuf_printf(&mb, "%s;to-tag=%s;from-tag=%s", callid, rtag, ltag);
+
+	(void)re_printf("transferring (replacing / attended) call %s, ltag %s, rtag %s to %s\n",
+		callid, ltag, rtag, source_call->peer_uri);
+
+	pl.p = (const char *)mb.buf;
+	pl.l = mb.end;
+	err = mbuf_printf(&mbenc, "%H", uri_header_escape, &pl);
+	if (err) {
+		DEBUG_WARNING("call: failed to encode replaces: %m\n", err);
+		mbuf_reset(&mb);
+		return err;
+	}
+	pl.p = (const char *)mbenc.buf;
+	pl.l = mbenc.end;
 
 	call->sub = mem_deref(call->sub);
 	err = sipevent_drefer(&call->sub, uag_sipevent_sock(),
 				  sipsess_dialog(call->sess), ua_cuser(call->ua),
 				  auth_handler, call->acc, true,
 				  sipsub_notify_handler, sipsub_close_handler,
-				  call, "Refer-To: %s?Replaces=%s\r\n",
-				  source_call->peer_uri, sip_dialog_callid(sipsess_dialog(call->sess)));
+				  call, "Refer-To: %s?Replaces=%r\r\n",
+				  source_call->peer_uri, &pl);
 	if (err) {
 		DEBUG_WARNING("call: sipevent_drefer with replaces: %m\n", err);
 	}
+
+	mbuf_reset(&mb);
+	mbuf_reset(&mbenc);
 
 	return err;
 }
