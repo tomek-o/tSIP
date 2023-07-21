@@ -1978,7 +1978,7 @@ int call_replace_transfer(struct call *call, struct call *source_call)
 		return EINVAL;
 	}
 
-	dialog = sipsess_dialog(call->sess);
+	dialog = sipsess_dialog(source_call->sess);
 	if (dialog == NULL) {
 		DEBUG_WARNING("call: no dialog on attended transfer attempt\n");
 		return EINVAL;
