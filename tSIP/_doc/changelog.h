@@ -1118,6 +1118,7 @@ Version 0.3
 			- added call ID as optional parameter to many other functions
 			- call ID is returned as second value from Call function
 			- call ID can be read as script source trigger id in "on call state", "on making call" and "on audio error" scripts
+			- added example listing current calls in log window
 		- separate ring volume setting - used if there is already another call active to make ring more quiet
 		- new button type: Attended transfer (simplified, at the moment working only if there are exactly two current calls)
 		- new button type: Start conference call using all current calls

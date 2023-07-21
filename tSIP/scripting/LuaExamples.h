@@ -872,4 +872,22 @@ const LuaExample luaExamples [] =
 	"end\n"
 	"GenerateTones()"
 	}
+	,
+	{
+	"List current calls in log window"
+	,
+	"local uids = GetCalls()\n"
+	"print(string.format(\"Currently: %d call(s)\\n\", #uids))\n"
+	"if #uids == 0 then\n"
+	"\treturn\n"
+	"end\n"
+	"\n"
+	"for i = 1, #uids do\n"
+	"\tlocal uid = uids[i]\n"
+	"\tprint(string.format(\"  Call UID = %d, state = %d, incoming = %d, peer = %s, codec = %s\\n\",\n"
+	"\t\tuid, GetCallState(uid), IsCallIncoming(uid), GetCallPeer(uid), GetCallCodecName(uid)))\n"
+	"end\n"
+	"\n"
+	"print(\"End of calls list\\n\")\n"
+	}
 };
