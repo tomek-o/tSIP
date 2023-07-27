@@ -678,6 +678,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		CallsJson.getBool("DisconnectCallOnAudioError", Calls.bDisconnectCallOnAudioError);
 		CallsJson.getBool("EnableAutoAnswerEvenIfAnotherCallIsActive", Calls.enableAutoAnswerEvenIfAnotherCallIsActive);
 		CallsJson.getBool("AutoHoldWhenSwitchingCalls", Calls.autoHoldWhenSwitchingCalls);
+		CallsJson.getBool("AutoSwitchToCallAnsweredFromTray", Calls.autoSwitchToCallAnsweredFromTray);
 	}
 
 	{
@@ -1009,6 +1010,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["DisconnectCallOnAudioError"] = Calls.bDisconnectCallOnAudioError;
 		jv["EnableAutoAnswerEvenIfAnotherCallIsActive"] = Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
 		jv["AutoHoldWhenSwitchingCalls"] = Calls.autoHoldWhenSwitchingCalls;
+		jv["AutoSwitchToCallAnsweredFromTray"] = Calls.autoSwitchToCallAnsweredFromTray;
 	}
 
 

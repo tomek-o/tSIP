@@ -473,6 +473,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbDisconnectCallOnAudioError->Checked = tmpSettings.Calls.bDisconnectCallOnAudioError;
 	chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked = tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
 	chbCallsAutoHoldWhenSwitchingCalls->Checked = tmpSettings.Calls.autoHoldWhenSwitchingCalls;
+	chbCallsAutoSwitchToCallAnsweredFromTray->Checked = tmpSettings.Calls.autoSwitchToCallAnsweredFromTray;
 
 	edWebRtcAecMsInSndCardBuf->Text = tmpSettings.uaConf.webrtcAec.msInSndCardBuf;
 	edWebRtcAecSkew->Text = tmpSettings.uaConf.webrtcAec.skew;
@@ -904,6 +905,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Calls.bDisconnectCallOnAudioError = chbDisconnectCallOnAudioError->Checked;
 	tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive = chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked;
 	tmpSettings.Calls.autoHoldWhenSwitchingCalls = chbCallsAutoHoldWhenSwitchingCalls->Checked;
+	tmpSettings.Calls.autoSwitchToCallAnsweredFromTray = chbCallsAutoSwitchToCallAnsweredFromTray->Checked;
 
 	tmpSettings.uaConf.webrtcAec.msInSndCardBuf = StrToIntDef(edWebRtcAecMsInSndCardBuf->Text, 120);
 	if (tmpSettings.uaConf.webrtcAec.msInSndCardBuf < 0) {

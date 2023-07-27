@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsAudioIO
+    ActivePage = tsMultipleCalls
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -4268,6 +4268,16 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Automatically hold/unhold when switching between calls'
         TabOrder = 1
+      end
+      object chbCallsAutoSwitchToCallAnsweredFromTray: TCheckBox
+        Left = 3
+        Top = 68
+        Width = 438
+        Height = 17
+        Caption = 
+          'Automatically switch to new call when answering using tray notif' +
+          'ier window'
+        TabOrder = 2
       end
     end
   end

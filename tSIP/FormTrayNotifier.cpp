@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FormTrayNotifier.h"
+#include "ua/Calls.h"
 #include "Settings.h"
 #include "Paths.h"
 #include "Log.h"
@@ -85,7 +86,11 @@ void __fastcall TfrmTrayNotifier::btnHangupClick(TObject *Sender)
 void __fastcall TfrmTrayNotifier::btnAnswerClick(TObject *Sender)
 {
 	if (OnAnswer && callUid != 0)
+	{
+		if (appSettings.Calls.autoSwitchToCallAnsweredFromTray)
+			Calls::SetCurrentCallUid(callUid);	// switch to new call
 		OnAnswer(callUid);
+	}
 	else
 		HideWindow();
 }
