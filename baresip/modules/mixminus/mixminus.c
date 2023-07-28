@@ -173,7 +173,7 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 		if (!mix)
 			return ENOMEM;
 		psize = st->prm.srate * st->prm.ch * 20 / 1000;
-		err = aubuf_alloc(&mix->ab, "mixminus mix", psize, 5 * psize);
+		err = aubuf_alloc(&mix->ab, "mixminus mix", psize, 8 * psize);
 		if (err)
 			goto out;
 
@@ -198,7 +198,7 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 		}
 
 		psize = enc->prm.srate * enc->prm.ch * 20 / 1000;
-		err = aubuf_alloc(&mix->ab, "mixminus mix", psize, 5 * psize);
+		err = aubuf_alloc(&mix->ab, "mixminus mix", psize, 8 * psize);
 		if (err)
 			goto out;
 
