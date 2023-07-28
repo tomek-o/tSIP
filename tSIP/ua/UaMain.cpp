@@ -43,7 +43,7 @@ namespace {
 	struct call* findCall(unsigned int uid)
 	{
 		std::map<unsigned int, struct call*>::iterator iter;
-		if (uid <= 0)
+		if (uid == 0)
 			return NULL;
 		if (calls.empty())
 			return NULL;
@@ -54,7 +54,15 @@ namespace {
 	}
 	void removeCall(unsigned int uid)
 	{
-		calls.erase(uid);
+		std::map<unsigned int, struct call*>::iterator iter = calls.find(uid);
+		if (iter != calls.end())
+		{
+			calls.erase(iter);
+		}
+		else
+		{
+			LOG("UaMain: could not erase call %u from map!\n", uid); 
+		}
 	}
 
 	struct App {
@@ -224,6 +232,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		{
 			state = Callback::CALL_STATE_CLOSED;
 			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+			removeCall(callUid);
 		}
 		else
 		{
@@ -1060,6 +1069,7 @@ extern "C" void control_handler(void)
 		{
 			DEBUG_WARNING("connect failed: %m\n", err);
 			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
+			// call was not added to calls map yet - no need to remove
 		}
 		else
 		{
