@@ -263,7 +263,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 		 prm->srate * prm->ch * 40);
 
 	/* 1 - inf seconds of audio */
-	err = aubuf_alloc(&st->aubuf, st->fprm.srate * prm->ch * 2, 0);
+	err = aubuf_alloc(&st->aubuf, "aufile_mm", st->fprm.srate * prm->ch * 2, 0);
 	if (err)
 		goto out;
 

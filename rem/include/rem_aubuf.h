@@ -6,7 +6,17 @@
 
 struct aubuf;
 
-int  aubuf_alloc(struct aubuf **abp, size_t min_sz, size_t max_sz);
+/**
+ * Allocate a new audio buffer
+ *
+ * @param abp    Pointer to allocated audio buffer
+ * @param name   Buffer description to be used for logging (copied locally to aubuf struct)
+ * @param min_sz Minimum buffer size
+ * @param max_sz Maximum buffer size (0 for no max size)
+ *
+ * @return 0 for success, otherwise error code
+ */
+int  aubuf_alloc(struct aubuf **abp, const char *name, size_t min_sz, size_t max_sz);
 int  aubuf_append(struct aubuf *ab, struct mbuf *mb);
 int  aubuf_write(struct aubuf *ab, const uint8_t *p, size_t sz);
 void aubuf_read(struct aubuf *ab, uint8_t *p, size_t sz);

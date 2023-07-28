@@ -187,10 +187,10 @@ static int recorder_alloc(struct recorder_st **stp, void **ctx, struct aufilt_pr
 	st->srate = prm->srate;
 
 	st->frame_size = prm->frame_size;
-	err = aubuf_alloc(&st->abrx, prm->frame_size, prm->frame_size*250);
+	err = aubuf_alloc(&st->abrx, "recorder rx", prm->frame_size, prm->frame_size*250);
 	if (err)
 		goto out;
-	err = aubuf_alloc(&st->abtx, prm->frame_size, prm->frame_size*250);
+	err = aubuf_alloc(&st->abtx, "recorder tx", prm->frame_size, prm->frame_size*250);
 	if (err)
 		goto out;
 

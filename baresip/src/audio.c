@@ -925,7 +925,7 @@ static int start_player(struct aurx *rx, struct audio *a)
 		if (!rx->ab) {
 			const size_t psize = 2 * prm.frame_size * (prm.srate>16000?(prm.srate/16000):1);
 			DEBUG_WARNING("audio: rx buf min = %u, max = %u\n", psize * 1, psize * 8);
-			err = aubuf_alloc(&rx->ab, psize * 1, psize * 8);
+			err = aubuf_alloc(&rx->ab, "audio rx/player", psize * 1, psize * 8);
 			if (err)
 				return err;
 		}
@@ -968,8 +968,7 @@ static int start_source(struct autx *tx, struct audio *a)
 		tx->psize = 2 * prm.frame_size;
 
 		if (!tx->ab) {
-			err = aubuf_alloc(&tx->ab, tx->psize * 2,
-					  tx->psize * 30);
+			err = aubuf_alloc(&tx->ab, "audio tx/source", tx->psize * 2, tx->psize * 30);
 			if (err)
 				return err;
 		}

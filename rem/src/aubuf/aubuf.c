@@ -14,12 +14,13 @@ static bool debug_enabled = false;
 struct aubuf {
 	struct list afl;
 	struct lock *lock;
-	size_t wish_sz;
+	size_t min_sz;
 	size_t cur_sz;
 	size_t max_sz;
 	bool filling;
 	uint64_t ts;
 
+	char name[32];
 	struct {
 		size_t or;
 		size_t ur;
@@ -51,16 +52,7 @@ static void aubuf_destructor(void *arg)
 }
 
 
-/**
- * Allocate a new audio buffer
- *
- * @param abp    Pointer to allocated audio buffer
- * @param min_sz Minimum buffer size
- * @param max_sz Maximum buffer size (0 for no max size)
- *
- * @return 0 for success, otherwise error code
- */
-int aubuf_alloc(struct aubuf **abp, size_t min_sz, size_t max_sz)
+int aubuf_alloc(struct aubuf **abp, const char *name, size_t min_sz, size_t max_sz)
 {
 	struct aubuf *ab;
 	int err;
@@ -72,11 +64,13 @@ int aubuf_alloc(struct aubuf **abp, size_t min_sz, size_t max_sz)
 	if (!ab)
 		return ENOMEM;
 
+	str_ncpy(ab->name, name, sizeof(ab->name));
+
 	err = lock_alloc(&ab->lock);
 	if (err)
 		goto out;
 
-	ab->wish_sz = min_sz;
+	ab->min_sz = min_sz;
 	ab->max_sz = max_sz;
 	ab->filling = true;
 
@@ -119,8 +113,8 @@ int aubuf_append(struct aubuf *ab, struct mbuf *mb)
 	if (ab->max_sz && ab->cur_sz > ab->max_sz) {
 		if (debug_enabled) {
 			++ab->stats.or;
-			(void)re_printf("aubuf: %p overrun (cur=%zu)\n",
-				ab, ab->cur_sz);
+			(void)re_printf("aubuf: %p (%s) overrun #%zu (cur=%zu, max=%zu)\n",
+				ab, ab->name, ab->stats.or, ab->cur_sz, ab->max_sz);
 		}
 		af = list_ledata(ab->afl.head);
 		if (af) {
@@ -181,12 +175,15 @@ void aubuf_read(struct aubuf *ab, uint8_t *p, size_t sz)
 	lock_write_get(ab->lock);
 
 
-	if (ab->cur_sz < (ab->filling ? ab->wish_sz : sz)) {
+	if (ab->cur_sz < (ab->filling ? ab->min_sz : sz)) {
 		if (debug_enabled) {
 			if (!ab->filling) {
 				++ab->stats.ur;
-				(void)re_printf("aubuf: %p underrun (cur=%zu)\n",
-						ab, ab->cur_sz);
+				(void)re_printf("aubuf: %p (%s) underrun #%zu (cur=%zu, requested=%zu)\n",
+						ab, ab->name, ab->stats.ur, ab->cur_sz, sz);
+			} else {
+				(void)re_printf("aubuf: %p (%s) filling (cur=%zu, requested=%zu)\n",
+						ab, ab->name, ab->cur_sz, sz);
 			}
 		}
 		ab->filling = true;
@@ -306,8 +303,8 @@ int aubuf_debug(struct re_printf *pf, const struct aubuf *ab)
 		return 0;
 
 	lock_read_get(ab->lock);
-	err = re_hprintf(pf, "wish_sz=%zu cur_sz=%zu filling=%d",
-			 ab->wish_sz, ab->cur_sz, ab->filling);
+	err = re_hprintf(pf, "aubuf %p (%s) min_sz=%zu cur_sz=%zu filling=%d",
+			 ab, ab->name, ab->min_sz, ab->cur_sz, ab->filling);
 
 	if (debug_enabled) {
 		err |= re_hprintf(pf, " [overrun=%zu underrun=%zu]",
@@ -347,7 +344,7 @@ void aubuf_stop_buffering(struct aubuf *ab)
 		return;
 	lock_write_get(ab->lock);
 	ab->filling = false;
-	ab->wish_sz = 0;
+	ab->min_sz = 0;
 	lock_rel(ab->lock);
 }
 
