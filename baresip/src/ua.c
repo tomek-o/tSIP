@@ -707,6 +707,42 @@ int ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuse
 	return err;
 }
 
+/**
+ * Appends params to mbuf if params do not already exist in mbuf.
+ *
+ * @param mb mbuf to append to
+ * @param params params in the form ;uri-param1;uri-param2
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+static int append_params(struct mbuf *mb, struct pl *params)
+{
+	char param[512];
+	char *str = NULL;
+	char *pstr;
+	char *token;
+	int err;
+
+	if (!mb || !params)
+		return EINVAL;
+
+	err = pl_strdup(&str, params);
+	if (err || !str)
+		return err ? err : ENOMEM;
+
+	pstr = str;
+	while((token = strtok(pstr, ";"))) {
+		re_snprintf(param, sizeof(param), ";%s", token);
+		if (re_regex((const char *)mb->buf, mb->end, param))
+			mbuf_write_str(mb, param);
+
+		pstr = NULL;
+	}
+
+	mem_deref(str);
+	return 0;
+}
+
 
 /**
  * Connect an outgoing call to a given SIP uri
@@ -785,7 +821,9 @@ int ua_connect(struct ua *ua, unsigned int callUid, struct call **callp,
 	}
 
 	/* Append any optional URI parameters */
-	err |= mbuf_write_pl(dialbuf, &ua->acc->luri.params);
+	err |= append_params(dialbuf, &ua->acc->luri.params);
+	if (err)
+		goto out;
 
 	if (params)
 		err |= mbuf_printf(dialbuf, ">");
