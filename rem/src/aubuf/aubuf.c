@@ -182,8 +182,10 @@ void aubuf_read(struct aubuf *ab, uint8_t *p, size_t sz)
 				(void)re_printf("aubuf: %p (%s) underrun #%zu (cur=%zu, requested=%zu)\n",
 						ab, ab->name, ab->stats.ur, ab->cur_sz, sz);
 			} else {
+			#if 0
 				(void)re_printf("aubuf: %p (%s) filling (cur=%zu, requested=%zu)\n",
 						ab, ab->name, ab->cur_sz, sz);
+			#endif
 			}
 		}
 		ab->filling = true;
