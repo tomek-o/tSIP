@@ -1099,8 +1099,9 @@ Version 0.3
 		- new button type: Hangup all calls
 		- state of HOLD and MUTE functions is separate for each call
 		- new, separate settings page related to multiple calls
-			- option to automatically hold/unhold calls when switching between them using LINE buttons
+			- option (opt-out) to automatically hold/unhold calls when switching between them using LINE buttons
 			- option to allow auto answer even if another call is already active
+			- option (opt-out) to switch automatically to new call when answering call using tray notifier window
 		- calls have now semi-unique identifier, 32-bit unsigned integer with value = 0 being invalid
 		- Lua scripting:
 			- many Lua functions that previously had empty argument list (e.g. Answer, GetCallState, GetCallPeer, GetCallInitialRxInvite, GetAudioErrorCount), would operate on the current call (if no argument is passed) or call with specified ID
@@ -1126,5 +1127,6 @@ Version 0.3
 		- removed unused resampling from audio.c, rem resampler replaced with newer version needed by mixminus (conferencing) baresip module
 		- if used with video, display output should be configured to used separate window, not button
 		- ZRTP is not supported/tested at the moment for multiple calls
+	- added name to aubuf, extended aubuf logging
 */
 
