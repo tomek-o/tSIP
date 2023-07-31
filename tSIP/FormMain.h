@@ -56,7 +56,6 @@ __published:	// IDE-managed Components
 	TAction *actShowSettings;
 	TAction *actShowLog;
 	TFileExit *actFileExit;
-	TImageList *imglistActions;
 	TTimer *tmrStartup;
 	TTimer *tmrCallbackPoll;
 	TTimer *tmrBackspace;
