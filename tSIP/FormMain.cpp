@@ -897,6 +897,12 @@ void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
 
 int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 {
+	if (appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED)
+	{
+        LOG("Cannot make call: app not started properly\n");
+		return -1;
+	}
+
 	Call* newCall = Calls::Alloc();
 	Call& call = *newCall;
 
