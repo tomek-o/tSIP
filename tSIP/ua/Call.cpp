@@ -143,3 +143,8 @@ void Call::SetState(Callback::ua_state_e state)
 	ShowOnLineButton();
 }
 
+void Call::SetInitialState(Callback::ua_state_e state)
+{
+	this->state = state;
+}
+

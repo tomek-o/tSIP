@@ -906,6 +906,7 @@ int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 	call.uri = target;
 	call.initialTarget = call.uri;
 	call.dialString = cbCallURI->Text;
+	call.SetInitialState(Callback::CALL_STATE_OUTGOING);
 
 	int btnId;
 	if (Calls::AssignLineButton(newCall, true, btnId) != 0)

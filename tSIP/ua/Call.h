@@ -36,6 +36,7 @@ private:
 	Callback::ua_state_e state;
 public:
 	void SetState(Callback::ua_state_e state);
+	void SetInitialState(Callback::ua_state_e state);
 	Callback::ua_state_e GetState(void) const {
 		return state;
 	}
