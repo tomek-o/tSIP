@@ -329,6 +329,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	SetMainWindowLayout(appSettings.frmMain.layout);
 
 	Calls::OnButtonConfigChange();
+
+	Application->OnRestore = OnRestore;
 }
 
 __fastcall TfrmMain::~TfrmMain()
@@ -3169,6 +3171,7 @@ void TfrmMain::ToggleVisibility(void)
 		SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 		FocusCbCallUri();
 		frmHistory->SetUpdating(pcMain->ActivePage == tsHistory);
+		OnRestore(NULL);
 	}
 	else
 	{
@@ -4048,6 +4051,36 @@ void TfrmMain::UpdateMainCallDisplay(void)
 		else
 		{
 			lbl2ndPartyDesc->Caption = call->getPeerName();
+		}
+	}
+}
+
+void __fastcall TfrmMain::OnRestore(TObject *Sender)
+{
+	bool monitorFound = false;
+	for (int i=0; i<Screen->MonitorCount; i++)
+	{
+		TMonitor *monitor = Screen->Monitors[i];
+		enum { MARGIN = 30 };
+		if (
+			(Left + Width + MARGIN >= monitor->Left) &&
+			(Left - MARGIN <= monitor->Left + monitor->Width) &&
+			(Top + 5 >= monitor->Top) &&
+			(Top - MARGIN <= monitor->Top + monitor->Height)
+			)
+		{
+			monitorFound = true;
+			break;
+		}
+	}
+	if (!monitorFound)
+	{
+		if (Screen->MonitorCount > 0)
+		{
+			LOG("Moving main window to first monitor\n");
+			TMonitor *monitor = Screen->Monitors[0];
+			Left = monitor->Left + 50;
+			Top = monitor->Top + 50;
 		}
 	}
 }

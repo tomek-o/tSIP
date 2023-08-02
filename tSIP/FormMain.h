@@ -234,6 +234,8 @@ private:	// User declarations
 	void ShowCallOnLineButton(const Call &call);
 	void ClearLineButton(int btnId);
 	void UpdateMainCallDisplay(void);
+	/** \brief Moving to first monitor if application appears to be on a monitor that is missing */
+	void __fastcall OnRestore(TObject *Sender);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);
 	void __fastcall WMEndSession(TWMEndSession &Msg);	
