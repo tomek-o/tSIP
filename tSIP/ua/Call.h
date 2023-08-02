@@ -54,6 +54,7 @@ public:
 	int btnId;
 	bool hold;
 	bool mute;
+	AnsiString dialString;
 	AnsiString sipReason;
 
 	Extctrls::TTimer *tmrAutoAnswer;

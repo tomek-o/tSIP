@@ -316,6 +316,7 @@ object frmMain: TfrmMain
       ParentFont = False
       TabOrder = 0
       Text = '3000'
+      OnChange = cbCallURIChange
       OnKeyPress = cbCallURIKeyPress
     end
   end

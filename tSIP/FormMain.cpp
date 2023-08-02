@@ -905,6 +905,7 @@ int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 	call.incoming = false;
 	call.uri = target;
 	call.initialTarget = call.uri;
+	call.dialString = cbCallURI->Text;
 
 	int btnId;
 	if (Calls::AssignLineButton(newCall, true, btnId) != 0)
@@ -1019,7 +1020,7 @@ int TfrmMain::OnGetBlfState(int contactId, std::string &number, std::string &rem
 {
 	if (contactId < 0 || contactId >= appSettings.uaConf.contacts.size())
 	{
-        LOG("OnGetBlfState: invalid contactId = %d\n", contactId);
+		LOG("OnGetBlfState: invalid contactId = %d\n", contactId);
 		return -1;
     }
 	const UaConf::Contact &contact = appSettings.uaConf.contacts[contactId];
@@ -1374,7 +1375,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 		}
 		else
 		{
-        	pollCnt = 0;
+			pollCnt = 0;
 		}
 	}
 }
@@ -1946,7 +1947,7 @@ void TfrmMain::PollCallbackQueue(void)
 					AnsiString asScriptFile;
 					bool handled = true;
 					asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onEncryptionState.c_str());
-                    int TODO__ZRTP_SESSION_ID_VS_CALL_ID;
+					int TODO__ZRTP_SESSION_ID_VS_CALL_ID;
 					RunScriptFile(SCRIPT_SRC_ON_ENCRYPTION_STATE, cb.zrtp.sessionId, asScriptFile.c_str(), handled);
 				}
 			}
@@ -2371,7 +2372,7 @@ void __fastcall TfrmMain::FormClose(TObject *Sender, TCloseAction &Action)
 		return;
 	}
 	if(!Application->Terminated)
-    {
+	{
 		if (trIcon)
 		{
 			ShowWindow(Application->Handle, SW_HIDE);
@@ -3038,7 +3039,7 @@ void TfrmMain::ToggleSpeedDial(void)
 			this->Top = this->Top - appSettings.frmMain.expandingPosLeftOffset;
 		}
 	}
-	SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);	
+	SetSpeedDial(appSettings.frmMain.bSpeedDialVisible);
 }
 
 void __fastcall TfrmMain::cbCallURIKeyPress(TObject *Sender, char &Key)
@@ -3255,7 +3256,7 @@ void __fastcall TfrmMain::edTransferKeyPress(TObject *Sender, char &Key)
 void __fastcall TfrmMain::WMCopyData(TWMCopyData& Message)
 {
     char *data = new char [Message.CopyDataStruct->cbData+1];
-    memcpy(data, Message.CopyDataStruct->lpData, Message.CopyDataStruct->cbData);
+	memcpy(data, Message.CopyDataStruct->lpData, Message.CopyDataStruct->cbData);
     data[Message.CopyDataStruct->cbData] = '\0';
     CommandLine::Instance().Execute(data, Message.CopyDataStruct->cbData/CommandLine::MAX_CMD_PARAM_LEN);
     delete[] data;
@@ -3740,7 +3741,7 @@ void TfrmMain::SetNotificationIcon(bool state)
 	{
 		trIcon->SetIcon(Application->Icon);
 	}
-	notificationIconState = state;	
+	notificationIconState = state;
 }
 
 void TfrmMain::SetErrorIcon(bool state)
@@ -4031,7 +4032,11 @@ void TfrmMain::UpdateMainCallDisplay(void)
 	}
 	else
 	{
-		lblCallState->Caption = call->getStateDescription();	
+		if (cbCallURI->Text != call->dialString)
+		{
+        	cbCallURI->Text = call->dialString;
+		}
+		lblCallState->Caption = call->getStateDescription();
 		lbl2ndParty->Caption = GetClip(call->getPeerUri(), appSettings.Display.bUserOnlyClip);
 		lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 		if (lastContactEntry)
@@ -4084,4 +4089,14 @@ void __fastcall TfrmMain::OnRestore(TObject *Sender)
 		}
 	}
 }
+
+void __fastcall TfrmMain::cbCallURIChange(TObject *Sender)
+{
+	Call* call = Calls::GetCurrentCall();
+	if (call)
+	{
+		call->dialString = cbCallURI->Text;
+	}
+}
+//---------------------------------------------------------------------------
 

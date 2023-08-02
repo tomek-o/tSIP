@@ -148,6 +148,7 @@ __published:	// IDE-managed Components
           TShiftState Shift, int X, int Y);
 	void __fastcall btnResetSpeakerVolumeMouseUp(TObject *Sender,
           TMouseButton Button, TShiftState Shift, int X, int Y);
+	void __fastcall cbCallURIChange(TObject *Sender);
 private:	// User declarations
 	static void TranslateForm(void* obj);
 
