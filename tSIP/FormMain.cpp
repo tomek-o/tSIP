@@ -2617,11 +2617,16 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		DialString(cfg.number, true);
 		break;
 	}
-	case Button::TRANSFER:
+	case Button::TRANSFER: {
 		if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
 			return;
-		UA->Transfer(0, edTransfer->Text);	
+		Call *call = Calls::GetCurrentCall();
+		if (call)
+		{
+			UA->Transfer(call->uid, edTransfer->Text);
+		}
 		break;
+	}
 	case Button::ATTENDED_TRANSFER: {
 		Call *call = Calls::GetCurrentCall();
 		int TODO__IS_CHECKING_STATE_REALLY_NEEDED;
@@ -3255,7 +3260,11 @@ void __fastcall TfrmMain::edTransferKeyPress(TObject *Sender, char &Key)
 		}	
 		if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
 			return;
-		UA->Transfer(0, edTransfer->Text);
+		Call *call = Calls::GetCurrentCall();
+		if (call)
+		{
+			UA->Transfer(call->uid, edTransfer->Text);
+		}
 	}
 }
 //---------------------------------------------------------------------------
