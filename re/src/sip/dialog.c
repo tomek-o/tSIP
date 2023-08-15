@@ -582,6 +582,16 @@ const char *sip_dialog_callid(const struct sip_dialog *dlg)
 	return dlg ? dlg->callid : NULL;
 }
 
+const char *sip_dialog_ltag(const struct sip_dialog *dlg)
+{
+	return dlg ? dlg->ltag : NULL;
+}
+
+const char *sip_dialog_rtag(const struct sip_dialog *dlg)
+{
+	return dlg ? dlg->rtag : NULL;
+}
+
 
 /**
  * Get the local sequence number from a SIP Dialog

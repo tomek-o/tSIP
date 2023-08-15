@@ -1088,5 +1088,45 @@ Version 0.2.14
 Version 0.2.14.1
 	- fixed crash from v0.2.14 when call was disconnected by the other party
 	- passing BYE message from handler, potentially allowing to use Reason from it
+
+Version 0.3
+	- support for multiple simultaneous calls
+		- new button type: LINE
+			- more than one button of this type has to be defined to allow more than one call
+			- each call if there are multiple calls would be assigned to its own LINE button
+			- line buttons are displaying state of assigned calls and are used to switch between calls
+			- if no LINE button was defined application should keep backward compatibility (being limited to a single call)
+		- new button type: Hangup all calls
+		- state of HOLD and MUTE functions is separate for each call
+		- new, separate settings page related to multiple calls
+			- option (opt-out) to automatically hold/unhold calls when switching between them using LINE buttons
+			- option to allow auto answer even if another call is already active
+			- option (opt-out) to switch automatically to new call when answering call using tray notifier window
+		- calls have now semi-unique identifier, 32-bit unsigned integer with value = 0 being invalid
+		- Lua scripting:
+			- many Lua functions that previously had empty argument list (e.g. Answer, GetCallState, GetCallPeer, GetCallInitialRxInvite, GetAudioErrorCount), would operate on the current call (if no argument is passed) or call with specified ID
+			- added GetCurrentCallUid function (returning ID associated with call that has been assigned to active LINE button or 0)
+			- added SetCurrentCallUid function to switch between currently active calls
+			- added GetCalls function, returning table of call IDs
+			- added Hangup2 function taking call ID as first argument, SIP code and reason text as next arguments
+			- added HangupAll function, taking SIP code and reason text as arguments
+			- added BlindTransfer2 function taking call ID and transfer target as arguments
+			- added AttendedTransfer function, taking two call IDs as arguments
+			- added SwitchAudioSource2 function, like SwitchAudioSource but taking call ID as first argument
+			- added SwitchAudioPlayer and SwitchAudioPlayer2 functions for completeness
+			- added SwitchVideoSource2 function, like SwitchVideoSource but taking call ID as first argument
+			- added GenerateTones2 function, taking call ID as first argument
+			- added call ID as optional parameter to many other functions
+			- call ID is returned as second value from Call function
+			- call ID can be read as script source trigger id in "on call state", "on making call" and "on audio error" scripts
+			- added example listing current calls in log window
+		- separate ring volume setting - used if there is already another call active to make ring more quiet
+		- new button type: Attended transfer (simplified, at the moment working only if there are exactly two current calls)
+		- new button type: Start conference call using all current calls
+		- call hold switches now to "inactive" instead of "sendonly" state
+		- removed unused resampling from audio.c, rem resampler replaced with newer version needed by mixminus (conferencing) baresip module
+		- if used with video, display output should be configured to used separate window, not button
+		- ZRTP is not supported/tested at the moment for multiple calls
+	- added name to aubuf, extended aubuf logging
 */
 

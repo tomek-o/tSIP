@@ -34,7 +34,7 @@ static void speexpp_destructor(void *arg)
 
 
 static int encode_update(struct aufilt_enc_st **stp, void **ctx,
-			 const struct aufilt *af, struct aufilt_prm *prm)
+			 const struct aufilt *af, struct aufilt_prm *prm, const struct audio *au)
 {
 	struct preproc *st;
 	int val;

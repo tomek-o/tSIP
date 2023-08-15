@@ -17,18 +17,20 @@ private:
 public:
 	int GetCommand(Command& cmd);
 
-	void Call(int accountId, AnsiString target, AnsiString extraHeaderLines, bool video, void *vidispParentHandle);
-	void Answer(int callId, AnsiString audioRxMod="", AnsiString audioRxDev="", bool video = true, void *vidispParentHandle = NULL);
-	void Transfer(int callId, AnsiString target);
-	void SendDigit(int callId, char key);
-	void GenerateTone(int callId,
+	void Call(int accountId, unsigned int callUid, AnsiString target, AnsiString extraHeaderLines, bool video, void *vidispParentHandle);
+	void Answer(unsigned int callUid, AnsiString audioRxMod="", AnsiString audioRxDev="", bool video = true, void *vidispParentHandle = NULL);
+	void Transfer(unsigned int callUid, AnsiString target);
+	void TransferReplace(unsigned int callUid, unsigned int callReplaceUid);
+	void CallStartAudioExtraSource(unsigned int callUid);
+	void SendDigit(unsigned int callUid, char key);
+	void GenerateTone(unsigned int callUid,
 		float amplitude1 = 0.0f, float frequency1 = 0.0f,
 		float amplitude2 = 0.0f, float frequency2 = 0.0f,
 		float amplitude3 = 0.0f, float frequency3 = 0.0f,
 		float amplitude4 = 0.0f, float frequency4 = 0.0f);
-	void Hold(int callId, bool state);
-	void Mute(int callId, bool state);
-	void Hangup(int callId, int code=0, AnsiString reason = "Busy Here");
+	void Hold(unsigned int callUid, bool state);
+	void Mute(unsigned int callUid, bool state);
+	void Hangup(unsigned int callUid, int code=0, AnsiString reason = "Busy Here");
 	void SetMsgLogging(bool enabled, bool onlyFirstLines);
 	void SetAubufLogging(bool enabled);	
 	void ReRegister(int accountId);
@@ -36,8 +38,8 @@ public:
 	void StartRing(AnsiString wavFile);
 	void PlayStop(void);
 	void StartRing2(AnsiString wavFile);
-	void Record(AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate);
-	void RecordPause(void);
+	void Record(unsigned int callUid, AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate);
+	void RecordPause(unsigned int callUid);
 	/** \brief Start transmitting RTP to specified targee
 		\param target address IP + port
 		\param pagingTxWaveFile audio file to be transmitted; if not specified default audio source is used
@@ -45,15 +47,16 @@ public:
 	void PagingTx(AnsiString target, AnsiString pagingTxWaveFile, AnsiString codec, unsigned int ptime);
 	/** \brief Change audio source device for call
 	*/
-	void SwitchAudioSource(int callId, AnsiString audioMod, AnsiString audioDev);
+	void SwitchAudioSource(unsigned int callUid, AnsiString audioMod, AnsiString audioDev);
 	/** \brief Change audio player device for call
 	*/
-	void SwitchAudioPlayer(int callId, AnsiString audioMod, AnsiString audioDev);
-	void SwitchVideoSource(int callId, AnsiString videoMod, AnsiString videoDev);
+	void SwitchAudioPlayer(unsigned int callUidd, AnsiString audioMod, AnsiString audioDev);
+	void SwitchVideoSource(unsigned int callUid, AnsiString videoMod, AnsiString videoDev);
 	void UpdateVolume(void);
 	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines);
 	int SendMessage(int requestId, int accountId, AnsiString target, AnsiString text);
 	int ZrtpVerifySas(bool state);
+	int ConferenceStart(void);
 };
 
 #define UA ControlQueue::Instance()

@@ -36,7 +36,7 @@ struct DialpadConf
 			height(30)
 		{}
 		void fromJson(const Json::Value &jv);
-		void toJson(Json::Value &jv);
+		void toJson(Json::Value &jv) const;
 		bool operator==(const ElementConf &right) const;
 		bool operator!=(const ElementConf &right) const
 		{
@@ -46,7 +46,7 @@ struct DialpadConf
 
 	DialpadConf(void);
 	void fromJson(const Json::Value &jv);
-	void toJson(Json::Value &jv);
+	void toJson(Json::Value &jv) const;
 
 	bool operator==(const DialpadConf &right) const;
 	bool operator!=(const DialpadConf &right) const

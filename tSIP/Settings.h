@@ -240,8 +240,14 @@ public:
 	{
 		AnsiString extraHeaderLines;
 		bool bDisconnectCallOnAudioError;
+		bool enableAutoAnswerEvenIfAnotherCallIsActive;
+		bool autoHoldWhenSwitchingCalls;				///< automatically hold inactive / unhold new active call when switching between calls
+		bool autoSwitchToCallAnsweredFromTray;
 		_Calls(void):
-			bDisconnectCallOnAudioError(true)
+			bDisconnectCallOnAudioError(true),
+			enableAutoAnswerEvenIfAnotherCallIsActive(false),
+			autoHoldWhenSwitchingCalls(true),
+			autoSwitchToCallAnsweredFromTray(true)
 		{
 		}
 	} Calls;

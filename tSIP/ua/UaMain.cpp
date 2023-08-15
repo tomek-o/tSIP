@@ -8,6 +8,7 @@
 #include "ControlQueue.h"
 #include "Command.h"
 #include "CallbackQueue.h"
+#include "Calls.h"
 #include "Callback.h"
 #include "Settings.h"
 #include "NetInterfaces.h"
@@ -20,6 +21,7 @@
 #include "common/StaticCheck.h"
 #include "Branding.h"
 #include <assert.h>
+#include <map>
 
 #pragma package(smart_init)
 
@@ -35,6 +37,40 @@ namespace {
 
 	std::vector<AnsiString> videoCodecs;
 	volatile bool videoCodecsAvailable = false;
+
+	// AV if this map is placed inside app structure; BC++ bug?
+	std::map<unsigned int, struct call*> calls;
+	struct call* findCall(unsigned int uid)
+	{
+		std::map<unsigned int, struct call*>::iterator iter;
+		if (uid == 0)
+			return NULL;
+		if (calls.empty())
+			return NULL;
+		iter = calls.find(uid);
+		if (iter != calls.end())
+			return iter->second;
+		return NULL;
+	}
+	void removeCall(unsigned int uid)
+	{
+		std::map<unsigned int, struct call*>::iterator iter = calls.find(uid);
+		if (iter != calls.end())
+		{
+			calls.erase(iter);
+		}
+		else
+		{
+			LOG("UaMain: could not erase call %u from map!\n", uid); 
+		}
+	}
+
+	struct App {
+		uint32_t n_uas;       /**< Number of User Agents           */
+		bool terminating;     /**< Application is terminating flag */
+		struct ua *ua;
+		struct paging_tx *paging_txp;
+	} app;
 
 	/** Escaping text to be added as display name
 		Rules:
@@ -85,14 +121,6 @@ public:
 #define DEBUG_LEVEL 6
 #include <re_dbg.h>
 
-static struct {
-	uint32_t n_uas;       /**< Number of User Agents           */
-	bool terminating;     /**< Application is terminating flag */
-	struct ua *ua;
-	struct call *callp;
-	struct paging_tx *paging_txp;	
-} app;
-
 struct ua* ua_cur(void) {
 	return app.ua;
 }
@@ -109,13 +137,15 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 
 	const char* peer_name = "";
 	int scode = 0;
+	int callUid = 0;
 	if (call)
 	{
 		peer_name = call_peername(call);
 		if (peer_name == NULL)
 			peer_name = "";
 		scode = call_scode(call);
-    }
+		callUid = call_get_uid(call);
+	}
 
 	switch (ev)
 	{
@@ -133,7 +163,10 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			UA_CB->SetCallData(initial_rx_invite);
 
 			state = Callback::CALL_STATE_INCOMING;
-			app.callp = call;
+
+			Call* appCall = Calls::Alloc();
+			calls[appCall->uid] = call;
+			call_set_uid(call, appCall->uid);
 
 			const char* alert_info = call_alert_info(call);
 			if (alert_info == NULL)
@@ -151,25 +184,20 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			if (pai_peer_name == NULL)
 				pai_peer_name = "";
 
-			if (appSettings.uaConf.startAudioSourceAtCallStart)
-			{
-				call_start_audio_extra_source(call);
-			}
-
-			UA_CB->ChangeCallState(state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name, "");
+			UA_CB->ChangeCallState(appCall->uid, state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name, "");
 			break;
 		}
 	case UA_EVENT_CALL_RINGING:
 		state = Callback::CALL_STATE_RINGING;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
 		break;
 	case UA_EVENT_CALL_TRYING:
 		state = Callback::CALL_STATE_TRYING;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
 		break;
 	case UA_EVENT_CALL_OUTGOING:
 		state = Callback::CALL_STATE_OUTGOING;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
 		if (appSettings.uaConf.startAudioSourceAtCallStart)
 		{
 			call_start_audio_extra_source(call);
@@ -177,7 +205,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		break;
 	case UA_EVENT_CALL_PROGRESS:
 		state = Callback::CALL_STATE_PROGRESS;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
 		break;
 	case UA_EVENT_CALL_ESTABLISHED:
 		{
@@ -196,19 +224,19 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 				codec_name = audio_get_rx_aucodec_name(au);
 			}
 
-			UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, pai_peer_uri, pai_peer_name, codec_name);
+			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, pai_peer_uri, pai_peer_name, codec_name);
 		}
 		break;
 	case UA_EVENT_CALL_CLOSED:
-		if (call == app.callp)
+		if (callUid > 0)
 		{
 			state = Callback::CALL_STATE_CLOSED;
-			UA_CB->ChangeCallState(state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
-			app.callp = NULL;
+			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+			removeCall(callUid);
 		}
 		else
 		{
-			LOG("Ignoring UA_EVENT_CALL_CLOSED (no current call), prm = %s\n", prm?prm:"NULL");
+			LOG("Ignoring UA_EVENT_CALL_CLOSED (callUid = %u)\n", callUid);
 		}
 		break;
 	case UA_EVENT_CALL_DTMF_START:
@@ -218,13 +246,12 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		UA_CB->ChangeCallDtmfState(prm, false);
 		break;
 	case UA_EVENT_CALL_TRANSFER:
-		app.callp = call;
 		state = Callback::CALL_STATE_TRANSFER;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode, -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode, -1, "", "", -1, "", "", "");
 		break;
 	case UA_EVENT_CALL_TRANSFER_OOD:
 		state = Callback::CALL_STATE_TRANSFER_OOD;
-		UA_CB->ChangeCallState(state, prm, peer_name, scode, -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode, -1, "", "", -1, "", "", "");
 		break;
 	case UA_EVENT_CALL_REINVITE_RECEIVED:
 		{
@@ -264,7 +291,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		UA_CB->ChangeRegState(0, reg_state, prm);
 		break;
 	case UA_EVENT_AUDIO_ERROR:
-		UA_CB->NotifyAudioError();
+		UA_CB->NotifyAudioError(callUid);
 		break;
 	default:
 		assert(!"Unhandled UA event");
@@ -480,7 +507,7 @@ static void recorder_state_handler(struct recorder_st *recorder, enum recorder_s
 	STATIC_CHECK(RECORDER_STATE_IDLE == Callback::RECORDER_STATE_IDLE, EnumMismatch);
 	STATIC_CHECK(RECORDER_STATE_ACTIVE == Callback::RECORDER_STATE_ACTIVE, EnumMismatch);
 	STATIC_CHECK(RECORDER_STATE_PAUSED == Callback::RECORDER_STATE_PAUSED, EnumMismatch);
-	UA_CB->ChangeRecorderState(0, static_cast<Callback::rec_state_e>(state));	
+	UA_CB->ChangeRecorderState(recorder_get_call_uid(recorder), static_cast<Callback::rec_state_e>(state));
 }
 
 static void zrtp_state_handler(int session_id, struct zrtp_st *st)
@@ -493,6 +520,7 @@ static void zrtp_state_handler(int session_id, struct zrtp_st *st)
 	zrtp.sas = st->sas;
 	zrtp.cipher = st->cipher;
 	zrtp.verified = st->verified;
+int TODO__ZRTP_CALL_ID_ON_MULTIPLE_CALLS;
 	UA_CB->ChangeEncryptionState(zrtp);
 }
 
@@ -537,6 +565,7 @@ static int app_init(void)
 	strncpyz(cfg->audio.ring_mod, appSettings.uaConf.audioCfgRing.mod.c_str(), sizeof(cfg->audio.ring_mod));
 	strncpyz(cfg->audio.ring_dev, appSettings.uaConf.audioCfgRing.dev.c_str(), sizeof(cfg->audio.ring_dev));
 	cfg->audio.ring_volume = appSettings.uaConf.audioCfgRing.volume;
+	cfg->audio.ring_volume_multi = appSettings.uaConf.audioCfgRing.volumeMulti;
 
 	cfg->audio.softvol_tx = appSettings.uaConf.audioSoftVol.tx;
 	cfg->audio.softvol_rx = appSettings.uaConf.audioSoftVol.rx;
@@ -784,8 +813,7 @@ static int app_start(void)
 
 		if (acc.stun_server != "")
 		{
-			addr.cat_printf(";medianat=stun;stunserver=stun:%s",
-				acc.stun_server.c_str());
+			addr.cat_printf(";medianat=stun;stunserver=stun:%s", acc.stun_server.c_str());
 		}
 
 		if (acc.outbound1 != "")
@@ -1022,22 +1050,36 @@ extern "C" void control_handler(void)
 	{
     	return;
 	}
+
+	struct call* cmdCall = findCall(cmd.callUid);
+	if (cmd.callUid > 0 && cmd.type != Command::CALL && cmdCall == NULL)
+	{
+		LOG("Call %u not found (currently %u calls)\n", cmd.callUid, calls.size());
+	}
+
 	switch (cmd.type)
 	{
-	case Command::CALL:
-		err = ua_connect(ua_cur(), &app.callp, NULL /*from*/,
+	case Command::CALL: {
+		struct call *newCall = NULL;
+		err = ua_connect(ua_cur(), cmd.callUid, &newCall, NULL /*from*/,
 			cmd.target.c_str(), NULL,
 			cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle,
 			cmd.extraHeaderLines.c_str());
 		if (err)
 		{
 			DEBUG_WARNING("connect failed: %m\n", err);
-			UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
+			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
+			// call was not added to calls map yet - no need to remove
+		}
+		else
+		{
+			calls[cmd.callUid] = newCall;
 		}
 		break;
+	}
 	case Command::ANSWER:
         LOG("Answering...\n");
-		err = ua_answer(ua_cur(), app.callp, cmd.audioMod.c_str(), cmd.audioDev.c_str(), cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle);
+		err = ua_answer(ua_cur(), cmdCall, cmd.audioMod.c_str(), cmd.audioDev.c_str(), cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle);
 		if (err)
 		{
         	DEBUG_WARNING("ua_answer failed: %m\n", err);
@@ -1048,39 +1090,61 @@ extern "C" void control_handler(void)
 		}
 		break;
 	case Command::TRANSFER:
-		if (app.callp)
+		if (cmdCall)
 		{
-			call_transfer(app.callp, cmd.target.c_str());
+			call_transfer(cmdCall, cmd.target.c_str());
 		}
 		break;
-	case Command::SEND_DIGIT:
-		if (app.callp)
+	case Command::TRANSFER_REPLACE: {
+		if (cmdCall)
 		{
-			if (call_send_digit(app.callp, cmd.key) == 0)
+			struct call* replaceCall = findCall(cmd.callReplaceUid);
+			if (replaceCall)
 			{
-				call_send_digit(app.callp, 0x00);
+				call_replace_transfer(cmdCall, replaceCall);
+			}
+			else
+			{
+				DEBUG_WARNING("Call %u to replace not found\n", cmd.callReplaceUid);
+			}
+		}
+		break;
+	}
+	case Command::CALL_START_AUDIO_EXTRA_SOURCE: {
+		if (cmdCall)
+		{
+			call_start_audio_extra_source(cmdCall);
+		}
+		break;
+	}
+	case Command::SEND_DIGIT:
+		if (cmdCall)
+		{
+			if (call_send_digit(cmdCall, cmd.key) == 0)
+			{
+				call_send_digit(cmdCall, 0x00);
 			}
 		}
 		break;
 	case Command::HOLD:
-		if (app.callp)
+		if (cmdCall)
 		{
-			call_hold(app.callp, cmd.bEnabled);
+			call_hold(cmdCall, cmd.bEnabled);
 		}
 		break;
 	case Command::MUTE:
-		if (app.callp)
+		if (cmdCall)
 		{
-			struct audio *audio = call_audio(app.callp);
+			struct audio *audio = call_audio(cmdCall);
 			audio_mute(audio, cmd.bEnabled);
 		}
 		break;
 	case Command::HANGUP:
-		if (app.callp)
+		if (cmdCall)
 		{
-			ua_hangup(ua_cur(), app.callp, cmd.code, cmd.reason.c_str());
-			UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
-			app.callp = NULL;
+			ua_hangup(ua_cur(), cmdCall, cmd.code, cmd.reason.c_str());
+			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
+			removeCall(cmd.callUid);
 		}
 		if (app.paging_txp)
 		{
@@ -1110,7 +1174,16 @@ extern "C" void control_handler(void)
 		struct ua* ua = ua_cur();
 		struct config * cfg = conf_config();
 		//LOG("UaMain: START_RING\n");
-		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), &cfg->audio.ring_volume, -1, cfg->audio.loop_ring_without_silence);
+		float *volume;
+		if (calls.size() <= 1)
+		{
+			volume = &cfg->audio.ring_volume;
+		}
+		else
+		{
+			volume = &cfg->audio.ring_volume_multi;
+		}
+		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), volume, -1, cfg->audio.loop_ring_without_silence);
 		break;
 	}
 	case Command::PLAY_STOP: {
@@ -1127,10 +1200,10 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::RECORD: {
-		if (app.callp) {
-			struct recorder_st *rec = call_get_recorder(app.callp);
+		if (cmdCall) {
+			struct recorder_st *rec = call_get_recorder(cmdCall);
 			if (rec) {
-				recorder_start(rec, cmd.target.c_str(), cmd.channels,
+				recorder_start(rec, call_get_uid(cmdCall), cmd.target.c_str(), cmd.channels,
 					static_cast<enum recorder_side>(cmd.recSide),\
 					static_cast<enum recorder_file_format>(cmd.recFileFormat),
 					cmd.bitrate
@@ -1140,8 +1213,8 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::RECORD_PAUSE: {
-		if (app.callp) {
-			struct recorder_st *rec = call_get_recorder(app.callp);
+		if (cmdCall) {
+			struct recorder_st *rec = call_get_recorder(cmdCall);
 			if (rec) {
 				recorder_pause(rec);
 			}
@@ -1201,9 +1274,9 @@ extern "C" void control_handler(void)
 	}
 	case Command::SWITCH_AUDIO_SOURCE: {
 		struct audio* a = NULL;
-		if (app.callp)
+		if (cmdCall)
 		{
-			a = call_audio(app.callp);
+			a = call_audio(cmdCall);
 		}
 		else if (app.paging_txp)
 		{
@@ -1220,9 +1293,9 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::SWITCH_AUDIO_PLAYER: {
-		if (app.callp)
+		if (cmdCall)
 		{
-			struct audio* a = call_audio(app.callp);
+			struct audio* a = call_audio(cmdCall);
 			err = audio_set_player(a, cmd.audioMod.c_str(), cmd.audioDev.c_str());
 			if (err) {
 				DEBUG_WARNING("failed to set audio output (%m)\n", err);
@@ -1234,9 +1307,9 @@ extern "C" void control_handler(void)
 	case Command::SWITCH_VIDEO_SOURCE: {
 	#ifdef USE_VIDEO
 		struct video* v = NULL;
-		if (app.callp)
+		if (cmdCall)
 		{
-			v = call_video(app.callp);
+			v = call_video(cmdCall);
 		}
 		if (v)
 		{
@@ -1257,6 +1330,7 @@ extern "C" void control_handler(void)
 		cfg->audio.softvol_rx = appSettings.uaConf.audioSoftVol.rx;
 		cfg->audio.alert_volume = appSettings.uaConf.audioCfgAlert.volume;
 		cfg->audio.ring_volume = appSettings.uaConf.audioCfgRing.volume;
+		cfg->audio.ring_volume_multi = appSettings.uaConf.audioCfgRing.volumeMulti;
 		break;
 	}
 	case Command::SEND_CUSTOM_REQUEST: {
@@ -1276,23 +1350,28 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::GENERATE_TONES: {
-		if (app.callp) {
+		if (cmdCall) {
 			for (unsigned int i=0; i<ARRAY_SIZE(cmd.tones); i++) {
 				const struct Command::Tone &tone = cmd.tones[i];
 				if (tone.amplitude > 0.000001f)
 				{
-					call_start_tone(app.callp, i, tone.amplitude, tone.frequency);
+					call_start_tone(cmdCall, i, tone.amplitude, tone.frequency);
 				}
 				else
 				{
-					call_stop_tone(app.callp, i);
+					call_stop_tone(cmdCall, i);
 				}
 			}
 		}
 		break;
 	}
 	case Command::ZRTP_VERIFY_SAS: {
-    	baresip_zrtp_verify_sas(1, cmd.bParam);
+		int TODO__ZRTP_ON_MULTIPLE_CALLS;
+		baresip_zrtp_verify_sas(1, cmd.bParam);
+		break;
+	}
+	case Command::CONFERENCE_START: {
+		baresip_start_conference();
 		break;
 	}
 	default:
@@ -1366,11 +1445,12 @@ int Ua::Start(void)
 void Ua::Restart(void)
 {
 	/** \todo ugly forced hangup */
-	if (app.callp)
+	std::map<unsigned int, struct call*>::iterator iter;
+	for (iter = calls.begin(); iter != calls.end(); ++iter)
 	{
-		UA_CB->ChangeCallState(Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
-		app.callp = NULL;
+		UA_CB->ChangeCallState(iter->first, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
 	}
+	calls.clear();
 	if (app.paging_txp)
 	{
 		paging_tx_hangup(app.paging_txp);
@@ -1408,6 +1488,7 @@ int Ua::GetAudioCodecList(std::vector<AnsiString> &codecs)
 
 unsigned int Ua::GetAudioRxSignalLevel(void)
 {
+	int TODO__SOFTVOL_MULTIPLE_CALLS;
 	return softvol_get_rx_level();
 }
 

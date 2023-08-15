@@ -35,3 +35,40 @@ AnsiString CleanNumber(AnsiString asNumber)
 	}
 	return nr;
 }
+
+AnsiString GetClip(AnsiString uri, bool userOnly)
+{
+	AnsiString res;
+	if (userOnly)
+	{
+		res = ExtractNumberFromUri(uri);
+		if (res != "")
+		{
+			return res;
+		}
+		else
+		{
+			return CleanUri(uri);
+		}
+	}
+	else
+	{
+		return CleanUri(uri);
+	}
+}
+
+AnsiString CleanUri(AnsiString uri)
+{
+	AnsiString res = uri;
+	int start = uri.Pos("<");
+	if (start == 0)
+		start = 1;
+	int end = uri.Pos(">");
+	if (end == 0 || (uri.Pos(";") < end))
+		end = uri.Pos(";");
+	if (start && end && end > start)
+	{
+		res = uri.SubString(start, end-start);
+	}
+	return res;
+}

@@ -56,7 +56,6 @@ __published:	// IDE-managed Components
 	TAction *actShowSettings;
 	TAction *actShowLog;
 	TFileExit *actFileExit;
-	TImageList *imglistActions;
 	TTimer *tmrStartup;
 	TTimer *tmrCallbackPoll;
 	TTimer *tmrBackspace;
@@ -65,7 +64,6 @@ __published:	// IDE-managed Components
 	TPopupMenu *popupTray;
 	TMenuItem *miTrayExit;
 	TAction *actExit;
-	TTimer *tmrAutoAnswer;
 	TImageList *imgListButtons;
 	TTimer *tmrAntirepeat;
 	TAction *actContactsCsvImport;
@@ -110,7 +108,6 @@ __published:	// IDE-managed Components
 	void __fastcall tmrCallbackPollTimer(TObject *Sender);
 	void __fastcall btnBackspaceClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
-	void __fastcall btnAutoAnswerClick(TObject *Sender);
 	void __fastcall edTransferEnter(TObject *Sender);
 	void __fastcall btnSpeedDialPanelClick(TObject *Sender);
 	void __fastcall cbCallURIKeyPress(TObject *Sender, char &Key);
@@ -151,6 +148,7 @@ __published:	// IDE-managed Components
           TShiftState Shift, int X, int Y);
 	void __fastcall btnResetSpeakerVolumeMouseUp(TObject *Sender,
           TMouseButton Button, TShiftState Shift, int X, int Y);
+	void __fastcall cbCallURIChange(TObject *Sender);
 private:	// User declarations
 	static void TranslateForm(void* obj);
 
@@ -161,30 +159,23 @@ private:	// User declarations
 	void UpdateLogConfig(void);
 	void SetSpeedDial(bool visible);
 	void UpdateCallHistory(void);
-	void ShowTrayNotifier(AnsiString description, AnsiString uri, bool incoming);
+	void ShowTrayNotifier(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	void HideTrayNotifier(void);
-	AnsiString CleanUri(AnsiString uri);
-	AnsiString GetClip(AnsiString uri);
-	void MakeCall(AnsiString target);
+	int MakeCall(AnsiString target, unsigned int &callUid);
 	void CallNumberBackspace(void);
-	void Hangup(int sipCode = 486, AnsiString reason = "Busy Here");
-	void Answer(void);
+	void Hangup(unsigned int callUid, int sipCode = 486, AnsiString reason = "Busy Here");
+	void Answer(unsigned int callUid);
 	std::string OnGetDial(void);
 	void OnSetDial(std::string number);
-	Call* OnGetCall(void);
-	void OnResetCall(void);
-	Call* OnGetPreviousCall(void);	
-	Recorder* OnGetRecorder(int id);
 	int OnGetContactId(const char* user);
 	int OnGetBlfState(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction);
 	int OnGetStreamingState(void);
-	unsigned int OnGetAudioErrorCount(void);
 	int OnGetRegistrationState(void);
 	void OnSetTrayIcon(const char* file);
 	int OnPluginSendMessageText(const char* dllName, const char* text);
 	int OnPluginEnable(const char* dllName, bool state);
-	int OnRecordStart(const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
-	std::string OnGetRxDtmf(void);
+	int OnRecordStart(unsigned int callUid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
+	std::string OnGetRxDtmf(unsigned int callUid);
 	void OnShowBtnContainerStatusPanel(int id, bool state);
 	void OnSetBtnContainerBackground(int id, const char* file);
 	void OnDisableBringToFront(bool state);
@@ -194,20 +185,18 @@ private:	// User declarations
 	void MainMenuShow(bool state);
 	void ApplicationClose(void);
 
-	int autoAnswerCode;
-	bool autoAnswerIntercom;
 	bool muteRing;
-	void AutoAnswer(void);
-	void ProgrammableButtonClick(int buttonId);	
-	void StartRing(AnsiString wavFile = "ring.wav");
+	void AutoAnswer(Call &call);
+	void ProgrammableButtonClick(int buttonId);
+	void StartRing(Call &call, AnsiString wavFile = "ring.wav");
 	AnsiString RingFile(AnsiString alertInfo);
 	void Redial(void);
-	void HttpQuery(void);
-	void AccessCallUrl(void);
+	void HttpQuery(const Call* call);
+	void AccessCallUrl(const Call *call);
 	void ExecuteApp(AnsiString cmd, AnsiString params);
 	void Dial(char digit);
 	void DialString(const std::string& digits, bool runScript);
-	void StartRecording(void);
+	void StartRecording(Call& call);
 	void PollCallbackQueue(void);
 	void HandleCommandLine(void);
 	void Finalize(void);
@@ -219,12 +208,6 @@ private:	// User declarations
 	int OnPhonePagingTx(const char* target, const char* filename, const char* codecname);
 	void OnPhoneClearDial(void);
 	int OnGetNumberDescription(const char* number, char* description, int descriptionSize);
-	int OnSetVariable(const char* name, const char* value);
-	int OnClearVariable(const char* name);
-	void OnQueuePush(const char* name, const char* value);
-	int OnQueuePop(const char* name, AnsiString &value);
-	int OnQueueClear(const char* name);
-	int OnQueueGetSize(const char* name);
 
 	void ToggleVisibility(void);
 	void ToggleSpeedDial(void);
@@ -243,12 +226,17 @@ private:	// User declarations
 	void UpdateSettings(const Settings &prev);
 	int UpdateButtonsFromJson(AnsiString json);
 	void UpdateAutoAnswer(void);
-	void UpdateClip(void);
+	void UpdateClip(unsigned int callUid);
 	void SetMainWindowLayout(int id);
 	void LoadTranslation(void);
 	void UpdateSize(void);
 	void UpdateDialpad(void);
 	void FocusCbCallUri(void);
+	void ShowCallOnLineButton(const Call &call);
+	void ClearLineButton(int btnId);
+	void UpdateMainCallDisplay(void);
+	/** \brief Moving to first monitor if application appears to be on a monitor that is missing */
+	void __fastcall OnRestore(TObject *Sender);
 	void __fastcall OnTrayIconLeftBtnDown(TObject *Sender);
 	void __fastcall WMCopyData(TWMCopyData& msg);
 	void __fastcall WMEndSession(TWMEndSession &Msg);	
@@ -256,7 +244,6 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
 	__fastcall ~TfrmMain();
-	void OnCall(AnsiString uri);
 	void OnPhonebookEdit(AnsiString uri);
 	void OnHttpQuery(AnsiString uri);
 	AnsiString OnGetContactName(AnsiString uri);	

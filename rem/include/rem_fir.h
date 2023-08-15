@@ -4,27 +4,17 @@
  * Copyright (C) 2010 Creytiv.com
  */
 
+#ifndef REM_FIR_H
+#define REM_FIR_H
 
-/** Maximum number of inputs that can be handled in one function call */
-#define FIR_MAX_INPUT_LEN   160
-
-/** Maximum length of filter than can be handled */
-#define FIR_MAX_FLT_LEN     63
-
-/** Buffer to hold all of the input samples */
-#define FIR_BUFFER_LEN      (FIR_MAX_FLT_LEN - 1 + FIR_MAX_INPUT_LEN)
-
-/** Maximum number of audio channels */
-#define FIR_MAX_CHANNELS    2
-
-
-/** FIR filter state */
+/** Defines the fir filter state */
 struct fir {
-	int16_t insamp[FIR_MAX_CHANNELS][FIR_BUFFER_LEN];  /**< Samples */
+	int16_t history[256];  /**< Previous samples */
+	unsigned index;        /**< Sample index */
 };
 
+void fir_reset(struct fir *fir);
+void fir_filter(struct fir *fir, int16_t *outv, const int16_t *inv, size_t inc,
+		unsigned ch, const int16_t *tapv, size_t tapc);
 
-void fir_init(struct fir *fir);
-void fir_process(struct fir *fir, const int16_t *coeffs,
-		 const int16_t *input, int16_t *output,
-		 size_t length, int filterLength, uint8_t channels);
+#endif

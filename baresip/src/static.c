@@ -26,6 +26,7 @@ extern const struct mod_export exports_softvol;
 extern const struct mod_export exports_nullaudio;
 extern const struct mod_export exports_gzrtp;
 extern const struct mod_export exports_srtp;
+extern const struct mod_export exports_mixminus;
 #ifdef USE_VIDEO
 extern const struct mod_export exports_avcodec;
 extern const struct mod_export exports_dshow;
@@ -62,6 +63,7 @@ const struct mod_export *mod_table[] = {
 	&exports_nullaudio,
 	&exports_gzrtp,
 	&exports_srtp,
+	&exports_mixminus,
 #ifdef USE_VIDEO
 	&exports_avcodec,
 	&exports_dshow,

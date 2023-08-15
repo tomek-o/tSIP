@@ -31,6 +31,8 @@ public:
 		SIMPLE_MESSAGE_STATUS,		///< status for sent MESSAGE; using requestUid, requestError, scode
 		RECORDER_STATE,
 		ENCRYPTION_STATE,
+
+		TYPE__LIMITER
 	} type;
 
 	enum ua_state_e
@@ -43,8 +45,13 @@ public:
 		CALL_STATE_PROGRESS,
 		CALL_STATE_ESTABLISHED,
 		CALL_STATE_TRANSFER,			///< REFER request received
-		CALL_STATE_TRANSFER_OOD			///< REFER outside of dialog received
+		CALL_STATE_TRANSFER_OOD,			///< REFER outside of dialog received
+
+		CALL_STATE__LIMITER
 	} state;
+
+	static const char* GetCallStateName(enum ua_state_e state);
+	static const char* GetCallStateDescription(enum ua_state_e state);
 
 	enum reg_state_e
 	{
@@ -53,14 +60,18 @@ public:
 		REG_STATE_REGISTER_OK,
 		REG_STATE_REGISTER_FAIL,
 		REG_STATE_UNREGISTERING,
-		REG_STATE_UNREGISTER_FAIL
+		REG_STATE_UNREGISTER_FAIL,
+
+		REG_STATE__LIMITER
 	} reg_state;
 	AnsiString prm;
 
 	enum paging_tx_state_e
 	{
 		PAGING_TX_ENDED = 0,
-		PAGING_TX_STARTED
+		PAGING_TX_STARTED,
+
+		PAGING_TX__LIMITER
 	} paging_tx_state;
 
 	enum app_state_e
@@ -68,14 +79,18 @@ public:
 		APP_STATE_UNKNOWN = 0,
 		APP_STARTED,
 		APP_INIT_FAILED,
-		APP_START_FAILED
+		APP_START_FAILED,
+
+		APP_STATE__LIMITER
 	} app_state;
 
 	enum rec_state_e
 	{
 		RECORDER_STATE_IDLE = 0,
 		RECORDER_STATE_ACTIVE,
-		RECORDER_STATE_PAUSED
+		RECORDER_STATE_PAUSED,
+
+		RECORDER_STATE__LIMITER
 	} rec_state;
 
 	AnsiString caller;
@@ -86,7 +101,7 @@ public:
 	AnsiString accessUrl;
 	int accessUrlMode;
 	int accountId;
-	int callId;
+	unsigned int callUid;
 	int contactId;
 	int callAnswerAfter;
 	AnsiString initialRxInvite;
@@ -130,6 +145,30 @@ public:
 			verified(false)
 		{}
 	} zrtp;
+
+	Callback(void):
+		type(TYPE__LIMITER),
+		state(CALL_STATE__LIMITER),
+		reg_state(REG_STATE__LIMITER),
+		paging_tx_state(PAGING_TX__LIMITER),
+		app_state(APP_STATE__LIMITER),
+		rec_state(RECORDER_STATE__LIMITER),
+		scode(-1),
+		accessUrlMode(-1),
+		accountId(-1),
+		callUid(0),
+		contactId(-1),
+		callAnswerAfter(-1),
+		ddata_cnt(0),
+		presenceState(-1),
+		mwiNewMsg(-1),
+		mwiOldMsg(-1),
+		dtmfActive(false),
+		requestUid(0),
+		requestError(0),
+		recorderId(-1)
+	{
+	}
 };
 
 #endif

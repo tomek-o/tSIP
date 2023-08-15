@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsHistory
+    ActivePage = tsMultipleCalls
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1799,21 +1799,21 @@ object frmSettings: TfrmSettings
       end
       object lblAudioOutputIntercom: TLabel
         Left = 3
-        Top = 307
+        Top = 329
         Width = 131
         Height = 13
         Caption = 'Output for paging/intercom'
       end
       object lblSoundOutputIntercomMod: TLabel
         Left = 30
-        Top = 326
+        Top = 348
         Width = 34
         Height = 13
         Caption = 'Module'
       end
       object lblSoundOutputIntercomDev: TLabel
         Left = 30
-        Top = 350
+        Top = 372
         Width = 32
         Height = 13
         Caption = 'Device'
@@ -1874,6 +1874,13 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Volume'
       end
+      object lblSoundRingVolumeMulti: TLabel
+        Left = 30
+        Top = 309
+        Width = 89
+        Height = 13
+        Caption = 'Volume for > 1 call'
+      end
       object cbSoundInputMod: TComboBox
         Left = 121
         Top = 17
@@ -1933,7 +1940,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundOutputIntercomMod: TComboBox
         Left = 121
-        Top = 323
+        Top = 345
         Width = 320
         Height = 21
         Style = csDropDownList
@@ -1943,7 +1950,7 @@ object frmSettings: TfrmSettings
       end
       object cbSoundOutputIntercomDev: TComboBox
         Left = 121
-        Top = 347
+        Top = 369
         Width = 320
         Height = 21
         Style = csDropDownList
@@ -2028,6 +2035,17 @@ object frmSettings: TfrmSettings
         Max = 100
         Frequency = 10
         TabOrder = 16
+        ThumbLength = 15
+        TickMarks = tmTopLeft
+      end
+      object trbarSoundRingVolumeMulti: TTrackBar
+        Left = 122
+        Top = 303
+        Width = 320
+        Height = 25
+        Max = 100
+        Frequency = 10
+        TabOrder = 17
         ThumbLength = 15
         TickMarks = tmTopLeft
       end
@@ -4220,6 +4238,47 @@ object frmSettings: TfrmSettings
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'
       ImageIndex = 21
+    end
+    object tsMultipleCalls: TTabSheet
+      Caption = 'Multi-call'
+      ImageIndex = 29
+      object lblMultipleCalls: TLabel
+        Left = 3
+        Top = 3
+        Width = 381
+        Height = 13
+        Caption = 
+          'Settings for configuration supporting multiple calls (with multi' +
+          'ple "LINE" buttons)'
+      end
+      object chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive: TCheckBox
+        Left = 3
+        Top = 22
+        Width = 462
+        Height = 17
+        Caption = 
+          'Auto answer incoming call if enabled in settings even if there i' +
+          's another call already active'
+        TabOrder = 0
+      end
+      object chbCallsAutoHoldWhenSwitchingCalls: TCheckBox
+        Left = 3
+        Top = 45
+        Width = 438
+        Height = 17
+        Caption = 'Automatically hold/unhold when switching between calls'
+        TabOrder = 1
+      end
+      object chbCallsAutoSwitchToCallAnsweredFromTray: TCheckBox
+        Left = 3
+        Top = 68
+        Width = 438
+        Height = 17
+        Caption = 
+          'Automatically switch to new call when answering using tray notif' +
+          'ier window'
+        TabOrder = 2
+      end
     end
   end
   object tvSelector: TTreeView

@@ -68,7 +68,7 @@ void DialpadConf::ElementConf::fromJson(const Json::Value &jv)
 	jv.getUInt("height", height);
 }
 
-void DialpadConf::ElementConf::toJson(Json::Value &jv)
+void DialpadConf::ElementConf::toJson(Json::Value &jv) const
 {
 	jv = Json::Value(Json::objectValue);
 	jv["visible"] = visible;
@@ -106,7 +106,7 @@ void DialpadConf::fromJson(const Json::Value &jv)
 	}
 }
 
-void DialpadConf::toJson(Json::Value &jv)
+void DialpadConf::toJson(Json::Value &jv) const
 {
 	jv = Json::Value(Json::objectValue);
 	Json::Value &je = jv["elements"];

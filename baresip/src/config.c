@@ -38,11 +38,9 @@ static struct config core_config = {
 		"","",
 		1.0f,
 		"","",
-		1.0f,
+		1.0f, 0.25f,
 		{8000, 48000},
 		{1, 2},
-		0,
-		0,
 		AUDIO_MODE_POLL,
 		128, 128,					// softvol tx, rx, \sa SOFTVOL_BASE
 		{ false, 12000, 6.0f, 0.01f, 0.01f },	// agc_rx: enabled, target, max gain, attack rate, release rate

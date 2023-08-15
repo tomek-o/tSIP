@@ -206,8 +206,10 @@ public:
 		std::string dev;		/**< Audio source device            */
 		std::string wavefile;
 		float volume;
+		float volumeMulti;		/**< Volume used for ring if there is > 1 call */
 		AudioCfg(void):
-			volume(1.0f)
+			volume(1.0f),
+			volumeMulti(0.25f)
 		{
 			mod = AudioModules::winwave2;
 		}

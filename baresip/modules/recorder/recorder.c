@@ -40,6 +40,9 @@ struct recorder_st {
 	HANDLE thread;
 
 	struct lock* rec_lock;
+
+	unsigned int call_uid;
+
 	bool filename_set;
 	char filename[512];
 	unsigned int channels;
@@ -54,10 +57,11 @@ struct recorder_st {
 	struct aubuf *abtx;
 };
 
-int recorder_start(struct recorder_st *st, const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate) {
+int recorder_start(struct recorder_st *st, unsigned int call_uid, const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate) {
 	if (st->rec_lock == NULL)
 		return -1;
 	lock_write_get(st->rec_lock);
+	st->call_uid = call_uid;
 	if (st->filename_set == false) {
 		st->channels = rec_channels;
 		st->side = rec_side;
@@ -77,6 +81,11 @@ void recorder_pause_resume(struct recorder_st *st) {
 
 void recorder_pause(struct recorder_st *st) {
 	st->pause_request = true;
+}
+
+unsigned int recorder_get_call_uid(struct recorder_st *st) {
+	assert(st);
+	return st->call_uid;
 }
 
 struct enc_st {
@@ -178,10 +187,10 @@ static int recorder_alloc(struct recorder_st **stp, void **ctx, struct aufilt_pr
 	st->srate = prm->srate;
 
 	st->frame_size = prm->frame_size;
-	err = aubuf_alloc(&st->abrx, prm->frame_size, prm->frame_size*250);
+	err = aubuf_alloc(&st->abrx, "recorder rx", prm->frame_size, prm->frame_size*250);
 	if (err)
 		goto out;
-	err = aubuf_alloc(&st->abtx, prm->frame_size, prm->frame_size*250);
+	err = aubuf_alloc(&st->abtx, "recorder tx", prm->frame_size, prm->frame_size*250);
 	if (err)
 		goto out;
 
@@ -206,7 +215,7 @@ static int recorder_alloc(struct recorder_st **stp, void **ctx, struct aufilt_pr
 
 
 static int encode_update(struct aufilt_enc_st **stp, void **ctx,
-			 const struct aufilt *af, struct aufilt_prm *prm)
+			 const struct aufilt *af, struct aufilt_prm *prm, const struct audio *au)
 {
 	struct enc_st *st;
 	int err;
@@ -233,7 +242,7 @@ static int encode_update(struct aufilt_enc_st **stp, void **ctx,
 
 
 static int decode_update(struct aufilt_dec_st **stp, void **ctx,
-			 const struct aufilt *af, struct aufilt_prm *prm)
+			 const struct aufilt *af, struct aufilt_prm *prm, const struct audio *au)
 {
 	struct dec_st *st;
 	int err;

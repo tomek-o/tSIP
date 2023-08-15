@@ -132,7 +132,8 @@ void TfrmSettings::CreatePages(void)
 	TTreeNode *nodeMainWindow = CreatePagesNode(NULL, tsMainWindow);
 	CreatePagesNode(nodeMainWindow, tsDialpad);
 	CreatePagesNode(NULL, tsSpeedDial);
-	CreatePagesNode(NULL, tsCalls);
+	TTreeNode *nodeCalls = CreatePagesNode(NULL, tsCalls);
+	CreatePagesNode(nodeCalls, tsMultipleCalls);
 	CreatePagesNode(NULL, tsMessages);
 	CreatePagesNode(NULL, tsDisplay);
 	TTreeNode *nodeLocking = CreatePagesNode(NULL, tsLocking);
@@ -192,6 +193,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	cbSoundRingOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgRing.mod);
 	cbSoundRingOutputModChange(NULL);
 	trbarSoundRingVolume->Position = tmpSettings.uaConf.audioCfgRing.volume * 100;
+	trbarSoundRingVolumeMulti->Position = tmpSettings.uaConf.audioCfgRing.volumeMulti * 100;	
 
 	cbSoundOutputIntercomMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgPlayIntercom.mod);
 	cbSoundOutputIntercomModChange(NULL);
@@ -469,6 +471,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	memoCallsExtraHeaderLines->Text = tmpSettings.Calls.extraHeaderLines;
 	chbDisconnectCallOnAudioError->Checked = tmpSettings.Calls.bDisconnectCallOnAudioError;
+	chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked = tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
+	chbCallsAutoHoldWhenSwitchingCalls->Checked = tmpSettings.Calls.autoHoldWhenSwitchingCalls;
+	chbCallsAutoSwitchToCallAnsweredFromTray->Checked = tmpSettings.Calls.autoSwitchToCallAnsweredFromTray;
 
 	edWebRtcAecMsInSndCardBuf->Text = tmpSettings.uaConf.webrtcAec.msInSndCardBuf;
 	edWebRtcAecSkew->Text = tmpSettings.uaConf.webrtcAec.skew;
@@ -796,6 +801,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		tmpSettings.uaConf.audioCfgRing.dev = cbSoundRingOutputDev->Text.c_str();
 	}
 	tmpSettings.uaConf.audioCfgRing.volume = static_cast<float>(trbarSoundRingVolume->Position) / 100.0f;
+	tmpSettings.uaConf.audioCfgRing.volumeMulti = static_cast<float>(trbarSoundRingVolumeMulti->Position) / 100.0f;
 
 	tmpSettings.uaConf.audioCfgPlayIntercom.mod = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputIntercomMod->ItemIndex);
 	if (cbSoundOutputIntercomDev->Tag == 0 || cbSoundOutputIntercomDev->ItemIndex != cbSoundOutputIntercomDev->Items->Count - 1)
@@ -897,6 +903,9 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.Calls.extraHeaderLines = memoCallsExtraHeaderLines->Text.Trim();
 	tmpSettings.Calls.bDisconnectCallOnAudioError = chbDisconnectCallOnAudioError->Checked;
+	tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive = chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked;
+	tmpSettings.Calls.autoHoldWhenSwitchingCalls = chbCallsAutoHoldWhenSwitchingCalls->Checked;
+	tmpSettings.Calls.autoSwitchToCallAnsweredFromTray = chbCallsAutoSwitchToCallAnsweredFromTray->Checked;
 
 	tmpSettings.uaConf.webrtcAec.msInSndCardBuf = StrToIntDef(edWebRtcAecMsInSndCardBuf->Text, 120);
 	if (tmpSettings.uaConf.webrtcAec.msInSndCardBuf < 0) {

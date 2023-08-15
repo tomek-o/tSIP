@@ -44,7 +44,7 @@ __published:	// IDE-managed Components
 	void __fastcall lvContactsInfoTip(TObject *Sender, TListItem *Item,
           AnsiString &InfoTip);
 public:
-	typedef void (__closure *CallbackCall)(AnsiString uri);
+	typedef int (__closure *CallbackCall)(AnsiString uri, unsigned int &callUid);
 private:	// User declarations
 	static void TranslateForm(void* obj);
 	Contacts *contacts;

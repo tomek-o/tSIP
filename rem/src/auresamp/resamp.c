@@ -3,243 +3,338 @@
  *
  * Copyright (C) 2010 Creytiv.com
  */
-#include <re.h>
+
 #include <string.h>
-#include <stdlib.h>
+#include <re.h>
 #include <rem_fir.h>
 #include <rem_auresamp.h>
 
 
-typedef void (resample_h)(struct auresamp *ar, int16_t *dst,
-			  const int16_t *src, size_t nsamp_dst);
-
-
-/** Defines an Audio resampler */
-struct auresamp {
-	struct fir fir;
-	const int16_t *coeffv;
-	int16_t *sampv;
-	size_t sampc;
-	int coeffn;
-	double ratio;
-	uint8_t ch_in;
-	uint8_t ch_out;
-	resample_h *resample;
+/* 48kHz sample-rate, 4kHz cutoff (pass 0-3kHz, stop 5-24kHz) */
+static const int16_t fir_48_4[] = {
+	 62,   -176,   -329,   -556,   -802,  -1005,  -1090,   -985,
+       -636,    -23,    826,   1837,   2894,   3859,   4595,   4994,
+       4994,   4595,   3859,   2894,   1837,    826,    -23,   -636,
+       -985,  -1090,  -1005,   -802,   -556,   -329,   -176,     62
 };
 
-
-/*
- * FIR filter with cutoff 8000Hz, samplerate 16000Hz
- */
-static const int16_t fir_lowpass[31] = {
-   -55,      0,     96,      0,   -220,      0,    461,      0,
-  -877,      0,   1608,      0,  -3176,      0,  10342,  16410,
- 10342,      0,  -3176,      0,   1608,      0,   -877,      0,
-   461,      0,   -220,      0,     96,      0,    -55,
+/* 48kHz sample-rate, 8kHz cutoff (pass 0-7kHz, stop 9-24kHz) */
+static const int16_t fir_48_8[] = {
+	238,    198,   -123,   -738,  -1268,  -1204,   -380,    714,
+       1164,    376,  -1220,  -2206,  -1105,   2395,   6909,  10069,
+      10069,   6909,   2395,  -1105,  -2206,  -1220,    376,   1164,
+	714,   -380,  -1204,  -1268,   -738,   -123,    198,    238
 };
 
+/* 16kHz sample-rate, 4kHz cutoff and 32kHz sample-rate, 8 kHz cutoff */
+static const int16_t fir_16_4[] = {
+		22, 60, -41, -157, -9, 322, 195, -490, -613, 539, 1362, -229,
+		-2657, -1101, 6031, 13167, 13167, 6031, -1101, -2657, -229,
+		1362, 539, -613, -490, 195, 322, -9, -157, -41, 60, 22
+};
 
-static inline void resample(struct auresamp *ar, int16_t *dst,
-			    const int16_t *src, size_t nsamp_dst)
+static void upsample_mono2mono(int16_t *outv, const int16_t *inv,
+			       size_t inc, unsigned ratio)
 {
-	double p = 0;
+	unsigned i;
 
-	while (nsamp_dst--) {
+	while (inc >= 1) {
 
-		*dst++ = src[(int)p];
+		for (i=0; i<ratio; i++)
+			*outv++ = *inv;
 
-		p += 1/ar->ratio;
+		++inv;
+		--inc;
 	}
 }
 
 
-static inline void resample_mono2stereo(struct auresamp *ar, int16_t *dst,
-					const int16_t *src, size_t nsamp_dst)
+static void upsample_mono2stereo(int16_t *outv, const int16_t *inv,
+				 size_t inc, unsigned ratio)
 {
-	double p = 0;
+	unsigned i;
 
-	while (nsamp_dst--) {
+	ratio *= 2;
 
-		const int i = (int)p;
+	while (inc >= 1) {
 
-		*dst++ = src[i];  /* Left channel */
-		*dst++ = src[i];  /* Right channel */
+		for (i=0; i<ratio; i++)
+			*outv++ = *inv;
 
-		p += 1/ar->ratio;
+		++inv;
+		--inc;
 	}
 }
 
 
-static inline void resample_stereo2mono(struct auresamp *ar, int16_t *dst,
-					const int16_t *src, size_t nsamp_dst)
+static void upsample_stereo2mono(int16_t *outv, const int16_t *inv,
+				 size_t inc, unsigned ratio)
 {
-	double p = 0;
+	unsigned i;
 
-	while (nsamp_dst--) {
+	while (inc >= 2) {
 
-		const int i = ((int)p) & ~1;
+		const int16_t s = inv[0]/2 + inv[1]/2;
 
-		*dst++ = (src[i] + src[i+1]) / 2;
+		for (i=0; i<ratio; i++)
+			*outv++ = s;
 
-		p += 1/ar->ratio * 2;
+		inv += 2;
+		inc -= 2;
 	}
 }
 
 
-static inline void resample_stereo(struct auresamp *ar, int16_t *dst,
-				   const int16_t *src, size_t nsamp_dst)
+static void upsample_stereo2stereo(int16_t *outv, const int16_t *inv,
+				   size_t inc, unsigned ratio)
 {
-	double p = 0;
+	unsigned i;
 
-	while (nsamp_dst--) {
+	while (inc >= 2) {
 
-		const int i = ((int)p) & ~1;
+		for (i=0; i<ratio; i++) {
+			*outv++ = inv[0];
+			*outv++ = inv[1];
+		}
 
-		*dst++ = src[i];    /* Left channel */
-		*dst++ = src[i+1];  /* Right channel */
-
-		p += 1/ar->ratio * 2;
+		inv += 2;
+		inc -= 2;
 	}
 }
 
 
-static void auresamp_lowpass(struct auresamp *ar, int16_t *buf, size_t nsamp,
-			     int channels)
+static void downsample_mono2mono(int16_t *outv, const int16_t *inv,
+				 size_t inc, unsigned ratio)
 {
-	while (nsamp > 0) {
+	while (inc >= ratio) {
 
-		size_t len = min(nsamp, FIR_MAX_INPUT_LEN);
+		*outv++ = *inv;
 
-		fir_process(&ar->fir, ar->coeffv, buf, buf, len, ar->coeffn,
-			    channels);
-
-		buf   += (len*channels);
-		nsamp -= len;
+		inv += ratio;
+		inc -= ratio;
 	}
 }
 
 
-static void destructor(void *arg)
+static void downsample_mono2stereo(int16_t *outv, const int16_t *inv,
+				   size_t inc, unsigned ratio)
 {
-	struct auresamp *ar = arg;
+	while (inc >= ratio) {
 
-	mem_deref(ar->sampv);
+		*outv++ = *inv;
+		*outv++ = *inv;
+
+		inv += ratio;
+		inc -= ratio;
+	}
+}
+
+
+static void downsample_stereo2mono(int16_t *outv, const int16_t *inv,
+				   size_t inc, unsigned ratio)
+{
+	ratio *= 2;
+
+	while (inc >= ratio) {
+
+		*outv++ = inv[0]/2 + inv[1]/2;
+
+		inv += ratio;
+		inc -= ratio;
+	}
+}
+
+
+static void downsample_stereo2stereo(int16_t *outv, const int16_t *inv,
+				     size_t inc, unsigned ratio)
+{
+	ratio *= 2;
+
+	while (inc >= ratio) {
+
+		*outv++ = inv[0];
+		*outv++ = inv[1];
+
+		inv += ratio;
+		inc -= ratio;
+	}
 }
 
 
 /**
- * Allocate a new Audio resampler
+ * Initialize a resampler object
  *
- * @param arp       Pointer to allocated audio resampler
- * @param sampc_max Maximum number of source samples when downsampling
- * @param srate_in  Sample rate for the input in [Hz]
- * @param ch_in     Number of channels for the input
- * @param srate_out Sample rate for the output in [Hz]
- * @param ch_out    Number of channels for the output
- *
- * @return 0 for success, otherwise error code
+ * @param rs Resampler to initialize
  */
-int auresamp_alloc(struct auresamp **arp, size_t sampc_max,
-		   uint32_t srate_in, uint8_t ch_in,
-		   uint32_t srate_out, uint8_t ch_out)
+void auresamp_init(struct auresamp *rs)
 {
-	struct auresamp *ar;
-	int err = 0;
+	if (!rs)
+		return;
 
-	if (!arp || !sampc_max || !srate_in || !srate_out)
+	memset(rs, 0, sizeof(*rs));
+	fir_reset(&rs->fir);
+}
+
+
+/**
+ * Configure a resampler object
+ *
+ * @note The sample rate ratio must be an integer
+ *
+ * @param rs    Resampler
+ * @param irate Input sample rate
+ * @param ich   Input channel count
+ * @param orate Output sample rate
+ * @param och   Output channel count
+ *
+ * @return 0 if success, otherwise error code
+ */
+int auresamp_setup(struct auresamp *rs, uint32_t irate, unsigned ich,
+		   uint32_t orate, unsigned och)
+{
+	if (!rs || !irate || !ich || !orate || !och)
 		return EINVAL;
 
-	ar = mem_zalloc(sizeof(*ar), destructor);
-	if (!ar)
-		return ENOMEM;
-
-	ar->sampv = mem_zalloc(sampc_max * 2, NULL);
-	if (!ar->sampv) {
-		err = ENOMEM;
-		goto out;
+	if (orate == irate && och == ich) {
+		auresamp_init(rs);
+		return 0;
 	}
 
-	ar->sampc = sampc_max;
-	ar->ratio = 1.0 * srate_out / srate_in;
-	ar->ch_in = ch_in;
-	ar->ch_out = ch_out;
+	if (orate >= irate) {
 
-	fir_init(&ar->fir);
+		if (orate % irate)
+			return ENOTSUP;
 
-	if (ch_in == 1 && ch_out == 1)
-		ar->resample = resample;
-	else if (ch_in == 1 && ch_out == 2)
-		ar->resample = resample_mono2stereo;
-	else if (ch_in == 2 && ch_out == 1)
-		ar->resample = resample_stereo2mono;
-	else if (ch_in == 2 && ch_out == 2)
-		ar->resample = resample_stereo;
+		if (ich == 1 && och == 1)
+			rs->resample = upsample_mono2mono;
+		else if (ich == 1 && och == 2)
+			rs->resample = upsample_mono2stereo;
+		else if (ich == 2 && och == 1)
+			rs->resample = upsample_stereo2mono;
+		else if (ich == 2 && och == 2)
+			rs->resample = upsample_stereo2stereo;
+		else
+			return ENOTSUP;
+
+		if (!rs->up || orate != rs->orate || och != rs->och)
+			fir_reset(&rs->fir);
+
+		rs->ratio = orate / irate;
+		rs->up    = true;
+
+		if (orate == irate) {
+			rs->tapv = NULL;
+			rs->tapc = 0;
+		}
+		else if (orate == 48000 && irate == 16000) {
+			rs->tapv = fir_48_8;
+			rs->tapc = RE_ARRAY_SIZE(fir_48_8);
+		}
+		else if ((orate == 16000 && irate == 8000) ||
+                         (orate == 32000 && irate == 16000)) {
+			rs->tapv = fir_16_4;
+			rs->tapc = RE_ARRAY_SIZE(fir_16_4);
+		}
+		else {
+			rs->tapv = fir_48_4;
+			rs->tapc = RE_ARRAY_SIZE(fir_48_4);
+		}
+	}
 	else {
-		err = EINVAL;
-		goto out;
+		if (irate % orate)
+			return ENOTSUP;
+
+		if (ich == 1 && och == 1)
+			rs->resample = downsample_mono2mono;
+		else if (ich == 1 && och == 2)
+			rs->resample = downsample_mono2stereo;
+		else if (ich == 2 && och == 1)
+			rs->resample = downsample_stereo2mono;
+		else if (ich == 2 && och == 2)
+			rs->resample = downsample_stereo2stereo;
+		else
+			return ENOTSUP;
+
+		if (rs->up || irate != rs->irate || ich != rs->ich)
+			fir_reset(&rs->fir);
+
+		rs->ratio = irate / orate;
+		rs->up    = false;
+
+		if (irate == 48000 && orate == 16000) {
+			rs->tapv = fir_48_8;
+			rs->tapc = RE_ARRAY_SIZE(fir_48_8);
+		}
+		else if ((irate == 16000 && orate == 8000) ||
+                         (irate == 32000 && orate == 16000)) {
+			rs->tapv = fir_16_4;
+			rs->tapc = RE_ARRAY_SIZE(fir_16_4);
+		}
+		else {
+			rs->tapv = fir_48_4;
+			rs->tapc = RE_ARRAY_SIZE(fir_48_4);
+		}
 	}
 
-	ar->coeffv = fir_lowpass;
-	ar->coeffn = (int)ARRAY_SIZE(fir_lowpass);
+	rs->orate = orate;
+	rs->och   = och;
+	rs->irate = irate;
+	rs->ich   = ich;
 
- out:
-	if (err)
-		mem_deref(ar);
-	else
-		*arp = ar;
-
-	return err;
+	return 0;
 }
 
 
 /**
- * Resample PCM data
+ * Resample
  *
- * @param ar        Audio resampler
- * @param dst_sampv Destination buffer for PCM data
- * @param dst_sampc Size of destination buffer/number of destination samples
- * @param src_sampv Source buffer with PCM data
- * @param src_sampc Number of source samples
+ * @note When downsampling, the input count must be divisible by rate ratio
  *
- * @return 0 for success, otherwise error code
+ * @param rs   Resampler
+ * @param outv Output samples
+ * @param outc Output sample count (in/out)
+ * @param inv  Input samples
+ * @param inc  Input sample count
+ *
+ * @return 0 if success, otherwise error code
  */
-int auresamp_process(struct auresamp *ar,
-		     int16_t *dst_sampv, size_t *dst_sampc,
-		     const int16_t *src_sampv, size_t src_sampc)
+int auresamp(struct auresamp *rs, int16_t *outv, size_t *outc,
+	     const int16_t *inv, size_t inc)
 {
-	size_t ns, nd;
+	size_t incc, outcc;
 
-	if (!ar || !dst_sampv || !dst_sampc || !src_sampv)
+	if (!rs || !rs->resample || !outv || !outc || !inv)
 		return EINVAL;
 
-	ns = src_sampc / ar->ch_in;
-	nd = (size_t)(ns * ar->ratio);
+	incc = inc / rs->ich;
 
-	if (*dst_sampc < nd * ar->ch_out)
-		return ENOMEM;
+	if (rs->up) {
+		outcc = incc * rs->ratio;
 
-	if (ar->ratio > 1) {
-
-		ar->resample(ar, dst_sampv, src_sampv, nd);
-		auresamp_lowpass(ar, dst_sampv, nd, ar->ch_out);
-	}
-	else if (ar->ratio < 1) {
-
-		/* decimation: low-pass filter, then downsample */
-
-		if (src_sampc > ar->sampc)
+		if (*outc < outcc * rs->och)
 			return ENOMEM;
 
-		memcpy(ar->sampv, src_sampv, src_sampc * 2);
+		rs->resample(outv, inv, inc, rs->ratio);
 
-		auresamp_lowpass(ar, ar->sampv, ns, ar->ch_in);
-		ar->resample(ar, dst_sampv, ar->sampv, nd);
+		*outc = outcc * rs->och;
+
+		if (rs->tapv)
+			fir_filter(&rs->fir, outv, outv, *outc, rs->och,
+				   rs->tapv, rs->tapc);
 	}
 	else {
-		ar->resample(ar, dst_sampv, src_sampv, nd);
-	}
+		outcc = incc / rs->ratio;
 
-	*dst_sampc = nd * ar->ch_out;
+		if (*outc < outcc * rs->och || *outc < inc)
+			return ENOMEM;
+
+		fir_filter(&rs->fir, outv, inv, inc, rs->ich,
+			   rs->tapv, rs->tapc);
+
+		rs->resample(outv, outv, inc, rs->ratio);
+
+		*outc = outcc * rs->och;
+	}
 
 	return 0;
 }

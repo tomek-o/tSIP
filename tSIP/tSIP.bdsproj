@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -496,6 +496,7 @@
         <FILE FILENAME="NetInterfaces.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NetInterfaces" FORMNAME="" DESIGNCLASS="" ADDITIONAL="NetInterfaces.h"/>
         <FILE FILENAME="FormMessage.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormMessage" FORMNAME="frmMessage" DESIGNCLASS="" ADDITIONAL="FormMessage.h"/>
         <FILE FILENAME="SIMPLE_Messages.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="SIMPLE_Messages" FORMNAME="" DESIGNCLASS="" ADDITIONAL="SIMPLE_Messages.h"/>
+        <FILE FILENAME="ua\Calls.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Calls" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\Calls.h"/>
         <FILE FILENAME="ua\FormUaConfOpus.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormUaConfOpus" FORMNAME="frmUaConfOpus" DESIGNCLASS="" ADDITIONAL="ua\FormUaConfOpus.h"/>
         <FILE FILENAME="Globals.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Globals" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Globals.h"/>
         <FILE FILENAME="PortaudioLock.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PortaudioLock" FORMNAME="" DESIGNCLASS="" ADDITIONAL="PortaudioLock.h"/>
@@ -531,7 +532,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">2</VersionInfo>
           <VersionInfo Name="Release">14</VersionInfo>
-          <VersionInfo Name="Build">1</VersionInfo>
+          <VersionInfo Name="Build">0</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -543,7 +544,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.2.14.1</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.2.14.0</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -597,10 +598,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

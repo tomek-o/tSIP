@@ -25,16 +25,12 @@ class ScriptExec
 private:
 	friend class LuaState;
 
-	typedef void (__closure *CallbackCall)(AnsiString number);
-	typedef void (__closure *CallbackHangup)(int sipCode, AnsiString reason);
-	typedef void (__closure *CallbackAnswer)(void);
+	typedef int (__closure *CallbackCall)(AnsiString number, unsigned int &callUid);
+	typedef void (__closure *CallbackHangup)(unsigned int callUid, int sipCode, AnsiString reason);
+	typedef void (__closure *CallbackAnswer)(unsigned int callUid);
 	typedef std::string (__closure *CallbackGetDial)(void);
 	typedef void (__closure *CallbackSetDial)(std::string number);
 	typedef void (__closure *CallbackSendDtmf)(const std::string& digits, bool runScript);
-	typedef Call* (__closure *CallbackGetCall)(void);
-	typedef void (__closure *CallbackResetCall)(void);
-	typedef Call* (__closure *CallbackGetPreviousCall)(void);
-	typedef Recorder* (__closure *CallbackGetRecorder)(int id);
 	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString number);	///< get name for number/uri
 	typedef int (__closure *CallbackGetStreamingState)(void);	///< get current streaming (paging) state, values as in Callback::paging_tx_state_e
 	typedef void (__closure *CallbackSetTrayIcon)(const char* file);
@@ -43,10 +39,10 @@ private:
 	typedef int (__closure *CallbackPluginEnable)(const char* dllName, bool state);
 	typedef int (__closure *CallbackGetContactId)(const char* user);
 	typedef int (__closure *CallbackGetBlfState)(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction);
-	typedef int (__closure *CallbackRecordStart)(const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
+	typedef int (__closure *CallbackRecordStart)(unsigned int callUid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
 	// pop single DTMF character from RX queue
-	typedef std::string (__closure *CallbackGetRxDtmf)(void);
-	typedef void (__closure *CallbackShowTrayNotifier)(AnsiString description, AnsiString uri, bool incoming);
+	typedef std::string (__closure *CallbackGetRxDtmf)(unsigned int callUid);
+	typedef void (__closure *CallbackShowTrayNotifier)(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	typedef void (__closure *CallbackHideTrayNotifier)(void);
 	typedef std::string (__closure *CallbackGetUserName)(void);
 	typedef void (__closure *CallbackProgrammableButtonClick)(int id);
@@ -55,7 +51,6 @@ private:
 	typedef const ButtonConf* (__closure *CallbackGetButtonConf)(int id);
 	typedef void (__closure *CallbackMainMenuShow)(bool state);
 	typedef void (__closure *CallbackApplicationClose)(void);
-	typedef unsigned int (__closure *CallbackGetAudioErrorCount)(void);
 
 	CallbackCall onCall;
 	CallbackHangup onHangup;
@@ -63,13 +58,8 @@ private:
 	CallbackGetDial onGetDial;
 	CallbackSetDial onSetDial;
 	CallbackSendDtmf onSendDtmf;
-	CallbackGetCall onGetCall;
-	CallbackResetCall onResetCall;
-	CallbackGetPreviousCall onGetPreviousCall;
-	CallbackGetRecorder onGetRecorder;
 	CallbackGetContactName onGetContactName;
 	CallbackGetStreamingState onGetStreamingState;
-	CallbackGetAudioErrorCount onGetAudioErrorCount;
 	CallbackSetTrayIcon onSetTrayIcon;
 	CallbackGetRegistrationState onGetRegistrationState;
 	CallbackPluginSendMessageText onPluginSendMessageText;
@@ -112,13 +102,8 @@ public:
 		CallbackGetDial onGetDial,
 		CallbackSetDial onSetDial,
 		CallbackSendDtmf onSendDtmf,
-		CallbackGetCall onGetCall,
-		CallbackResetCall onResetCall,
-		CallbackGetPreviousCall onGetPreviousCall,
-		CallbackGetRecorder onGetRecorder,
 		CallbackGetContactName onGetContactName,
 		CallbackGetStreamingState onGetStreamingState,
-		CallbackGetAudioErrorCount onGetAudioErrorCount,
 		CallbackSetTrayIcon onSetTrayIcon,
 		CallbackGetRegistrationState onGetRegistrationState,
 		CallbackPluginSendMessageText onPluginSendMessageText,

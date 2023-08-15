@@ -14,7 +14,7 @@
 		</Source>
 		<BCBPROJECT>
       <project version="10.0">
-        <property category="build.config" name="active" value="1"/>
+        <property category="build.config" name="active" value="0"/>
         <property category="build.config" name="count" value="1"/>
         <property category="build.config" name="excludedefaultforzero" value="0"/>
         <property category="build.config.0" name="builddir" value="Debug"/>
@@ -719,7 +719,7 @@
         <FILE FILENAME="..\..\src\h264\h264_nal.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="h264_nal" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\h264\sps.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sps" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\src\sip\sip_reason.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="sip_reason" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\src\sipsess\sipsess.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="..\..\src\sipsess\sipsess.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

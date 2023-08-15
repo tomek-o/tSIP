@@ -3,7 +3,8 @@
 #include "PhoneInterface.h"
 #include "Phone.h"
 #include "PhoneConf.h"
-#include "ScriptSource.h"
+#include "scripting/ScriptSource.h"
+#include "scripting/ScriptExec.h"
 #include "AppStatus.h"
 #include "common/Utilities.h"
 #include "common/Mutex.h"
@@ -29,12 +30,6 @@ PhoneInterface::CallbackKey PhoneInterface::callbackKey = NULL;
 PhoneInterface::CallbackPagingTx PhoneInterface::callbackPagingTx = NULL;
 PhoneInterface::CallbackClearDial PhoneInterface::callbackClearDial = NULL;
 PhoneInterface::CallbackGetNumberDescription PhoneInterface::callbackGetNumberDescription = NULL;
-PhoneInterface::CallbackSetVariable PhoneInterface::callbackSetVariable = NULL;
-PhoneInterface::CallbackClearVariable PhoneInterface::callbackClearVariable = NULL;
-PhoneInterface::CallbackQueuePush PhoneInterface::callbackQueuePush = NULL;
-PhoneInterface::CallbackQueuePop PhoneInterface::callbackQueuePop = NULL;
-PhoneInterface::CallbackQueueClear PhoneInterface::callbackQueueClear = NULL;
-PhoneInterface::CallbackQueueGetSize PhoneInterface::callbackQueueGetSize = NULL;
 TPopupMenu* PhoneInterface::trayPopupMenu = NULL;
 
 namespace
@@ -505,9 +500,7 @@ int __stdcall PhoneInterface::OnSetVariable(void *cookie, const char* name, cons
 	{
 		return -1;
 	}
-	if (dev->callbackSetVariable)
-		return dev->callbackSetVariable(name, value);
-	return -2;
+	return ScriptExec::SetVariable(name, value);
 }
 
 int __stdcall PhoneInterface::OnClearVariable(void *cookie, const char* name)
@@ -518,9 +511,7 @@ int __stdcall PhoneInterface::OnClearVariable(void *cookie, const char* name)
 	{
 		return -1;
 	}
-	if (dev->callbackClearVariable)
-		return dev->callbackClearVariable(name);
-	return -2;
+	return ScriptExec::ClearVariable(name);
 }
 
 int __stdcall PhoneInterface::OnQueuePush(void *cookie, const char* name, const char* value)
@@ -531,12 +522,8 @@ int __stdcall PhoneInterface::OnQueuePush(void *cookie, const char* name, const 
 	{
 		return -1;
 	}
-	if (dev->callbackQueuePush)
-	{
-		dev->callbackQueuePush(name, value);
-		return 0;
-	}
-	return -2;
+	ScriptExec::QueuePush(name, value);
+	return 0;
 }
 
 int __stdcall PhoneInterface::OnQueuePop(void *cookie, const char* name, char* value, unsigned int valueSize)
@@ -547,10 +534,9 @@ int __stdcall PhoneInterface::OnQueuePop(void *cookie, const char* name, char* v
 	{
 		return -1;
 	}
-	if (dev->callbackQueuePop == NULL)
-		return -2;
+
 	AnsiString asValue;
-	int ret = dev->callbackQueuePop(name, asValue);
+	int ret = ScriptExec::QueuePop(name, asValue);
 	strncpy(value, asValue.c_str(), valueSize-1);
 	value[valueSize-1] = '\0';
 	return ret;
@@ -564,9 +550,7 @@ int __stdcall PhoneInterface::OnQueueClear(void *cookie, const char* name)
 	{
 		return -1;
 	}
-	if (dev->callbackQueueClear)
-		return dev->callbackQueueClear(name);
-	return -2;
+	return ScriptExec::QueueClear(name);
 }
 
 int __stdcall PhoneInterface::OnQueueGetSize(void *cookie, const char* name)
@@ -577,9 +561,7 @@ int __stdcall PhoneInterface::OnQueueGetSize(void *cookie, const char* name)
 	{
 		return -1;
 	}
-	if (dev->callbackQueueGetSize)
-		return dev->callbackQueueGetSize(name);
-	return -2;
+	return ScriptExec::QueueGetSize(name);
 }
 
 int __stdcall PhoneInterface::OnRunScriptAsync(void *cookie, const char* script)

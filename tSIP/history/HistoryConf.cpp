@@ -56,7 +56,7 @@ void HistoryConf::fromJson(const Json::Value &jv)
 	}
 }
 
-void HistoryConf::toJson(Json::Value &jv)
+void HistoryConf::toJson(Json::Value &jv) const
 {
 	jv = Json::Value(Json::objectValue);
 	jv["NoStoreToFile"] = noStoreToFile;

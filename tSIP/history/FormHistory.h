@@ -51,7 +51,7 @@ __published:	// IDE-managed Components
 	void __fastcall miOpenInExplorerClick(TObject *Sender);
 	void __fastcall popupHistoryPopup(TObject *Sender);
 public:
-	typedef void (__closure *CallbackCall)(AnsiString uri);
+	typedef int (__closure *CallbackCall)(AnsiString uri, unsigned int &callUid);
 	typedef void (__closure *CallbackPhonebookEdit)(AnsiString uri);
 	typedef void (__closure *CallbackHttpQuery)(AnsiString uri);
 private:	// User declarations

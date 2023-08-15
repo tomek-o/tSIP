@@ -16,6 +16,7 @@
 #include "Recorder.h"
 #include "UaCustomRequests.h"
 #include "UaMain.h"
+#include "Calls.h"
 #include "AppStatus.h"
 #include "Globals.h"
 #include "Contacts.h"
@@ -147,6 +148,24 @@ inline void lua_register2(Lua_State &L, lua_CFunction fn, const char* name, cons
 	}
 	lua_register(L, name, fn);
 }
+
+/** \brief Get call specified by the first arg or current call */
+Call* GetCall(lua_State *L)
+{
+	int argCount = lua_gettop(L);
+	Call *call = NULL;
+	if (argCount >= 1)
+	{
+		unsigned int callUid = lua_tointegerx(L, 1, NULL);
+		call = Calls::FindByUid(callUid);
+	}
+	else
+	{
+		call = Calls::GetCurrentCall();
+	}
+	return call;
+}
+
 
 }	// namespace
 
@@ -471,11 +490,66 @@ static int l_Call(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	GetContext(L)->onCall(str);
-	return 0;
+	unsigned int callUid = 0;
+	int ret = GetContext(L)->onCall(str, callUid);
+	lua_pushnumber(L, ret);
+	lua_pushnumber(L, callUid);
+	return 2;
 }
 
 static int l_Hangup(lua_State* L)
+{
+	Call* call = Calls::GetCurrentCall();
+	if (call == NULL)
+	{
+		return 0;
+	}
+
+	int argCount = lua_gettop(L);
+	enum { DEFAULT_CODE = 486 };
+	int sipCode = DEFAULT_CODE;
+	if (argCount >= 1)
+	{
+		sipCode = lua_tointeger(L, 1);
+		if (sipCode < 400 || sipCode > 699)
+			sipCode = DEFAULT_CODE;
+	}
+	AnsiString reason = "Busy Here";
+	if (argCount >= 2)
+	{
+		reason = lua_tostring(L, 2);
+	}
+	GetContext(L)->onHangup(call->uid, sipCode, reason);
+	return 0;
+}
+
+static int l_Hangup2(lua_State* L)
+{
+	Call* call = GetCall(L);
+	if (call == NULL)
+	{
+		return 0;
+	}
+
+	int argCount = lua_gettop(L);
+	enum { DEFAULT_CODE = 486 };
+	int sipCode = DEFAULT_CODE;
+	if (argCount >= 2)
+	{
+		sipCode = lua_tointeger(L, 2);
+		if (sipCode < 400 || sipCode > 699)
+			sipCode = DEFAULT_CODE;
+	}
+	AnsiString reason = "Busy Here";
+	if (argCount >= 3)
+	{
+		reason = lua_tostring(L, 3);
+	}
+	GetContext(L)->onHangup(call->uid, sipCode, reason);
+	return 0;
+}
+
+static int l_HangupAll(lua_State* L)
 {
 	int argCount = lua_gettop(L);
 	enum { DEFAULT_CODE = 486 };
@@ -491,13 +565,24 @@ static int l_Hangup(lua_State* L)
 	{
 		reason = lua_tostring(L, 2);
 	}
-	GetContext(L)->onHangup(sipCode, reason);
+
+	std::vector<unsigned int> uids = Calls::GetUids();
+	for (unsigned int i=0; i<uids.size(); i++)
+	{
+		GetContext(L)->onHangup(uids[i], sipCode, reason);
+	}
 	return 0;
 }
 
+
 static int l_Answer(lua_State* L)
 {
-	GetContext(L)->onAnswer();
+	Call* call = GetCall(L);
+	if (call == NULL)
+	{
+		return 0;
+	}
+	GetContext(L)->onAnswer(call->uid);
 	return 0;
 }
 
@@ -528,7 +613,7 @@ static int l_SetInitialCallTarget(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		call->initialTarget = str;
@@ -548,7 +633,7 @@ static int l_SetCallTarget(lua_State* L)
 		LOG("Lua error: str == NULL\n");
 		return 0;
 	}
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
         call->uri = str;
@@ -563,7 +648,7 @@ static int l_SetCallTarget(lua_State* L)
 
 static int l_GetInitialCallTarget(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		std::string num = call->initialTarget.c_str();
@@ -575,25 +660,23 @@ static int l_GetInitialCallTarget(lua_State* L)
 
 static int l_ResetCall(lua_State* L)
 {
-	GetContext(L)->onResetCall();
+	Call* call = Calls::GetCurrentCall();
+	if (call)
+		call->reset();
 	return 0;
 }
 
 static int l_GetPreviousCallStatusCode(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetPreviousCall();
-	if (call == NULL)
-		return 0;
-	lua_pushinteger( L, call->lastScode );
+	Call &call = Calls::GetPreviousCall();
+	lua_pushinteger( L, call.lastScode );
 	return 1;
 }
 
 static int l_GetPreviousCallReplyLine(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetPreviousCall();
-	if (call == NULL)
-		return 0;
-	lua_pushstring( L, call->lastReplyLine.c_str() );
+	Call &call = Calls::GetPreviousCall();
+	lua_pushstring( L, call.lastReplyLine.c_str() );
 	return 1;
 }
 
@@ -612,7 +695,90 @@ static int l_SwitchAudioSource(lua_State* L)
 		LOG("Lua error: dev == NULL\n");
 		return 0;
 	}
-	UA->SwitchAudioSource(0, mod, dev);
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->SwitchAudioSource(uid, mod, dev);
+	return 0;
+}
+
+static int l_SwitchAudioSource2(lua_State* L)
+{
+	unsigned int callUid;
+
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		callUid = lua_tointegerx(L, 1, NULL);
+	}
+	else
+	{
+		LOG("Lua error: missing call UID\n");
+		return 0;
+	}
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	UA->SwitchAudioSource(callUid, mod, dev);
+	return 0;
+}
+
+static int l_SwitchAudioPlayer(lua_State* L)
+{
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->SwitchAudioPlayer(uid, mod, dev);
+	return 0;
+}
+
+static int l_SwitchAudioPlayer2(lua_State* L)
+{
+	unsigned int callUid;
+
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		callUid = lua_tointegerx(L, 1, NULL);
+	}
+	else
+	{
+		LOG("Lua error: missing call UID\n");
+		return 0;
+	}
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	UA->SwitchAudioPlayer(callUid, mod, dev);
 	return 0;
 }
 
@@ -631,7 +797,39 @@ static int l_SwitchVideoSource(lua_State* L)
 		LOG("Lua error: dev == NULL\n");
 		return 0;
 	}
-	UA->SwitchVideoSource(0, mod, dev);
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->SwitchVideoSource(uid, mod, dev);
+	return 0;
+}
+
+static int l_SwitchVideoSource2(lua_State* L)
+{
+	unsigned int callUid;
+
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		callUid = lua_tointegerx(L, 1, NULL);
+	}
+	else
+	{
+		LOG("Lua error: missing call UID\n");
+		return 0;
+	}
+	const char* mod = lua_tostring( L, 1 );
+	if (mod == NULL)
+	{
+		LOG("Lua error: mod == NULL\n");
+		return 0;
+	}
+	const char* dev = lua_tostring( L, 2 );
+	if (dev == NULL)
+	{
+		LOG("Lua error: dev == NULL\n");
+		return 0;
+	}
+	UA->SwitchVideoSource(callUid, mod, dev);
 	return 0;
 }
 
@@ -649,7 +847,32 @@ static int l_SendDtmf(lua_State* L)
 
 static int l_GenerateTones(lua_State* L)
 {
-	UA->GenerateTone(0,
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->GenerateTone(uid,
+		lua_tonumber(L, 1), lua_tonumber(L, 2),	// amplitude, frequency
+		lua_tonumber(L, 3), lua_tonumber(L, 4),
+		lua_tonumber(L, 5), lua_tonumber(L, 6),
+		lua_tonumber(L, 7), lua_tonumber(L, 8)
+	);
+	return 0;
+}
+
+static int l_GenerateTones2(lua_State* L)
+{
+	unsigned int callUid;
+
+	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		callUid = lua_tointegerx(L, 1, NULL);
+	}
+	else
+	{
+		LOG("Lua error: missing call UID\n");
+		return 0;
+	}
+	UA->GenerateTone(callUid,
 		lua_tonumber(L, 1), lua_tonumber(L, 2),	// amplitude, frequency
 		lua_tonumber(L, 3), lua_tonumber(L, 4),
 		lua_tonumber(L, 5), lua_tonumber(L, 6),
@@ -666,16 +889,91 @@ static int l_BlindTransfer(lua_State* L)
         LOG("Lua BlindTransfer error: str == NULL\n");
 		return 0;
 	}
-	UA->Transfer(0, str);
+	unsigned int uid = Calls::GetCurrentCallUid();
+	UA->Transfer(uid, str);
 	return 0;
+}
+
+static int l_BlindTransfer2(lua_State* L)
+{
+	int argCount = lua_gettop(L);
+	if (argCount >= 2)
+	{
+		unsigned int callUid = lua_tointegerx(L, 1, NULL);
+		const char* str = lua_tostring( L, 2 );
+		if (str == NULL)
+		{
+			LOG("Lua BlindTransfer error: str == NULL\n");
+			return 0;
+		}
+		UA->Transfer(callUid, str);
+	}
+	else
+	{
+		LOG("Lua BlindTransfer2 requires callUid and transfer target!\n");
+	}
+	return 0;
+}
+
+static int l_AttendedTransfer(lua_State* L)
+{
+	int argCount = lua_gettop(L);
+	if (argCount >= 2)
+	{
+		unsigned int callUid1 = lua_tointegerx(L, 1, NULL);
+		unsigned int callUid2 = lua_tointegerx(L, 2, NULL);
+		UA->TransferReplace(callUid1, callUid2);
+	}
+	else
+	{
+		LOG("Lua AttendedTransfer requires two call UIDs!\n");
+	}
+	return 0;
+}
+
+static int l_GetCalls(lua_State* L)
+{
+	std::vector<unsigned int> uids = Calls::GetUids();
+	// returns table
+	lua_newtable(L);
+	int top = lua_gettop(L);
+
+	for (unsigned int i = 0; i < uids.size(); i++)
+	{
+		lua_pushnumber(L, i+1);		// push the index, starting from 1 in Lua
+		lua_pushnumber(L, uids[i]); // push the value at 'i'
+		lua_settable(L, top);
+	}
+	return 1;
+}
+
+static int l_GetCurrentCallUid(lua_State* L)
+{
+	unsigned int uid = Calls::GetCurrentCallUid();
+	lua_pushnumber(L, uid);
+	return 1;
+}
+
+static int l_SetCurrentCallUid(lua_State* L)
+{
+	int argCount = lua_gettop(L);
+	if (argCount >= 1)
+	{
+		unsigned int callUid = lua_tointegerx(L, 1, NULL);
+		int status = Calls::SetCurrentCallUid(callUid);
+		lua_pushnumber(L, status);
+		return 1;
+	}
+	lua_pushnumber(L, -1);
+	return 1;
 }
 
 static int l_GetCallState(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call *call = GetCall(L);
 	if (call)
 	{
-		lua_pushinteger( L, call->state );
+		lua_pushinteger( L, call->GetState() );
 		return 1;
 	}
 	return 0;
@@ -684,7 +982,7 @@ static int l_GetCallState(lua_State* L)
 static int l_GetRecorderState(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
-	Recorder *recorder = GetContext(L)->onGetRecorder(id);
+	Recorder *recorder = Calls::FindRecorder(id);
 	if (recorder)
 	{
 		lua_pushinteger( L, recorder->state );
@@ -695,7 +993,7 @@ static int l_GetRecorderState(lua_State* L)
 
 static int l_GetZrtpState(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = GetCall(L);
 	if (call)
 	{
 		const Call::Zrtp &zrtp = call->zrtp;
@@ -711,7 +1009,7 @@ static int l_GetZrtpState(lua_State* L)
 
 static int l_IsCallIncoming(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = GetCall(L);
 	if (call)
 	{
 		lua_pushinteger( L, call->incoming );
@@ -722,7 +1020,7 @@ static int l_IsCallIncoming(lua_State* L)
 
 static int l_GetCallPeer(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = GetCall(L);
 	if (call == NULL)
 		return 0;
 
@@ -741,7 +1039,7 @@ static int l_GetCallPeer(lua_State* L)
 
 static int l_GetCallInitialRxInvite(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = GetCall(L);
 	if (call)
 	{
 		lua_pushstring( L, call->initialRxInvite.c_str() );
@@ -752,7 +1050,7 @@ static int l_GetCallInitialRxInvite(lua_State* L)
 
 static int l_GetCallCodecName(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = GetCall(L);
 	if (call)
 	{
 		lua_pushstring( L, call->codecName.c_str() );
@@ -783,7 +1081,12 @@ static int l_GetStreamingState(lua_State* L)
 
 static int l_GetAudioErrorCount(lua_State* L)
 {
-	unsigned int count = GetContext(L)->onGetAudioErrorCount();
+	Call* call = GetCall(L);
+	unsigned int count = 0;
+	if (call)
+	{
+		count = call->audioErrorCount;
+	}
 	lua_pushinteger( L, count );
 	return 1;
 }
@@ -1135,7 +1438,7 @@ static int l_GetExecSourceId(lua_State* L)
 
 static int l_GetRecordFile(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = GetCall(L);
 	if (call)
 	{
 		lua_pushstring( L, call->recordFile.c_str() );
@@ -1180,14 +1483,32 @@ static int l_RecordStart(lua_State* L)
 	unsigned int bitrate = lua_tointeger( L, 5 );
 	if (bitrate <= 0)
 		bitrate = 64000;
-	int ret = GetContext(L)->onRecordStart(file, channels, side, fileFormat, bitrate);
+
+	int argCount = lua_gettop(L);
+	Call *call = NULL;
+	if (argCount >= 6)
+	{
+		unsigned int callUid = lua_tointegerx(L, 6, NULL);
+		call = Calls::FindByUid(callUid);
+	}
+	else
+	{
+		call = Calls::GetCurrentCall();
+	}
+	if (call == NULL)
+	{
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+
+	int ret = GetContext(L)->onRecordStart(call->uid, file, channels, side, fileFormat, bitrate);
 	lua_pushinteger(L, ret);
 	return 1;
 }
 
 static int l_GetRecordingState(lua_State* L)
 {
-	Call *call = GetContext(L)->onGetCall();
+	Call* call = GetCall(L);
 	if (call)
 	{
 		lua_pushinteger( L, call->recording );
@@ -1198,7 +1519,17 @@ static int l_GetRecordingState(lua_State* L)
 
 static int l_GetRxDtmf(lua_State* L)
 {
-	std::string num = GetContext(L)->onGetRxDtmf();
+	Call* call = GetCall(L);
+	std::string num = "";
+	if (call != NULL)
+	{
+		std::deque<char> &dtmfRxQueue = call->dtmfRxQueue;
+		if (!dtmfRxQueue.empty())
+		{
+			num = std::string(1, dtmfRxQueue[0]);
+			dtmfRxQueue.pop_front();
+		}
+	}
 	lua_pushstring( L, num.c_str() );
 	return 1;
 }
@@ -1219,7 +1550,9 @@ static int l_ShowTrayNotifier(lua_State* L)
 	}
 	int incoming = lua_tointegerx(L, 3, NULL);
 
-	GetContext(L)->onShowTrayNotifier(description, uri, incoming);
+	unsigned int callUid = lua_tointegerx(L, 4, NULL);
+
+	GetContext(L)->onShowTrayNotifier(callUid, description, uri, incoming);
 
 	lua_pushinteger(L, 0);
 	return 1;
@@ -1552,13 +1885,8 @@ ScriptExec::ScriptExec(
 	CallbackGetDial onGetDial,
 	CallbackSetDial onSetDial,
 	CallbackSendDtmf onSendDtmf,
-	CallbackGetCall onGetCall,
-	CallbackResetCall onResetCall,
-	CallbackGetPreviousCall onGetPreviousCall,
-	CallbackGetRecorder onGetRecorder,
 	CallbackGetContactName onGetContactName,
 	CallbackGetStreamingState onGetStreamingState,
-	CallbackGetAudioErrorCount onGetAudioErrorCount,
 	CallbackSetTrayIcon onSetTrayIcon,
 	CallbackGetRegistrationState onGetRegistrationState,
 	CallbackPluginSendMessageText onPluginSendMessageText,
@@ -1587,10 +1915,6 @@ ScriptExec::ScriptExec(
 	onGetDial(onGetDial),
 	onSetDial(onSetDial),
 	onSendDtmf(onSendDtmf),
-	onGetCall(onGetCall),
-	onResetCall(onResetCall),
-	onGetPreviousCall(onGetPreviousCall),
-	onGetRecorder(onGetRecorder),
 	onGetContactName(onGetContactName),
 	onGetStreamingState(onGetStreamingState),
 	onSetTrayIcon(onSetTrayIcon),
@@ -1610,16 +1934,11 @@ ScriptExec::ScriptExec(
 	onGetButtonConf(onGetButtonConf),
 	onMainMenuShow(onMainMenuShow),
 	onApplicationClose(onApplicationClose),
-	onGetAudioErrorCount(onGetAudioErrorCount),
 
 	running(false)
 {
 	assert(onCall && onHangup && onAnswer && onGetDial && onSetDial &&
 		onSendDtmf &&
-		onGetCall &&
-		onResetCall &&
-		onGetPreviousCall &&
-		onGetRecorder &&
 		onGetContactName &&
 		onGetStreamingState &&
 		onSetTrayIcon &&
@@ -1637,8 +1956,7 @@ ScriptExec::ScriptExec(
 		onUpdateButtons &&
 		onGetButtonConf &&
 		onMainMenuShow &&
-		onApplicationClose &&
-		onGetAudioErrorCount
+		onApplicationClose
 		);
 }
 
@@ -1668,26 +1986,38 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SetClipboardText, "SetClipboardText", "Copy text to clipboard", "");
 	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "Equivalent of VCL function with same name.");
 	lua_register2(L, ScriptImp::l_FindWindowByCaptionAndExeName, "FindWindowByCaptionAndExeName", "Search for window by caption and executable name", "");
-	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "");
-	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect current call, reject incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
-	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer incoming call", "");
+	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns status (0 on success) and allocated call ID. May fail if current call number reaches limit.");
+	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect or reject current incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
+	lua_register2(L, ScriptImp::l_Hangup2, "Hangup2", "Disconnect or reject specific incoming call", "Examples:\n    Hangup2(callUid)\n    Hangup2(callUid, sipCode, reasonText)");
+	lua_register2(L, ScriptImp::l_HangupAll, "HangupAll", "Disconnect all calls", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
+	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer current or specified incoming call", "Takes call UID as optional argument to answer specific call.");
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");
 	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "Example: SwitchAudioSource(\"aufile\", \"file.wav\").");
-	lua_register2(L, ScriptImp::l_SwitchVideoSource, "SwitchVideoSource", "Change video source during the call", "Example: SwitchAudioSource(\"avformat\", \"file.mp4\").");
-	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbos during the call", "Accepts single DTMF or whole string");
+	lua_register2(L, ScriptImp::l_SwitchAudioSource2, "SwitchAudioSource2", "Change audio source for the specified call", "Example: SwitchAudioSource2(callUid, \"aufile\", \"file.wav\").");
+	lua_register2(L, ScriptImp::l_SwitchAudioPlayer, "SwitchAudioPlayer", "Change audio output during the call", "Example: SwitchAudioPlayer(\"winwave2\", \"Headphones\").");
+	lua_register2(L, ScriptImp::l_SwitchAudioPlayer2, "SwitchAudioPlayer2", "Change audio output for the specified call", "Example: SwitchAudioPlayer2(callUid, \"winwave2\", \"Headphones\").");
+	lua_register2(L, ScriptImp::l_SwitchVideoSource, "SwitchVideoSource", "Change video source during the call", "Example: SwitchVideoSource(\"avformat\", \"file.mp4\").");
+	lua_register2(L, ScriptImp::l_SwitchVideoSource2, "SwitchVideoSource2", "Change video source for the specified call", "Example: SwitchVideoSource(callUid, \"avformat\", \"file.mp4\").");
+	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbols during the call", "Accepts single DTMF or whole string");
 	lua_register2(L, ScriptImp::l_GenerateTones, "GenerateTones", "Generate up to 4 tones with specified amplitude and frequency", "Tone generator is able to generate up to 4 sine waves at the same time, each one with separate amplitude and frequency setting. Sum of sine waves is saturated. Tone generator is placed before softvol module (software volume control sliders) in transmit chain and replaces \"regular\" audio source when is activated.\nGenerateTones function takes up to 8 parameters (up to 4 pairs of amplitude + frequency). Amplitude is interpreted as a fraction of full-scale.\nCalling this function without arguments stops generator.\nExample generating 1000 Hz at 0.2 FS + 3000 Hz at 0.1 FS:\n\tGenerateTones(0.2, 1000, 0.1, 3000)");
+	lua_register2(L, ScriptImp::l_GenerateTones2, "GenerateTones2", "Second version of GenerateTones function, taking call ID as first argument", "Tone generator is able to generate up to 4 sine waves at the same time, each one with separate amplitude and frequency setting. Sum of sine waves is saturated. Tone generator is placed before softvol module (software volume control sliders) in transmit chain and replaces \"regular\" audio source when is activated.\nGenerateTones2 function takes up to 9 parameters (call ID + up to 4 pairs of amplitude + frequency). Amplitude is interpreted as a fraction of full-scale.\nCalling this function without arguments stops generator.\nExample generating 1000 Hz at 0.2 FS + 3000 Hz at 0.1 FS:\n\tGenerateTones2(callUid, 0.2, 1000, 0.1, 3000)");
 	lua_register2(L, ScriptImp::l_BlindTransfer, "BlindTransfer", "Send REFER during the call", "");
-	lua_register2(L, ScriptImp::l_GetCallState, "GetCallState", "Get current call state", "");
-	lua_register2(L, ScriptImp::l_GetRecorderState, "GetRecorderState", "Check if recording is running", "");
-	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption", "Returns session ID, active/inactive state, SAS code, cipher, verfication state");
-	lua_register2(L, ScriptImp::l_IsCallIncoming, "IsCallIncoming", "Check if current call is incoming", "");
-	lua_register2(L, ScriptImp::l_GetCallPeer, "GetCallPeer", "Get number/URI of current caller/callee", "");
-	lua_register2(L, ScriptImp::l_GetCallInitialRxInvite, "GetCallInitialRxInvite", "Get full text of initial received INVITE", "");
-	lua_register2(L, ScriptImp::l_GetCallCodecName, "GetCallCodecName", "Get name of codec used during current call", "");
+	lua_register2(L, ScriptImp::l_BlindTransfer2, "BlindTransfer2", "Send REFER for specific call", "Example: BlindTransfer(callUid, target)");
+	lua_register2(L, ScriptImp::l_AttendedTransfer, "AttendedTransfer", "Attended transfer using two already established calls", "Example: AttendedTransfer(callUid1, callUid2)");
+	lua_register2(L, ScriptImp::l_GetCalls, "GetCalls", "Get a table with UIDs of currently active calls", "");
+	lua_register2(L, ScriptImp::l_GetCurrentCallUid, "GetCurrentCallUid", "Get UID of current call, 0 = invalid/none", "");
+	lua_register2(L, ScriptImp::l_SetCurrentCallUid, "SetCurrentCallUid", "Set current call to call with specified UID", "Returns 0 on success.");
+	lua_register2(L, ScriptImp::l_GetCallState, "GetCallState", "Get state of current or specified call", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetRecorderState, "GetRecorderState", "Check if recording is running for current or specified call", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verfication state. Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_IsCallIncoming, "IsCallIncoming", "Check if current or specified call is incoming", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallPeer, "GetCallPeer", "Get number/URI of caller/callee from current or specified call", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallInitialRxInvite, "GetCallInitialRxInvite", "Get full text of initial received INVITE", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallCodecName, "GetCallCodecName", "Get name of codec used during current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetContactName, "GetContactName", "Get number description from phonebook", "");
 	lua_register2(L, ScriptImp::l_GetStreamingState, "GetStreamingState", "Get current state of RTP streaming", "");
-	lua_register2(L, ScriptImp::l_GetAudioErrorCount, "GetAudioErrorCount", "Get number of audio device erros during the call", "Used to detect end-of-file event for wave input files");
+	lua_register2(L, ScriptImp::l_GetAudioErrorCount, "GetAudioErrorCount", "Get number of audio device errors during the call", "Used to detect end-of-file event for wave input files. Takes one, optional argument: call UID.");
 
 	lua_register2(L, ScriptImp::l_SetVariable, "SetVariable", "Set value for variable with specified name", "Example: SetVariable(\"runcount\", count).");
 	lua_register2(L, ScriptImp::l_GetVariable, "GetVariable", "Get variable value and isSet flag for variable with specified name", "Example: local count, var_isset = GetVariable(\"runcount\")");
@@ -1728,12 +2058,12 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetRecordFile, "GetRecordFile", "Get name of recording file from current call or call that ended", "");
 	lua_register2(L, ScriptImp::l_GetContactId, "GetContactId", "Get contact ID for specified number/URI", "");
 	lua_register2(L, ScriptImp::l_GetBlfState, "GetBlfState", "Get BLF state of specified contact (by contact ID)", "To be used in \"on BLF change\" (GetExecSourceId() as contact id / argument) or together with GetContactId(number).\nReturning number, state, remote identity number/URI, remote identity display name and call direction.");
-	lua_register2(L, ScriptImp::l_RecordStart, "RecordStart", "Start recording", "");
+	lua_register2(L, ScriptImp::l_RecordStart, "RecordStart", "Start recording", "Example: RecordStart(filename, channels, side, fileFormat, bitrate, optionalCallUid).");
 	lua_register2(L, ScriptImp::l_GetExeName, "GetExeName", "Get name and full path of this executable",  "");
 	lua_register2(L, ScriptImp::l_GetProfileDir, "GetProfileDir", "Get folder name where settings and other files are stored", "");
 	lua_register2(L, ScriptImp::l_GetRecordingState, "GetRecordingState", "Check if softphone is recording at the moment", "");
 	lua_register2(L, ScriptImp::l_GetRxDtmf, "GetRxDtmf", "Get DTMF from receiving queue, empty string if queue is empty", "");
-	lua_register2(L, ScriptImp::l_ShowTrayNotifier, "ShowTrayNotifier", "Show tray notifier window with specified description, URI and incoming state", "");
+	lua_register2(L, ScriptImp::l_ShowTrayNotifier, "ShowTrayNotifier", "Show tray notifier window with specified description, URI, incoming state, call UID", "");
 	lua_register2(L, ScriptImp::l_HideTrayNotifier, "HideTrayNotifier", "Hide tray notifier window", "");
 	lua_register2(L, ScriptImp::l_GetUserName, "GetUserName", "Get user name from account settings", "");
 	lua_register2(L, ScriptImp::l_ProgrammableButtonClick, "ProgrammableButtonClick", "Programmatically press button", "");

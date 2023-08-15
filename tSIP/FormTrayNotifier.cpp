@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FormTrayNotifier.h"
+#include "ua/Calls.h"
 #include "Settings.h"
 #include "Paths.h"
 #include "Log.h"
@@ -26,7 +27,8 @@ void TfrmTrayNotifier::TranslateForm(void* obj)
 __fastcall TfrmTrayNotifier::TfrmTrayNotifier(TComponent* Owner)
 	: TForm(Owner),
 	OnHangup(NULL),
-	OnAnswer(NULL)
+	OnAnswer(NULL),
+	callUid(0)
 {
 	RegisterTranslationCb(this, TranslateForm);
 	Width = appSettings.frmTrayNotifier.iWidth;
@@ -36,8 +38,9 @@ __fastcall TfrmTrayNotifier::TfrmTrayNotifier(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 
-void TfrmTrayNotifier::SetData(AnsiString description, AnsiString uri, bool incoming)
+void TfrmTrayNotifier::SetData(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming)
 {
+	this->callUid = callUid;
 	lblDescription->Caption = description;
 	lblUri->Caption = uri;
 	btnAnswer->Visible = incoming;
@@ -73,15 +76,23 @@ void TfrmTrayNotifier::HideWindow(void)
 
 void __fastcall TfrmTrayNotifier::btnHangupClick(TObject *Sender)
 {
-	if (OnHangup)
-		OnHangup(486, "Busy Here");	
+	if (OnHangup && callUid != 0)
+		OnHangup(callUid, 486, "Busy Here");
+	else
+		HideWindow();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmTrayNotifier::btnAnswerClick(TObject *Sender)
 {
-	if (OnAnswer)
-		OnAnswer();	
+	if (OnAnswer && callUid != 0)
+	{
+		if (appSettings.Calls.autoSwitchToCallAnsweredFromTray)
+			Calls::SetCurrentCallUid(callUid);	// switch to new call
+		OnAnswer(callUid);
+	}
+	else
+		HideWindow();
 }
 //---------------------------------------------------------------------------
 

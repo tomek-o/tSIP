@@ -131,7 +131,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 		Application->CreateForm(__classid(TfrmTrayNotifier), &frmTrayNotifier);
 		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
 		Application->CreateForm(__classid(TfrmContactPopup), &frmContactPopup);
-		
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;
 		frmContactPopup->Top = appSettings.frmContactPopup.iPosY;
 		frmContactPopup->Width = appSettings.frmContactPopup.iWidth;

@@ -21,6 +21,7 @@ extern "C" {
 #include "baresip_presence_status.h"
 #include "baresip_recorder.h"
 #include "baresip_zrtp.h"
+#include "baresip_conference.h"
 
 /*
  * Clock-rate for audio timestamp
@@ -93,6 +94,7 @@ bool call_has_audio(const struct call *call);
 bool call_has_video(const struct call *call);
 int  call_set_vidisp_parent_handle(struct call *call, void *handle);
 int  call_transfer(struct call *call, const char *uri);
+int  call_replace_transfer(struct call *target_call, struct call *source_call);
 int  call_status(struct re_printf *pf, const struct call *call);
 int  call_debug(struct re_printf *pf, const struct call *call);
 void call_set_handlers(struct call *call, call_event_h *eh,
@@ -114,7 +116,8 @@ struct video *call_video(const struct call *call);
 struct list  *call_streaml(const struct call *call);
 void          call_enable_rtp_timeout(struct call *call, uint32_t timeout_ms);
 struct recorder_st* call_get_recorder(const struct call *call);
-
+void call_set_uid(struct call *call, unsigned int uid);
+unsigned int call_get_uid(struct call *call);
 
 /*
  * Paging TX
@@ -192,10 +195,9 @@ struct config {
 		char ring_mod[32];      /**< Audio module for incoming ring */
 		char ring_dev[128];     /**< Audio device for incoming ring */
 		float ring_volume;
+		float ring_volume_multi;/**< Ring volume if there is already another call */
 		struct range srate;     /**< Audio sampling rate in [Hz]    */
 		struct range channels;  /**< Nr. of audio channels (1=mono) */
-		uint32_t srate_play;    /**< Opt. sampling rate for player  */
-		uint32_t srate_src;     /**< Opt. sampling rate for source  */
 		enum audio_mode txmode; /**< Audio transmit mode            */
 		unsigned int softvol_tx;/**< Software volume control for TX; formula: sample = (sample * volume)/128 */
 		unsigned int softvol_rx;/**< Software volume control for RX; formula: sample = (sample * volume)/128 */
@@ -470,12 +472,14 @@ struct aufilt_prm {
 };
 
 typedef int (aufilt_encupd_h)(struct aufilt_enc_st **stp, void **ctx,
-			      const struct aufilt *af, struct aufilt_prm *prm);
+			      const struct aufilt *af, struct aufilt_prm *prm,
+			      const struct audio *au);
 typedef int (aufilt_encode_h)(struct aufilt_enc_st *st,
 			      int16_t *sampv, size_t *sampc);
 
 typedef int (aufilt_decupd_h)(struct aufilt_dec_st **stp, void **ctx,
-			      const struct aufilt *af, struct aufilt_prm *prm);
+			      const struct aufilt *af, struct aufilt_prm *prm,
+			      const struct audio *au);
 typedef int (aufilt_decode_h)(struct aufilt_dec_st *st,
 			      int16_t *sampv, size_t *sampc);
 
@@ -602,7 +606,7 @@ typedef void (options_resp_h)(int err, const struct sip_msg *msg, void *arg);
 
 /* Multiple instances */
 int  ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuser);
-int  ua_connect(struct ua *ua, struct call **callp,
+int  ua_connect(struct ua *ua, unsigned int callUid, struct call **callp,
 		const char *from_uri, const char *uri,
 		const char *params, enum vidmode vmode, void *vidisp_parent_handle, const char* extra_hdr_lines);
 void ua_hangup(struct ua *ua, struct call *call,
@@ -628,6 +632,7 @@ const char     *ua_cuser(const struct ua *ua);
 struct account *ua_account(const struct ua *ua);
 const char     *ua_outbound(const struct ua *ua);
 struct call    *ua_call(const struct ua *ua);
+struct list    *ua_calls(const struct ua *ua);
 struct account *ua_prm(const struct ua *ua);
 
 
@@ -937,6 +942,8 @@ int  audio_debug(struct re_printf *pf, const struct audio *a);
 /* Get name of the codec used in RX direction */
 const char* audio_get_rx_aucodec_name(const struct audio *a);
 struct recorder_st* audio_get_recorder(const struct audio *a);
+int  audio_set_conference(struct audio *au, bool conference);
+bool audio_is_conference(const struct audio *au);
 
 
 /*
@@ -950,7 +957,6 @@ int   video_set_fullscreen(struct video *v, bool fs);
 int   video_set_orient(struct video *v, int orient);
 void  video_vidsrc_set_device(struct video *v, const char *dev);
 int   video_set_source(struct video *v, const char *name, const char *dev);
-void  video_set_devicename(struct video *v, const char *src, const char *disp);
 int   video_debug(struct re_printf *pf, const struct video *v);
 
 

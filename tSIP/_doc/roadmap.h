@@ -119,5 +119,12 @@ from G.711a to G.722 during the call after re-INVITE from FreePBX 16. Re-INVITE
 was triggered by attended transfer on the PABX. Initial offer from FPBX contained
 PCMA, G.722, second one same codecs in reverse order. Reported by A.T. 2023.03.31.
 
+test multiple calls capacity / performance
+test multiple calls recording
+switch automatically to line with new incoming call if there is only one call
+switch automatically to line with new outgoing call if there is only one call
+
+support for multiple simultaneous RTP streaming - treat streaming as call
+
 */
 

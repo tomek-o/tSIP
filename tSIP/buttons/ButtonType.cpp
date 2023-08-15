@@ -85,6 +85,14 @@ const char* Button::TypeName(enum Type type)
 		return "ZRTP: unverify SAS";
 	case SWITCH_VIDEO_SOURCE:
 		return "Switch video source";
+	case LINE:
+		return "LINE - multiple calls";
+	case HANGUP_ALL:
+		return "Hangup all calls";
+	case ATTENDED_TRANSFER:
+		return "Attended transfer";
+	case CONFERENCE_START:
+		return "Start conference";
 
 	default:
 		return "???";
@@ -159,11 +167,20 @@ const char* Button::TypeDescription(enum Type type)
 	case AUTO_ANSWER_DND:
 		return "Auto answer or DND. For auto answer use SIP code = 200, for DND = 486 or 603.";
 	case ZRTP_VERIFY_SAS:
-		return "Verify SAS (Short Authentication String) for current ZRTP session";
+		return "Verify SAS (Short Authentication String) for current ZRTP session.";
 	case ZRTP_UNVERIFY_SAS:
-		return "Remove SAS (Short Authentication String) verification for current ZRTP session";
+		return "Remove SAS (Short Authentication String) verification for current ZRTP session.";
 	case SWITCH_VIDEO_SOURCE:
-		return "Switch video source (module + device) for the current call";
+		return "Switch video source (module + device) for the current call, switching to e.g. DirectShow camera, avformat mp4 file or test video generator.";
+	case LINE:
+		return "LINE buttons are used to manage multiple simultaneous calls. Each button represents single call and maximum call number would be limited by configured number of LINE buttons. If no button is defined, application is limited to single call.";
+	case HANGUP_ALL:
+		return "Terminate all currently active calls.";		
+	case ATTENDED_TRANSFER:
+		return "Make attended transfer using two already active calls.";
+	case CONFERENCE_START:
+		return "Create conference from current calls";
+
 	default:
 		return "???";
 	}

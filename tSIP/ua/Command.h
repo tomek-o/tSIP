@@ -15,6 +15,7 @@ public:
 		ANSWER,
 		SEND_DIGIT,
 		TRANSFER,
+		TRANSFER_REPLACE,
 		HOLD,
 		HANGUP,
 		SET_MSG_LOGGING,
@@ -36,6 +37,8 @@ public:
 		GENERATE_TONES,
 		ZRTP_VERIFY_SAS,
 		SWITCH_VIDEO_SOURCE,
+		CALL_START_AUDIO_EXTRA_SOURCE,
+		CONFERENCE_START,
 
 		TYPE__LIMITER
 	} type;
@@ -43,7 +46,8 @@ public:
 	AnsiString target;
 	AnsiString extraHeaderLines;	///< extra/custom header lines for outgoing calls and custom requests
 	int accountId;
-	int callId;
+	unsigned int callUid;
+	unsigned int callReplaceUid;	///< used by TRANSFER_REPLACE / attended transfer
 	int code;
 	AnsiString reason;
 	char key;
@@ -80,7 +84,8 @@ public:
 	Command(void):
 		type(TYPE__LIMITER),
 		accountId(-1),
-		callId(-1),
+		callUid(0),
+		callReplaceUid(0),
 		code(-1),
 		key('\0'),
 		bEnabled(false),

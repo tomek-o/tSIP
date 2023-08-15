@@ -30,7 +30,7 @@ public:
 	}
 
 	void FromJson(const Json::Value &jv);
-	void ToJson(Json::Value &jv);
+	void ToJson(Json::Value &jv) const;
 };
 
 #endif
