@@ -42,6 +42,9 @@ __published:	// IDE-managed Components
 	TMenuItem *miDeselectAll;
 	TCheckBox *chbImagePosition;
 	TCheckBox *chbLabelPosition;
+	TLabel *lblFrom;
+	TLabel *lblTo;
+	TComboBox *cbTargetTo;
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall cbTargetTypeChange(TObject *Sender);

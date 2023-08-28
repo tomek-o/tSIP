@@ -4,8 +4,8 @@ object frmButtonCopy: TfrmButtonCopy
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Copy button'
-  ClientHeight = 242
-  ClientWidth = 445
+  ClientHeight = 263
+  ClientWidth = 442
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -29,10 +29,24 @@ object frmButtonCopy: TfrmButtonCopy
     Height = 13
     Caption = 'Target'
   end
+  object lblFrom: TLabel
+    Left = 240
+    Top = 33
+    Width = 22
+    Height = 13
+    Caption = 'from'
+  end
+  object lblTo: TLabel
+    Left = 240
+    Top = 58
+    Width = 10
+    Height = 13
+    Caption = 'to'
+  end
   object pnlBottom: TPanel
     Left = 0
-    Top = 205
-    Width = 445
+    Top = 226
+    Width = 442
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
@@ -62,7 +76,7 @@ object frmButtonCopy: TfrmButtonCopy
     Width = 145
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 1
   end
   object cbTarget: TComboBox
@@ -71,12 +85,12 @@ object frmButtonCopy: TfrmButtonCopy
     Width = 145
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 2
   end
   object grboxCopy: TGroupBox
-    Left = 8
-    Top = 63
+    Left = 9
+    Top = 84
     Width = 425
     Height = 136
     Caption = 'Copy'
@@ -209,7 +223,17 @@ object frmButtonCopy: TfrmButtonCopy
     Items.Strings = (
       'single button'
       'all visible buttons'
+      'button range'
       'all buttons')
+  end
+  object cbTargetTo: TComboBox
+    Left = 286
+    Top = 55
+    Width = 145
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 5
   end
   object popupCopy: TPopupMenu
     Left = 16

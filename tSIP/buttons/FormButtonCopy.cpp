@@ -22,6 +22,7 @@ void TfrmButtonCopy::SetButtons(ProgrammableButtons *buttons)
 	this->buttons = buttons;
 	cbSource->Items->Clear();
 	cbTarget->Items->Clear();
+	cbTargetTo->Items->Clear();
 	for (int i=0; i<buttons->btnConf.size(); i++) {
 		AnsiString caption;
 		ButtonConf &cfg = buttons->btnConf[i];
@@ -32,9 +33,13 @@ void TfrmButtonCopy::SetButtons(ProgrammableButtons *buttons)
 
 		cbSource->Items->Add(caption);
 		cbTarget->Items->Add(caption);
+		cbTargetTo->Items->Add(caption);
 	}
 	cbSource->ItemIndex = 0;
 	cbTarget->ItemIndex = 0;
+	cbTargetTo->ItemIndex = 0;
+
+	cbTargetType->OnChange(NULL);
 }
 
 
@@ -44,7 +49,7 @@ void __fastcall TfrmButtonCopy::btnApplyClick(TObject *Sender)
 	int src = cbSource->ItemIndex;
 	if (src < 0)
 		return;
-	if (cbTargetType->ItemIndex == 0)
+	if (cbTargetType->ItemIndex == 0)		// single button
 	{
 		int dst = cbTarget->ItemIndex;
 		if (dst < 0)
@@ -52,7 +57,7 @@ void __fastcall TfrmButtonCopy::btnApplyClick(TObject *Sender)
 		CopyButton(src, dst);
 		cbTarget->ItemIndex = dst;		
 	}
-	else if (cbTargetType->ItemIndex == 1)
+	else if (cbTargetType->ItemIndex == 1)	// all visible buttons
 	{
 		for (int i=0; i<cbTarget->Items->Count; i++)
 		{
@@ -66,7 +71,22 @@ void __fastcall TfrmButtonCopy::btnApplyClick(TObject *Sender)
 		}
 		cbSource->ItemIndex = src;
 	}
-	else
+	else if (cbTargetType->ItemIndex == 2)	// button range
+	{
+		int start = cbTarget->ItemIndex;
+		int end = cbTargetTo->ItemIndex;
+		if (start < 0 || end < 0)
+		{
+			return;
+		}
+		for (int i=start; i<=end; i++)
+		{
+        	CopyButton(src, i);
+		}
+		cbTarget->ItemIndex = start;
+		cbTargetTo->ItemIndex = end;
+	}
+	else									
 	{
 		for (int i=0; i<cbTarget->Items->Count; i++)
 		{
@@ -178,11 +198,31 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 		caption.sprintf("%d: [unnamed]", dst);
 	cbSource->Items->Strings[dst] = caption;
 	cbTarget->Items->Strings[dst] = caption;
+	cbTargetTo->Items->Strings[dst] = caption;
 }
 
 void __fastcall TfrmButtonCopy::cbTargetTypeChange(TObject *Sender)
 {
-	cbTarget->Visible = (cbTargetType->ItemIndex == 0);	
+	lblFrom->Visible = false;
+	cbTarget->Visible = false;
+	lblTo->Visible = false;
+	cbTargetTo->Visible = false;
+
+	switch (cbTargetType->ItemIndex)
+	{
+	case 0:
+		lblFrom->Visible = true;
+		cbTarget->Visible = true;
+		break;
+	case 2:
+		lblFrom->Visible = true;
+		cbTarget->Visible = true;
+		lblTo->Visible = true;
+		cbTargetTo->Visible = true;
+		break;
+	default:
+		break;
+	}
 }
 //---------------------------------------------------------------------------
 
