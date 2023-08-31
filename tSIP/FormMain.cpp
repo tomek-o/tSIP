@@ -1762,7 +1762,18 @@ void TfrmMain::PollCallbackQueue(void)
 					{
 						if (call)
 						{
-							ShowTrayNotifier(call->uid, lbl2ndPartyDesc->Caption, lbl2ndParty->Caption, call->incoming);
+							AnsiString party = GetClip(call->getPeerUri(), appSettings.Display.bUserOnlyClip);
+							AnsiString desc;
+							Contacts::Entry *entry = contacts.GetEntry(CleanUri(call->getPeerUri()));
+							if (entry)
+							{
+								desc = lastContactEntry->description;
+							}
+							else
+							{
+								desc = call->getPeerName();
+							}
+							ShowTrayNotifier(call->uid, desc, party, call->incoming);
 						}
 					}
 				}
