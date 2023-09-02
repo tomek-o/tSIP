@@ -50,7 +50,14 @@ void VideoDevicesList::Refresh(void)
 					      &enum_mon, 0);
 	if (res != NOERROR)
 	{
-		LOG("Failed to create video input class enumerator!\n");
+		if (res == S_FALSE)
+		{
+			LOG("Failed to create video input class enumerator: video input devices list is probably empty\n");
+		}
+		else
+		{
+			LOG("Failed to create video input class enumerator, result = %d!\n", static_cast<int>(res));
+		}
 		return;
 	}
 
