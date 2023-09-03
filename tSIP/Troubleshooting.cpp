@@ -22,6 +22,22 @@
 using namespace Troubleshooting;
 
 namespace {
+	unsigned int lineButtonCount = 0;	///< number of line buttons
+
+	/** \brief Utility: count/update the number line buttons */
+	void CountLineButtons(void)
+	{
+		lineButtonCount = 0;
+		const std::vector<ButtonConf> &conf = buttons.btnConf;
+		for (unsigned int i=0; i<conf.size(); i++)
+		{
+			const ButtonConf &c = conf[i];
+			if (c.type == Button::LINE)
+			{
+				lineButtonCount++;
+			}
+		}
+	}
 
 	std::vector<Item> items;
 
@@ -337,6 +353,47 @@ namespace {
 		return false;
 	}
 
+	bool CheckSingleLine(void)
+	{
+		return (lineButtonCount == 1);
+	}
+
+	bool CheckAttendedTransferWithSingleLine(void)
+	{
+		if (lineButtonCount > 1)
+			return false;
+
+		ButtonConf defaultBtnConf;
+		const std::vector<ButtonConf> &conf = buttons.btnConf;
+		for (unsigned int i=0; i<conf.size(); i++)
+		{
+			const ButtonConf &c = conf[i];
+			if (c.type == Button::ATTENDED_TRANSFER)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool CheckConferenceWithSingleLine(void)
+	{
+		if (lineButtonCount > 1)
+			return false;
+
+		ButtonConf defaultBtnConf;
+		const std::vector<ButtonConf> &conf = buttons.btnConf;
+		for (unsigned int i=0; i<conf.size(); i++)
+		{
+			const ButtonConf &c = conf[i];
+			if (c.type == Button::CONFERENCE_START)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	struct ItemTypeData itemTypeData[] =
 	{
 		{ LevelError, "No specified network interface",
@@ -393,6 +450,9 @@ namespace {
 			"Presence button(s) probably should use deticated bitmaps (check.bmp, cross.bmp) instead of default BLF bitmaps.",
 			CheckPresenceBitmaps
 			},
+		{ LevelWarning, "Defining single LINE button is not useful", "Defining single LINE button would give same behavior as not defining any LINE button at all.", CheckSingleLine },
+		{ LevelWarning, "Attended transfer requires min. 2 lines", "Define at least two line buttons to use attended transfer.", CheckAttendedTransferWithSingleLine },
+		{ LevelWarning, "Conference function requires min. 2 lines", "Define at least two line buttons to use conference function.", CheckConferenceWithSingleLine },
 	};
 
 	enum Level getItemLevel(int typeId)
@@ -459,6 +519,8 @@ const std::vector<Item>& Troubleshooting::getItems(void)
 
 void Troubleshooting::Update(void)
 {
+    CountLineButtons();
+
 	items.clear();
 	for (int i=0; i<ARRAY_SIZE(itemTypeData); i++)
 	{
