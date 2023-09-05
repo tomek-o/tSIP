@@ -1128,5 +1128,6 @@ Version 0.3
 		- if used with video, display output should be configured to used separate window, not button
 		- ZRTP is not supported/tested at the moment for multiple calls
 	- added name to aubuf, extended aubuf logging
+	- added option to copy button properties to multiple buttons from specified range
 */
 
