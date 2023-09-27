@@ -422,7 +422,10 @@ namespace {
 		//{ LevelWarning, "Invalid frame ptime for L16 codec(s)", "Selected RTP ptime may be too large for selected L16 codec, exceeding network MTU.", CheckL16Ptime },
 		{ LevelHint, "Selected ptime is different then commonly used 20ms.", "Ptime other than 20ms with commonly used codecs may cause interoperability problems.", CheckUncommonFrameLength },
 		{ LevelHint, "Popular codecs are disabled", "Note: popular/commonly used codecs (G.711a, G.711u) are not enabled.", CheckCommonCodecs },
-		{ LevelHint, "No registration", "Note: registration is not enabled (registration expires value is set to zero in account configuration).", CheckNoRegistration },
+		{ LevelHint, "No registration",
+			"Note: registration is not enabled (registration expires value is set to zero in account configuration).\n"
+			"This is normal for peer-to-peer communication, but for typical PABX-based systems would not allow to receive any incoming calls."
+			, CheckNoRegistration },
 		{ LevelHint, "No local port assigned",
 			"Softphone is configured without registration but local port is not assigned.\n"
 			"You most likely won't be able to receive calls with this configuration."
