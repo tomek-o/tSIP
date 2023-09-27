@@ -82,10 +82,11 @@ void TfrmTroubleshooting::SelectItem(TListItem *Item)
 	int id = Item->Index;
 	const std::vector<Troubleshooting::Item> &items = Troubleshooting::getItems();
 	const Troubleshooting::Item &ti = items[id];
-	memoDetails->Text = ti.getDescription();
+	AnsiString text = ti.getDescription();
 	if (ti.extraMsg != "")
 	{
-		memoDetails->Text = memoDetails->Text + "\n" + ti.extraMsg;
+		text = text + "\n" + ti.extraMsg;
 	}
+	memoDetails->Lines->Text = text;
 }
 

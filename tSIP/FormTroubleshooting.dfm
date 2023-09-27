@@ -17,9 +17,9 @@ object frmTroubleshooting: TfrmTroubleshooting
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 222
+    Top = 208
     Width = 468
-    Height = 103
+    Height = 117
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
@@ -35,7 +35,7 @@ object frmTroubleshooting: TfrmTroubleshooting
       Left = 8
       Top = 25
       Width = 452
-      Height = 70
+      Height = 84
       Margins.Left = 8
       Margins.Top = 25
       Margins.Right = 8
@@ -50,7 +50,7 @@ object frmTroubleshooting: TfrmTroubleshooting
     Left = 0
     Top = 0
     Width = 468
-    Height = 222
+    Height = 208
     Align = alClient
     Columns = <
       item
@@ -69,6 +69,7 @@ object frmTroubleshooting: TfrmTroubleshooting
     ViewStyle = vsReport
     OnData = lvItemsData
     OnSelectItem = lvItemsSelectItem
+    ExplicitHeight = 222
   end
   object imgList: TImageList
     Left = 8
