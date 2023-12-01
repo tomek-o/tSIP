@@ -1129,5 +1129,8 @@ Version 0.3
 		- ZRTP is not supported/tested at the moment for multiple calls
 	- added name to aubuf, extended aubuf logging
 	- added option to copy button properties to multiple buttons from specified range
+
+Version 0.3.0.1
+	- FIXED: in v0.3 call history entry for outgoing call was unnecessary containing full SIP URI is user dialed with just a number/user part
 */
 

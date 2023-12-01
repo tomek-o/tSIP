@@ -1536,7 +1536,12 @@ void TfrmMain::PollCallbackQueue(void)
 				Call *call = Calls::FindByUid(cb.callUid);
 				if (call)
 				{
-					call->uri = cb.caller;
+					AnsiString shortClip = GetClip(cb.caller, true);
+					if (shortClip != "" && shortClip != call->uri)
+					{
+						// do not overwrite initial value set when making call
+						call->uri = cb.caller;
+					}
 					call->recordFile = "";
 				}
 				if (lastContactEntry)
