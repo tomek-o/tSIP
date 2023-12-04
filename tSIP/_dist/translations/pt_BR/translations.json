@@ -56,6 +56,7 @@
     "miMinimizeTray": "Minimize para a bandeja",
     "miPatchButtonSettings": "Configurações de patch / atualização do botão com JSON",
     "miRefreshTranslationFromFile": "Atualizar as traduções do arquivo",
+    "miScriptPluginVariables": "Variáveis de scripts e plug-ins",
     "miScripting": "Janela de script - Lua",
     "miSettings": "Configuração",
     "miSettingsPatch": "Corrigir / atualizar as configurações principais com JSON",

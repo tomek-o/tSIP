@@ -524,6 +524,7 @@
         <FILE FILENAME="VideoDevicesList.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VideoDevicesList" FORMNAME="" DESIGNCLASS="" ADDITIONAL="VideoDevicesList.h"/>
         <FILE FILENAME="ua\VideoModules.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VideoModules" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\VideoModules.h"/>
         <FILE FILENAME="ua\UaGlobals.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="UaGlobals" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\UaGlobals.h"/>
+        <FILE FILENAME="scripting\FormScriptPluginVariables.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormScriptPluginVariables" FORMNAME="frmScriptPluginVariables" DESIGNCLASS="" ADDITIONAL="scripting\FormScriptPluginVariables.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>

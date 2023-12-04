@@ -29,6 +29,7 @@ USEFORM("buttons\ButtonsDataModule.cpp", dmButtons); /* TDataModule: File Type *
 USEFORM("FormDialpadConf.cpp", frmDialpadConf);
 USEFORM("scripting\FormLuaScriptHelp.cpp", frmLuaScriptHelp);
 USEFORM("FormVideoConf.cpp", frmVideoConf);
+USEFORM("scripting\FormScriptPluginVariables.cpp", frmScriptPluginVariables);
 //---------------------------------------------------------------------------
 #include "baresip_base_config.h"
 

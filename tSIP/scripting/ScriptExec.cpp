@@ -188,6 +188,12 @@ int ScriptExec::ClearVariable(const char* name)
 	return 0;
 }
 
+std::map<AnsiString, AnsiString> ScriptExec::GetVariables(void)
+{
+	ScopedLock<Mutex> lock(mutexVariables);
+	return variables;
+}
+
 void ScriptExec::QueuePush(const char* name, const char* value)
 {
 	ScopedLock<Mutex> lock(mutexQueues);

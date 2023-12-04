@@ -56,6 +56,7 @@
     "miMinimizeTray": "Свернуть",
     "miPatchButtonSettings": "Исправить / обновить настройки кнопок из JSON",
     "miRefreshTranslationFromFile": "Обновить перевод из файла",
+    "miScriptPluginVariables": "Переменные скриптов и плагинов",
     "miScripting": "Окно скриптов",
     "miSettings": "Настройки",
     "miSettingsPatch": "Исправить / обновить настройки из JSON",

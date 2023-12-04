@@ -56,6 +56,7 @@
     "miMinimizeTray": "In Systray minimieren",
     "miPatchButtonSettings": "Button-Einstellung aus JSON-Datei neu laden",
     "miRefreshTranslationFromFile": "Übersetzung aus Datei neu laden",
+    "miScriptPluginVariables": "Skripte und Plugins-Variablen",
     "miScripting": "Script-Fenster",
     "miSettings": "Konfig",
     "miSettingsPatch": "Einstellungen aus JSON-Datei neu laden",

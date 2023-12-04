@@ -41,6 +41,7 @@
 #include "PhoneInterface.h"
 #include "FormContactsCsvImport.h"
 #include "FormLuaScript.h"
+#include "FormScriptPluginVariables.h"
 #include "Troubleshooting.h"
 #include "FormTroubleshooting.h"
 #include "SIMPLE_Messages.h"
@@ -209,6 +210,7 @@ void TfrmMain::TranslateForm(void* obj)
 	TRANSLATE_TMP("TfrmMain.miClearCallsHistory", frm->miClearCallsHistory->Caption);
 	TRANSLATE_TMP("TfrmMain.miRefreshTranslationFromFile", frm->miRefreshTranslationFromFile->Caption);
 	TRANSLATE_TMP("TfrmMain.miScripting", frm->miScripting->Caption);
+	TRANSLATE_TMP("TfrmMain.miScriptPluginVariables", frm->miScriptPluginVariables->Caption);	
 	TRANSLATE_TMP("TfrmMain.miMessages", frm->miMessages->Caption);
 	TRANSLATE_TMP("TfrmMain.miTroubleshooting", frm->miTroubleshooting->Caption);
 	TRANSLATE_TMP("TfrmMain.miAbout", frm->miAbout->Caption);
@@ -4129,6 +4131,16 @@ void __fastcall TfrmMain::cbCallURIChange(TObject *Sender)
 	{
 		call->dialString = cbCallURI->Text;
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miScriptPluginVariablesClick(TObject *Sender)
+{
+	if (frmScriptPluginVariables == NULL)
+	{
+		Application->CreateForm(__classid(TfrmScriptPluginVariables), &frmScriptPluginVariables);
+	}
+	frmScriptPluginVariables->Show();
 }
 //---------------------------------------------------------------------------
 

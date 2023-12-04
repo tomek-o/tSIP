@@ -97,6 +97,8 @@ __published:	// IDE-managed Components
 	TTrackBar *trbarSoftvolSpeaker;
 	TBitBtn *btnResetMicVolume;
 	TBitBtn *btnResetSpeakerVolume;
+	TMenuItem *miScriptPluginVariables;
+	TMenuItem *N1;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -149,6 +151,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnResetSpeakerVolumeMouseUp(TObject *Sender,
           TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall cbCallURIChange(TObject *Sender);
+	void __fastcall miScriptPluginVariablesClick(TObject *Sender);
 private:	// User declarations
 	static void TranslateForm(void* obj);
 

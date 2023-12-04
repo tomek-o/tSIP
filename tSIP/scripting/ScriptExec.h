@@ -10,6 +10,7 @@
 
 #include <string>
 #include <vector>
+#include <map>
 #include <System.hpp>
 
 struct lua_State;
@@ -131,6 +132,7 @@ public:
 
 	static int SetVariable(const char* name, const char* value);
 	static int ClearVariable(const char* name);
+	static std::map<AnsiString, AnsiString> GetVariables(void);	
 
 	/** \brief Add value to the end of the queue; queue is created if does not exist
 		\param name queue name
