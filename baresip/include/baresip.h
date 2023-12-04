@@ -43,6 +43,8 @@ struct ua;
 struct vidframe;
 struct vidrect;
 struct vidsz;
+struct config;
+struct paging_tx;
 
 
 /*
