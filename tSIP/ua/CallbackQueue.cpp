@@ -86,12 +86,13 @@ void CallbackQueue::OnReinviteReceived(AnsiString caller, AnsiString caller_name
 	fifo.push();
 }
 
-void CallbackQueue::ChangeCallDtmfState(AnsiString dtmf, bool active)
+void CallbackQueue::ChangeCallDtmfState(unsigned int uid, AnsiString dtmf, bool active)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
 	if (!cb)
 		return;
+	cb->callUid = uid;
 	cb->type = Callback::CALL_DTMF_STATE;
 	cb->dtmf = dtmf;
 	cb->dtmfActive = active;

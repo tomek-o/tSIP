@@ -240,10 +240,10 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		}
 		break;
 	case UA_EVENT_CALL_DTMF_START:
-		UA_CB->ChangeCallDtmfState(prm, true);
+		UA_CB->ChangeCallDtmfState(callUid, prm, true);
 		break;
 	case UA_EVENT_CALL_DTMF_END:
-		UA_CB->ChangeCallDtmfState(prm, false);
+		UA_CB->ChangeCallDtmfState(callUid, prm, false);
 		break;
 	case UA_EVENT_CALL_TRANSFER:
 		state = Callback::CALL_STATE_TRANSFER;
