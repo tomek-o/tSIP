@@ -63,7 +63,7 @@ void TfrmContacts::FilterContacts(void)
 	{
 		for (int i=0; i<entries.size(); i++)
 		{
-			Contacts::Entry& entry = entries[i];
+			const Contacts::Entry& entry = entries[i];
 			fentry.id = i;
 			fentry.entry = entry;
 			filteredContacts.push_back(fentry);
@@ -112,7 +112,7 @@ void TfrmContacts::obsUpdate(Observable* o, Argument * arg)
 void __fastcall TfrmContacts::lvContactsData(TObject *Sender, TListItem *Item)
 {
 	int id = Item->Index;
-	Contacts::Entry &entry = filteredContacts[id].entry;
+	const Contacts::Entry &entry = filteredContacts[id].entry;
 	Item->Caption = entry.description;
 	//Item->SubItems->Add(entry.uri.c_str());
 }

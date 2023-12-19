@@ -103,7 +103,6 @@ unsigned int CountIncomingForms(void)
 void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body)
 {
 	LOG("Received message from %s: ContentType %s, body [%s]\n", caller.c_str(), contentType.c_str(), body.c_str());
-	std::set<TfrmMessage*>::iterator iter;
 	TfrmMessage *frm = FindForm(caller);
 	if (frm == NULL && CountIncomingForms() > 25)
 	{

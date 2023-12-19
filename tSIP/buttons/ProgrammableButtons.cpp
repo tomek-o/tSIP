@@ -653,7 +653,7 @@ void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)
 	contacts.clear();
 	for (unsigned int btnId=0; btnId<btnConf.size(); btnId++)
 	{
-		class ButtonConf &cfg = btnConf[btnId];
+		const class ButtonConf &cfg = btnConf[btnId];
 		if (cfg.number != "")
 		{
 			if (cfg.type == Button::BLF)
@@ -933,12 +933,9 @@ void ProgrammableButtons::Create(TComponent* Owner,
 		TProgrammableButton *panel = new TProgrammableButton(Owner, dmButtons->imgList, scalingPercentage);
 		panel->Tag = i;
 		//panel->AlignWithMargins = true;
-		if (i < btnConf.size())
-		{
-			panel->Parent = GetBtnContainer(i)->GetButtonParent();
-			const ButtonConf &cfg = btnConf[i];			
-			panel->SetConfig(cfg);
-		}
+		panel->Parent = GetBtnContainer(i)->GetButtonParent();
+		const ButtonConf &cfg = btnConf[i];
+		panel->SetConfig(cfg);
 		panel->OnClick = SpeedDialPanelClick;
 		panel->OnDblClick = SpeedDialPanelClick;
 		panel->SetMouseUpDownCallback(OnPanelMouseUpDown);
@@ -1058,7 +1055,7 @@ void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
         }
 		int id = panel->Tag;
 
-		ButtonConf &cfg = btnConf[id];
+		const ButtonConf &cfg = btnConf[id];
 		if (cfg.type == Button::HOLD || cfg.type == Button::MUTE || cfg.type == Button::MUTE_RING)
 		{
 			panel->SetDown(!panel->GetDown());

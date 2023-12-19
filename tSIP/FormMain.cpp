@@ -91,8 +91,10 @@ namespace {
 	Contacts::Entry *lastContactEntry = NULL;
 	void ShowContactPopup(Contacts::Entry *entry)
 	{
+        assert(entry);
 		if (frmContactPopup->isNoteModified() && !appSettings.Contacts.storeNoteInSeparateFile)
 		{
+            frmContactPopup->UpdateEntry();
 			/** \todo Limit write frequency
 			*/
 			contacts.Write();

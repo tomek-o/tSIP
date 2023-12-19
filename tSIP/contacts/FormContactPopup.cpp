@@ -141,4 +141,12 @@ void TfrmContactPopup::AppendNoteText(AnsiString text)
 	note->Perform(EM_SCROLLCARET, 0, 0);
 }
 
+void TfrmContactPopup::UpdateEntry(void)
+{
+	if (entry)
+	{
+    	entry->note = note->Text;
+	}
+}
+
 

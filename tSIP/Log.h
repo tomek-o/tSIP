@@ -26,7 +26,7 @@ public:
 	/** \brief Select output log file
 	 *  \return zero on no error
 	 */
-	int SetFile(std::string);
+	int SetFile(const std::string &file);
 	void SetLogToFile(bool);
 	void SetFlush(bool state);
 	void SetMaxFileSize(unsigned int size);

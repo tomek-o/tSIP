@@ -32,9 +32,10 @@ CLog::CLog()
 	bFlush = false;
 	callbackLog = NULL;
 	maxFileSize = 0;
+	maxLogrotateCnt = 1;
 };
 
-int CLog::SetFile(std::string file)
+int CLog::SetFile(const std::string &file)
 {
 	ScopedLock<Mutex> lock(mutex);
 	sFile = file;

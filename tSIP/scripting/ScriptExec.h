@@ -126,7 +126,7 @@ public:
 	~ScriptExec();
 	void Run(const char* script);
 	void Break(void);
-	bool isRunning(void) {
+	bool isRunning(void) const {
 		return running;
 	}
 

@@ -31,6 +31,7 @@ public:		// User declarations
 	bool isNoteModified(void);
 	void InvalidateData(void);
 	void AppendNoteText(AnsiString text);
+	void UpdateEntry(void);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmContactPopup *frmContactPopup;

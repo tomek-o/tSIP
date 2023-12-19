@@ -15,7 +15,7 @@ enum BASE64_ALPHABET {
 	BASE64_ALPHABET_FSAFE	// file-safe
 };
 
-std::string base64_encode(unsigned char const* , unsigned int len, enum BASE64_ALPHABET alphabet = BASE64_ALPHABET_BASIC);
-std::string base64_decode(std::string const& s, enum BASE64_ALPHABET alphabet = BASE64_ALPHABET_BASIC);
+std::string base64_encode(unsigned char const* , unsigned int in_len, enum BASE64_ALPHABET alphabet = BASE64_ALPHABET_BASIC);
+std::string base64_decode(std::string const& encoded_string, enum BASE64_ALPHABET alphabet = BASE64_ALPHABET_BASIC);
 
 #endif // BASE64H

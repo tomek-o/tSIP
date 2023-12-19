@@ -217,7 +217,6 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg, bool term
 	enum dialog_info_status status = DIALOG_INFO_UNKNOWN;
 	struct dialog_info *dlg_info = arg;
 	const struct sip_hdr *hdr;
-	struct pl pl_remote_identity, pl_remote_identity_display;
 	struct dialog_info_context ctx;
 	SAX_Callbacks sax;
 
@@ -325,14 +324,6 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg, bool term
 #endif
 	(void)sip_treply(NULL, sip, msg, 200, "OK");
 
-#if 0
-	pl_set_str(&pl_remote_identity, ctx.identity);
-	pl_set_str(&pl_remote_identity_display, ctx.identity_display);
-	if (status == DIALOG_INFO_UNKNOWN)
-	{
-		status = ctx.status;
-	}
-#endif
 	contact_set_dialog_info(dlg_info->contact, ctx.ddata, ctx.dialog_data_cnt);
 }
 

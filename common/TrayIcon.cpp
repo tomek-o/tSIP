@@ -8,7 +8,9 @@
 #define WM_TRAYICON WM_USER + 1
 
 __fastcall TrayIcon::TrayIcon(TComponent* Owner)
-        : TComponent(Owner)
+		: TComponent(Owner),
+		ImageList(NULL),
+		PopupMenu(NULL)
 {
 	memset(&IconData, 0, sizeof(IconData));
 	IconData.cbSize = sizeof(IconData);
@@ -28,15 +30,10 @@ __fastcall TrayIcon::TrayIcon(TComponent* Owner)
 
 __fastcall TrayIcon::~TrayIcon()
 {
-	ImageList    = NULL;
-	PopupMenu    = NULL;
-
 	TrayMessage(NIM_DELETE);
 	DeallocateHWnd(IconHandle);
 	delete Timer;
-
 	delete Icon;
-	Icon         = NULL;
 }
 //---------------------------------------------------------------------------
 

@@ -50,7 +50,7 @@ public:
 	void SwitchAudioSource(unsigned int callUid, AnsiString audioMod, AnsiString audioDev);
 	/** \brief Change audio player device for call
 	*/
-	void SwitchAudioPlayer(unsigned int callUidd, AnsiString audioMod, AnsiString audioDev);
+	void SwitchAudioPlayer(unsigned int callUid, AnsiString audioMod, AnsiString audioDev);
 	void SwitchVideoSource(unsigned int callUid, AnsiString videoMod, AnsiString videoDev);
 	void UpdateVolume(void);
 	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines);

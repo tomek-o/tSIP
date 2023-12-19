@@ -34,7 +34,7 @@ AnsiString GetRcDataAsString(unsigned int id)
 	if(MemoryHandle == NULL)
 		return "";
 
-	BYTE *MemPtr = (BYTE *)LockResource(MemoryHandle);
+	BYTE *MemPtr = reinterpret_cast<BYTE *>(LockResource(MemoryHandle));
 
 	AnsiString ret = AnsiString(reinterpret_cast<char*>(MemPtr), Size);
 
