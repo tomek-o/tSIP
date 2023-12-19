@@ -24,11 +24,8 @@ __fastcall TfrmContactPopup::TfrmContactPopup(TComponent* Owner)
 
 void TfrmContactPopup::SetData(Contacts::Entry *entry, bool storeNoteInSeparateFile)
 {
-    this->storeNoteInSeparateFile = storeNoteInSeparateFile;
-	if (Visible && entry)
-	{
-		entry->note = note->Text;
-	}
+	assert(entry);
+	this->storeNoteInSeparateFile = storeNoteInSeparateFile;
 	this->entry = entry;
 	AnsiString text;
 	text.sprintf("%s, %s", entry->description.c_str(), entry->GetMainUri().c_str());
