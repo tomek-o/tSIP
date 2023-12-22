@@ -121,6 +121,7 @@ int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_ca
 	struct pl pl_dialbuf;
 	size_t len;
 	struct account *acc;
+	struct sa socketaddr;
 
 	if (!ua || !peer || !msg)
 		return EINVAL;
@@ -142,8 +143,13 @@ int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_ca
 
 	err |= mbuf_write_str(dialbuf, peer);
 
-	/* Assuming that if sip: is present then domain is present */
-	if (0 != re_regex(peer, len, "sip:")) {
+	/* Append domain if missing */
+	/* Assuming that if sip: is present then domain is also present */
+	/* Assuming that if dialed string looks like IP then domain should not be appended */
+	if (0 != re_regex(uri, len, "[^@]+@[^]+", NULL, NULL) &&
+		0 != re_regex(uri, len, "sip:") &&
+		0 != net_inet_pton(uri, &socketaddr)
+		) {
 #if HAVE_INET6
 		if (AF_INET6 == ua->acc->luri.af)
 			err |= mbuf_printf(dialbuf, "@[%r]", &acc->luri.host);
