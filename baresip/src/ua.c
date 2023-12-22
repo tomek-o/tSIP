@@ -790,7 +790,7 @@ int ua_connect(struct ua *ua, unsigned int callUid, struct call **callp,
 	if (0 != re_regex(uri, len, "[^@]+@[^]+", NULL, NULL)) {
 #else
 	// above: does not allow to call to sip:ip_address, required user part of URI
-	// below: assuming that if sip: is present than domain is present
+	// below: assuming that if sip: is present then domain is present
 	if (0 != re_regex(uri, len, "sip:")) {
 #endif
 
