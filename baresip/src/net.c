@@ -183,7 +183,7 @@ int net_init(const struct config_net *cfg, int af)
 
 		bool got_it = false;
 
-		(void)re_printf("Binding to interface '%s'\n",
+		(void)re_printf("Binding to interface / network adapter '%s'\n",
 				cfg->ifname);
 
 		str_ncpy(net.ifname, cfg->ifname, sizeof(net.ifname));
