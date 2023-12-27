@@ -52,6 +52,7 @@ struct sip_ctrans {
 	enum state state;
 	uint32_t txc;
 	bool invite;
+	bool shutdown;
 };
 
 
@@ -186,6 +187,12 @@ static void retransmit_handler(void *arg)
 
 	ct->txc++;
 
+	if (ct->shutdown && ct->txc >= 3) {
+		terminate(ct, ETIMEDOUT);
+		mem_deref(ct);
+		return;
+	}
+
 	switch (ct->state) {
 
 	case TRYING:
@@ -207,7 +214,7 @@ static void retransmit_handler(void *arg)
 	tmr_start(&ct->tmre, timeout, retransmit_handler, ct);
 
 	err = sip_transp_send(&ct->qent, ct->sip, NULL, ct->tp, &ct->dst,
-			      ct->host, ct->mb, transport_handler, ct);
+				  ct->host, ct->mb, transport_handler, ct);
 	if (err) {
 		terminate(ct, err);
 		mem_deref(ct);
@@ -311,7 +318,7 @@ static bool response_handler(const struct sip_msg *msg, void *arg)
 
 int sip_ctrans_request(struct sip_ctrans **ctp, struct sip *sip,
 		       enum sip_transp tp, const struct sa *dst, char *met,
-		       char *branch, char *host, struct mbuf *mb,
+			   char *branch, char *host, struct mbuf *mb,
 		       sip_resp_h *resph, void *arg)
 {
 	struct sip_ctrans *ct;
@@ -449,4 +456,20 @@ int sip_ctrans_debug(struct re_printf *pf, const struct sip *sip)
 	hash_apply(sip->ht_ctrans, debug_handler, pf);
 
 	return err;
+}
+
+static bool ctrans_shutdown_handler(struct le *le, void *arg)
+{
+	struct sip_ctrans *ct = le->data;
+	(void)arg;
+	ct->shutdown = true;
+	return false;
+}
+
+int  sip_ctrans_shutdown(struct sip *sip)
+{
+	if (sip == NULL)
+		return EINVAL;
+	hash_apply(sip->ht_ctrans, ctrans_shutdown_handler, NULL);
+	return 0;
 }

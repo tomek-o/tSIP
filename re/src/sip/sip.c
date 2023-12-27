@@ -155,6 +155,7 @@ void sip_close(struct sip *sip, bool force)
 	}
 	else if (!sip->closing) {
 		sip->closing = true;
+		sip_ctrans_shutdown(sip);
 		mem_deref(sip);
 	}
 }

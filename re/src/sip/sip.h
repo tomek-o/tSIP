@@ -57,6 +57,8 @@ int  sip_ctrans_request(struct sip_ctrans **ctp, struct sip *sip,
 int  sip_ctrans_cancel(struct sip_ctrans *ct);
 int  sip_ctrans_init(struct sip *sip, uint32_t sz);
 int  sip_ctrans_debug(struct re_printf *pf, const struct sip *sip);
+/** \brief Reduce maximum time of current client transactions when closing or restarting client */
+int  sip_ctrans_shutdown(struct sip *sip);
 
 
 /* strans */
