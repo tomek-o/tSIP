@@ -1130,7 +1130,12 @@ Version 0.3
 	- added name to aubuf, extended aubuf logging
 	- added option to copy button properties to multiple buttons from specified range
 
-Version 0.3.0.1
+Version 0.3.1
 	- FIXED: in v0.3 call history entry for outgoing call was unnecessary containing full SIP URI is user dialed with just a number/user part
+	- FIXED: DTMF reception using scripting was broken in v0.3
+	- direct URI dialing is not requiring "sip:" prefix if dialed string contains "@" in the middle or if it looks like a valid quad-dotted decimal IPv4 address
+	- Tools menu: added window with current scripts and plugins variables
+	- not requiring sip: prefix for common direct IP/URI dialing; for calling and messaging account domain is not appended if dialed string starts with "sip:", contains "@" in the middle or is a valid quad-dotted decimal IPv4
+	- reducing number of client transaction retransmission when shutting down application or restarting SIP stack to speed up these operation
 */
 
