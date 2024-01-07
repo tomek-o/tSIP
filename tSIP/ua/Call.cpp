@@ -1,6 +1,3 @@
-//---------------------------------------------------------------------------
-
-
 #pragma hdrstop
 
 #include "Call.h"
@@ -9,13 +6,12 @@
 #include "Settings.h"
 #include "buttons/ProgrammableButtons.h"
 #include "buttons/ProgrammableButton.h"
+#include "PhoneInterface.h"
 #include "Globals.h"
 #include "Log.h"
 #include "common/TelecomUtils.h"
 
 #include <ExtCtrls.hpp>
-
-//---------------------------------------------------------------------------
 
 #pragma package(smart_init)
 
@@ -71,6 +67,7 @@ void Call::setMute(bool state)
 	{
 		buttons.UpdateBtnState(Button::MUTE, state);
 	}
+	PhoneInterface::UpdateMuteState(uid, static_cast<int>(state));
 	ShowOnLineButton();
 }
 

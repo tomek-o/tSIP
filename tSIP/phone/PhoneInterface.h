@@ -67,6 +67,7 @@ private:
 	pfSetRegistrationState dllSetRegistrationState;
 	pfSetCallState dllSetCallState;
 	pfRing dllRing;
+	pfSetMuteState dllSetMuteState;
 	pfSendMessageText dllSendMessageText;
 
     pfSetPagingTxCallback dllSetPagingTxCallback;
@@ -126,6 +127,8 @@ public:
 	static void UpdateCallState(int state, const char* display);
 
 	static void UpdateRing(int state);
+
+	static void UpdateMuteState(unsigned int callUid, int state);
 
 	static void UpdatePagingTxState(int state);
 
@@ -227,6 +230,13 @@ public:
 			state = 0;
 		if (dllRing)
 			return dllRing(state);
+		return -1;
+	}
+
+	int SetMuteState(unsigned int callUid, int state)
+	{
+		if (dllSetMuteState)
+			return dllSetMuteState(callUid, state);
 		return -1;
 	}
 

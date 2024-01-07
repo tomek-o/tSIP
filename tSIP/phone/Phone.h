@@ -217,6 +217,10 @@ DECLARE_FN(int, SetCallState, int state, const char* display);
 
 DECLARE_FN(int, Ring, int state);
 
+/** \brief Set state of the microphone / tx audio mute function
+*/
+DECLARE_FN(int, SetMuteState, unsigned int callUid, int state);
+
 /*
  * PAGING (transmitter) - added 2016.01
  */

@@ -290,6 +290,15 @@ void PhoneInterface::UpdateRing(int state)
 	}
 }
 
+void PhoneInterface::UpdateMuteState(unsigned int callUid, int state)
+{
+	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
+	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
+	{
+		itinst->second->SetMuteState(callUid, state);
+	}
+}
+
 void PhoneInterface::UpdatePagingTxState(int state)
 {
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
@@ -648,6 +657,7 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetRegistrationState(NULL),
 	dllSetCallState(NULL),
 	dllRing(NULL),
+	dllSetMuteState(NULL),
 	dllSendMessageText(NULL),
 	dllSetPagingTxCallback(NULL),
 	dllSetPagingTxState(NULL),
@@ -724,6 +734,7 @@ int PhoneInterface::Load(void)
 	dllSetRegistrationState = (pfSetRegistrationState)GetProcAddress(hInstance, "SetRegistrationState");
 	dllSetCallState = (pfSetCallState)GetProcAddress(hInstance, "SetCallState");
 	dllRing = (pfRing)GetProcAddress(hInstance, "Ring");
+	dllSetMuteState = (pfSetMuteState)GetProcAddress(hInstance, "SetMuteState");
 	dllSendMessageText = (pfSendMessageText)GetProcAddress(hInstance, "SendMessageText");
 
 	dllSetPagingTxCallback = (pfSetPagingTxCallback)GetProcAddress(hInstance, "SetPagingTxCallback");
