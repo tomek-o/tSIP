@@ -592,6 +592,31 @@ static int l_Answer(lua_State* L)
 	return 0;
 }
 
+static int l_Mute(lua_State* L)
+{
+	Call *call = Calls::GetCurrentCall();
+	if (call)
+	{
+		int argCount = lua_gettop(L);
+		if (argCount >= 1)
+		{
+			int state = lua_tointeger(L, 1);
+			call->setMute(state);
+		}
+	}
+	return 0;
+}
+
+static int l_MuteToggle(lua_State* L)
+{
+	Call *call = Calls::GetCurrentCall();
+	if (call)
+	{
+		call->setMute(!call->mute);
+	}
+	return 0;
+}
+
 static int l_SetDial(lua_State* L)
 {
 	const char* str = lua_tostring( L, -1 );
@@ -1997,6 +2022,8 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_Hangup2, "Hangup2", "Disconnect or reject specific incoming call", "Examples:\n    Hangup2(callUid)\n    Hangup2(callUid, sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_HangupAll, "HangupAll", "Disconnect all calls", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer current or specified incoming call", "Takes call UID as optional argument to answer specific call.");
+	lua_register2(L, ScriptImp::l_Mute, "Mute", "Set mute state for transmitted audio (microphone) of the current call", "Examples:\nMute(1) -- mute\nMute(0) -- unmute");
+	lua_register2(L, ScriptImp::l_MuteToggle, "MuteToggle", "Toggle (reverse) mute state for current call", "");
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");
 	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "Example: SwitchAudioSource(\"aufile\", \"file.wav\").");
