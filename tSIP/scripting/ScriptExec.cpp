@@ -592,29 +592,110 @@ static int l_Answer(lua_State* L)
 	return 0;
 }
 
-static int l_Mute(lua_State* L)
+static int l_SetMute(lua_State* L)
 {
-	Call *call = Calls::GetCurrentCall();
+	Call *call = GetCall(L);
 	if (call)
 	{
 		int argCount = lua_gettop(L);
-		if (argCount >= 1)
+		if (argCount >= 2)
 		{
-			int state = lua_tointeger(L, 1);
+			int state = lua_tointeger(L, 2);
 			call->setMute(state);
 		}
+		else
+		{
+			LOG("Lua error: missing state argument for SetMute()\n");
+		}
+	}
+	else
+	{
+		LOG("Lua error: call for SetMute() not found\n");
 	}
 	return 0;
 }
 
-static int l_MuteToggle(lua_State* L)
+static int l_ToggleMute(lua_State* L)
 {
-	Call *call = Calls::GetCurrentCall();
+	Call *call = GetCall(L);
 	if (call)
 	{
 		call->setMute(!call->mute);
 	}
+	else
+	{
+		LOG("Lua error: call for ToggleMute() not found\n");
+	}
 	return 0;
+}
+
+static int l_GetMute(lua_State* L)
+{
+	bool mute = false;
+	Call *call = GetCall(L);
+	if (call)
+	{
+		mute = call->mute;
+	}
+	else
+	{
+		LOG("Lua error: call for GetMute() not found\n");
+	}
+	lua_pushinteger(L, mute);	
+	return 1;
+}
+
+static int l_SetHold(lua_State* L)
+{
+	Call *call = GetCall(L);
+	if (call)
+	{
+		int argCount = lua_gettop(L);
+		if (argCount >= 2)
+		{
+			int state = lua_tointeger(L, 2);
+			call->setHold(state);
+		}
+		else
+		{
+			LOG("Lua error: missing state argument for SetHold()\n");  
+		}
+	}
+	else
+	{
+		LOG("Lua error: call for SetHold() not found\n");
+	}
+	return 0;
+}
+
+static int l_ToggleHold(lua_State* L)
+{
+	Call *call = GetCall(L);
+	if (call)
+	{
+		call->setHold(!call->hold);
+	}
+	else
+	{
+		LOG("Lua error: call for ToggleHold() not found\n");
+	}
+	return 0;
+}
+
+static int l_GetHold(lua_State* L)
+{
+	bool hold = false;
+	Call *call = GetCall(L);
+	if (call)
+	{
+		hold = call->hold;
+	}
+	else
+	{
+		LOG("Lua error: call for GetHold() not found\n");
+	}
+	lua_pushinteger(L, hold);	
+	return 1;
 }
 
 static int l_SetDial(lua_State* L)
@@ -717,13 +798,13 @@ static int l_SwitchAudioSource(lua_State* L)
 	const char* mod = lua_tostring( L, 1 );
 	if (mod == NULL)
 	{
-		LOG("Lua error: mod == NULL\n");
+		LOG("Lua error: SwitchAudioSource mod == NULL\n");
 		return 0;
 	}
 	const char* dev = lua_tostring( L, 2 );
 	if (dev == NULL)
 	{
-		LOG("Lua error: dev == NULL\n");
+		LOG("Lua error: SwitchAudioSource dev == NULL\n");
 		return 0;
 	}
 	unsigned int uid = Calls::GetCurrentCallUid();
@@ -743,19 +824,19 @@ static int l_SwitchAudioSource2(lua_State* L)
 	}
 	else
 	{
-		LOG("Lua error: missing call UID\n");
+		LOG("Lua error: SwitchAudioSource2 missing call UID\n");
 		return 0;
 	}
-	const char* mod = lua_tostring( L, 1 );
+	const char* mod = lua_tostring( L, 2 );
 	if (mod == NULL)
 	{
-		LOG("Lua error: mod == NULL\n");
+		LOG("Lua error: SwitchAudioSource2 mod == NULL\n");
 		return 0;
 	}
-	const char* dev = lua_tostring( L, 2 );
+	const char* dev = lua_tostring( L, 3 );
 	if (dev == NULL)
 	{
-		LOG("Lua error: dev == NULL\n");
+		LOG("Lua error: SwitchAudioSource2 dev == NULL\n");
 		return 0;
 	}
 	UA->SwitchAudioSource(callUid, mod, dev);
@@ -768,13 +849,13 @@ static int l_SwitchAudioPlayer(lua_State* L)
 	const char* mod = lua_tostring( L, 1 );
 	if (mod == NULL)
 	{
-		LOG("Lua error: mod == NULL\n");
+		LOG("Lua error: SwitchAudioPlayer mod == NULL\n");
 		return 0;
 	}
 	const char* dev = lua_tostring( L, 2 );
 	if (dev == NULL)
 	{
-		LOG("Lua error: dev == NULL\n");
+		LOG("Lua error: SwitchAudioPlayer dev == NULL\n");
 		return 0;
 	}
 	unsigned int uid = Calls::GetCurrentCallUid();
@@ -794,19 +875,19 @@ static int l_SwitchAudioPlayer2(lua_State* L)
 	}
 	else
 	{
-		LOG("Lua error: missing call UID\n");
+		LOG("Lua error: SwitchAudioPlayer2 missing call UID\n");
 		return 0;
 	}
-	const char* mod = lua_tostring( L, 1 );
+	const char* mod = lua_tostring( L, 2 );
 	if (mod == NULL)
 	{
-		LOG("Lua error: mod == NULL\n");
+		LOG("Lua error: SwitchAudioPlayer2 mod == NULL\n");
 		return 0;
 	}
-	const char* dev = lua_tostring( L, 2 );
+	const char* dev = lua_tostring( L, 3 );
 	if (dev == NULL)
 	{
-		LOG("Lua error: dev == NULL\n");
+		LOG("Lua error: SwitchAudioPlayer2 dev == NULL\n");
 		return 0;
 	}
 	UA->SwitchAudioPlayer(callUid, mod, dev);
@@ -819,13 +900,13 @@ static int l_SwitchVideoSource(lua_State* L)
 	const char* mod = lua_tostring( L, 1 );
 	if (mod == NULL)
 	{
-		LOG("Lua error: mod == NULL\n");
+		LOG("Lua error: SwitchVideoSource mod == NULL\n");
 		return 0;
 	}
 	const char* dev = lua_tostring( L, 2 );
 	if (dev == NULL)
 	{
-		LOG("Lua error: dev == NULL\n");
+		LOG("Lua error: SwitchVideoSource dev == NULL\n");
 		return 0;
 	}
 	unsigned int uid = Calls::GetCurrentCallUid();
@@ -845,16 +926,16 @@ static int l_SwitchVideoSource2(lua_State* L)
 	}
 	else
 	{
-		LOG("Lua error: missing call UID\n");
+		LOG("Lua error: SwitchVideoSource2 missing call UID\n");
 		return 0;
 	}
-	const char* mod = lua_tostring( L, 1 );
+	const char* mod = lua_tostring( L, 2 );
 	if (mod == NULL)
 	{
-		LOG("Lua error: mod == NULL\n");
+		LOG("Lua error: SwitchVideoSource2 mod == NULL\n");
 		return 0;
 	}
-	const char* dev = lua_tostring( L, 2 );
+	const char* dev = lua_tostring( L, 3 );
 	if (dev == NULL)
 	{
 		LOG("Lua error: dev == NULL\n");
@@ -2022,8 +2103,12 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_Hangup2, "Hangup2", "Disconnect or reject specific incoming call", "Examples:\n    Hangup2(callUid)\n    Hangup2(callUid, sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_HangupAll, "HangupAll", "Disconnect all calls", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer current or specified incoming call", "Takes call UID as optional argument to answer specific call.");
-	lua_register2(L, ScriptImp::l_Mute, "Mute", "Set mute state for transmitted audio (microphone) of the current call", "Examples:\nMute(1) -- mute\nMute(0) -- unmute");
-	lua_register2(L, ScriptImp::l_MuteToggle, "MuteToggle", "Toggle (reverse) mute state for current call", "");
+	lua_register2(L, ScriptImp::l_SetMute, "SetMute", "Set mute state for transmitted audio (microphone) of the specified call", "Examples:\nSetMute(callUid, 1) -- mute\nSetMute(callUid, 0) -- unmute");
+	lua_register2(L, ScriptImp::l_ToggleMute, "ToggleMute", "Toggle (reverse) mute state for current or specified call", "Takes callUid as optional argument.");
+	lua_register2(L, ScriptImp::l_GetMute, "GetMute", "Get mute state for current call or specified call", "Takes callUid as optional argument, returns 0/1.");
+	lua_register2(L, ScriptImp::l_SetHold, "SetHold", "Set hold state for specified call", "Example: SetHold(callUid, 1).");
+	lua_register2(L, ScriptImp::l_ToggleHold, "ToggleHold", "Toggle hold state for current or specified call", "Examples:\nToggleHold(callUid)\nToggleHold()");
+	lua_register2(L, ScriptImp::l_GetHold, "GetHold", "Get hold state for current or specified call", "Examples:\nlocal state = GetHold()\nlocal state2 = GetHold(callUid)");
 	lua_register2(L, ScriptImp::l_GetDial, "GetDial", "Get number (string) from softphone dial edit", "");
 	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "Example: SwitchAudioSource(\"aufile\", \"file.wav\").");
