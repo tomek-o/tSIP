@@ -1137,5 +1137,12 @@ Version 0.3.1
 	- Tools menu: added window with current scripts and plugins variables
 	- not requiring sip: prefix for common direct IP/URI dialing; for calling and messaging account domain is not appended if dialed string starts with "sip:", contains "@" in the middle or is a valid quad-dotted decimal IPv4
 	- reducing number of client transaction retransmission when shutting down application or restarting SIP stack to speed up these operation
+
+Version 0.3.2
+	- plugin interface: added SetMute function
+	- scripting:
+		- added SetMute, ToggleMute, GetMute functions
+		- added SetHold, ToggleHold, GetHold functions
+		- added GetCallPeerName function
 */
 

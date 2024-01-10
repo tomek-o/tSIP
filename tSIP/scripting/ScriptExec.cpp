@@ -1149,6 +1149,17 @@ static int l_GetCallPeer(lua_State* L)
 	return 1;
 }
 
+static int l_GetCallPeerName(lua_State* L)
+{
+	Call* call = GetCall(L);
+	if (call == NULL)
+		return 0;
+
+	AnsiString peerName = call->getPeerName();
+	lua_pushstring( L, peerName.c_str() );
+	return 1;
+}
+
 static int l_GetCallInitialRxInvite(lua_State* L)
 {
 	Call* call = GetCall(L);
@@ -2131,6 +2142,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verfication state. Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_IsCallIncoming, "IsCallIncoming", "Check if current or specified call is incoming", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallPeer, "GetCallPeer", "Get number/URI of caller/callee from current or specified call", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallPeerName, "GetCallPeerName", "Get name of caller/callee from current or specified call", "Takes one, optional argument: call UID. Retuns 0 results, display name or (depending on settings) PAI display name.");
 	lua_register2(L, ScriptImp::l_GetCallInitialRxInvite, "GetCallInitialRxInvite", "Get full text of initial received INVITE", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallCodecName, "GetCallCodecName", "Get name of codec used during current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetContactName, "GetContactName", "Get number description from phonebook", "");
