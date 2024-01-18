@@ -1144,5 +1144,9 @@ Version 0.3.2
 		- added SetMute, ToggleMute, GetMute functions
 		- added SetHold, ToggleHold, GetHold functions
 		- added GetCallPeerName function
+		- fixed multiple-call variants of functions switching audio/video inputs and outputs during the call
+		- added devices = GetAudioDevicesList(moduleName, direction) function, returning array/table
+		- if GetAudioDevice or GetAudioDevicesList is called and audio devices list was not yet refreshed for the first time (initialized), it is done automatically
+	- added/fixed closing with Esc in few windows			
 */
 
