@@ -1750,6 +1750,9 @@ static int l_GetAudioDevice(lua_State* L)
 		}
 	}
 
+	if (!AudioDevicesList::Instance().IsFilled())
+		AudioDevicesList::Instance().Refresh();	
+
 	std::vector<AnsiString> *v = NULL;
 	if (strcmp(module, AudioModules::portaudio) == 0)
 	{
@@ -1815,6 +1818,9 @@ static int l_GetAudioDevicesList(lua_State* L)
 			return 0;
 		}
 	}
+
+	if (!AudioDevicesList::Instance().IsFilled())
+		AudioDevicesList::Instance().Refresh();
 
 	std::vector<AnsiString> *v = NULL;
 	if (strcmp(module, AudioModules::portaudio) == 0)

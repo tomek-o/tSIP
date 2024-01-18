@@ -14,7 +14,8 @@
 
 #pragma package(smart_init)
 
-AudioDevicesList::AudioDevicesList(void)
+AudioDevicesList::AudioDevicesList(void):
+	filled(false)
 {
 
 }
@@ -77,6 +78,8 @@ void AudioDevicesList::Refresh(void)
 			winwaveDevsIn.push_back(wic.szPname);
 		}
 	}
+
+	filled = true;
 }
 
 void AudioDevicesList::FillComboBox(Stdctrls::TComboBox *target, AnsiString module, bool out, AnsiString selected)
