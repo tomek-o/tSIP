@@ -1,7 +1,12 @@
 //---------------------------------------------------------------------------
-
 #ifndef SpeedDialStatusH
 #define SpeedDialStatusH
+
+/** \brief List of notifications/warnings/errors that can be displayed as a part of a button container.
+
+	Purpose: displaying various messages as a list in a kiosk applications.
+*/
+
 //---------------------------------------------------------------------------
 #include "common/Observable.h"
 #include <windows.h>
