@@ -1751,14 +1751,14 @@ static int l_GetAudioDevice(lua_State* L)
 	}
 
 	std::vector<AnsiString> *v = NULL;
-	if (strcmp(module, "portaudio") == 0)
+	if (strcmp(module, AudioModules::portaudio) == 0)
 	{
 		if (out)
 			v = &AudioDevicesList::Instance().portaudioDevsOut;
 		else
 			v = &AudioDevicesList::Instance().portaudioDevsIn;
 	}
-	else if (strcmp(module, "winwave") == 0 || strcmp(module, "winwave2") == 0)
+	else if (strcmp(module, AudioModules::winwave) == 0 || strcmp(module, AudioModules::winwave2) == 0)
 	{
 		if (out)
 			v = &AudioDevicesList::Instance().winwaveDevsOut;
