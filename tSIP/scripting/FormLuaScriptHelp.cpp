@@ -143,3 +143,12 @@ void __fastcall TfrmLuaScriptHelp::miCopyBriefDescriptionClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmLuaScriptHelp::FormKeyPress(TObject *Sender, char &Key)
+{
+	if (Key == VK_ESCAPE)
+	{
+		Close();
+    }	
+}
+//---------------------------------------------------------------------------
+

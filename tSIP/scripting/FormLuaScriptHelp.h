@@ -36,6 +36,7 @@ __published:	// IDE-managed Components
           bool Selected);
 	void __fastcall miCopyFunctionNameClick(TObject *Sender);
 	void __fastcall miCopyBriefDescriptionClick(TObject *Sender);
+	void __fastcall FormKeyPress(TObject *Sender, char &Key);
 private:	// User declarations
 	std::vector<ScriptExec::Symbol> entries;
 	void Filter(void);

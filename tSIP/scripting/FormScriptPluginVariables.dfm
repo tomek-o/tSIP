@@ -12,6 +12,7 @@ object frmScriptPluginVariables: TfrmScriptPluginVariables
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   OnKeyPress = FormKeyPress
   OnShow = FormShow
@@ -25,9 +26,6 @@ object frmScriptPluginVariables: TfrmScriptPluginVariables
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitLeft = 216
-    ExplicitTop = 264
-    ExplicitWidth = 185
     object btnRead: TButton
       Left = 16
       Top = 6
@@ -69,10 +67,6 @@ object frmScriptPluginVariables: TfrmScriptPluginVariables
     TabOrder = 1
     ViewStyle = vsReport
     OnData = lvVariablesData
-    ExplicitLeft = 104
-    ExplicitTop = 56
-    ExplicitWidth = 250
-    ExplicitHeight = 150
   end
   object tmrAutoRefresh: TTimer
     Enabled = False

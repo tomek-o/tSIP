@@ -23,6 +23,7 @@ __published:	// IDE-managed Components
 	void __fastcall lvItemsData(TObject *Sender, TListItem *Item);
 	void __fastcall lvItemsSelectItem(TObject *Sender, TListItem *Item,
           bool Selected);
+	void __fastcall FormKeyPress(TObject *Sender, char &Key);
 private:	// User declarations
 	void SelectItem(TListItem *Item);
 public:		// User declarations

@@ -90,3 +90,12 @@ void TfrmTroubleshooting::SelectItem(TListItem *Item)
 	memoDetails->Lines->Text = text;
 }
 
+void __fastcall TfrmTroubleshooting::FormKeyPress(TObject *Sender, char &Key)
+{
+	if (Key == VK_ESCAPE)
+	{
+		Close();
+    }	
+}
+//---------------------------------------------------------------------------
+
