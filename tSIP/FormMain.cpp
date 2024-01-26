@@ -1404,7 +1404,7 @@ void TfrmMain::PollCallbackQueue(void)
 	{
 		case Callback::CALL_STATE:
 		{
-			LOG("Callback::CALL_STATE, call uid = %d, state = %d\n", cb.callUid, static_cast<int>(cb.state));
+			LOG("Call [uid = %d] state changed to %s (%d)\n", cb.callUid, Callback::GetCallStateName(cb.state), static_cast<int>(cb.state));
 			switch(cb.state)
 			{
 			case Callback::CALL_STATE_INCOMING: {
