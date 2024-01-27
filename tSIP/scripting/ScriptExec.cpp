@@ -2172,8 +2172,17 @@ void ScriptExec::Run(const char* script)
 	lua_register(L, "print", ScriptImp::LuaPrint);
 
 	lua_register2(L, ScriptImp::l_ShowMessage, "ShowMessage", "Show simple message dialog", "Example: ShowMessage(\"text\")");
-	lua_register2(L, l_MessageBox, "MessageBox", "Show standard WinAPI MessageBox", "");
-	lua_register2(L, ScriptImp::l_InputQuery, "InputQuery", "Display modal dialog allowing to take text input from the user", "");
+	lua_register2(L, l_MessageBox, "MessageBox", "Show standard WinAPI MessageBox",
+		"Examples:\n"
+		"  MessageBox(\"message with just [OK] button\", \"message title\", 0)\n"
+		"  MessageBox(\"message with ICON_INFORMATION\", \"message title\", 64)\n"
+		"  local res = MessageBox(\"message with MB_YESNO and question icon\", \"message title\", 4+32)\n"
+		"  if res == 6 then\n"
+		"  \tShowMessage(\"\\\"Yes\\\" was pressed\")\n"
+		"  else\n"
+		"  \tShowMessage(\"Result is other than \\\"Yes\\\"\")\n"
+		"  end  ");
+	lua_register2(L, ScriptImp::l_InputQuery, "InputQuery", "Display modal dialog allowing to take text input from the user", "Example: local text, isAccepted = InputQuery(caption, prompt, defaultText).");
 	lua_register2(L, ScriptImp::l_Sleep, "Sleep", "Pause script for specified time (miliseconds)", "Function returns non-zero if it exited due to user break, zero if full delay passed. Example: Sleep(100).");
 	lua_register2(L, l_Beep, "Beep", "Equivalent of WinAPI Beep(frequency, time)", "Example: Beep(400, 250).");
 	lua_register2(L, ScriptImp::l_CheckBreak, "CheckBreak", "Check if \"Break\" button was pressed by the user", "Allowing to interrupt scripts");
@@ -2236,7 +2245,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetInitialCallTarget, "GetInitialCallTarget", "Get number/URI that was initially dialed by the user", "");
 	lua_register2(L, ScriptImp::l_SetInitialCallTarget, "SetInitialCallTarget", "Override number dialed by the user", "");
 	lua_register2(L, ScriptImp::l_SetCallTarget, "SetCallTarget", "Overwrite both initial call target and current URI of the call", "");
-	lua_register2(L, ScriptImp::l_ResetCall, "ResetCall", "Clear whole call state", "Use with care");
+	lua_register2(L, ScriptImp::l_ResetCall, "ResetCall", "Clear whole call state", "Use with care!");
 	lua_register2(L, ScriptImp::l_GetPreviousCallStatusCode, "GetPreviousCallStatusCode", "Get status code of call that ended", "");
 	lua_register2(L, ScriptImp::l_GetPreviousCallReplyLine, "GetPreviousCallReplyLine", "Get SIP reply line from the call that ended", "");
 	lua_register2(L, ScriptImp::l_ShellExecute, "ShellExecute", "Run another application (WinAPI equivalent)", "");
@@ -2244,9 +2253,9 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetRegistrationState, "GetRegistrationState", "Check if softphone is registered", "");
 	lua_register2(L, ScriptImp::l_Unregister, "Unregister", "Unregister SIP account", "");
 	lua_register2(L, ScriptImp::l_Reregister, "Reregister", "Re-register SIP account", "");
-	lua_register2(L, ScriptImp::l_SetButtonCaption, "SetButtonCaption", "Set text for the first line of the button", "");
-	lua_register2(L, ScriptImp::l_SetButtonCaption2, "SetButtonCaption2", "Set text for the second line of the button", "");
-	lua_register2(L, ScriptImp::l_SetButtonDown, "SetButtonDown", "Change button state to down/pressed", "Example: SetButtonDown(buttonId, buttoState).");
+	lua_register2(L, ScriptImp::l_SetButtonCaption, "SetButtonCaption", "Set text for the first line of the button", "Example: SetButtonCaption(buttonId, text).");
+	lua_register2(L, ScriptImp::l_SetButtonCaption2, "SetButtonCaption2", "Set text for the second line of the button", "Example: SetButtonCaption2(buttonId, text).");
+	lua_register2(L, ScriptImp::l_SetButtonDown, "SetButtonDown", "Change button state to down/pressed", "Example: SetButtonDown(buttonId, buttonState).");
 	lua_register2(L, ScriptImp::l_GetButtonDown, "GetButtonDown", "Check if button is down", "Example state = GetButtonDown(buttonId) -- returning 0 or 1.");
 	lua_register2(L, ScriptImp::l_GetButtonMouseDown, "GetButtonMouseDown", "Check is mouse button is pressed on programmable button", "");
 	lua_register2(L, ScriptImp::l_GetButtonBlfState, "GetButtonBlfState", "Get BLF state from the button", "");
