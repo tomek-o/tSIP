@@ -27,9 +27,10 @@ namespace {
 }
 //---------------------------------------------------------------------------
 __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
-	: TForm(Owner)
+	: TForm(Owner),
+	lastTab(NULL)
 {
-    pageControl->ActivePage = tsVisual;
+    pageControl->ActivePage = tsGeneral;
 	for (int i=0; i<Button::TYPE_LIMITER; i++)
 	{
 		cbType->Items->Add(Button::TypeName((Button::Type)i));
@@ -74,7 +75,45 @@ __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
 #ifndef USE_VIDEO
 	lblNoVideo->Visible = true;
 #endif
+
+	for (int i=0; i<pageControl->PageCount; i++)
+	{
+		pageControl->Pages[i]->TabVisible = false;
+		pageControl->Pages[i]->Visible = false;
+	}
+
+	CreatePages();
 }
+
+TTreeNode* TfrmButtonEdit::CreatePagesNode(TTreeNode *parent, TTabSheet *tab)
+{
+	TTreeNode *node;
+	if (parent == NULL)
+		node = tvSelector->Items->Add(parent, tab->Caption);
+	else
+		node = tvSelector->Items->AddChild(parent, tab->Caption);
+	node->Data = tab;
+
+	return node;
+}
+
+void TfrmButtonEdit::CreatePages(void)
+{
+	tvSelector->Items->Clear();
+
+	CreatePagesNode(NULL, tsGeneral);
+	CreatePagesNode(NULL, tsBehavior);
+	CreatePagesNode(NULL, tsColors);
+	CreatePagesNode(NULL, tsBitmaps);
+
+
+	if (tvSelector->Items->Count > 0)
+	{
+		tvSelector->Items->Item[0]->Selected = true;
+	}
+}
+
+
 //---------------------------------------------------------------------------
 void __fastcall TfrmButtonEdit::FormShow(TObject *Sender)
 {
@@ -107,8 +146,8 @@ void TfrmButtonEdit::ApplyConf(void)
 	{
 		cbCaptionLines->ItemIndex = cfg->captionLines - 1;
 	}
-	edCaption->Text = cfg->caption.c_str();
-	edCaption2->Text = cfg->caption2.c_str();
+	memoCaption1->Text = cfg->caption.c_str();
+	memoCaption2->Text = cfg->caption2.c_str();
 	edNumber->Text = cfg->number.c_str();
 	chbVisible->Checked = cfg->visible;
 	chbDown->Checked = cfg->down;
@@ -207,8 +246,8 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->type = static_cast<Button::Type>(cbType->ItemIndex);
 	cfg->parentId = cbParentId->ItemIndex;
 	cfg->captionLines = cbCaptionLines->ItemIndex + 1;
-	cfg->caption = edCaption->Text.c_str();
-	cfg->caption2 = edCaption2->Text.c_str();
+	cfg->caption = memoCaption1->Text.c_str();
+	cfg->caption2 = memoCaption2->Text.c_str();
 
 	cfg->number = edNumber->Text.c_str();
 	cfg->visible = chbVisible->Checked;
@@ -921,6 +960,22 @@ void __fastcall TfrmButtonEdit::cbVideoInputModChange(TObject *Sender)
 		cbVideoInputDev->Visible = false;
 		lblVideoInputDevice->Visible = false;
 	}
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TfrmButtonEdit::tvSelectorChange(TObject *Sender,
+      TTreeNode *Node)
+{
+	if (Node && Node->Selected)
+	{
+		TTabSheet *tab = reinterpret_cast<TTabSheet*>(Node->Data);
+		assert(tab);
+		tab->Visible = true;
+		if (lastTab)
+			lastTab->Visible = false;
+		lastTab = tab;
+	}	
 }
 //---------------------------------------------------------------------------
 

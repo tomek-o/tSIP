@@ -1,10 +1,11 @@
 object frmButtonEdit: TfrmButtonEdit
   Left = 0
   Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Edit button'
-  ClientHeight = 531
-  ClientWidth = 675
+  ClientHeight = 437
+  ClientWidth = 657
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,52 +19,19 @@ object frmButtonEdit: TfrmButtonEdit
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object lblNumber: TLabel
-    Left = 469
-    Top = 57
-    Width = 37
-    Height = 13
-    Caption = 'Number'
-  end
-  object lblType: TLabel
-    Left = 8
-    Top = 7
-    Width = 24
-    Height = 13
-    Caption = 'Type'
-  end
-  object lblCaption: TLabel
-    Left = 126
-    Top = 57
-    Width = 37
-    Height = 13
-    Caption = 'Caption'
-  end
-  object lblCaption2: TLabel
-    Left = 270
-    Top = 57
-    Width = 54
-    Height = 13
-    Caption = 'Caption #2'
-  end
-  object lblParent: TLabel
-    Left = 9
-    Top = 31
-    Width = 80
-    Height = 13
-    Caption = 'Parent container'
-  end
   object pnlBottom: TPanel
     Left = 0
-    Top = 494
-    Width = 675
+    Top = 400
+    Width = 657
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 448
+    ExplicitWidth = 679
     object btnCancel: TButton
-      Left = 592
-      Top = 7
+      Left = 574
+      Top = 6
       Width = 75
       Height = 25
       Caption = 'Cancel'
@@ -71,8 +39,8 @@ object frmButtonEdit: TfrmButtonEdit
       OnClick = btnCancelClick
     end
     object btnApply: TButton
-      Left = 511
-      Top = 7
+      Left = 482
+      Top = 6
       Width = 75
       Height = 25
       Caption = 'Apply'
@@ -89,101 +57,92 @@ object frmButtonEdit: TfrmButtonEdit
       OnClick = btnClearClick
     end
   end
-  object edNumber: TEdit
-    Left = 514
-    Top = 54
-    Width = 153
-    Height = 21
-    TabOrder = 1
-  end
-  object cbType: TComboBox
-    Left = 39
-    Top = 4
-    Width = 225
-    Height = 21
-    Style = csDropDownList
-    DropDownCount = 12
-    ItemHeight = 0
-    TabOrder = 2
-    OnChange = cbTypeChange
-  end
-  object memoHelp: TMemo
-    Left = 264
-    Top = 8
-    Width = 403
-    Height = 42
-    TabStop = False
-    BorderStyle = bsNone
-    Color = clBtnFace
-    ReadOnly = True
-    TabOrder = 3
-  end
   object pageControl: TPageControl
-    Left = 8
-    Top = 81
-    Width = 659
-    Height = 408
-    ActivePage = tsBehavior
-    TabOrder = 4
-    object tsVisual: TTabSheet
-      Caption = 'Visual'
-      ImageIndex = 1
-      ExplicitLeft = 0
+    Left = 128
+    Top = 78
+    Width = 529
+    Height = 322
+    ActivePage = tsGeneral
+    Align = alClient
+    TabHeight = 10
+    TabOrder = 1
+    ExplicitLeft = 134
+    ExplicitTop = 98
+    ExplicitWidth = 551
+    ExplicitHeight = 361
+    object tsGeneral: TTabSheet
+      Caption = 'General'
+      ImageIndex = 2
+      ExplicitLeft = 6
       ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      object lblBevelWidth: TLabel
-        Left = 407
-        Top = 8
-        Width = 55
-        Height = 13
-        Caption = 'Bevel width'
-      end
-      object lblHeight: TLabel
-        Left = 277
-        Top = 33
-        Width = 31
-        Height = 13
-        Caption = 'Height'
-      end
-      object lblWidth: TLabel
-        Left = 173
-        Top = 33
-        Width = 28
-        Height = 13
-        Caption = 'Width'
-      end
+      ExplicitWidth = 543
+      ExplicitHeight = 405
       object lblLeft: TLabel
-        Left = 3
-        Top = 33
+        Left = 5
+        Top = 10
         Width = 19
         Height = 13
         Caption = 'Left'
       end
       object lblTop: TLabel
-        Left = 89
-        Top = 33
+        Left = 91
+        Top = 10
         Width = 18
         Height = 13
         Caption = 'Top'
       end
-      object chbVisible: TCheckBox
+      object lblWidth: TLabel
+        Left = 175
+        Top = 10
+        Width = 28
+        Height = 13
+        Caption = 'Width'
+      end
+      object lblHeight: TLabel
+        Left = 279
+        Top = 10
+        Width = 31
+        Height = 13
+        Caption = 'Height'
+      end
+      object lblBevelWidth: TLabel
         Left = 3
-        Top = 7
-        Width = 110
-        Height = 17
-        Caption = 'Visible (show)'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
+        Top = 241
+        Width = 55
+        Height = 13
+        Caption = 'Bevel width'
+      end
+      object cbCaptionLines: TComboBox
+        Left = 5
+        Top = 49
+        Width = 100
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
         TabOrder = 0
+        Text = '1 caption line'
+        Items.Strings = (
+          '1 caption line'
+          '2 caption lines')
+      end
+      object edLeft: TEdit
+        Left = 30
+        Top = 7
+        Width = 38
+        Height = 21
+        TabOrder = 1
+      end
+      object edTop: TEdit
+        Left = 115
+        Top = 7
+        Width = 38
+        Height = 21
+        TabOrder = 2
       end
       object chbDown: TCheckBox
-        Left = 132
-        Top = 7
+        Left = 3
+        Top = 265
         Width = 60
         Height = 17
         Caption = 'Down'
@@ -193,11 +152,11 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 3
       end
       object chbInactive: TCheckBox
-        Left = 198
-        Top = 7
+        Left = 69
+        Top = 265
         Width = 71
         Height = 17
         Caption = 'Inactive'
@@ -207,11 +166,18 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 2
+        TabOrder = 4
+      end
+      object edWidth: TEdit
+        Left = 219
+        Top = 7
+        Width = 38
+        Height = 21
+        TabOrder = 5
       end
       object chbCustomFrame: TCheckBox
-        Left = 275
-        Top = 7
+        Left = 146
+        Top = 265
         Width = 95
         Height = 17
         Caption = 'custom frame'
@@ -221,73 +187,59 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
-      end
-      object edBevelWidth: TEdit
-        Left = 468
-        Top = 5
-        Width = 38
-        Height = 21
-        TabOrder = 4
-      end
-      object edHeight: TEdit
-        Left = 318
-        Top = 30
-        Width = 38
-        Height = 21
-        TabOrder = 5
-      end
-      object edWidth: TEdit
-        Left = 217
-        Top = 30
-        Width = 38
-        Height = 21
         TabOrder = 6
       end
-      object edTop: TEdit
-        Left = 113
-        Top = 30
+      object edHeight: TEdit
+        Left = 320
+        Top = 7
         Width = 38
         Height = 21
         TabOrder = 7
       end
-      object edLeft: TEdit
-        Left = 28
-        Top = 30
+      object edBevelWidth: TEdit
+        Left = 64
+        Top = 238
         Width = 38
         Height = 21
         TabOrder = 8
       end
       object grboxCaption1: TGroupBox
-        Left = 0
-        Top = 81
-        Width = 321
+        Left = 3
+        Top = 76
+        Width = 510
         Height = 72
         Caption = 'Caption #1'
         TabOrder = 9
         object lblSpeedDialFont: TLabel
-          Left = 10
-          Top = 17
+          Left = 196
+          Top = 16
           Width = 22
           Height = 13
           Caption = 'Font'
         end
         object lblLabelTop: TLabel
-          Left = 159
+          Left = 345
           Top = 39
           Width = 18
           Height = 13
           Caption = 'Top'
         end
         object lblLabelLeft: TLabel
-          Left = 159
+          Left = 345
           Top = 17
           Width = 19
           Height = 13
           Caption = 'Left'
         end
+        object lblCaption: TLabel
+          Left = 7
+          Top = 17
+          Width = 22
+          Height = 13
+          Caption = 'Text'
+        end
         object edSpeedDialFont: TEdit
-          Left = 38
+          Left = 224
           Top = 13
           Width = 75
           Height = 52
@@ -296,7 +248,7 @@ object frmButtonEdit: TfrmButtonEdit
           Text = 'abcABC 123 () [] <>,.'
         end
         object btnSpeedDialFontSelect: TButton
-          Left = 119
+          Left = 305
           Top = 14
           Width = 26
           Height = 22
@@ -305,7 +257,7 @@ object frmButtonEdit: TfrmButtonEdit
           OnClick = btnSpeedDialFontSelectClick
         end
         object chbLabelCenterHorizontally: TCheckBox
-          Left = 245
+          Left = 431
           Top = 15
           Width = 71
           Height = 17
@@ -319,14 +271,14 @@ object frmButtonEdit: TfrmButtonEdit
           TabOrder = 2
         end
         object edLabelTop: TEdit
-          Left = 192
+          Left = 378
           Top = 36
           Width = 38
           Height = 21
           TabOrder = 3
         end
         object chbLabelCenterVertically: TCheckBox
-          Left = 245
+          Left = 431
           Top = 38
           Width = 73
           Height = 17
@@ -341,43 +293,57 @@ object frmButtonEdit: TfrmButtonEdit
           OnClick = chbLabelCenterVerticallyClick
         end
         object edLabelLeft: TEdit
-          Left = 192
+          Left = 378
           Top = 14
           Width = 38
           Height = 21
           TabOrder = 5
         end
+        object memoCaption1: TMemo
+          Left = 35
+          Top = 14
+          Width = 142
+          Height = 51
+          TabOrder = 6
+        end
       end
       object grboxCaption2: TGroupBox
-        Left = 327
-        Top = 81
-        Width = 321
+        Left = 3
+        Top = 150
+        Width = 510
         Height = 72
         Caption = 'Caption #2'
         TabOrder = 10
         object Label1: TLabel
-          Left = 10
-          Top = 17
+          Left = 194
+          Top = 16
           Width = 22
           Height = 13
           Caption = 'Font'
         end
         object lblLabel2Top: TLabel
-          Left = 159
+          Left = 343
           Top = 40
           Width = 18
           Height = 13
           Caption = 'Top'
         end
         object Label6: TLabel
-          Left = 159
+          Left = 343
           Top = 17
           Width = 19
           Height = 13
           Caption = 'Left'
         end
+        object lblCaption2: TLabel
+          Left = 7
+          Top = 17
+          Width = 22
+          Height = 13
+          Caption = 'Text'
+        end
         object edCaption2Font: TEdit
-          Left = 38
+          Left = 222
           Top = 13
           Width = 75
           Height = 52
@@ -386,7 +352,7 @@ object frmButtonEdit: TfrmButtonEdit
           Text = 'abcABC 123 () [] <>,.'
         end
         object btnCaption2FontSelect: TButton
-          Left = 119
+          Left = 303
           Top = 14
           Width = 26
           Height = 22
@@ -395,21 +361,21 @@ object frmButtonEdit: TfrmButtonEdit
           OnClick = btnSpeedDialFontSelectClick
         end
         object edLabel2Top: TEdit
-          Left = 192
+          Left = 376
           Top = 37
           Width = 38
           Height = 21
           TabOrder = 2
         end
         object edLabel2Left: TEdit
-          Left = 192
+          Left = 376
           Top = 14
           Width = 38
           Height = 21
           TabOrder = 3
         end
         object chbLabel2CenterHorizontally: TCheckBox
-          Left = 240
+          Left = 429
           Top = 16
           Width = 68
           Height = 17
@@ -423,324 +389,18 @@ object frmButtonEdit: TfrmButtonEdit
           TabOrder = 4
           OnClick = chbLabel2CenterHorizontallyClick
         end
-      end
-      object grboxColors: TGroupBox
-        Left = 0
-        Top = 162
-        Width = 648
-        Height = 95
-        Caption = 'Colors'
-        TabOrder = 11
-        object lblInactive: TLabel
-          Left = 10
-          Top = 45
-          Width = 37
-          Height = 13
-          Caption = 'inactive'
-        end
-        object lblColorIdle: TLabel
-          Left = 242
-          Top = 18
-          Width = 16
-          Height = 13
-          Caption = 'idle'
-        end
-        object lblColorDown: TLabel
-          Left = 10
-          Top = 69
-          Width = 26
-          Height = 13
-          Caption = 'down'
-        end
-        object lblColorDownPressed: TLabel
-          Left = 242
-          Top = 69
-          Width = 71
-          Height = 13
-          Caption = 'down, pressed'
-        end
-        object lblColorInactiveDown: TLabel
-          Left = 242
-          Top = 45
-          Width = 70
-          Height = 13
-          Caption = 'inactive, down'
-        end
-        object cbInactiveColor: TComboBox
-          Left = 53
-          Top = 42
-          Width = 140
-          Height = 21
-          Style = csDropDownList
-          ItemHeight = 0
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 0
-          OnChange = cbColorChange
-        end
-        object btnSelectInactiveColor: TButton
-          Left = 196
-          Top = 43
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 1
-          OnClick = SelectColorClick
-        end
-        object cbIdleColor: TComboBox
-          Left = 317
-          Top = 15
-          Width = 140
-          Height = 21
-          Style = csDropDownList
-          ItemHeight = 0
-          TabOrder = 2
-          OnChange = cbColorChange
-        end
-        object btnSelectIdleColor: TButton
-          Left = 460
-          Top = 16
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 3
-          OnClick = SelectColorClick
-        end
-        object cbDownColor: TComboBox
-          Left = 53
-          Top = 66
-          Width = 140
-          Height = 21
-          Style = csDropDownList
-          ItemHeight = 0
-          TabOrder = 4
-          OnChange = cbColorChange
-        end
-        object btnSelectDownColor: TButton
-          Left = 196
-          Top = 67
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 5
-          OnClick = SelectColorClick
-        end
-        object cbDownPressedColor: TComboBox
-          Left = 317
-          Top = 66
-          Width = 140
-          Height = 21
-          Style = csDropDownList
-          ItemHeight = 0
-          TabOrder = 6
-          OnChange = cbColorChange
-        end
-        object btnSelectDownPressedColor: TButton
-          Left = 460
-          Top = 67
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 7
-          OnClick = SelectColorClick
-        end
-        object cbColorElement: TComboBox
-          Left = 8
-          Top = 15
-          Width = 140
-          Height = 21
-          Style = csDropDownList
-          ItemHeight = 13
-          ParentShowHint = False
-          ShowHint = True
-          TabOrder = 8
-          OnChange = cbColorElementChange
-          Items.Strings = (
-            'Background'
-            'Font'
-            'Custom frame')
-        end
-        object cbInactiveDownColor: TComboBox
-          Left = 317
-          Top = 42
-          Width = 140
-          Height = 21
-          Style = csDropDownList
-          ItemHeight = 0
-          TabOrder = 9
-          OnChange = cbColorChange
-        end
-        object btnSelectInactiveDownColor: TButton
-          Left = 460
-          Top = 43
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 10
-          OnClick = SelectColorClick
-        end
-      end
-      object grboxImage: TGroupBox
-        Left = -1
-        Top = 268
-        Width = 649
-        Height = 109
-        Caption = 'Bitmaps (from "img" subdirectory)'
-        TabOrder = 12
-        object lblImgIdle: TLabel
-          Left = 8
-          Top = 20
-          Width = 95
-          Height = 13
-          Caption = 'Idle/invalid/non-BLF'
-        end
-        object lblImgTerminated: TLabel
-          Left = 8
-          Top = 40
-          Width = 76
-          Height = 13
-          Caption = 'BLF: terminated'
-        end
-        object lblImgEarly: TLabel
-          Left = 8
-          Top = 60
-          Width = 48
-          Height = 13
-          Caption = 'BLF: early'
-        end
-        object lblImgConfirmed: TLabel
-          Left = 8
-          Top = 80
-          Width = 71
-          Height = 13
-          Caption = 'BLF: confirmed'
-        end
-        object lblImageLeft: TLabel
-          Left = 297
-          Top = 20
-          Width = 54
-          Height = 13
-          Caption = 'image: Left'
-        end
-        object lblImageTop: TLabel
-          Left = 297
-          Top = 41
-          Width = 53
-          Height = 13
-          Caption = 'image: Top'
-        end
-        object edImgIdle: TEdit
-          Left = 114
-          Top = 17
-          Width = 117
-          Height = 21
-          TabOrder = 0
-        end
-        object edImgTerminated: TEdit
-          Left = 114
-          Top = 37
-          Width = 117
-          Height = 21
-          TabOrder = 1
-        end
-        object edImgEarly: TEdit
-          Left = 114
-          Top = 57
-          Width = 117
-          Height = 21
-          TabOrder = 2
-        end
-        object edImgConfirmed: TEdit
-          Left = 114
-          Top = 77
-          Width = 117
-          Height = 21
-          TabOrder = 3
-        end
-        object btnSelectImgTerminated: TButton
-          Left = 233
-          Top = 38
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 4
-          OnClick = SelectImgClick
-        end
-        object btnSelectImgEarly: TButton
-          Left = 233
-          Top = 58
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 5
-          OnClick = SelectImgClick
-        end
-        object btnSelectImgConfirmed: TButton
-          Left = 233
-          Top = 78
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 6
-          OnClick = SelectImgClick
-        end
-        object btnSelectImgIdle: TButton
-          Left = 233
-          Top = 17
-          Width = 21
-          Height = 19
-          Caption = '...'
-          TabOrder = 7
-          OnClick = SelectImgClick
-        end
-        object edImageLeft: TEdit
-          Left = 366
+        object memoCaption2: TMemo
+          Left = 35
           Top = 14
-          Width = 38
-          Height = 21
-          TabOrder = 8
-        end
-        object chbImageTransparent: TCheckBox
-          Left = 297
-          Top = 81
-          Width = 154
-          Height = 17
-          Caption = 'transparent bitmap image'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 9
-        end
-        object edImageTop: TEdit
-          Left = 366
-          Top = 38
-          Width = 38
-          Height = 21
-          TabOrder = 10
-        end
-        object chbImageCenterVertically: TCheckBox
-          Left = 413
-          Top = 40
-          Width = 60
-          Height = 17
-          Caption = 'centered'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-          TabOrder = 11
-          OnClick = chbImageCenterVerticallyClick
+          Width = 140
+          Height = 51
+          TabOrder = 5
         end
       end
       object chbSpaceLabelsYEqually: TCheckBox
-        Left = 3
-        Top = 58
-        Width = 632
+        Left = 111
+        Top = 51
+        Width = 407
         Height = 17
         Caption = 
           'space caption lines equally in Y axis (automatically for either ' +
@@ -751,32 +411,30 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 13
+        TabOrder = 11
         OnClick = chbSpaceLabelsYEquallyClick
       end
     end
     object tsBehavior: TTabSheet
       Caption = 'Behavior'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitWidth = 543
+      ExplicitHeight = 428
       object pcBehavior: TPageControl
         Left = 0
         Top = 0
-        Width = 651
-        Height = 380
+        Width = 521
+        Height = 302
         ActivePage = tsBehaviorSwitchAudioSource
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
+        ExplicitWidth = 543
+        ExplicitHeight = 428
         object tsBehaviorBlf: TTabSheet
           Caption = 'tsBehaviorBlf'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 535
+          ExplicitHeight = 397
           object lblBlfInCallAction: TLabel
             Left = 3
             Top = 125
@@ -900,10 +558,8 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorPaging: TTabSheet
           Caption = 'tsBehaviorPaging'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 535
+          ExplicitHeight = 397
           object lblPagingTxWaveFile: TLabel
             Left = 3
             Top = 3
@@ -973,10 +629,8 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorScript: TTabSheet
           Caption = 'tsBehaviorScript'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 535
+          ExplicitHeight = 397
           object lblScriptFile: TLabel
             Left = 3
             Top = 3
@@ -1039,10 +693,8 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorExecute: TTabSheet
           Caption = 'tsBehaviorExecute'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 535
+          ExplicitHeight = 397
           object lblArg1: TLabel
             Left = 3
             Top = 3
@@ -1061,10 +713,8 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioSource: TTabSheet
           Caption = 'tsBehaviorSwitchAudioSource'
           ImageIndex = 4
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 535
+          ExplicitHeight = 397
           object lblSoundInputModule: TLabel
             Left = 3
             Top = 3
@@ -1085,7 +735,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 320
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = cbSoundInputModChange
           end
@@ -1111,17 +761,15 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 320
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
           end
         end
         object tsBehaviorSwitchAudioPlayer: TTabSheet
           Caption = 'tsBehaviorSwitchAudioPlayer'
           ImageIndex = 5
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 535
+          ExplicitHeight = 397
           object lblSoundOutputMod: TLabel
             Left = 3
             Top = 3
@@ -1142,7 +790,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 320
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 0
             OnChange = cbSoundOutputModChange
           end
@@ -1152,17 +800,15 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 320
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 1
           end
         end
         object tsBehaviorSwitchVideoSource: TTabSheet
           Caption = 'tsBehaviorSwitchVideoSource'
           ImageIndex = 7
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 535
+          ExplicitHeight = 397
           object lblVideoInputModule: TLabel
             Left = 3
             Top = 3
@@ -1207,7 +853,7 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 320
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 1
             OnChange = cbVideoInputModChange
           end
@@ -1226,17 +872,15 @@ object frmButtonEdit: TfrmButtonEdit
             Width = 320
             Height = 21
             Style = csDropDownList
-            ItemHeight = 0
+            ItemHeight = 13
             TabOrder = 3
           end
         end
         object tsBehaviorAutoAnswer: TTabSheet
           Caption = 'tsBehaviorAutoAnswer'
           ImageIndex = 6
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          ExplicitWidth = 535
+          ExplicitHeight = 397
           object lblAutoAnswerSipCode: TLabel
             Left = 3
             Top = 3
@@ -1277,64 +921,448 @@ object frmButtonEdit: TfrmButtonEdit
         end
       end
     end
+    object tsColors: TTabSheet
+      Caption = 'Colors'
+      ImageIndex = 1
+      ExplicitLeft = 6
+      ExplicitTop = 14
+      ExplicitWidth = 543
+      ExplicitHeight = 428
+      object lblInactive: TLabel
+        Left = 10
+        Top = 45
+        Width = 37
+        Height = 13
+        Caption = 'inactive'
+      end
+      object lblColorDown: TLabel
+        Left = 10
+        Top = 69
+        Width = 26
+        Height = 13
+        Caption = 'down'
+      end
+      object lblElements: TLabel
+        Left = 10
+        Top = 6
+        Width = 38
+        Height = 13
+        Caption = 'Element'
+      end
+      object lblColorIdle: TLabel
+        Left = 10
+        Top = 93
+        Width = 16
+        Height = 13
+        Caption = 'idle'
+      end
+      object lblColorInactiveDown: TLabel
+        Left = 10
+        Top = 120
+        Width = 70
+        Height = 13
+        Caption = 'inactive, down'
+      end
+      object lblColorDownPressed: TLabel
+        Left = 10
+        Top = 144
+        Width = 71
+        Height = 13
+        Caption = 'down, pressed'
+      end
+      object cbColorElement: TComboBox
+        Left = 94
+        Top = 3
+        Width = 140
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+        OnChange = cbColorElementChange
+        Items.Strings = (
+          'Background'
+          'Font'
+          'Custom frame')
+      end
+      object cbInactiveColor: TComboBox
+        Left = 94
+        Top = 42
+        Width = 140
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 1
+        OnChange = cbColorChange
+      end
+      object btnSelectInactiveColor: TButton
+        Left = 237
+        Top = 43
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 2
+        OnClick = SelectColorClick
+      end
+      object cbDownColor: TComboBox
+        Left = 94
+        Top = 66
+        Width = 140
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 3
+        OnChange = cbColorChange
+      end
+      object btnSelectDownColor: TButton
+        Left = 237
+        Top = 67
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 4
+        OnClick = SelectColorClick
+      end
+      object cbDownPressedColor: TComboBox
+        Left = 94
+        Top = 141
+        Width = 140
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 5
+        OnChange = cbColorChange
+      end
+      object cbInactiveDownColor: TComboBox
+        Left = 94
+        Top = 117
+        Width = 140
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 6
+        OnChange = cbColorChange
+      end
+      object cbIdleColor: TComboBox
+        Left = 94
+        Top = 90
+        Width = 140
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 7
+        OnChange = cbColorChange
+      end
+      object btnSelectIdleColor: TButton
+        Left = 237
+        Top = 91
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 8
+        OnClick = SelectColorClick
+      end
+      object btnSelectInactiveDownColor: TButton
+        Left = 237
+        Top = 118
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 9
+        OnClick = SelectColorClick
+      end
+      object btnSelectDownPressedColor: TButton
+        Left = 237
+        Top = 142
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 10
+        OnClick = SelectColorClick
+      end
+    end
+    object tsBitmaps: TTabSheet
+      Caption = 'Bitmaps'
+      ImageIndex = 3
+      ExplicitWidth = 543
+      ExplicitHeight = 428
+      object Label2: TLabel
+        Left = 2
+        Top = 99
+        Width = 213
+        Height = 13
+        Caption = 'Bitmaps must be placed in "img" subdirectory'
+      end
+      object lblImgIdle: TLabel
+        Left = 3
+        Top = 118
+        Width = 95
+        Height = 13
+        Caption = 'Idle/invalid/non-BLF'
+      end
+      object lblImgTerminated: TLabel
+        Left = 3
+        Top = 138
+        Width = 76
+        Height = 13
+        Caption = 'BLF: terminated'
+      end
+      object lblImgEarly: TLabel
+        Left = 3
+        Top = 158
+        Width = 48
+        Height = 13
+        Caption = 'BLF: early'
+      end
+      object lblImgConfirmed: TLabel
+        Left = 3
+        Top = 178
+        Width = 71
+        Height = 13
+        Caption = 'BLF: confirmed'
+      end
+      object lblImageLeft: TLabel
+        Left = 3
+        Top = 12
+        Width = 54
+        Height = 13
+        Caption = 'image: Left'
+      end
+      object lblImageTop: TLabel
+        Left = 3
+        Top = 33
+        Width = 53
+        Height = 13
+        Caption = 'image: Top'
+      end
+      object edImgConfirmed: TEdit
+        Left = 109
+        Top = 175
+        Width = 117
+        Height = 21
+        TabOrder = 0
+      end
+      object edImgEarly: TEdit
+        Left = 109
+        Top = 155
+        Width = 117
+        Height = 21
+        TabOrder = 1
+      end
+      object edImgTerminated: TEdit
+        Left = 109
+        Top = 135
+        Width = 117
+        Height = 21
+        TabOrder = 2
+      end
+      object edImgIdle: TEdit
+        Left = 109
+        Top = 115
+        Width = 117
+        Height = 21
+        TabOrder = 3
+      end
+      object btnSelectImgIdle: TButton
+        Left = 228
+        Top = 115
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 4
+        OnClick = SelectImgClick
+      end
+      object btnSelectImgTerminated: TButton
+        Left = 228
+        Top = 136
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 5
+        OnClick = SelectImgClick
+      end
+      object btnSelectImgEarly: TButton
+        Left = 228
+        Top = 156
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 6
+        OnClick = SelectImgClick
+      end
+      object btnSelectImgConfirmed: TButton
+        Left = 228
+        Top = 176
+        Width = 21
+        Height = 19
+        Caption = '...'
+        TabOrder = 7
+        OnClick = SelectImgClick
+      end
+      object edImageLeft: TEdit
+        Left = 72
+        Top = 6
+        Width = 38
+        Height = 21
+        TabOrder = 8
+      end
+      object edImageTop: TEdit
+        Left = 72
+        Top = 30
+        Width = 38
+        Height = 21
+        TabOrder = 9
+      end
+      object chbImageCenterVertically: TCheckBox
+        Left = 119
+        Top = 32
+        Width = 60
+        Height = 17
+        Caption = 'centered'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 10
+        OnClick = chbImageCenterVerticallyClick
+      end
+      object chbImageTransparent: TCheckBox
+        Left = 3
+        Top = 67
+        Width = 154
+        Height = 17
+        Caption = 'make bitmap transparent'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 11
+      end
+    end
   end
-  object cbCaptionLines: TComboBox
-    Left = 8
-    Top = 54
-    Width = 100
-    Height = 21
-    Style = csDropDownList
-    ItemHeight = 13
-    ItemIndex = 0
-    TabOrder = 5
-    Text = '1 caption line'
-    Items.Strings = (
-      '1 caption line'
-      '2 caption lines')
+  object tvSelector: TTreeView
+    Left = 0
+    Top = 78
+    Width = 128
+    Height = 322
+    Align = alLeft
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    HideSelection = False
+    Indent = 19
+    ParentFont = False
+    ReadOnly = True
+    RowSelect = True
+    TabOrder = 2
+    OnChange = tvSelectorChange
+    ExplicitTop = 96
+    ExplicitHeight = 352
   end
-  object edCaption: TEdit
-    Left = 169
-    Top = 54
-    Width = 89
-    Height = 21
-    TabOrder = 6
-  end
-  object edCaption2: TEdit
-    Left = 328
-    Top = 54
-    Width = 89
-    Height = 21
-    TabOrder = 7
-  end
-  object cbParentId: TComboBox
-    Left = 95
-    Top = 28
-    Width = 169
-    Height = 21
-    Style = csDropDownList
-    DropDownCount = 12
-    ItemHeight = 13
-    ItemIndex = 1
-    TabOrder = 8
-    Text = 'main / console'
-    Items.Strings = (
-      'dialpad'
-      'main / console')
+  object pnlTop: TPanel
+    Left = 0
+    Top = 0
+    Width = 657
+    Height = 78
+    Align = alTop
+    BevelOuter = bvNone
+    TabOrder = 3
+    object lblType: TLabel
+      Left = 5
+      Top = 8
+      Width = 24
+      Height = 13
+      Caption = 'Type'
+    end
+    object lblNumber: TLabel
+      Left = 6
+      Top = 56
+      Width = 65
+      Height = 13
+      Caption = 'Number / URI'
+    end
+    object cbType: TComboBox
+      Left = 36
+      Top = 5
+      Width = 225
+      Height = 21
+      Style = csDropDownList
+      DropDownCount = 12
+      ItemHeight = 13
+      TabOrder = 0
+      OnChange = cbTypeChange
+    end
+    object memoHelp: TMemo
+      Left = 267
+      Top = 5
+      Width = 383
+      Height = 69
+      TabStop = False
+      BorderStyle = bsNone
+      Color = clBtnFace
+      ReadOnly = True
+      TabOrder = 1
+    end
+    object chbVisible: TCheckBox
+      Left = 6
+      Top = 31
+      Width = 115
+      Height = 17
+      Caption = 'Visible (show) on'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      ParentFont = False
+      TabOrder = 2
+    end
+    object cbParentId: TComboBox
+      Left = 122
+      Top = 29
+      Width = 139
+      Height = 21
+      Style = csDropDownList
+      DropDownCount = 12
+      ItemHeight = 13
+      ItemIndex = 1
+      TabOrder = 3
+      Text = 'main area / console'
+      Items.Strings = (
+        'dialpad'
+        'main area / console')
+    end
+    object edNumber: TEdit
+      Left = 122
+      Top = 53
+      Width = 139
+      Height = 21
+      TabOrder = 4
+    end
   end
   object openDialog: TOpenDialog
     Options = [ofHideReadOnly, ofNoChangeDir, ofFileMustExist, ofEnableSizing]
-    Left = 96
-    Top = 408
+    Left = 8
+    Top = 152
   end
   object colorDialog: TColorDialog
-    Left = 128
-    Top = 408
+    Left = 40
+    Top = 152
   end
   object dlgOpenRing: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav'
     Options = [ofHideReadOnly, ofNoChangeDir, ofFileMustExist, ofEnableSizing]
-    Left = 192
-    Top = 408
+    Left = 40
+    Top = 184
   end
   object fontDialog: TFontDialog
     Font.Charset = DEFAULT_CHARSET
@@ -1343,12 +1371,12 @@ object frmButtonEdit: TfrmButtonEdit
     Font.Name = 'Tahoma'
     Font.Style = []
     Options = [fdForceFontExist]
-    Left = 160
-    Top = 408
+    Left = 8
+    Top = 184
   end
   object dlgOpenDeviceFile: TOpenDialog
     Options = [ofEnableSizing]
-    Left = 224
-    Top = 408
+    Left = 8
+    Top = 216
   end
 end
