@@ -4,6 +4,8 @@
 #pragma hdrstop
 
 #include "ButtonConf.h"
+#include "ua/AudioModules.h"
+#include "ua/VideoModules.h"
 #include <Graphics.hpp>
 
 //---------------------------------------------------------------------------
@@ -92,12 +94,12 @@ void ButtonConf::Reset(void)
 	blfActionDuringCall = BLF_IN_CALL_TRANSFER;
 	blfDtmfPrefixDuringCall = "";
 
-	audioTxMod = "winwave";
+	audioTxMod = AudioModules::winwave2;
 	audioTxDev = "";
-	audioRxMod = "winwave";
+	audioRxMod = AudioModules::winwave2;
 	audioRxDev = "";
 
-	videoRxMod = "colorbar_generator_animated";
+	videoRxMod = VideoModules::colorbar_generator_animated;
 	videoRxDev = "";
 
 	fontLabel2 = font;
