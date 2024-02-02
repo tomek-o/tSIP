@@ -738,13 +738,15 @@ void ProgrammableButtons::SetInitialSettings(void)
 
 	int top = 3;
 
-	cfg = &btnConf[0];
+	int btnId = 0;
+
+	cfg = &btnConf[btnId++];
 	cfg->caption = "    Redial";
 	cfg->labelLeft = 0;
 	cfg->type = Button::REDIAL;
 	cfg->top = top;
 
-	cfg = &btnConf[1];
+	cfg = &btnConf[btnId++];
 	cfg->caption = "    FLASH";
 	cfg->labelLeft = 0;
 	cfg->type = Button::DTMF;
@@ -752,21 +754,29 @@ void ProgrammableButtons::SetInitialSettings(void)
 	top += HEIGHT;
 	cfg->top = top;
 
-	cfg = &btnConf[2];
+	cfg = &btnConf[btnId++];
 	cfg->caption = "Hold";
 	cfg->type = Button::HOLD;
 	cfg->imgIdle = "hold.bmp";
 	top += HEIGHT;
 	cfg->top = top;
 
-	cfg = &btnConf[3];
+	cfg = &btnConf[btnId++];
 	cfg->caption = " Re-register";
 	cfg->labelLeft = 4;
 	cfg->type = Button::REREGISTER;
 	top += HEIGHT;
 	cfg->top = top;
 
-	cfg = &btnConf[4];
+	cfg = &btnConf[btnId++];
+	cfg->caption = " VOIP.MS";
+	cfg->number = "https://voip.ms/en/code/tSIP";
+	cfg->labelLeft = 4;
+	cfg->type = Button::EXECUTE;
+	top += HEIGHT;
+	cfg->top = top;
+
+	cfg = &btnConf[btnId++];
 	cfg->captionLines = 2;
 	cfg->caption = " Right click";
 	cfg->caption2 = " to edit btn";
@@ -779,7 +789,7 @@ void ProgrammableButtons::SetInitialSettings(void)
 	top += HEIGHT;
 	cfg->top = top;
 
-	for (unsigned int i=5; i<BASIC_PANEL_CONSOLE_BTNS; i++)
+	for (unsigned int i=btnId; i<BASIC_PANEL_CONSOLE_BTNS; i++)
 	{
 		cfg = &btnConf[i];
 		//cfg->top = 5 * HEIGHT;
