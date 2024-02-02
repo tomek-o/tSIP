@@ -27,8 +27,6 @@ object frmButtonEdit: TfrmButtonEdit
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 448
-    ExplicitWidth = 679
     object btnCancel: TButton
       Left = 574
       Top = 6
@@ -62,21 +60,13 @@ object frmButtonEdit: TfrmButtonEdit
     Top = 78
     Width = 529
     Height = 322
-    ActivePage = tsGeneral
+    ActivePage = tsBitmaps
     Align = alClient
     TabHeight = 10
     TabOrder = 1
-    ExplicitLeft = 134
-    ExplicitTop = 98
-    ExplicitWidth = 551
-    ExplicitHeight = 361
     object tsGeneral: TTabSheet
       Caption = 'General'
       ImageIndex = 2
-      ExplicitLeft = 6
-      ExplicitTop = 0
-      ExplicitWidth = 543
-      ExplicitHeight = 405
       object lblLeft: TLabel
         Left = 5
         Top = 10
@@ -418,8 +408,6 @@ object frmButtonEdit: TfrmButtonEdit
     object tsBehavior: TTabSheet
       Caption = 'Behavior'
       ImageIndex = 1
-      ExplicitWidth = 543
-      ExplicitHeight = 428
       object pcBehavior: TPageControl
         Left = 0
         Top = 0
@@ -429,12 +417,8 @@ object frmButtonEdit: TfrmButtonEdit
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
-        ExplicitWidth = 543
-        ExplicitHeight = 428
         object tsBehaviorBlf: TTabSheet
           Caption = 'tsBehaviorBlf'
-          ExplicitWidth = 535
-          ExplicitHeight = 397
           object lblBlfInCallAction: TLabel
             Left = 3
             Top = 125
@@ -558,8 +542,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorPaging: TTabSheet
           Caption = 'tsBehaviorPaging'
           ImageIndex = 1
-          ExplicitWidth = 535
-          ExplicitHeight = 397
           object lblPagingTxWaveFile: TLabel
             Left = 3
             Top = 3
@@ -629,8 +611,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorScript: TTabSheet
           Caption = 'tsBehaviorScript'
           ImageIndex = 2
-          ExplicitWidth = 535
-          ExplicitHeight = 397
           object lblScriptFile: TLabel
             Left = 3
             Top = 3
@@ -693,8 +673,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorExecute: TTabSheet
           Caption = 'tsBehaviorExecute'
           ImageIndex = 3
-          ExplicitWidth = 535
-          ExplicitHeight = 397
           object lblArg1: TLabel
             Left = 3
             Top = 3
@@ -713,8 +691,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioSource: TTabSheet
           Caption = 'tsBehaviorSwitchAudioSource'
           ImageIndex = 4
-          ExplicitWidth = 535
-          ExplicitHeight = 397
           object lblSoundInputModule: TLabel
             Left = 3
             Top = 3
@@ -768,8 +744,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchAudioPlayer: TTabSheet
           Caption = 'tsBehaviorSwitchAudioPlayer'
           ImageIndex = 5
-          ExplicitWidth = 535
-          ExplicitHeight = 397
           object lblSoundOutputMod: TLabel
             Left = 3
             Top = 3
@@ -807,8 +781,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorSwitchVideoSource: TTabSheet
           Caption = 'tsBehaviorSwitchVideoSource'
           ImageIndex = 7
-          ExplicitWidth = 535
-          ExplicitHeight = 397
           object lblVideoInputModule: TLabel
             Left = 3
             Top = 3
@@ -879,8 +851,6 @@ object frmButtonEdit: TfrmButtonEdit
         object tsBehaviorAutoAnswer: TTabSheet
           Caption = 'tsBehaviorAutoAnswer'
           ImageIndex = 6
-          ExplicitWidth = 535
-          ExplicitHeight = 397
           object lblAutoAnswerSipCode: TLabel
             Left = 3
             Top = 3
@@ -924,10 +894,6 @@ object frmButtonEdit: TfrmButtonEdit
     object tsColors: TTabSheet
       Caption = 'Colors'
       ImageIndex = 1
-      ExplicitLeft = 6
-      ExplicitTop = 14
-      ExplicitWidth = 543
-      ExplicitHeight = 428
       object lblInactive: TLabel
         Left = 10
         Top = 45
@@ -951,7 +917,7 @@ object frmButtonEdit: TfrmButtonEdit
       end
       object lblColorIdle: TLabel
         Left = 10
-        Top = 93
+        Top = 95
         Width = 16
         Height = 13
         Caption = 'idle'
@@ -965,10 +931,47 @@ object frmButtonEdit: TfrmButtonEdit
       end
       object lblColorDownPressed: TLabel
         Left = 10
-        Top = 144
+        Top = 145
         Width = 71
         Height = 13
         Caption = 'down, pressed'
+      end
+      object shColorInactive: TShape
+        Left = 280
+        Top = 42
+        Width = 41
+        Height = 21
+      end
+      object shColorDown: TShape
+        Left = 280
+        Top = 67
+        Width = 41
+        Height = 21
+      end
+      object shColorIdle: TShape
+        Left = 280
+        Top = 92
+        Width = 41
+        Height = 21
+      end
+      object shColorInactiveDown: TShape
+        Left = 280
+        Top = 117
+        Width = 41
+        Height = 21
+      end
+      object shColorDownPressed: TShape
+        Left = 280
+        Top = 142
+        Width = 41
+        Height = 21
+      end
+      object lblColorPreview: TLabel
+        Left = 280
+        Top = 23
+        Width = 38
+        Height = 13
+        Caption = 'preview'
       end
       object cbColorElement: TComboBox
         Left = 94
@@ -999,10 +1002,10 @@ object frmButtonEdit: TfrmButtonEdit
         OnChange = cbColorChange
       end
       object btnSelectInactiveColor: TButton
-        Left = 237
-        Top = 43
+        Left = 239
+        Top = 42
         Width = 21
-        Height = 19
+        Height = 21
         Caption = '...'
         TabOrder = 2
         OnClick = SelectColorClick
@@ -1018,17 +1021,17 @@ object frmButtonEdit: TfrmButtonEdit
         OnChange = cbColorChange
       end
       object btnSelectDownColor: TButton
-        Left = 237
-        Top = 67
+        Left = 239
+        Top = 66
         Width = 21
-        Height = 19
+        Height = 21
         Caption = '...'
         TabOrder = 4
         OnClick = SelectColorClick
       end
       object cbDownPressedColor: TComboBox
         Left = 94
-        Top = 141
+        Top = 142
         Width = 140
         Height = 21
         Style = csDropDownList
@@ -1048,7 +1051,7 @@ object frmButtonEdit: TfrmButtonEdit
       end
       object cbIdleColor: TComboBox
         Left = 94
-        Top = 90
+        Top = 92
         Width = 140
         Height = 21
         Style = csDropDownList
@@ -1057,28 +1060,28 @@ object frmButtonEdit: TfrmButtonEdit
         OnChange = cbColorChange
       end
       object btnSelectIdleColor: TButton
-        Left = 237
-        Top = 91
+        Left = 239
+        Top = 92
         Width = 21
-        Height = 19
+        Height = 21
         Caption = '...'
         TabOrder = 8
         OnClick = SelectColorClick
       end
       object btnSelectInactiveDownColor: TButton
-        Left = 237
-        Top = 118
+        Left = 239
+        Top = 117
         Width = 21
-        Height = 19
+        Height = 21
         Caption = '...'
         TabOrder = 9
         OnClick = SelectColorClick
       end
       object btnSelectDownPressedColor: TButton
-        Left = 237
+        Left = 239
         Top = 142
         Width = 21
-        Height = 19
+        Height = 21
         Caption = '...'
         TabOrder = 10
         OnClick = SelectColorClick
@@ -1087,39 +1090,39 @@ object frmButtonEdit: TfrmButtonEdit
     object tsBitmaps: TTabSheet
       Caption = 'Bitmaps'
       ImageIndex = 3
-      ExplicitWidth = 543
-      ExplicitHeight = 428
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object Label2: TLabel
         Left = 2
-        Top = 99
+        Top = 100
         Width = 213
         Height = 13
         Caption = 'Bitmaps must be placed in "img" subdirectory'
       end
       object lblImgIdle: TLabel
         Left = 3
-        Top = 118
+        Top = 146
         Width = 95
         Height = 13
         Caption = 'Idle/invalid/non-BLF'
       end
       object lblImgTerminated: TLabel
         Left = 3
-        Top = 138
+        Top = 176
         Width = 76
         Height = 13
         Caption = 'BLF: terminated'
       end
       object lblImgEarly: TLabel
         Left = 3
-        Top = 158
+        Top = 206
         Width = 48
         Height = 13
         Caption = 'BLF: early'
       end
       object lblImgConfirmed: TLabel
         Left = 3
-        Top = 178
+        Top = 238
         Width = 71
         Height = 13
         Caption = 'BLF: confirmed'
@@ -1138,37 +1141,72 @@ object frmButtonEdit: TfrmButtonEdit
         Height = 13
         Caption = 'image: Top'
       end
+      object imgIdle: TImage
+        Left = 272
+        Top = 137
+        Width = 57
+        Height = 31
+        Center = True
+      end
+      object imgTerminated: TImage
+        Left = 272
+        Top = 168
+        Width = 57
+        Height = 31
+        Center = True
+      end
+      object imgEarly: TImage
+        Left = 272
+        Top = 199
+        Width = 57
+        Height = 31
+        Center = True
+      end
+      object imgConfirmed: TImage
+        Left = 272
+        Top = 230
+        Width = 57
+        Height = 31
+        Center = True
+      end
+      object Label3: TLabel
+        Left = 280
+        Top = 118
+        Width = 38
+        Height = 13
+        Caption = 'preview'
+      end
       object edImgConfirmed: TEdit
         Left = 109
-        Top = 175
+        Top = 235
         Width = 117
         Height = 21
         TabOrder = 0
       end
       object edImgEarly: TEdit
         Left = 109
-        Top = 155
+        Top = 203
         Width = 117
         Height = 21
         TabOrder = 1
       end
       object edImgTerminated: TEdit
         Left = 109
-        Top = 135
+        Top = 173
         Width = 117
         Height = 21
         TabOrder = 2
       end
       object edImgIdle: TEdit
         Left = 109
-        Top = 115
+        Top = 143
         Width = 117
         Height = 21
         TabOrder = 3
       end
       object btnSelectImgIdle: TButton
-        Left = 228
-        Top = 115
+        Left = 229
+        Top = 143
         Width = 21
         Height = 19
         Caption = '...'
@@ -1176,8 +1214,8 @@ object frmButtonEdit: TfrmButtonEdit
         OnClick = SelectImgClick
       end
       object btnSelectImgTerminated: TButton
-        Left = 228
-        Top = 136
+        Left = 229
+        Top = 174
         Width = 21
         Height = 19
         Caption = '...'
@@ -1185,8 +1223,8 @@ object frmButtonEdit: TfrmButtonEdit
         OnClick = SelectImgClick
       end
       object btnSelectImgEarly: TButton
-        Left = 228
-        Top = 156
+        Left = 229
+        Top = 204
         Width = 21
         Height = 19
         Caption = '...'
@@ -1194,8 +1232,8 @@ object frmButtonEdit: TfrmButtonEdit
         OnClick = SelectImgClick
       end
       object btnSelectImgConfirmed: TButton
-        Left = 228
-        Top = 176
+        Left = 229
+        Top = 236
         Width = 21
         Height = 19
         Caption = '...'
@@ -1265,8 +1303,6 @@ object frmButtonEdit: TfrmButtonEdit
     RowSelect = True
     TabOrder = 2
     OnChange = tvSelectorChange
-    ExplicitTop = 96
-    ExplicitHeight = 352
   end
   object pnlTop: TPanel
     Left = 0

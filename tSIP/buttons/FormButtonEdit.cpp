@@ -186,6 +186,7 @@ void TfrmButtonEdit::ApplyConf(void)
 	chbImageCenterVertically->Checked = cfg->imageCenterVertically;
 	edImageTop->Enabled = !chbImageCenterVertically->Checked;
 
+	UpdateImgPreview();
 
 	chbBlfOverrideIdle->Checked = cfg->blfOverrideIdle.active;
 	edBlfOverrideIdle->Text = cfg->blfOverrideIdle.number.c_str();
@@ -519,6 +520,8 @@ void __fastcall TfrmButtonEdit::SelectImgClick(TObject *Sender)
 	{
     	edit->Text = ExtractFileName(openDialog->FileName);
 	}
+
+	UpdateImgPreview();
 }
 //---------------------------------------------------------------------------
 
@@ -564,6 +567,7 @@ void __fastcall TfrmButtonEdit::SelectColorClick(TObject *Sender)
 	colorDialog->Color = static_cast<TColor>(*col);
 	colorDialog->Execute();
 	*col = colorDialog->Color;
+	UpdateColorsPreview();
 }
 //---------------------------------------------------------------------------
 
@@ -807,6 +811,8 @@ void TfrmButtonEdit::UpdateColorView(void)
 	colorId = Color::IntTColorToId(color.downPressed);
 	cbDownPressedColor->ItemIndex = colorId;
 	btnSelectDownPressedColor->Visible = (colorId == Color::clCustom);
+
+	UpdateColorsPreview();
 }
 
 void TfrmButtonEdit::UpdateColors(void)
@@ -837,7 +843,20 @@ void TfrmButtonEdit::UpdateColors(void)
 	{
 		color.downPressed = Color::IdToIntTColor(static_cast<Color::Id>(cbDownPressedColor->ItemIndex));
 	}
+
+	UpdateColorsPreview();
 }
+
+void TfrmButtonEdit::UpdateColorsPreview(void)
+{
+	ButtonConf::Color &color = colors[cbColorElement->ItemIndex];
+	shColorIdle->Brush->Color = static_cast<TColor>(color.idle);
+	shColorInactive->Brush->Color = static_cast<TColor>(color.inactive);
+	shColorInactiveDown->Brush->Color = static_cast<TColor>(color.inactiveDown);
+	shColorDown->Brush->Color = static_cast<TColor>(color.down);
+	shColorDownPressed->Brush->Color = static_cast<TColor>(color.downPressed);
+}
+
 
 void __fastcall TfrmButtonEdit::chbImageCenterVerticallyClick(TObject *Sender)
 {
@@ -851,8 +870,7 @@ void __fastcall TfrmButtonEdit::chbLabelCenterVerticallyClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmButtonEdit::chbLabel2CenterHorizontallyClick(
-      TObject *Sender)
+void __fastcall TfrmButtonEdit::chbLabel2CenterHorizontallyClick(TObject *Sender)
 {
 	edLabel2Left->Enabled = !chbLabel2CenterHorizontally->Checked;
 }
@@ -860,8 +878,7 @@ void __fastcall TfrmButtonEdit::chbLabel2CenterHorizontallyClick(
 
 
 
-void __fastcall TfrmButtonEdit::btnSelectedScriptOnButtonEditClick(
-      TObject *Sender)
+void __fastcall TfrmButtonEdit::btnSelectedScriptOnButtonEditClick(TObject *Sender)
 {
 	TEdit *edit = NULL;
 	AnsiString eventName;
@@ -978,4 +995,43 @@ void __fastcall TfrmButtonEdit::tvSelectorChange(TObject *Sender,
 	}	
 }
 //---------------------------------------------------------------------------
+
+void TfrmButtonEdit::UpdateImgPreview(void)
+{
+	AnsiString idle = Paths::GetFullImgName(edImgIdle->Text);
+	AnsiString terminated = Paths::GetFullImgName(edImgTerminated->Text);
+	AnsiString early = Paths::GetFullImgName(edImgEarly->Text);
+	AnsiString confirmed = Paths::GetFullImgName(edImgConfirmed->Text);
+
+	try {
+		if (FileExists(idle))
+		{
+			imgIdle->Picture->LoadFromFile(idle);
+			imgIdle->Visible = true;
+		}
+	} catch (...) {
+		imgIdle->Visible = false;
+	}
+
+	try {
+		imgTerminated->Picture->LoadFromFile(terminated);
+		imgTerminated->Visible = true;
+	} catch (...) {
+		imgTerminated->Visible = false;
+	}
+
+	try {
+		imgEarly->Picture->LoadFromFile(early);
+		imgEarly->Visible = true;
+	} catch (...) {
+		imgEarly->Visible = false;
+	}
+
+	try {
+		imgConfirmed->Picture->LoadFromFile(confirmed);
+		imgConfirmed->Visible = true;
+	} catch (...) {
+		imgConfirmed->Visible = false;
+	}
+}
 

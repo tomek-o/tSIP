@@ -1148,5 +1148,11 @@ Version 0.3.2
 		- added devices = GetAudioDevicesList(moduleName, direction) function, returning array/table
 		- if GetAudioDevice or GetAudioDevicesList is called and audio devices list was not yet refreshed for the first time (initialized), it is done automatically
 	- added/fixed closing with Esc in few windows			
+	- button configuration editor:
+		- entered text for caption #1 and caption #2 can be multiline
+		- splitted settings into few pages like for main configuration
+		- added preview for color selection
+		- added preview for "BLF"/dialog/presence bitmaps
+		
 */
 

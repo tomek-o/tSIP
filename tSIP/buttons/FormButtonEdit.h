@@ -175,6 +175,17 @@ __published:	// IDE-managed Components
 	TComboBox *cbParentId;
 	TLabel *lblNumber;
 	TEdit *edNumber;
+	TShape *shColorInactive;
+	TShape *shColorDown;
+	TShape *shColorIdle;
+	TShape *shColorInactiveDown;
+	TShape *shColorDownPressed;
+	TLabel *lblColorPreview;
+	TImage *imgIdle;
+	TImage *imgTerminated;
+	TImage *imgEarly;
+	TImage *imgConfirmed;
+	TLabel *Label3;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
@@ -211,7 +222,9 @@ private:	// User declarations
 	void ApplyConf(void);
 	void UpdateColorView(void);
 	void UpdateColors(void);
+	void UpdateColorsPreview(void);
 	void UpdateLabelsTopVisibility(void);
+	void UpdateImgPreview(void);
 	TTabSheet *lastTab;
 	TTreeNode* CreatePagesNode(TTreeNode *parent, TTabSheet *tab);
 	void CreatePages(void);
