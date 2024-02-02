@@ -723,8 +723,8 @@ void ProgrammableButtons::SetSaveAllSettings(bool state)
 void ProgrammableButtons::SetInitialSettings(void)
 {
 	ButtonConf *cfg;
-	enum { LEFT = 184 };
-	enum { WIDTH = 73 };
+	enum { LEFT = 190 };
+	enum { WIDTH = 65 };
 	enum { HEIGHT = 32 };
 
 	for (unsigned int i=0; i<BASIC_PANEL_CONSOLE_BTNS; i++)
