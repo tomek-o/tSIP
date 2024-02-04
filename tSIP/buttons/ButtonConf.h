@@ -14,11 +14,7 @@ public:
 	enum { DEFAULT_PARENT_ID = 1 };
     int parentId;			///< id of button container where this button belongs
 	Button::Type type;
-	std::string caption;
-	std::string caption2;	///< optional 2nd caption line
-	enum { CAPTION_LINES_MIN = 1 };
-	enum { CAPTION_LINES_MAX = 2 };
-	int captionLines;
+
 	std::string number;
 
 	bool visible;	// hide whole button
@@ -27,18 +23,19 @@ public:
 	int left, top, width, height;
 	unsigned int bevelWidth;
 	bool customFrame;
+
+	enum { CAPTION_LINES_MIN = 1 };
+	enum { CAPTION_LINES_MAX = 2 };
+	int captionLines;
+	bool spaceLabelsYEqually;
+
+	std::string caption;
 	bool labelCenterHorizontally;
 	bool labelCenterVertically;
 	int labelLeft;
 	int labelTop;
 
-    bool spaceLabelsYEqually;
-
-	bool imageTransparent;
-	int imageLeft;
-	bool imageCenterVertically;
-	int imageTop;					// used if imageCenterVertically == false;
-
+	std::string caption2;	///< optional 2nd caption line
 	int label2Left;
 	int label2Top;
 	bool label2CenterHorizontally;
@@ -70,6 +67,10 @@ public:
 		}
 	} colors[EL_LIMITER];
 
+	bool imageTransparent;
+	int imageLeft;
+	bool imageCenterVertically;
+	int imageTop;					// used if imageCenterVertically == false;
 
 	std::string imgIdle;
 	std::string imgTerminated;

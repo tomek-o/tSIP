@@ -1,11 +1,12 @@
 object frmButtonCopy: TfrmButtonCopy
   Left = 0
   Top = 0
+  Anchors = [akTop, akRight]
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Copy button'
-  ClientHeight = 263
-  ClientWidth = 442
+  ClientHeight = 437
+  ClientWidth = 604
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -23,51 +24,67 @@ object frmButtonCopy: TfrmButtonCopy
     Caption = 'Source'
   end
   object lblTarget: TLabel
-    Left = 240
+    Left = 231
     Top = 8
     Width = 32
     Height = 13
     Caption = 'Target'
   end
   object lblFrom: TLabel
-    Left = 240
-    Top = 33
+    Left = 231
+    Top = 32
     Width = 22
     Height = 13
     Caption = 'from'
   end
   object lblTo: TLabel
-    Left = 240
-    Top = 58
+    Left = 435
+    Top = 32
     Width = 10
     Height = 13
     Caption = 'to'
   end
+  object lblDirection: TLabel
+    Left = 207
+    Top = 8
+    Width = 16
+    Height = 13
+    Caption = '=>'
+  end
   object pnlBottom: TPanel
     Left = 0
-    Top = 226
-    Width = 442
+    Top = 400
+    Width = 604
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 226
+    ExplicitWidth = 442
+    DesignSize = (
+      604
+      37)
     object btnCancel: TButton
-      Left = 360
+      Left = 524
       Top = 6
       Width = 75
       Height = 25
+      Anchors = [akTop, akRight]
       Caption = 'Close'
       TabOrder = 1
       OnClick = btnCancelClick
+      ExplicitLeft = 360
     end
     object btnApply: TButton
-      Left = 279
+      Left = 443
       Top = 6
       Width = 75
       Height = 25
+      Anchors = [akTop, akRight]
       Caption = 'Copy'
       TabOrder = 0
       OnClick = btnApplyClick
+      ExplicitLeft = 279
     end
   end
   object cbSource: TComboBox
@@ -80,8 +97,8 @@ object frmButtonCopy: TfrmButtonCopy
     TabOrder = 1
   end
   object cbTarget: TComboBox
-    Left = 286
-    Top = 30
+    Left = 277
+    Top = 29
     Width = 145
     Height = 21
     Style = csDropDownList
@@ -89,128 +106,226 @@ object frmButtonCopy: TfrmButtonCopy
     TabOrder = 2
   end
   object grboxCopy: TGroupBox
-    Left = 9
-    Top = 84
-    Width = 425
-    Height = 136
-    Caption = 'Copy'
+    Left = 8
+    Top = 56
+    Width = 588
+    Height = 338
+    Caption = 'Attributes to copy'
     PopupMenu = popupCopy
     TabOrder = 3
     object chbPosition: TCheckBox
       Left = 16
-      Top = 85
+      Top = 97
       Width = 73
       Height = 17
       Caption = 'position'
       TabOrder = 0
     end
-    object chbCaption: TCheckBox
-      Left = 144
-      Top = 62
-      Width = 73
-      Height = 17
-      Caption = 'caption'
-      TabOrder = 1
-    end
     object chbBehavior: TCheckBox
-      Left = 248
-      Top = 62
+      Left = 16
+      Top = 51
       Width = 105
       Height = 17
       Caption = 'type and behavior'
-      TabOrder = 2
-    end
-    object chbFont: TCheckBox
-      Left = 144
-      Top = 16
-      Width = 73
-      Height = 17
-      Caption = 'font'
-      TabOrder = 3
+      TabOrder = 1
     end
     object chbSize: TCheckBox
       Left = 144
-      Top = 39
+      Top = 97
       Width = 73
       Height = 17
       Caption = 'size'
-      TabOrder = 4
+      TabOrder = 2
     end
     object chbColors: TCheckBox
       Left = 16
-      Top = 16
+      Top = 269
       Width = 73
       Height = 17
       Caption = 'colors'
-      TabOrder = 5
+      TabOrder = 3
     end
     object chbVisible: TCheckBox
-      Left = 248
-      Top = 16
+      Left = 16
+      Top = 74
       Width = 73
       Height = 17
       Caption = 'visible'
-      TabOrder = 6
+      TabOrder = 4
     end
     object chbInactive: TCheckBox
-      Left = 16
-      Top = 39
+      Left = 336
+      Top = 74
       Width = 73
       Height = 17
       Caption = 'inactive'
-      TabOrder = 7
+      TabOrder = 5
     end
     object chbImages: TCheckBox
       Left = 16
-      Top = 62
+      Top = 292
       Width = 73
       Height = 17
       Caption = 'images'
-      TabOrder = 8
+      TabOrder = 6
     end
     object chbFrame: TCheckBox
-      Left = 248
-      Top = 39
+      Left = 16
+      Top = 314
       Width = 122
       Height = 17
       Caption = 'frame, bevel width'
-      TabOrder = 9
-    end
-    object chbCenterTextHorizontally: TCheckBox
-      Left = 144
-      Top = 85
-      Width = 73
-      Height = 17
-      Caption = 'center text'
-      TabOrder = 10
+      TabOrder = 7
     end
     object chbImageTransparent: TCheckBox
-      Left = 248
-      Top = 85
-      Width = 129
+      Left = 336
+      Top = 292
+      Width = 124
       Height = 17
       Caption = 'image: transparent'
-      TabOrder = 11
+      TabOrder = 8
     end
     object chbImagePosition: TCheckBox
-      Left = 248
-      Top = 108
+      Left = 144
+      Top = 292
       Width = 129
       Height = 17
       Caption = 'image: position'
-      TabOrder = 12
+      TabOrder = 9
     end
-    object chbLabelPosition: TCheckBox
-      Left = 16
-      Top = 108
+    object chbParentContainer: TCheckBox
+      Left = 144
+      Top = 74
       Width = 129
       Height = 17
-      Caption = 'label: position'
+      Caption = 'parent container'
+      TabOrder = 10
+    end
+    object grboxCaption1: TGroupBox
+      Left = 8
+      Top = 159
+      Width = 571
+      Height = 44
+      Caption = 'Caption #1'
+      TabOrder = 11
+      object chbCaption1: TCheckBox
+        Left = 9
+        Top = 18
+        Width = 46
+        Height = 17
+        Caption = 'text'
+        TabOrder = 0
+      end
+      object chbFont1: TCheckBox
+        Left = 70
+        Top = 18
+        Width = 42
+        Height = 17
+        Caption = 'font'
+        TabOrder = 1
+      end
+      object chbLabelPosition1: TCheckBox
+        Left = 136
+        Top = 18
+        Width = 60
+        Height = 17
+        Caption = 'position'
+        TabOrder = 2
+      end
+      object chbCenterTextHorizontally1: TCheckBox
+        Left = 228
+        Top = 18
+        Width = 135
+        Height = 17
+        Caption = 'center text horizontally'
+        TabOrder = 3
+      end
+      object chbCenterTextVertically1: TCheckBox
+        Left = 383
+        Top = 18
+        Width = 125
+        Height = 17
+        Caption = 'center text vertically'
+        TabOrder = 4
+      end
+    end
+    object chbNumberOfCaptionLines: TCheckBox
+      Left = 17
+      Top = 140
+      Width = 158
+      Height = 17
+      Caption = 'number of caption lines'
+      TabOrder = 12
+    end
+    object chbSpaceLabelsYEqually: TCheckBox
+      Left = 181
+      Top = 140
+      Width = 158
+      Height = 17
+      Caption = 'space labels equally in Y axis'
       TabOrder = 13
+    end
+    object grboxCaption2: TGroupBox
+      Left = 8
+      Top = 202
+      Width = 571
+      Height = 44
+      Caption = 'Caption #2'
+      TabOrder = 14
+      object chbCaption2: TCheckBox
+        Left = 9
+        Top = 18
+        Width = 46
+        Height = 17
+        Caption = 'text'
+        TabOrder = 0
+      end
+      object chbFont2: TCheckBox
+        Left = 70
+        Top = 18
+        Width = 42
+        Height = 17
+        Caption = 'font'
+        TabOrder = 1
+      end
+      object chbLabelPosition2: TCheckBox
+        Left = 136
+        Top = 18
+        Width = 60
+        Height = 17
+        Caption = 'position'
+        TabOrder = 2
+      end
+      object chbCenterTextHorizontally2: TCheckBox
+        Left = 228
+        Top = 18
+        Width = 135
+        Height = 17
+        Caption = 'center text horizontally'
+        TabOrder = 3
+      end
+    end
+    object btnSelectAll: TButton
+      Left = 16
+      Top = 18
+      Width = 75
+      Height = 23
+      Caption = 'Select all'
+      TabOrder = 15
+      OnClick = btnSelectAllClick
+    end
+    object btnDeselectAll: TButton
+      Left = 97
+      Top = 18
+      Width = 75
+      Height = 23
+      Caption = 'Deselect all'
+      TabOrder = 16
+      OnClick = btnDeselectAllClick
     end
   end
   object cbTargetType: TComboBox
-    Left = 286
+    Left = 277
     Top = 5
     Width = 145
     Height = 21
@@ -227,8 +342,8 @@ object frmButtonCopy: TfrmButtonCopy
       'all buttons')
   end
   object cbTargetTo: TComboBox
-    Left = 286
-    Top = 55
+    Left = 451
+    Top = 29
     Width = 145
     Height = 21
     Style = csDropDownList
@@ -236,8 +351,8 @@ object frmButtonCopy: TfrmButtonCopy
     TabOrder = 5
   end
   object popupCopy: TPopupMenu
-    Left = 16
-    Top = 208
+    Left = 8
+    Top = 32
     object miSelectAll: TMenuItem
       Caption = 'Select all'
       OnClick = miSelectAllClick

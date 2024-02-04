@@ -119,10 +119,7 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 		btnDst.width = btnSrc.width;
 		btnDst.height = btnSrc.height;
 	}
-	if (chbCaption->Checked)
-	{
-		btnDst.caption = btnSrc.caption;
-	}
+
 	if (chbBehavior->Checked)
 	{
 		btnDst.type = btnSrc.type;
@@ -138,12 +135,66 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 		btnDst.audioRxDev = btnSrc.audioRxDev;
 		btnDst.videoRxMod = btnSrc.videoRxMod;
 		btnDst.videoRxDev = btnSrc.videoRxDev;
+		btnDst.sipCode = btnSrc.sipCode;
+		btnDst.sipReason = btnSrc.sipReason;
+		btnDst.expires = btnSrc.expires;
+		
+		btnDst.blfOverrideIdle = btnSrc.blfOverrideIdle;
+		btnDst.blfOverrideTerminated = btnSrc.blfOverrideTerminated;
+		btnDst.blfOverrideEarly = btnSrc.blfOverrideEarly;
+		btnDst.blfOverrideConfirmed = btnSrc.blfOverrideConfirmed;
+
+		btnDst.blfActionDuringCall = btnSrc.blfActionDuringCall;
+		btnDst.blfDtmfPrefixDuringCall = btnSrc.blfDtmfPrefixDuringCall;
 	}
-	if (chbFont->Checked)
+
+	if (chbNumberOfCaptionLines->Checked)
+	{
+		btnDst.captionLines = btnSrc.captionLines;
+	}
+	if (chbSpaceLabelsYEqually->Checked)
+	{
+		btnDst.spaceLabelsYEqually = btnSrc.spaceLabelsYEqually;
+	}
+	if (chbCaption1->Checked)
+	{
+		btnDst.caption = btnSrc.caption;
+	}
+	if (chbCaption2->Checked)
+	{
+		btnDst.caption2 = btnSrc.caption2;
+	}
+	if (chbFont1->Checked)
 	{
 		btnDst.font = btnSrc.font;
+	}
+	if (chbFont2->Checked)
+	{
 		btnDst.fontLabel2 = btnSrc.fontLabel2;
 	}
+	if (chbLabelPosition1->Checked)
+	{
+		btnDst.labelLeft = btnSrc.labelLeft;
+		btnDst.labelTop = btnSrc.labelTop;
+	}
+	if (chbLabelPosition2->Checked)
+	{
+		btnDst.label2Left = btnSrc.label2Left;
+		btnDst.label2Top = btnSrc.label2Top;
+	}
+	if (chbCenterTextVertically1->Checked)
+	{
+		btnDst.labelCenterVertically = btnSrc.labelCenterVertically;
+	}
+	if (chbCenterTextHorizontally1->Checked)
+	{
+		btnDst.labelCenterHorizontally = btnSrc.labelCenterHorizontally;
+	}
+	if (chbCenterTextHorizontally2->Checked)
+	{
+		btnDst.label2CenterHorizontally = btnSrc.label2CenterHorizontally;
+	}
+
 	if (chbColors->Checked)
 	{
 		memcpy(btnDst.colors, btnSrc.colors, sizeof(btnDst.colors));
@@ -151,6 +202,10 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 	if (chbVisible->Checked)
 	{
 		btnDst.visible = btnSrc.visible;
+	}
+	if (chbParentContainer->Checked)
+	{
+    	btnDst.parentId = btnSrc.parentId;
 	}
 	if (chbInactive->Checked)
 	{
@@ -168,10 +223,6 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 		btnDst.customFrame = btnSrc.customFrame;
 		btnDst.bevelWidth = btnSrc.bevelWidth;
 	}
-	if (chbCenterTextHorizontally->Checked)
-	{
-		btnDst.labelCenterHorizontally = btnSrc.labelCenterHorizontally;
-	}
 	if (chbImageTransparent->Checked)
 	{
         btnDst.imageTransparent = btnSrc.imageTransparent;
@@ -181,14 +232,6 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 		btnDst.imageLeft = btnSrc.imageLeft;
 		btnDst.imageTop = btnSrc.imageTop;
 		btnDst.imageCenterVertically = btnSrc.imageCenterVertically;
-	}
-	if (chbLabelPosition->Checked)
-	{
-        btnDst.labelLeft = btnSrc.labelLeft;
-		btnDst.labelTop = btnSrc.labelTop;
-		btnDst.labelCenterVertically = btnSrc.labelCenterVertically;
-		btnDst.label2Left = btnSrc.label2Left;
-		btnDst.label2Top = btnSrc.label2Top;
 	}
 
 	AnsiString caption;
@@ -211,7 +254,7 @@ void __fastcall TfrmButtonCopy::cbTargetTypeChange(TObject *Sender)
 	switch (cbTargetType->ItemIndex)
 	{
 	case 0:
-		lblFrom->Visible = true;
+		//lblFrom->Visible = true;
 		cbTarget->Visible = true;
 		break;
 	case 2:
@@ -242,15 +285,39 @@ void  TfrmButtonCopy::SetCheckboxes(bool state)
 {
 	chbPosition->Checked = state;
 	chbSize->Checked = state;
-	chbCaption->Checked = state;
+
 	chbBehavior->Checked = state;
-	chbFont->Checked = state;
 	chbColors->Checked = state;
 	chbVisible->Checked = state;
+	chbParentContainer->Checked = state;
 	chbInactive->Checked = state;
 	chbImages->Checked = state;
-	chbFrame->Checked = state;
-	chbCenterTextHorizontally->Checked = state;
+	chbImagePosition->Checked = state;
 	chbImageTransparent->Checked = state;
+	chbFrame->Checked = state;
+
+	chbNumberOfCaptionLines->Checked = state;
+	chbSpaceLabelsYEqually->Checked = state;
+	chbCaption1->Checked = state;
+	chbCaption2->Checked = state;
+	chbFont1->Checked = state;
+	chbFont2->Checked = state;
+	chbLabelPosition1->Checked = state;
+	chbLabelPosition2->Checked = state;
+	chbCenterTextHorizontally1->Checked = state;
+	chbCenterTextHorizontally2->Checked = state;
+	chbCenterTextVertically1->Checked = state;
 }
+
+void __fastcall TfrmButtonCopy::btnSelectAllClick(TObject *Sender)
+{
+	SetCheckboxes(true);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonCopy::btnDeselectAllClick(TObject *Sender)
+{
+	SetCheckboxes(false);
+}
+//---------------------------------------------------------------------------
 
