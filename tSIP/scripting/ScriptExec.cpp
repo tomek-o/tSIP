@@ -1354,7 +1354,9 @@ static int l_SetButtonImage(lua_State* L)
 static int l_ProgrammableButtonClick(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
-	GetContext(L)->onProgrammableButtonClick(id);
+	TProgrammableButton* btn = buttons.GetBtn(id);
+	if (btn)
+		btn->OnClick(btn);
 	return 0;
 }
 
@@ -2105,7 +2107,6 @@ ScriptExec::ScriptExec(
 	CallbackGetRxDtmf onGetRxDtmf,
 	CallbackShowTrayNotifier onShowTrayNotifier,
 	CallbackHideTrayNotifier onHideTrayNotifier,
-	CallbackProgrammableButtonClick onProgrammableButtonClick,
 	CallbackUpdateSettings onUpdateSettings,
 	CallbackUpdateButtons onUpdateButtons,
 	CallbackMainMenuShow onMainMenuShow,
@@ -2131,7 +2132,6 @@ ScriptExec::ScriptExec(
 	onGetRxDtmf(onGetRxDtmf),
 	onShowTrayNotifier(onShowTrayNotifier),
 	onHideTrayNotifier(onHideTrayNotifier),
-	onProgrammableButtonClick(onProgrammableButtonClick),
 	onUpdateSettings(onUpdateSettings),
 	onUpdateButtons(onUpdateButtons),
 	onMainMenuShow(onMainMenuShow),
@@ -2150,7 +2150,6 @@ ScriptExec::ScriptExec(
 		onGetRxDtmf &&
 		onShowTrayNotifier &&
 		onHideTrayNotifier &&
-		onProgrammableButtonClick &&
 		onUpdateSettings &&
 		onUpdateButtons &&
 		onMainMenuShow &&

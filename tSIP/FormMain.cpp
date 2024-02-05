@@ -2957,7 +2957,6 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetRxDtmf,
 		&ShowTrayNotifier,
 		&HideTrayNotifier,
-		&ProgrammableButtonClick,
 		&UpdateSettingsFromJson,
 		&UpdateButtonsFromJson,
 		&MainMenuShow,
