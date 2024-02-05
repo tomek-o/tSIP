@@ -1158,13 +1158,6 @@ std::string TfrmMain::OnGetRxDtmf(unsigned int callUid)
 	return ret;
 }
 
-std::string TfrmMain::OnGetUserName(void)
-{
-	if (appSettings.uaConf.accounts.empty())
-		return "";
-	return appSettings.uaConf.accounts[0].user.c_str();
-}
-
 void TfrmMain::MainMenuShow(bool state)
 {
 	this->Menu = (state)?(MainMenu):(NULL);
@@ -2975,7 +2968,6 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetRxDtmf,
 		&ShowTrayNotifier,
 		&HideTrayNotifier,
-		&OnGetUserName,
 		&ProgrammableButtonClick,
 		&UpdateSettingsFromJson,
 		&UpdateButtonsFromJson,

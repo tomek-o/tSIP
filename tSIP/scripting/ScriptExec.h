@@ -44,7 +44,6 @@ private:
 	typedef std::string (__closure *CallbackGetRxDtmf)(unsigned int callUid);
 	typedef void (__closure *CallbackShowTrayNotifier)(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	typedef void (__closure *CallbackHideTrayNotifier)(void);
-	typedef std::string (__closure *CallbackGetUserName)(void);
 	typedef void (__closure *CallbackProgrammableButtonClick)(int id);
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
 	typedef int (__closure *CallbackUpdateButtons)(AnsiString json);
@@ -68,7 +67,6 @@ private:
 	CallbackGetRxDtmf onGetRxDtmf;
 	CallbackShowTrayNotifier onShowTrayNotifier;
 	CallbackHideTrayNotifier onHideTrayNotifier;
-	CallbackGetUserName onGetUserName;
 	CallbackProgrammableButtonClick onProgrammableButtonClick;
 	CallbackUpdateSettings onUpdateSettings;
 	CallbackUpdateButtons onUpdateButtons;
@@ -110,7 +108,6 @@ public:
 		CallbackGetRxDtmf onGetRxDtmf,
 		CallbackShowTrayNotifier onShowTrayNotifier,
 		CallbackHideTrayNotifier onHideTrayNotifier,
-		CallbackGetUserName onGetUserName,
 		CallbackProgrammableButtonClick onProgrammableButtonClick,
 		CallbackUpdateSettings onUpdateSettings,
 		CallbackUpdateButtons onUpdateButtons,

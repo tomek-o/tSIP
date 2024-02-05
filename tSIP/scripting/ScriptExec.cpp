@@ -1691,7 +1691,11 @@ static int l_HideTrayNotifier(lua_State* L)
 
 static int l_GetUserName(lua_State* L)
 {
-	std::string user = GetContext(L)->onGetUserName();
+	std::string user;
+	if (!appSettings.uaConf.accounts.empty())
+	{
+		user = appSettings.uaConf.accounts[0].user.c_str();
+	}
 	lua_pushstring(L, user.c_str());
 	return 1;
 }
@@ -2093,7 +2097,6 @@ ScriptExec::ScriptExec(
 	CallbackGetRxDtmf onGetRxDtmf,
 	CallbackShowTrayNotifier onShowTrayNotifier,
 	CallbackHideTrayNotifier onHideTrayNotifier,
-	CallbackGetUserName onGetUserName,
 	CallbackProgrammableButtonClick onProgrammableButtonClick,
 	CallbackUpdateSettings onUpdateSettings,
 	CallbackUpdateButtons onUpdateButtons,
@@ -2121,7 +2124,6 @@ ScriptExec::ScriptExec(
 	onGetRxDtmf(onGetRxDtmf),
 	onShowTrayNotifier(onShowTrayNotifier),
 	onHideTrayNotifier(onHideTrayNotifier),
-	onGetUserName(onGetUserName),
 	onProgrammableButtonClick(onProgrammableButtonClick),
 	onUpdateSettings(onUpdateSettings),
 	onUpdateButtons(onUpdateButtons),
@@ -2142,7 +2144,6 @@ ScriptExec::ScriptExec(
 		onGetRxDtmf &&
 		onShowTrayNotifier &&
 		onHideTrayNotifier &&
-		onGetUserName &&
 		onProgrammableButtonClick &&
 		onUpdateSettings &&
 		onUpdateButtons &&

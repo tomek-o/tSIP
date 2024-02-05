@@ -182,7 +182,6 @@ private:	// User declarations
 	void OnSetBtnContainerBackground(int id, const char* file);
 	void OnDisableBringToFront(bool state);
 	void OnSetKeepForeground(bool state);
-	std::string OnGetUserName(void);
 	void MainMenuShow(bool state);
 	void ApplicationClose(void);
 
