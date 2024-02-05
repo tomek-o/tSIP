@@ -1165,15 +1165,6 @@ std::string TfrmMain::OnGetUserName(void)
 	return appSettings.uaConf.accounts[0].user.c_str();
 }
 
-const ButtonConf* TfrmMain::OnGetButtonConf(int id)
-{
-	if (id < 0 || id >= buttons.btnConf.size())
-	{
-		return NULL;
-	}
-	return &buttons.btnConf[id];
-}
-
 void TfrmMain::MainMenuShow(bool state)
 {
 	this->Menu = (state)?(MainMenu):(NULL);

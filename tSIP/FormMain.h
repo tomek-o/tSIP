@@ -183,7 +183,6 @@ private:	// User declarations
 	void OnDisableBringToFront(bool state);
 	void OnSetKeepForeground(bool state);
 	std::string OnGetUserName(void);
-	const ButtonConf* OnGetButtonConf(int id);
 	void MainMenuShow(bool state);
 	void ApplicationClose(void);
 

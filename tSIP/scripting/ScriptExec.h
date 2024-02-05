@@ -48,7 +48,6 @@ private:
 	typedef void (__closure *CallbackProgrammableButtonClick)(int id);
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
 	typedef int (__closure *CallbackUpdateButtons)(AnsiString json);
-	typedef const ButtonConf* (__closure *CallbackGetButtonConf)(int id);
 	typedef void (__closure *CallbackMainMenuShow)(bool state);
 	typedef void (__closure *CallbackApplicationClose)(void);
 
@@ -73,7 +72,6 @@ private:
 	CallbackProgrammableButtonClick onProgrammableButtonClick;
 	CallbackUpdateSettings onUpdateSettings;
 	CallbackUpdateButtons onUpdateButtons;
-	CallbackGetButtonConf onGetButtonConf;
 	CallbackMainMenuShow onMainMenuShow;
 	CallbackApplicationClose onApplicationClose;
 
@@ -116,7 +114,6 @@ public:
 		CallbackProgrammableButtonClick onProgrammableButtonClick,
 		CallbackUpdateSettings onUpdateSettings,
 		CallbackUpdateButtons onUpdateButtons,
-		CallbackGetButtonConf onGetButtonConf,
 		CallbackMainMenuShow onMainMenuShow,
 		CallbackApplicationClose onApplicationClose
 		);

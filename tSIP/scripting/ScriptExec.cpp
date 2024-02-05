@@ -1894,26 +1894,26 @@ static int l_SetHandled(lua_State* L)
 static int l_GetButtonType(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
-	const ButtonConf* btnConf = GetContext(L)->onGetButtonConf(id);
-	if (btnConf == NULL)
+	if (id < 0 || id >= buttons.btnConf.size())
 	{
 		LOG("Lua error: no button configuration for id = %d\n", id);
 		return 0;
 	}
-	lua_pushinteger(L, btnConf->type);
+	const ButtonConf& btnConf = buttons.btnConf[id];
+	lua_pushinteger(L, btnConf.type);
 	return 1;
 }
 
 static int l_GetButtonNumber(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
-	const ButtonConf* btnConf = GetContext(L)->onGetButtonConf(id);
-	if (btnConf == NULL)
+	if (id < 0 || id >= buttons.btnConf.size())
 	{
 		LOG("Lua error: no button configuration for id = %d\n", id);
 		return 0;
 	}
-	lua_pushstring(L, btnConf->number.c_str());
+	const ButtonConf& btnConf = buttons.btnConf[id];
+	lua_pushstring(L, btnConf.number.c_str());
 	return 1;
 }
 
@@ -2097,7 +2097,6 @@ ScriptExec::ScriptExec(
 	CallbackProgrammableButtonClick onProgrammableButtonClick,
 	CallbackUpdateSettings onUpdateSettings,
 	CallbackUpdateButtons onUpdateButtons,
-	CallbackGetButtonConf onGetButtonConf,
 	CallbackMainMenuShow onMainMenuShow,
 	CallbackApplicationClose onApplicationClose
 	):
@@ -2126,7 +2125,6 @@ ScriptExec::ScriptExec(
 	onProgrammableButtonClick(onProgrammableButtonClick),
 	onUpdateSettings(onUpdateSettings),
 	onUpdateButtons(onUpdateButtons),
-	onGetButtonConf(onGetButtonConf),
 	onMainMenuShow(onMainMenuShow),
 	onApplicationClose(onApplicationClose),
 
@@ -2148,7 +2146,6 @@ ScriptExec::ScriptExec(
 		onProgrammableButtonClick &&
 		onUpdateSettings &&
 		onUpdateButtons &&
-		onGetButtonConf &&
 		onMainMenuShow &&
 		onApplicationClose
 		);
