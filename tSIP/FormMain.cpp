@@ -2979,7 +2979,6 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&ProgrammableButtonClick,
 		&UpdateSettingsFromJson,
 		&UpdateButtonsFromJson,
-		&OnGetButtonConf,
 		&MainMenuShow,
 		&ApplicationClose
 		);
