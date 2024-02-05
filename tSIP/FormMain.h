@@ -170,7 +170,6 @@ private:	// User declarations
 	void Answer(unsigned int callUid);
 	std::string OnGetDial(void);
 	void OnSetDial(std::string number);
-	int OnGetContactId(const char* user);
 	int OnGetStreamingState(void);
 	int OnGetRegistrationState(void);
 	void OnSetTrayIcon(const char* file);

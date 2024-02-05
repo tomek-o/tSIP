@@ -1576,7 +1576,16 @@ static int l_GetContactId(lua_State* L)
 	const char* str = lua_tostring( L, 1 );
 	if (str == NULL)
 		return 0;
-	int id = GetContext(L)->onGetContactId(str);
+
+	int id = -1;
+	for (unsigned int i=0; i<appSettings.uaConf.contacts.size(); i++)
+	{
+		if (appSettings.uaConf.contacts[i].user == str)
+		{
+			id = i;
+			break;
+		}
+	}
 	lua_pushinteger( L, id );
 	return 1;
 }
@@ -2092,7 +2101,6 @@ ScriptExec::ScriptExec(
 	CallbackGetRegistrationState onGetRegistrationState,
 	CallbackPluginSendMessageText onPluginSendMessageText,
 	CallbackPluginEnable onPluginEnable,
-	CallbackGetContactId onGetContactId,
 	CallbackRecordStart onRecordStart,
 	CallbackGetRxDtmf onGetRxDtmf,
 	CallbackShowTrayNotifier onShowTrayNotifier,
@@ -2119,7 +2127,6 @@ ScriptExec::ScriptExec(
 	onGetRegistrationState(onGetRegistrationState),
 	onPluginSendMessageText(onPluginSendMessageText),
 	onPluginEnable(onPluginEnable),
-	onGetContactId(onGetContactId),
 	onRecordStart(onRecordStart),
 	onGetRxDtmf(onGetRxDtmf),
 	onShowTrayNotifier(onShowTrayNotifier),
@@ -2139,7 +2146,6 @@ ScriptExec::ScriptExec(
 		onSetTrayIcon &&
 		onGetRegistrationState &&
 		onPluginSendMessageText && onPluginEnable &&
-		onGetContactId &&
 		onRecordStart &&
 		onGetRxDtmf &&
 		onShowTrayNotifier &&

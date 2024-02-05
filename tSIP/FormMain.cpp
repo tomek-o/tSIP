@@ -1017,16 +1017,6 @@ void TfrmMain::OnSetDial(std::string number)
 	cbCallURI->Text = number.c_str();
 }
 
-int TfrmMain::OnGetContactId(const char* user)
-{
-	for (unsigned int i=0; i<appSettings.uaConf.contacts.size(); i++)
-	{
-		if (appSettings.uaConf.contacts[i].user == user)
-			return i;
-	}
-	return -1;
-}
-
 int TfrmMain::OnGetStreamingState(void)
 {
 	return pagingTx.state;
@@ -2963,7 +2953,6 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnSetTrayIcon,
 		&OnGetRegistrationState,
 		&OnPluginSendMessageText, &OnPluginEnable,
-		&OnGetContactId,
 		&OnRecordStart,
 		&OnGetRxDtmf,
 		&ShowTrayNotifier,
