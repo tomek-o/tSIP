@@ -171,7 +171,6 @@ private:	// User declarations
 	std::string OnGetDial(void);
 	void OnSetDial(std::string number);
 	int OnGetContactId(const char* user);
-	int OnGetBlfState(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction);
 	int OnGetStreamingState(void);
 	int OnGetRegistrationState(void);
 	void OnSetTrayIcon(const char* file);

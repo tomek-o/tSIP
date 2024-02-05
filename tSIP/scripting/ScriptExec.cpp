@@ -18,6 +18,7 @@
 #include "UaMain.h"
 #include "Calls.h"
 #include "AppStatus.h"
+#include "Settings.h"
 #include "Globals.h"
 #include "Contacts.h"
 #include "FormContactPopup.h"
@@ -1583,17 +1584,18 @@ static int l_GetContactId(lua_State* L)
 static int l_GetBlfState(lua_State* L)
 {
 	int contactId = lua_tointeger( L, 1 );
+	if (contactId < 0 || contactId >= appSettings.uaConf.contacts.size())
+	{
+		LOG("GetBlfState: invalid contactId = %d\n", contactId);
+		return 0;
+	}
 
-	std::string number;
-	std::string remoteIdentity;
-	std::string remoteIdentityDisplay;
-	enum dialog_info_direction direction;
-	int state = GetContext(L)->onGetBlfState(contactId, number, remoteIdentity, remoteIdentityDisplay, direction);
-	lua_pushstring( L, number.c_str() );
-	lua_pushinteger( L, state );
-	lua_pushstring( L, remoteIdentity.c_str() );
-	lua_pushstring( L, remoteIdentityDisplay.c_str() );
-	lua_pushinteger( L, direction );
+	const UaConf::Contact &contact = appSettings.uaConf.contacts[contactId];
+	lua_pushstring( L, contact.user.c_str() );
+	lua_pushinteger( L, contact.dialog_info_state );
+	lua_pushstring( L, contact.remoteIdentity.c_str() );
+	lua_pushstring( L, contact.remoteIdentityDisplay.c_str() );
+	lua_pushinteger( L, contact.direction );
 	return 5;
 }
 
@@ -2087,7 +2089,6 @@ ScriptExec::ScriptExec(
 	CallbackPluginSendMessageText onPluginSendMessageText,
 	CallbackPluginEnable onPluginEnable,
 	CallbackGetContactId onGetContactId,
-	CallbackGetBlfState onGetBlfState,
 	CallbackRecordStart onRecordStart,
 	CallbackGetRxDtmf onGetRxDtmf,
 	CallbackShowTrayNotifier onShowTrayNotifier,
@@ -2117,7 +2118,6 @@ ScriptExec::ScriptExec(
 	onPluginSendMessageText(onPluginSendMessageText),
 	onPluginEnable(onPluginEnable),
 	onGetContactId(onGetContactId),
-	onGetBlfState(onGetBlfState),
 	onRecordStart(onRecordStart),
 	onGetRxDtmf(onGetRxDtmf),
 	onShowTrayNotifier(onShowTrayNotifier),
@@ -2140,7 +2140,6 @@ ScriptExec::ScriptExec(
 		onGetRegistrationState &&
 		onPluginSendMessageText && onPluginEnable &&
 		onGetContactId &&
-		onGetBlfState &&
 		onRecordStart &&
 		onGetRxDtmf &&
 		onShowTrayNotifier &&

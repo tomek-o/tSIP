@@ -1027,21 +1027,6 @@ int TfrmMain::OnGetContactId(const char* user)
 	return -1;
 }
 
-int TfrmMain::OnGetBlfState(int contactId, std::string &number, std::string &remoteIdentity, std::string &remoteIdentityDisplay, enum dialog_info_direction &direction)
-{
-	if (contactId < 0 || contactId >= appSettings.uaConf.contacts.size())
-	{
-		LOG("OnGetBlfState: invalid contactId = %d\n", contactId);
-		return -1;
-    }
-	const UaConf::Contact &contact = appSettings.uaConf.contacts[contactId];
-	number = contact.user;
-	remoteIdentity = contact.remoteIdentity.c_str();
-	remoteIdentityDisplay = contact.remoteIdentityDisplay.c_str();
-	direction = contact.direction;
-	return contact.dialog_info_state;
-}
-
 int TfrmMain::OnGetStreamingState(void)
 {
 	return pagingTx.state;
@@ -2995,7 +2980,6 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetRegistrationState,
 		&OnPluginSendMessageText, &OnPluginEnable,
 		&OnGetContactId,
-		&OnGetBlfState,
 		&OnRecordStart,
 		&OnGetRxDtmf,
 		&ShowTrayNotifier,
