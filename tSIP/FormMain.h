@@ -176,7 +176,6 @@ private:	// User declarations
 	int OnPluginSendMessageText(const char* dllName, const char* text);
 	int OnPluginEnable(const char* dllName, bool state);
 	int OnRecordStart(unsigned int callUid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
-	std::string OnGetRxDtmf(unsigned int callUid);
 	void OnShowBtnContainerStatusPanel(int id, bool state);
 	void OnSetBtnContainerBackground(int id, const char* file);
 	void OnDisableBringToFront(bool state);

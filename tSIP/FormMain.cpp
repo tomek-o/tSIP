@@ -1136,18 +1136,6 @@ int TfrmMain::OnRecordStart(unsigned int callUid, const char* file, int channels
 	return 0;
 }
 
-std::string TfrmMain::OnGetRxDtmf(unsigned int callUid)
-{
-	Call *call = Calls::FindByUid(callUid);
-	if (call == NULL)
-		return "";
-	if (call->dtmfRxQueue.empty())
-		return "";
-	std::string ret(1, call->dtmfRxQueue[0]);
-	call->dtmfRxQueue.pop_front();
-	return ret;
-}
-
 void TfrmMain::MainMenuShow(bool state)
 {
 	this->Menu = (state)?(MainMenu):(NULL);
@@ -2954,7 +2942,6 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&OnGetRegistrationState,
 		&OnPluginSendMessageText, &OnPluginEnable,
 		&OnRecordStart,
-		&OnGetRxDtmf,
 		&ShowTrayNotifier,
 		&HideTrayNotifier,
 		&UpdateSettingsFromJson,

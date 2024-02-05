@@ -2104,7 +2104,6 @@ ScriptExec::ScriptExec(
 	CallbackPluginSendMessageText onPluginSendMessageText,
 	CallbackPluginEnable onPluginEnable,
 	CallbackRecordStart onRecordStart,
-	CallbackGetRxDtmf onGetRxDtmf,
 	CallbackShowTrayNotifier onShowTrayNotifier,
 	CallbackHideTrayNotifier onHideTrayNotifier,
 	CallbackUpdateSettings onUpdateSettings,
@@ -2129,7 +2128,6 @@ ScriptExec::ScriptExec(
 	onPluginSendMessageText(onPluginSendMessageText),
 	onPluginEnable(onPluginEnable),
 	onRecordStart(onRecordStart),
-	onGetRxDtmf(onGetRxDtmf),
 	onShowTrayNotifier(onShowTrayNotifier),
 	onHideTrayNotifier(onHideTrayNotifier),
 	onUpdateSettings(onUpdateSettings),
@@ -2147,7 +2145,6 @@ ScriptExec::ScriptExec(
 		onGetRegistrationState &&
 		onPluginSendMessageText && onPluginEnable &&
 		onRecordStart &&
-		onGetRxDtmf &&
 		onShowTrayNotifier &&
 		onHideTrayNotifier &&
 		onUpdateSettings &&
