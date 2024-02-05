@@ -976,7 +976,14 @@ void TfrmMain::Hangup(unsigned int callUid, int sipCode, AnsiString reason)
 	if (c == NULL)
 		return;
 	c->disconnecting = true;
-	c->sipReason.sprintf("Local hangup, %d / %s", sipCode, reason.c_str());
+	if (c->connected)
+	{
+		c->sipReason = "Local hangup";
+	}
+	else
+	{
+		c->sipReason.sprintf("Local hangup, %d / %s", sipCode, reason.c_str());
+	}
 	UA->Hangup(callUid, sipCode, reason);
 }
 
