@@ -44,6 +44,7 @@ private:
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
 	typedef int (__closure *CallbackUpdateButtons)(AnsiString json);
 	typedef void (__closure *CallbackMainMenuShow)(bool state);
+	typedef void (__closure *CallbackApplicationShow)(bool focused);
 	typedef void (__closure *CallbackApplicationClose)(void);
 
 	CallbackCall onCall;
@@ -64,6 +65,7 @@ private:
 	CallbackUpdateSettings onUpdateSettings;
 	CallbackUpdateButtons onUpdateButtons;
 	CallbackMainMenuShow onMainMenuShow;
+	CallbackApplicationShow onApplicationShow;
 	CallbackApplicationClose onApplicationClose;
 
 	friend class ScriptImp;
@@ -102,6 +104,7 @@ public:
 		CallbackUpdateSettings onUpdateSettings,
 		CallbackUpdateButtons onUpdateButtons,
 		CallbackMainMenuShow onMainMenuShow,
+		CallbackApplicationShow onApplicationShow,
 		CallbackApplicationClose onApplicationClose
 		);
 	~ScriptExec();

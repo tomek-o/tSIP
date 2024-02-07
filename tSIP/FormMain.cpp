@@ -927,18 +927,7 @@ int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 
 	if (appSettings.frmMain.bShowWhenMakingCall)
 	{
-		if (!Visible)
-		{
-			ToggleVisibility();
-		}
-		else
-		{
-			Application->Restore();
-			SetActiveWindow (Handle);
-			SetForegroundWindow (Handle);
-			SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-		}
-		BringToFront();
+		ApplicationShow(true);	///< \todo Focused / not focused setting
 	}
 
 	if (appSettings.Scripts.onMakeCall != "")
@@ -1146,6 +1135,32 @@ int TfrmMain::OnRecordStart(unsigned int callUid, const char* file, int channels
 void TfrmMain::MainMenuShow(bool state)
 {
 	this->Menu = (state)?(MainMenu):(NULL);
+}
+
+void TfrmMain::ApplicationShow(bool focused)
+{
+	if (focused)
+	{
+		if (!Visible)
+		{
+			ToggleVisibility();
+		}
+		else
+		{
+			Application->Restore();
+			SetActiveWindow (Handle);
+			SetForegroundWindow (Handle);
+			SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+		}
+		BringToFront();
+	}
+	else
+	{
+        ShowWindow(Handle, SW_RESTORE);
+		ShowWindow(Handle, SW_SHOWNOACTIVATE);
+		SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		Visible = true;
+	}
 }
 
 void TfrmMain::ApplicationClose(void)
@@ -2954,6 +2969,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&UpdateSettingsFromJson,
 		&UpdateButtonsFromJson,
 		&MainMenuShow,
+		&ApplicationShow,
 		&ApplicationClose
 		);
 	scriptExec.Run(script.c_str());

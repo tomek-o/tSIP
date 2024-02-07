@@ -181,6 +181,7 @@ private:	// User declarations
 	void OnDisableBringToFront(bool state);
 	void OnSetKeepForeground(bool state);
 	void MainMenuShow(bool state);
+	void ApplicationShow(bool focused);
 	void ApplicationClose(void);
 
 	bool muteRing;
