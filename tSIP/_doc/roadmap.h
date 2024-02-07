@@ -5,7 +5,8 @@
 /** \page roadmap Roadmap
 
 Bunch of things to do in future releases.
-No particular order. Might be outdated.
+No particular order.
+Outdated / not the only one TODO list.
 
 - multiple accounts, even if only single active at the time
 - UDP transport keepalive

@@ -1147,12 +1147,16 @@ Version 0.3.2
 		- fixed multiple-call variants of functions switching audio/video inputs and outputs during the call
 		- added devices = GetAudioDevicesList(moduleName, direction) function, returning array/table
 		- if GetAudioDevice or GetAudioDevicesList is called and audio devices list was not yet refreshed for the first time (initialized), it is done automatically
+		- added ApplicationShow(focused) function
 	- added/fixed closing with Esc in few windows			
 	- button configuration editor:
 		- entered text for caption #1 and caption #2 can be multiline
 		- splitted settings into few pages like for main configuration
 		- added preview for color selection
 		- added preview for "BLF"/dialog/presence bitmaps
+	- default button configuration: "basic" column is slightly moved to the right and slightly slimmer
+	- default button configuration: added button with voip.ms affiliate link (note that this won't affect existing users)
+	- modified / extended button copy dialog 
 		
 */
 
