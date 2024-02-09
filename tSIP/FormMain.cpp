@@ -4017,8 +4017,15 @@ void TfrmMain::ClearLineButton(int btnId)
 	TProgrammableButton *btn = buttons.GetBtn(btnId);
 	if (btn == NULL)
 		return;
+#if 0
 	btn->SetCaption("LINE");
 	btn->SetCaption2(Callback::GetCallStateDescription(Callback::CALL_STATE_CLOSED));
+#else
+	// restore initial button captions
+	const ButtonConf &cfg = buttons.btnConf[btnId];
+	btn->SetCaption(cfg.caption.c_str());
+	btn->SetCaption2(cfg.caption2.c_str());
+#endif
 }
 
 void TfrmMain::UpdateMainCallDisplay(void)
