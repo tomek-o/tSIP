@@ -1162,6 +1162,9 @@ void TfrmMain::ApplicationShow(bool focused)
         ShowWindow(Handle, SW_RESTORE);
 		ShowWindow(Handle, SW_SHOWNOACTIVATE);
 		SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		SetWindowPos(Handle, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+		//SetForegroundWindow(Handle);
+		//SetWindowPos(Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 		Visible = true;
 	}
 }
