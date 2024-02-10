@@ -394,22 +394,22 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 	{
 		const Json::Value &frmMainJson = root["frmMain"];
 		int iWidth = frmMainJson.get("AppCollapsedWidth", frmMain.collapsedWidth).asInt();
-		if (iWidth >= _frmMain::MIN_WIDTH && iWidth <= maxX + 50)
+		if (iWidth >= _frmMain::MIN_WIDTH)
 		{
 			frmMain.collapsedWidth = iWidth;
 		}
 		iWidth = frmMainJson.get("AppExpandedWidth", frmMain.expandedWidth).asInt();
-		if (iWidth >= _frmMain::MIN_WIDTH && iWidth <= maxX + 50)
+		if (iWidth >= _frmMain::MIN_WIDTH)
 		{
 			frmMain.expandedWidth = iWidth;
 		}
 		int iHeight = frmMainJson.get("AppCollapsedHeight", frmMain.collapsedHeight).asInt();
-		if (iHeight >= _frmMain::MIN_HEIGHT && iHeight <= maxY + 50)
+		if (iHeight >= _frmMain::MIN_HEIGHT)
 		{
 			frmMain.collapsedHeight = iHeight;
 		}
 		iHeight = frmMainJson.get("AppExpandedHeight", frmMain.expandedHeight).asInt();
-		if (iHeight >= _frmMain::MIN_HEIGHT && iHeight <= maxY + 50)
+		if (iHeight >= _frmMain::MIN_HEIGHT)
 		{
 			frmMain.expandedHeight = iHeight;
 		}
