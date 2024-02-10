@@ -746,6 +746,9 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 {
 	tmrStartup->Enabled = false;
 
+	// make sure window position is not outside of available monitors
+	OnRestore(NULL);
+
 	{
 		// trying to fight with inconsistent state of tray notifier when trying to show it without activation
 		frmTrayNotifier->Show();
@@ -4089,10 +4092,13 @@ void __fastcall TfrmMain::OnRestore(TObject *Sender)
 	{
 		if (Screen->MonitorCount > 0)
 		{
-			LOG("Moving main window to first monitor\n");
 			TMonitor *monitor = Screen->Monitors[0];
-			Left = monitor->Left + 50;
-			Top = monitor->Top + 50;
+			if (monitor)
+			{
+				LOG("Moving main window to first monitor\n");
+				Left = monitor->Left + 50;
+				Top = monitor->Top + 50;
+			}
 		}
 	}
 }

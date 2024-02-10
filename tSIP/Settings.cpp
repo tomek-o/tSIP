@@ -437,17 +437,12 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			iWidth = frmMain.collapsedWidth;
 			iHeight = frmMain.collapsedHeight;
 		}
+
 		frmMainJson.getBool("UseClientAreaSizes", frmMain.bUseClientAreaSizes);
-		int iPosX = frmMainJson.get("AppPositionX", frmMain.iPosX).asInt();
-		if (iPosX >= 0 && iPosX + iWidth <= maxX)
-		{
-			frmMain.iPosX = iPosX;
-		}
-		int iPosY = frmMainJson.get("AppPositionY", frmMain.iPosY).asInt();
-		if (iPosY >= 0 && frmMain.iPosY + iHeight <= maxY)
-		{
-			frmMain.iPosY = iPosY;
-		}
+
+		frmMainJson.getInt("AppPositionX", frmMain.iPosX);
+		frmMainJson.getInt("AppPositionY", frmMain.iPosY);
+		
 		frmMain.bWindowMaximized = frmMainJson.get("Maximized", frmMain.bWindowMaximized).asBool();
 		frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", frmMain.bAlwaysOnTop).asBool();
 		frmMainJson.getBool("HideCallPanel", frmMain.bHideCallPanel);
