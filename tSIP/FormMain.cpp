@@ -1307,7 +1307,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				unsigned int delta = SecondsBetween(Now(), call->timeTalkStart);
 				AnsiString caption;
-				caption.sprintf("Connected, %02d:%02d", delta/60, delta%60);
+				caption.sprintf("%s, %02d:%02d", call->getStateTranslatedDescription().c_str(), delta/60, delta%60);
 				lblCallState->Caption = caption;
 			}
 		}
@@ -4049,7 +4049,7 @@ void TfrmMain::UpdateMainCallDisplay(void)
 		{
         	cbCallURI->Text = call->dialString;
 		}
-		lblCallState->Caption = call->getStateDescription();
+		lblCallState->Caption = call->getStateTranslatedDescription();
 		lbl2ndParty->Caption = GetClip(call->getPeerUri(), appSettings.Display.bUserOnlyClip);
 		lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 		if (lastContactEntry)

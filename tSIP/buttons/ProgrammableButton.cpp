@@ -379,6 +379,16 @@ void TProgrammableButton::SetCaption2(AnsiString text)
 	}	
 }
 
+AnsiString TProgrammableButton::GetCaption(void) const
+{
+	return label->Caption;
+}
+
+AnsiString TProgrammableButton::GetCaption2(void) const
+{
+	return label2->Caption;
+}
+
 void TProgrammableButton::SetState(enum dialog_info_status state, bool updateRemoteIdentity, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay)
 {
 	this->state = state;

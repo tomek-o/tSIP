@@ -106,6 +106,8 @@ public:
 	AnsiString getPeerName(void) const;
 	AnsiString getStateName(void) const;
 	AnsiString getStateDescription(void) const;
+	AnsiString getStateTranslatedName(void) const;
+	AnsiString getStateTranslatedDescription(void) const;
 };
 
 #endif

@@ -1156,7 +1156,11 @@ Version 0.3.2
 		- added preview for "BLF"/dialog/presence bitmaps
 	- default button configuration: "basic" column is slightly moved to the right and slightly slimmer
 	- default button configuration: added button with voip.ms affiliate link (note that this won't affect existing users)
-	- modified / extended button copy dialog 
+	- modified / extended button copy dialog
+	- removed most of the window size and position restrictions (better multi-monitor support)
+	- "LINE" buttons: using user-configured captions for idle state 
+	- call state short name (visible on the LINE buttons) and description (longer text in main window) can be translated 
+	- programmable button context menu: added options to copy to clipboard caption #1 and #2 text (e.g. text set previously by some Lua script or text from user presence status)		
 		
 */
 

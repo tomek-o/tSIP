@@ -1,4 +1,17 @@
 {
+  "Call": {
+    "stateDescription": {
+      "CLOSED": "- brak -",
+      "ESTABLISHED": "Połączono",
+      "INCOMING": "Połączenie przychodzące",
+      "OUTGOING": "Dzwonienie...",
+      "PROGRESS": "Postęp dzwonienia",
+      "RINGING": "Dzwoni...",
+      "TRANSFER": "Przekazanie",
+      "TRANSFER_OOD": "Przekazanie OOD",
+      "TRYING": "Próba..."
+    }
+  },
   "TfrmContactEditor": {
     "btnApply": "Zastosuj",
     "btnCancel": "Anuluj",

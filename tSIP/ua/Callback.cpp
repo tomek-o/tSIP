@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "Callback.h"
+#include "Translate.h"
 
 //---------------------------------------------------------------------------
 
@@ -65,4 +66,59 @@ const char* Callback::GetCallStateDescription(enum ua_state_e state)
 	}
 }
 
+AnsiString Callback::GetCallStateTranslatedName(enum ua_state_e state)
+{
+	switch (state)
+	{
+	case CALL_STATE_CLOSED:
+		return Translate2("Call.stateName.CLOSED", GetCallStateName(state));
+	case CALL_STATE_INCOMING:
+		return Translate2("Call.stateName.INCOMING", GetCallStateName(state));
+	case CALL_STATE_OUTGOING:
+		return Translate2("Call.stateName.OUTGOING", GetCallStateName(state));
+	case CALL_STATE_TRYING:
+		return Translate2("Call.stateName.TRYING", GetCallStateName(state));
+	case CALL_STATE_RINGING:
+		return Translate2("Call.stateName.RINGING", GetCallStateName(state));
+	case CALL_STATE_PROGRESS:
+		return Translate2("Call.stateName.PROGRESS", GetCallStateName(state));
+	case CALL_STATE_ESTABLISHED:
+		return Translate2("Call.stateName.ESTABLISHED", GetCallStateName(state));
+	case CALL_STATE_TRANSFER:
+		return Translate2("Call.stateName.TRANSFER", GetCallStateName(state));
+	case CALL_STATE_TRANSFER_OOD:
+		return Translate2("Call.stateName.TRANSFER_OOD", GetCallStateName(state));
+
+	default:
+		return "???";
+	}
+}
+
+AnsiString Callback::GetCallStateTranslatedDescription(enum ua_state_e state)
+{
+	switch (state)
+	{
+	case CALL_STATE_CLOSED:
+		return Translate2("Call.stateDescription.CLOSED", GetCallStateDescription(state));
+	case CALL_STATE_INCOMING:
+		return Translate2("Call.stateDescription.INCOMING", GetCallStateDescription(state));
+	case CALL_STATE_OUTGOING:
+		return Translate2("Call.stateDescription.OUTGOING", GetCallStateDescription(state));
+	case CALL_STATE_TRYING:
+		return Translate2("Call.stateDescription.TRYING", GetCallStateDescription(state));
+	case CALL_STATE_RINGING:
+		return Translate2("Call.stateDescription.RINGING", GetCallStateDescription(state));
+	case CALL_STATE_PROGRESS:
+		return Translate2("Call.stateDescription.PROGRESS", GetCallStateDescription(state));
+	case CALL_STATE_ESTABLISHED:
+		return Translate2("Call.stateDescription.ESTABLISHED", GetCallStateDescription(state));
+	case CALL_STATE_TRANSFER:
+		return Translate2("Call.stateDescription.TRANSFER", GetCallStateDescription(state));
+	case CALL_STATE_TRANSFER_OOD:
+		return Translate2("Call.stateDescription.TRANSFER_OOD", GetCallStateDescription(state));
+
+	default:
+		return "???";
+	}
+}
 

@@ -1,4 +1,28 @@
 {
+  "Call": {
+    "stateDescription": {
+      "CLOSED": " - IDLE - ",
+      "ESTABLISHED": "Connected",
+      "INCOMING": "Incoming call",
+      "OUTGOING": "Calling...",
+      "PROGRESS": "Call state progress",
+      "RINGING": "Ringback",
+      "TRANSFER": "Transfer",
+      "TRANSFER_OOD": "Transfer OOD",
+      "TRYING": "Trying..."
+    },
+    "stateName": {
+      "CLOSED": "CLOSED",
+      "ESTABLISHED": "ESTABLISHED",
+      "INCOMING": "INCOMING",
+      "OUTGOING": "OUTGOING",
+      "PROGRESS": "PROGRESS",
+      "RINGING": "RINGING",
+      "TRANSFER": "TRANSFER",
+      "TRANSFER_OOD": "TRANSFER OOD",
+      "TRYING": "TRYING"
+    }
+  },
   "TfrmContactEditor": {
     "btnApply": "Apply",
     "btnCancel": "Cancel",

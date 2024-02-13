@@ -80,6 +80,8 @@ public:
 	void SetConfig(const ButtonConf &cfg);
 	void SetCaption(AnsiString text);
 	void SetCaption2(AnsiString text);
+	AnsiString GetCaption(void) const;
+	AnsiString GetCaption2(void) const;
 	void SetState(enum dialog_info_status state, bool updateRemoteIdentity, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
 	enum dialog_info_status GetState(void) {
 		return state;

@@ -96,11 +96,23 @@ AnsiString Call::getStateName(void) const
 	return Callback::GetCallStateName(state);
 }
 
+AnsiString Call::getStateTranslatedName(void) const
+{
+	return Callback::GetCallStateTranslatedName(state);
+}
+
 AnsiString Call::getStateDescription(void) const
 {
 	if (sipReason != "")
 		return sipReason;
 	return Callback::GetCallStateDescription(state);
+}
+
+AnsiString Call::getStateTranslatedDescription(void) const
+{
+	if (sipReason != "")
+		return sipReason;
+	return Callback::GetCallStateTranslatedDescription(state);
 }
 
 void Call::ShowOnLineButton(void)
@@ -126,7 +138,7 @@ void Call::ShowOnLineButton(void)
 	btn->SetCaption(caption);
 
 	AnsiString caption2;
-	caption2.sprintf("%s", getStateName().c_str());
+	caption2.sprintf("%s", getStateTranslatedName().c_str());
 	if (hold)
 		caption2 += ", HOLD";
 	if (mute)

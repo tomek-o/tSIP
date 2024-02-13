@@ -52,6 +52,8 @@ public:
 
 	static const char* GetCallStateName(enum ua_state_e state);
 	static const char* GetCallStateDescription(enum ua_state_e state);
+	static AnsiString GetCallStateTranslatedName(enum ua_state_e state);
+	static AnsiString GetCallStateTranslatedDescription(enum ua_state_e state);
 
 	enum reg_state_e
 	{
