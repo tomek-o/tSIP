@@ -12,6 +12,14 @@ object dmButtons: TdmButtons
     object N1: TMenuItem
       Caption = '-'
     end
+    object miCopyCaption1: TMenuItem
+      Caption = 'Copy caption #1 to clipboard'
+      OnClick = miCopyCaption1Click
+    end
+    object miCopyCaption2: TMenuItem
+      Caption = 'Copy caption #2 to clipboard'
+      OnClick = miCopyCaption2Click
+    end
     object miEditSpeedDial: TMenuItem
       Caption = 'Edit'
       OnClick = miEditSpeedDialClick

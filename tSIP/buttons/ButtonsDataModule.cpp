@@ -7,6 +7,7 @@
 #include "ProgrammableButton.h"
 #include "ProgrammableButtons.h"
 #include "Globals.h"
+#include <Clipbrd.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -53,6 +54,22 @@ void __fastcall TdmButtons::miResizeSpeedDialClick(TObject *Sender)
 	assert(panel);
 	int id = panel->Tag;
 	buttons.Resize(id);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TdmButtons::miCopyCaption1Click(TObject *Sender)
+{
+	TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(popupPanel->PopupComponent);
+	assert(panel);
+	Clipboard()->AsText = panel->GetCaption();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TdmButtons::miCopyCaption2Click(TObject *Sender)
+{
+	TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(popupPanel->PopupComponent);
+	assert(panel);
+	Clipboard()->AsText = panel->GetCaption2();
 }
 //---------------------------------------------------------------------------
 

@@ -23,10 +23,14 @@ __published:	// IDE-managed Components
 	TMenuItem *miContainerMenu;
 	TImageList *imgList;
 	TTimer *tmrMoving;
+	TMenuItem *miCopyCaption1;
+	TMenuItem *miCopyCaption2;
 	void __fastcall popupPanelPopup(TObject *Sender);
 	void __fastcall miEditSpeedDialClick(TObject *Sender);
 	void __fastcall miMoveSpeedDialClick(TObject *Sender);
 	void __fastcall miResizeSpeedDialClick(TObject *Sender);
+	void __fastcall miCopyCaption1Click(TObject *Sender);
+	void __fastcall miCopyCaption2Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TdmButtons(TComponent* Owner);
