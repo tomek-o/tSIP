@@ -731,7 +731,7 @@ static int append_params(struct mbuf *mb, struct pl *params)
 		return err ? err : ENOMEM;
 
 	pstr = str;
-	while((token = strtok(pstr, ";"))) {
+	while((token = strtok(pstr, ";")) != NULL) {
 		re_snprintf(param, sizeof(param), ";%s", token);
 		if (re_regex((const char *)mb->buf, mb->end, param))
 			mbuf_write_str(mb, param);
