@@ -957,7 +957,6 @@ void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
 	if (call)
 	{
 		Hangup(call->uid);
-		UA->PlayStop();
 	}
 }
 //---------------------------------------------------------------------------
@@ -1574,7 +1573,6 @@ void TfrmMain::PollCallbackQueue(void)
 				{
 					call->connected = true;
 					call->timeTalkStart = Now();
-					call->ringStarted = false;
 					call->paiPeerUri = cb.paiPeerUri;
 					call->paiPeerName = GetPeerName(cb.paiPeerName);
 					call->codecName = cb.codecName;
@@ -1645,10 +1643,6 @@ void TfrmMain::PollCallbackQueue(void)
 						call->lastReplyLine = cb.caller;
 					}
 					Calls::SetPreviousCall(*call);
-					if (call->ringStarted) {
-						UA->PlayStop();
-						call->ringStarted = false;
-					}
 
 					if (cb.caller != "")
 					{
@@ -2703,11 +2697,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 			Call *call = Calls::GetCurrentCall();
 			if (call->incoming)
 			{
-                int TODO__MULTIPLE_CALLS_MULTIPLE_RINGS;
-				UA->PlayStop();
+				UA->PlayStop(call->uid);
 				int TODO__PHONE_INTERFACE_CALL_ID;
 				PhoneInterface::UpdateRing(0);
-				call->ringStarted = false;
 			}
 		}
 		break;
@@ -3441,9 +3433,8 @@ void TfrmMain::ProgrammableButtonClick(int buttonId)
 
 void TfrmMain::StartRing(Call &call, AnsiString wavFile)
 {
-	UA->StartRing(wavFile);
+	UA->StartRing(call.uid, wavFile);
 	PhoneInterface::UpdateRing(1);
-	call.ringStarted = true;	
 }
 
 AnsiString TfrmMain::RingFile(AnsiString alertInfo)

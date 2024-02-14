@@ -89,6 +89,7 @@ struct call {
 	call_dtmf_h *dtmfh;       /**< DTMF handler                         */
 	void *arg;                /**< Handler argument                     */
 	uint32_t rtp_timeout_ms;  /**< RTP Timeout in [ms]                  */
+	struct play *play;        /**< Playback for ring, ringback, etc.    */	
 };
 
 
@@ -395,6 +396,7 @@ static void call_destructor(void *arg)
 	mem_deref(call->sub);
 	mem_deref(call->not);
 	mem_deref(call->acc);
+	mem_deref(call->play);
 }
 
 
@@ -710,6 +712,8 @@ int call_hangup(struct call *call, uint16_t scode, const char *reason)
 	if (!call)
 		return EINVAL;
 
+	call->play = mem_deref(call->play);		
+
 	switch (call->state) {
 
 	case STATE_INCOMING:
@@ -769,6 +773,8 @@ int call_answer(struct call *call, uint16_t scode, const char *audio_mod, const 
 	
 	if (!call || !call->sess)
 		return EINVAL;
+
+	call->play = mem_deref(call->play);
 
 	if (STATE_INCOMING != call->state) {
 		return 0;
@@ -2116,4 +2122,19 @@ unsigned int call_get_uid(struct call *call)
 	if (!call)
 		return 0;
 	return call->uid;
+}
+
+int call_play_file(struct call *call, const char *audio_mod, const char *audio_dev, const char *filename, float *volume, int repeat, bool loop_without_silence)
+{
+	if (!call)
+		return EINVAL;
+	return play_file(&call->play, audio_mod, audio_dev, filename, volume, repeat, loop_without_silence);
+}
+
+int call_play_stop(struct call *call)
+{
+	if (!call)
+		return EINVAL;
+	call->play = mem_deref(call->play);
+	return 0;
 }

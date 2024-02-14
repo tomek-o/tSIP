@@ -1171,25 +1171,29 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::START_RING: {
-		struct ua* ua = ua_cur();
-		struct config * cfg = conf_config();
-		//LOG("UaMain: START_RING\n");
-		float *volume;
-		if (calls.size() <= 1)
+		if (cmdCall)
 		{
-			volume = &cfg->audio.ring_volume;
+			struct config * cfg = conf_config();
+			//LOG("UaMain: START_RING\n");
+			float *volume;
+			if (calls.size() <= 1)
+			{
+				volume = &cfg->audio.ring_volume;
+			}
+			else
+			{
+				volume = &cfg->audio.ring_volume_multi;
+			}
+			(void)call_play_file(cmdCall, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), volume, -1, cfg->audio.loop_ring_without_silence);
 		}
-		else
-		{
-			volume = &cfg->audio.ring_volume_multi;
-		}
-		(void)ua_play_file(ua, cfg->audio.ring_mod, cfg->audio.ring_dev, cmd.target.c_str(), volume, -1, cfg->audio.loop_ring_without_silence);
 		break;
 	}
 	case Command::PLAY_STOP: {
-		struct ua* ua = ua_cur();
-		//LOG("UaMain: PLAY_STOP\n");
-		ua_play_stop(ua);
+		if (cmdCall)
+		{
+			//LOG("UaMain: PLAY_STOP\n");
+			call_play_stop(cmdCall);
+		}
 		break;
 	}
 	case Command::START_RING2: {

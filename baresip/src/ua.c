@@ -31,8 +31,7 @@ struct ua {
 	struct account *acc;         /**< Account Parameters                 */
 	struct list regl;            /**< List of Register clients           */
 	struct list calls;           /**< List of active calls (struct call) */
-	struct play *play;           /**< Playback of ringtones etc. (basic) */
-	struct play *play2;          /**< Playback of ringtones etc. #2 (incoming MESSAGE)     */
+	struct play *play2;          /**< Playback of ringtones etc. not related to calll (incoming MESSAGE notification) */
 	struct pl extensionv[8];     /**< Vector of SIP extensions           */
 	size_t    extensionc;        /**< Number of SIP extensions           */
 	char *cuser;                 /**< SIP Contact username               */
@@ -260,21 +259,6 @@ int ua_reregister(struct ua *ua)
 	return ua_register(ua);
 }
 
-int ua_play_file(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, float *volume, int repeat, bool loop_without_silence)
-{
-	if (!ua)
-		return EINVAL;
-	return play_file(&ua->play, audio_mod, audio_dev, filename, volume, repeat, loop_without_silence);
-}
-
-int ua_play_stop(struct ua *ua)
-{
-	if (!ua)
-		return EINVAL;
-	ua->play = mem_deref(ua->play);
-	return 0;
-}
-
 int ua_play_file2(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, float *volume)
 {
 	if (!ua)
@@ -309,7 +293,7 @@ static void call_event_handler(struct call *call, enum call_event ev,
 	peeruri = call_peeruri(call);
 
 	/* stop any ringtones */
-	ua->play = mem_deref(ua->play);
+	call_play_stop(call);
 
 	switch (ev) {
 
@@ -332,7 +316,7 @@ static void call_event_handler(struct call *call, enum call_event ev,
 		break;
 
 	case CALL_EVENT_RINGING:
-		(void)play_file(&ua->play, cfg->audio.alert_mod, cfg->audio.alert_dev, "ringback.wav", &cfg->audio.alert_volume, -1, false);
+		(void)call_play_file(call, cfg->audio.alert_mod, cfg->audio.alert_dev, "ringback.wav", &cfg->audio.alert_volume, -1, false);
 
 		ua_event(ua, UA_EVENT_CALL_RINGING, call, "%s", peeruri);
 		break;
@@ -355,8 +339,10 @@ static void call_event_handler(struct call *call, enum call_event ev,
 		if (call_scode(call)) {
 			const char *tone;
 			tone = translate_errorcode(call_scode(call));
-			if (tone)
-				(void)play_file(&ua->play, cfg->audio.alert_mod, cfg->audio.alert_dev, tone, &cfg->audio.alert_volume, 1, false);
+			if (tone) {
+				/* Cannot use call player as call would be destroyed here */
+				(void)play_file(&ua->play2, cfg->audio.alert_mod, cfg->audio.alert_dev, tone, &cfg->audio.alert_volume, 1, false);
+			}
 		}
 		ua_event(ua, UA_EVENT_CALL_CLOSED, call, "%s", str);
 		mem_deref(call);
@@ -542,7 +528,6 @@ static void ua_destructor(void *arg)
 
 	list_flush(&ua->calls);
 	list_flush(&ua->regl);
-	mem_deref(ua->play);
 	mem_deref(ua->play2);
 	mem_deref(ua->cuser);
 	mem_deref(ua->acc);
@@ -889,8 +874,6 @@ void ua_hangup(struct ua *ua, struct call *call,
 			return;
 	}
 
-	ua->play = mem_deref(ua->play);
-
 	(void)call_hangup(call, scode, reason);
 
 	mem_deref(call);
@@ -922,8 +905,6 @@ int ua_answer(struct ua *ua, struct call *call, const char *audio_mod, const cha
 	}
 
 	/* todo: put previous call on-hold (if configured) */
-
-	ua->play = mem_deref(ua->play);
 
 	call_set_vidisp_parent_handle(call, vidisp_parent_handle);	
 

@@ -1160,7 +1160,8 @@ Version 0.3.2
 	- removed most of the window size and position restrictions (better multi-monitor support)
 	- "LINE" buttons: using user-configured captions for idle state 
 	- call state short name (visible on the LINE buttons) and description (longer text in main window) can be translated 
-	- programmable button context menu: added options to copy to clipboard caption #1 and #2 text (e.g. text set previously by some Lua script or text from user presence status)		
-		
+	- programmable button context menu: added options to copy to clipboard caption #1 and #2 text (e.g. text set previously by some Lua script or text from user presence status)
+	- FIXED: each call holds now its own instance of audio file player (ring, ringback, etc.) fixing possible problems with multiple calls		
+	- direct IP dialing is not requiring "sip:" prefix when using IP:PORT as target		
 */
 

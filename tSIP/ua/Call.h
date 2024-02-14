@@ -46,7 +46,6 @@ public:
 	AnsiString recordFile;
 	bool recording;
 	std::deque<char> dtmfRxQueue;
-	bool ringStarted;
 	AnsiString paiPeerUri;
 	AnsiString paiPeerName;
 	AnsiString codecName;
@@ -87,7 +86,6 @@ public:
 		state(Callback::CALL_STATE_CLOSED),
 		lastScode(0),
 		recording(false),
-		ringStarted(false),
 		displayParentHandle(NULL),
 		audioErrorCount(0),
 		btnId(-1),

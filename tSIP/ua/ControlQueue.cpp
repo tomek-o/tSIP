@@ -240,24 +240,26 @@ void ControlQueue::Hangup(unsigned int callUid, int code, AnsiString reason)
 	fifo.push();
 }
 
-void ControlQueue::StartRing(AnsiString wavFile)
+void ControlQueue::StartRing(unsigned int callUid, AnsiString wavFile)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::START_RING;
+	cmd->callUid = callUid;
 	cmd->target = wavFile;
 	fifo.push();
 }
 
-void ControlQueue::PlayStop(void)
+void ControlQueue::PlayStop(unsigned int callUid)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::PLAY_STOP;
+	cmd->callUid = callUid;
 	fifo.push();
 }
 

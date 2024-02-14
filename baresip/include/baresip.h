@@ -120,6 +120,8 @@ void          call_enable_rtp_timeout(struct call *call, uint32_t timeout_ms);
 struct recorder_st* call_get_recorder(const struct call *call);
 void call_set_uid(struct call *call, unsigned int uid);
 unsigned int call_get_uid(struct call *call);
+int call_play_file(struct call *call, const char *audio_mod, const char *audio_dev, const char *filename, float *volume, int repeat, bool loop_without_silence);
+int call_play_stop(struct call *call);
 
 /*
  * Paging TX
@@ -625,9 +627,7 @@ void ua_unregister(struct ua *ua);
 bool ua_isregistered(const struct ua *ua);
 unsigned int ua_regint(const struct ua *ua);
 int	ua_reregister(struct ua *ua);
-int ua_play_file(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, float *volume, int repeat, bool loop_without_silence);
-int ua_play_stop(struct ua *ua);
-/** Start playing another, separate "ring", with no options to repeat/cancel */
+/** Start playing "ring" not related to calls, with no options to repeat/cancel */
 int ua_play_file2(struct ua *ua, const char *audio_mod, const char *audio_dev, const char *filename, float *volume);
 const char     *ua_aor(const struct ua *ua);
 const char     *ua_cuser(const struct ua *ua);
