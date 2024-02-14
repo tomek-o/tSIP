@@ -766,7 +766,7 @@ int ua_connect(struct ua *ua, unsigned int callUid, struct call **callp,
 	struct pl pl_extra_hdr_lines;
 	size_t len;
 	int err = 0;
-	struct sa socketaddr;
+	bool valid_ip = false;
 
 	if (!ua || !str_isset(uri))
 		return EINVAL;
@@ -786,12 +786,24 @@ int ua_connect(struct ua *ua, unsigned int callUid, struct call **callp,
 
 	err |= mbuf_write_str(dialbuf, uri);
 
+	{
+		char ip_buf[16];
+		struct sa socketaddr;
+		char* p;
+		str_ncpy(ip_buf, uri, sizeof(ip_buf));
+		p = strchr(ip_buf, ':');	/* allow IP:PORT */
+		if (p)
+			*p = '\0';
+		if (net_inet_pton(ip_buf, &socketaddr) == 0)
+			valid_ip = true;
+	}
+
 	/* Append domain if missing */
 	/* Assuming that if sip: is present then domain is also present */
 	/* Assuming that if dialed string looks like IP then domain should not be appended */
 	if (0 != re_regex(uri, len, "[^@]+@[^]+", NULL, NULL) &&
 		0 != re_regex(uri, len, "sip:") &&
-		0 != net_inet_pton(uri, &socketaddr)
+		!valid_ip
 		) {
 
 #if HAVE_INET6
