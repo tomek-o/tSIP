@@ -24,6 +24,7 @@
 #include <FileCtrl.hpp>
 #include <assert.h>
 #include <stdio.h>
+#include <math.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -38,6 +39,11 @@ namespace
 	{
 		strncpy(dst, src, dstsize);
 		dst[dstsize-1] = '\0';
+	}
+
+	inline double round(double d)
+	{
+		return floor(d + 0.5);
 	}
 
 	void StrToIntDef2(const AnsiString &str, int& value)
@@ -188,12 +194,12 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	cbSoundAlertOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgAlert.mod);
 	cbSoundAlertOutputModChange(NULL);
-	trbarSoundAlertVolume->Position = tmpSettings.uaConf.audioCfgAlert.volume * 100;
+	trbarSoundAlertVolume->Position = round(tmpSettings.uaConf.audioCfgAlert.volume * 100.0f);
 
 	cbSoundRingOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgRing.mod);
 	cbSoundRingOutputModChange(NULL);
-	trbarSoundRingVolume->Position = tmpSettings.uaConf.audioCfgRing.volume * 100;
-	trbarSoundRingVolumeMulti->Position = tmpSettings.uaConf.audioCfgRing.volumeMulti * 100;	
+	trbarSoundRingVolume->Position = round(tmpSettings.uaConf.audioCfgRing.volume * 100.0f);
+	trbarSoundRingVolumeMulti->Position = round(tmpSettings.uaConf.audioCfgRing.volumeMulti * 100.0f);
 
 	cbSoundOutputIntercomMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(tmpSettings.uaConf.audioCfgPlayIntercom.mod);
 	cbSoundOutputIntercomModChange(NULL);
