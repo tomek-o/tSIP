@@ -127,5 +127,9 @@ switch automatically to line with new outgoing call if there is only one call
 
 support for multiple simultaneous RTP streaming - treat streaming as call
 
+- option to deny incoming call if other call is active (for the ones that want attended transfer and/or conference but no call waiting)
+- button editor: button to blink edited button to find it
+button container: set color
+
 */
 

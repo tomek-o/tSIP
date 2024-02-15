@@ -1163,5 +1163,7 @@ Version 0.3.2
 	- programmable button context menu: added options to copy to clipboard caption #1 and #2 text (e.g. text set previously by some Lua script or text from user presence status)
 	- FIXED: each call holds now its own instance of audio file player (ring, ringback, etc.) fixing possible problems with multiple calls		
 	- direct IP dialing is not requiring "sip:" prefix when using IP:PORT as target		
+	- FIXED issue with volume sliders for audio volume in settings moving slightly to the left each time settings are accepted if configured volume was low due to rounding errors
+	- FIXED minor issue with main call display not refreshed in multiple call setup when there are two incoming calls and first one (from selected one) is disconnected and then incoming again		
 */
 

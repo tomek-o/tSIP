@@ -30,6 +30,7 @@ USEFORM("FormDialpadConf.cpp", frmDialpadConf);
 USEFORM("scripting\FormLuaScriptHelp.cpp", frmLuaScriptHelp);
 USEFORM("FormVideoConf.cpp", frmVideoConf);
 USEFORM("scripting\FormScriptPluginVariables.cpp", frmScriptPluginVariables);
+USEFORM("buttons\FormButtonContainerConf.cpp", frmButtonContainerConf);
 //---------------------------------------------------------------------------
 #include "baresip_base_config.h"
 

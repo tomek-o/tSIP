@@ -525,6 +525,7 @@
         <FILE FILENAME="ua\VideoModules.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VideoModules" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\VideoModules.h"/>
         <FILE FILENAME="ua\UaGlobals.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="UaGlobals" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\UaGlobals.h"/>
         <FILE FILENAME="scripting\FormScriptPluginVariables.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormScriptPluginVariables" FORMNAME="frmScriptPluginVariables" DESIGNCLASS="" ADDITIONAL="scripting\FormScriptPluginVariables.h"/>
+        <FILE FILENAME="buttons\FormButtonContainerConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonContainerConf" FORMNAME="frmButtonContainerConf" DESIGNCLASS="" ADDITIONAL="buttons\FormButtonContainerConf.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -533,7 +534,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">3</VersionInfo>
           <VersionInfo Name="Release">1</VersionInfo>
-          <VersionInfo Name="Build">7</VersionInfo>
+          <VersionInfo Name="Build">8</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -545,7 +546,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.3.1.7</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.3.1.8</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
