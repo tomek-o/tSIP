@@ -35,7 +35,17 @@ void Call::reset(void)
 void Call::setHold(bool state)
 {
 	if (connected == false && progress == false)
-		state = false;
+	{
+		if (state)
+		{
+			LOG("Call %u: no media yet, cannot hold\n", uid);
+			state = false;
+		}
+		if (hold == state)
+		{
+			return;
+		}
+	}
 	if (hold == state)
 	{
 		LOG("Call %u: no need to change hold state to %d\n", uid, static_cast<int>(state));
