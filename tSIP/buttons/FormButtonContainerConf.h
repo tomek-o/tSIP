@@ -8,6 +8,7 @@
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
 #include <ExtCtrls.hpp>
+#include <Dialogs.hpp>
 //---------------------------------------------------------------------------
 
 class ButtonContainerConf;
@@ -18,7 +19,15 @@ __published:	// IDE-managed Components
 	TPanel *pnlBottom;
 	TButton *btnCancel;
 	TButton *btnApply;
+	TLabel *lblBackgroundBitmap;
+	TEdit *edBackgroundBitmap;
+	TButton *btnSelectBackgroundBitmap;
+	TOpenDialog *openDialog;
 	void __fastcall FormShow(TObject *Sender);
+	void __fastcall btnSelectBackgroundBitmapClick(TObject *Sender);
+	void __fastcall btnApplyClick(TObject *Sender);
+	void __fastcall FormKeyPress(TObject *Sender, char &Key);
+	void __fastcall btnCancelClick(TObject *Sender);
 private:	// User declarations
 	bool confirmed;
 	ButtonContainerConf *cfg;

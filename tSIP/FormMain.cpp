@@ -256,7 +256,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		&OnSetKeepForeground,
 		appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
 	frmButtonContainerBasic->Parent = this->pnlDialpad;
-	frmButtonContainerBasic->UpdateBackgroundImage();
+	frmButtonContainerBasic->ApplyConfig();
 	frmButtonContainerBasic->Visible = true;
 	frmButtonContainers[0] = frmButtonContainerBasic;
 
@@ -276,7 +276,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 			&OnSetKeepForeground,
 			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
 		container->Parent = this; //this->pnlSpeedDial;
-		container->UpdateBackgroundImage();
+		container->ApplyConfig();
 		container->SendToBack();
 		container->Align = alClient;
 		container->Visible = true;
@@ -623,7 +623,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		TfrmButtonContainer *& container = frmButtonContainers[i];
 		if (container)
 		{
-			container->UpdateSettings();
+			container->UpdatePopupSettings();
 		}
 	}
 	if (appSettings.frmMain.bAlwaysOnTop)

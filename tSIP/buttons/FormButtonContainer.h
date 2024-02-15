@@ -29,29 +29,27 @@ __published:	// IDE-managed Components
 	TPanel *panelMain;
 	TPopupMenu *popupAddPanel;
 	TMenuItem *miAddEditPanel;
-	TMenuItem *miSetBackground;
-	TOpenDialog *openDialog;
 	TImage *imgBackground;
-	TMenuItem *miClearBackground;
 	TMenuItem *miCopyPanel;
 	TPanel *pnlStatus;
 	TListView *lvStatus;
 	TImageList *imglistStatus;
 	TTimer *tmrMoving;
 	TPanel *movingFrame;
+	TMenuItem *miConfigureButtonContainer;
 	void __fastcall popupAddPanelPopup(TObject *Sender);
 	void __fastcall miAddEditPanelClick(TObject *Sender);
-	void __fastcall miSetBackgroundClick(TObject *Sender);
-	void __fastcall miClearBackgroundClick(TObject *Sender);
 	void __fastcall miCopyPanelClick(TObject *Sender);
 	void __fastcall lvStatusData(TObject *Sender, TListItem *Item);
 	void __fastcall panelMainMouseDown(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y);
 	void __fastcall imgBackgroundMouseDown(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y);
+	void __fastcall miConfigureButtonContainerClick(TObject *Sender);
 public:
 	typedef void (__closure *CallbackSetKeepForeground)(bool disable);
-	void UpdateSettings(void);
+	void UpdatePopupSettings(void);
+	void ApplyConfig(void);
 	void UpdateBackgroundImage(AnsiString file);
 	TPanel* GetButtonParent(void) {
     	return panelMain;
@@ -75,7 +73,6 @@ public:		// User declarations
 		CallbackSetKeepForeground callbackSetKeepForeground,
         bool showStatus, int statusPanelHeight, bool hideEmptyStatus
 		);
-	void UpdateBackgroundImage(void);
 	void ShowStatusPanel(bool state);
 	void obsUpdate(Observable* o, Argument * arg);
 	void UpdateAll(void);	

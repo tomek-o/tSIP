@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FormButtonContainer.h"
+#include "FormButtonContainerConf.h"
 #include "ProgrammableButton.h"
 #include "FormButtonCopy.h"
 #include "ProgrammableButtons.h"
@@ -67,7 +68,7 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 //---------------------------------------------------------------------------
 
 
-void TfrmButtonContainer::UpdateSettings(void)
+void TfrmButtonContainer::UpdatePopupSettings(void)
 {
 	if (useContextMenu == appSettings.frmMain.bSpeedDialPopupMenu)
 	{
@@ -118,33 +119,6 @@ void __fastcall TfrmButtonContainer::miAddEditPanelClick(TObject *Sender)
 	buttons.Edit(id);
 }
 
-void __fastcall TfrmButtonContainer::miSetBackgroundClick(TObject *Sender)
-{
-	AnsiString &fname = appSettings.buttonContainers[containerId].backgroundImage;
-	openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";
-	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\img\\";
-	openDialog->InitialDir = dir;
-	if (FileExists(dir + fname))
-		openDialog->FileName = dir + fname;
-	else
-		openDialog->FileName = "";
-	callbackSetKeepForeground(false);
-	if (openDialog->Execute())
-	{
-		fname = ExtractFileName(openDialog->FileName);
-		UpdateBackgroundImage();
-		AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
-		appSettings.Write(asConfigFile);
-	}
-	callbackSetKeepForeground(true);
-}
-//---------------------------------------------------------------------------
-
-void TfrmButtonContainer::UpdateBackgroundImage(void)
-{
-	UpdateBackgroundImage(appSettings.buttonContainers[containerId].backgroundImage);
-}
-
 void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file)
 {
 	AnsiString asBackgroundFile;
@@ -168,15 +142,6 @@ void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file)
 		LOG("Failed to load background (%s)\n", asBackgroundFile.c_str());
 	}
 }
-
-void __fastcall TfrmButtonContainer::miClearBackgroundClick(TObject *Sender)
-{
-	appSettings.buttonContainers[containerId].backgroundImage = "";
-	UpdateBackgroundImage();
-	AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
-	appSettings.Write(asConfigFile);
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TfrmButtonContainer::miCopyPanelClick(TObject *Sender)
 {
@@ -222,8 +187,6 @@ void TfrmButtonContainer::ShowStatusPanel(bool state)
 }
 
 
-
-
 void __fastcall TfrmButtonContainer::panelMainMouseDown(TObject *Sender,
       TMouseButton Button, TShiftState Shift, int X, int Y)
 {
@@ -243,3 +206,30 @@ void __fastcall TfrmButtonContainer::imgBackgroundMouseDown(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmButtonContainer::miConfigureButtonContainerClick(
+      TObject *Sender)
+{
+	callbackSetKeepForeground(false);
+	if (frmButtonContainerConf == NULL)
+	{
+		Application->CreateForm(__classid(TfrmButtonContainerConf), &frmButtonContainerConf);
+	}
+	ButtonContainerConf prev = appSettings.buttonContainers[containerId];
+	frmButtonContainerConf->ShowModal(&appSettings.buttonContainers[containerId]);
+	if (frmButtonContainerConf->isConfirmed())
+	{
+		if (prev != appSettings.buttonContainers[containerId])
+		{
+			ApplyConfig();
+			AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
+			appSettings.Write(asConfigFile);
+		}
+	}
+	callbackSetKeepForeground(true);
+}
+//---------------------------------------------------------------------------
+
+void TfrmButtonContainer::ApplyConfig(void)
+{
+	UpdateBackgroundImage(appSettings.buttonContainers[containerId].backgroundImage);
+}

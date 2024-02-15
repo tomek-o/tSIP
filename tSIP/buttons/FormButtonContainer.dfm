@@ -14,8 +14,6 @@ object frmButtonContainer: TfrmButtonContainer
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object panelMain: TPanel
@@ -109,19 +107,10 @@ object frmButtonContainer: TfrmButtonContainer
       Caption = 'Copy panel'
       OnClick = miCopyPanelClick
     end
-    object miSetBackground: TMenuItem
-      Caption = 'Set background image'
-      OnClick = miSetBackgroundClick
+    object miConfigureButtonContainer: TMenuItem
+      Caption = 'Configure button container'
+      OnClick = miConfigureButtonContainerClick
     end
-    object miClearBackground: TMenuItem
-      Caption = 'Clear background image'
-      OnClick = miClearBackgroundClick
-    end
-  end
-  object openDialog: TOpenDialog
-    Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
-    Left = 24
-    Top = 328
   end
   object imglistStatus: TImageList
     Height = 36
