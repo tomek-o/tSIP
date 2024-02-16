@@ -565,9 +565,11 @@ void __fastcall TfrmButtonEdit::SelectColorClick(TObject *Sender)
 		return;
 	}
 	colorDialog->Color = static_cast<TColor>(*col);
-	colorDialog->Execute();
-	*col = colorDialog->Color;
-	UpdateColorsPreview();
+	if (colorDialog->Execute())
+	{
+		*col = colorDialog->Color;
+		UpdateColorsPreview();
+	}
 }
 //---------------------------------------------------------------------------
 
