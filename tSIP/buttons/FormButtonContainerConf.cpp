@@ -5,6 +5,7 @@
 
 #include "FormButtonContainerConf.h"
 #include "ButtonContainerConf.h"
+#include "common\Colors.h"
 #include <assert.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -16,6 +17,11 @@ __fastcall TfrmButtonContainerConf::TfrmButtonContainerConf(TComponent* Owner)
 	confirmed(false),
 	cfg(NULL)
 {
+	cbBackgroundColor->Items->Clear();
+	for (int i=0; i<Color::clLimiter; i++)
+	{
+		cbBackgroundColor->Items->Add(Color::IdToText(static_cast<Color::Id>(i)));
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -25,6 +31,12 @@ void __fastcall TfrmButtonContainerConf::ShowModal(ButtonContainerConf *cfg)
 	this->cfg = cfg;
 	
 	edBackgroundBitmap->Text = cfg->backgroundImage;
+
+	int colorId = Color::IntTColorToId(cfg->backgroundColor);
+	cbBackgroundColor->ItemIndex = colorId;
+	btnSelectBackgroundColor->Visible = (colorId == Color::clCustom);
+
+	UpdateColorsPreview();
 
 	TForm::ShowModal();
 }
@@ -56,6 +68,10 @@ void __fastcall TfrmButtonContainerConf::btnApplyClick(TObject *Sender)
 {
 	confirmed = true;
 	cfg->backgroundImage = ExtractFileName(edBackgroundBitmap->Text);
+	if (cbBackgroundColor->ItemIndex != Color::clCustom)
+	{
+		cfg->backgroundColor = Color::IdToIntTColor(static_cast<Color::Id>(cbBackgroundColor->ItemIndex));
+	}
 
 	Close();
 }
@@ -72,6 +88,40 @@ void __fastcall TfrmButtonContainerConf::FormKeyPress(TObject *Sender,
 void __fastcall TfrmButtonContainerConf::btnCancelClick(TObject *Sender)
 {
 	Close();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmButtonContainerConf::cbBackgroundColorChange(
+      TObject *Sender)
+{
+	btnSelectBackgroundColor->Visible = (cbBackgroundColor->ItemIndex == Color::clCustom);
+}
+//---------------------------------------------------------------------------
+
+void TfrmButtonContainerConf::UpdateColorsPreview(void)
+{
+	shColorBackground->Brush->Color = static_cast<TColor>(cfg->backgroundColor);
+}
+
+void __fastcall TfrmButtonContainerConf::btnSelectBackgroundColorClick(
+      TObject *Sender)
+{
+	int *col;
+	if (Sender == btnSelectBackgroundColor)
+	{
+		col = &cfg->backgroundColor;
+	}
+	else
+	{
+		assert(!"Unhandled color type");
+		return;
+	}
+	colorDialog->Color = static_cast<TColor>(*col);
+	if (colorDialog->Execute())
+	{
+		*col = colorDialog->Color;
+		UpdateColorsPreview();
+	}
 }
 //---------------------------------------------------------------------------
 

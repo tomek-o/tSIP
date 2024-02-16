@@ -1164,6 +1164,8 @@ Version 0.3.2
 	- FIXED: each call holds now its own instance of audio file player (ring, ringback, etc.) fixing possible problems with multiple calls		
 	- direct IP dialing is not requiring "sip:" prefix when using IP:PORT as target		
 	- FIXED issue with volume sliders for audio volume in settings moving slightly to the left each time settings are accepted if configured volume was low due to rounding errors
-	- FIXED minor issue with main call display not refreshed in multiple call setup when there are two incoming calls and first one (from selected one) is disconnected and then incoming again		
+	- FIXED minor issue with main call display not refreshed in multiple call setup when there are two incoming calls and first one (from selected one) is disconnected and then incoming again
+	- added new configuration window with button container properties; this is replacing two existing items (setting/clearing bitmap) from container popup menu
+		- added background color to container configuration (lighter than using bitmap for the same purpose)		
 */
 

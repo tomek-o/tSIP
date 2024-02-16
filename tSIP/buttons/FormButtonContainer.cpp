@@ -214,12 +214,13 @@ void __fastcall TfrmButtonContainer::miConfigureButtonContainerClick(
 	{
 		Application->CreateForm(__classid(TfrmButtonContainerConf), &frmButtonContainerConf);
 	}
-	ButtonContainerConf prev = appSettings.buttonContainers[containerId];
-	frmButtonContainerConf->ShowModal(&appSettings.buttonContainers[containerId]);
+	ButtonContainerConf tmp = appSettings.buttonContainers[containerId];
+	frmButtonContainerConf->ShowModal(&tmp);
 	if (frmButtonContainerConf->isConfirmed())
 	{
-		if (prev != appSettings.buttonContainers[containerId])
+		if (tmp != appSettings.buttonContainers[containerId])
 		{
+			appSettings.buttonContainers[containerId] = tmp;
 			ApplyConfig();
 			AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 			appSettings.Write(asConfigFile);
@@ -231,5 +232,7 @@ void __fastcall TfrmButtonContainer::miConfigureButtonContainerClick(
 
 void TfrmButtonContainer::ApplyConfig(void)
 {
-	UpdateBackgroundImage(appSettings.buttonContainers[containerId].backgroundImage);
+	const ButtonContainerConf &cfg = appSettings.buttonContainers[containerId];
+	UpdateBackgroundImage(cfg.backgroundImage);
+	panelMain->Color = static_cast<TColor>(cfg.backgroundColor);
 }
