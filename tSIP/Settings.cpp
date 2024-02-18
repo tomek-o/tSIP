@@ -674,6 +674,14 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		CallsJson.getBool("EnableAutoAnswerEvenIfAnotherCallIsActive", Calls.enableAutoAnswerEvenIfAnotherCallIsActive);
 		CallsJson.getBool("AutoHoldWhenSwitchingCalls", Calls.autoHoldWhenSwitchingCalls);
 		CallsJson.getBool("AutoSwitchToCallAnsweredFromTray", Calls.autoSwitchToCallAnsweredFromTray);
+
+		{
+			const Json::Value &jaa = CallsJson["autoAnswerSecondCall"];
+			struct _Calls::AutoAnswerSecondCall &aa = Calls.autoAnswerSecondCall;
+			jaa.getBool("enabled", aa.enabled);
+			jaa.getInt("code", aa.code);
+			jaa.getAString("reason", aa.reason);
+		}
 	}
 
 	{
@@ -1006,6 +1014,13 @@ int Settings::Write(AnsiString asFileName)
 		jv["EnableAutoAnswerEvenIfAnotherCallIsActive"] = Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
 		jv["AutoHoldWhenSwitchingCalls"] = Calls.autoHoldWhenSwitchingCalls;
 		jv["AutoSwitchToCallAnsweredFromTray"] = Calls.autoSwitchToCallAnsweredFromTray;
+		{
+			Json::Value &jaa = jv["autoAnswerSecondCall"];
+			const struct _Calls::AutoAnswerSecondCall &aa = Calls.autoAnswerSecondCall;
+			jaa["enabled"] = aa.enabled;
+			jaa["code"] = aa.code;
+			jaa["reason"] = aa.reason;
+		}
 	}
 
 

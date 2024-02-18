@@ -1158,14 +1158,16 @@ Version 0.3.2
 	- default button configuration: added button with voip.ms affiliate link (note that this won't affect existing users)
 	- modified / extended button copy dialog
 	- removed most of the window size and position restrictions (better multi-monitor support)
-	- "LINE" buttons: using user-configured captions for idle state 
-	- call state short name (visible on the LINE buttons) and description (longer text in main window) can be translated 
+	- call state short name (visible on the LINE buttons) and description (longer text in main window) can be translated
 	- programmable button context menu: added options to copy to clipboard caption #1 and #2 text (e.g. text set previously by some Lua script or text from user presence status)
-	- FIXED: each call holds now its own instance of audio file player (ring, ringback, etc.) fixing possible problems with multiple calls		
-	- direct IP dialing is not requiring "sip:" prefix when using IP:PORT as target		
+	- direct IP dialing is not requiring "sip:" prefix when using IP:PORT as target
 	- FIXED issue with volume sliders for audio volume in settings moving slightly to the left each time settings are accepted if configured volume was low due to rounding errors
-	- FIXED minor issue with main call display not refreshed in multiple call setup when there are two incoming calls and first one (from selected one) is disconnected and then incoming again
 	- added new configuration window with button container properties; this is replacing two existing items (setting/clearing bitmap) from container popup menu
-		- added background color to container configuration (lighter than using bitmap for the same purpose)		
+		- added background color to container configuration (lighter than using bitmap for the same purpose)
+	- multiple calls:
+		- added new settings to auto-deny incoming call if another call is active
+		- "LINE" buttons: using user-configured captions for idle state
+		- FIXED minor issue with main call display not refreshed in multiple call setup when there are two incoming calls and first one (from selected one) is disconnected and then incoming again
+		- FIXED: each call holds now its own instance of audio file player (ring, ringback, etc.) fixing possible problems with multiple calls
 */
 

@@ -4251,9 +4251,16 @@ object frmSettings: TfrmSettings
           'Settings for configuration supporting multiple calls (with multi' +
           'ple "LINE" buttons)'
       end
+      object lblMultipleCallsDenyReason: TLabel
+        Left = 352
+        Top = 31
+        Width = 54
+        Height = 13
+        Caption = 'and reason'
+      end
       object chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive: TCheckBox
         Left = 3
-        Top = 22
+        Top = 59
         Width = 462
         Height = 17
         Caption = 
@@ -4263,7 +4270,7 @@ object frmSettings: TfrmSettings
       end
       object chbCallsAutoHoldWhenSwitchingCalls: TCheckBox
         Left = 3
-        Top = 45
+        Top = 89
         Width = 438
         Height = 17
         Caption = 'Automatically hold/unhold when switching between calls'
@@ -4271,13 +4278,35 @@ object frmSettings: TfrmSettings
       end
       object chbCallsAutoSwitchToCallAnsweredFromTray: TCheckBox
         Left = 3
-        Top = 68
+        Top = 116
         Width = 438
         Height = 17
         Caption = 
           'Automatically switch to new call when answering using tray notif' +
           'ier window'
         TabOrder = 2
+      end
+      object chbAutoAnswerSecondCallEnabled: TCheckBox
+        Left = 3
+        Top = 30
+        Width = 284
+        Height = 17
+        Caption = 'Deny incoming call if other call is active, using SIP code'
+        TabOrder = 3
+      end
+      object edAutoAnswerSecondCallCode: TEdit
+        Left = 291
+        Top = 28
+        Width = 49
+        Height = 21
+        TabOrder = 4
+      end
+      object edAutoAnswerSecondCallReason: TEdit
+        Left = 416
+        Top = 28
+        Width = 141
+        Height = 21
+        TabOrder = 5
       end
     end
   end

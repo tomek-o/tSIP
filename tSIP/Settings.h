@@ -243,6 +243,19 @@ public:
 		bool enableAutoAnswerEvenIfAnotherCallIsActive;
 		bool autoHoldWhenSwitchingCalls;				///< automatically hold inactive / unhold new active call when switching between calls
 		bool autoSwitchToCallAnsweredFromTray;
+
+		struct AutoAnswerSecondCall
+		{
+			bool enabled;
+			int code;
+			AnsiString reason;
+			AutoAnswerSecondCall(void):
+				enabled(false),
+				code(486),
+				reason("Busy Here")
+			{}
+		} autoAnswerSecondCall;
+
 		_Calls(void):
 			bDisconnectCallOnAudioError(true),
 			enableAutoAnswerEvenIfAnotherCallIsActive(false),

@@ -481,6 +481,10 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbCallsAutoHoldWhenSwitchingCalls->Checked = tmpSettings.Calls.autoHoldWhenSwitchingCalls;
 	chbCallsAutoSwitchToCallAnsweredFromTray->Checked = tmpSettings.Calls.autoSwitchToCallAnsweredFromTray;
 
+	chbAutoAnswerSecondCallEnabled->Checked = tmpSettings.Calls.autoAnswerSecondCall.enabled;
+	edAutoAnswerSecondCallCode->Text = tmpSettings.Calls.autoAnswerSecondCall.code;
+	edAutoAnswerSecondCallReason->Text = tmpSettings.Calls.autoAnswerSecondCall.reason;
+
 	edWebRtcAecMsInSndCardBuf->Text = tmpSettings.uaConf.webrtcAec.msInSndCardBuf;
 	edWebRtcAecSkew->Text = tmpSettings.uaConf.webrtcAec.skew;
 
@@ -912,6 +916,10 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive = chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked;
 	tmpSettings.Calls.autoHoldWhenSwitchingCalls = chbCallsAutoHoldWhenSwitchingCalls->Checked;
 	tmpSettings.Calls.autoSwitchToCallAnsweredFromTray = chbCallsAutoSwitchToCallAnsweredFromTray->Checked;
+
+	tmpSettings.Calls.autoAnswerSecondCall.enabled = chbAutoAnswerSecondCallEnabled->Checked;
+	tmpSettings.Calls.autoAnswerSecondCall.code = StrToIntDef(edAutoAnswerSecondCallCode->Text, 486);
+	tmpSettings.Calls.autoAnswerSecondCall.reason = edAutoAnswerSecondCallReason->Text;
 
 	tmpSettings.uaConf.webrtcAec.msInSndCardBuf = StrToIntDef(edWebRtcAecMsInSndCardBuf->Text, 120);
 	if (tmpSettings.uaConf.webrtcAec.msInSndCardBuf < 0) {
