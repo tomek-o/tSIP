@@ -2709,7 +2709,8 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		if (muteRing)
 		{
 			Call *call = Calls::GetCurrentCall();
-			if (call->incoming)
+			/** \todo Should this stop rings for all the current calls? */
+			if (call && call->incoming)
 			{
 				UA->PlayStop(call->uid);
 				int TODO__PHONE_INTERFACE_CALL_ID;
@@ -2743,6 +2744,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	case Button::HTTP_QUERY: {
 		Call *call = Calls::GetCurrentCall();
+		/** \note HttpQuery accepts also NULL, taking number from last history entry in this case */
 		HttpQuery(call);
 		break;
 	}
