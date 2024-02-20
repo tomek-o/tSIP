@@ -353,3 +353,11 @@ void Calls::OnButtonConfigChange(void)
 	}
 }
 
+void Calls::SetHold(bool state)
+{
+	ScopedLock<Mutex> lock(mutex);
+	for(std::map<unsigned int, Call>::iterator iter = entries.begin(); iter != entries.end(); ++iter)
+	{
+		iter->second.setHold(state);
+	}
+}

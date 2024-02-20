@@ -33,6 +33,8 @@ namespace Calls
 	int AssignLineButton(Call *call, bool outgoing, int &btnId);
 	void OnLineButtonClick(int id, TProgrammableButton* btn);
 	void OnButtonConfigChange(void);
+
+	void SetHold(bool state);
 };
 
 #endif

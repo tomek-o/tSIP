@@ -2682,11 +2682,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	}
 	case Button::CONFERENCE_START: {
 		// unhold all calls first
-		std::map<unsigned int, Call>& calls = Calls::GetCalls();
-		for(std::map<unsigned int, Call>::iterator iter = calls.begin(); iter != calls.end(); ++iter)
-		{
-        	iter->second.setHold(false);
-		}
+		Calls::SetHold(false);
 		UA->ConferenceStart();
 		break;
 	}
