@@ -2704,14 +2704,13 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		muteRing = down;
 		if (muteRing)
 		{
-			Call *call = Calls::GetCurrentCall();
-			/** \todo Should this stop rings for all the current calls? */
-			if (call && call->incoming)
+			const std::map<unsigned int, Call>& calls = Calls::GetCalls();
+			for(std::map<unsigned int, Call>::const_iterator iter = calls.begin(); iter != calls.end(); ++iter)
 			{
-				UA->PlayStop(call->uid);
-				int TODO__PHONE_INTERFACE_CALL_ID;
-				PhoneInterface::UpdateRing(0);
+				UA->PlayStop(iter->second.uid);
 			}
+			int TODO__PHONE_INTERFACE_CALL_ID;
+			PhoneInterface::UpdateRing(0);
 		}
 		break;
 	case Button::CONTACT_NOTE:
