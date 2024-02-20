@@ -1,4 +1,28 @@
-{
+{  
+  "Call": {
+    "stateDescription": {
+      "CLOSED": " - FREI - ",
+      "ESTABLISHED": "verbunden",
+      "INCOMING": "eingehender Anruf",
+      "OUTGOING": "Wähle...",
+      "PROGRESS": "Anruf Status Prozess",
+      "RINGING": "Rückruf",
+      "TRANSFER": "Transfer",
+      "TRANSFER_OOD": "Transfer OOD",
+      "TRYING": "Rufaufbau..."
+    },
+    "stateName": {
+      "CLOSED": "beendet",
+      "ESTABLISHED": "hergestellt",
+      "INCOMING": "eingehend",
+      "OUTGOING": "ausgehend",
+      "PROGRESS": "in Arbeit",
+      "RINGING": "klingelnd",
+      "TRANSFER": "Transfer",
+      "TRANSFER_OOD": "Transfer OOD",
+      "TRYING": "Rufaufbau"
+    }
+  },
   "TfrmContactEditor": {
     "btnApply": "Anwenden",
     "btnCancel": "Absagen",
