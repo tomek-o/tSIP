@@ -160,8 +160,9 @@ std::vector<unsigned int> Calls::GetUids(void)
 	return ret;
 }
 
-std::map<unsigned int, Call>& Calls::GetCalls(void)
+const std::map<unsigned int, Call> Calls::GetCalls(void)
 {
+	ScopedLock<Mutex> lock(mutex);
 	return entries;
 }
 
