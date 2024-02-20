@@ -2704,13 +2704,21 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		muteRing = down;
 		if (muteRing)
 		{
+			bool mutePlugins = false;
 			const std::map<unsigned int, Call>& calls = Calls::GetCalls();
 			for(std::map<unsigned int, Call>::const_iterator iter = calls.begin(); iter != calls.end(); ++iter)
 			{
-				UA->PlayStop(iter->second.uid);
+				if (iter->second.incoming)
+				{
+					UA->PlayStop(iter->second.uid);
+					mutePlugins = true;
+				}
 			}
-			int TODO__PHONE_INTERFACE_CALL_ID;
-			PhoneInterface::UpdateRing(0);
+			if (mutePlugins)
+			{
+				int TODO__PHONE_INTERFACE_CALL_ID;
+				PhoneInterface::UpdateRing(0);
+			}
 		}
 		break;
 	case Button::CONTACT_NOTE:
