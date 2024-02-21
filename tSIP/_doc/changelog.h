@@ -1169,5 +1169,9 @@ Version 0.3.2
 		- "LINE" buttons: using user-configured captions for idle state
 		- FIXED minor issue with main call display not refreshed in multiple call setup when there are two incoming calls and first one (from selected one) is disconnected and then incoming again
 		- FIXED: each call holds now its own instance of audio file player (ring, ringback, etc.) fixing possible problems with multiple calls
+
+Version 0.3.2.1
+	- FIXED: AV when using "Mute Ring" while no call is active
+	- FIXED unintentional change at version ~0.3: dialing combobox was not cleared at the end of the call 		
 */
 

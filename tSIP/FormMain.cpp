@@ -4055,7 +4055,11 @@ void TfrmMain::UpdateMainCallDisplay(void)
 	}
 	else
 	{
-		if (cbCallURI->Text != call->dialString)
+		if(call->GetState() == Callback::CALL_STATE_CLOSED)
+		{
+			cbCallURI->Text = "";
+		}
+		else if (cbCallURI->Text != call->dialString)
 		{
         	cbCallURI->Text = call->dialString;
 		}
