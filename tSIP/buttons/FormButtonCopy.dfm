@@ -14,6 +14,7 @@ object frmButtonCopy: TfrmButtonCopy
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object lblSource: TLabel
@@ -59,8 +60,6 @@ object frmButtonCopy: TfrmButtonCopy
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
-    ExplicitTop = 226
-    ExplicitWidth = 442
     DesignSize = (
       604
       37)
@@ -73,7 +72,6 @@ object frmButtonCopy: TfrmButtonCopy
       Caption = 'Close'
       TabOrder = 1
       OnClick = btnCancelClick
-      ExplicitLeft = 360
     end
     object btnApply: TButton
       Left = 443
@@ -84,7 +82,6 @@ object frmButtonCopy: TfrmButtonCopy
       Caption = 'Copy'
       TabOrder = 0
       OnClick = btnApplyClick
-      ExplicitLeft = 279
     end
   end
   object cbSource: TComboBox

@@ -154,7 +154,10 @@ void __fastcall TfrmButtonContainer::miCopyPanelClick(TObject *Sender)
 	frmButtonCopy->ShowModal();
 	callbackSetKeepForeground(true);
 
-	buttons.UpdateAll();
+	if (frmButtonCopy->IsApplied())
+	{
+		buttons.UpdateAll();
+	}
 }
 //---------------------------------------------------------------------------
 

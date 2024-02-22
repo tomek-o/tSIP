@@ -65,14 +65,19 @@ __published:	// IDE-managed Components
 	void __fastcall miDeselectAllClick(TObject *Sender);
 	void __fastcall btnSelectAllClick(TObject *Sender);
 	void __fastcall btnDeselectAllClick(TObject *Sender);
+	void __fastcall FormShow(TObject *Sender);
 private:	// User declarations
 	ProgrammableButtons *buttons;
+	bool applied;
 	void CopyButton(int src, int dst);
 	void SetCheckboxes(bool state);
 public:		// User declarations
 	__fastcall TfrmButtonCopy(TComponent* Owner);
 	void SetButtons(ProgrammableButtons *buttons);
-
+	bool IsApplied(void) const
+	{
+		return applied;
+	}
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmButtonCopy *frmButtonCopy;
