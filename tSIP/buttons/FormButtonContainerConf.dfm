@@ -53,7 +53,7 @@ object frmButtonContainerConf: TfrmButtonContainerConf
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 0
+    TabOrder = 4
     DesignSize = (
       386
       37)
@@ -83,7 +83,7 @@ object frmButtonContainerConf: TfrmButtonContainerConf
     Top = 5
     Width = 242
     Height = 21
-    TabOrder = 1
+    TabOrder = 0
   end
   object btnSelectBackgroundBitmap: TButton
     Left = 352
@@ -91,7 +91,7 @@ object frmButtonContainerConf: TfrmButtonContainerConf
     Width = 25
     Height = 21
     Caption = '...'
-    TabOrder = 2
+    TabOrder = 1
     OnClick = btnSelectBackgroundBitmapClick
   end
   object cbBackgroundColor: TComboBox
@@ -103,7 +103,7 @@ object frmButtonContainerConf: TfrmButtonContainerConf
     ItemHeight = 13
     ParentShowHint = False
     ShowHint = True
-    TabOrder = 3
+    TabOrder = 2
     OnChange = cbBackgroundColorChange
   end
   object btnSelectBackgroundColor: TButton
@@ -112,7 +112,7 @@ object frmButtonContainerConf: TfrmButtonContainerConf
     Width = 21
     Height = 21
     Caption = '...'
-    TabOrder = 4
+    TabOrder = 3
     OnClick = btnSelectBackgroundColorClick
   end
   object openDialog: TOpenDialog

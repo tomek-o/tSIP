@@ -13,7 +13,9 @@ object frmButtonCopy: TfrmButtonCopy
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
+  OnKeyPress = FormKeyPress
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -59,7 +61,7 @@ object frmButtonCopy: TfrmButtonCopy
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 0
+    TabOrder = 5
     DesignSize = (
       604
       37)
@@ -91,7 +93,7 @@ object frmButtonCopy: TfrmButtonCopy
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 1
+    TabOrder = 0
   end
   object cbTarget: TComboBox
     Left = 277
@@ -109,14 +111,14 @@ object frmButtonCopy: TfrmButtonCopy
     Height = 338
     Caption = 'Attributes to copy'
     PopupMenu = popupCopy
-    TabOrder = 3
+    TabOrder = 4
     object chbPosition: TCheckBox
       Left = 16
       Top = 97
       Width = 73
       Height = 17
       Caption = 'position'
-      TabOrder = 0
+      TabOrder = 6
     end
     object chbBehavior: TCheckBox
       Left = 16
@@ -124,7 +126,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 105
       Height = 17
       Caption = 'type and behavior'
-      TabOrder = 1
+      TabOrder = 2
     end
     object chbSize: TCheckBox
       Left = 144
@@ -132,7 +134,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 73
       Height = 17
       Caption = 'size'
-      TabOrder = 2
+      TabOrder = 7
     end
     object chbColors: TCheckBox
       Left = 16
@@ -140,7 +142,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 73
       Height = 17
       Caption = 'colors'
-      TabOrder = 3
+      TabOrder = 12
     end
     object chbVisible: TCheckBox
       Left = 16
@@ -148,7 +150,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 73
       Height = 17
       Caption = 'visible'
-      TabOrder = 4
+      TabOrder = 3
     end
     object chbInactive: TCheckBox
       Left = 336
@@ -164,7 +166,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 73
       Height = 17
       Caption = 'images'
-      TabOrder = 6
+      TabOrder = 13
     end
     object chbFrame: TCheckBox
       Left = 16
@@ -172,7 +174,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 122
       Height = 17
       Caption = 'frame, bevel width'
-      TabOrder = 7
+      TabOrder = 16
     end
     object chbImageTransparent: TCheckBox
       Left = 336
@@ -180,7 +182,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 124
       Height = 17
       Caption = 'image: transparent'
-      TabOrder = 8
+      TabOrder = 15
     end
     object chbImagePosition: TCheckBox
       Left = 144
@@ -188,7 +190,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 129
       Height = 17
       Caption = 'image: position'
-      TabOrder = 9
+      TabOrder = 14
     end
     object chbParentContainer: TCheckBox
       Left = 144
@@ -196,7 +198,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 129
       Height = 17
       Caption = 'parent container'
-      TabOrder = 10
+      TabOrder = 4
     end
     object grboxCaption1: TGroupBox
       Left = 8
@@ -204,7 +206,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 571
       Height = 44
       Caption = 'Caption #1'
-      TabOrder = 11
+      TabOrder = 10
       object chbCaption1: TCheckBox
         Left = 9
         Top = 18
@@ -252,7 +254,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 158
       Height = 17
       Caption = 'number of caption lines'
-      TabOrder = 12
+      TabOrder = 8
     end
     object chbSpaceLabelsYEqually: TCheckBox
       Left = 181
@@ -260,7 +262,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 158
       Height = 17
       Caption = 'space labels equally in Y axis'
-      TabOrder = 13
+      TabOrder = 9
     end
     object grboxCaption2: TGroupBox
       Left = 8
@@ -268,7 +270,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 571
       Height = 44
       Caption = 'Caption #2'
-      TabOrder = 14
+      TabOrder = 11
       object chbCaption2: TCheckBox
         Left = 9
         Top = 18
@@ -308,7 +310,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 75
       Height = 23
       Caption = 'Select all'
-      TabOrder = 15
+      TabOrder = 0
       OnClick = btnSelectAllClick
     end
     object btnDeselectAll: TButton
@@ -317,7 +319,7 @@ object frmButtonCopy: TfrmButtonCopy
       Width = 75
       Height = 23
       Caption = 'Deselect all'
-      TabOrder = 16
+      TabOrder = 1
       OnClick = btnDeselectAllClick
     end
   end
@@ -329,7 +331,7 @@ object frmButtonCopy: TfrmButtonCopy
     Style = csDropDownList
     ItemHeight = 13
     ItemIndex = 0
-    TabOrder = 4
+    TabOrder = 1
     Text = 'single button'
     OnChange = cbTargetTypeChange
     Items.Strings = (
@@ -345,7 +347,7 @@ object frmButtonCopy: TfrmButtonCopy
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 5
+    TabOrder = 3
   end
   object popupCopy: TPopupMenu
     Left = 8

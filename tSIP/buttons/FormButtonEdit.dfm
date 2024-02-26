@@ -26,14 +26,14 @@ object frmButtonEdit: TfrmButtonEdit
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 0
+    TabOrder = 3
     object btnCancel: TButton
       Left = 574
       Top = 6
       Width = 75
       Height = 25
       Caption = 'Cancel'
-      TabOrder = 1
+      TabOrder = 2
       OnClick = btnCancelClick
     end
     object btnApply: TButton
@@ -42,7 +42,7 @@ object frmButtonEdit: TfrmButtonEdit
       Width = 75
       Height = 25
       Caption = 'Apply'
-      TabOrder = 0
+      TabOrder = 1
       OnClick = btnApplyClick
     end
     object btnClear: TButton
@@ -51,7 +51,7 @@ object frmButtonEdit: TfrmButtonEdit
       Width = 137
       Height = 25
       Caption = 'Reset button settings'
-      TabOrder = 2
+      TabOrder = 0
       OnClick = btnClearClick
     end
   end
@@ -60,10 +60,10 @@ object frmButtonEdit: TfrmButtonEdit
     Top = 78
     Width = 529
     Height = 322
-    ActivePage = tsBitmaps
+    ActivePage = tsGeneral
     Align = alClient
     TabHeight = 10
-    TabOrder = 1
+    TabOrder = 2
     object tsGeneral: TTabSheet
       Caption = 'General'
       ImageIndex = 2
@@ -110,7 +110,7 @@ object frmButtonEdit: TfrmButtonEdit
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 0
+        TabOrder = 4
         Text = '1 caption line'
         Items.Strings = (
           '1 caption line'
@@ -121,14 +121,14 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 7
         Width = 38
         Height = 21
-        TabOrder = 1
+        TabOrder = 0
       end
       object edTop: TEdit
         Left = 115
         Top = 7
         Width = 38
         Height = 21
-        TabOrder = 2
+        TabOrder = 1
       end
       object chbDown: TCheckBox
         Left = 3
@@ -142,7 +142,7 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 9
       end
       object chbInactive: TCheckBox
         Left = 69
@@ -156,14 +156,14 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 10
       end
       object edWidth: TEdit
         Left = 219
         Top = 7
         Width = 38
         Height = 21
-        TabOrder = 5
+        TabOrder = 2
       end
       object chbCustomFrame: TCheckBox
         Left = 146
@@ -177,14 +177,14 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 11
       end
       object edHeight: TEdit
         Left = 320
         Top = 7
         Width = 38
         Height = 21
-        TabOrder = 7
+        TabOrder = 3
       end
       object edBevelWidth: TEdit
         Left = 64
@@ -199,7 +199,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 510
         Height = 72
         Caption = 'Caption #1'
-        TabOrder = 9
+        TabOrder = 6
         object lblSpeedDialFont: TLabel
           Left = 196
           Top = 16
@@ -234,7 +234,7 @@ object frmButtonEdit: TfrmButtonEdit
           Width = 75
           Height = 52
           AutoSize = False
-          TabOrder = 0
+          TabOrder = 1
           Text = 'abcABC 123 () [] <>,.'
         end
         object btnSpeedDialFontSelect: TButton
@@ -243,7 +243,7 @@ object frmButtonEdit: TfrmButtonEdit
           Width = 26
           Height = 22
           Caption = '...'
-          TabOrder = 1
+          TabOrder = 2
           OnClick = btnSpeedDialFontSelectClick
         end
         object chbLabelCenterHorizontally: TCheckBox
@@ -258,14 +258,14 @@ object frmButtonEdit: TfrmButtonEdit
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 2
+          TabOrder = 4
         end
         object edLabelTop: TEdit
           Left = 378
           Top = 36
           Width = 38
           Height = 21
-          TabOrder = 3
+          TabOrder = 5
         end
         object chbLabelCenterVertically: TCheckBox
           Left = 431
@@ -279,7 +279,7 @@ object frmButtonEdit: TfrmButtonEdit
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          TabOrder = 4
+          TabOrder = 6
           OnClick = chbLabelCenterVerticallyClick
         end
         object edLabelLeft: TEdit
@@ -287,14 +287,14 @@ object frmButtonEdit: TfrmButtonEdit
           Top = 14
           Width = 38
           Height = 21
-          TabOrder = 5
+          TabOrder = 3
         end
         object memoCaption1: TMemo
           Left = 35
           Top = 14
           Width = 142
           Height = 51
-          TabOrder = 6
+          TabOrder = 0
         end
       end
       object grboxCaption2: TGroupBox
@@ -303,7 +303,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 510
         Height = 72
         Caption = 'Caption #2'
-        TabOrder = 10
+        TabOrder = 7
         object Label1: TLabel
           Left = 194
           Top = 16
@@ -338,7 +338,7 @@ object frmButtonEdit: TfrmButtonEdit
           Width = 75
           Height = 52
           AutoSize = False
-          TabOrder = 0
+          TabOrder = 1
           Text = 'abcABC 123 () [] <>,.'
         end
         object btnCaption2FontSelect: TButton
@@ -347,7 +347,7 @@ object frmButtonEdit: TfrmButtonEdit
           Width = 26
           Height = 22
           Caption = '...'
-          TabOrder = 1
+          TabOrder = 2
           OnClick = btnSpeedDialFontSelectClick
         end
         object edLabel2Top: TEdit
@@ -355,7 +355,7 @@ object frmButtonEdit: TfrmButtonEdit
           Top = 37
           Width = 38
           Height = 21
-          TabOrder = 2
+          TabOrder = 5
         end
         object edLabel2Left: TEdit
           Left = 376
@@ -365,7 +365,7 @@ object frmButtonEdit: TfrmButtonEdit
           TabOrder = 3
         end
         object chbLabel2CenterHorizontally: TCheckBox
-          Left = 429
+          Left = 431
           Top = 16
           Width = 68
           Height = 17
@@ -384,7 +384,7 @@ object frmButtonEdit: TfrmButtonEdit
           Top = 14
           Width = 140
           Height = 51
-          TabOrder = 5
+          TabOrder = 0
         end
       end
       object chbSpaceLabelsYEqually: TCheckBox
@@ -401,7 +401,7 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 11
+        TabOrder = 5
         OnClick = chbSpaceLabelsYEquallyClick
       end
     end
@@ -413,7 +413,7 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 0
         Width = 521
         Height = 302
-        ActivePage = tsBehaviorSwitchAudioSource
+        ActivePage = tsBehaviorBlf
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -1036,7 +1036,7 @@ object frmButtonEdit: TfrmButtonEdit
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 5
+        TabOrder = 9
         OnChange = cbColorChange
       end
       object cbInactiveDownColor: TComboBox
@@ -1046,7 +1046,7 @@ object frmButtonEdit: TfrmButtonEdit
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 6
+        TabOrder = 7
         OnChange = cbColorChange
       end
       object cbIdleColor: TComboBox
@@ -1056,7 +1056,7 @@ object frmButtonEdit: TfrmButtonEdit
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 7
+        TabOrder = 5
         OnChange = cbColorChange
       end
       object btnSelectIdleColor: TButton
@@ -1065,7 +1065,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 21
         Height = 21
         Caption = '...'
-        TabOrder = 8
+        TabOrder = 6
         OnClick = SelectColorClick
       end
       object btnSelectInactiveDownColor: TButton
@@ -1074,7 +1074,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 21
         Height = 21
         Caption = '...'
-        TabOrder = 9
+        TabOrder = 8
         OnClick = SelectColorClick
       end
       object btnSelectDownPressedColor: TButton
@@ -1090,8 +1090,6 @@ object frmButtonEdit: TfrmButtonEdit
     object tsBitmaps: TTabSheet
       Caption = 'Bitmaps'
       ImageIndex = 3
-      ExplicitLeft = 6
-      ExplicitTop = 14
       object Label2: TLabel
         Left = 2
         Top = 100
@@ -1129,7 +1127,7 @@ object frmButtonEdit: TfrmButtonEdit
       end
       object lblImageLeft: TLabel
         Left = 3
-        Top = 12
+        Top = 10
         Width = 54
         Height = 13
         Caption = 'image: Left'
@@ -1181,28 +1179,28 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 235
         Width = 117
         Height = 21
-        TabOrder = 0
+        TabOrder = 10
       end
       object edImgEarly: TEdit
         Left = 109
         Top = 203
         Width = 117
         Height = 21
-        TabOrder = 1
+        TabOrder = 8
       end
       object edImgTerminated: TEdit
         Left = 109
         Top = 173
         Width = 117
         Height = 21
-        TabOrder = 2
+        TabOrder = 6
       end
       object edImgIdle: TEdit
         Left = 109
         Top = 143
         Width = 117
         Height = 21
-        TabOrder = 3
+        TabOrder = 4
       end
       object btnSelectImgIdle: TButton
         Left = 229
@@ -1210,7 +1208,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 21
         Height = 19
         Caption = '...'
-        TabOrder = 4
+        TabOrder = 5
         OnClick = SelectImgClick
       end
       object btnSelectImgTerminated: TButton
@@ -1219,7 +1217,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 21
         Height = 19
         Caption = '...'
-        TabOrder = 5
+        TabOrder = 7
         OnClick = SelectImgClick
       end
       object btnSelectImgEarly: TButton
@@ -1228,7 +1226,7 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 21
         Height = 19
         Caption = '...'
-        TabOrder = 6
+        TabOrder = 9
         OnClick = SelectImgClick
       end
       object btnSelectImgConfirmed: TButton
@@ -1237,22 +1235,22 @@ object frmButtonEdit: TfrmButtonEdit
         Width = 21
         Height = 19
         Caption = '...'
-        TabOrder = 7
+        TabOrder = 11
         OnClick = SelectImgClick
       end
       object edImageLeft: TEdit
         Left = 72
-        Top = 6
+        Top = 7
         Width = 38
         Height = 21
-        TabOrder = 8
+        TabOrder = 0
       end
       object edImageTop: TEdit
         Left = 72
         Top = 30
         Width = 38
         Height = 21
-        TabOrder = 9
+        TabOrder = 1
       end
       object chbImageCenterVertically: TCheckBox
         Left = 119
@@ -1266,7 +1264,7 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 10
+        TabOrder = 2
         OnClick = chbImageCenterVerticallyClick
       end
       object chbImageTransparent: TCheckBox
@@ -1281,7 +1279,7 @@ object frmButtonEdit: TfrmButtonEdit
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 11
+        TabOrder = 3
       end
     end
   end
@@ -1301,7 +1299,7 @@ object frmButtonEdit: TfrmButtonEdit
     ParentFont = False
     ReadOnly = True
     RowSelect = True
-    TabOrder = 2
+    TabOrder = 1
     OnChange = tvSelectorChange
   end
   object pnlTop: TPanel
@@ -1311,7 +1309,7 @@ object frmButtonEdit: TfrmButtonEdit
     Height = 78
     Align = alTop
     BevelOuter = bvNone
-    TabOrder = 3
+    TabOrder = 0
     object lblType: TLabel
       Left = 5
       Top = 8
@@ -1346,7 +1344,7 @@ object frmButtonEdit: TfrmButtonEdit
       BorderStyle = bsNone
       Color = clBtnFace
       ReadOnly = True
-      TabOrder = 1
+      TabOrder = 4
     end
     object chbVisible: TCheckBox
       Left = 6
@@ -1360,7 +1358,7 @@ object frmButtonEdit: TfrmButtonEdit
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-      TabOrder = 2
+      TabOrder = 1
     end
     object cbParentId: TComboBox
       Left = 122
@@ -1371,7 +1369,7 @@ object frmButtonEdit: TfrmButtonEdit
       DropDownCount = 12
       ItemHeight = 13
       ItemIndex = 1
-      TabOrder = 3
+      TabOrder = 2
       Text = 'main area / console'
       Items.Strings = (
         'dialpad'
@@ -1382,7 +1380,7 @@ object frmButtonEdit: TfrmButtonEdit
       Top = 53
       Width = 139
       Height = 21
-      TabOrder = 4
+      TabOrder = 3
     end
   end
   object openDialog: TOpenDialog
