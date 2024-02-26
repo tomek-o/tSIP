@@ -66,6 +66,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnSelectAllClick(TObject *Sender);
 	void __fastcall btnDeselectAllClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
+	void __fastcall FormKeyPress(TObject *Sender, char &Key);
 private:	// User declarations
 	ProgrammableButtons *buttons;
 	bool applied;

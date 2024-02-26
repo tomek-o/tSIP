@@ -328,3 +328,13 @@ void __fastcall TfrmButtonCopy::FormShow(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmButtonCopy::FormKeyPress(TObject *Sender, char &Key)
+{
+	if (Key == VK_ESCAPE)
+	{
+		Key = 0;
+		Close();
+	}
+}
+//---------------------------------------------------------------------------
+

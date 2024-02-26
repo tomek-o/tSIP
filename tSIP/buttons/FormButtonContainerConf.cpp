@@ -81,7 +81,10 @@ void __fastcall TfrmButtonContainerConf::FormKeyPress(TObject *Sender,
       char &Key)
 {
 	if (Key == VK_ESCAPE)
-		Close();	
+	{
+		Key = 0;
+		Close();
+	}
 }
 //---------------------------------------------------------------------------
 
