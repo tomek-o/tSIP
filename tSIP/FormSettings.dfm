@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsMultipleCalls
+    ActivePage = tsSpeedDial
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2226,9 +2226,11 @@ object frmSettings: TfrmSettings
       object chbAudioRxAgcEnabled: TCheckBox
         Left = 3
         Top = 310
-        Width = 262
+        Width = 534
         Height = 17
-        Caption = 'Enable AGC for RX (received audio) direction'
+        Caption = 
+          'Enable AGC (Automatic Gain Control - keeping volume even) for RX' +
+          ' (received audio, speaker) direction'
         TabOrder = 9
       end
       object edAudioRxAgcTarget: TEdit
@@ -2262,9 +2264,11 @@ object frmSettings: TfrmSettings
       object chbAudioTxGateEnabled: TCheckBox
         Left = 3
         Top = 190
-        Width = 398
+        Width = 558
         Height = 17
-        Caption = 'Enable audio gate microphone path (transmitted audio) direction'
+        Caption = 
+          'Enable audio gate (preventing picking up background noise) for m' +
+          'icrophone path (transmitted audio) direction'
         TabOrder = 14
       end
       object edAudioTxGateReleaseMs: TEdit
