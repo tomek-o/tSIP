@@ -1946,6 +1946,12 @@ static int l_ApplicationShow(lua_State* L)
 	return 0;
 }
 
+static int l_ApplicationHide(lua_State* L)
+{
+	GetContext(L)->onApplicationHide();
+	return 0;
+}
+
 static int l_ApplicationClose(lua_State* L)
 {
 	GetContext(L)->onApplicationClose();
@@ -2117,6 +2123,7 @@ ScriptExec::ScriptExec(
 	CallbackUpdateButtons onUpdateButtons,
 	CallbackMainMenuShow onMainMenuShow,
 	CallbackApplicationShow onApplicationShow,
+	CallbackApplicationHide onApplicationHide,
 	CallbackApplicationClose onApplicationClose
 	):
 	srcType(srcType),
@@ -2142,6 +2149,7 @@ ScriptExec::ScriptExec(
 	onUpdateButtons(onUpdateButtons),
 	onMainMenuShow(onMainMenuShow),
 	onApplicationShow(onApplicationShow),
+	onApplicationHide(onApplicationHide),
 	onApplicationClose(onApplicationClose),
 
 	running(false)
@@ -2160,6 +2168,7 @@ ScriptExec::ScriptExec(
 		onUpdateButtons &&
 		onMainMenuShow &&
 		onApplicationShow &&
+		onApplicationHide &&
 		onApplicationClose
 		);
 }
@@ -2300,6 +2309,7 @@ void ScriptExec::Run(const char* script)
 
 	lua_register2(L, ScriptImp::l_MainMenuShow, "MainMenuShow", "Show/hide main menu (e.g. in kiosk applications)", "");
 	lua_register2(L, ScriptImp::l_ApplicationShow, "ApplicationShow", "Show application (restoring minimized or from tray)", "Example: ApplicationShow(focused)");
+	lua_register2(L, ScriptImp::l_ApplicationHide, "ApplicationHide", "Hide application to tray", "");
 	lua_register2(L, ScriptImp::l_ApplicationClose, "ApplicationClose", "Close this program", "");
 
 	lua_register2(L, ScriptImp::l_SendCustomRequest, "SendCustomRequest", "Send custom SIP request", "Example: requestUid = SendCustomRequest(uri, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional");

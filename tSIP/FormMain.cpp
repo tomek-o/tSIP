@@ -1168,6 +1168,14 @@ void TfrmMain::ApplicationShow(bool focused)
 	}
 }
 
+void TfrmMain::ApplicationHide(void)
+{
+	if (Visible)
+	{
+		ToggleVisibility();
+	}
+}
+
 void TfrmMain::ApplicationClose(void)
 {
 	actExit->Execute();
@@ -2987,6 +2995,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&UpdateButtonsFromJson,
 		&MainMenuShow,
 		&ApplicationShow,
+		&ApplicationHide,
 		&ApplicationClose
 		);
 	scriptExec.Run(script.c_str());
