@@ -1424,6 +1424,7 @@ void TfrmMain::PollCallbackQueue(void)
 				call->paiPeerUri = cb.paiPeerUri;
 				call->paiPeerName = GetPeerName(cb.paiPeerName);
 				call->autoAnswerIntercom = false;
+				call->initialRxInvite = cb.initialRxInvite;
 
 				if (appSettings.uaConf.startAudioSourceAtCallStart)
 				{
@@ -1846,15 +1847,6 @@ void TfrmMain::PollCallbackQueue(void)
 				{
 					call->dtmfRxQueue.push_back(cb.dtmf[1]);
 				}
-			}
-			break;
-		}
-		case Callback::SET_CALL_DATA:
-		{
-			Call *call = Calls::FindByUid(cb.callUid);
-			if (call)
-			{
-				call->initialRxInvite = cb.initialRxInvite;
 			}
 			break;
 		}

@@ -160,7 +160,6 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			const char* initial_rx_invite = call_initial_rx_invite(call);
 			if (initial_rx_invite == NULL)
 				initial_rx_invite = "";
-			UA_CB->SetCallData(initial_rx_invite);
 
 			state = Callback::CALL_STATE_INCOMING;
 
@@ -184,20 +183,20 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			if (pai_peer_name == NULL)
 				pai_peer_name = "";
 
-			UA_CB->ChangeCallState(appCall->uid, state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name, "");
+			UA_CB->ChangeCallState(appCall->uid, state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name, "", initial_rx_invite);
 			break;
 		}
 	case UA_EVENT_CALL_RINGING:
 		state = Callback::CALL_STATE_RINGING;
-		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "", "");
 		break;
 	case UA_EVENT_CALL_TRYING:
 		state = Callback::CALL_STATE_TRYING;
-		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "", "");
 		break;
 	case UA_EVENT_CALL_OUTGOING:
 		state = Callback::CALL_STATE_OUTGOING;
-		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "", "");
 		if (appSettings.uaConf.startAudioSourceAtCallStart)
 		{
 			call_start_audio_extra_source(call);
@@ -205,7 +204,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		break;
 	case UA_EVENT_CALL_PROGRESS:
 		state = Callback::CALL_STATE_PROGRESS;
-		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "", "");
 		break;
 	case UA_EVENT_CALL_ESTABLISHED:
 		{
@@ -224,14 +223,14 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 				codec_name = audio_get_rx_aucodec_name(au);
 			}
 
-			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, pai_peer_uri, pai_peer_name, codec_name);
+			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, pai_peer_uri, pai_peer_name, codec_name, "");
 		}
 		break;
 	case UA_EVENT_CALL_CLOSED:
 		if (callUid > 0)
 		{
 			state = Callback::CALL_STATE_CLOSED;
-			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "");
+			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "", "");
 			removeCall(callUid);
 		}
 		else
@@ -247,11 +246,11 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		break;
 	case UA_EVENT_CALL_TRANSFER:
 		state = Callback::CALL_STATE_TRANSFER;
-		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode, -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode, -1, "", "", -1, "", "", "", "");
 		break;
 	case UA_EVENT_CALL_TRANSFER_OOD:
 		state = Callback::CALL_STATE_TRANSFER_OOD;
-		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode, -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode, -1, "", "", -1, "", "", "", "");
 		break;
 	case UA_EVENT_CALL_REINVITE_RECEIVED:
 		{
@@ -1068,7 +1067,7 @@ extern "C" void control_handler(void)
 		if (err)
 		{
 			DEBUG_WARNING("connect failed: %m\n", err);
-			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
+			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "", "");
 			// call was not added to calls map yet - no need to remove
 		}
 		else
@@ -1143,7 +1142,7 @@ extern "C" void control_handler(void)
 		if (cmdCall)
 		{
 			ua_hangup(ua_cur(), cmdCall, cmd.code, cmd.reason.c_str());
-			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
+			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "", "");
 			removeCall(cmd.callUid);
 		}
 		if (app.paging_txp)
@@ -1452,7 +1451,7 @@ void Ua::Restart(void)
 	std::map<unsigned int, struct call*>::iterator iter;
 	for (iter = calls.begin(); iter != calls.end(); ++iter)
 	{
-		UA_CB->ChangeCallState(iter->first, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "");
+		UA_CB->ChangeCallState(iter->first, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "", "");
 	}
 	calls.clear();
 	if (app.paging_txp)

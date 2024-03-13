@@ -39,18 +39,7 @@ int CallbackQueue::GetCallback(Callback& cb)
 	return 0;
 }
 
-void CallbackQueue::SetCallData(AnsiString initialRxInvite)
-{
-	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
-	if (!cb)
-		return;
-	cb->type = Callback::SET_CALL_DATA;
-	cb->initialRxInvite = initialRxInvite;
-	fifo.push();
-}
-
-void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name)
+void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name, AnsiString initial_rx_invite)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -69,6 +58,7 @@ void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state
 	cb->paiPeerUri = pai_peer_uri;
 	cb->paiPeerName = pai_peer_name;
 	cb->codecName = codec_name;
+	cb->initialRxInvite = initial_rx_invite;
 	fifo.push();
 }
 

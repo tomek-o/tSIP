@@ -24,7 +24,6 @@ public:
 		PAGING_TX_STATE,
 		EVENT_TALK,
 		AUDIO_CODEC_LIST,			///< audio codec list sent after static and dynamic modules are loaded
-		SET_CALL_DATA,
 		AUDIO_ERROR,
 		CUSTOM_REQUEST_STATUS,
 		SIMPLE_MESSAGE,
