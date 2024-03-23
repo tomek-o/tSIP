@@ -74,7 +74,7 @@ private:	// User declarations
 	void SetCheckboxes(bool state);
 public:		// User declarations
 	__fastcall TfrmButtonCopy(TComponent* Owner);
-	void SetButtons(ProgrammableButtons *buttons);
+	void SetButtons(ProgrammableButtons *buttons, int sourceBtnId);
 	bool IsApplied(void) const
 	{
 		return applied;

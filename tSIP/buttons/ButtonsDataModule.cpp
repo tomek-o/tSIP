@@ -73,3 +73,12 @@ void __fastcall TdmButtons::miCopyCaption2Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TdmButtons::miCopyButtonPropertiesClick(TObject *Sender)
+{
+	TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(popupPanel->PopupComponent);
+	assert(panel);
+	int id = panel->Tag;
+	buttons.CopyConfig(id);
+}
+//---------------------------------------------------------------------------
+

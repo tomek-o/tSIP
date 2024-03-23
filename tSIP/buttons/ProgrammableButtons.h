@@ -132,6 +132,7 @@ public:
 	void UpdateAutoAnswer(bool enabled, int sipCode, AnsiString sipReason);
 
 	void SetConfig(int btnId, const ButtonConf &conf);
+	void CopyConfig(int sourceBtnId);
 };
 
 #endif

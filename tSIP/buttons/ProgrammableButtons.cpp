@@ -11,6 +11,7 @@
 #include "ButtonContainers.h"
 #include "FormButtonContainer.h"
 #include "FormButtonEdit.h"
+#include "FormButtonCopy.h"
 #include "SettingsAppVersion.h"
 #include "Settings.h"	// just for transition from column-based version < 0.2
 #include "Sizes.h"
@@ -1372,4 +1373,19 @@ void ProgrammableButtons::EndEditing(TfrmButtonContainer *container)
 	}
 }
 
+void ProgrammableButtons::CopyConfig(int sourceBtnId)
+{
+	if (frmButtonCopy == NULL)
+	{
+		Application->CreateForm(__classid(TfrmButtonCopy), &frmButtonCopy);
+	}
+	frmButtonCopy->SetButtons(this, sourceBtnId);
+	callbackSetKeepForeground(false);
+	frmButtonCopy->ShowModal();
+	callbackSetKeepForeground(true);
 
+	if (frmButtonCopy->IsApplied())
+	{
+		UpdateAll();
+	}
+}

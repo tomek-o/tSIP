@@ -32,6 +32,10 @@ object dmButtons: TdmButtons
       Caption = 'Resize'
       OnClick = miResizeSpeedDialClick
     end
+    object miCopyButtonProperties: TMenuItem
+      Caption = 'Copy button properties'
+      OnClick = miCopyButtonPropertiesClick
+    end
     object miContainerMenu: TMenuItem
       Caption = 'Container menu'
       Visible = False

@@ -17,7 +17,7 @@ __fastcall TfrmButtonCopy::TfrmButtonCopy(TComponent* Owner)
 
 }
 
-void TfrmButtonCopy::SetButtons(ProgrammableButtons *buttons)
+void TfrmButtonCopy::SetButtons(ProgrammableButtons *buttons, int sourceBtnId)
 {
 	this->buttons = buttons;
 	cbSource->Items->Clear();
@@ -35,7 +35,14 @@ void TfrmButtonCopy::SetButtons(ProgrammableButtons *buttons)
 		cbTarget->Items->Add(caption);
 		cbTargetTo->Items->Add(caption);
 	}
-	cbSource->ItemIndex = 0;
+	if (sourceBtnId >= 0 && sourceBtnId < cbSource->Items->Count)
+	{
+    	cbSource->ItemIndex = sourceBtnId;
+	}
+	else
+	{
+		cbSource->ItemIndex = 0;
+	}
 	cbTarget->ItemIndex = 0;
 	cbTargetTo->ItemIndex = 0;
 

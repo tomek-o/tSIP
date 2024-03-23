@@ -6,7 +6,6 @@
 #include "FormButtonContainer.h"
 #include "FormButtonContainerConf.h"
 #include "ProgrammableButton.h"
-#include "FormButtonCopy.h"
 #include "ProgrammableButtons.h"
 #include "SpeedDialStatus.h"
 #include "Settings.h"
@@ -145,19 +144,7 @@ void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file)
 
 void __fastcall TfrmButtonContainer::miCopyPanelClick(TObject *Sender)
 {
-	if (frmButtonCopy == NULL)
-	{
-		Application->CreateForm(__classid(TfrmButtonCopy), &frmButtonCopy);
-	}
-	frmButtonCopy->SetButtons(&buttons);
-	callbackSetKeepForeground(false);
-	frmButtonCopy->ShowModal();
-	callbackSetKeepForeground(true);
-
-	if (frmButtonCopy->IsApplied())
-	{
-		buttons.UpdateAll();
-	}
+    buttons.CopyConfig(-1);
 }
 //---------------------------------------------------------------------------
 
