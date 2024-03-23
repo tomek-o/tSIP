@@ -14,8 +14,6 @@ object frmButtonContainer: TfrmButtonContainer
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object panelMain: TPanel
@@ -103,10 +101,10 @@ object frmButtonContainer: TfrmButtonContainer
     Left = 24
     Top = 248
     object miAddEditPanel: TMenuItem
-      Caption = 'Add/edit panel'
+      Caption = 'Add/edit button (panel)'
     end
     object miCopyPanel: TMenuItem
-      Caption = 'Copy panel'
+      Caption = 'Copy button properties'
       OnClick = miCopyPanelClick
     end
     object miConfigureButtonContainer: TMenuItem
