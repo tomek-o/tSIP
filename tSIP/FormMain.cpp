@@ -540,6 +540,10 @@ int TfrmMain::UpdateSettingsFromJson(AnsiString json)
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
 	UpdateSize();
+	if (appSettings.frmMain.bKioskMode)
+	{
+		SetKioskMode(appSettings.frmMain.bKioskMode);
+	}	
 	if (prev.dialpad != appSettings.dialpad)
 	{
 		UpdateDialpad();
