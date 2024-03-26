@@ -1060,6 +1060,32 @@ static int l_GetCalls(lua_State* L)
 	return 1;
 }
 
+static int l_GetCallUidFromLineButton(lua_State* L)
+{
+	int argCount = lua_gettop(L);
+	if (argCount == 1)
+	{
+		unsigned int buttonId = lua_tointegerx(L, 1, NULL);
+		const std::map<unsigned int, Call> calls = Calls::GetCalls();
+		for (std::map<unsigned int, Call>::const_iterator iter = calls.begin(); iter != calls.end(); ++iter)
+		{
+			const Call &call = iter->second;
+			if (call.btnId == buttonId)
+			{
+				lua_pushnumber(L, call.uid);
+				return 1;
+			}
+		}
+		lua_pushnumber(L, Call::INVALID_UID);
+		return 1;
+	}
+	else
+	{
+		LOG("Lua error: missing button id parameter\n");
+		return 0;		
+	}
+}
+
 static int l_GetCurrentCallUid(lua_State* L)
 {
 	unsigned int uid = Calls::GetCurrentCallUid();
@@ -2234,6 +2260,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_BlindTransfer2, "BlindTransfer2", "Send REFER for specific call", "Example: BlindTransfer(callUid, target)");
 	lua_register2(L, ScriptImp::l_AttendedTransfer, "AttendedTransfer", "Attended transfer using two already established calls", "Example: AttendedTransfer(callUid1, callUid2)");
 	lua_register2(L, ScriptImp::l_GetCalls, "GetCalls", "Get a table with UIDs of currently active calls", "");
+	lua_register2(L, ScriptImp::l_GetCallUidFromLineButton, "GetCallUidFromLineButton", "Get call UID assigned to specified line button", "Allows to e.g. create answer/hangup button associated with specified line button.\nExample: local callUid = GetCallUidFromLineButton(buttonId)");
 	lua_register2(L, ScriptImp::l_GetCurrentCallUid, "GetCurrentCallUid", "Get UID of current call, 0 = invalid/none", "");
 	lua_register2(L, ScriptImp::l_SetCurrentCallUid, "SetCurrentCallUid", "Set current call to call with specified UID", "Returns 0 on success.");
 	lua_register2(L, ScriptImp::l_GetCallState, "GetCallState", "Get state of current or specified call", "Takes one, optional argument: call UID.");
