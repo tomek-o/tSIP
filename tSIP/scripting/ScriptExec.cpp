@@ -1341,6 +1341,21 @@ static int l_GetButtonBlfState(lua_State* L)
 	return 0;
 }
 
+static int l_GetButtonHandle(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	const char* str = lua_tostring( L, 2 );
+	if (str == NULL)
+		str = "";
+	TProgrammableButton *btn = buttons.GetBtn(id);
+	if (btn)
+	{
+		lua_pushinteger(L, reinterpret_cast<unsigned int>(btn->Handle));
+		return 1;
+	}
+	return 0;
+}
+
 static int l_SetButtonInactive(lua_State* L)
 {
 	int id = lua_tointeger( L, 1 );
@@ -2304,6 +2319,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetButtonDown, "GetButtonDown", "Check if button is down", "Example state = GetButtonDown(buttonId) -- returning 0 or 1.");
 	lua_register2(L, ScriptImp::l_GetButtonMouseDown, "GetButtonMouseDown", "Check is mouse button is pressed on programmable button", "");
 	lua_register2(L, ScriptImp::l_GetButtonBlfState, "GetButtonBlfState", "Get BLF state from the button", "");
+	lua_register2(L, ScriptImp::l_GetButtonHandle, "GetButtonHandle", "Get Windows HANDLE for specified button", "");	
 	lua_register2(L, ScriptImp::l_SetButtonInactive, "SetButtonInactive", "Prevent button from being pressed, set its state to inactive", "");
 	lua_register2(L, ScriptImp::l_SetButtonVisible, "SetButtonVisible", "Show/hide button", "");
 	lua_register2(L, ScriptImp::l_SetButtonImage, "SetButtonImage", "Set button bitmap", "");
