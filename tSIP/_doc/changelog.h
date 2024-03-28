@@ -1170,8 +1170,15 @@ Version 0.3.2
 		- FIXED minor issue with main call display not refreshed in multiple call setup when there are two incoming calls and first one (from selected one) is disconnected and then incoming again
 		- FIXED: each call holds now its own instance of audio file player (ring, ringback, etc.) fixing possible problems with multiple calls
 
-Version 0.3.2.1
+Version 0.3.03
 	- FIXED: AV when using "Mute Ring" while no call is active
-	- FIXED unintentional change at version ~0.3: dialing combobox was not cleared at the end of the call 		
+	- "Mute Ring" button is applied to all current calls
+	- FIXED unintentional change at version ~0.3: dialing combobox was not cleared at the end of the call
+	- Lua:
+		- FIXED: GetCallInitialRxInvite() function
+		- added ApplicationHide() function
+		- added GetCallUidFromLineButton(buttonId) function - allows to create script buttons associated with specific LINE button
+		- added GetButtonHandle(buttonId) function - allows to pass Windows HANDLE to tSIP_mpv.dll plugin
+	- few other minor fixes/improvements
 */
 
