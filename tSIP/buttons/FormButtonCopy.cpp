@@ -93,7 +93,21 @@ void __fastcall TfrmButtonCopy::btnApplyClick(TObject *Sender)
 		cbTarget->ItemIndex = start;
 		cbTargetTo->ItemIndex = end;
 	}
-	else									
+	else if (cbTargetType->ItemIndex == 3)	// all buttons from the same container
+	{
+		const ButtonConf &btnSrc = buttons->btnConf[src];
+		for (int i=0; i<cbTarget->Items->Count; i++)
+		{
+			int dst = i;
+			const ButtonConf &btnDst = buttons->btnConf[dst];
+			if ((btnDst.parentId == btnSrc.parentId) && (dst != src))
+			{
+				CopyButton(src, dst);
+			}
+		}
+		cbSource->ItemIndex = src;
+	}
+	else	// all buttons
 	{
 		for (int i=0; i<cbTarget->Items->Count; i++)
 		{

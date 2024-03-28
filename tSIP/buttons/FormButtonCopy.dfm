@@ -326,7 +326,7 @@ object frmButtonCopy: TfrmButtonCopy
   object cbTargetType: TComboBox
     Left = 277
     Top = 5
-    Width = 145
+    Width = 319
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
@@ -338,6 +338,7 @@ object frmButtonCopy: TfrmButtonCopy
       'single button'
       'all visible buttons'
       'button range'
+      'all buttons from the same container'
       'all buttons')
   end
   object cbTargetTo: TComboBox
