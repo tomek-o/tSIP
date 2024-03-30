@@ -200,6 +200,11 @@ int Settings::UpdateFromText(AnsiString text)
 		return 1;
 	}
 
+	if (root.type() != Json::objectValue)
+	{
+		return 3;
+	}
+
 	// assume this is newest configuration version if version is not present in text
 	if (root["info"].type() == Json::nullValue)
 	{
