@@ -3680,6 +3680,14 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 		btnHangupClick(NULL);
 		break;
 	}
+	case KEY_MUTE_TOGGLE: {
+		Call* call = Calls::GetCurrentCall();
+		if (call)
+		{
+			call->setMute(!call->mute);
+		}
+		break;
+	}
 	default:
 		break;
 	}
