@@ -3668,6 +3668,18 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 		}
 		break;
 	}
+	case KEY_APP: {
+		ToggleVisibility();
+		break;
+	}
+	case KEY_CALL_MAKE_ANSWER: {
+		btnMakeCallClick(NULL);
+		break;
+	}
+	case KEY_CALL_HANGUP: {
+		btnHangupClick(NULL);
+		break;
+	}
 	default:
 		break;
 	}

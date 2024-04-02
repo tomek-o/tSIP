@@ -74,7 +74,10 @@ enum E_KEY
 	KEY_OK,
 	KEY_C,
 	KEY_UP,
-	KEY_DOWN
+	KEY_DOWN,
+	KEY_APP,
+	KEY_CALL_MAKE_ANSWER,
+	KEY_CALL_HANGUP
 };
 
 static inline const char* GetPhoneKeyName(enum E_KEY key)
@@ -114,7 +117,13 @@ static inline const char* GetPhoneKeyName(enum E_KEY key)
 	case KEY_UP:
         return "UP";
 	case KEY_DOWN:
-        return "DOWN";
+		return "DOWN";
+	case KEY_APP:
+		return "APP";
+	case KEY_CALL_MAKE_ANSWER:
+		return "CALL MAKE/ANSWER";
+	case KEY_CALL_HANGUP:
+		return "CALL HANGUP";
     default:
         return "???";
     }
