@@ -438,7 +438,7 @@ void __stdcall PhoneInterface::OnKey(void *cookie, int keyCode, int state)
 {
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	LOG("Phone: key %d, state %d\n", keyCode, state);
+	LOG("Phone: key %s (code %d), state %d\n", GetPhoneKeyName(static_cast<E_KEY>(keyCode)), keyCode, state);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
 	{
 		//LOG(E_LOG_TRACE, "OnKey called with unknown cookie %p. No matching object.\n", dev);

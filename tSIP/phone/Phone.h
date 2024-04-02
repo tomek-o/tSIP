@@ -77,6 +77,49 @@ enum E_KEY
 	KEY_DOWN
 };
 
+static inline const char* GetPhoneKeyName(enum E_KEY key)
+{
+    switch (key)
+    {
+    case KEY_0:
+        return "0";
+	case KEY_1:
+        return "1";
+    case KEY_2:
+        return "2";
+	case KEY_3:
+        return "3";
+	case KEY_4:
+        return "4";
+    case KEY_5:
+        return "5";
+	case KEY_6:
+        return "6";
+	case KEY_7:
+        return "7";
+	case KEY_8:
+        return "8";
+	case KEY_9:
+        return "*";
+	case KEY_STAR:
+        return "*";
+	case KEY_HASH:
+        return "#";
+	case KEY_HOOK:
+        return "HOOK";
+	case KEY_OK:
+        return "OK";
+	case KEY_C:
+        return "C";
+	case KEY_UP:
+        return "UP";
+	case KEY_DOWN:
+        return "DOWN";
+    default:
+        return "???";
+    }
+}
+
 struct S_PHONE_CAPABILITIES;
 struct S_PHONE_SETTINGS;
 
