@@ -74,75 +74,68 @@ public:
 	}
 } trayEventsHandler;
 
-Mutex mutexScriptQueue;
-std::deque<AnsiString> enqueuedScripts;
-enum { MAX_SCRIPT_QUEUE_SIZE = 1000 };
 PhoneInterface::CallbackRunScript cbRunScript = NULL;
 
-int EnqueueScript(AnsiString script)
+enum PhoneEventType
 {
-	ScopedLock<Mutex> lock(mutexScriptQueue);
-
-	if (enqueuedScripts.size() < MAX_SCRIPT_QUEUE_SIZE)
-	{
-		enqueuedScripts.push_back(script);
-		return 0;
-	}
-	return -1;
-}
-
-void PollScriptQueue(void)
-{
-	ScopedLock<Mutex> lock(mutexScriptQueue);
-	if (enqueuedScripts.empty())
-	{
-		return;
-	}
-	AnsiString script = enqueuedScripts.front();
-	enqueuedScripts.pop_front();
-
-	/** \todo Global break request */
-	bool breakRequest = false;
-	bool handled = true;
-	assert(cbRunScript);
-	cbRunScript(SCRIPT_SRC_PLUGIN_QUEUE, -1, script, breakRequest, handled);
-}
-
-
-Mutex mutexAppStatus;
-struct AppStatusEntry
-{
-	AnsiString id;
-	int priority;
-	AnsiString text;
+	PHONE_EVENT__INVALID = 0,
+	PHONE_EVENT_SCRIPT,
+	PHONE_EVENT_APP_STATUS,
+	PHONE_EVENT_KEY,
+	PHONE_PAGING_TX,
+	PHONE_CLEAR_DIAL,
 };
-std::deque<struct AppStatusEntry> enqueuedAppStatus;
-enum { MAX_APP_STATUS_QUEUE_SIZE = 1000 };
-int EnqueueAppStatus(const char* id, int priority, const char* text)
+
+struct PhoneEvent
 {
-	ScopedLock<Mutex> lock(mutexAppStatus);
-	if (enqueuedAppStatus.size() < MAX_APP_STATUS_QUEUE_SIZE)
+	void *cookie;
+
+	enum PhoneEventType type;
+
+	AnsiString script;
+
+	struct AppStatus
 	{
-		struct AppStatusEntry entry;
-		entry.id = id;
-		entry.priority = priority;
-		entry.text = text;	
-		enqueuedAppStatus.push_back(entry);
+		AnsiString id;
+		int priority;
+		AnsiString text;
+		AppStatus(void):
+			priority(-1)
+		{}
+	} appStatus;
+
+	int keyCode;
+	int keyState;
+
+	struct PagingTx
+	{
+		AnsiString target;
+		AnsiString filename;
+		AnsiString codecname;
+	} pagingTx;
+
+	PhoneEvent(void):
+		cookie(NULL),
+		type(PHONE_EVENT__INVALID),
+		keyCode(-1),
+		keyState(-1)
+	{}
+};
+
+Mutex mutexEventQueue;
+std::deque<PhoneEvent> eventQueue;
+enum { MAX_EVENT_QUEUE_SIZE = 500 };
+
+int EnqueueEvent(const PhoneEvent &event)
+{
+	ScopedLock<Mutex> lock(mutexEventQueue);
+
+	if (eventQueue.size() < MAX_EVENT_QUEUE_SIZE)
+	{
+		eventQueue.push_back(event);
 		return 0;
 	}
 	return -1;
-}
-
-void PollAppStatusQueue(void)
-{
-	ScopedLock<Mutex> lock(mutexAppStatus);
-	if (enqueuedAppStatus.empty())
-	{
-		return;
-	}
-	const struct AppStatusEntry entry = enqueuedAppStatus.front();
-	enqueuedAppStatus.pop_front();
-	SetAppStatus(entry.id, entry.priority, entry.text);
 }
 
 }	// namespace
@@ -459,59 +452,39 @@ void __stdcall PhoneInterface::OnConnect(void *cookie, int state, const char *sz
 
 void __stdcall PhoneInterface::OnKey(void *cookie, int keyCode, int state)
 {
-	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	LOG("Phone: key %s (code %d), state %d\n", GetPhoneKeyName(static_cast<E_KEY>(keyCode)), keyCode, state);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
-		//LOG(E_LOG_TRACE, "OnKey called with unknown cookie %p. No matching object.\n", dev);
-		return;
-	}
-	int TODO__THIS_REQUIRES_SYNCHRONIZATION_WITH_VCL;
-	if (dev->callbackKey)
-		dev->callbackKey(keyCode, state);
+	PhoneEvent event;
+	event.cookie = cookie;
+	event.type = PHONE_EVENT_KEY;
+	event.keyCode = keyCode;
+	event.keyState = state;
+	EnqueueEvent(event);
 }
 
 int __stdcall PhoneInterface::OnPagingTx(void *cookie, const char* target, const char* filename, const char* codecname)
 {
-	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	PhoneEvent event;
+	event.cookie = cookie;
+	event.type = PHONE_PAGING_TX;
+	event.pagingTx.target = target;
+	event.pagingTx.filename = filename;
+	event.pagingTx.codecname = codecname;
 	if (filename == NULL)
 	{
 		LOG("Phone: invalid argument for PagingTx, filename == NULL\n");
 		return -1;
 	}
 	LOG("Phone: pagingTx, target = %s, filename = %s, codecname = %s\n", target, filename, codecname);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
-		//LOG(E_LOG_TRACE, "OnPagingTx called with unknown cookie %p. No matching object.\n", dev);
-		return -2;
-	}
-	if (dev->callbackPagingTx)
-	{
-		return dev->callbackPagingTx(target, filename, codecname);
-	}
-	else
-	{
-		return -3;
-	}
+
+	return EnqueueEvent(event);
 }
 
 void __stdcall PhoneInterface::OnClearDial(void *cookie)
 {
-	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	PhoneEvent event;
+	event.cookie = cookie;
+	event.type = PHONE_CLEAR_DIAL;
 	LOG("Phone: ClearDial\n");
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
-		//LOG(E_LOG_TRACE, "OnKey called with unknown cookie %p. No matching object.\n", dev);
-		return;
-	}
-	if (dev->callbackClearDial)
-		dev->callbackClearDial();
+	EnqueueEvent(event);
 }
 
 int __stdcall PhoneInterface::OnGetNumberDescription(void *cookie, const char* number, char* description, int descriptionSize)
@@ -609,25 +582,22 @@ int __stdcall PhoneInterface::OnQueueGetSize(void *cookie, const char* name)
 
 int __stdcall PhoneInterface::OnRunScriptAsync(void *cookie, const char* script)
 {
-	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
-		return -1;
-	}
-	return EnqueueScript(script);
+	PhoneEvent event;
+	event.cookie = cookie;
+	event.type = PHONE_EVENT_SCRIPT;
+	event.script = script;
+	return EnqueueEvent(event);
 }
 
 int __stdcall PhoneInterface::OnSetAppStatus(void *cookie, const char* id, int priority, const char* text)
 {
-	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
-		return -1;
-	}
-	return EnqueueAppStatus(id, priority, text);
+	PhoneEvent event;
+	event.cookie = cookie;
+	event.type = PHONE_EVENT_APP_STATUS;
+	event.appStatus.id = id;
+	event.appStatus.priority = priority;
+	event.appStatus.text = text;
+	return EnqueueEvent(event);
 }
 
 void PhoneInterface::SetCallbackRunScript(CallbackRunScript cb)
@@ -876,8 +846,66 @@ int PhoneInterface::Load(void)
 
 void PhoneInterface::Poll(void)
 {
-	PollScriptQueue();
-	PollAppStatusQueue();
+	ScopedLock<Mutex> lock(mutexEventQueue);
+	if (eventQueue.empty())
+	{
+		return;
+	}
+
+	PhoneEvent event = eventQueue.front();
+	eventQueue.pop_front();
+
+	ScopedLock<Mutex> lockInstances(mutexInstances);
+	class PhoneInterface *dev;
+	dev = reinterpret_cast<class PhoneInterface*>(event.cookie);
+	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	{
+        LOG("PhoneInterface: device %p not found!\n", dev);
+		return;
+	}
+
+	switch (event.type)
+	{
+
+	case PHONE_EVENT_SCRIPT: {
+		/** \todo Global break request */
+		bool breakRequest = false;
+		bool handled = true;
+		assert(cbRunScript);
+		cbRunScript(SCRIPT_SRC_PLUGIN_QUEUE, -1, event.script, breakRequest, handled);
+		break;
+	}
+
+	case PHONE_EVENT_APP_STATUS: {
+		SetAppStatus(event.appStatus.id, event.appStatus.priority, event.appStatus.text);
+		break;
+	}
+
+	case PHONE_EVENT_KEY: {
+		if (dev->callbackKey)
+			dev->callbackKey(event.keyCode, event.keyState);
+		break;
+	}
+
+	case PHONE_PAGING_TX: {
+		if (dev->callbackPagingTx)
+		{
+			dev->callbackPagingTx(event.pagingTx.target.c_str(), event.pagingTx.filename.c_str(), event.pagingTx.codecname.c_str());
+		}
+		break;
+	}
+
+	case PHONE_CLEAR_DIAL: {
+		if (dev->callbackClearDial)
+			dev->callbackClearDial();
+		break;
+	}
+
+	default:
+		assert(!"Unhandled event type!");
+		LOG("PhoneInterface: unhandled event type = %d!\n", static_cast<int>(event.type));
+		break;
+	}
 }
 
 
