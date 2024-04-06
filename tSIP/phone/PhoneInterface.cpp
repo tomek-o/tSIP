@@ -49,7 +49,7 @@ struct TrayMenuItemEntry
 
 std::map<TMenuItem*, struct TrayMenuItemEntry> trayMenuItemsMap;
 
-class EventsHandler
+class TrayEventsHandler
 {
 public:
 	// A VCL event handler is expected to be a non-static member of a class.
@@ -72,7 +72,7 @@ public:
 			}
 		}
 	}
-} eventsHandler;
+} trayEventsHandler;
 
 Mutex mutexScriptQueue;
 std::deque<AnsiString> enqueuedScripts;
@@ -658,7 +658,7 @@ void* __stdcall PhoneInterface::OnAddTrayMenuItem(void *cookie, void* parent, co
 		TMenuItem *item = new TMenuItem(trayPopupMenu);
 		item->AutoHotkeys = maManual;
 		item->Caption = caption;
-		item->OnClick = &eventsHandler.TrayMenuItemClick;
+		item->OnClick = &trayEventsHandler.TrayMenuItemClick;
 		trayPopupMenu->Items->Insert(count - 1, item);
 
 		struct TrayMenuItemEntry entry;
