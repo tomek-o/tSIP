@@ -491,7 +491,7 @@ int __stdcall PhoneInterface::OnGetNumberDescription(void *cookie, const char* n
 {
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	//LOG("Phone: ClearDial\n");
+	//LOG("Phone: GetNumberDescription\n");
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
 	{
 		return -1;
