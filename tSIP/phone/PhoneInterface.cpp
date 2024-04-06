@@ -35,6 +35,8 @@ TPopupMenu* PhoneInterface::trayPopupMenu = NULL;
 namespace
 {
 
+Mutex mutexInstances;
+
 struct TrayMenuItemEntry
 {
 	CALLBACK_MENU_ITEM_CLICK callback;
@@ -182,6 +184,7 @@ void PhoneInterface::ReEnumerateDlls(void)
 
 void PhoneInterface::SetCfg(std::list<PhoneConf> &newcfg)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	std::list<PhoneConf>::iterator it, it2;
 
 	// unloading unused DLLs
@@ -251,6 +254,8 @@ void PhoneInterface::SetCfg(std::list<PhoneConf> &newcfg)
 
 void PhoneInterface::Close(void)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	while (!instances.empty())
 	{
@@ -265,6 +270,8 @@ void PhoneInterface::Close(void)
 
 void PhoneInterface::UpdateRegistrationState(int state)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
 	{
@@ -274,6 +281,8 @@ void PhoneInterface::UpdateRegistrationState(int state)
 
 void PhoneInterface::UpdateCallState(int state, const char* display)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
 	{
@@ -283,6 +292,8 @@ void PhoneInterface::UpdateCallState(int state, const char* display)
 
 void PhoneInterface::UpdateRing(int state)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
 	{
@@ -292,6 +303,8 @@ void PhoneInterface::UpdateRing(int state)
 
 void PhoneInterface::UpdateMuteState(unsigned int callUid, int state)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
 	{
@@ -301,6 +314,8 @@ void PhoneInterface::UpdateMuteState(unsigned int callUid, int state)
 
 void PhoneInterface::UpdatePagingTxState(int state)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
 	{
@@ -310,6 +325,8 @@ void PhoneInterface::UpdatePagingTxState(int state)
 
 int PhoneInterface::SendMessageText(AnsiString asDllName, AnsiString text)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	itinst = instances.find(LowerCase(asDllName));
 	if (itinst == instances.end())
@@ -322,6 +339,8 @@ int PhoneInterface::SendMessageText(AnsiString asDllName, AnsiString text)
 
 void PhoneInterface::UpdateAudioError(void)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
 	{
@@ -331,6 +350,8 @@ void PhoneInterface::UpdateAudioError(void)
 
 void PhoneInterface::UpdateProfileDir(AnsiString dir)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
+
 	profileDir = dir;
 	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
 	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
@@ -408,6 +429,7 @@ void PhoneInterface::AddDll(const struct DllInfo &dllinfo)
 void __stdcall PhoneInterface::OnLog(void *cookie, const char *szText)
 {
 #if 0
+	ScopedLock<Mutex> lock(mutexInstances);
 	class DeviceInterface *dev;
 	dev = reinterpret_cast<class DeviceInterface*>(cookie);
 	if (instances.find(LowerCase(dev)) == instances.end())
@@ -421,6 +443,7 @@ void __stdcall PhoneInterface::OnLog(void *cookie, const char *szText)
 
 void __stdcall PhoneInterface::OnConnect(void *cookie, int state, const char *szMsgText)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -436,6 +459,7 @@ void __stdcall PhoneInterface::OnConnect(void *cookie, int state, const char *sz
 
 void __stdcall PhoneInterface::OnKey(void *cookie, int keyCode, int state)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	LOG("Phone: key %s (code %d), state %d\n", GetPhoneKeyName(static_cast<E_KEY>(keyCode)), keyCode, state);
@@ -444,12 +468,14 @@ void __stdcall PhoneInterface::OnKey(void *cookie, int keyCode, int state)
 		//LOG(E_LOG_TRACE, "OnKey called with unknown cookie %p. No matching object.\n", dev);
 		return;
 	}
+	int TODO__THIS_REQUIRES_SYNCHRONIZATION_WITH_VCL;
 	if (dev->callbackKey)
 		dev->callbackKey(keyCode, state);
 }
 
 int __stdcall PhoneInterface::OnPagingTx(void *cookie, const char* target, const char* filename, const char* codecname)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (filename == NULL)
@@ -475,6 +501,7 @@ int __stdcall PhoneInterface::OnPagingTx(void *cookie, const char* target, const
 
 void __stdcall PhoneInterface::OnClearDial(void *cookie)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	LOG("Phone: ClearDial\n");
@@ -489,6 +516,7 @@ void __stdcall PhoneInterface::OnClearDial(void *cookie)
 
 int __stdcall PhoneInterface::OnGetNumberDescription(void *cookie, const char* number, char* description, int descriptionSize)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	//LOG("Phone: GetNumberDescription\n");
@@ -503,6 +531,7 @@ int __stdcall PhoneInterface::OnGetNumberDescription(void *cookie, const char* n
 
 int __stdcall PhoneInterface::OnSetVariable(void *cookie, const char* name, const char* value)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -514,6 +543,7 @@ int __stdcall PhoneInterface::OnSetVariable(void *cookie, const char* name, cons
 
 int __stdcall PhoneInterface::OnClearVariable(void *cookie, const char* name)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -525,6 +555,7 @@ int __stdcall PhoneInterface::OnClearVariable(void *cookie, const char* name)
 
 int __stdcall PhoneInterface::OnQueuePush(void *cookie, const char* name, const char* value)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -537,6 +568,7 @@ int __stdcall PhoneInterface::OnQueuePush(void *cookie, const char* name, const 
 
 int __stdcall PhoneInterface::OnQueuePop(void *cookie, const char* name, char* value, unsigned int valueSize)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -553,6 +585,7 @@ int __stdcall PhoneInterface::OnQueuePop(void *cookie, const char* name, char* v
 
 int __stdcall PhoneInterface::OnQueueClear(void *cookie, const char* name)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -564,6 +597,7 @@ int __stdcall PhoneInterface::OnQueueClear(void *cookie, const char* name)
 
 int __stdcall PhoneInterface::OnQueueGetSize(void *cookie, const char* name)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -575,6 +609,7 @@ int __stdcall PhoneInterface::OnQueueGetSize(void *cookie, const char* name)
 
 int __stdcall PhoneInterface::OnRunScriptAsync(void *cookie, const char* script)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -586,6 +621,7 @@ int __stdcall PhoneInterface::OnRunScriptAsync(void *cookie, const char* script)
 
 int __stdcall PhoneInterface::OnSetAppStatus(void *cookie, const char* id, int priority, const char* text)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
 	{
@@ -602,6 +638,7 @@ void PhoneInterface::SetCallbackRunScript(CallbackRunScript cb)
 
 void* __stdcall PhoneInterface::OnAddTrayMenuItem(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
@@ -702,6 +739,7 @@ int PhoneInterface::Disconnect(void) {
 
 PhoneInterface::~PhoneInterface()
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	std::map<AnsiString, class PhoneInterface*>::iterator it = instances.find(LowerCase(filename));
 	if (it != instances.end())
 	{
@@ -713,6 +751,7 @@ PhoneInterface::~PhoneInterface()
 
 int PhoneInterface::Load(void)
 {
+	ScopedLock<Mutex> lock(mutexInstances);
 	AnsiString fullDllName = asDllDir + filename;
 	hInstance = LoadLibrary(fullDllName.c_str());
 	if (!hInstance)
