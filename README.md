@@ -16,6 +16,10 @@ Based on re/rem/baresip (https://github.com/baresip/).
 
 ![Multi-call kiosk](https://tomeko.net/software/SIPclient/howto/multi_call_panel/tSIP_Lenovo_Miix_2_panel.jpg)
 
+[Four video files playing on tSIP buttons with mpv plugin](https://tomeko.net/software/SIPclient/mpv/)
+
+![mpv](http://tomeko.net/software/SIPclient/mpv/mpv_multi.png)
+
 ## License
 
 Source code is using mostly BSD license (same as baresip).  
