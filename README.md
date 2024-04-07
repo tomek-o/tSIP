@@ -1,12 +1,20 @@
 # tSIP
-Small, portable SIP softphone for Windows.  
+Small, portable, highly customizable SIP softphone for Windows.  
 Based on re/rem/baresip (https://github.com/baresip/).
 
 ![tSIP 0.1.76 screenshot with console](http://tomeko.net/software/SIPclient/tSIP_0_1_76.png)
 
+[Example bitmap-based GUI](https://tomeko.net/software/SIPclient/howto/tSIP_0_2_custom.php)
+
 ![tSIP 0.2.00](http://tomeko.net/software/SIPclient/tSIP_0_2_00.png)
 
+[Kiosk-like GUI made out of flat buttons](https://tomeko.net/software/SIPclient/howto/flat_GUI/)
+
 ![tSIP 0.2.08 flat GUI example](http://tomeko.net/software/SIPclient/howto/flat_GUI/tSIP_flat.png)
+
+[Kiosk-like application on a Lenovo tablet](https://tomeko.net/software/SIPclient/howto/multi_call_panel/)
+
+![Multi-call kiosk](https://tomeko.net/software/SIPclient/howto/multi_call_panel/tSIP_Lenovo_Miix_2_panel.jpg)
 
 ## License
 
