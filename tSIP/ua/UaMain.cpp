@@ -502,7 +502,7 @@ static void simple_message_response_handler(int err, const struct sip_msg *msg, 
 }
 
 static void recorder_state_handler(struct recorder_st *recorder, enum recorder_state state) {
-	DEBUG_WARNING("recorder %p state changed to %d\n", recorder, static_cast<int>(state));
+	DEBUG_WARNING("recorder %p (call uid %u) state changed to %d\n", recorder, recorder_get_call_uid(recorder), static_cast<int>(state));
 	STATIC_CHECK(RECORDER_STATE_IDLE == Callback::RECORDER_STATE_IDLE, EnumMismatch);
 	STATIC_CHECK(RECORDER_STATE_ACTIVE == Callback::RECORDER_STATE_ACTIVE, EnumMismatch);
 	STATIC_CHECK(RECORDER_STATE_PAUSED == Callback::RECORDER_STATE_PAUSED, EnumMismatch);

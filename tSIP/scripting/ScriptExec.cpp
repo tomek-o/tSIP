@@ -1120,14 +1120,16 @@ static int l_GetCallState(lua_State* L)
 
 static int l_GetRecorderState(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
-	Recorder *recorder = Calls::FindRecorder(id);
-	if (recorder)
+	Call *call = GetCall(L);
+	if (call)
 	{
-		lua_pushinteger( L, recorder->state );
-		return 1;
+		lua_pushinteger( L, call->recorder.state );
 	}
-	return 0;
+	else
+	{
+		lua_pushinteger( L, Callback::RECORDER_STATE_IDLE );
+	}
+	return 1;
 }
 
 static int l_GetZrtpState(lua_State* L)

@@ -1180,5 +1180,10 @@ Version 0.3.03
 		- added GetCallUidFromLineButton(buttonId) function - allows to create script buttons associated with specific LINE button
 		- added GetButtonHandle(buttonId) function - allows to pass Windows HANDLE to tSIP_mpv.dll plugin
 	- few other minor fixes/improvements
+
+Version 0.3.04
+	- added few key types to plugin/phone interface (Philips VOIP1511 supports)
+	- using queue to separate plugin thread from VCL thread when passing events
+	- fixed "on recording state" scripting (broken in 0.3)
 */
 

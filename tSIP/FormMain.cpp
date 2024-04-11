@@ -1933,7 +1933,6 @@ void TfrmMain::PollCallbackQueue(void)
 			if (call)
 			{
 				Recorder &recorder = call->recorder;
-				recorder.id = cb.recorderId;
 				recorder.state = cb.rec_state;
 
 				if (appSettings.Scripts.onRecorderState != "")
@@ -1941,7 +1940,7 @@ void TfrmMain::PollCallbackQueue(void)
 					AnsiString asScriptFile;
 					bool handled = true;
 					asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onRecorderState.c_str());
-					RunScriptFile(SCRIPT_SRC_ON_RECORDER_STATE, recorder.id, asScriptFile.c_str(), handled);
+					RunScriptFile(SCRIPT_SRC_ON_RECORDER_STATE, call->uid, asScriptFile.c_str(), handled);
 				}
 			}
 			break;

@@ -26,8 +26,6 @@ namespace Calls
 	const std::map<unsigned int, Call> GetCalls(void);
 	unsigned int Count(void);
 
-	Recorder* FindRecorder(int recorderId);
-
 	/** \return 0 on success
 	*/
 	int AssignLineButton(Call *call, bool outgoing, int &btnId);

@@ -128,8 +128,6 @@ public:
 	int requestError;	
 	AnsiString requestReplyText;
 
-	int recorderId;
-
 	AnsiString contentType;		// MESSAGE
 	AnsiString body;			// MESSAGE
 
@@ -166,8 +164,7 @@ public:
 		mwiOldMsg(-1),
 		dtmfActive(false),
 		requestUid(0),
-		requestError(0),
-		recorderId(-1)
+		requestError(0)
 	{
 	}
 };

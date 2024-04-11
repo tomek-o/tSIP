@@ -172,20 +172,6 @@ unsigned int Calls::Count(void)
 	return entries.size();
 }
 
-Recorder* Calls::FindRecorder(int recorderId)
-{
-	ScopedLock<Mutex> lock(mutex);
-	std::map<unsigned int, Call>::iterator iter;
-	for (iter = entries.begin(); iter != entries.end(); ++iter)
-	{
-		if (iter->second.recorder.id == recorderId)
-		{
-			return &iter->second.recorder;
-		}
-	}
-	return NULL;
-}
-
 int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 {
 	if (lineButtonIds.empty())

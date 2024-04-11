@@ -89,14 +89,14 @@ void CallbackQueue::ChangeCallDtmfState(unsigned int uid, AnsiString dtmf, bool 
 	fifo.push();
 }
 
-void CallbackQueue::ChangeRecorderState(int id, Callback::rec_state_e state)
+void CallbackQueue::ChangeRecorderState(unsigned int callUid, Callback::rec_state_e state)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::RECORDER_STATE;
-	cb->recorderId = id;
+	cb->callUid = callUid;
 	cb->rec_state = state;
 	fifo.push();
 }
