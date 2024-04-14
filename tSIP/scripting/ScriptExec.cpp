@@ -1118,6 +1118,17 @@ static int l_GetCallState(lua_State* L)
 	return 0;
 }
 
+static int l_GetCallButtonId(lua_State* L)
+{
+	Call *call = GetCall(L);
+	if (call)
+	{
+		lua_pushinteger( L, call->btnId );
+		return 1;
+	}
+	return 0;
+}
+
 static int l_GetRecorderState(lua_State* L)
 {
 	Call *call = GetCall(L);
@@ -2281,6 +2292,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetCurrentCallUid, "GetCurrentCallUid", "Get UID of current call, 0 = invalid/none", "");
 	lua_register2(L, ScriptImp::l_SetCurrentCallUid, "SetCurrentCallUid", "Set current call to call with specified UID", "Returns 0 on success.");
 	lua_register2(L, ScriptImp::l_GetCallState, "GetCallState", "Get state of current or specified call", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallButtonId, "GetCallButtonId", "Get button ID assigned to current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetRecorderState, "GetRecorderState", "Check if recording is running for current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verfication state. Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_IsCallIncoming, "IsCallIncoming", "Check if current or specified call is incoming", "Takes one, optional argument: call UID.");
