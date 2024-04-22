@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "ControlQueue.h"
+#include "AudioModules.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include "common/StaticCheck.h"
@@ -322,6 +323,8 @@ void ControlQueue::SwitchAudioSource(unsigned int callUid, AnsiString audioMod, 
 	if (!cmd)
 		return;
 	cmd->type = Command::SWITCH_AUDIO_SOURCE;
+	if (audioMod == AudioModules::winwave)
+		audioMod = AudioModules::winwave2;	// backward compability: original wiwave has bugs, it was deprecated and removed
 	cmd->audioMod = audioMod;
 	cmd->audioDev = audioDev;
 	cmd->callUid = callUid;
@@ -335,6 +338,8 @@ void ControlQueue::SwitchAudioPlayer(unsigned int callUid, AnsiString audioMod, 
 	if (!cmd)
 		return;
 	cmd->type = Command::SWITCH_AUDIO_PLAYER;
+	if (audioMod == AudioModules::winwave)
+		audioMod = AudioModules::winwave2;	// backward compability: original wiwave has bugs, it was deprecated and removed
 	cmd->audioMod = audioMod;
 	cmd->audioDev = audioDev;
 	cmd->callUid = callUid;

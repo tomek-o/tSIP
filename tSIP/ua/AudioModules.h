@@ -11,6 +11,11 @@ namespace Stdctrls
 	class TComboBox;
 }
 
+namespace Json
+{
+	class Value;
+}
+
 namespace AudioModules
 {
 
@@ -35,6 +40,12 @@ namespace AudioModules
 
 	bool IsInput(const std::string& name);
 	bool IsOutput(const std::string& name);
+
+	enum Dir {
+		DIR_INPUT = 0,
+		DIR_OUTPUT
+	};
+	void GetModuleFromJson(const Json::Value &jv, const std::string &name, enum Dir dir, std::string &mod);
 }
 
 #endif

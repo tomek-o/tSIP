@@ -441,10 +441,6 @@
         <FILE FILENAME="..\..\modules\speex_aec\speex_aec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="speex_aec" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\speex_pp\speex_pp.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="speex_pp" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\stun\stun.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="stun" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\modules\winwave\winwave_play.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="winwave_play" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\modules\winwave\src.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="src" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\modules\winwave\winwave.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="winwave" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\modules\winwave\winwave.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\winwave2\winwave2_src.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="winwave2_src" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\winwave2\winwave2_play.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="winwave2_play" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\winwave2\winwave2.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>

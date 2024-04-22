@@ -6,6 +6,7 @@
 #include "AudioModules.h"
 #include "baresip_base_config.h"
 
+#include <json/json.h>
 #include <Classes.hpp>
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
@@ -37,8 +38,7 @@ struct AudioModuleDef
 const AudioModuleDef audioModuleDefs [] =
 {
 	{ true, true, portaudio, "PortAudio / DirectSound" },
-	{ true, true, winwave, "WaveIn, WaveOut" },
-	{ true, true, winwave2, "WaveIn, WaveOut v2" },
+	{ true, true, winwave2, "WaveIn, WaveOut" },
 	{ true, false, aufile, "Wave file" },
 	{ true, false, aufileMm, "Wave file - with MM timer" },
 #ifdef USE_VIDEO
@@ -182,4 +182,27 @@ bool AudioModules::IsOutput(const std::string& name)
 	}
 	return false;
 }
+
+void AudioModules::GetModuleFromJson(const Json::Value &jv, const std::string &name, enum Dir dir, std::string &mod)
+{
+	std::string tmp = mod;
+	jv.getString(name.c_str(), tmp);
+	if (tmp == winwave)
+		tmp = winwave2;
+	if (dir == DIR_INPUT)
+	{
+		if (AudioModules::IsInput(tmp))
+		{
+			mod = tmp;
+		}
+	}
+	else if (dir == DIR_OUTPUT)
+	{
+		if (AudioModules::IsOutput(tmp))
+		{
+			mod = tmp;
+		}
+	}
+}
+
 

@@ -63,35 +63,20 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 {
 	{
 		const Json::Value &uaConfAudioCfgSrcJson = uaConfJson["audioCfgSrc"];
-		std::string str = audioCfgSrc.mod;
-		uaConfAudioCfgSrcJson.getString("mod", str);
-		if (AudioModules::IsInput(str))
-		{
-			audioCfgSrc.mod = str;
-		}
+		AudioModules::GetModuleFromJson(uaConfAudioCfgSrcJson, "mod", AudioModules::DIR_INPUT, audioCfgSrc.mod);
 		uaConfAudioCfgSrcJson.getString("dev", audioCfgSrc.dev);
 		uaConfAudioCfgSrcJson.getString("wavefile", audioCfgSrc.wavefile);
 	}
 
 	{
 		const Json::Value &uaConfAudioCfgPlayJson = uaConfJson["audioCfgPlay"];
-		std::string str = audioCfgPlay.mod;
-		uaConfAudioCfgPlayJson.getString("mod", str);
-		if (AudioModules::IsOutput(str))
-		{
-			audioCfgPlay.mod = str;
-		}
+		AudioModules::GetModuleFromJson(uaConfAudioCfgPlayJson, "mod", AudioModules::DIR_OUTPUT, audioCfgPlay.mod);
 		uaConfAudioCfgPlayJson.getString("dev", audioCfgPlay.dev);
 	}
 
 	{
 		const Json::Value &uaConfAudioCfgAlertJson = uaConfJson["audioCfgAlert"];
-		std::string str = audioCfgAlert.mod;
-		uaConfAudioCfgAlertJson.getString("mod", str);
-		if (AudioModules::IsOutput(str))
-		{
-			audioCfgAlert.mod = str;
-		}
+		AudioModules::GetModuleFromJson(uaConfAudioCfgAlertJson, "mod", AudioModules::DIR_OUTPUT, audioCfgAlert.mod);
 		uaConfAudioCfgAlertJson.getString("dev", audioCfgAlert.dev);
 		uaConfAudioCfgAlertJson.getFloat("volume", audioCfgAlert.volume);
 	}
@@ -109,12 +94,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		else
 		{
 			const Json::Value &uaConfAudioCfgRingJson = uaConfJson["audioCfgRing"];
-			std::string str = audioCfgRing.mod;
-			uaConfAudioCfgRingJson.getString("mod", str);
-			if (AudioModules::IsOutput(str))
-			{
-				audioCfgRing.mod = str;
-			}
+			AudioModules::GetModuleFromJson(uaConfAudioCfgRingJson, "mod", AudioModules::DIR_OUTPUT, audioCfgRing.mod);
 			uaConfAudioCfgRingJson.getString("dev", audioCfgRing.dev);
 			uaConfAudioCfgRingJson.getFloat("volume", audioCfgRing.volume);
 			uaConfAudioCfgRingJson.getFloat("volumeMulti", audioCfgRing.volumeMulti);
@@ -123,12 +103,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 
 	{
 		const Json::Value &uaConfAudioCfgPlayIntercomJson = uaConfJson["audioCfgPlayIntercom"];
-		std::string str = audioCfgPlayIntercom.mod;
-		uaConfAudioCfgPlayIntercomJson.getString("mod", str);
-		if (AudioModules::IsOutput(str))
-		{
-			audioCfgPlayIntercom.mod = str;
-		}
+		AudioModules::GetModuleFromJson(uaConfAudioCfgPlayIntercomJson, "mod", AudioModules::DIR_OUTPUT, audioCfgPlayIntercom.mod);
 		uaConfAudioCfgPlayIntercomJson.getString("dev", audioCfgPlayIntercom.dev);
 	}
 

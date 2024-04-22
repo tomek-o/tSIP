@@ -96,8 +96,6 @@ tSIP plugin: logout from group on inactivity (mouse, keyboard)
 tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(), 
 tSIP scripting: file I/O example (report call quality after each call)
 
-BUG: halt if audio device (mic with autosensing) is detached during call - winwave => winwave2
-
 www: scripting with javascript
 
 update Lua to 5.3.x, remove CVS tags from Lua source

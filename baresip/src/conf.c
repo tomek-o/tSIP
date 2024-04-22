@@ -102,9 +102,6 @@ int configure(void)
 	pl_set_str(&modname, "portaudio");
 	load_module2(NULL, &modname);
 
-	pl_set_str(&modname, "winwave");
-	load_module2(NULL, &modname);
-
 	pl_set_str(&modname, "winwave2");
 	load_module2(NULL, &modname);
 

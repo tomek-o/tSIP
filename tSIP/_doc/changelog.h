@@ -1185,5 +1185,6 @@ Version 0.3.04
 	- added few key types to plugin/phone interface (Philips VOIP1511 supports)
 	- using queue to separate plugin thread from VCL thread when passing events
 	- fixed "on recording state" scripting (broken in 0.3)
+	- removed winwave module (obsoleted by winwave2)
 */
 

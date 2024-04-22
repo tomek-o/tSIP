@@ -714,6 +714,8 @@ void __fastcall TfrmButtonEdit::cbSoundOutputModChange(TObject *Sender)
 		mod == AudioModules::winwave ||
 		mod == AudioModules::winwave2)
 	{
+		if (mod == AudioModules::winwave)
+			mod = AudioModules::winwave2;	// original "winwave" was buggy/obsoletes/removed
 		cbSoundOutputDev->Visible = true;
 		lblSoundOutputDev->Visible = true;
 		AudioDevicesList::FillComboBox(cbSoundOutputDev, mod, true, cfg->audioTxDev.c_str());

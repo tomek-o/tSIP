@@ -232,9 +232,9 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 
 				cfg.script = btnJson.get("script", cfg.script).asString();
 
-				cfg.audioRxMod = btnJson.get("audioRxMod", cfg.audioRxMod).asString();
+				AudioModules::GetModuleFromJson(btnJson, "audioRxMod", AudioModules::DIR_INPUT, cfg.audioRxMod);
 				cfg.audioRxDev = btnJson.get("audioRxDev", cfg.audioRxDev).asString();
-				cfg.audioTxMod = btnJson.get("audioTxMod", cfg.audioTxMod).asString();
+				AudioModules::GetModuleFromJson(btnJson, "audioTxMod", AudioModules::DIR_OUTPUT, cfg.audioTxMod);
 				cfg.audioTxDev = btnJson.get("audioTxDev", cfg.audioTxDev).asString();
 
 				btnJson.getString("videoRxMod", cfg.videoRxMod);
