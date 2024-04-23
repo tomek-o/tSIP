@@ -24,14 +24,14 @@ object frmButtonContainerConf: TfrmButtonContainerConf
     Top = 8
     Width = 91
     Height = 13
-    Caption = 'background bitmap'
+    Caption = 'Background bitmap'
   end
   object lblBackgroundColor: TLabel
-    Left = 10
+    Left = 8
     Top = 45
     Width = 82
     Height = 13
-    Caption = 'background color'
+    Caption = 'Background color'
   end
   object shColorBackground: TShape
     Left = 336
