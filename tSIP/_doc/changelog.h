@@ -1182,9 +1182,17 @@ Version 0.3.03
 	- few other minor fixes/improvements
 
 Version 0.3.04
-	- added few key types to plugin/phone interface (Philips VOIP1511 supports)
+	- added new key types to plugin/phone interface (needed for Philips VOIP1511 support)
+		- application toggle ("Skype" key on Philips)
+		- mute toggle
+		- call answer
+		- call hangup
 	- using queue to separate plugin thread from VCL thread when passing events
 	- fixed "on recording state" scripting (broken in 0.3)
-	- removed winwave module (obsoleted by winwave2)
+	- Lua: added GetCallButtonId(callId) function (call id -> assigned button id)
+	- removed winwave module (with some issues and obsoleted by winwave2)
+	- added new button containers
+		- on the panel with Answer/Hangup button
+		- on the tray notifier window
 */
 

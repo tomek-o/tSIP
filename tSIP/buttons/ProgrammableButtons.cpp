@@ -45,7 +45,7 @@ void ProgrammableButtons::SetDefaultsForBtnId(int id, ButtonConf& cfg)
 {
 	enum { HEIGHT = 32 };
 
-	if (id < 0 || id >= BASIC_PANEL_CONSOLE_BTNS + (EXT_CONSOLE_COLUMNS * CONSOLE_BTNS_PER_CONTAINER))
+	if (id < 0 || id >= GetTotalCnt())
 		return;
 	if (id < BASIC_PANEL_CONSOLE_BTNS)
 	{
@@ -80,7 +80,7 @@ ProgrammableButtons::ProgrammableButtons(void):
 	editedPanelId(-1),
 	scalingPercentage(100)	
 {
-	btnConf.resize(BASIC_PANEL_CONSOLE_BTNS + (EXT_CONSOLE_COLUMNS * CONSOLE_BTNS_PER_CONTAINER));
+	btnConf.resize(GetTotalCnt());
 
 	for (unsigned int i=0; i<btnConf.size(); i++)
 	{
@@ -917,8 +917,8 @@ TfrmButtonContainer* ProgrammableButtons::GetBtnContainer(int btnId)
 	}
 	else
 	{
-		assert(ARRAY_SIZE(frmButtonContainers) < ButtonConf::DEFAULT_PARENT_ID);
-		return frmButtonContainers[ButtonConf::DEFAULT_PARENT_ID];
+		assert(ARRAY_SIZE(frmButtonContainers) < BUTTON_CONTAINER_MAIN);
+		return frmButtonContainers[BUTTON_CONTAINER_MAIN];
 	}
 }
 

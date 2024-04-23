@@ -6,6 +6,7 @@
 #include "Settings.h"
 #include "common\KeybKeys.h"
 #include "ProgrammableButtons.h"
+#include "ButtonContainers.h"
 #include "AudioModules.h"
 #include "Sizes.h"
 #include "Branding.h"
@@ -173,7 +174,7 @@ Settings::Settings(void)
 
 	ScriptWindow.ClearMruItems();
 
-	buttonContainers.resize(1 + ProgrammableButtons::EXT_CONSOLE_COLUMNS);
+	buttonContainers.resize(BUTTON_CONTAINER__COUNT);
 }
 
 int Settings::UpdateFromText(AnsiString text)

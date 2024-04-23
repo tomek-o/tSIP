@@ -75,13 +75,12 @@ public:
 	int ReadFromString(AnsiString json);
 	int Write(void);
 
-	enum { EXT_CONSOLE_COLUMNS = 1 };
 	enum { BASIC_PANEL_CONSOLE_BTNS = 15 };
-	enum { CONSOLE_BTNS_PER_CONTAINER = 200 };
+	enum { EXTRA_BTNS = 200 };
 
 	static int GetTotalCnt(void)
 	{
-		return BASIC_PANEL_CONSOLE_BTNS + (EXT_CONSOLE_COLUMNS * CONSOLE_BTNS_PER_CONTAINER);
+		return BASIC_PANEL_CONSOLE_BTNS + EXTRA_BTNS;
 	}
 
 	std::vector<ButtonConf> btnConf;

@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "ButtonConf.h"
+#include "ButtonContainers.h"
 #include "ua/AudioModules.h"
 #include "ua/VideoModules.h"
 #include <Graphics.hpp>
@@ -19,7 +20,7 @@ ButtonConf::ButtonConf(void)
 
 void ButtonConf::Reset(void)
 {
-    parentId = DEFAULT_PARENT_ID;	// "main" button container
+	parentId = BUTTON_CONTAINER_MAIN;
 	type = Button::DISABLED;
 	visible = true;
 	caption = "";

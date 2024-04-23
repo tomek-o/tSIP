@@ -8,6 +8,7 @@
 #include "ButtonType.h"
 #include "ButtonConf.h"
 #include "ProgrammableButtons.h"
+#include "ButtonContainers.h"
 #include "Paths.h"
 #include "common\Colors.h"
 #include "AudioDevicesList.h"
@@ -34,6 +35,11 @@ __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
 	for (int i=0; i<Button::TYPE_LIMITER; i++)
 	{
 		cbType->Items->Add(Button::TypeName((Button::Type)i));
+	}
+	cbParentId->Clear();
+	for (int i=0; i<BUTTON_CONTAINER__COUNT; i++)
+	{
+    	cbParentId->Items->Add(GetButtonContainerName(static_cast<enum ButtonContainerId>(i)));
 	}
 	cbInactiveColor->Items->Clear();
 	for (int i=0; i<Color::clLimiter; i++)
@@ -140,7 +146,7 @@ void TfrmButtonEdit::ApplyConf(void)
 	}
 	else
 	{
-    	cbParentId->ItemIndex = ButtonConf::DEFAULT_PARENT_ID;
+    	cbParentId->ItemIndex = BUTTON_CONTAINER__DEFAULT;
 	}
 	if (cfg->captionLines > 0 && cfg->captionLines <= cbCaptionLines->Items->Count)
 	{

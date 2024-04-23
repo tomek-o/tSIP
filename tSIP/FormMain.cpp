@@ -248,24 +248,29 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 
     buttons.SetScalingPercentage(appSettings.gui.scalingPct);
 
-	TfrmButtonContainer *frmButtonContainerBasic = new TfrmButtonContainer(
-		this->pnlDialpad,
-		buttons,
-		0,
-		this->pnlDialpad->Width, this->pnlDialpad->Height, appSettings.gui.scalingPct,
-		&OnSetKeepForeground,
-		appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
-	frmButtonContainerBasic->Parent = this->pnlDialpad;
-	frmButtonContainerBasic->ApplyConfig();
-	frmButtonContainerBasic->Visible = true;
-	frmButtonContainers[0] = frmButtonContainerBasic;
+	{
+		TfrmButtonContainer *frmButtonContainerBasic = new TfrmButtonContainer(
+			this->pnlDialpad,
+			buttons,
+			0,
+			this->pnlDialpad->Width, this->pnlDialpad->Height, appSettings.gui.scalingPct,
+			&OnSetKeepForeground,
+			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
+		frmButtonContainerBasic->Parent = this->pnlDialpad;
+		frmButtonContainerBasic->ApplyConfig();
+		frmButtonContainerBasic->Visible = true;
+		frmButtonContainers[0] = frmButtonContainerBasic;
 
-	trbarSoftvolMic->Parent = frmButtonContainerBasic;
-	trbarSoftvolSpeaker->Parent = frmButtonContainerBasic;
-	edTransfer->Enabled = false;	// this eliminates ugly effect with edTransfer content being selected for a moment at the startup - probably because of parent change
-	edTransfer->Parent = frmButtonContainerBasic;
-	btnResetMicVolume->Parent = frmButtonContainerBasic;
-	btnResetSpeakerVolume->Parent = frmButtonContainerBasic;
+		trbarSoftvolMic->Parent = frmButtonContainerBasic;
+		trbarSoftvolSpeaker->Parent = frmButtonContainerBasic;
+		edTransfer->Enabled = false;	// this eliminates ugly effect with edTransfer content being selected for a moment at the startup - probably because of parent change
+		edTransfer->Parent = frmButtonContainerBasic;
+		btnResetMicVolume->Parent = frmButtonContainerBasic;
+		btnResetSpeakerVolume->Parent = frmButtonContainerBasic;
+	}
+	
+	// TfrmMain should remain MainForm (created first), but I need tray notifier to create buttons on its container
+	Application->CreateForm(__classid(TfrmTrayNotifier), &frmTrayNotifier);
 
 	for (int i=1; i<ARRAY_SIZE(frmButtonContainers); i++) {
 		TfrmButtonContainer *& container = frmButtonContainers[i];

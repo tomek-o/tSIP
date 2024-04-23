@@ -11,7 +11,6 @@
 class ButtonConf
 {
 public:
-	enum { DEFAULT_PARENT_ID = 1 };
     int parentId;			///< id of button container where this button belongs
 	Button::Type type;
 
