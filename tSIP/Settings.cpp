@@ -596,6 +596,10 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		{
 			frmTrayNotifier.iPosY = iPosY;
 		}
+
+		frmTrayNotifierJson.getUInt("Width", frmTrayNotifier.iWidth);
+		frmTrayNotifierJson.getUInt("Height", frmTrayNotifier.iHeight);
+
 		frmTrayNotifier.showOnIncoming = frmTrayNotifierJson.get("ShowOnIncoming", frmTrayNotifier.showOnIncoming).asBool();
 		frmTrayNotifier.skipIfMainWindowVisible = frmTrayNotifierJson.get("SkipIfMainWindowVisible", frmTrayNotifier.skipIfMainWindowVisible).asBool();
 		frmTrayNotifier.showOnOutgoing = frmTrayNotifierJson.get("ShowOnOutgoing", frmTrayNotifier.showOnOutgoing).asBool();
@@ -965,6 +969,8 @@ int Settings::Write(AnsiString asFileName)
 		Json::Value& jv = root["frmTrayNotifier"];
 		jv["PosX"] = frmTrayNotifier.iPosX;
 		jv["PosY"] = frmTrayNotifier.iPosY;
+		jv["Width"] = frmTrayNotifier.iWidth;
+		jv["Height"] = frmTrayNotifier.iHeight;
 		jv["ShowOnIncoming"] = frmTrayNotifier.showOnIncoming;
 		jv["SkipIfMainWindowVisible"] = frmTrayNotifier.skipIfMainWindowVisible;
 		jv["ShowOnOutgoing"] = frmTrayNotifier.showOnOutgoing;

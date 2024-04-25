@@ -300,6 +300,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbTrayNotifierHideWhenAnsweringCall->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCall;
 	chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically;
 	chbTrayNotifierDoNotChangePosition->Checked = tmpSettings.frmTrayNotifier.doNotChangePosition;
+	edTrayNotifierWidth->Text = tmpSettings.frmTrayNotifier.iWidth;
+	edTrayNotifierHeight->Text = tmpSettings.frmTrayNotifier.iHeight;
 
 	chbFrmMainUseCustomApplicationTitle->Checked = tmpSettings.frmMain.bUseCustomApplicationTitle;
 	edFrmMainCustomApplicationTitle->Text = tmpSettings.frmMain.customApplicationTitle;
@@ -701,6 +703,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmTrayNotifier.hideWhenAnsweringCall = chbTrayNotifierHideWhenAnsweringCall->Checked;
 	tmpSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically = chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked;
 	tmpSettings.frmTrayNotifier.doNotChangePosition = chbTrayNotifierDoNotChangePosition->Checked;
+	tmpSettings.frmTrayNotifier.iWidth = StrToIntDef(edTrayNotifierWidth->Text, tmpSettings.frmTrayNotifier.iWidth);
+	tmpSettings.frmTrayNotifier.iHeight = StrToIntDef(edTrayNotifierHeight->Text, tmpSettings.frmTrayNotifier.iHeight);
 
 	tmpSettings.frmMain.bUseCustomApplicationTitle = chbFrmMainUseCustomApplicationTitle->Checked;
 	tmpSettings.frmMain.customApplicationTitle = edFrmMainCustomApplicationTitle->Text;

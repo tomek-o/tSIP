@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsSpeedDial
+    ActivePage = tsTrayNotifier
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -3044,6 +3044,20 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = '%'
       end
+      object lblTrayNotifierWidth: TLabel
+        Left = 3
+        Top = 181
+        Width = 67
+        Height = 13
+        Caption = 'Window width'
+      end
+      object lblTrayNotifierHeight: TLabel
+        Left = 166
+        Top = 181
+        Width = 71
+        Height = 13
+        Caption = 'Window height'
+      end
       object chbTrayNotifierShowOnIncoming: TCheckBox
         Left = 2
         Top = 3
@@ -3116,6 +3130,20 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Do not change position (always show at same, current position)'
         TabOrder = 8
+      end
+      object edTrayNotifierWidth: TEdit
+        Left = 78
+        Top = 178
+        Width = 42
+        Height = 21
+        TabOrder = 9
+      end
+      object edTrayNotifierHeight: TEdit
+        Left = 244
+        Top = 178
+        Width = 42
+        Height = 21
+        TabOrder = 10
       end
     end
     object tsScripts: TTabSheet

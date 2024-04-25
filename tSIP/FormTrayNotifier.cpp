@@ -51,6 +51,8 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 {
 	Left = appSettings.frmTrayNotifier.iPosX;
 	Top = appSettings.frmTrayNotifier.iPosY;
+	Width = appSettings.frmTrayNotifier.iWidth;
+	Height = appSettings.frmTrayNotifier.iHeight;
 #if 0
 	/** \todo frmTrayNotifier steals focus at first call */
 	Visible = true;

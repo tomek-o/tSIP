@@ -523,6 +523,10 @@ __published:	// IDE-managed Components
 	TEdit *edAutoAnswerSecondCallCode;
 	TLabel *lblMultipleCallsDenyReason;
 	TEdit *edAutoAnswerSecondCallReason;
+	TLabel *lblTrayNotifierWidth;
+	TEdit *edTrayNotifierWidth;
+	TLabel *lblTrayNotifierHeight;
+	TEdit *edTrayNotifierHeight;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

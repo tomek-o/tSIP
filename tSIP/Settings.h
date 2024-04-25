@@ -177,7 +177,7 @@ public:
 	struct _frmTrayNotifier
 	{
 		int iPosX, iPosY;				///< coordinates
-		int iHeight, iWidth;
+		unsigned int iHeight, iWidth;
 		bool showOnIncoming;
 		bool skipIfMainWindowVisible;
 		bool showOnOutgoing;

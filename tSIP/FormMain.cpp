@@ -702,6 +702,8 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	/** \todo bug? use prev settings */
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
+	frmTrayNotifier->Width = appSettings.frmTrayNotifier.iWidth;
+	frmTrayNotifier->Height = appSettings.frmTrayNotifier.iHeight;
 
 	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
 
