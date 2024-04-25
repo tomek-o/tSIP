@@ -49,8 +49,8 @@ void TfrmTrayNotifier::SetData(unsigned int callUid, AnsiString description, Ans
 
 void TfrmTrayNotifier::ShowWithoutFocus(void)
 {
-	frmTrayNotifier->Left = appSettings.frmTrayNotifier.iPosX;
-	frmTrayNotifier->Top = appSettings.frmTrayNotifier.iPosY;
+	Left = appSettings.frmTrayNotifier.iPosX;
+	Top = appSettings.frmTrayNotifier.iPosY;
 #if 0
 	/** \todo frmTrayNotifier steals focus at first call */
 	Visible = true;

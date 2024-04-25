@@ -964,10 +964,12 @@ void ProgrammableButtons::Create(TComponent* Owner,
 
 void ProgrammableButtons::Destroy(void)
 {
+#if 0	// buttons have own, different owners, possibly from different windows
 	for (unsigned int i=0; i<btns.size(); i++)
 	{
 		delete btns[i];
 	}
+#endif
 	btns.clear();
 	if (dmButtons)
 	{

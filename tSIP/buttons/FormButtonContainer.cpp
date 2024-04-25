@@ -31,6 +31,7 @@ namespace
 __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	ProgrammableButtons &buttons,
 	unsigned int containerId,
+	bool moveParentControlsToSelf,
 	int width, int height, int scalingPercentage,
 	CallbackSetKeepForeground callbackSetKeepForeground,
 	bool showStatus, int statusPanelHeight, bool hideEmptyStatus)
@@ -61,7 +62,32 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	pnlStatus->Visible = showStatus && !hideEmptyStatus;
 	pnlStatus->Height = statusPanelHeight;
 
-	speedDialStatus.addObserver(*this);	
+	speedDialStatus.addObserver(*this);
+
+	if (moveParentControlsToSelf)
+	{
+		TWinControl *parent = dynamic_cast<TWinControl*>(Owner);
+		if (parent)
+		{
+			// move parent child controls onto self
+			std::vector<TControl*> controls;
+			for (int i = 0; i < parent->ControlCount; i++)
+			{
+				TControl *control = parent->Controls[i];
+				if (control != this)
+				{
+					controls.push_back(control);
+				}
+			}
+			for (unsigned int i=0; i<controls.size(); i++)
+			{
+				TControl *control = controls[i];
+				control->Parent = panelMain;
+				//control->Visible = true;
+				//control->BringToFront();
+			}
+		}
+	}
 }
 
 //---------------------------------------------------------------------------

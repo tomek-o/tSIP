@@ -130,6 +130,8 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
 		Application->CreateForm(__classid(TfrmLog), &frmLog);
+		Application->CreateForm(__classid(TfrmTrayNotifier), &frmTrayNotifier);
+		frmMain->InitButtons();
 		Application->CreateForm(__classid(TfrmContactEditor), &frmContactEditor);
 		Application->CreateForm(__classid(TfrmContactPopup), &frmContactPopup);
 		frmContactPopup->Left = appSettings.frmContactPopup.iPosX;

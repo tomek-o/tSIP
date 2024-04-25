@@ -252,7 +252,8 @@ public:		// User declarations
 	void OnRestartUa(void);
 	void obsUpdate(Observable* o, Argument * arg);
 	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
-	void SetTrayIconHint(AnsiString text);	
+	void SetTrayIconHint(AnsiString text);
+	void InitButtons(void);	
 
 	BEGIN_MESSAGE_MAP
 		MESSAGE_HANDLER(WM_COPYDATA, TWMCopyData, WMCopyData)

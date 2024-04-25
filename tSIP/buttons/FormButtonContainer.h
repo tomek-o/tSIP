@@ -69,6 +69,7 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmButtonContainer(TComponent* Owner, ProgrammableButtons &buttons,
 		unsigned int containerId,
+		bool moveParentControlsToSelf,
 		int width, int height, int scalingPercentage,
 		CallbackSetKeepForeground callbackSetKeepForeground,
         bool showStatus, int statusPanelHeight, bool hideEmptyStatus

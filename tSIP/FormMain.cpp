@@ -239,62 +239,6 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
 
-	AnsiString asButtonsFile;
-	asButtonsFile.sprintf("%s\\%s_buttons.json", Paths::GetProfileDir().c_str(),
-		ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
-	buttons.SetFilename(asButtonsFile);
-	buttons.Read();
-	buttons.UpdateContacts(appSettings.uaConf.contacts);
-
-    buttons.SetScalingPercentage(appSettings.gui.scalingPct);
-
-	{
-		TfrmButtonContainer *frmButtonContainerBasic = new TfrmButtonContainer(
-			this->pnlDialpad,
-			buttons,
-			0,
-			this->pnlDialpad->Width, this->pnlDialpad->Height, appSettings.gui.scalingPct,
-			&OnSetKeepForeground,
-			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
-		frmButtonContainerBasic->Parent = this->pnlDialpad;
-		frmButtonContainerBasic->ApplyConfig();
-		frmButtonContainerBasic->Visible = true;
-		frmButtonContainers[0] = frmButtonContainerBasic;
-
-		trbarSoftvolMic->Parent = frmButtonContainerBasic;
-		trbarSoftvolSpeaker->Parent = frmButtonContainerBasic;
-		edTransfer->Enabled = false;	// this eliminates ugly effect with edTransfer content being selected for a moment at the startup - probably because of parent change
-		edTransfer->Parent = frmButtonContainerBasic;
-		btnResetMicVolume->Parent = frmButtonContainerBasic;
-		btnResetSpeakerVolume->Parent = frmButtonContainerBasic;
-	}
-	
-	// TfrmMain should remain MainForm (created first), but I need tray notifier to create buttons on its container
-	Application->CreateForm(__classid(TfrmTrayNotifier), &frmTrayNotifier);
-
-	for (int i=1; i<ARRAY_SIZE(frmButtonContainers); i++) {
-		TfrmButtonContainer *& container = frmButtonContainers[i];
-		container = new TfrmButtonContainer(this,
-			buttons,
-			i,
-			300, 0, appSettings.gui.scalingPct,
-			&OnSetKeepForeground,
-			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
-		container->Parent = this; //this->pnlSpeedDial;
-		container->ApplyConfig();
-		container->SendToBack();
-		container->Align = alClient;
-		container->Visible = true;
-	}
-
-	buttons.Create(this, appSettings.gui.scalingPct,
-		&OnProgrammableBtnClick,
-		&OnProgrammableBtnMouseUpDown,
-		&OnSetKeepForeground,
-		&OnRestartUa
-		);
-	buttons.UseContextMenu(appSettings.frmMain.bSpeedDialPopupMenu);
-
 	frmContacts = new TfrmContacts(this->tsContacts, &contacts, &MakeCall);
 	frmContacts->Scale(appSettings.gui.scalingPct);
 	frmContacts->Parent = tsContacts;
@@ -351,7 +295,7 @@ __fastcall TfrmMain::~TfrmMain()
 		trIcon = NULL;
 	}
 	PortaudioLockShutdown();
-	FreeBitmapResources();	
+	FreeBitmapResources();
 }
 
 //---------------------------------------------------------------------------
@@ -372,7 +316,8 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	pnlCallControls->Visible = !appSettings.frmMain.bHideCallPanel;
 	pnlMain->Visible = !appSettings.frmMain.bHideMainPanel;
 
-	//edTransfer->Text = asTransferHint;			
+	//edTransfer->Text = asTransferHint;
+
 
 #if 0 // this MIGHT work for scaling scrollbar width - not working
 	TNonClientMetrics NCMet;
@@ -450,6 +395,88 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	UpdateAutoAnswer();
 }
 //---------------------------------------------------------------------------
+
+void TfrmMain::InitButtons(void)
+{
+	AnsiString asButtonsFile;
+	asButtonsFile.sprintf("%s\\%s_buttons.json", Paths::GetProfileDir().c_str(),
+		ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
+	buttons.SetFilename(asButtonsFile);
+	buttons.Read();
+	buttons.UpdateContacts(appSettings.uaConf.contacts);
+
+	buttons.SetScalingPercentage(appSettings.gui.scalingPct);
+
+	{
+		const int id = BUTTON_CONTAINER_DIALPAD;
+		TfrmButtonContainer *frmButtonContainerBasic = new TfrmButtonContainer(
+			this->pnlDialpad,
+			buttons,
+			id, true,
+			this->pnlDialpad->Width, this->pnlDialpad->Height, appSettings.gui.scalingPct,
+			&OnSetKeepForeground,
+			false, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
+		frmButtonContainerBasic->Parent = this->pnlDialpad;
+		frmButtonContainerBasic->ApplyConfig();
+		frmButtonContainerBasic->Visible = true;
+		frmButtonContainers[id] = frmButtonContainerBasic;
+	}
+	
+	{
+		const int id = BUTTON_CONTAINER_MAIN;
+		TfrmButtonContainer *& container = frmButtonContainers[id];
+		container = new TfrmButtonContainer(this,
+			buttons,
+			id, false,
+			300, 0, appSettings.gui.scalingPct,
+			&OnSetKeepForeground,
+			appSettings.frmSpeedDial.showStatus, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
+		container->Parent = this;
+		container->ApplyConfig();
+		container->Align = alClient;
+		container->Visible = true;
+		container->SendToBack();
+	}
+
+	{
+		const int id = BUTTON_CONTAINER_CALL_PANEL;
+		TfrmButtonContainer *& container = frmButtonContainers[id];
+		container = new TfrmButtonContainer(this->pnlCallControls,
+			buttons,
+			id, true,
+			this->pnlCallControls->Width, this->pnlCallControls->Height, appSettings.gui.scalingPct,
+			&OnSetKeepForeground,
+			false, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
+		container->Parent = this->pnlCallControls;
+		container->ApplyConfig();
+		//container->Align = alClient;
+		container->Visible = true;
+	}
+
+	{
+		const int id = BUTTON_CONTAINER_TRAY_NOTIFIER;
+		TfrmButtonContainer *& container = frmButtonContainers[id];
+		container = new TfrmButtonContainer(frmTrayNotifier,
+			buttons,
+			id, true,
+			300, 0, appSettings.gui.scalingPct,
+			&OnSetKeepForeground,
+			false, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
+		container->Parent = frmTrayNotifier;
+		container->ApplyConfig();
+		container->SendToBack();
+		container->Align = alClient;
+		container->Visible = true;
+	}
+
+	buttons.Create(this, appSettings.gui.scalingPct,
+		&OnProgrammableBtnClick,
+		&OnProgrammableBtnMouseUpDown,
+		&OnSetKeepForeground,
+		&OnRestartUa
+		);
+	buttons.UseContextMenu(appSettings.frmMain.bSpeedDialPopupMenu);
+}
 
 void TfrmMain::Finalize(void)
 {
@@ -1258,7 +1285,7 @@ void TfrmMain::UpdateDialpad(void)
 		once = true;
 		scale = static_cast<float>(appSettings.gui.scalingPct) / 100.0f;
 	}
-	
+#if 0
 	{
 		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_ED_TRANSFER];
 		edTransfer->Visible = el.visible;
@@ -1299,6 +1326,9 @@ void TfrmMain::UpdateDialpad(void)
 		btnResetSpeakerVolume->Width = el.width * scale;
 		btnResetSpeakerVolume->Height = el.height * scale;
 	}
+#else
+	int TODO__RESTORE;
+#endif
 }
 
 void TfrmMain::FocusCbCallUri(void)
