@@ -88,6 +88,8 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 			}
 		}
 	}
+
+	panelMain->DoubleBuffered = true;
 }
 
 //---------------------------------------------------------------------------
