@@ -1285,7 +1285,7 @@ void TfrmMain::UpdateDialpad(void)
 		once = true;
 		scale = static_cast<float>(appSettings.gui.scalingPct) / 100.0f;
 	}
-#if 0
+
 	{
 		const DialpadConf::ElementConf &el = appSettings.dialpad.elements[DialpadConf::EL_ED_TRANSFER];
 		edTransfer->Visible = el.visible;
@@ -1326,9 +1326,6 @@ void TfrmMain::UpdateDialpad(void)
 		btnResetSpeakerVolume->Width = el.width * scale;
 		btnResetSpeakerVolume->Height = el.height * scale;
 	}
-#else
-	int TODO__RESTORE;
-#endif
 }
 
 void TfrmMain::FocusCbCallUri(void)
