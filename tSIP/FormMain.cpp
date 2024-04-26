@@ -698,7 +698,6 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	}
 
 	UpdateBitmaps();
-	frmTrayNotifier->UpdateBackgroundImage();
 	/** \todo bug? use prev settings */
 	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
@@ -800,7 +799,6 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
     frmTrayNotifier->Caption = Branding::appName;
 	frmTrayNotifier->OnHangup = Hangup;
 	frmTrayNotifier->OnAnswer = Answer;
-	frmTrayNotifier->UpdateBackgroundImage();
 	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
 
 	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
