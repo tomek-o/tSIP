@@ -11,7 +11,7 @@
 #include <Dialogs.hpp>
 //---------------------------------------------------------------------------
 
-class ButtonContainerConf;
+#include "ButtonContainerConf.h"
 
 class TfrmButtonContainerConf : public TForm
 {
@@ -29,6 +29,7 @@ __published:	// IDE-managed Components
 	TShape *shColorBackground;
 	TLabel *lblColorPreview;
 	TColorDialog *colorDialog;
+	TCheckBox *chbBackgroundImageTransparent;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSelectBackgroundBitmapClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -38,7 +39,8 @@ __published:	// IDE-managed Components
 	void __fastcall btnSelectBackgroundColorClick(TObject *Sender);
 private:	// User declarations
 	bool confirmed;
-	ButtonContainerConf *cfg;
+	ButtonContainerConf *config;
+	ButtonContainerConf tmpConfig;
 	__fastcall int ShowModal(void) {
 		return TForm::ShowModal();
 	};

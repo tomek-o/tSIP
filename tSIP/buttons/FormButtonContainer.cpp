@@ -146,7 +146,7 @@ void __fastcall TfrmButtonContainer::miAddEditPanelClick(TObject *Sender)
 	buttons.Edit(id);
 }
 
-void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file)
+void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file, bool transparent)
 {
 	AnsiString asBackgroundFile;
 	try
@@ -163,6 +163,7 @@ void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file)
 			imgBackground->Picture = NULL;
 			lastImage = "";
 		}
+		imgBackground->Transparent = transparent;
 	}
 	catch (...)
 	{
@@ -251,6 +252,6 @@ void __fastcall TfrmButtonContainer::miConfigureButtonContainerClick(
 void TfrmButtonContainer::ApplyConfig(void)
 {
 	const ButtonContainerConf &cfg = appSettings.buttonContainers[containerId];
-	UpdateBackgroundImage(cfg.backgroundImage);
+	UpdateBackgroundImage(cfg.backgroundImage, cfg.backgroundImageTransparent);
 	panelMain->Color = static_cast<TColor>(cfg.backgroundColor);
 }

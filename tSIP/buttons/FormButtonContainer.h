@@ -50,7 +50,7 @@ public:
 	typedef void (__closure *CallbackSetKeepForeground)(bool disable);
 	void UpdatePopupSettings(void);
 	void ApplyConfig(void);
-	void UpdateBackgroundImage(AnsiString file);
+	void UpdateBackgroundImage(AnsiString file, bool transparent);
 	TPanel* GetButtonParent(void) {
     	return panelMain;
 	}

@@ -15,6 +15,7 @@ class ButtonContainerConf
 {
 public:
 	AnsiString backgroundImage;
+	bool backgroundImageTransparent;
 	int backgroundColor;
 	
 	ButtonContainerConf(void);
@@ -22,6 +23,7 @@ public:
 	bool operator==(const ButtonContainerConf& right) const {
 		return (
 			backgroundImage == right.backgroundImage &&
+			backgroundImageTransparent == right.backgroundImageTransparent &&
 			backgroundColor == right.backgroundColor
 		);
 	}

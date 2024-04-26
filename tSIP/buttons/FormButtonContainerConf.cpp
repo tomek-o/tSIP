@@ -4,7 +4,6 @@
 #pragma hdrstop
 
 #include "FormButtonContainerConf.h"
-#include "ButtonContainerConf.h"
 #include "common\Colors.h"
 #include <assert.h>
 //---------------------------------------------------------------------------
@@ -15,7 +14,7 @@ TfrmButtonContainerConf *frmButtonContainerConf = NULL;
 __fastcall TfrmButtonContainerConf::TfrmButtonContainerConf(TComponent* Owner)
 	: TForm(Owner),
 	confirmed(false),
-	cfg(NULL)
+	config(NULL)
 {
 	cbBackgroundColor->Items->Clear();
 	for (int i=0; i<Color::clLimiter; i++)
@@ -28,11 +27,13 @@ __fastcall TfrmButtonContainerConf::TfrmButtonContainerConf(TComponent* Owner)
 void __fastcall TfrmButtonContainerConf::ShowModal(ButtonContainerConf *cfg)
 {
 	assert(cfg);
-	this->cfg = cfg;
+	this->config = cfg;
+	tmpConfig = *config;
 	
-	edBackgroundBitmap->Text = cfg->backgroundImage;
+	edBackgroundBitmap->Text = tmpConfig.backgroundImage;
+	chbBackgroundImageTransparent->Checked = tmpConfig.backgroundImageTransparent;
 
-	int colorId = Color::IntTColorToId(cfg->backgroundColor);
+	int colorId = Color::IntTColorToId(tmpConfig.backgroundColor);
 	cbBackgroundColor->ItemIndex = colorId;
 	btnSelectBackgroundColor->Visible = (colorId == Color::clCustom);
 
@@ -49,7 +50,7 @@ void __fastcall TfrmButtonContainerConf::FormShow(TObject *Sender)
 void __fastcall TfrmButtonContainerConf::btnSelectBackgroundBitmapClick(
       TObject *Sender)
 {
-	AnsiString &fname = cfg->backgroundImage;
+	AnsiString &fname = tmpConfig.backgroundImage;
 	openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";
 	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\img\\";
 	openDialog->InitialDir = dir;
@@ -67,11 +68,10 @@ void __fastcall TfrmButtonContainerConf::btnSelectBackgroundBitmapClick(
 void __fastcall TfrmButtonContainerConf::btnApplyClick(TObject *Sender)
 {
 	confirmed = true;
-	cfg->backgroundImage = ExtractFileName(edBackgroundBitmap->Text);
-	if (cbBackgroundColor->ItemIndex != Color::clCustom)
-	{
-		cfg->backgroundColor = Color::IdToIntTColor(static_cast<Color::Id>(cbBackgroundColor->ItemIndex));
-	}
+	tmpConfig.backgroundImage = ExtractFileName(edBackgroundBitmap->Text);
+	tmpConfig.backgroundImageTransparent = chbBackgroundImageTransparent->Checked;
+
+	*config = tmpConfig;	
 
 	Close();
 }
@@ -98,12 +98,17 @@ void __fastcall TfrmButtonContainerConf::cbBackgroundColorChange(
       TObject *Sender)
 {
 	btnSelectBackgroundColor->Visible = (cbBackgroundColor->ItemIndex == Color::clCustom);
+	if (cbBackgroundColor->ItemIndex != Color::clCustom)
+	{
+		tmpConfig.backgroundColor = Color::IdToIntTColor(static_cast<Color::Id>(cbBackgroundColor->ItemIndex));
+	}	
+	UpdateColorsPreview();
 }
 //---------------------------------------------------------------------------
 
 void TfrmButtonContainerConf::UpdateColorsPreview(void)
 {
-	shColorBackground->Brush->Color = static_cast<TColor>(cfg->backgroundColor);
+	shColorBackground->Brush->Color = static_cast<TColor>(tmpConfig.backgroundColor);
 }
 
 void __fastcall TfrmButtonContainerConf::btnSelectBackgroundColorClick(
@@ -112,7 +117,7 @@ void __fastcall TfrmButtonContainerConf::btnSelectBackgroundColorClick(
 	int *col;
 	if (Sender == btnSelectBackgroundColor)
 	{
-		col = &cfg->backgroundColor;
+		col = &tmpConfig.backgroundColor;
 	}
 	else
 	{
