@@ -1182,7 +1182,7 @@ Version 0.3.03
 	- few other minor fixes/improvements
 
 Version 0.3.04
-	- added new key types to plugin/phone interface (needed for Philips VOIP1511 support)
+	- added new key types to plugin/phone interface (needed for Philips VOIP1511 USB handset support)
 		- application toggle ("Skype" key on Philips)
 		- mute toggle
 		- call answer
@@ -1191,8 +1191,15 @@ Version 0.3.04
 	- fixed "on recording state" scripting (broken in 0.3)
 	- Lua: added GetCallButtonId(callId) function (call id -> assigned button id)
 	- removed winwave module (with some issues and obsoleted by winwave2)
+		- if anyone still used winwave: transition should be transparent, scripts acccept both module names selecting always winwave2
 	- added new button containers
 		- on the panel with Answer/Hangup button
 		- on the tray notifier window
+		- note: popup menus (all together for 4 containers) can be disabled from Settings/Tray Notifier 
+	- added size configuration for tray notifier window (adding capacity for few custom buttons)
+		- description and uri labels are scaled with tray notifier window width, possibly showing longer text
+	- few minor improvements for button container configuration dialog
+	- BREAKING: tray notifier window no longer has background image property - it is replaced by background image of button container that is now placed on tray notifier window
+	- added "transparent" configuration for button container background image
 */
 
