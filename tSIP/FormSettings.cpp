@@ -295,7 +295,6 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbTrayNotifierShowOnIncoming->Checked = tmpSettings.frmTrayNotifier.showOnIncoming;
 	chbSkipTrayNotifierIfMainWindowVisible->Checked = tmpSettings.frmTrayNotifier.skipIfMainWindowVisible;
 	chbTrayNotifierShowOnOutgoing->Checked = tmpSettings.frmTrayNotifier.showOnOutgoing;
-	edTrayNotifierBackgroundImage->Text = tmpSettings.frmTrayNotifier.backgroundImage;
 	edTrayNotifierGuiScaling->Text = tmpSettings.frmTrayNotifier.scalingPct;
 	chbTrayNotifierHideWhenAnsweringCall->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCall;
 	chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically;
@@ -693,7 +692,6 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmTrayNotifier.showOnIncoming = chbTrayNotifierShowOnIncoming->Checked;
 	tmpSettings.frmTrayNotifier.skipIfMainWindowVisible = chbSkipTrayNotifierIfMainWindowVisible->Checked;
 	tmpSettings.frmTrayNotifier.showOnOutgoing = this->chbTrayNotifierShowOnOutgoing->Checked;
-	tmpSettings.frmTrayNotifier.backgroundImage = edTrayNotifierBackgroundImage->Text;
 	tmpSettings.frmTrayNotifier.scalingPct = StrToIntDef(edTrayNotifierGuiScaling->Text, tmpSettings.frmTrayNotifier.scalingPct);
 	if (tmpSettings.frmTrayNotifier.scalingPct < Settings::_frmTrayNotifier::SCALING_MIN ||
 		tmpSettings.frmTrayNotifier.scalingPct > Settings::_frmTrayNotifier::SCALING_MAX)
@@ -1429,10 +1427,6 @@ void __fastcall TfrmSettings::btnSelectImageClick(
 	else if (Sender == btnSelectTrayNotificationImage)
 	{
 		edit = edTrayNotificationImage;
-	}
-	else if (Sender == btnTrayNotifierBackgroundImage)
-	{
-		edit = edTrayNotifierBackgroundImage;
 	}
 	else if (Sender == btnSelectBmpBtnBackspace)
 	{

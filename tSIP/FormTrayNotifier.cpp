@@ -33,7 +33,6 @@ __fastcall TfrmTrayNotifier::TfrmTrayNotifier(TComponent* Owner)
 	RegisterTranslationCb(this, TranslateForm);
 	Width = appSettings.frmTrayNotifier.iWidth;
 	Height = appSettings.frmTrayNotifier.iHeight;
-	UpdateBackgroundImage();
 	this->ActiveControl = btnStopFocus;
 }
 //---------------------------------------------------------------------------
@@ -105,27 +104,6 @@ void __fastcall TfrmTrayNotifier::FormCreate(TObject *Sender)
 	Top = appSettings.frmTrayNotifier.iPosY;
 }
 //---------------------------------------------------------------------------
-
-void TfrmTrayNotifier::UpdateBackgroundImage(void)
-{
-	AnsiString asBackgroundFile;
-	try
-	{
-		static AnsiString lastImage;
-		AnsiString image = appSettings.frmTrayNotifier.backgroundImage;
-		if (image != "" && image != lastImage)
-		{
-			asBackgroundFile = Paths::GetFullImgName(image);
-			imgBackground->Picture->Bitmap->PixelFormat = pf24bit;
-			imgBackground->Picture->LoadFromFile(asBackgroundFile);
-			lastImage = image;
-		}
-	}
-	catch (...)
-	{
-		LOG("Failed to load notifier window background (%s)\n", asBackgroundFile.c_str());
-	}
-}
 
 void __fastcall TfrmTrayNotifier::CreateParams(TCreateParams &Params)
 {

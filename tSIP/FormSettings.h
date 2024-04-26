@@ -187,9 +187,6 @@ __published:	// IDE-managed Components
 	TCheckBox *chbTrayNotifierShowOnIncoming;
 	TCheckBox *chbSkipTrayNotifierIfMainWindowVisible;
 	TCheckBox *chbTrayNotifierShowOnOutgoing;
-	TEdit *edTrayNotifierBackgroundImage;
-	TLabel *lblTrayNotifierBackgroundImage;
-	TButton *btnTrayNotifierBackgroundImage;
 	TLabel *lblIntegrationFromBrowser;
 	TLabel *lblIntegrationSoftphoneToBrowser;
 	TLabel *lblIntegrationSoftphoneToBrowserMode;

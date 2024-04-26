@@ -15,25 +15,17 @@ object frmTrayNotifier: TfrmTrayNotifier
   ScreenSnap = True
   OnClose = FormClose
   OnCreate = FormCreate
+  DesignSize = (
+    207
+    83)
   PixelsPerInch = 96
   TextHeight = 13
-  object imgBackground: TImage
-    Left = 0
-    Top = 0
-    Width = 207
-    Height = 83
-    Align = alClient
-    Transparent = True
-    ExplicitLeft = 89
-    ExplicitTop = 40
-    ExplicitWidth = 105
-    ExplicitHeight = 105
-  end
   object lblDescription: TLabel
     Left = 8
     Top = 8
     Width = 191
     Height = 13
+    Anchors = [akLeft, akTop, akRight]
     AutoSize = False
     Caption = 'lblDescription'
     Font.Charset = DEFAULT_CHARSET
@@ -49,6 +41,7 @@ object frmTrayNotifier: TfrmTrayNotifier
     Top = 27
     Width = 191
     Height = 13
+    Anchors = [akLeft, akTop, akRight]
     AutoSize = False
     Caption = 'lblUri'
     Font.Charset = DEFAULT_CHARSET

@@ -183,7 +183,6 @@ public:
 		bool showOnOutgoing;
 		bool hideWhenAnsweringCall;		///< for manual call answer
 		bool hideWhenAnsweringCallAutomatically;
-		AnsiString backgroundImage;
 		enum { SCALING_MIN = 50 };
 		enum { SCALING_DEF = 100 };
 		enum { SCALING_MAX = 500 };

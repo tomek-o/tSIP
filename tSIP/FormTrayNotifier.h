@@ -19,7 +19,6 @@ __published:	// IDE-managed Components
 	TLabel *lblUri;
 	TButton *btnAnswer;
 	TButton *btnHangup;
-	TImage *imgBackground;
 	TButton *btnStopFocus;
 	void __fastcall btnHangupClick(TObject *Sender);
 	void __fastcall btnAnswerClick(TObject *Sender);
@@ -37,7 +36,6 @@ public:		// User declarations
 	void SetData(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	void ShowWithoutFocus(void);
     void HideWindow(void);
-	void UpdateBackgroundImage(void);
 	CallbackHangup OnHangup;
 	CallbackAnswer OnAnswer;
 	void SetCallState(Callback::ua_state_e state);

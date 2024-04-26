@@ -3023,37 +3023,30 @@ object frmSettings: TfrmSettings
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      object lblTrayNotifierBackgroundImage: TLabel
-        Left = 3
-        Top = 72
-        Width = 87
-        Height = 13
-        Caption = 'Background image'
-      end
       object lblTrayNotifierGuiScaling: TLabel
         Left = 3
-        Top = 96
+        Top = 71
         Width = 53
         Height = 13
         Caption = 'GUI scaling'
       end
       object lblTrayNotifierGuiScalingPercent: TLabel
         Left = 275
-        Top = 96
+        Top = 71
         Width = 11
         Height = 13
         Caption = '%'
       end
       object lblTrayNotifierWidth: TLabel
         Left = 3
-        Top = 181
+        Top = 156
         Width = 67
         Height = 13
         Caption = 'Window width'
       end
       object lblTrayNotifierHeight: TLabel
         Left = 166
-        Top = 181
+        Top = 156
         Width = 71
         Height = 13
         Caption = 'Window height'
@@ -3084,66 +3077,50 @@ object frmSettings: TfrmSettings
           'tray (e.g. when using hotkeys)'
         TabOrder = 2
       end
-      object edTrayNotifierBackgroundImage: TEdit
-        Left = 166
-        Top = 69
-        Width = 121
+      object edTrayNotifierGuiScaling: TEdit
+        Left = 227
+        Top = 68
+        Width = 42
         Height = 21
         TabOrder = 3
       end
-      object btnTrayNotifierBackgroundImage: TButton
-        Left = 293
-        Top = 69
-        Width = 22
-        Height = 21
-        Caption = '...'
-        TabOrder = 4
-        OnClick = btnSelectImageClick
-      end
-      object edTrayNotifierGuiScaling: TEdit
-        Left = 227
-        Top = 93
-        Width = 42
-        Height = 21
-        TabOrder = 5
-      end
       object chbTrayNotifierHideWhenAnsweringCall: TCheckBox
         Left = 3
-        Top = 115
+        Top = 90
         Width = 502
         Height = 17
         Caption = 'Hide tray notifier when (manually) answering call'
-        TabOrder = 6
+        TabOrder = 4
       end
       object chbTrayNotifierHideWhenAnsweringCallAutomatically: TCheckBox
         Left = 3
-        Top = 136
+        Top = 111
         Width = 502
         Height = 17
         Caption = 'Hide tray notifier when call is auto-answered'
-        TabOrder = 7
+        TabOrder = 5
       end
       object chbTrayNotifierDoNotChangePosition: TCheckBox
         Left = 3
-        Top = 158
+        Top = 133
         Width = 406
         Height = 17
         Caption = 'Do not change position (always show at same, current position)'
-        TabOrder = 8
+        TabOrder = 6
       end
       object edTrayNotifierWidth: TEdit
         Left = 78
-        Top = 178
+        Top = 153
         Width = 42
         Height = 21
-        TabOrder = 9
+        TabOrder = 7
       end
       object edTrayNotifierHeight: TEdit
         Left = 244
-        Top = 178
+        Top = 153
         Width = 42
         Height = 21
-        TabOrder = 10
+        TabOrder = 8
       end
     end
     object tsScripts: TTabSheet
