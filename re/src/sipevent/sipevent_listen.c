@@ -147,8 +147,6 @@ static int unsolicited_notify_handler(struct sipevent_sock *sock,
 		}
 	}
 
-	(void)sip_reply(sip, msg, 400,"Bad Subscription-State Header");
-
 	return -1;
 }
 
@@ -192,11 +190,13 @@ static void notify_handler(struct sipevent_sock *sock,
 	if (!hdr) {
 		// FreePBX: unsolicited NOTIFY (MWI in particular) does not contain Subscription-State
 		// (might be not sufficient for other servers)
-		unsolicited_notify_handler(sock, msg, &event);
+		if (unsolicited_notify_handler(sock, msg, &event) != 0) {
+			(void)sip_reply(sip, msg, 400, "No event handler for received unsolicited notify");
+		}
 		return;
 	}
 	if (sipevent_substate_decode(&state, &hdr->val)) {
-		(void)sip_reply(sip, msg, 400,"Bad Subscription-State Header");
+		(void)sip_reply(sip, msg, 400, "Bad Subscription-State Header");
 		return;
 	}
 
