@@ -2382,7 +2382,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_ReadXmlContacts, "ReadXmlContacts", "Read contacts from XML Yealink-like file", "");
 	lua_register2(L, ScriptImp::l_AppendContactNoteText, "AppendContactNoteText", "Add text to note from currently opened contact popup", "");
 
-	lua_register2(L, ScriptImp::l_SendTextMessage, "SendTextMessage", "Send SIP SIMPLE message", "");
+	lua_register2(L, ScriptImp::l_SendTextMessage, "SendTextMessage", "Send SIP SIMPLE message", "Example: SendTextMesssage(target, text, sendImmediately)\nOpens text messaging window and optionally sends immediately text.");
 
 	lua_register2(L, ScriptImp::l_SetAppStatus, "SetAppStatus", "Set status visible as hint in system tray", "");
 
