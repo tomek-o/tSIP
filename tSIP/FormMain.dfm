@@ -74,7 +74,6 @@ object frmMain: TfrmMain
             Font.Style = []
             ParentFont = False
             TabOrder = 0
-            Text = 'Transfer to ... [Enter]'
             OnEnter = edTransferEnter
             OnKeyPress = edTransferKeyPress
           end
@@ -187,7 +186,7 @@ object frmMain: TfrmMain
     Margins.Bottom = 0
     Align = alCustom
     BevelOuter = bvNone
-    TabOrder = 2
+    TabOrder = 0
     object lbl2ndPartyDesc: TLabel
       Left = 8
       Top = 39

@@ -57,6 +57,7 @@
   "TfrmMain": {
     "btnHangup": "Zakończ",
     "btnMakeCall": "Zadzwoń/Odbierz",
+    "edTransferHint": "Przekaż do... [Enter]",
     "miAbout": "O programie",
     "miClearCallsHistory": "Wyczyść historię połączeń",
     "miCommonSettings": "Konfiguracja ogólna",

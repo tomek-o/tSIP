@@ -68,6 +68,7 @@
   "TfrmMain": {
     "btnHangup": "Hangup",
     "btnMakeCall": "Call/Answer",
+    "edTransferHint": "Transfer to... [Enter]",
     "miAbout": "About...",
     "miClearCallsHistory": "Clear calls history",
     "miCommonSettings": "Settings",

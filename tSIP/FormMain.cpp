@@ -70,7 +70,7 @@
 TfrmMain *frmMain;
 
 namespace {
-	AnsiString asTransferHint = "Transfer to ... [Enter]";
+	AnsiString asTransferHint = "Transfer to... [Enter]";
 	bool useOwnTrayIcon = false;
 
 	struct PagingTx {
@@ -216,6 +216,7 @@ void TfrmMain::TranslateForm(void* obj)
 	TRANSLATE_TMP("TfrmMain.miMessages", frm->miMessages->Caption);
 	TRANSLATE_TMP("TfrmMain.miTroubleshooting", frm->miTroubleshooting->Caption);
 	TRANSLATE_TMP("TfrmMain.miAbout", frm->miAbout->Caption);
+	Translate("TfrmMain.edTransferHint", asTransferHint);
 }
 
 //---------------------------------------------------------------------------
@@ -245,7 +246,6 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	frmContacts->Visible = true;
 	frmContacts->FilterUsingNote(appSettings.Contacts.filterUsingNote);
 	frmContacts->StoreNoteInSeparateFile(appSettings.Contacts.storeNoteInSeparateFile);
-	edTransfer->Text = asTransferHint;
 
 	if (appSettings.frmMain.bNoTrayIcon == false)
 	{
@@ -315,9 +315,6 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
 	pnlCallControls->Visible = !appSettings.frmMain.bHideCallPanel;
 	pnlMain->Visible = !appSettings.frmMain.bHideMainPanel;
-
-	//edTransfer->Text = asTransferHint;
-
 
 #if 0 // this MIGHT work for scaling scrollbar width - not working
 	TNonClientMetrics NCMet;
@@ -795,6 +792,8 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
 	
 	edTransfer->Enabled = true;
+	edTransfer->Text = asTransferHint;
+	edTransfer->Hint = asTransferHint;
 
     frmTrayNotifier->Caption = Branding::appName;
 	frmTrayNotifier->OnHangup = Hangup;
