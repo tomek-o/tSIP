@@ -2656,12 +2656,17 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::TRANSFER: {
-		if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
-			return;
+		AnsiString target = cfg.number.c_str();
+		if (target == "")
+		{
+			if (edTransfer->Text == asTransferHint || edTransfer->Text == "")
+				return;
+			target = edTransfer->Text;
+		}
 		Call *call = Calls::GetCurrentCall();
 		if (call)
 		{
-			UA->Transfer(call->uid, edTransfer->Text);
+			UA->Transfer(call->uid, target);
 		}
 		break;
 	}

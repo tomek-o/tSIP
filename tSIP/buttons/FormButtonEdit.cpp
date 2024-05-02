@@ -393,7 +393,6 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::CONTACT_NOTE:
 	case Button::CONTACT_FILE:
 	case Button::REDIAL:
-	case Button::TRANSFER:
 	case Button::HOLD:
 	case Button::HTTP_QUERY:
 	case Button::SIP_ACCESS_URL:

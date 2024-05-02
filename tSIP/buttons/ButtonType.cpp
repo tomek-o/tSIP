@@ -26,7 +26,7 @@ const char* Button::TypeName(enum Type type)
 	case REDIAL:
 		return "Redial";
 	case TRANSFER:
-		return "Transfer";
+		return "Blind transfer";
 	case HOLD:
 		return "Hold";
 	case REREGISTER:
@@ -113,7 +113,7 @@ const char* Button::TypeDescription(enum Type type)
 	case REDIAL:
 		return "Dial last number again.";
 	case TRANSFER:
-		return "Blind transfer - enter target number in main window (\"Transfer to ...\").";
+		return "Blind transfer, using the number from button configuration as target or if this number is empty - number from the main window (\"Transfer to ...\").";
 	case HOLD:
 		return "Temporary disable media stream.";
 	case REREGISTER:
