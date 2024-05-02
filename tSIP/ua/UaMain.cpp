@@ -262,7 +262,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			if (pai_peer_name == NULL)
 				pai_peer_name = "";
 
-			UA_CB->OnReinviteReceived(prm, peer_name, pai_peer_uri, pai_peer_name);
+			UA_CB->OnReinviteReceived(callUid, prm, peer_name, pai_peer_uri, pai_peer_name);
 		}
 		break;
 	case UA_EVENT_REGISTERING:

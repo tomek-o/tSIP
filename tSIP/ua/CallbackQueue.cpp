@@ -62,13 +62,14 @@ void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state
 	fifo.push();
 }
 
-void CallbackQueue::OnReinviteReceived(AnsiString caller, AnsiString caller_name, AnsiString pai_peer_uri, AnsiString pai_peer_name)
+void CallbackQueue::OnReinviteReceived(unsigned int uid, AnsiString caller, AnsiString caller_name, AnsiString pai_peer_uri, AnsiString pai_peer_name)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::CALL_REINVITE_RECEIVED;
+	cb->callUid = uid;
 	cb->caller = caller;
 	cb->callerName = caller_name;
 	cb->paiPeerUri = pai_peer_uri;
