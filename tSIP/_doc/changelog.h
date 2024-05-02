@@ -1185,7 +1185,7 @@ Version 0.3.04
 	- added new key types to plugin/phone interface (needed for Philips VOIP1511 USB handset support)
 		- application toggle ("Skype" key on Philips)
 		- mute toggle
-		- call answer
+		- call answer; it might be weird that it was not added earlier, but previously only cradle hook-off switch was needed
 		- call hangup
 	- using queue to separate plugin thread from VCL thread when passing events
 	- fixed "on recording state" scripting (broken in 0.3)
@@ -1201,5 +1201,10 @@ Version 0.3.04
 	- few minor improvements for button container configuration dialog
 	- BREAKING: tray notifier window no longer has background image property - it is replaced by background image of button container that is now placed on tray notifier window
 	- added "transparent" configuration for button container background image
+	- added "Make or answer the call" and "Answer the current call" button types (though script buttons could be used previously for the same purposes)
+	- for button(s) with "Blind transfer" type: target can be set in button configuration, if it is empty - number from the main window, "Transfer to..." is used as previously
+	- FIXED: hint/default text for blind transfer target edit was not showing up at startup
+	- blind transfer hint in the main window can be translated
+	- FIXED re-INVITE handling / updating CLIP/COLP with P-Asserted-Identity, broken in 0.3 
 */
 
