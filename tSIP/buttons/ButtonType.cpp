@@ -93,6 +93,10 @@ const char* Button::TypeName(enum Type type)
 		return "Attended transfer";
 	case CONFERENCE_START:
 		return "Start conference";
+	case CALL_MAKE_OR_ANSWER:
+		return "Make or answer the call";
+	case CALL_ANSWER:
+		return "Answer the current call";
 
 	default:
 		return "???";
@@ -179,7 +183,11 @@ const char* Button::TypeDescription(enum Type type)
 	case ATTENDED_TRANSFER:
 		return "Make attended transfer using two already active calls.";
 	case CONFERENCE_START:
-		return "Create conference from current calls";
+		return "Create conference from current calls.";
+	case CALL_MAKE_OR_ANSWER:
+		return "Make a new call or answer the current call (like default Call/Answer button in the main window).";
+	case CALL_ANSWER:
+		return "Answer the current call (like default Call/Answer button but only for incoming call).";
 
 	default:
 		return "???";

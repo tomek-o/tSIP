@@ -2864,6 +2864,20 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		break;
 	}
+	case Button::CALL_MAKE_OR_ANSWER: {
+		btnMakeCallClick(NULL);
+		break;
+	}
+	case Button::CALL_ANSWER: {
+		if (pagingTx.active)
+			break;
+		Call* call = Calls::GetCurrentCall();
+		if (call && call->incoming)
+		{
+			Answer(call->uid);
+		}
+		break;
+	}
 	case Button::SEND_TEXT_MESSAGE: {
 		AnsiString target = cfg.number.c_str();
 		if (target == "")
