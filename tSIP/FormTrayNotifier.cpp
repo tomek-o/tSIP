@@ -31,8 +31,8 @@ __fastcall TfrmTrayNotifier::TfrmTrayNotifier(TComponent* Owner)
 	callUid(0)
 {
 	RegisterTranslationCb(this, TranslateForm);
-	Width = appSettings.frmTrayNotifier.iWidth;
-	Height = appSettings.frmTrayNotifier.iHeight;
+	Width = appSettings.trayNotifier.iWidth;
+	Height = appSettings.trayNotifier.iHeight;
 	this->ActiveControl = btnStopFocus;
 }
 //---------------------------------------------------------------------------
@@ -42,16 +42,16 @@ void TfrmTrayNotifier::SetData(unsigned int callUid, AnsiString description, Ans
 	this->callUid = callUid;
 	lblDescription->Caption = description;
 	lblUri->Caption = uri;
-	btnAnswer->Visible = incoming;
+	btnAnswer->Visible = incoming && appSettings.trayNotifier.elements.btnAnswer.visible;
 	this->ActiveControl = btnStopFocus;	
 }
 
 void TfrmTrayNotifier::ShowWithoutFocus(void)
 {
-	Left = appSettings.frmTrayNotifier.iPosX;
-	Top = appSettings.frmTrayNotifier.iPosY;
-	Width = appSettings.frmTrayNotifier.iWidth;
-	Height = appSettings.frmTrayNotifier.iHeight;
+	Left = appSettings.trayNotifier.iPosX;
+	Top = appSettings.trayNotifier.iPosY;
+	Width = appSettings.trayNotifier.iWidth;
+	Height = appSettings.trayNotifier.iHeight;
 #if 0
 	/** \todo frmTrayNotifier steals focus at first call */
 	Visible = true;
@@ -62,14 +62,35 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 	//frmTrayNotifier->BringToFront();
 	Visible = true;	
 #endif
+
+	const TrayNotifierConf::Elements &el = appSettings.trayNotifier.elements;
+	lblDescription->Visible = el.labelDescription.visible;
+	lblDescription->Left = el.labelDescription.left;
+	lblDescription->Top = el.labelDescription.top;
+	lblDescription->Width = el.labelDescription.width;
+
+	lblUri->Visible = el.labelUri.visible;
+	lblUri->Left = el.labelUri.left;
+	lblUri->Top = el.labelUri.top;
+	lblUri->Width = el.labelUri.width;
+
+	btnAnswer->Visible = el.btnAnswer.visible;
+	btnAnswer->Left = el.btnAnswer.left;
+	btnAnswer->Top = el.btnAnswer.top;
+	btnAnswer->Width = el.btnAnswer.width;
+
+	btnHangup->Visible = el.btnHangup.visible;
+	btnHangup->Left = el.btnHangup.left;
+	btnHangup->Top = el.btnHangup.top;
+	btnHangup->Width = el.btnHangup.width;
 }
 
 void TfrmTrayNotifier::HideWindow(void)
 {
-	if (appSettings.frmTrayNotifier.doNotChangePosition == false)
+	if (appSettings.trayNotifier.doNotChangePosition == false)
 	{
-		appSettings.frmTrayNotifier.iPosX = frmTrayNotifier->Left;
-		appSettings.frmTrayNotifier.iPosY = frmTrayNotifier->Top;
+		appSettings.trayNotifier.iPosX = frmTrayNotifier->Left;
+		appSettings.trayNotifier.iPosY = frmTrayNotifier->Top;
 	}
 	Visible = false;
 	ShowWindow(Handle, SW_HIDE);
@@ -100,8 +121,8 @@ void __fastcall TfrmTrayNotifier::btnAnswerClick(TObject *Sender)
 void __fastcall TfrmTrayNotifier::FormCreate(TObject *Sender)
 {
 	this->FormStyle = fsStayOnTop;
-	Left = appSettings.frmTrayNotifier.iPosX;
-	Top = appSettings.frmTrayNotifier.iPosY;
+	Left = appSettings.trayNotifier.iPosX;
+	Top = appSettings.trayNotifier.iPosY;
 }
 //---------------------------------------------------------------------------
 
@@ -123,10 +144,10 @@ void TfrmTrayNotifier::SetCallState(Callback::ua_state_e state)
 void __fastcall TfrmTrayNotifier::FormClose(TObject *Sender,
       TCloseAction &Action)
 {
-	if (appSettings.frmTrayNotifier.doNotChangePosition == false)
+	if (appSettings.trayNotifier.doNotChangePosition == false)
 	{
-		appSettings.frmTrayNotifier.iPosX = frmTrayNotifier->Left;
-		appSettings.frmTrayNotifier.iPosY = frmTrayNotifier->Top;
+		appSettings.trayNotifier.iPosX = frmTrayNotifier->Left;
+		appSettings.trayNotifier.iPosY = frmTrayNotifier->Top;
 	}
 }
 //---------------------------------------------------------------------------

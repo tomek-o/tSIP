@@ -1195,9 +1195,10 @@ Version 0.3.04
 	- added new button containers
 		- on the panel with Answer/Hangup button
 		- on the tray notifier window
-		- note: popup menus (all together for 4 containers) can be disabled from Settings/Tray Notifier 
-	- added size configuration for tray notifier window (adding capacity for few custom buttons)
-		- description and uri labels are scaled with tray notifier window width, possibly showing longer text
+		- note: popup menus (all together for 4 containers) can be disabled from Settings/Tray Notifier
+	- added extra settings for tray notifier window
+		- window size
+		- hiding/moving standard GUI elements, possibly replacing them altogether with custom ones
 	- few minor improvements for button container configuration dialog
 	- BREAKING: tray notifier window no longer has background image property - it is replaced by background image of button container that is now placed on tray notifier window
 	- added "transparent" configuration for button container background image

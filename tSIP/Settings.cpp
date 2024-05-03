@@ -100,26 +100,6 @@ Settings::_frmSpeedDial::_frmSpeedDial(void):
 {
 }
 
-Settings::_frmTrayNotifier::_frmTrayNotifier(void):
-	iHeight(105),
-	iWidth(213),
-	iPosX(30),	// overriden later, depending on screen size
-	iPosY(30),	// overriden later, depending on screen size
-	showOnIncoming(false),
-	skipIfMainWindowVisible(false),
-	showOnOutgoing(false),
-	hideWhenAnsweringCall(false),
-	hideWhenAnsweringCallAutomatically(false),
-	scalingPct(SCALING_DEF),
-	doNotChangePosition(false)
-{
-	int maxX = GetSystemMetrics(SM_CXSCREEN);
-	/** \todo Ugly fixed taskbar margin */
-	int maxY = GetSystemMetrics(SM_CYSCREEN) - 32;
-	iPosX = maxX - iWidth;
-	iPosY = maxY - iHeight;
-}
-
 Settings::_frmContactPopup::_frmContactPopup(void):
 	showOnIncoming(false),
 	showOnOutgoing(false),
@@ -583,34 +563,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		}
 	}
 
-	{
-		const Json::Value &frmTrayNotifierJson = root["frmTrayNotifier"];
-		int iPosX = frmTrayNotifierJson.get("PosX", frmTrayNotifier.iPosX).asInt();
-		if (iPosX >= 0 && iPosX + frmTrayNotifier.iWidth <= maxX)
-		{
-			frmTrayNotifier.iPosX = iPosX;
-		}
-
-		int iPosY = frmTrayNotifierJson.get("PosY", frmTrayNotifier.iPosY).asInt();
-		if (iPosY >= 0 && iPosY + frmTrayNotifier.iHeight <= maxY)
-		{
-			frmTrayNotifier.iPosY = iPosY;
-		}
-
-		frmTrayNotifierJson.getUInt("Width", frmTrayNotifier.iWidth);
-		frmTrayNotifierJson.getUInt("Height", frmTrayNotifier.iHeight);
-
-		frmTrayNotifier.showOnIncoming = frmTrayNotifierJson.get("ShowOnIncoming", frmTrayNotifier.showOnIncoming).asBool();
-		frmTrayNotifier.skipIfMainWindowVisible = frmTrayNotifierJson.get("SkipIfMainWindowVisible", frmTrayNotifier.skipIfMainWindowVisible).asBool();
-		frmTrayNotifier.showOnOutgoing = frmTrayNotifierJson.get("ShowOnOutgoing", frmTrayNotifier.showOnOutgoing).asBool();
-		frmTrayNotifier.hideWhenAnsweringCall = frmTrayNotifierJson.get("HideWhenAnsweringCall", frmTrayNotifier.hideWhenAnsweringCall).asBool();
-		frmTrayNotifier.hideWhenAnsweringCallAutomatically = frmTrayNotifierJson.get("HideWhenAnsweringCallAutomatically", frmTrayNotifier.hideWhenAnsweringCallAutomatically).asBool();
-		int scalingPct = frmTrayNotifierJson.get("ScalingPct", frmTrayNotifier.scalingPct).asInt();
-		if (scalingPct >= _frmTrayNotifier::SCALING_MIN && frmTrayNotifier.scalingPct <= _frmTrayNotifier::SCALING_MAX) {
-			frmTrayNotifier.scalingPct = scalingPct;
-		}
-		frmTrayNotifierJson.getBool("DoNotChangePosition", frmTrayNotifier.doNotChangePosition);
-	}
+	trayNotifier.fromJson(root["frmTrayNotifier"]);
 
 	{
 		const Json::Value &frmContactPopupJson = root["frmContactPopup"];
@@ -964,20 +917,7 @@ int Settings::Write(AnsiString asFileName)
 		}
 	}
 
-    {
-		Json::Value& jv = root["frmTrayNotifier"];
-		jv["PosX"] = frmTrayNotifier.iPosX;
-		jv["PosY"] = frmTrayNotifier.iPosY;
-		jv["Width"] = frmTrayNotifier.iWidth;
-		jv["Height"] = frmTrayNotifier.iHeight;
-		jv["ShowOnIncoming"] = frmTrayNotifier.showOnIncoming;
-		jv["SkipIfMainWindowVisible"] = frmTrayNotifier.skipIfMainWindowVisible;
-		jv["ShowOnOutgoing"] = frmTrayNotifier.showOnOutgoing;
-		jv["HideWhenAnsweringCall"] = frmTrayNotifier.hideWhenAnsweringCall;
-		jv["HideWhenAnsweringCallAutomatically"] = frmTrayNotifier.hideWhenAnsweringCallAutomatically;
-		jv["ScalingPct"] = frmTrayNotifier.scalingPct;
-		jv["DoNotChangePosition"] = frmTrayNotifier.doNotChangePosition;
-	}
+	trayNotifier.toJson(root["frmTrayNotifier"]);
 
 	root["frmContactPopup"]["ShowOnIncoming"] = frmContactPopup.showOnIncoming;
 	root["frmContactPopup"]["ShowOnOutgoing"] = frmContactPopup.showOnOutgoing;

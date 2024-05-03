@@ -292,15 +292,44 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbAlwaysOnTop->Checked = tmpSettings.frmMain.bAlwaysOnTop;
 	chbStartMinimizedToTray->Checked = tmpSettings.frmMain.bStartMinimizedToTray;
 
-	chbTrayNotifierShowOnIncoming->Checked = tmpSettings.frmTrayNotifier.showOnIncoming;
-	chbSkipTrayNotifierIfMainWindowVisible->Checked = tmpSettings.frmTrayNotifier.skipIfMainWindowVisible;
-	chbTrayNotifierShowOnOutgoing->Checked = tmpSettings.frmTrayNotifier.showOnOutgoing;
-	edTrayNotifierGuiScaling->Text = tmpSettings.frmTrayNotifier.scalingPct;
-	chbTrayNotifierHideWhenAnsweringCall->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCall;
-	chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked = tmpSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically;
-	chbTrayNotifierDoNotChangePosition->Checked = tmpSettings.frmTrayNotifier.doNotChangePosition;
-	edTrayNotifierWidth->Text = tmpSettings.frmTrayNotifier.iWidth;
-	edTrayNotifierHeight->Text = tmpSettings.frmTrayNotifier.iHeight;
+	chbTrayNotifierShowOnIncoming->Checked = tmpSettings.trayNotifier.showOnIncoming;
+	chbSkipTrayNotifierIfMainWindowVisible->Checked = tmpSettings.trayNotifier.skipIfMainWindowVisible;
+	chbTrayNotifierShowOnOutgoing->Checked = tmpSettings.trayNotifier.showOnOutgoing;
+	edTrayNotifierGuiScaling->Text = tmpSettings.trayNotifier.scalingPct;
+	chbTrayNotifierHideWhenAnsweringCall->Checked = tmpSettings.trayNotifier.hideWhenAnsweringCall;
+	chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked = tmpSettings.trayNotifier.hideWhenAnsweringCallAutomatically;
+	chbTrayNotifierDoNotChangePosition->Checked = tmpSettings.trayNotifier.doNotChangePosition;
+	edTrayNotifierWidth->Text = tmpSettings.trayNotifier.iWidth;
+	edTrayNotifierHeight->Text = tmpSettings.trayNotifier.iHeight;
+
+	{
+		const TrayNotifierConf::ElementConf &el = tmpSettings.trayNotifier.elements.labelDescription;
+		chbTrayNotifierDescriptionVisible->Checked = el.visible;
+		edTrayNotifierDescriptionLeft->Text = el.left;
+		edTrayNotifierDescriptionTop->Text = el.top;
+		edTrayNotifierDescriptionWidth->Text = el.width;
+	}
+	{
+		const TrayNotifierConf::ElementConf &el = tmpSettings.trayNotifier.elements.labelUri;
+		chbTrayNotifierUriVisible->Checked = el.visible;
+		edTrayNotifierUriLeft->Text = el.left;
+		edTrayNotifierUriTop->Text = el.top;
+		edTrayNotifierUriWidth->Text = el.width;
+	}
+	{
+		const TrayNotifierConf::ElementConf &el = tmpSettings.trayNotifier.elements.btnAnswer;
+		chbTrayNotifierAnswerButtonVisible->Checked = el.visible;
+		edTrayNotifierAnswerButtonLeft->Text = el.left;
+		edTrayNotifierAnswerButtonTop->Text = el.top;
+		edTrayNotifierAnswerButtonWidth->Text = el.width;
+	}
+	{
+		const TrayNotifierConf::ElementConf &el = tmpSettings.trayNotifier.elements.btnHangup;
+		chbTrayNotifierHangupButtonVisible->Checked = el.visible;
+		edTrayNotifierHangupButtonLeft->Text = el.left;
+		edTrayNotifierHangupButtonTop->Text = el.top;
+		edTrayNotifierHangupButtonWidth->Text = el.width;
+	}
 
 	chbFrmMainUseCustomApplicationTitle->Checked = tmpSettings.frmMain.bUseCustomApplicationTitle;
 	edFrmMainCustomApplicationTitle->Text = tmpSettings.frmMain.customApplicationTitle;
@@ -689,20 +718,48 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.frmMain.bAlwaysOnTop = chbAlwaysOnTop->Checked;
 	tmpSettings.frmMain.bStartMinimizedToTray = chbStartMinimizedToTray->Checked;
-	tmpSettings.frmTrayNotifier.showOnIncoming = chbTrayNotifierShowOnIncoming->Checked;
-	tmpSettings.frmTrayNotifier.skipIfMainWindowVisible = chbSkipTrayNotifierIfMainWindowVisible->Checked;
-	tmpSettings.frmTrayNotifier.showOnOutgoing = this->chbTrayNotifierShowOnOutgoing->Checked;
-	tmpSettings.frmTrayNotifier.scalingPct = StrToIntDef(edTrayNotifierGuiScaling->Text, tmpSettings.frmTrayNotifier.scalingPct);
-	if (tmpSettings.frmTrayNotifier.scalingPct < Settings::_frmTrayNotifier::SCALING_MIN ||
-		tmpSettings.frmTrayNotifier.scalingPct > Settings::_frmTrayNotifier::SCALING_MAX)
+	tmpSettings.trayNotifier.showOnIncoming = chbTrayNotifierShowOnIncoming->Checked;
+	tmpSettings.trayNotifier.skipIfMainWindowVisible = chbSkipTrayNotifierIfMainWindowVisible->Checked;
+	tmpSettings.trayNotifier.showOnOutgoing = this->chbTrayNotifierShowOnOutgoing->Checked;
+	tmpSettings.trayNotifier.scalingPct = StrToIntDef(edTrayNotifierGuiScaling->Text, tmpSettings.trayNotifier.scalingPct);
+	if (tmpSettings.trayNotifier.scalingPct < TrayNotifierConf::SCALING_MIN ||
+		tmpSettings.trayNotifier.scalingPct > TrayNotifierConf::SCALING_MAX)
 	{
-		tmpSettings.frmTrayNotifier.scalingPct = Settings::_frmTrayNotifier::SCALING_DEF;
+		tmpSettings.trayNotifier.scalingPct = TrayNotifierConf::SCALING_DEF;
 	}
-	tmpSettings.frmTrayNotifier.hideWhenAnsweringCall = chbTrayNotifierHideWhenAnsweringCall->Checked;
-	tmpSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically = chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked;
-	tmpSettings.frmTrayNotifier.doNotChangePosition = chbTrayNotifierDoNotChangePosition->Checked;
-	tmpSettings.frmTrayNotifier.iWidth = StrToIntDef(edTrayNotifierWidth->Text, tmpSettings.frmTrayNotifier.iWidth);
-	tmpSettings.frmTrayNotifier.iHeight = StrToIntDef(edTrayNotifierHeight->Text, tmpSettings.frmTrayNotifier.iHeight);
+	tmpSettings.trayNotifier.hideWhenAnsweringCall = chbTrayNotifierHideWhenAnsweringCall->Checked;
+	tmpSettings.trayNotifier.hideWhenAnsweringCallAutomatically = chbTrayNotifierHideWhenAnsweringCallAutomatically->Checked;
+	tmpSettings.trayNotifier.doNotChangePosition = chbTrayNotifierDoNotChangePosition->Checked;
+	tmpSettings.trayNotifier.iWidth = StrToIntDef(edTrayNotifierWidth->Text, tmpSettings.trayNotifier.iWidth);
+	tmpSettings.trayNotifier.iHeight = StrToIntDef(edTrayNotifierHeight->Text, tmpSettings.trayNotifier.iHeight);
+	{
+		TrayNotifierConf::ElementConf &el = tmpSettings.trayNotifier.elements.labelDescription;
+		el.visible = chbTrayNotifierDescriptionVisible->Checked;
+		el.left = StrToIntDef(edTrayNotifierDescriptionLeft->Text, el.left);
+		el.top = StrToIntDef(edTrayNotifierDescriptionTop->Text, el.top);
+		el.width = StrToIntDef(edTrayNotifierDescriptionWidth->Text, el.width);
+	}
+	{
+		TrayNotifierConf::ElementConf &el = tmpSettings.trayNotifier.elements.labelUri;
+		el.visible = chbTrayNotifierUriVisible->Checked;
+		el.left = StrToIntDef(edTrayNotifierUriLeft->Text, el.left);
+		el.top = StrToIntDef(edTrayNotifierUriTop->Text, el.top);
+		el.width = StrToIntDef(edTrayNotifierUriWidth->Text, el.width);
+	}
+	{
+		TrayNotifierConf::ElementConf &el = tmpSettings.trayNotifier.elements.btnAnswer;
+		el.visible = chbTrayNotifierAnswerButtonVisible->Checked;
+		el.left = StrToIntDef(edTrayNotifierAnswerButtonLeft->Text, el.left);
+		el.top = StrToIntDef(edTrayNotifierAnswerButtonTop->Text, el.top);
+		el.width = StrToIntDef(edTrayNotifierAnswerButtonWidth->Text, el.width);
+	}
+	{
+		TrayNotifierConf::ElementConf &el = tmpSettings.trayNotifier.elements.btnHangup;
+		el.visible = chbTrayNotifierHangupButtonVisible->Checked;
+		el.left = StrToIntDef(edTrayNotifierHangupButtonLeft->Text, el.left);
+		el.top = StrToIntDef(edTrayNotifierHangupButtonTop->Text, el.top);
+		el.width = StrToIntDef(edTrayNotifierHangupButtonWidth->Text, el.width);
+	}
 
 	tmpSettings.frmMain.bUseCustomApplicationTitle = chbFrmMainUseCustomApplicationTitle->Checked;
 	tmpSettings.frmMain.customApplicationTitle = edFrmMainCustomApplicationTitle->Text;

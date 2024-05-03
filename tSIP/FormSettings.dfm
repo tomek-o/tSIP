@@ -3023,6 +3023,8 @@ object frmSettings: TfrmSettings
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object lblTrayNotifierGuiScaling: TLabel
         Left = 3
         Top = 71
@@ -3050,6 +3052,118 @@ object frmSettings: TfrmSettings
         Width = 71
         Height = 13
         Caption = 'Window height'
+      end
+      object lblTrayNotifierDescription: TLabel
+        Left = 3
+        Top = 195
+        Width = 78
+        Height = 13
+        Caption = 'Description label'
+      end
+      object lblTrayNotifierDescriptionLeft: TLabel
+        Left = 187
+        Top = 195
+        Width = 16
+        Height = 13
+        Caption = 'left'
+      end
+      object lblTrayNotifierDescriptionTop: TLabel
+        Left = 267
+        Top = 197
+        Width = 16
+        Height = 13
+        Caption = 'top'
+      end
+      object lblTrayNotifierDescriptionWidth: TLabel
+        Left = 350
+        Top = 195
+        Width = 26
+        Height = 13
+        Caption = 'width'
+      end
+      object lblTrayNotifierUri: TLabel
+        Left = 3
+        Top = 219
+        Width = 83
+        Height = 13
+        Caption = 'URI/number label'
+      end
+      object lblTrayNotifierUriLeft: TLabel
+        Left = 187
+        Top = 219
+        Width = 16
+        Height = 13
+        Caption = 'left'
+      end
+      object lblTrayNotifierUriTop: TLabel
+        Left = 267
+        Top = 219
+        Width = 16
+        Height = 13
+        Caption = 'top'
+      end
+      object lblTrayNotifierUriWidth: TLabel
+        Left = 350
+        Top = 219
+        Width = 26
+        Height = 13
+        Caption = 'width'
+      end
+      object lblTrayNotifierAnswerButton: TLabel
+        Left = 3
+        Top = 243
+        Width = 71
+        Height = 13
+        Caption = 'Answer button'
+      end
+      object lblTrayNotifierAnswerButtonLeft: TLabel
+        Left = 187
+        Top = 243
+        Width = 16
+        Height = 13
+        Caption = 'left'
+      end
+      object lblTrayNotifierAnswerButtonTop: TLabel
+        Left = 267
+        Top = 243
+        Width = 16
+        Height = 13
+        Caption = 'top'
+      end
+      object lblTrayNotifierAnswerButtonWidth: TLabel
+        Left = 350
+        Top = 243
+        Width = 26
+        Height = 13
+        Caption = 'width'
+      end
+      object lblTrayNotifierHangupButton: TLabel
+        Left = 3
+        Top = 267
+        Width = 72
+        Height = 13
+        Caption = 'Hangup button'
+      end
+      object lblTrayNotifierHangupButtonLeft: TLabel
+        Left = 187
+        Top = 267
+        Width = 16
+        Height = 13
+        Caption = 'left'
+      end
+      object lblTrayNotifierHangupButtonTop: TLabel
+        Left = 267
+        Top = 267
+        Width = 16
+        Height = 13
+        Caption = 'top'
+      end
+      object lblTrayNotifierHangupButtonWidth: TLabel
+        Left = 350
+        Top = 267
+        Width = 26
+        Height = 13
+        Caption = 'width'
       end
       object chbTrayNotifierShowOnIncoming: TCheckBox
         Left = 2
@@ -3121,6 +3235,122 @@ object frmSettings: TfrmSettings
         Width = 42
         Height = 21
         TabOrder = 8
+      end
+      object chbTrayNotifierDescriptionVisible: TCheckBox
+        Left = 116
+        Top = 194
+        Width = 65
+        Height = 17
+        Caption = 'visible'
+        TabOrder = 9
+      end
+      object edTrayNotifierDescriptionLeft: TEdit
+        Left = 209
+        Top = 192
+        Width = 33
+        Height = 21
+        TabOrder = 10
+      end
+      object edTrayNotifierDescriptionTop: TEdit
+        Left = 289
+        Top = 192
+        Width = 33
+        Height = 21
+        TabOrder = 11
+      end
+      object edTrayNotifierDescriptionWidth: TEdit
+        Left = 383
+        Top = 192
+        Width = 33
+        Height = 21
+        TabOrder = 12
+      end
+      object chbTrayNotifierUriVisible: TCheckBox
+        Left = 116
+        Top = 218
+        Width = 65
+        Height = 17
+        Caption = 'visible'
+        TabOrder = 13
+      end
+      object edTrayNotifierUriLeft: TEdit
+        Left = 209
+        Top = 216
+        Width = 33
+        Height = 21
+        TabOrder = 14
+      end
+      object edTrayNotifierUriTop: TEdit
+        Left = 289
+        Top = 216
+        Width = 33
+        Height = 21
+        TabOrder = 15
+      end
+      object edTrayNotifierUriWidth: TEdit
+        Left = 383
+        Top = 216
+        Width = 33
+        Height = 21
+        TabOrder = 16
+      end
+      object chbTrayNotifierAnswerButtonVisible: TCheckBox
+        Left = 116
+        Top = 242
+        Width = 65
+        Height = 17
+        Caption = 'visible'
+        TabOrder = 17
+      end
+      object edTrayNotifierAnswerButtonLeft: TEdit
+        Left = 209
+        Top = 240
+        Width = 33
+        Height = 21
+        TabOrder = 18
+      end
+      object edTrayNotifierAnswerButtonTop: TEdit
+        Left = 289
+        Top = 240
+        Width = 33
+        Height = 21
+        TabOrder = 19
+      end
+      object edTrayNotifierAnswerButtonWidth: TEdit
+        Left = 383
+        Top = 240
+        Width = 33
+        Height = 21
+        TabOrder = 20
+      end
+      object chbTrayNotifierHangupButtonVisible: TCheckBox
+        Left = 116
+        Top = 266
+        Width = 65
+        Height = 17
+        Caption = 'visible'
+        TabOrder = 21
+      end
+      object edTrayNotifierHangupButtonLeft: TEdit
+        Left = 209
+        Top = 264
+        Width = 33
+        Height = 21
+        TabOrder = 22
+      end
+      object edTrayNotifierHangupButtonTop: TEdit
+        Left = 289
+        Top = 264
+        Width = 33
+        Height = 21
+        TabOrder = 23
+      end
+      object edTrayNotifierHangupButtonWidth: TEdit
+        Left = 383
+        Top = 264
+        Width = 33
+        Height = 21
+        TabOrder = 24
       end
     end
     object tsScripts: TTabSheet

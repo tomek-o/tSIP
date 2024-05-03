@@ -13,6 +13,7 @@
 #include "SettingsAppVersion.h"
 #include "buttons/ButtonContainerConf.h"
 #include "DialpadConf.h"
+#include "TrayNotifierConf.h"
 #include "history/HistoryConf.h"
 #include "VideoConf.h"
 #include <deque>
@@ -174,23 +175,7 @@ public:
 		bool saveAllSettings;	///< save all (even identical to default) button settings; larger JSON file but possibly easier to edit
 		_frmSpeedDial(void);
 	} frmSpeedDial;	
-	struct _frmTrayNotifier
-	{
-		int iPosX, iPosY;				///< coordinates
-		unsigned int iHeight, iWidth;
-		bool showOnIncoming;
-		bool skipIfMainWindowVisible;
-		bool showOnOutgoing;
-		bool hideWhenAnsweringCall;		///< for manual call answer
-		bool hideWhenAnsweringCallAutomatically;
-		enum { SCALING_MIN = 50 };
-		enum { SCALING_DEF = 100 };
-		enum { SCALING_MAX = 500 };
-		int scalingPct;					///< scaling (percentage)
-        bool doNotChangePosition;
-
-		_frmTrayNotifier(void);		
-	} frmTrayNotifier;
+	TrayNotifierConf trayNotifier;
 	struct _frmContactPopup
 	{
 		bool showOnIncoming;

@@ -696,10 +696,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 
 	UpdateBitmaps();
 	/** \todo bug? use prev settings */
-	frmTrayNotifier->ScaleBy(100, appSettings.frmTrayNotifier.scalingPct);
-	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
-	frmTrayNotifier->Width = appSettings.frmTrayNotifier.iWidth;
-	frmTrayNotifier->Height = appSettings.frmTrayNotifier.iHeight;
+	frmTrayNotifier->ScaleBy(100, appSettings.trayNotifier.scalingPct);
+	frmTrayNotifier->ScaleBy(appSettings.trayNotifier.scalingPct, 100);
+	frmTrayNotifier->Width = appSettings.trayNotifier.iWidth;
+	frmTrayNotifier->Height = appSettings.trayNotifier.iHeight;
 
 	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
 
@@ -798,7 +798,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
     frmTrayNotifier->Caption = Branding::appName;
 	frmTrayNotifier->OnHangup = Hangup;
 	frmTrayNotifier->OnAnswer = Answer;
-	frmTrayNotifier->ScaleBy(appSettings.frmTrayNotifier.scalingPct, 100);
+	frmTrayNotifier->ScaleBy(appSettings.trayNotifier.scalingPct, 100);
 
 	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
 
@@ -1029,7 +1029,7 @@ void TfrmMain::Answer(unsigned int callUid)
                 ToggleVisibility();
 			}
 		}
-		if (appSettings.frmTrayNotifier.hideWhenAnsweringCall)
+		if (appSettings.trayNotifier.hideWhenAnsweringCall)
 		{
 			frmTrayNotifier->HideWindow();
         }
@@ -1600,7 +1600,7 @@ void TfrmMain::PollCallbackQueue(void)
 					secondPartyDesc = GetPeerName(cb.callerName);
 				}
 
-				if (Visible == false && appSettings.frmTrayNotifier.showOnOutgoing)
+				if (Visible == false && appSettings.trayNotifier.showOnOutgoing)
 				{
 					if (call)
 						ShowTrayNotifier(call->uid, secondPartyDesc, secondParty, call->incoming);
@@ -1789,11 +1789,11 @@ void TfrmMain::PollCallbackQueue(void)
 
 			if (cb.state == Callback::CALL_STATE_INCOMING)
 			{
-				if (appSettings.frmTrayNotifier.showOnIncoming)
+				if (appSettings.trayNotifier.showOnIncoming)
 				{
 					if (
-						(Visible == false || appSettings.frmTrayNotifier.skipIfMainWindowVisible == false) &&
-						((answered && appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically) == false)
+						(Visible == false || appSettings.trayNotifier.skipIfMainWindowVisible == false) &&
+						((answered && appSettings.trayNotifier.hideWhenAnsweringCallAutomatically) == false)
 						)
 					{
 						if (call)
@@ -3274,7 +3274,7 @@ void TfrmMain::AutoAnswer(Call &call)
 		} else {
 			Answer(call.uid);
 		}
-		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
+		if (appSettings.trayNotifier.hideWhenAnsweringCallAutomatically)
 		{
 			frmTrayNotifier->HideWindow();
 		}
@@ -3286,7 +3286,7 @@ void TfrmMain::AutoAnswer(Call &call)
 		call.incoming = false;
 		call.progress = false;
 		call.connected = false;
-		if (appSettings.frmTrayNotifier.hideWhenAnsweringCallAutomatically)
+		if (appSettings.trayNotifier.hideWhenAnsweringCallAutomatically)
 		{
 			frmTrayNotifier->HideWindow();
 		}

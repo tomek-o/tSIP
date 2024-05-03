@@ -15,9 +15,6 @@ object frmTrayNotifier: TfrmTrayNotifier
   ScreenSnap = True
   OnClose = FormClose
   OnCreate = FormCreate
-  DesignSize = (
-    207
-    83)
   PixelsPerInch = 96
   TextHeight = 13
   object lblDescription: TLabel
@@ -25,7 +22,6 @@ object frmTrayNotifier: TfrmTrayNotifier
     Top = 8
     Width = 191
     Height = 13
-    Anchors = [akLeft, akTop, akRight]
     AutoSize = False
     Caption = 'lblDescription'
     Font.Charset = DEFAULT_CHARSET
@@ -41,7 +37,6 @@ object frmTrayNotifier: TfrmTrayNotifier
     Top = 27
     Width = 191
     Height = 13
-    Anchors = [akLeft, akTop, akRight]
     AutoSize = False
     Caption = 'lblUri'
     Font.Charset = DEFAULT_CHARSET
