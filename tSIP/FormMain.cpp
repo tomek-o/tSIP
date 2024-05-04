@@ -281,8 +281,6 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 
 	SetMainWindowLayout(appSettings.frmMain.layout);
 
-	Calls::OnButtonConfigChange();
-
 	Application->OnRestore = OnRestore;
 }
 
@@ -473,6 +471,8 @@ void TfrmMain::InitButtons(void)
 		&OnRestartUa
 		);
 	buttons.UseContextMenu(appSettings.frmMain.bSpeedDialPopupMenu);
+
+	Calls::OnButtonConfigChange();	
 }
 
 void TfrmMain::Finalize(void)
