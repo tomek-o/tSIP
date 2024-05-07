@@ -52,6 +52,38 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 	Top = appSettings.trayNotifier.iPosY;
 	Width = appSettings.trayNotifier.iWidth;
 	Height = appSettings.trayNotifier.iHeight;
+
+	bool monitorFound = false;
+	for (int i=0; i<Screen->MonitorCount; i++)
+	{
+		TMonitor *monitor = Screen->Monitors[i];
+		enum { MARGIN = 30 };
+		if (
+			(Left + Width + MARGIN >= monitor->Left) &&
+			(Left - MARGIN <= monitor->Left + monitor->Width) &&
+			(Top + 5 >= monitor->Top) &&
+			(Top - MARGIN <= monitor->Top + monitor->Height)
+			)
+		{
+			monitorFound = true;
+			break;
+		}
+	}
+	if (!monitorFound)
+	{
+		if (Screen->MonitorCount > 0)
+		{
+			TMonitor *monitor = Screen->Monitors[0];
+			if (monitor)
+			{
+           		enum { MARGIN = 30 };
+				LOG("Moving tray notifier window to the first monitor\n");
+				Left = monitor->Left + monitor->Width - Width - MARGIN;
+				Top = monitor->Top + monitor->Height - Height - MARGIN;
+			}
+		}
+	}
+
 #if 0
 	/** \todo frmTrayNotifier steals focus at first call */
 	Visible = true;

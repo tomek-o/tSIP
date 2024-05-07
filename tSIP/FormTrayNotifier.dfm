@@ -6,6 +6,7 @@ object frmTrayNotifier: TfrmTrayNotifier
   ClientHeight = 83
   ClientWidth = 207
   Color = clBtnFace
+  DefaultMonitor = dmDesktop
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11

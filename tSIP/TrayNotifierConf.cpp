@@ -72,21 +72,8 @@ void TrayNotifierConf::fromJson(const Json::Value &jv)
 
 	jv.getUInt("Width", iWidth);
 	jv.getUInt("Height", iHeight);
-
-	{
-		int tmp = jv.get("PosX", iPosX).asInt();
-		if (tmp >= 0 && tmp + iWidth <= maxX)
-		{
-			iPosX = tmp;
-		}
-	}
-	{
-		int tmp = jv.get("PosY", iPosY).asInt();
-		if (tmp >= 0 && tmp + iHeight <= maxY)
-		{
-			iPosY = tmp;
-		}
-	}
+	jv.getInt("PosX", iPosX);
+	jv.getInt("PosY", iPosY);
 	jv.getBool("ShowOnIncoming", showOnIncoming);
 	jv.getBool("SkipIfMainWindowVisible", skipIfMainWindowVisible);
 	jv.getBool("ShowOnOutgoing", showOnOutgoing);
