@@ -1862,7 +1862,7 @@ void TfrmMain::PollCallbackQueue(void)
 				call->peerName = GetPeerName(cb.callerName);
 				call->paiPeerUri = cb.paiPeerUri;
 				call->paiPeerName = GetPeerName(cb.paiPeerName);
-
+				call->ShowOnLineButton();
 				if (call == Calls::GetCurrentCall())
 				{
 					UpdateMainCallDisplay();
