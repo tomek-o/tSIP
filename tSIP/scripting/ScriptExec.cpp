@@ -1738,7 +1738,7 @@ static int l_ShowTrayNotifier(lua_State* L)
 		lua_pushinteger( L, -1 );
 		return 1;
 	}
-	int incoming = lua_toboolean(L, 3);
+	int incoming = lua_tointeger(L, 3);
 
 	unsigned int callUid = lua_tointegerx(L, 4, NULL);
 
