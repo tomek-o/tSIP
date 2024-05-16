@@ -2359,7 +2359,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_UpdateSettings, "UpdateSettings", "Update main settings with JSON", "Application provisioning or changing settings while running. JSON is merged. Example:\nlocal settings = [[\n{\n   \"uaConf\" : {\n      \"audioCfgAlert\" : {\n         \"volume\" : 0.1\n      },\n      \"audioCfgRing\" : {\n         \"volume\" : 0.2\n      }\n   }\n}\n]]\n\nUpdateSettings(settings)");
 	lua_register2(L, ScriptImp::l_UpdateButtons, "UpdateButtons", "Update buttons settings with JSON", "Provisioning for buttons or changing settings while running. JSON is merged. Example:\nUpdateButtons('{\"btnConf\":[{\"caption\":\"    REDIAL\"}]}')");
 
-	lua_register2(L, ScriptImp::l_SetHandled, "SetHandled", "Set \"handled\" flag associated with script trigger event", "Possibility of skipping default event handling after script was called (replacing default behavior with script).");
+	lua_register2(L, ScriptImp::l_SetHandled, "SetHandled", "Set \"handled\" flag associated with script trigger event", "Possibility of skipping default event handling after script was called (replacing default behavior with script), Example: SetHandled(1).");
 
 	lua_register2(L, ScriptImp::l_GetButtonType, "GetButtonType", "Get type of the button with specified id", "");
 	lua_register2(L, ScriptImp::l_GetButtonNumber, "GetButtonNumber", "Get number/URI from button configuration", "");
