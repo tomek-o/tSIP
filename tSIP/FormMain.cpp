@@ -2227,18 +2227,18 @@ void TfrmMain::PollCallbackQueue(void)
 			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
+				bool handled = false;
 				call->audioErrorCount++;
 				if (appSettings.Scripts.onAudioDeviceError != "")
 				{
 					AnsiString asScriptFile;
-					bool handled = true;
 					asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onAudioDeviceError.c_str());
 					RunScriptFile(SCRIPT_SRC_ON_AUDIO_ERROR, cb.callUid, asScriptFile.c_str(), handled);
 				}
 				PhoneInterface::UpdateAudioError();
-				if (appSettings.Calls.bDisconnectCallOnAudioError)
+				if (appSettings.Calls.bDisconnectCallOnAudioError && !handled)
 				{
-					LOG("Disconnecting call %u on audio error\n", call->uid);
+					LOG("Disconnecting call %u on audio error or end of file\n", call->uid);
 					Hangup(call->uid);
 				}
 			}
