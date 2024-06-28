@@ -817,13 +817,13 @@ static int app_start(void)
 
 		if (acc.outbound1 != "")
 		{
-			addr.cat_printf(";outbound1=sip:%s", acc.outbound1.c_str());
+			addr.cat_printf(";outbound1=\"sip:%s\"", acc.outbound1.c_str());
 		}
 		/** \todo outbound2 not working? only single Route line in outgoing REGISTER
 		*/
 		if (acc.outbound2 != "")
 		{
-			addr.cat_printf(";outbound2=sip:%s", acc.outbound2.c_str());
+			addr.cat_printf(";outbound2=\"sip:%s\"", acc.outbound2.c_str());
 		}
 		if (acc.answer_any != 0)
 		{
