@@ -404,4 +404,20 @@ object frmAccount: TfrmAccount
       'srtp-mandf'
       'zrtp')
   end
+  object cbOutbound1Transport: TComboBox
+    Left = 294
+    Top = 238
+    Width = 50
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    ItemIndex = 0
+    TabOrder = 21
+    Text = 'UDP'
+    OnChange = cbOutbound1TransportChange
+    Items.Strings = (
+      'UDP'
+      'TCP'
+      'TLS')
+  end
 end

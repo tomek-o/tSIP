@@ -271,7 +271,17 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 
 			new_acc.stun_server = acc.get("stun_server", new_acc.stun_server).asString();
 			new_acc.outbound1 = acc.get("outbound1", new_acc.outbound1).asString();
+			transport = (UaConf::Account::TRANSPORT_TYPE)acc.get("outbound1Transport", new_acc.outbound1Transport).asInt();
+			if (transport >= 0 && transport < UaConf::Account::TRANSPORT_LIMITER)
+			{
+				new_acc.outbound1Transport = transport;
+			}
 			new_acc.outbound2 = acc.get("outbound2", new_acc.outbound2).asString();
+			transport = (UaConf::Account::TRANSPORT_TYPE)acc.get("outbound2Transport", new_acc.outbound2Transport).asInt();
+			if (transport >= 0 && transport < UaConf::Account::TRANSPORT_LIMITER)
+			{
+				new_acc.outbound2Transport = transport;
+			}
 
 			bool zrtp = false;
 			acc.getBool("zrtp", zrtp);
@@ -1072,7 +1082,9 @@ int Settings::Write(AnsiString asFileName)
 
 		cfgAcc["stun_server"] = acc.stun_server;
 		cfgAcc["outbound1"] = acc.outbound1;
+		cfgAcc["outbound1Transport"] = acc.outbound1Transport;
 		cfgAcc["outbound2"] = acc.outbound2;
+		cfgAcc["outbound2Transport"] = acc.outbound2Transport;
 		for (unsigned int j=0; j<acc.audio_codecs.size(); j++)
 		{
 			cfgAcc["audio_codecs"][j] = acc.audio_codecs[j];

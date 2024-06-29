@@ -51,6 +51,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chbHideDisplayName;
 	TLabel *lblMediaEncryption;
 	TComboBox *cbMediaEncryption;
+	TComboBox *cbOutbound1Transport;
 	void __fastcall edRegServerChange(TObject *Sender);
 	void __fastcall edUserChange(TObject *Sender);
 	void __fastcall edPasswordChange(TObject *Sender);
@@ -72,6 +73,7 @@ __published:	// IDE-managed Components
 	void __fastcall edDisplayNameChange(TObject *Sender);
 	void __fastcall chbHideDisplayNameClick(TObject *Sender);
 	void __fastcall cbMediaEncryptionChange(TObject *Sender);
+	void __fastcall cbOutbound1TransportChange(TObject *Sender);
 private:	// User declarations
 	UaConf::Account& acc;
 public:		// User declarations

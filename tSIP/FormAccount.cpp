@@ -43,6 +43,7 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 	edPtime->Text = acc.ptime;
 	edStunServer->Text = acc.stun_server.c_str();
 	edOutbound1->Text = acc.outbound1.c_str();
+	cbOutbound1Transport->ItemIndex = acc.outbound1Transport;	
 	//edOutbound2->Text = acc.outbound2.c_str();
 	if (acc.dtmf_tx_format < cbDtmfTxFormat->Items->Count)
 	{
@@ -210,6 +211,12 @@ void __fastcall TfrmAccount::cbMediaEncryptionChange(TObject *Sender)
 		acc.mediaenc = "";
 	else
 		acc.mediaenc = cbMediaEncryption->Text.c_str();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::cbOutbound1TransportChange(TObject *Sender)
+{
+	acc.outbound1Transport = (UaConf::Account::TRANSPORT_TYPE)cbOutbound1Transport->ItemIndex;	
 }
 //---------------------------------------------------------------------------
 

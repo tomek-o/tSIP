@@ -802,7 +802,7 @@ static int app_start(void)
 
 		addr.cat_printf("<sip:%s@%s;transport=%s>;regint=%d", //;sipnat=outbound",
 			acc.user.c_str(), acc.reg_server.c_str(),
-			acc.getTransportStr(),
+			UaConf::Account::getTransportStr(acc.transport),
 			acc.reg_expires
 			);
 		if (acc.auth_user != "")
@@ -817,13 +817,15 @@ static int app_start(void)
 
 		if (acc.outbound1 != "")
 		{
-			addr.cat_printf(";outbound1=\"sip:%s\"", acc.outbound1.c_str());
+			addr.cat_printf(";outbound1=\"sip:%s;transport=%s\"",
+				acc.outbound1.c_str(), UaConf::Account::getTransportStr(acc.outbound1Transport));
 		}
 		/** \todo outbound2 not working? only single Route line in outgoing REGISTER
 		*/
 		if (acc.outbound2 != "")
 		{
-			addr.cat_printf(";outbound2=\"sip:%s\"", acc.outbound2.c_str());
+			addr.cat_printf(";outbound2=\"sip:%s;transport=%s\"",
+				acc.outbound2.c_str(), UaConf::Account::getTransportStr(acc.outbound2Transport));
 		}
 		if (acc.answer_any != 0)
 		{
@@ -910,7 +912,7 @@ static int app_start(void)
 				addr.sprintf("<sip:%s@%s;transport=%s>",
 					contact.user.c_str(),
 					acc.reg_server.c_str(),
-					acc.getTransportStr()
+					UaConf::Account::getTransportStr(acc.transport)
 					);
 			}
 			if (contact.sub_dialog_info)

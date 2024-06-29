@@ -36,7 +36,22 @@ public:
 			TRANSPORT_TCP,
 			TRANSPORT_TLS,
 			TRANSPORT_LIMITER
-		} transport;
+		};
+		static const char* const getTransportStr(enum TRANSPORT_TYPE type) {
+			switch (type)
+			{
+			case TRANSPORT_UDP:
+				return "udp";
+			case TRANSPORT_TCP:
+				return "tcp";
+			case TRANSPORT_TLS:
+				return "tls";
+			default:
+				assert(!"Unhandled cfg transport type");
+				return "???";
+			}
+		}
+		enum TRANSPORT_TYPE transport;
 		std::string reg_server;
 		std::string user;
 		std::string display_name;
@@ -65,7 +80,9 @@ public:
 
 		std::string stun_server;
 		std::string outbound1;
+		enum TRANSPORT_TYPE outbound1Transport;
 		std::string outbound2;
+		enum TRANSPORT_TYPE outbound2Transport;
 
 		std::string mediaenc;
 
@@ -93,7 +110,9 @@ public:
 				ptime == right.ptime &&
 				stun_server == right.stun_server &&
 				outbound1 == right.outbound1 &&
+				outbound1Transport == right.outbound1Transport &&
 				outbound2 == right.outbound2 &&
+				outbound2Transport == right.outbound2Transport &&
 
 				mediaenc == right.mediaenc
 				);
@@ -120,6 +139,9 @@ public:
 
 			ptime(DEF_PTIME),
 
+			outbound1Transport(TRANSPORT_UDP),
+			outbound2Transport(TRANSPORT_UDP),
+
 			mediaenc("")
 		{
 			audio_codecs.push_back("PCMU/8000/1");
@@ -131,20 +153,6 @@ public:
 			video_codecs.push_back("MP4V-ES");
 		}
 
-		const char* const getTransportStr(void) const {
-			switch (transport)
-			{
-			case TRANSPORT_UDP:
-				return "udp";
-			case TRANSPORT_TCP:
-				return "tcp";
-			case TRANSPORT_TLS:
-				return "tls";
-			default:
-				assert(!"Unhandled cfg transport type");
-				return "???";
-			}
-		}
 		bool isAnySettingHidden(void) const {
 			return
 				hide_reg_server ||
