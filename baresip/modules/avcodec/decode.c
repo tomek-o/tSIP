@@ -299,15 +299,17 @@ int avcodec_decode_h264(struct viddec_state *st, struct vidframe *frame,
 				goto out;
 		}
 		else {
+			int diff;
 			if (!st->frag) {
 				DEBUG_WARNING("avcodec: ignoring fragment"
-				      " (nal=%u)\n", fu.type);
+					  " (nal=%u)\n", fu.type);
 				++st->stats.n_lost;
 				return 0;
 			}
 
-			if (rtp_seq_diff(st->frag_seq, seq) != 1) {
-				DEBUG_WARNING("avcodec: lost fragments detected\n");
+			diff = rtp_seq_diff(st->frag_seq, seq);
+			if (diff != 1) {
+				DEBUG_WARNING("avcodec: lost fragments detected (seq diff = %d, frag_seq = %d, seq = %d)\n", diff, st->frag_seq, seq);
 				fragment_rewind(st);
 				st->frag = false;
 				++st->stats.n_lost;
