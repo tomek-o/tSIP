@@ -180,7 +180,7 @@ static void rtp_recv(const struct sa *src, const struct rtp_header *hdr,
 	{
 		char buf[64];
 		/* debugging exact timing of read handler calls */
-		(void)re_printf("[%s] rtp_recv\n", sys_time(buf, sizeof(buf)));
+		(void)re_printf("[%s] rtp_recv, seq = %d\n", sys_time(buf, sizeof(buf)), (int)hdr->seq);
 	}
 #endif
 
@@ -251,7 +251,7 @@ static void rtcp_handler(const struct sa *src, struct rtcp_msg *msg, void *arg)
 }
 
 
-static int stream_sock_alloc(struct stream *s, int af)
+static int stream_sock_alloc(struct stream *s, int af, int rtp_sock_rx_buf_size)
 {
 	struct sa laddr;
 	int tos, err;
@@ -275,6 +275,13 @@ static int stream_sock_alloc(struct stream *s, int af)
 			     &tos, sizeof(tos));
 
 	udp_rxsz_set(rtp_sock(s->rtp), RTP_RECV_SIZE);
+
+	if (rtp_sock_rx_buf_size > 0) {
+		int status = udp_setsockopt(rtp_sock(s->rtp), SOL_SOCKET, SO_RCVBUF, &rtp_sock_rx_buf_size, sizeof(rtp_sock_rx_buf_size));
+		if (status != 0) {
+			DEBUG_WARNING("udp_setsockopt: failed to set SO_RCVBUF: status = %d\n", status);
+		}
+	}
 
 	return 0;
 }
@@ -307,6 +314,7 @@ static void tmr_stats_handler(void *arg)
 int stream_alloc(struct stream **sp, const struct config_avt *cfg,
 		 struct call *call, struct sdp_session *sdp_sess,
 		 const char *name, int label,
+		 int rtp_sock_rx_buf_size,
 		 const struct mnat *mnat, struct mnat_sess *mnat_sess,
 		 const struct menc *menc, struct menc_sess *menc_sess,
 		 stream_rtp_h *rtph, stream_rtcp_h *rtcph, void *arg)
@@ -333,7 +341,7 @@ int stream_alloc(struct stream **sp, const struct config_avt *cfg,
 	s->pseq  = -1;
 	s->rtcp  = s->cfg.rtcp_enable;
 
-	err = stream_sock_alloc(s, call_af(call));
+	err = stream_sock_alloc(s, call_af(call), rtp_sock_rx_buf_size);
 	if (err)
 		goto out;
 
@@ -426,7 +434,7 @@ int stream_alloc2(struct stream **sp, const struct config_avt *cfg,
 	s->pseq  = -1;
 	s->rtcp  = 0;
 
-	err = stream_sock_alloc(s, af);
+	err = stream_sock_alloc(s, af, -1);
 	if (err)
 		goto out;
 

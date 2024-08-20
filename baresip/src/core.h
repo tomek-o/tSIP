@@ -281,6 +281,7 @@ typedef void (stream_error_h)(struct stream *strm, int err, void *arg);
 int  stream_alloc(struct stream **sp, const struct config_avt *cfg,
 		  struct call *call, struct sdp_session *sdp_sess,
 		  const char *name, int label,
+		  int rtp_sock_rx_buf_size,
 		  const struct mnat *mnat, struct mnat_sess *mnat_sess,
 		  const struct menc *menc, struct menc_sess *menc_sess,
 		  stream_rtp_h *rtph, stream_rtcp_h *rtcph, void *arg);
