@@ -196,7 +196,7 @@ static int encode_win(struct vidfilt_enc_st *st, struct vidframe *frame)
 	return vidisp_display(enc->disp, "Selfview", frame, 0);
 }
 
-
+/** Capture TX image */
 static int encode_pip(struct vidfilt_enc_st *st, struct vidframe *frame)
 {
 	struct selfview_enc *enc = (struct selfview_enc *)st;
@@ -228,7 +228,7 @@ static int encode_pip(struct vidfilt_enc_st *st, struct vidframe *frame)
 	return err;
 }
 
-
+/** Draw captured TX image on RX canvas */
 static int decode_pip(struct vidfilt_dec_st *st, struct vidframe *frame)
 {
 	struct selfview_dec *dec = (struct selfview_dec *)st;
@@ -252,6 +252,10 @@ static int decode_pip(struct vidfilt_dec_st *st, struct vidframe *frame)
 		else
 			rect.y = frame->size.h/2;
 
+		/* 	This generates artifacts (looking like kind of echo of selfview) on Windows.
+			Frame is not a deep copy, *data[4] pointers are supplied by ffmpeg and
+			apparently this memory is reused by ffmpeg when video is moving.
+		*/
 		vidconv(frame, sv->frame, &rect);
 
 		vidframe_draw_rect(frame, rect.x, rect.y, rect.w, rect.h,
