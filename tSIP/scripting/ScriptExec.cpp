@@ -844,6 +844,20 @@ static int l_SwitchAudioSource2(lua_State* L)
 	return 0;
 }
 
+static int l_SwitchAudioSourceToConfigured(lua_State* L)
+{
+	Call* call = GetCall(L);
+	if (call)
+	{
+		UA->SwitchAudioSource(call->uid, appSettings.uaConf.audioCfgSrc.mod.c_str(), appSettings.uaConf.audioCfgSrc.dev.c_str());
+	}
+	else
+	{
+		LOG("Lua: SwitchAudioSourceToConfigured: call not found\n");
+	}
+	return 0;
+}
+
 static int l_SwitchAudioPlayer(lua_State* L)
 {
 	//  The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on.
@@ -2277,6 +2291,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SetDial, "SetDial", "Set text on softphone dialing edit control", "");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource, "SwitchAudioSource", "Change audio source during the call", "Example: SwitchAudioSource(\"aufile\", \"file.wav\").");
 	lua_register2(L, ScriptImp::l_SwitchAudioSource2, "SwitchAudioSource2", "Change audio source for the specified call", "Example: SwitchAudioSource2(callUid, \"aufile\", \"file.wav\").");
+	lua_register2(L, ScriptImp::l_SwitchAudioSourceToConfigured, "SwitchAudioSourceToConfigured", "Change audio source for current or specified call to default/configured", "Example: SwitchAudioSourceToConfigured(optional_callUid).");
 	lua_register2(L, ScriptImp::l_SwitchAudioPlayer, "SwitchAudioPlayer", "Change audio output during the call", "Example: SwitchAudioPlayer(\"winwave2\", \"Headphones\").");
 	lua_register2(L, ScriptImp::l_SwitchAudioPlayer2, "SwitchAudioPlayer2", "Change audio output for the specified call", "Example: SwitchAudioPlayer2(callUid, \"winwave2\", \"Headphones\").");
 	lua_register2(L, ScriptImp::l_SwitchVideoSource, "SwitchVideoSource", "Change video source during the call", "Example: SwitchVideoSource(\"avformat\", \"file.mp4\").");
