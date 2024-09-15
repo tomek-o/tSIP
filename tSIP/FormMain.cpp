@@ -993,6 +993,10 @@ void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
 	{
 		Hangup(call->uid);
 	}
+	else if (pagingTx.active)
+	{
+		UA->Hangup(Call::INVALID_UID, 200, "");
+	}
 }
 //---------------------------------------------------------------------------
 
@@ -2828,6 +2832,10 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		if (call)
 		{
 			UA->SwitchAudioSource(call->uid, cfg.audioRxMod.c_str(), cfg.audioRxDev.c_str());
+		}
+		else if (pagingTx.active)
+		{
+			UA->SwitchAudioSource(Call::INVALID_UID, cfg.audioRxMod.c_str(), cfg.audioRxDev.c_str());
 		}
 		break;
 	}
