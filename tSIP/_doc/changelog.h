@@ -1207,6 +1207,12 @@ Version 0.3.04
 	- FIXED: hint/default text for blind transfer target edit was not showing up at startup
 	- blind transfer hint in the main window can be translated
 	- FIXED re-INVITE handling / updating CLIP/COLP with P-Asserted-Identity, broken in 0.3
-	- call is not disconnected on audio error or end of file if SetHandled(1) is called from Lua script, regardless of Calls/DisconnectCallOnAudioError setting 
+	- call is not disconnected on audio error or end of file if SetHandled(1) is called from Lua script, regardless of Calls/DisconnectCallOnAudioError setting
+
+Version 0.3.05
+	- added transport selection for outbound proxy
+	- FIXED H.264 RTP loss (setting SO_RCVBUF)
+	- added Lua SwitchAudioSourceToConfigured(OPTIONAL_callUid) function
+	- FIXED hangup and switching audio source for RTP multicast/unicast streaming function (broken in 0.3)	
 */
 
