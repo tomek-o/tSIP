@@ -221,21 +221,25 @@ void TfrmButtonEdit::ApplyConf(void)
 
 	edSpeedDialFont->Font->Name = cfg->font.name.c_str();
 	edSpeedDialFont->Font->Size = cfg->font.size;
+	TFontStyles style = TFontStyles();
 	if (cfg->font.bold)
-		edSpeedDialFont->Font->Style << fsBold;
+		style << fsBold;
 	if (cfg->font.italic)
-		edSpeedDialFont->Font->Style << fsItalic;
+		style << fsItalic;
 	if (cfg->font.underline)
-		edSpeedDialFont->Font->Style << fsUnderline;
+		style << fsUnderline;
+	edSpeedDialFont->Font->Style = style;
 
 	edCaption2Font->Font->Name = cfg->fontLabel2.name.c_str();
 	edCaption2Font->Font->Size = cfg->fontLabel2.size;
+	style = TFontStyles();
 	if (cfg->fontLabel2.bold)
-		edCaption2Font->Font->Style << fsBold;
+		style << fsBold;
 	if (cfg->fontLabel2.italic)
-		edCaption2Font->Font->Style << fsItalic;
+		style << fsItalic;
 	if (cfg->fontLabel2.underline)
-		edCaption2Font->Font->Style << fsUnderline;
+		style << fsUnderline;
+	edCaption2Font->Font->Style = style;
 
 	cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod.c_str());
 	cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod.c_str());
@@ -764,13 +768,14 @@ void __fastcall TfrmButtonEdit::btnSpeedDialFontSelectClick(TObject *Sender)
 
 	fontDialog->Font->Name = font->name.c_str();
 	fontDialog->Font->Size = font->size;
-	fontDialog->Font->Style = TFontStyles();
+	TFontStyles style = TFontStyles();
 	if (font->bold)
-		fontDialog->Font->Style << fsBold;
+		style << fsBold;
 	if (font->italic)
-		fontDialog->Font->Style << fsItalic;
+		style << fsItalic;
 	if (font->underline)
-		fontDialog->Font->Style << fsUnderline;
+		style << fsUnderline;
+	fontDialog->Font->Style = style;		
 	fontDialog->Font->Color = clBlack;
 	if (fontDialog->Execute())
 	{

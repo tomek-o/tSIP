@@ -229,19 +229,20 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 
 	label->Font->Name = cfg.font.name.c_str();
 	label->Font->Size = cfg.font.size;
-	label->Font->Style = TFontStyles();
+	TFontStyles style = TFontStyles();
 	if (cfg.font.bold)
 	{
-		label->Font->Style << fsBold;
+		style << fsBold;
 	}
 	if (cfg.font.italic)
 	{
-		label->Font->Style << fsItalic;
+		style << fsItalic;
 	}
 	if (cfg.font.underline)
 	{
-		label->Font->Style << fsUnderline;
+		style << fsUnderline;
 	}
+	label->Font->Style = style;
 
 
 	label2->Left = cfg.label2Left;
@@ -249,19 +250,20 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	spaceLabelsYEqually = cfg.spaceLabelsYEqually;
 	label2->Font->Name = cfg.fontLabel2.name.c_str();
 	label2->Font->Size = cfg.fontLabel2.size;
-	label2->Font->Style = TFontStyles();
+	style = TFontStyles();
 	if (cfg.fontLabel2.bold)
 	{
-		label2->Font->Style << fsBold;
+		style << fsBold;
 	}
 	if (cfg.fontLabel2.italic)
 	{
-		label2->Font->Style << fsItalic;
+		style << fsItalic;
 	}
 	if (cfg.fontLabel2.underline)
 	{
-		label2->Font->Style << fsUnderline;
+		style << fsUnderline;
 	}
+	label2->Font->Style = style;
 
 	Left = cfg.left * percentage/100;
 	Top = cfg.top * percentage/100;
