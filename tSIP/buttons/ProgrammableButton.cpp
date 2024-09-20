@@ -242,6 +242,10 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	{
 		style << fsUnderline;
 	}
+	if (cfg.font.strikeout)
+	{
+		style << fsStrikeOut;
+	}
 	label->Font->Style = style;
 
 
@@ -262,6 +266,10 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	if (cfg.fontLabel2.underline)
 	{
 		style << fsUnderline;
+	}
+	if (cfg.fontLabel2.strikeout)
+	{
+		style << fsStrikeOut;
 	}
 	label2->Font->Style = style;
 

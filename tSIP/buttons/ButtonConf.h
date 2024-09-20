@@ -142,13 +142,14 @@ public:
 	{
 		std::string name;
 		int size;
-		bool bold, italic, underline;
+		bool bold, italic, underline, strikeout;
 		Font(void):
 			name("Tahoma"),
 			size(8),
 			bold(false),
 			italic(false),
-			underline(false)
+			underline(false),
+			strikeout(false)
 		{}
 		bool operator==(const Font& right) const {
 			return (
@@ -156,7 +157,8 @@ public:
 				size == right.size &&
 				bold == right.bold &&
 				italic == right.italic &&
-				underline == right.underline
+				underline == right.underline &&
+				strikeout == right.strikeout
 			);
 		}
 		bool operator!=(const Font& right) const {

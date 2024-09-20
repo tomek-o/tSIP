@@ -228,6 +228,8 @@ void TfrmButtonEdit::ApplyConf(void)
 		style << fsItalic;
 	if (cfg->font.underline)
 		style << fsUnderline;
+	if (cfg->font.strikeout)
+		style << fsStrikeOut;
 	edSpeedDialFont->Font->Style = style;
 
 	edCaption2Font->Font->Name = cfg->fontLabel2.name.c_str();
@@ -239,6 +241,8 @@ void TfrmButtonEdit::ApplyConf(void)
 		style << fsItalic;
 	if (cfg->fontLabel2.underline)
 		style << fsUnderline;
+	if (cfg->fontLabel2.strikeout)
+		style << fsStrikeOut;
 	edCaption2Font->Font->Style = style;
 
 	cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod.c_str());
@@ -775,6 +779,8 @@ void __fastcall TfrmButtonEdit::btnSpeedDialFontSelectClick(TObject *Sender)
 		style << fsItalic;
 	if (font->underline)
 		style << fsUnderline;
+	if (font->strikeout)
+		style << fsStrikeOut;
 	fontDialog->Font->Style = style;		
 	fontDialog->Font->Color = clBlack;
 	if (fontDialog->Execute())
@@ -790,6 +796,7 @@ void __fastcall TfrmButtonEdit::btnSpeedDialFontSelectClick(TObject *Sender)
 		font->bold = fontDialog->Font->Style.Contains(fsBold);
 		font->italic = fontDialog->Font->Style.Contains(fsItalic);
 		font->underline = fontDialog->Font->Style.Contains(fsUnderline);
+		font->strikeout = fontDialog->Font->Style.Contains(fsStrikeOut);
 	}
 }
 //---------------------------------------------------------------------------

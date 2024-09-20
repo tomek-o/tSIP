@@ -247,6 +247,7 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 					cfg.font.bold = font.get("bold", cfg.font.bold).asBool();
 					cfg.font.italic = font.get("italic", cfg.font.italic).asBool();
 					cfg.font.underline = font.get("underline", cfg.font.underline).asBool();
+					font.getBool("strikeout", cfg.font.strikeout);
 				}
 
 				{
@@ -257,6 +258,7 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 					font.bold = jv.get("bold", font.bold).asBool();
 					font.italic = jv.get("italic", font.italic).asBool();
 					font.underline = jv.get("underline", font.underline).asBool();
+					jv.getBool("strikeout", cfg.font.strikeout);
 				}
 			}
 			catch (const std::runtime_error &e)
@@ -621,6 +623,7 @@ int ProgrammableButtons::Write(void)
 				jv["bold"] = font.bold;
 				jv["italic"] = font.italic;
 				jv["underline"] = font.underline;
+				jv["strikeout"] = font.strikeout;
 			}
 		}
 
@@ -634,6 +637,7 @@ int ProgrammableButtons::Write(void)
 				jv["bold"] = font.bold;
 				jv["italic"] = font.italic;
 				jv["underline"] = font.underline;
+				jv["strikeout"] = font.strikeout;
 			}
 		}
 	}
