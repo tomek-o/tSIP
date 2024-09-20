@@ -118,6 +118,7 @@ static int read_thread(void *data)
 	struct shared *st = data;
 	uint64_t now, offset = tmr_jiffies();
 	double auts = 0, vidts = 0;
+	bool vidts_valid = false;
 	AVPacket *pkt;
 
 	pkt = av_packet_alloc();
@@ -138,9 +139,13 @@ static int read_thread(void *data)
 			if (!st->run)
 				break;
 
-			if (st->au.idx >=0 && st->vid.idx >=0)
-				xts = min(auts, vidts);
-			else if (st->au.idx >=0)
+			if (st->au.idx >=0 && st->vid.idx >=0) {
+				if (vidts_valid) {
+					xts = min(auts, vidts);
+				} else {
+					xts = auts;
+				}
+			} else if (st->au.idx >=0)
 				xts = auts;
 			else if (st->vid.idx >=0)
 				xts = vidts;
@@ -168,6 +173,7 @@ static int read_thread(void *data)
 
 				offset = tmr_jiffies();
 				auts = vidts = 0;
+				vidts_valid = false;
 				break;
 			}
 			else if (ret < 0) {
@@ -193,6 +199,9 @@ static int read_thread(void *data)
 
 				if (pkt->pts == AV_NOPTS_VALUE) {
 					DEBUG_WARNING("no video pts\n");
+					vidts_valid = false;
+				} else {
+					vidts_valid = true;
 				}
 
 				vidts = 1000.0 * pkt->pts * av_q2d_local(st->vid.time_base);
