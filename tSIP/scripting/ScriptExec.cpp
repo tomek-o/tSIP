@@ -2279,7 +2279,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns status (0 on success) and allocated call ID. May fail if current call number reaches limit.");
 	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect or reject current incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_Hangup2, "Hangup2", "Disconnect or reject specific incoming call", "Examples:\n    Hangup2(callUid)\n    Hangup2(callUid, sipCode, reasonText)");
-	lua_register2(L, ScriptImp::l_HangupAll, "HangupAll", "Disconnect all calls", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
+	lua_register2(L, ScriptImp::l_HangupAll, "HangupAll", "Disconnect all calls", "Example: HangupAll()");
 	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer current or specified incoming call", "Takes call UID as optional argument to answer specific call.");
 	lua_register2(L, ScriptImp::l_SetMute, "SetMute", "Set mute state for transmitted audio (microphone) of the specified call", "Examples:\nSetMute(callUid, 1) -- mute\nSetMute(callUid, 0) -- unmute");
 	lua_register2(L, ScriptImp::l_ToggleMute, "ToggleMute", "Toggle (reverse) mute state for current or specified call", "Takes callUid as optional argument.");
