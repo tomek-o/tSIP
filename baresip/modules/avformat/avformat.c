@@ -198,6 +198,7 @@ static int read_thread(void *data)
 			else if (pkt->stream_index == st->vid.idx) {
 
 				if (pkt->pts == AV_NOPTS_VALUE) {
+					/* this happens with mp3 file with audio + video (MJPEG cover) streams */
 					DEBUG_WARNING("no video pts\n");
 					vidts_valid = false;
 				} else {
