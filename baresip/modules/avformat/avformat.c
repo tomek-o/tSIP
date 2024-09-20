@@ -195,7 +195,7 @@ static int read_thread(void *data)
 					DEBUG_WARNING("no video pts\n");
 				}
 
-				vidts = 1000 * pkt->pts * av_q2d_local(st->vid.time_base);
+				vidts = 1000.0 * pkt->pts * av_q2d_local(st->vid.time_base);
 			#if 0
 				if (st->is_pass_through) {
 					avformat_video_copy(st, pkt);
