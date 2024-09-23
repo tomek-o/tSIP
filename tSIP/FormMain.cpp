@@ -387,7 +387,6 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	}
 
 	UpdateCallHistory();
-	UpdateAutoAnswer();
 }
 //---------------------------------------------------------------------------
 
@@ -472,7 +471,8 @@ void TfrmMain::InitButtons(void)
 		);
 	buttons.UseContextMenu(appSettings.frmMain.bSpeedDialPopupMenu);
 
-	Calls::OnButtonConfigChange();	
+	UpdateAutoAnswer();
+	Calls::OnButtonConfigChange();
 }
 
 void TfrmMain::Finalize(void)
