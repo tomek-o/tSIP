@@ -39,7 +39,7 @@ static void process_frame(struct vidsrc_st *st)
 	unsigned y;
     struct vidsz *size = &st->size;
 
-	st->ts += (VIDEO_TIMEBASE / st->fps);
+	st->ts += (uint64_t)(VIDEO_TIMEBASE / st->fps);
 
 	/* Pattern of three horizontal bars in RGB */
 	for (y=0; y<size->h; y++) {

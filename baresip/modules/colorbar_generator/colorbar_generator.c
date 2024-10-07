@@ -30,7 +30,7 @@ static struct vidsrc *vidsrc;
 
 static void process_frame(struct vidsrc_st *st)
 {
-	st->ts += (VIDEO_TIMEBASE / st->fps);
+	st->ts += (uint64_t)(VIDEO_TIMEBASE / st->fps);
 
 	st->frameh(st->frame, /*st->ts, */ st->arg);
 }
