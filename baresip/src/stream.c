@@ -639,8 +639,11 @@ void stream_hold(struct stream *s, bool hold)
 {
 	if (!s)
 		return;
-
-	sdp_media_set_ldir(s->sdp, hold ? SDP_INACTIVE : SDP_SENDRECV);
+	/* \todo Fix oversimplified hold.
+		Call hold is done by setint the media direction to 'sendonly',
+		except when current media direction is 'inactive'.
+	*/
+	sdp_media_set_ldir(s->sdp, hold ? SDP_SENDONLY /*SDP_INACTIVE*/ : SDP_SENDRECV);
 }
 
 
