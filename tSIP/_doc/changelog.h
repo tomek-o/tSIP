@@ -1213,6 +1213,14 @@ Version 0.3.05
 	- added transport selection for outbound proxy
 	- FIXED H.264 RTP loss (setting SO_RCVBUF)
 	- added Lua SwitchAudioSourceToConfigured(OPTIONAL_callUid) function
-	- FIXED hangup and switching audio source for RTP multicast/unicast streaming function (broken in 0.3)	
+	- FIXED hangup and switching audio source for RTP multicast/unicast streaming function (broken in 0.3)
+
+Version 0.3.06
+	- FIXED button font style selection, added underline and strikeout effects
+	- FIXED auto-answer/DND buttons not being set down after restart
+	- using SENDONLY direction for hold
+	- video, avformat: fixed vidts overflow for mp3 playback
+	- video, avformat: fixed playback of mp3 files with MJPEG cover
+	- video: fixed exception when using colorbar generators or nullaudio video source modules
 */
 
