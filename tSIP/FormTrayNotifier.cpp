@@ -15,6 +15,14 @@
 TfrmTrayNotifier *frmTrayNotifier;
 //---------------------------------------------------------------------------
 
+namespace
+{
+	int Scale(int val)
+	{
+		return static_cast<float>(val) * appSettings.trayNotifier.scalingPct / 100;
+	}
+}	// namespace
+
 void TfrmTrayNotifier::TranslateForm(void* obj)
 {
 	TfrmTrayNotifier *frm = reinterpret_cast<TfrmTrayNotifier*>(obj);
@@ -50,8 +58,6 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 {
 	Left = appSettings.trayNotifier.iPosX;
 	Top = appSettings.trayNotifier.iPosY;
-	Width = appSettings.trayNotifier.iWidth;
-	Height = appSettings.trayNotifier.iHeight;
 
 	bool monitorFound = false;
 	for (int i=0; i<Screen->MonitorCount; i++)
@@ -97,24 +103,24 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 
 	const TrayNotifierConf::Elements &el = appSettings.trayNotifier.elements;
 	lblDescription->Visible = el.labelDescription.visible;
-	lblDescription->Left = el.labelDescription.left;
-	lblDescription->Top = el.labelDescription.top;
-	lblDescription->Width = el.labelDescription.width;
+	lblDescription->Left = Scale(el.labelDescription.left);
+	lblDescription->Top = Scale(el.labelDescription.top);
+	lblDescription->Width = Scale(el.labelDescription.width);
 
 	lblUri->Visible = el.labelUri.visible;
-	lblUri->Left = el.labelUri.left;
-	lblUri->Top = el.labelUri.top;
-	lblUri->Width = el.labelUri.width;
+	lblUri->Left = Scale(el.labelUri.left);
+	lblUri->Top = Scale(el.labelUri.top);
+	lblUri->Width = Scale(el.labelUri.width);
 
 	btnAnswer->Visible = el.btnAnswer.visible;
-	btnAnswer->Left = el.btnAnswer.left;
-	btnAnswer->Top = el.btnAnswer.top;
-	btnAnswer->Width = el.btnAnswer.width;
+	btnAnswer->Left = Scale(el.btnAnswer.left);
+	btnAnswer->Top = Scale(el.btnAnswer.top);
+	btnAnswer->Width = Scale(el.btnAnswer.width);
 
 	btnHangup->Visible = el.btnHangup.visible;
-	btnHangup->Left = el.btnHangup.left;
-	btnHangup->Top = el.btnHangup.top;
-	btnHangup->Width = el.btnHangup.width;
+	btnHangup->Left = Scale(el.btnHangup.left);
+	btnHangup->Top = Scale(el.btnHangup.top);
+	btnHangup->Width = Scale(el.btnHangup.width);
 }
 
 void TfrmTrayNotifier::HideWindow(void)

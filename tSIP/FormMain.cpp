@@ -698,8 +698,8 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	/** \todo bug? use prev settings */
 	frmTrayNotifier->ScaleBy(100, appSettings.trayNotifier.scalingPct);
 	frmTrayNotifier->ScaleBy(appSettings.trayNotifier.scalingPct, 100);
-	frmTrayNotifier->Width = appSettings.trayNotifier.iWidth;
-	frmTrayNotifier->Height = appSettings.trayNotifier.iHeight;
+	frmTrayNotifier->Width = appSettings.trayNotifier.iWidth * appSettings.trayNotifier.scalingPct / 100;
+	frmTrayNotifier->Height = appSettings.trayNotifier.iHeight * appSettings.trayNotifier.scalingPct / 100;
 
 	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
 
@@ -799,6 +799,8 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	frmTrayNotifier->OnHangup = Hangup;
 	frmTrayNotifier->OnAnswer = Answer;
 	frmTrayNotifier->ScaleBy(appSettings.trayNotifier.scalingPct, 100);
+	frmTrayNotifier->Width = appSettings.trayNotifier.iWidth * appSettings.trayNotifier.scalingPct / 100;
+	frmTrayNotifier->Height = appSettings.trayNotifier.iHeight * appSettings.trayNotifier.scalingPct / 100;
 
 	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
 
