@@ -30,6 +30,7 @@
 #include "common/ScopedLock.h"
 #include "common/Os.h"
 #include <Clipbrd.hpp>
+#include "CustomDateUtils.hpp"
 #include <psapi.h>
 #include <string>
 #include <assert.h>
@@ -1236,6 +1237,30 @@ static int l_GetCallCodecName(lua_State* L)
 	return 0;
 }
 
+static int l_GetCallDurationFromStart(lua_State* L)
+{
+	Call *call = GetCall(L);
+	if (call)
+	{
+		int milliseconds = static_cast<int>(MilliSecondsBetween(Now(), call->timestamp));
+		lua_pushinteger( L, milliseconds );
+		return 1;
+	}
+	return 0;
+}
+
+static int l_GetCallDurationFromConfirmed(lua_State* L)
+{
+	Call *call = GetCall(L);
+	if (call && call->connected)
+	{
+		int milliseconds = static_cast<int>(MilliSecondsBetween(Now(), call->timeTalkStart));
+		lua_pushinteger( L, milliseconds );
+		return 1;
+	}
+	return 0;
+}
+
 static int l_GetContactName(lua_State* L)
 {
 	const char* number = lua_tostring( L, -1 );
@@ -2315,6 +2340,8 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetCallPeerName, "GetCallPeerName", "Get name of caller/callee from current or specified call", "Takes one, optional argument: call UID. Retuns 0 results, display name or (depending on settings) PAI display name.");
 	lua_register2(L, ScriptImp::l_GetCallInitialRxInvite, "GetCallInitialRxInvite", "Get full text of initial received INVITE", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallCodecName, "GetCallCodecName", "Get name of codec used during current or specified call", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallDurationFromStart, "GetCallDurationFromStart", "Get time in ms from the call start/creation", "Returns milliseconds passed since call was created (call incoming event or making call).\nTakes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallDurationFromConfirmed, "GetCallDurationFromConfirmed", "Get time in ms from the call start/creation", "Returns milliseconds passed since call was confirmed.\nIf call was not confirmed or does not exits, nothing is returned.\nTakes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetContactName, "GetContactName", "Get number description from phonebook", "");
 	lua_register2(L, ScriptImp::l_GetStreamingState, "GetStreamingState", "Get current state of RTP streaming", "");
 	lua_register2(L, ScriptImp::l_GetAudioErrorCount, "GetAudioErrorCount", "Get number of audio device errors during the call", "Used to detect end-of-file event for wave input files. Takes one, optional argument: call UID.");
