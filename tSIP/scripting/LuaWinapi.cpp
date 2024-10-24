@@ -4,6 +4,9 @@
 #include "LuaWinapi.h"
 #include "ScriptExec.h"	// sharing some functions
 #include "lua.hpp"
+#include "Log.h"
+#include "common/NetworkUtils.h"
+
 
 //---------------------------------------------------------------------------
 
@@ -60,6 +63,27 @@ int l_Winapi_keybd_event(lua_State* L)
 	return 0;
 }
 
+int l_Winapi_GetAdaptersInfoIp(lua_State* L)
+{
+	std::vector<AnsiString> ips;
+	DWORD ret = GetAdaptersInfoIp(ips);
+	if (ret != ERROR_SUCCESS) {
+		LOG("GetAdaptersInfo() failed (status = %u)!\n", ret);
+		return 0;
+	}
+
+	// returns table
+	lua_newtable(L);
+	int top = lua_gettop(L);
+	for (unsigned int i=0; i<ips.size(); i++)
+	{
+		lua_pushnumber(L, i+1);		// push the index, starting from 1 in Lua
+		lua_pushstring(L, ips[i].c_str()); // push the value at 'i'
+		lua_settable(L, top);
+	}
+	return 1;
+}
+
 }	// namespace
 
 
@@ -73,6 +97,7 @@ int luaopen_tsip_winapi (lua_State *L)
 		{"GetAsyncKeyState", l_WinapiGetAsyncKeyState},
 		{"PlaySound", l_WinapiPlaySound},
 		{"keybd_event", l_Winapi_keybd_event},
+		{"GetAdaptersInfoIp", l_Winapi_GetAdaptersInfoIp},
 		{NULL, NULL}
 	};
 	luaL_newlib(L, tsip_winapi);

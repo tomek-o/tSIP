@@ -2443,6 +2443,7 @@ void ScriptExec::Run(const char* script)
 		AddSymbol("winapi.GetAsyncKeyState", "WinAPI GetAsyncKeyState equivalent", "Example use: modify button behavior depending on Ctrl/Alt/Shift state.");
 		AddSymbol("winapi.PlaySound", "WinAPI PlaySound equivalent", "");
 		AddSymbol("winapi.keybd_event", "WinAPI keybd_event equivalent but without 4th parameter", "");
+		AddSymbol("winapi.GetAdaptersInfoIp", "Function returning array of computer IPs", "");		
 	}
 	globalsSetComplete = true;
 
