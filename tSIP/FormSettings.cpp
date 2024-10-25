@@ -207,9 +207,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	cbAec->ItemIndex = tmpSettings.uaConf.aec;
 
 
-	edLocalAddress->Text = tmpSettings.uaConf.local.c_str();
+	edLocalAddress->Text = tmpSettings.uaConf.netLocal.c_str();
 
-	edIfName->Text = tmpSettings.uaConf.ifname.c_str();
+	edIfName->Text = tmpSettings.uaConf.netIfName.c_str();
 	{
 		cbNetworkInterfaces->Items->Clear();
 		if (GetNetInterfaces(networkInterfaces) == 0)
@@ -228,7 +228,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		for (unsigned int i=0; i<networkInterfaces.size(); i++)
 		{
 			const NetInterface &ni = networkInterfaces[i];
-			if (ni.name == tmpSettings.uaConf.ifname.c_str())
+			if (ni.name == tmpSettings.uaConf.netIfName.c_str())
 			{
 				cbNetworkInterfaces->ItemIndex = i;
 			}
@@ -881,14 +881,14 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.uaConf.aec = (UaConf::Aec)cbAec->ItemIndex;
 
-	tmpSettings.uaConf.local = edLocalAddress->Text.c_str();
+	tmpSettings.uaConf.netLocal = edLocalAddress->Text.c_str();
 	if (cbNetworkInterfaces->ItemIndex == cbNetworkInterfaces->Items->Count - 1)
 	{
-		tmpSettings.uaConf.ifname = edIfName->Text.c_str();
+		tmpSettings.uaConf.netIfName = edIfName->Text.c_str();
 	}
 	else
 	{
-		tmpSettings.uaConf.ifname = networkInterfaces[cbNetworkInterfaces->ItemIndex].name.c_str();
+		tmpSettings.uaConf.netIfName = networkInterfaces[cbNetworkInterfaces->ItemIndex].name.c_str();
 	}
 	tmpSettings.uaConf.avt.portMin = StrToIntDef(edRtpPortMin->Text, 0);
 	tmpSettings.uaConf.avt.portMax = StrToIntDef(edRtpPortMax->Text, 0);

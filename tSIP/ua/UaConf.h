@@ -514,8 +514,8 @@ public:
 		}
 	} tls;
 
-	std::string local;
-	std::string ifname;	///< baresip config_net.ifname
+	std::string netLocal;
+	std::string netIfName;	///< baresip config_net.ifname
 
 	struct Avt {
 		unsigned int portMin;
@@ -786,9 +786,9 @@ public:
 			return false;
 		if (tls != right.tls)
 			return false;
-		if (local != right.local)
+		if (netLocal != right.netLocal)
 			return false;
-		if (ifname != right.ifname)
+		if (netIfName != right.netIfName)
 			return false;
 		if (avt != right.avt)
 			return false;

@@ -229,8 +229,8 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 	logMessages = uaConfJson.get("logMessages", logMessages).asBool();
 	uaConfJson.getBool("logMessagesOnlyFirstLine", logMessagesOnlyFirstLine);
 	uaConfJson.getBool("logAubuf", logAubuf);
-	local = uaConfJson.get("localAddress", local).asString();
-	ifname = uaConfJson.get("ifName", ifname).asString();
+	uaConfJson.getString("localAddress", netLocal);
+	uaConfJson.getString("ifName", netIfName);
 
 	{
 		const Json::Value &uaAvtJson = uaConfJson["avt"];
@@ -385,8 +385,8 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	uaConfJson["logMessagesOnlyFirstLine"] = logMessagesOnlyFirstLine;
 	uaConfJson["logAubuf"] = logAubuf;
 
-	uaConfJson["localAddress"] = local;
-	uaConfJson["ifName"] = ifname;
+	uaConfJson["localAddress"] = netLocal;
+	uaConfJson["ifName"] = netIfName;
 	uaConfJson["avt"]["portMin"] = avt.portMin;
 	uaConfJson["avt"]["portMax"] = avt.portMax;
 	uaConfJson["avt"]["jbufDelayMin"] = avt.jbufDelayMin;

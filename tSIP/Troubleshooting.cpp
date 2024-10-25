@@ -56,7 +56,7 @@ namespace {
 			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
 			if (acc.reg_expires <= 0)
 			{
-				if (appSettings.uaConf.local.find(":") == std::string::npos)
+				if (appSettings.uaConf.netLocal.find(":") == std::string::npos)
 				{
 					return true;
 				}
@@ -91,10 +91,10 @@ namespace {
 		const struct sa *addr = net_laddr_af(AF_INET);
 		assert(addr);
 
-		if (appSettings.uaConf.ifname != "")
+		if (appSettings.uaConf.netIfName != "")
 			return false;
 
-		if (strncmp(appSettings.uaConf.local.c_str(), "0.0.0.0", strlen("0.0.0.0")))
+		if (strncmp(appSettings.uaConf.netLocal.c_str(), "0.0.0.0", strlen("0.0.0.0")))
 			return false;
 
 		char buf[64];
@@ -116,10 +116,10 @@ namespace {
 		const struct sa *addr = net_laddr_af(AF_INET);
 		assert(addr);
 
-		if (appSettings.uaConf.ifname != "")
+		if (appSettings.uaConf.netIfName != "")
 			return false;
 
-		if (strncmp(appSettings.uaConf.local.c_str(), "0.0.0.0", strlen("0.0.0.0")))
+		if (strncmp(appSettings.uaConf.netLocal.c_str(), "0.0.0.0", strlen("0.0.0.0")))
 			return false;
 
 		char buf[64];
@@ -189,7 +189,7 @@ namespace {
 
 	bool CheckNetworkInterface(void)
 	{
-		if (appSettings.uaConf.ifname != "")
+		if (appSettings.uaConf.netIfName != "")
 		{
 			std::vector<NetInterface> interfaces;
 			int status = GetNetInterfaces(interfaces);
@@ -197,7 +197,7 @@ namespace {
 			{
 				for (unsigned int i=0; i<interfaces.size(); i++)
 				{
-					if (interfaces[i].name == appSettings.uaConf.ifname.c_str())
+					if (interfaces[i].name == appSettings.uaConf.netIfName.c_str())
 						return false;
 				}
 			}

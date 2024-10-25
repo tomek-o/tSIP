@@ -615,9 +615,9 @@ static int app_init(void)
 		cfg->sip.verify_server = tls.verifyServer;
 	}
 
-	strncpyz(cfg->sip.local, appSettings.uaConf.local.c_str(), sizeof(cfg->sip.local));
-	if (appSettings.uaConf.ifname.size() > 0) {
-		strncpyz(cfg->net.ifname, appSettings.uaConf.ifname.c_str(), sizeof(cfg->net.ifname));
+	strncpyz(cfg->sip.local, appSettings.uaConf.netLocal.c_str(), sizeof(cfg->sip.local));
+	if (appSettings.uaConf.netIfName.size() > 0) {
+		strncpyz(cfg->net.ifname, appSettings.uaConf.netIfName.c_str(), sizeof(cfg->net.ifname));
 	} else {
 		// try to avoid VirtualBox interface
 		cfg->net.ifname[0] = '\0';
