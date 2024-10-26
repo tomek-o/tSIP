@@ -13,10 +13,16 @@
 #include <stdint.h>
 #include <rem.h>
 #include <baresip.h>
+#ifdef __BORLANDC__
+#pragma warn -8056	// disable "Integer arithmetic overflow" warning
+#endif
 #include <libavformat/avformat.h>
 #include <libavcodec/avcodec.h>
 #include <libavdevice/avdevice.h>
 #include <libavutil/hwcontext.h>
+#ifdef __BORLANDC__
+#pragma warn .8056
+#endif
 #include "mod_avformat.h"
 
 #define DEBUG_MODULE "avformat"
