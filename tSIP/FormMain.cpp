@@ -3282,6 +3282,7 @@ void TfrmMain::AutoAnswer(Call &call)
 			LOG("Answering with module %s, device %s\n", appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
 			UA->Answer(call.uid, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str(), appSettings.video.enabled, GetDisplayParentHandle());
 		} else {
+			LOG("Auto-answer\n", call.autoAnswerCode);
 			Answer(call.uid);
 		}
 		if (appSettings.trayNotifier.hideWhenAnsweringCallAutomatically)
@@ -3289,6 +3290,7 @@ void TfrmMain::AutoAnswer(Call &call)
 			frmTrayNotifier->HideWindow();
 		}
 	} else if (call.autoAnswerCode >= 400) {
+		LOG("Auto-answer (DND) with SIP code = %d\n", call.autoAnswerCode);
 		UA->Hangup(call.uid, call.autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
 		lbl2ndParty->Caption = "";
 		lbl2ndPartyDesc->Caption = "";
