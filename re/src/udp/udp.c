@@ -329,6 +329,13 @@ int udp_listen(struct udp_sock **usp, const struct sa *local,
 			continue;
 		}
 
+#if 1
+		if (r->ai_family == AF_INET)
+		{
+			struct sockaddr_in *sin = (struct sockaddr_in*)r->ai_addr;
+			sin->sin_addr.S_un.S_addr = INADDR_ANY;
+		}
+#endif
 		if (bind(fd, r->ai_addr, SIZ_CAST r->ai_addrlen) < 0) {
 			err = errno;
 			DEBUG_INFO("listen: bind(): %m (%J)\n", err, local);

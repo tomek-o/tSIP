@@ -762,8 +762,11 @@ int sip_transp_add(struct sip *sip, enum sip_transp tp,
 				 udp_recv_handler, transp);
 		if (err)
 			break;
-
 		err = udp_local_get(transp->sock, &transp->laddr);
+		if (transp->laddr.u.in.sin_addr.S_un.S_addr == INADDR_ANY)
+		{
+			transp->laddr.u.in.sin_addr = laddr->u.in.sin_addr;
+		}
 		break;
 
 	case SIP_TRANSP_TLS:
@@ -782,8 +785,11 @@ int sip_transp_add(struct sip *sip, enum sip_transp tp,
 				 tcp_connect_handler, transp);
 		if (err)
 			break;
-
 		err = tcp_sock_local_get(transp->sock, &transp->laddr);
+		if (transp->laddr.u.in.sin_addr.S_un.S_addr == INADDR_ANY)
+		{
+			transp->laddr.u.in.sin_addr = laddr->u.in.sin_addr;
+		}
 		break;
 
 	default:
