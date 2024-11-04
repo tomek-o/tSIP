@@ -1788,19 +1788,23 @@ const char *uag_allowed_methods(void)
 
 int ua_print_supported(struct re_printf *pf, const struct ua *ua)
 {
-	size_t i;
-	int err;
+	if (ua->extensionc > 0) {
+		size_t i;
+		int err;
 
-	err = re_hprintf(pf, "Supported:");
+		err = re_hprintf(pf, "Supported:");
 
-	for (i=0; i<ua->extensionc; i++) {
-		err |= re_hprintf(pf, "%s%r",
-				  i==0 ? " " : ",", &ua->extensionv[i]);
+		for (i=0; i<ua->extensionc; i++) {
+			err |= re_hprintf(pf, "%s%r",
+					  i==0 ? " " : ",", &ua->extensionv[i]);
+		}
+
+		err |= re_hprintf(pf, "\r\n");
+
+		return err;
+	} else {
+		return 0;
 	}
-
-	err |= re_hprintf(pf, "\r\n");
-
-	return err;
 }
 
 
