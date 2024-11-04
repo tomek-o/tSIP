@@ -2481,6 +2481,10 @@ void TfrmMain::HttpQuery(const Call *call)
 	{
     	OnHttpQuery(target);
 	}
+	else
+	{
+		LOG("HTTP query: no incoming call with number found\n");
+	}
 }
 
 void TfrmMain::AccessCallUrl(const Call *call)
