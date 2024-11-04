@@ -779,10 +779,16 @@ void ProgrammableButtons::SetInitialSettings(void)
 	cfg->top = top;
 
 	cfg = &btnConf[btnId++];
-	cfg->caption = " VOIP.MS";
-	cfg->number = "https://voip.ms/en/code/tSIP";
+	cfg->captionLines = 2;
+	cfg->caption = " Number";
+	cfg->caption2 = " lookup";
 	cfg->labelLeft = 4;
-	cfg->type = Button::EXECUTE;
+	cfg->labelTop = 3;
+	cfg->label2Left = 4;
+	cfg->label2Top = 17;	
+	cfg->label2CenterHorizontally = false;	
+	cfg->labelLeft = 4;
+	cfg->type = Button::HTTP_QUERY;
 	top += HEIGHT;
 	cfg->top = top;
 
