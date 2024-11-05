@@ -234,7 +234,7 @@ void __fastcall TfrmButtonContainer::miConfigureButtonContainerClick(
 		Application->CreateForm(__classid(TfrmButtonContainerConf), &frmButtonContainerConf);
 	}
 	ButtonContainerConf tmp = appSettings.buttonContainers[containerId];
-	frmButtonContainerConf->ShowModal(&tmp);
+	frmButtonContainerConf->ShowModal(containerId, &tmp);
 	if (frmButtonContainerConf->isConfirmed())
 	{
 		if (tmp != appSettings.buttonContainers[containerId])

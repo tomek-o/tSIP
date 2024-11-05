@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FormButtonContainerConf.h"
+#include "ButtonContainers.h"
 #include "common\Colors.h"
 #include <assert.h>
 //---------------------------------------------------------------------------
@@ -24,12 +25,12 @@ __fastcall TfrmButtonContainerConf::TfrmButtonContainerConf(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmButtonContainerConf::ShowModal(ButtonContainerConf *cfg)
+void __fastcall TfrmButtonContainerConf::ShowModal(int containerId, ButtonContainerConf *cfg)
 {
 	assert(cfg);
 	this->config = cfg;
 	tmpConfig = *config;
-	
+
 	edBackgroundBitmap->Text = tmpConfig.backgroundImage;
 	chbBackgroundImageTransparent->Checked = tmpConfig.backgroundImageTransparent;
 
@@ -38,6 +39,8 @@ void __fastcall TfrmButtonContainerConf::ShowModal(ButtonContainerConf *cfg)
 	btnSelectBackgroundColor->Visible = (colorId == Color::clCustom);
 
 	UpdateColorsPreview();
+
+	lblContainerName->Caption = GetButtonContainerName(static_cast<ButtonContainerId>(containerId));
 
 	TForm::ShowModal();
 }

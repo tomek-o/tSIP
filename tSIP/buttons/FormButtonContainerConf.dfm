@@ -4,7 +4,7 @@ object frmButtonContainerConf: TfrmButtonContainerConf
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Button container configuration'
-  ClientHeight = 121
+  ClientHeight = 144
   ClientWidth = 407
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,41 +21,59 @@ object frmButtonContainerConf: TfrmButtonContainerConf
   TextHeight = 13
   object lblBackgroundBitmap: TLabel
     Left = 8
-    Top = 8
+    Top = 32
     Width = 91
     Height = 13
     Caption = 'Background bitmap'
   end
   object lblBackgroundColor: TLabel
     Left = 8
-    Top = 56
+    Top = 80
     Width = 82
     Height = 13
     Caption = 'Background color'
   end
   object shColorBackground: TShape
-    Left = 357
-    Top = 53
+    Left = 351
+    Top = 77
     Width = 41
     Height = 21
   end
   object lblColorPreview: TLabel
-    Left = 299
-    Top = 56
+    Left = 298
+    Top = 80
     Width = 38
     Height = 13
     Caption = 'preview'
   end
+  object lblContainer: TLabel
+    Left = 8
+    Top = 8
+    Width = 47
+    Height = 13
+    Caption = 'Container'
+  end
+  object lblContainerName: TLabel
+    Left = 105
+    Top = 8
+    Width = 100
+    Height = 13
+    Caption = 'lblContainerName'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   object pnlBottom: TPanel
     Left = 0
-    Top = 84
+    Top = 107
     Width = 407
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 4
-    ExplicitTop = 71
-    ExplicitWidth = 386
     DesignSize = (
       407
       37)
@@ -68,7 +86,6 @@ object frmButtonContainerConf: TfrmButtonContainerConf
       Caption = 'Cancel'
       TabOrder = 1
       OnClick = btnCancelClick
-      ExplicitLeft = 302
     end
     object btnApply: TButton
       Left = 234
@@ -79,19 +96,18 @@ object frmButtonContainerConf: TfrmButtonContainerConf
       Caption = 'Apply'
       TabOrder = 0
       OnClick = btnApplyClick
-      ExplicitLeft = 213
     end
   end
   object edBackgroundBitmap: TEdit
     Left = 105
-    Top = 5
-    Width = 261
+    Top = 29
+    Width = 256
     Height = 21
     TabOrder = 0
   end
   object btnSelectBackgroundBitmap: TButton
-    Left = 373
-    Top = 5
+    Left = 367
+    Top = 29
     Width = 25
     Height = 21
     Caption = '...'
@@ -100,8 +116,8 @@ object frmButtonContainerConf: TfrmButtonContainerConf
   end
   object cbBackgroundColor: TComboBox
     Left = 105
-    Top = 53
-    Width = 144
+    Top = 77
+    Width = 136
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
@@ -111,8 +127,8 @@ object frmButtonContainerConf: TfrmButtonContainerConf
     OnChange = cbBackgroundColorChange
   end
   object btnSelectBackgroundColor: TButton
-    Left = 258
-    Top = 53
+    Left = 247
+    Top = 76
     Width = 21
     Height = 21
     Caption = '...'
@@ -121,7 +137,7 @@ object frmButtonContainerConf: TfrmButtonContainerConf
   end
   object chbBackgroundImageTransparent: TCheckBox
     Left = 8
-    Top = 32
+    Top = 56
     Width = 390
     Height = 17
     Caption = 
@@ -132,10 +148,10 @@ object frmButtonContainerConf: TfrmButtonContainerConf
   object openDialog: TOpenDialog
     Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
     Left = 8
-    Top = 88
+    Top = 104
   end
   object colorDialog: TColorDialog
     Left = 40
-    Top = 88
+    Top = 104
   end
 end

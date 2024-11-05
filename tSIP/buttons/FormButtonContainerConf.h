@@ -30,6 +30,8 @@ __published:	// IDE-managed Components
 	TLabel *lblColorPreview;
 	TColorDialog *colorDialog;
 	TCheckBox *chbBackgroundImageTransparent;
+	TLabel *lblContainer;
+	TLabel *lblContainerName;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSelectBackgroundBitmapClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
@@ -47,7 +49,7 @@ private:	// User declarations
 	void UpdateColorsPreview(void);
 public:		// User declarations
 	__fastcall TfrmButtonContainerConf(TComponent* Owner);
-	void __fastcall ShowModal(ButtonContainerConf *cfg);
+	void __fastcall ShowModal(int containerId, ButtonContainerConf *cfg);
 	bool isConfirmed(void) {
 		return confirmed;
 	}	
