@@ -246,6 +246,14 @@ static void response_handler(int err, const struct sip_msg *msg, void *arg)
 
 		case 401:
 		case 407:
+			if (sip_msg_hdr_count(msg, SIP_HDR_WWW_AUTHENTICATE) == 0 &&
+				sip_msg_hdr_count(msg, SIP_HDR_PROXY_AUTHENTICATE) == 0) {
+				/* 	Trying to handle FreeSWITCH bug: no auth header in SIP/401 reply
+					after nonce-ttl time passed for SUBSCRIBE.
+					This case is treated here like stale nonce.
+				*/
+				sip_auth_reset(sub->auth);
+			}
 			err = sip_auth_authenticate(sub->auth, msg);
 			if (err) {
 				err = (err == EAUTH) ? 0 : err;
