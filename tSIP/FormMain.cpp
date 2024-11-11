@@ -386,6 +386,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 		}
 	}
 
+	cbCallURI->Clear();
 	UpdateCallHistory();
 }
 //---------------------------------------------------------------------------
@@ -869,7 +870,6 @@ void TfrmMain::RegisterGlobalHotKeys(void)
 
 void TfrmMain::UpdateCallHistory(void)
 {
-	cbCallURI->Clear();
 	const std::deque<History::Entry>& entries = history.GetEntries();
 	std::set<std::string> numbers;
 	std::vector<std::string> numbersByDate;
