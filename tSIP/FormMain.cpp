@@ -1556,7 +1556,10 @@ void TfrmMain::PollCallbackQueue(void)
 						OpenContactFile(lastContactEntry);
 					}
 				}
-				PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(call->getPeerUri()).c_str()); //CleanUri(cb.caller).c_str());
+				if (Calls::Count() == 1)
+				{
+					PhoneInterface::UpdateCallState(1, ExtractNumberFromUri(call->getPeerUri()).c_str()); //CleanUri(cb.caller).c_str());
+				}
 				if (appSettings.HttpQuery.openMode == Settings::_HttpQuery::openAutomaticOnIncoming)
 				{
 					HttpQuery(call);
@@ -1765,7 +1768,10 @@ void TfrmMain::PollCallbackQueue(void)
 					lbl2ndParty->Caption = "";
 					lbl2ndPartyDesc->Caption = "";
 				#endif
-					PhoneInterface::UpdateCallState(0, "");
+					if (call == Calls::GetCurrentCall())
+					{
+						PhoneInterface::UpdateCallState(0, "");
+					}
 					PhoneInterface::UpdateRing(0);
 				}
 				break;
@@ -3192,14 +3198,7 @@ void TfrmMain::CallNumberBackspace(void)
 {
 	cbCallURI->Text = cbCallURI->Text.SubString(1, cbCallURI->Text.Length() - 1);
 	cbCallURI->SelStart = cbCallURI->Text.Length();
-	if (cbCallURI->Text == "")
-	{
-		PhoneInterface::UpdateCallState(0, cbCallURI->Text.c_str());
-	}
-	else
-	{
-		PhoneInterface::UpdateCallState(1, cbCallURI->Text.c_str());
-	}
+	PhoneInterface::UpdateCallState(Calls::Count()?1:0, cbCallURI->Text.c_str());
 }
 
 void __fastcall TfrmMain::tmrBackspaceTimer(TObject *Sender)
@@ -3296,9 +3295,12 @@ void TfrmMain::AutoAnswer(Call &call)
 	} else if (call.autoAnswerCode >= 400) {
 		LOG("Auto-answer (DND) with SIP code = %d\n", call.autoAnswerCode);
 		UA->Hangup(call.uid, call.autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
-		lbl2ndParty->Caption = "";
-		lbl2ndPartyDesc->Caption = "";
-		lblCallState->Caption = "";
+		if (&call == Calls::GetCurrentCall())
+		{
+			lbl2ndParty->Caption = "";
+			lbl2ndPartyDesc->Caption = "";
+			lblCallState->Caption = "";
+		}
 		call.incoming = false;
 		call.progress = false;
 		call.connected = false;
