@@ -1055,7 +1055,7 @@ extern "C" void control_handler(void)
 	struct call* cmdCall = findCall(cmd.callUid);
 	if (cmd.callUid > 0 && cmd.type != Command::CALL && cmdCall == NULL)
 	{
-		LOG("Call %u not found (currently %u calls)\n", cmd.callUid, calls.size());
+		LOG("Call %u not found (current call count = %u)\n", cmd.callUid, calls.size());
 	}
 
 	switch (cmd.type)
