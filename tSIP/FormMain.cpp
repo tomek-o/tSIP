@@ -1440,7 +1440,7 @@ void TfrmMain::PollCallbackQueue(void)
 					const Settings::_Calls::AutoAnswerSecondCall &aa = appSettings.Calls.autoAnswerSecondCall;
 					if (aa.enabled && aa.code >= 400)
 					{
-                        LOG("Auto-denying incoming call with code %d, reason %s (another call is active)", aa.code, aa.reason.c_str());
+                        LOG("Auto-denying incoming call with code %d, reason %s (another call is active)\n", aa.code, aa.reason.c_str());
 						call->disconnecting = true;
 						call->lastScode = aa.code;
 						call->lastReplyLine = aa.reason;
