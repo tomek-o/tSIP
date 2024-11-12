@@ -1537,7 +1537,7 @@ void TfrmMain::PollCallbackQueue(void)
 						}
 					}
 				}
-				if (answered == false && muteRing == false)
+				if (answered == false && muteRing == false && !call->disconnecting)
 				{
 					StartRing(*call, RingFile(cb.alertInfo));
 				}
@@ -1772,7 +1772,11 @@ void TfrmMain::PollCallbackQueue(void)
 					{
 						PhoneInterface::UpdateCallState(0, "");
 					}
-					PhoneInterface::UpdateRing(0);
+					if (call->GetState() == Callback::CALL_STATE_INCOMING && Calls::CountIncoming() == 1)
+					{
+						// this was last ringing call
+						PhoneInterface::UpdateRing(0);
+					}
 				}
 				break;
 			}

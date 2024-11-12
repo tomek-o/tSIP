@@ -172,6 +172,19 @@ unsigned int Calls::Count(void)
 	return entries.size();
 }
 
+unsigned int Calls::CountIncoming(void)
+{
+	ScopedLock<Mutex> lock(mutex);
+	unsigned int count = 0;
+	std::map<unsigned int, Call>::iterator iter;
+	for (iter = entries.begin(); iter != entries.end(); ++iter)
+	{
+		if(iter->second.GetState() == Callback::CALL_STATE_INCOMING)
+			count++;
+	}
+	return count;
+}
+
 int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 {
 	if (lineButtonIds.empty())

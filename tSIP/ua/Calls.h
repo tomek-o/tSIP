@@ -25,6 +25,7 @@ namespace Calls
 	std::vector<unsigned int> GetUids(void);
 	const std::map<unsigned int, Call> GetCalls(void);
 	unsigned int Count(void);
+	unsigned int CountIncoming(void);
 
 	/** \return 0 on success
 	*/
