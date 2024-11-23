@@ -337,6 +337,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edFrmMainCustomCaption->Text = tmpSettings.frmMain.customCaption;
 
 	chbFrmMainHideCallPanel->Checked = tmpSettings.frmMain.bHideCallPanel;
+	chbFrmMainHideMakeCallButton->Checked = tmpSettings.frmMain.bHideMakeCallButton;
+	chbFrmMainHideHangupButton->Checked = tmpSettings.frmMain.bHideHangupButton;
 	chbFrmMainHideMainPanel->Checked = tmpSettings.frmMain.bHideMainPanel;
 
 	chbSpeedDialPopupMenu->Checked = tmpSettings.frmMain.bSpeedDialPopupMenu;
@@ -767,6 +769,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.customCaption = edFrmMainCustomCaption->Text;
 
 	tmpSettings.frmMain.bHideCallPanel = chbFrmMainHideCallPanel->Checked;
+	tmpSettings.frmMain.bHideMakeCallButton = chbFrmMainHideMakeCallButton->Checked;
+	tmpSettings.frmMain.bHideHangupButton = chbFrmMainHideHangupButton->Checked;
 	tmpSettings.frmMain.bHideMainPanel = chbFrmMainHideMainPanel->Checked;
 
 	tmpSettings.frmMain.bSpeedDialPopupMenu = chbSpeedDialPopupMenu->Checked;

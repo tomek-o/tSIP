@@ -53,6 +53,8 @@ Settings::_frmMain::_frmMain(void):
 	bSpeedDialVisible(false),
 	bUseClientAreaSizes(false),
 	bHideCallPanel(false),
+	bHideMakeCallButton(false),
+	bHideHangupButton(false),
 	bHideMainPanel(false),
 	bSpeedDialPopupMenu(true),
 	bSpeedDialIgnorePresenceNote(false),
@@ -442,6 +444,8 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bWindowMaximized = frmMainJson.get("Maximized", frmMain.bWindowMaximized).asBool();
 		frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", frmMain.bAlwaysOnTop).asBool();
 		frmMainJson.getBool("HideCallPanel", frmMain.bHideCallPanel);
+		frmMainJson.getBool("HideMakeCallButton", frmMain.bHideMakeCallButton);
+		frmMainJson.getBool("HideHangupButton", frmMain.bHideHangupButton);
 		frmMainJson.getBool("HideMainPanel", frmMain.bHideMainPanel);
 		frmMain.bSpeedDialPopupMenu = frmMainJson.get("SpeedDialPopupMenu", frmMain.bSpeedDialPopupMenu).asBool();
 		frmMain.bSpeedDialIgnorePresenceNote = frmMainJson.get("SpeedDialIgnorePresenceNote", frmMain.bSpeedDialIgnorePresenceNote).asBool();
@@ -878,6 +882,8 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialVisible"] = frmMain.bSpeedDialVisible;
 		jv["UseClientAreaSizes"] = frmMain.bUseClientAreaSizes;
 		jv["HideCallPanel"] = frmMain.bHideCallPanel;
+		jv["HideMakeCallButton"] = frmMain.bHideMakeCallButton;
+		jv["HideHangupButton"] = frmMain.bHideHangupButton;
 		jv["HideMainPanel"] = frmMain.bHideMainPanel;
 		jv["SpeedDialPopupMenu"] = frmMain.bSpeedDialPopupMenu;
 		jv["SpeedDialIgnorePresenceNote"] = frmMain.bSpeedDialIgnorePresenceNote;

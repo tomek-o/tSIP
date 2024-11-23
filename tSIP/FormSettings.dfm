@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsTrayNotifier
+    ActivePage = tsMainWindow
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -485,7 +485,7 @@ object frmSettings: TfrmSettings
       end
       object lblFrmMainMainPanelPositionCollapsed: TLabel
         Left = 2
-        Top = 238
+        Top = 287
         Width = 310
         Height = 13
         Caption = 
@@ -494,7 +494,7 @@ object frmSettings: TfrmSettings
       end
       object lblFrmMainMainlPanelPositionExpanded: TLabel
         Left = 2
-        Top = 259
+        Top = 308
         Width = 181
         Height = 13
         Caption = 'Main panel position in expanded state'
@@ -515,14 +515,14 @@ object frmSettings: TfrmSettings
       end
       object lblMainPanelCollapsedLeft: TLabel
         Left = 335
-        Top = 238
+        Top = 287
         Width = 16
         Height = 13
         Caption = 'left'
       end
       object lblMainPanelExpandedLeft: TLabel
         Left = 335
-        Top = 259
+        Top = 308
         Width = 16
         Height = 13
         Caption = 'left'
@@ -543,14 +543,14 @@ object frmSettings: TfrmSettings
       end
       object lblMainPanelCollapsedTop: TLabel
         Left = 415
-        Top = 238
+        Top = 287
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object lblMainPanelExpandedTop: TLabel
         Left = 415
-        Top = 259
+        Top = 308
         Width = 16
         Height = 13
         Caption = 'top'
@@ -564,7 +564,7 @@ object frmSettings: TfrmSettings
       end
       object lblDialComboboxSortOrder: TLabel
         Left = 3
-        Top = 304
+        Top = 353
         Width = 134
         Height = 13
         Caption = 'Dialing combobox sort order'
@@ -646,14 +646,14 @@ object frmSettings: TfrmSettings
       end
       object edMainPanelExpandedLeft: TEdit
         Left = 365
-        Top = 256
+        Top = 305
         Width = 35
         Height = 21
         TabOrder = 1
       end
       object edMainPanelCollapsedLeft: TEdit
         Left = 365
-        Top = 235
+        Top = 284
         Width = 35
         Height = 21
         TabOrder = 2
@@ -674,14 +674,14 @@ object frmSettings: TfrmSettings
       end
       object edMainPanelExpandedTop: TEdit
         Left = 451
-        Top = 256
+        Top = 305
         Width = 35
         Height = 21
         TabOrder = 5
       end
       object edMainPanelCollapsedTop: TEdit
         Left = 451
-        Top = 235
+        Top = 284
         Width = 35
         Height = 21
         TabOrder = 6
@@ -720,7 +720,7 @@ object frmSettings: TfrmSettings
       end
       object cbDialComboboxOrder: TComboBox
         Left = 152
-        Top = 301
+        Top = 350
         Width = 145
         Height = 21
         Style = csDropDownList
@@ -734,7 +734,7 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainHideMainPanel: TCheckBox
         Left = 2
-        Top = 217
+        Top = 266
         Width = 486
         Height = 17
         Caption = 'Hide main panel (Dialpad/Contacts/History)'
@@ -789,6 +789,22 @@ object frmSettings: TfrmSettings
         Width = 35
         Height = 21
         TabOrder = 18
+      end
+      object chbFrmMainHideMakeCallButton: TCheckBox
+        Left = 26
+        Top = 208
+        Width = 486
+        Height = 17
+        Caption = 'Hide "Call/Answer" button'
+        TabOrder = 19
+      end
+      object chbFrmMainHideHangupButton: TCheckBox
+        Left = 26
+        Top = 227
+        Width = 486
+        Height = 17
+        Caption = 'Hide "Hangup" button'
+        TabOrder = 20
       end
     end
     object tsDialpad: TTabSheet
@@ -3023,8 +3039,6 @@ object frmSettings: TfrmSettings
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      ExplicitLeft = 6
-      ExplicitTop = 14
       object lblTrayNotifierGuiScaling: TLabel
         Left = 3
         Top = 71

@@ -32,7 +32,6 @@ Outdated / not the only one TODO list.
 - call history: master/detail view, adding to phonebook
 - number processing / "LCR" / dialplan
 
-- user definable Call/Hangup buttons (horizontal configurable button container? buttons from basic container used?)
 - buttons: Dialpad/Contacts/History and equivalent hotkey actions replacing existing tab row
 - combine regular number edit and transfer number edit into one 
 
@@ -95,8 +94,6 @@ tSIP plugin: logout from group on inactivity (mouse, keyboard)
 
 tSIP scripting: examples for os: os.clock(), date(), difftime(), execute(), 
 tSIP scripting: file I/O example (report call quality after each call)
-
-www: scripting with javascript
 
 update Lua to 5.3.x, remove CVS tags from Lua source
 

@@ -312,6 +312,8 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
 	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
 	pnlCallControls->Visible = !appSettings.frmMain.bHideCallPanel;
+	btnMakeCall->Visible = !appSettings.frmMain.bHideMakeCallButton;
+	btnHangup->Visible = !appSettings.frmMain.bHideHangupButton;
 	pnlMain->Visible = !appSettings.frmMain.bHideMainPanel;
 
 #if 0 // this MIGHT work for scaling scrollbar width - not working
@@ -651,6 +653,8 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	tsDialpad->Visible = !appSettings.frmMain.bHideDialpad;
 	tsDialpad->TabVisible = !appSettings.frmMain.bHideDialpad;
 	pnlCallControls->Visible = !appSettings.frmMain.bHideCallPanel;
+	btnMakeCall->Visible = !appSettings.frmMain.bHideMakeCallButton;
+	btnHangup->Visible = !appSettings.frmMain.bHideHangupButton;
 	pnlMain->Visible = !appSettings.frmMain.bHideMainPanel;
 	// enable/disable popup menu
 	for (int i=0; i<ARRAY_SIZE(frmButtonContainers); i++) {

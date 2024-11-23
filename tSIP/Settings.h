@@ -92,6 +92,8 @@ public:
 		bool bSpeedDialVisible;
 		bool bUseClientAreaSizes;
 		bool bHideCallPanel;			///< do not show panel with dialing combobox, call/hangup buttons
+		bool bHideMakeCallButton;
+		bool bHideHangupButton;
 		bool bHideMainPanel;			///< do not show panel with Dialpad/Contacts/History
 		bool bSpeedDialPopupMenu;       ///< enable/disable popup menu (editing) for speed dial / BLF panels
 		bool bSpeedDialIgnorePresenceNote;	///< do not show "note" for presence
