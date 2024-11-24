@@ -1222,5 +1222,16 @@ Version 0.3.06
 	- video, avformat: fixed vidts overflow for mp3 playback
 	- video, avformat: fixed playback of mp3 files with MJPEG cover
 	- video: fixed exception when using colorbar generators or nullaudio video source modules
+
+Version 0.3.07
+	- BLF + presence: added workaround for FreeSWITCH issue #1532
+	- FIXED: applying GUI scaling for tray notifier window
+	- Lua:
+		- added GetCallDurationFromStart() and GetCallDurationFromConfirmed() functions
+		- added winapi.GetAdaptersInfoIp() function
+	- skipping empty Supported line (this was crashing Zenitel)
+	- fixes related to handling HID headsets, mainly for multiple simultaneous calls
+	- added options to hide default Call/Answer and Hangup buttons
+	- few other minor fixes/improvements	 
 */
 

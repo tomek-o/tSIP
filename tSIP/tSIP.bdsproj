@@ -484,7 +484,6 @@
         <FILE FILENAME="FormTextEditor.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTextEditor" FORMNAME="frmTextEditor" DESIGNCLASS="" ADDITIONAL="FormTextEditor.h"/>
         <FILE FILENAME="ScEdit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScEdit" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ScEdit.h"/>
         <FILE FILENAME="Paths.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Paths" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Paths.h"/>
-        <FILE FILENAME="FormTroubleshooting.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTroubleshooting" FORMNAME="frmTroubleshooting" DESIGNCLASS="" ADDITIONAL="FormTroubleshooting.h"/>
         <FILE FILENAME="Troubleshooting.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Troubleshooting" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Troubleshooting.h"/>
         <FILE FILENAME="scripting\FormLuaScript.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLuaScript" FORMNAME="frmLuaScript" DESIGNCLASS="" ADDITIONAL="scripting\FormLuaScript.h"/>
         <FILE FILENAME="scripting\LuaExamples.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
@@ -494,6 +493,7 @@
         <FILE FILENAME="phone\PhoneConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="phone\FormPhones.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormPhones" FORMNAME="frmPhones" DESIGNCLASS="" ADDITIONAL="phone\FormPhones.h"/>
         <FILE FILENAME="NetInterfaces.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NetInterfaces" FORMNAME="" DESIGNCLASS="" ADDITIONAL="NetInterfaces.h"/>
+        <FILE FILENAME="FormTroubleshooting.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormTroubleshooting" FORMNAME="frmTroubleshooting" DESIGNCLASS="" ADDITIONAL="FormTroubleshooting.h"/>
         <FILE FILENAME="FormMessage.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormMessage" FORMNAME="frmMessage" DESIGNCLASS="" ADDITIONAL="FormMessage.h"/>
         <FILE FILENAME="SIMPLE_Messages.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="SIMPLE_Messages" FORMNAME="" DESIGNCLASS="" ADDITIONAL="SIMPLE_Messages.h"/>
         <FILE FILENAME="ua\Calls.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Calls" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\Calls.h"/>
@@ -534,7 +534,7 @@
           <VersionInfo Name="AutoIncBuild">False</VersionInfo>
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">3</VersionInfo>
-          <VersionInfo Name="Release">6</VersionInfo>
+          <VersionInfo Name="Release">7</VersionInfo>
           <VersionInfo Name="Build">0</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
@@ -547,7 +547,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.3.6.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.3.7.0</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
