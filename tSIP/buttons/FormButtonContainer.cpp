@@ -216,7 +216,9 @@ void __fastcall TfrmButtonContainer::panelMainMouseDown(TObject *Sender,
 void __fastcall TfrmButtonContainer::imgBackgroundMouseDown(TObject *Sender,
       TMouseButton Button, TShiftState Shift, int X, int Y)
 {
-	if (appSettings.frmSpeedDial.dragApplicationWithButtonContainer && Button == mbLeft)
+	if (!movingFrame->Visible &&
+		appSettings.frmSpeedDial.dragApplicationWithButtonContainer &&
+		Button == mbLeft)
 	{
 		enum {SC_DRAGMOVE = 0xF012};
 		ReleaseCapture();
