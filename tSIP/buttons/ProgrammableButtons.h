@@ -39,6 +39,7 @@ private:
 	std::vector<TProgrammableButton*> btns;
 
 	bool panelIsMoving;
+	bool panelMovingGroup;
 	bool panelIsResizing;
 	int editedPanelId;
 	int scalingPercentage;
@@ -105,7 +106,7 @@ public:
 
 	void Edit(int id);
 
-	void Move(int id);
+	void Move(int id, bool moveGroup);
 
 	void Resize(int id);
 

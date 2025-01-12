@@ -1232,6 +1232,9 @@ Version 0.3.07
 	- skipping empty Supported line (this was crashing Zenitel)
 	- fixes related to handling HID headsets, mainly for multiple simultaneous calls
 	- added options to hide default Call/Answer and Hangup buttons
-	- few other minor fixes/improvements	 
+	- few other minor fixes/improvements
+
+Version 0.3.07.1
+	- button context menu: added option moving button group (button with buttons inside)
 */
 

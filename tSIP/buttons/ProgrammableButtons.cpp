@@ -76,6 +76,7 @@ ProgrammableButtons::ProgrammableButtons(void):
 	saveAllSettings(true),
 	updated(false),
 	panelIsMoving(false),
+	panelMovingGroup(false),
 	panelIsResizing(false),
 	editedPanelId(-1),
 	scalingPercentage(100)	
@@ -1012,6 +1013,7 @@ void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
 		if (P.y < 0)
 			P.y = 0;
 		ButtonConf cfg = btnConf[editedPanelId];	// copy
+		ButtonConf initialCfg = cfg;
 		cfg.left = P.x * 100/scalingPercentage;
 		cfg.top = P.y * 100/scalingPercentage;
 
@@ -1031,6 +1033,23 @@ void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
 		}
 
 		ApplyButtonCfg(editedPanelId, cfg);
+
+		if (panelMovingGroup)
+		{
+			int deltaX = cfg.left - initialCfg.left;
+			int deltaY = cfg.top - initialCfg.top;
+			for (int i=editedPanelId+1; i<btnConf.size(); i++)
+			{
+				const ButtonConf& other = btnConf[i];
+				if (initialCfg.Contains(other))
+				{
+					ButtonConf newConf = other;
+					newConf.left += deltaX;
+					newConf.top += deltaY;
+					ApplyButtonCfg(i, newConf);
+				}
+			}
+		}
 	}
 	else if (panelIsResizing)
 	{
@@ -1232,10 +1251,11 @@ void ProgrammableButtons::Edit(int id)
 	}
 }
 
-void ProgrammableButtons::Move(int id)
+void ProgrammableButtons::Move(int id, bool moveGroup)
 {
 	editedPanelId = id;
 	panelIsMoving = true;
+	panelMovingGroup = moveGroup;
 	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
 	container->imgBackground->Cursor = crCross;
 	dmButtons->tmrMoving->Enabled = true;

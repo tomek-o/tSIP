@@ -28,6 +28,10 @@ object dmButtons: TdmButtons
       Caption = 'Move'
       OnClick = miMoveSpeedDialClick
     end
+    object miMoveSpeedDialGroup: TMenuItem
+      Caption = 'Move group'
+      OnClick = miMoveSpeedDialGroupClick
+    end
     object miResizeSpeedDial: TMenuItem
       Caption = 'Resize'
       OnClick = miResizeSpeedDialClick

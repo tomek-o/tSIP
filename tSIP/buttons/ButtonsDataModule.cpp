@@ -24,9 +24,30 @@ void __fastcall TdmButtons::popupPanelPopup(TObject *Sender)
 	int id = panel->Tag;
 
 	AnsiString text;
-	AnsiString typeText = Button::TypeName(buttons.btnConf[id].type);
+	const ButtonConf &cfg = buttons.btnConf[id];
+	AnsiString typeText = Button::TypeName(cfg.type);
 	text.sprintf("Button #%d: %s", id, typeText.c_str());;
-	miInfo->Caption = text;	
+	miInfo->Caption = text;
+
+	// "button group" = buttons with higher id placed on the button with lower id,
+	// working as kind of background/frame
+	unsigned int groupBtnCount = 0;
+	for (int i=id+1; i<buttons.btnConf.size(); i++)
+	{
+		if (cfg.Contains(buttons.btnConf[i]))
+			groupBtnCount++;
+	}
+	if (groupBtnCount == 0)
+	{
+		miMoveSpeedDialGroup->Visible = false;
+	}
+	else
+	{
+		AnsiString text;
+		text.sprintf("Move group, %u button(s) inside", groupBtnCount);
+		miMoveSpeedDialGroup->Caption = text;
+		miMoveSpeedDialGroup->Visible = true;
+	}
 }
 
 //---------------------------------------------------------------------------
@@ -44,7 +65,7 @@ void __fastcall TdmButtons::miMoveSpeedDialClick(TObject *Sender)
 	TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(popupPanel->PopupComponent);
 	assert(panel);
 	int id = panel->Tag;
-	buttons.Move(id);
+	buttons.Move(id, false);
 }
 //---------------------------------------------------------------------------
 
@@ -79,6 +100,15 @@ void __fastcall TdmButtons::miCopyButtonPropertiesClick(TObject *Sender)
 	assert(panel);
 	int id = panel->Tag;
 	buttons.CopyConfig(id);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TdmButtons::miMoveSpeedDialGroupClick(TObject *Sender)
+{
+	TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(popupPanel->PopupComponent);
+	assert(panel);
+	int id = panel->Tag;
+	buttons.Move(id, true);	
 }
 //---------------------------------------------------------------------------
 

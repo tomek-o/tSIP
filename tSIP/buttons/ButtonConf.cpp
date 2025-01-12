@@ -106,6 +106,21 @@ void ButtonConf::Reset(void)
 	fontLabel2 = font;
 }
 
+bool ButtonConf::Contains(const ButtonConf& other) const
+{
+	if (other.parentId == parentId)
+	{
+		if (other.left + other.width > left &&
+			other.left < left + width &&
+			other.top + other.height > top &&
+			other.top < top + height)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 bool ButtonConf::UaRestartNeeded(const ButtonConf& right) const
 {
 	if (type == Button::BLF || right.type == Button::BLF ||

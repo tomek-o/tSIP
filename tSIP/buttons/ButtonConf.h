@@ -229,6 +229,9 @@ public:
 		return !(*this == right);
 	}
 
+    /** Check for button group */
+	bool Contains(const ButtonConf& other) const;
+
 	bool UaRestartNeeded(const ButtonConf& right) const;
 
 	void Reset(void);
