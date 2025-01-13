@@ -1330,6 +1330,16 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 		}
 	}
 
+	{
+		SHORT state = GetAsyncKeyState( VK_RETURN );
+		// Test high bit - if set, key was down when GetAsyncKeyState was called.
+		if( ( 1 << 15 ) & state )
+		{
+			SpeedDialPanelClick(NULL);
+			return;
+		}
+	}
+
 	const ButtonConf &cfg = btnConf[editedPanelId];	// copy
 
 	AnsiString text;
