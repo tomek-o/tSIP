@@ -431,10 +431,11 @@ int ProgrammableButtons::Write(void)
 	// write buttons configuration
 	Json::Value &jBtnConf = root["btnConf"];
 	jBtnConf = Json::Value(Json::arrayValue);
+	jBtnConf.resize(btnConf.size());
 	for (unsigned int i=0; i<btnConf.size(); i++)
 	{
 		const ButtonConf &cfg = btnConf[i];
-		Json::Value &jsonBtn = jBtnConf.append(Json::objectValue);
+		Json::Value &jsonBtn = jBtnConf[i];
 		jsonBtn["parentId"] = cfg.parentId;
 		jsonBtn["type"] = cfg.type;
 		jsonBtn["caption"] = cfg.caption;
@@ -498,11 +499,12 @@ int ProgrammableButtons::Write(void)
 			Json::Value &jEl = jColors[el];
 			if (saveAllSettings || (cfg.colors[el] != defaultBtn.colors[el]))
 			{
-				jEl["idle"] = cfg.colors[el].idle;
-				jEl["down"] = cfg.colors[el].down;
-				jEl["downPressed"] = cfg.colors[el].downPressed;
-				jEl["inactive"] = cfg.colors[el].inactive;
-				jEl["inactiveDown"] = cfg.colors[el].inactiveDown;
+				const ButtonConf::Color& color = cfg.colors[el];
+				jEl["idle"] = color.idle;
+				jEl["down"] = color.down;
+				jEl["downPressed"] = color.downPressed;
+				jEl["inactive"] = color.inactive;
+				jEl["inactiveDown"] = color.inactiveDown;
 			}
 			else
 			{
@@ -533,23 +535,27 @@ int ProgrammableButtons::Write(void)
 		jsonBtn["imgConfirmed"] = cfg.imgConfirmed;
 		if (saveAllSettings || (cfg.blfOverrideIdle != defaultBtn.blfOverrideIdle))
 		{
-			jsonBtn["blfOverrideIdle"]["active"] = cfg.blfOverrideIdle.active;
-			jsonBtn["blfOverrideIdle"]["number"] = cfg.blfOverrideIdle.number;
+			Json::Value &jv = jsonBtn["blfOverrideIdle"];
+			jv["active"] = cfg.blfOverrideIdle.active;
+			jv["number"] = cfg.blfOverrideIdle.number;
 		}
 		if (saveAllSettings || (cfg.blfOverrideTerminated != defaultBtn.blfOverrideTerminated))
 		{
-			jsonBtn["blfOverrideTerminated"]["active"] = cfg.blfOverrideTerminated.active;
-			jsonBtn["blfOverrideTerminated"]["number"] = cfg.blfOverrideTerminated.number;
+			Json::Value &jv = jsonBtn["blfOverrideTerminated"];
+			jv["active"] = cfg.blfOverrideTerminated.active;
+			jv["number"] = cfg.blfOverrideTerminated.number;
 		}
 		if (saveAllSettings || (cfg.blfOverrideEarly != defaultBtn.blfOverrideEarly))
 		{
-			jsonBtn["blfOverrideEarly"]["active"] = cfg.blfOverrideEarly.active;
-			jsonBtn["blfOverrideEarly"]["number"] = cfg.blfOverrideEarly.number;
+			Json::Value &jv = jsonBtn["blfOverrideEarly"];
+			jv["active"] = cfg.blfOverrideEarly.active;
+			jv["number"] = cfg.blfOverrideEarly.number;
 		}
 		if (saveAllSettings || (cfg.blfOverrideConfirmed != defaultBtn.blfOverrideConfirmed))
 		{
-			jsonBtn["blfOverrideConfirmed"]["active"] = cfg.blfOverrideConfirmed.active;
-			jsonBtn["blfOverrideConfirmed"]["number"] = cfg.blfOverrideConfirmed.number;
+			Json::Value &jv = jsonBtn["blfOverrideConfirmed"];
+			jv["active"] = cfg.blfOverrideConfirmed.active;
+			jv["number"] = cfg.blfOverrideConfirmed.number;
 		}
 		if (saveAllSettings || (cfg.blfActionDuringCall != defaultBtn.blfActionDuringCall))
 		{
@@ -643,17 +649,23 @@ int ProgrammableButtons::Write(void)
 		}
 	}
 
-	std::string outputConfig = writer.write( root );
-
-	try
 	{
-		std::ofstream ofs(filename.c_str());
-		ofs << outputConfig;
-		ofs.close();
-	}
-	catch(...)
-	{
-    	return 1;
+		//TimeCounter tc("Writing buttons configuration file");
+		std::string outputConfig = writer.write( root );		// Debug: ~300 ms
+		FILE *fp = fopen(filename.c_str(), "wb");
+		if (fp)
+		{
+			int ret = fwrite(outputConfig.data(), outputConfig.size(), 1, fp);
+			if (ret != 1)
+			{
+				fclose(fp);
+				return 1;
+			}
+		}
+		else
+		{
+			return 1;
+		}
 	}
 		
 	return 0;
