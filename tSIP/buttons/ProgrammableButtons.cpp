@@ -656,9 +656,9 @@ int ProgrammableButtons::Write(void)
 		if (fp)
 		{
 			int ret = fwrite(outputConfig.data(), outputConfig.size(), 1, fp);
+			fclose(fp);
 			if (ret != 1)
 			{
-				fclose(fp);
 				return 1;
 			}
 		}
