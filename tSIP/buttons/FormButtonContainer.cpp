@@ -124,10 +124,17 @@ void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
 	#endif
 		item->AutoHotkeys = maManual;
 		AnsiString text;
-		AnsiString caption = "[unnamed]";
+		AnsiString caption = "[empty caption]";
 		ButtonConf &cfg = buttons.btnConf[i];
 		if (cfg.caption != "")
-			caption = cfg.caption.c_str();		
+		{
+			enum { BUTTON_CAPTION_MAX_DISPLAY_LENGTH = 64 };
+			caption = cfg.caption.c_str();
+			if (caption.Length() > BUTTON_CAPTION_MAX_DISPLAY_LENGTH)
+			{
+				caption = caption.SubString(1, BUTTON_CAPTION_MAX_DISPLAY_LENGTH) + "...";
+			}
+		}
 		text.sprintf("Button #%02d: %s", i, caption.c_str());
 		item->Caption = text;
 		item->OnClick = miAddEditPanelClick;
