@@ -1281,6 +1281,14 @@ void ProgrammableButtons::Move(int id, bool moveGroup)
 	panelMovingGroup = moveGroup;
 	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
 	container->imgBackground->Cursor = crCross;
+
+	// move mouse to top left button corner
+	TPoint tp, tp2;
+	tp.x = btnConf[id].left;
+	tp.y = btnConf[id].top;
+	tp2 = container->ClientToScreen(tp);
+	::SetCursorPos(tp2.x, tp2.y);
+
 	dmButtons->tmrMoving->Enabled = true;
 }
 
@@ -1290,7 +1298,15 @@ void ProgrammableButtons::Resize(int id)
 	panelIsResizing = true;
 	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
 	container->imgBackground->Cursor = crCross;
-	dmButtons->tmrMoving->Enabled = true;	
+
+	// move mouse to bottom right button corder
+	TPoint tp, tp2;
+	tp.x = btnConf[id].left + btnConf[id].width;
+	tp.y = btnConf[id].top + btnConf[id].height;
+	tp2 = container->ClientToScreen(tp);
+	::SetCursorPos(tp2.x, tp2.y);
+
+	dmButtons->tmrMoving->Enabled = true;
 }
 
 void ProgrammableButtons::UpdateAll(void)
