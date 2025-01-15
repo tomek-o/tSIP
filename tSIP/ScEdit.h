@@ -9,6 +9,8 @@
 
 class TScEdit : public TWinControl
 {
+private:
+	int lineCount;
 protected:
 	virtual void __fastcall CreateParams(Controls::TCreateParams &Params);
 	virtual void __fastcall WndProc(Messages::TMessage &Message);
@@ -19,8 +21,11 @@ protected:
 public:
 	enum { MARGIN_SCRIPT_FOLD_INDEX = 1 };
 
-	__fastcall TScEdit(Classes::TComponent* AOwner)
-		:TWinControl(AOwner){;}
+	__fastcall TScEdit(Classes::TComponent* AOwner):
+		TWinControl(AOwner),
+		lineCount(10)
+	{
+	}
 
 	LONG_PTR SendEditor(unsigned int iMessage, ULONG_PTR wParam = 0, LONG_PTR lParam = 0)
 	{
@@ -30,6 +35,7 @@ public:
 	void setFont(AnsiString name, int size);
 	/** \note must be called AFTER setFont */
 	void setStyle(enum ScEditStyle style);
+	void updateMarginWidth(bool force);	
 };
 
 

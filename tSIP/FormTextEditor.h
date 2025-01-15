@@ -20,10 +20,8 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	TScEdit * m_se;
 	typedef void (__closure *CallbackTextChange)(void);
-	int lineCount;
 	AnsiString fontName;
 	int fontSize;
-	void UpdateMarginWidth(bool force);
 protected:
 	void __fastcall WMNotify(TMessage &Message);
 	BEGIN_MESSAGE_MAP
