@@ -38,7 +38,18 @@ namespace
 		if (res & 0x8000)
 			return true;
 		return false;
-	}	
+	}
+
+	void UpdateCursorPos(int deltaX, int deltaY)
+	{
+		POINT pt;
+		if (::GetCursorPos(&pt)) {
+			pt.x += deltaX;
+			pt.y += deltaY;
+			::SetCursorPos(pt.x, pt.y);
+			Sleep(200);	// simplified way to prevent too fast repetition
+		}
+	}
 }
 
 void ProgrammableButtons::SetDefaultsForBtnId(int id, ButtonConf& cfg)
@@ -1339,6 +1350,44 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 			return;
 		}
 	}
+
+	{
+		SHORT state = GetAsyncKeyState( VK_LEFT );
+		// Test high bit - if set, key was down when GetAsyncKeyState was called.
+		if( ( 1 << 15 ) & state )
+		{
+			UpdateCursorPos(-1, 0);
+			return;
+		}
+	}
+	{
+		SHORT state = GetAsyncKeyState( VK_RIGHT );
+		// Test high bit - if set, key was down when GetAsyncKeyState was called.
+		if( ( 1 << 15 ) & state )
+		{
+			UpdateCursorPos(1, 0);
+			return;
+		}
+	}
+	{
+		SHORT state = GetAsyncKeyState( VK_UP );
+		// Test high bit - if set, key was down when GetAsyncKeyState was called.
+		if( ( 1 << 15 ) & state )
+		{
+			UpdateCursorPos(0, -1);
+			return;
+		}
+	}
+	{
+		SHORT state = GetAsyncKeyState( VK_DOWN );
+		// Test high bit - if set, key was down when GetAsyncKeyState was called.
+		if( ( 1 << 15 ) & state )
+		{
+			UpdateCursorPos(0, 1);
+			return;
+		}
+	}
+
 
 	const ButtonConf &cfg = btnConf[editedPanelId];	// copy
 
