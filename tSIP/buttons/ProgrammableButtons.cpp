@@ -1373,7 +1373,6 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 		if( ( 1 << 15 ) & state )
 		{
 			UpdateCursorPos(-1, 0);
-			return;
 		}
 	}
 	{
@@ -1382,7 +1381,6 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 		if( ( 1 << 15 ) & state )
 		{
 			UpdateCursorPos(1, 0);
-			return;
 		}
 	}
 	{
@@ -1391,7 +1389,6 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 		if( ( 1 << 15 ) & state )
 		{
 			UpdateCursorPos(0, -1);
-			return;
 		}
 	}
 	{
@@ -1400,7 +1397,6 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 		if( ( 1 << 15 ) & state )
 		{
 			UpdateCursorPos(0, 1);
-			return;
 		}
 	}
 
