@@ -41,7 +41,8 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	callbackSetKeepForeground(callbackSetKeepForeground),
 	scalingPercentage(scalingPercentage),
 	showStatus(showStatus),
-	hideEmptyStatus(hideEmptyStatus)
+	hideEmptyStatus(hideEmptyStatus),
+	editedPanelId(0)
 {
 	assert(callbackSetKeepForeground);
 	if (width > 0)
@@ -103,7 +104,6 @@ void TfrmButtonContainer::UpdatePopupSettings(void)
 	}
 	useContextMenu = appSettings.frmMain.bSpeedDialPopupMenu;
 	panelMain->PopupMenu = useContextMenu ? popupAddPanel : NULL;
-
 }
 
 void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
@@ -264,3 +264,91 @@ void TfrmButtonContainer::ApplyConfig(void)
 	UpdateBackgroundImage(cfg.backgroundImage, cfg.backgroundImageTransparent);
 	panelMain->Color = static_cast<TColor>(cfg.backgroundColor);
 }
+
+void TfrmButtonContainer::StartEditingButton(int editedPanelId)
+{
+	this->editedPanelId = editedPanelId;
+	imgBackground->Cursor = crCross;
+	movingFrame->Visible = true;
+
+	UpdateMovingFrameCaption();
+}
+
+void TfrmButtonContainer::UpdateMovingFrame(int x, int y, int width, int height)
+{
+	movingFrame->Left = x;
+	movingFrame->Top = y;
+	movingFrame->Width = width;
+	movingFrame->Height = height;
+	movingFrame->BringToFront();
+	UpdateMovingFrameCaption();
+}
+
+void TfrmButtonContainer::UpdateMovingFrameCaption(void)
+{
+	// button caption and position switched periodically if there is not enough space
+	static unsigned int cnt = 0;
+	cnt++;
+	enum { MIN_WIDTH_FOR_XYWH = 150 };	// minimum width to fit X, Y, width and height same time
+
+	AnsiString text;
+	AnsiString caption = "[unnamed]";
+	const ButtonConf &cfg = buttons.btnConf[editedPanelId];
+	if (cfg.caption != "")
+		caption = cfg.caption.c_str();
+	text.sprintf("#%02d: %s", editedPanelId, caption.Trim().c_str());
+	if (movingFrame->Height >= 48)
+	{
+		text.cat_printf("\r\nX %d, Y %d\r\nW %d, H %d",
+			movingFrame->Left, movingFrame->Top, movingFrame->Width, movingFrame->Height);
+	}
+	else if (movingFrame->Height >= 32)
+	{
+		if (movingFrame->Width >= MIN_WIDTH_FOR_XYWH)
+		{
+			text.cat_printf("\r\nX %d, Y %d, W %d, H %d",
+				movingFrame->Left, movingFrame->Top, movingFrame->Width, movingFrame->Height);
+		}
+		else
+		{
+			int cycle = (cnt / 100) % 2;
+			if (cycle == 0)
+			{
+				text.cat_printf("\r\nX %d, Y %d", movingFrame->Left, movingFrame->Top);
+			}
+			else
+			{
+				text.cat_printf("\r\nW %d, H %d", movingFrame->Width, movingFrame->Height);
+			}
+		}
+	}
+	else
+	{
+		if (movingFrame->Width >= MIN_WIDTH_FOR_XYWH)
+		{
+			int cycle = (cnt / 100) % 2;
+			if (cycle == 1)
+			{
+				text.printf("X %d, Y %d, W %d, H %d",
+					movingFrame->Left, movingFrame->Top, movingFrame->Width, movingFrame->Height);
+			}
+		}
+		else
+		{
+			int cycle = (cnt / 100) % 3;
+			if (cycle == 1)
+			{
+				text.printf("X %d, Y %d", movingFrame->Left, movingFrame->Top);
+			}
+			else if (cycle == 2)
+			{
+				text.printf("W %d, H %d", movingFrame->Width, movingFrame->Height);
+			}
+		}
+	}
+	lblCaption->Caption = text;
+	lblCaption->Left = (movingFrame->Width - lblCaption->Width) / 2;
+	lblCaption->Top = (movingFrame->Height - lblCaption->Height) / 2;
+}
+
+

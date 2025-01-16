@@ -14,8 +14,6 @@ object frmButtonContainer: TfrmButtonContainer
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object panelMain: TPanel
@@ -49,10 +47,19 @@ object frmButtonContainer: TfrmButtonContainer
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelWidth = 2
-      Caption = 'BUTTON'
       Color = clYellow
       TabOrder = 0
       Visible = False
+      object lblCaption: TLabel
+        Left = 72
+        Top = 14
+        Width = 40
+        Height = 13
+        Align = alCustom
+        Alignment = taCenter
+        Caption = 'BUTTON'
+        ShowAccelChar = False
+      end
     end
   end
   object pnlStatus: TPanel

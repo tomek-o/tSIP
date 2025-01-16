@@ -50,6 +50,12 @@ namespace
 			Sleep(200);	// simplified way to prevent too fast repetition
 		}
 	}
+
+	enum
+	{
+		MIN_PANEL_WIDTH = 4,
+		MIN_PANEL_HEIGHT = 4
+	};
 }
 
 void ProgrammableButtons::SetDefaultsForBtnId(int id, ButtonConf& cfg)
@@ -1089,9 +1095,6 @@ void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
 		cfg.width = P.x * 100/scalingPercentage - cfg.left;
 		cfg.height = P.y * 100/scalingPercentage - cfg.top;
 
-		if (cfg.width < 10 || cfg.height < 10)
-			return;
-
 		if (!IsShiftPressed() && appSettings.frmSpeedDial.useGrid)
 		{
 			int grid = appSettings.frmSpeedDial.gridSize;
@@ -1106,6 +1109,11 @@ void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
 			else
 				cfg.height -= modY;
 		}
+
+		if (cfg.width < MIN_PANEL_WIDTH)
+			cfg.width = MIN_PANEL_WIDTH;
+		if (cfg.height < MIN_PANEL_HEIGHT)
+			cfg.height = MIN_PANEL_HEIGHT;		
 
 		ApplyButtonCfg(editedPanelId, cfg);
 	}
@@ -1280,7 +1288,7 @@ void ProgrammableButtons::Move(int id, bool moveGroup)
 	panelIsMoving = true;
 	panelMovingGroup = moveGroup;
 	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
-	container->imgBackground->Cursor = crCross;
+	container->StartEditingButton(editedPanelId);
 
 	// move mouse to top left button corner
 	TPoint tp, tp2;
@@ -1297,7 +1305,7 @@ void ProgrammableButtons::Resize(int id)
 	editedPanelId = id;
 	panelIsResizing = true;
 	TfrmButtonContainer *container = GetBtnContainer(editedPanelId);
-	container->imgBackground->Cursor = crCross;
+	container->StartEditingButton(editedPanelId);
 
 	// move mouse to bottom right button corder
 	TPoint tp, tp2;
@@ -1401,16 +1409,8 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 	}
 
 
-	const ButtonConf &cfg = btnConf[editedPanelId];	// copy
+	const ButtonConf &cfg = btnConf[editedPanelId];
 
-	AnsiString text;
-	AnsiString caption = "[unnamed]";
-	if (cfg.caption != "")
-		caption = cfg.caption.c_str();
-	text.sprintf("#%02d: %s", editedPanelId, caption.Trim().c_str());
-	container->movingFrame->Caption = text;
-
-	container->movingFrame->Visible = true;
 	TPoint P = container->ScreenToClient(Mouse->CursorPos);
 	if (P.x < 0)
 		P.x = 0;
@@ -1436,19 +1436,12 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 			else
 				top -= modY;
 		}
-		container->movingFrame->Top = top;
-		container->movingFrame->Left = left;
-		container->movingFrame->Width = cfg.width;
-		container->movingFrame->Height = cfg.height;
-		container->movingFrame->BringToFront();
+		container->UpdateMovingFrame(left, top, cfg.width, cfg.height);
 	}
 	else if (panelIsResizing)
 	{
 		int width = P.x * 100/scalingPercentage - cfg.left;
 		int height = P.y * 100/scalingPercentage - cfg.top;
-
-		if (width < 10 || height < 10)
-			return;
 
 		if (!IsShiftPressed() && appSettings.frmSpeedDial.useGrid)
 		{
@@ -1464,11 +1457,13 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 			else
 				height -= modY;
 		}
-		container->movingFrame->Top = cfg.top;
-		container->movingFrame->Left = cfg.left;
-		container->movingFrame->Width = width;
-		container->movingFrame->Height = height;
-		container->movingFrame->BringToFront();
+
+		if (width < MIN_PANEL_WIDTH)
+			width = MIN_PANEL_WIDTH;
+		if (height < MIN_PANEL_HEIGHT)
+			height = MIN_PANEL_HEIGHT;
+
+		container->UpdateMovingFrame(cfg.left, cfg.top, width, height);
 	}
 }
 

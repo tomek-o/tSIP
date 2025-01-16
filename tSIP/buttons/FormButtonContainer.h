@@ -37,6 +37,7 @@ __published:	// IDE-managed Components
 	TTimer *tmrMoving;
 	TPanel *movingFrame;
 	TMenuItem *miConfigureButtonContainer;
+	TLabel *lblCaption;
 	void __fastcall popupAddPanelPopup(TObject *Sender);
 	void __fastcall miAddEditPanelClick(TObject *Sender);
 	void __fastcall miCopyPanelClick(TObject *Sender);
@@ -51,8 +52,9 @@ public:
 	void UpdatePopupSettings(void);
 	void ApplyConfig(void);
 	void UpdateBackgroundImage(AnsiString file, bool transparent);
+	void UpdateMovingFrameCaption(void);
 	TPanel* GetButtonParent(void) {
-    	return panelMain;
+		return panelMain;
 	}
 private:	// User declarations
 	unsigned int containerId;
@@ -64,7 +66,9 @@ private:	// User declarations
 
 	bool showStatus;
 	bool hideEmptyStatus;
-	
+
+	int editedPanelId;
+
 	ProgrammableButtons &buttons;
 public:		// User declarations
 	__fastcall TfrmButtonContainer(TComponent* Owner, ProgrammableButtons &buttons,
@@ -72,11 +76,13 @@ public:		// User declarations
 		bool moveParentControlsToSelf,
 		int width, int height, int scalingPercentage,
 		CallbackSetKeepForeground callbackSetKeepForeground,
-        bool showStatus, int statusPanelHeight, bool hideEmptyStatus
+		bool showStatus, int statusPanelHeight, bool hideEmptyStatus
 		);
 	void ShowStatusPanel(bool state);
 	void obsUpdate(Observable* o, Argument * arg);
-	void UpdateAll(void);	
+	void UpdateAll(void);
+	void StartEditingButton(int editedPanelId);
+	void UpdateMovingFrame(int x, int y, int width, int height);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmButtonContainer *frmButtonContainer;
