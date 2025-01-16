@@ -983,6 +983,8 @@ void ProgrammableButtons::Create(TComponent* Owner,
 		frm->OnKeyPress = FormKeyPress;
 		frm->imgBackground->OnClick = containerBackgroundClick;
 		frm->panelMain->OnClick = containerBackgroundClick;
+		frm->movingFrame->OnClick = containerBackgroundClick;
+		frm->lblCaption->OnClick = containerBackgroundClick;
 	}
 	for (unsigned int i=0; i<btnConf.size(); i++)
 	{
