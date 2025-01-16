@@ -1235,6 +1235,13 @@ Version 0.3.07
 	- few other minor fixes/improvements
 
 Version 0.3.07.1
-	- button context menu: added option moving button group (button with buttons inside)
+	- button context menu: added option moving button group (button working as kind of a frame with higher ID buttons inside)
+	- moving/resizing buttons:
+		- [Enter] accepts current position ([Esc] cancels)
+		- arrows can be used to move cursor by 1 pixel
+		- moving cursor to previous position when editing starts
+		- diplaying position (X, Y) and size (W, H) on the button-like panel shown when editing
+		- fixed issue with confirming by left click not working for some positions (e.g. when holding Shift to ignore grid)
+
 */
 
