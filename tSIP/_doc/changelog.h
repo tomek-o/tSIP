@@ -1234,7 +1234,7 @@ Version 0.3.07
 	- added options to hide default Call/Answer and Hangup buttons
 	- few other minor fixes/improvements
 
-Version 0.3.07.1
+Version 0.3.08
 	- button context menu: added option moving button group (button working as kind of a frame with higher ID buttons inside)
 	- moving/resizing buttons:
 		- [Enter] accepts current position ([Esc] cancels)
