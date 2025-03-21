@@ -1237,6 +1237,17 @@ static int l_GetCallCodecName(lua_State* L)
 	return 0;
 }
 
+static int l_GetCallReason(lua_State* L)
+{
+	Call* call = GetCall(L);
+	if (call)
+	{
+		lua_pushstring( L, call->sipReason.c_str() );
+		return 1;
+	}
+	return 0;
+}
+
 static int l_GetCallDurationFromStart(lua_State* L)
 {
 	Call *call = GetCall(L);
@@ -2337,9 +2348,10 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verfication state. Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_IsCallIncoming, "IsCallIncoming", "Check if current or specified call is incoming", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallPeer, "GetCallPeer", "Get number/URI of caller/callee from current or specified call", "Takes one, optional argument: call UID.");
-	lua_register2(L, ScriptImp::l_GetCallPeerName, "GetCallPeerName", "Get name of caller/callee from current or specified call", "Takes one, optional argument: call UID. Retuns 0 results, display name or (depending on settings) PAI display name.");
+	lua_register2(L, ScriptImp::l_GetCallPeerName, "GetCallPeerName", "Get name of caller/callee from current or specified call", "Takes one, optional argument: call UID. Returns 0 results, display name or (depending on settings) PAI display name.");
 	lua_register2(L, ScriptImp::l_GetCallInitialRxInvite, "GetCallInitialRxInvite", "Get full text of initial received INVITE", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallCodecName, "GetCallCodecName", "Get name of codec used during current or specified call", "Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallReason, "GetCallReason", "Get SIP Reason associated with current or specified call", "Takes one, optional argument: call UID. Returns reason from request line or from Reason line like \"Call completed elsewhere\"");
 	lua_register2(L, ScriptImp::l_GetCallDurationFromStart, "GetCallDurationFromStart", "Get time in ms from the call start/creation", "Returns milliseconds passed since call was created (call incoming event or making call).\nTakes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallDurationFromConfirmed, "GetCallDurationFromConfirmed", "Get time in ms from the call start/creation", "Returns milliseconds passed since call was confirmed.\nIf call was not confirmed or does not exits, nothing is returned.\nTakes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetContactName, "GetContactName", "Get number description from phonebook", "");
