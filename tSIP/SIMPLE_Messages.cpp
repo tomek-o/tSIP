@@ -135,6 +135,11 @@ void OnMessageStatus(int requestUid, int requestError, int sipCode, AnsiString r
 
 void Send(AnsiString target, AnsiString text, bool sendImmediately)
 {
+	if (!appSettings.uaConf.messages.enabled)
+	{
+        LOG("Could not send text message, messaging is disabled in configuration!\n");
+		return;
+	}
 	TfrmMessage *frm = FindForm(target);
 	if (frm == NULL)
 	{

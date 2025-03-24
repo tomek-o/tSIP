@@ -364,6 +364,8 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 	miView->Visible = !appSettings.frmMain.bHideView;
 	miTools->Visible = !appSettings.frmMain.bHideTools;
 	miHelp->Visible = !appSettings.frmMain.bHideHelp;
+	miMessages->Visible = appSettings.uaConf.messages.enabled;
+	miSeparatorMessages->Visible = appSettings.uaConf.messages.enabled;
 
 	trbarSoftvolMic->Position = trbarSoftvolMic->Max + trbarSoftvolMic->Min - appSettings.uaConf.audioSoftVol.tx;
 	trbarSoftvolSpeaker->Position = trbarSoftvolSpeaker->Max + trbarSoftvolSpeaker->Min - appSettings.uaConf.audioSoftVol.rx;
@@ -712,6 +714,8 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	miView->Visible = !appSettings.frmMain.bHideView;
 	miTools->Visible = !appSettings.frmMain.bHideTools;
 	miHelp->Visible = !appSettings.frmMain.bHideHelp;
+	miMessages->Visible = appSettings.uaConf.messages.enabled;
+	miSeparatorMessages->Visible = appSettings.uaConf.messages.enabled;
 
 	PhoneInterface::SetCfg(appSettings.phoneConf);
 
@@ -2280,26 +2284,36 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::SIMPLE_MESSAGE:
 		{
-			SIMPLE_Messages::OnIncomingMessage(cb.caller, cb.contentType, cb.body);
-			AnsiString file = appSettings.Messages.ring;
-			if (file != "")
+			if (appSettings.uaConf.messages.enabled)
 			{
-				AnsiString fileFull;
-				fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), file.c_str());
-				if (FileExists(fileFull))
+				SIMPLE_Messages::OnIncomingMessage(cb.caller, cb.contentType, cb.body);
+				AnsiString file = appSettings.Messages.ring;
+				if (file != "")
 				{
-					UA->StartRing2(file);
+					AnsiString fileFull;
+					fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), file.c_str());
+					if (FileExists(fileFull))
+					{
+						UA->StartRing2(file);
+					}
+					else
+					{
+						LOG("Ring file (%s) for MESSAGE not found\n", file.c_str());
+					}
 				}
-				else
-				{
-					LOG("Ring file (%s) for MESSAGE not found\n", file.c_str());
-				}
+			}
+			else
+			{
+            	LOG("Ignoring incoming SIP SIMPLE MESSAGE - messaging is not enabled\n");
 			}
 			break;
 		}
 		case Callback::SIMPLE_MESSAGE_STATUS:
 		{
-			SIMPLE_Messages::OnMessageStatus(cb.requestUid, cb.requestError, cb.scode, cb.reason);
+			if (appSettings.uaConf.messages.enabled)
+			{
+				SIMPLE_Messages::OnMessageStatus(cb.requestUid, cb.requestError, cb.scode, cb.reason);
+			}
 			break;
 		}
 		default:

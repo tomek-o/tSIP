@@ -8,6 +8,7 @@
 #include "Contacts.h"
 #include "SIMPLE_Messages.h"
 #include "Translate.h"
+#include "Settings.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -201,7 +202,7 @@ void __fastcall TfrmContacts::popupContactListPopup(TObject *Sender)
 	miMessage->Clear();
 
 	miCall->Visible = (item != NULL);
-	miMessage->Visible = (item != NULL);
+	miMessage->Visible = (item != NULL) && appSettings.uaConf.messages.enabled;
 	miEdit->Visible = (item != NULL);
 	miDelete->Visible = (item != NULL);
 

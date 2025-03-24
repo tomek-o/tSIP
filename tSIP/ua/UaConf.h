@@ -586,16 +586,20 @@ public:
 	} avt;	// audio/video transport
 
 	struct Messages {
+		bool enabled;
 		int replyCode;
 		std::string replyReason;
 		bool doNotReply;
 		Messages(void):
+			enabled(true),
 			replyCode(200),
 			replyReason("OK"),
 			doNotReply(false)
 		{}
 		bool operator==(const UaConf::Messages& right) const {
-			if (replyCode == right.replyCode &&
+			if (
+                enabled == right.enabled &&
+				replyCode == right.replyCode &&
 				replyReason == right.replyReason &&
                 doNotReply == right.doNotReply
 				)

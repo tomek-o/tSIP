@@ -248,6 +248,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 
 	{
 		const Json::Value &uaMessagesJson = uaConfJson["messages"];
+		uaMessagesJson.getBool("enabled", messages.enabled);
 		uaMessagesJson.getInt("replyCode", messages.replyCode);
 		uaMessagesJson.getString("replyReason", messages.replyReason);
 		uaMessagesJson.getBool("doNotReply", messages.doNotReply);
@@ -395,6 +396,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 
 	{
 		Json::Value &jv = uaConfJson["messages"];
+		jv["enabled"] = messages.enabled;
 		jv["replyCode"] = messages.replyCode;
 		jv["replyReason"] = messages.replyReason;
 		jv["doNotReply"] = messages.doNotReply;

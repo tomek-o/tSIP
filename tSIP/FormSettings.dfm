@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsMainWindow
+    ActivePage = tsMessages
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1083,36 +1083,36 @@ object frmSettings: TfrmSettings
       Caption = 'Messages'
       ImageIndex = 22
       object lblMessagesRing: TLabel
-        Left = 5
-        Top = 3
+        Left = 3
+        Top = 35
         Width = 136
         Height = 13
         Caption = 'Sound for incoming message'
       end
       object lbMessagesReply: TLabel
-        Left = 5
-        Top = 35
+        Left = 3
+        Top = 67
         Width = 202
         Height = 13
         Caption = 'Reply to incoming messages with SIP code'
       end
       object lblMessagesReply2: TLabel
         Left = 263
-        Top = 35
+        Top = 67
         Width = 85
         Height = 13
         Caption = 'and reason (text)'
       end
       object edMessagesRing: TEdit
         Left = 160
-        Top = 0
+        Top = 32
         Width = 121
         Height = 21
         TabOrder = 0
       end
       object btnMessagesSelectRing: TButton
         Left = 285
-        Top = 0
+        Top = 32
         Width = 22
         Height = 21
         Caption = '...'
@@ -1121,27 +1121,37 @@ object frmSettings: TfrmSettings
       end
       object edMessagesReplyCode: TEdit
         Left = 213
-        Top = 32
+        Top = 64
         Width = 44
         Height = 21
         TabOrder = 2
       end
       object edMessagesReplyReason: TEdit
         Left = 354
-        Top = 32
+        Top = 64
         Width = 175
         Height = 21
         TabOrder = 3
       end
       object chbMessagesDoNotReply: TCheckBox
-        Left = 5
-        Top = 64
+        Left = 3
+        Top = 96
         Width = 524
         Height = 17
         Caption = 
           'Do not reply to incoming messages  (ONLY for SIP testing purpose' +
           's)'
         TabOrder = 4
+      end
+      object chbMessagesEnabled: TCheckBox
+        Left = 3
+        Top = 3
+        Width = 524
+        Height = 17
+        Caption = 
+          'Enable (if not enabled: incoming MESSAGEs would be ignored, rela' +
+          'ted menu items hidden)'
+        TabOrder = 5
       end
     end
     object tsDisplay: TTabSheet

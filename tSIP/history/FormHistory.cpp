@@ -11,6 +11,7 @@
 #include "UaGlobals.h"
 #include "Translate.h"
 #include "Branding.h"
+#include "Settings.h"
 #include <assert.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -530,6 +531,7 @@ void __fastcall TfrmHistory::popupHistoryPopup(TObject *Sender)
 	{
 		miRecordFile->Visible = Branding::recording && (entry->recordFile != "");
 	}
+	miMessage->Visible = appSettings.uaConf.messages.enabled;
 }
 //---------------------------------------------------------------------------
 

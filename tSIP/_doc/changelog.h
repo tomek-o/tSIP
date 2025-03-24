@@ -1243,8 +1243,8 @@ Version 0.3.08
 		- diplaying position (X, Y) and size (W, H) on the button-like panel shown when editing
 		- fixed issue with confirming by left click not working for some positions (e.g. when holding Shift to ignore grid)
 
-Version 0.3.08.1
+Version 0.3.08.2
 	- added Lua GetCallReason() function		
-
+	- added option to disable text messaging (SIP SIMPLE MESSAGE) altogether
 */
 

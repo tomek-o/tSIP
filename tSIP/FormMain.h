@@ -98,7 +98,7 @@ __published:	// IDE-managed Components
 	TBitBtn *btnResetMicVolume;
 	TBitBtn *btnResetSpeakerVolume;
 	TMenuItem *miScriptPluginVariables;
-	TMenuItem *N1;
+	TMenuItem *miSeparatorMessages;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);

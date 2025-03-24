@@ -558,6 +558,7 @@ __published:	// IDE-managed Components
 	TEdit *edTrayNotifierHangupButtonWidth;
 	TCheckBox *chbFrmMainHideMakeCallButton;
 	TCheckBox *chbFrmMainHideHangupButton;
+	TCheckBox *chbMessagesEnabled;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

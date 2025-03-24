@@ -242,6 +242,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edJbufDelayMax->Text = tmpSettings.uaConf.avt.jbufDelayMax;
 	edRtpTimeout->Text = tmpSettings.uaConf.avt.rtpTimeout;
 
+	chbMessagesEnabled->Checked = tmpSettings.uaConf.messages.enabled;	
 	edMessagesReplyCode->Text = tmpSettings.uaConf.messages.replyCode;
 	edMessagesReplyReason->Text = tmpSettings.uaConf.messages.replyReason.c_str();
 	chbMessagesDoNotReply->Checked = tmpSettings.uaConf.messages.doNotReply;
@@ -915,6 +916,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		return;
 	}
 
+	tmpSettings.uaConf.messages.enabled = chbMessagesEnabled->Checked;
 	tmpSettings.uaConf.messages.replyCode = StrToIntDef(edMessagesReplyCode->Text, tmpSettings.uaConf.messages.replyCode);
 	tmpSettings.uaConf.messages.replyReason = edMessagesReplyReason->Text.c_str();
 	tmpSettings.uaConf.messages.doNotReply = chbMessagesDoNotReply->Checked;
