@@ -115,13 +115,12 @@ void message_close(void)
 int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_callback_arg)
 {
 	struct sip_addr addr;
-	char *uri = NULL;
 	int err = 0;
 	struct mbuf *dialbuf;
 	struct pl pl_dialbuf;
 	size_t len;
 	struct account *acc;
-	struct sa socketaddr;
+	bool valid_ip = false;
 
 	if (!ua || !peer || !msg)
 		return EINVAL;
@@ -143,12 +142,24 @@ int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_ca
 
 	err |= mbuf_write_str(dialbuf, peer);
 
+	{
+		char ip_buf[16];
+		struct sa socketaddr;
+		char* p;
+		str_ncpy(ip_buf, peer, sizeof(ip_buf));
+		p = strchr(ip_buf, ':');	/* allow IP:PORT */
+		if (p)
+			*p = '\0';
+		if (net_inet_pton(ip_buf, &socketaddr) == 0)
+			valid_ip = true;
+	}	
+
 	/* Append domain if missing */
 	/* Assuming that if sip: is present then domain is also present */
 	/* Assuming that if dialed string looks like IP then domain should not be appended */
-	if (0 != re_regex(uri, len, "[^@]+@[^]+", NULL, NULL) &&
-		0 != re_regex(uri, len, "sip:") &&
-		0 != net_inet_pton(uri, &socketaddr)
+	if (0 != re_regex(peer, len, "[^@]+@[^]+", NULL, NULL) &&
+		0 != re_regex(peer, len, "sip:") &&
+		!valid_ip
 		) {
 #if HAVE_INET6
 		if (AF_INET6 == ua->acc->luri.af)
@@ -176,18 +187,21 @@ int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_ca
 	if (err)
 		goto out;
 
-	err = pl_strdup(&uri, &addr.auri);
-	if (err)
-		goto out;
+	{
+		char *uri = NULL;
+		err = pl_strdup(&uri, &addr.auri);
+		if (err)
+			goto out;
 
-	err = sip_req_send(ua, "MESSAGE", uri, resp_handler, resp_callback_arg,
-			   "Accept: text/plain\r\n"
-			   "Content-Type: text/plain\r\n"
-			   "Content-Length: %zu\r\n"
-			   "\r\n%s",
-			   str_len(msg), msg);
+		err = sip_req_send(ua, "MESSAGE", uri, resp_handler, resp_callback_arg,
+				   "Accept: text/plain\r\n"
+				   "Content-Type: text/plain\r\n"
+				   "Content-Length: %zu\r\n"
+				   "\r\n%s",
+				   str_len(msg), msg);
 
-	mem_deref(uri);
+		mem_deref(uri);
+	}
 
  out:
 	mem_deref(dialbuf);
