@@ -1128,9 +1128,12 @@ static int l_GetCallState(lua_State* L)
 	if (call)
 	{
 		lua_pushinteger( L, call->GetState() );
-		return 1;
 	}
-	return 0;
+	else
+	{
+		lua_pushinteger( L, Callback::CALL_STATE_CLOSED );
+	}
+	return 1;
 }
 
 static int l_GetCallButtonId(lua_State* L)
