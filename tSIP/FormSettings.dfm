@@ -3523,9 +3523,9 @@ object frmSettings: TfrmSettings
       object lblOnEncryptionState: TLabel
         Left = 5
         Top = 425
-        Width = 94
+        Width = 122
         Height = 13
-        Caption = 'on encryption state'
+        Caption = 'on ZRTP encryption state'
       end
       object edScriptOnCallStateChangeFile: TEdit
         Left = 148
