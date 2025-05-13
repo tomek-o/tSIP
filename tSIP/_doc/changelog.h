@@ -1243,8 +1243,10 @@ Version 0.3.08
 		- diplaying position (X, Y) and size (W, H) on the button-like panel shown when editing
 		- fixed issue with confirming by left click not working for some positions (e.g. when holding Shift to ignore grid)
 
-Version 0.3.08.2
+Version 0.3.09
 	- added Lua GetCallReason() function		
 	- added option to disable text messaging (SIP SIMPLE MESSAGE) altogether
+	- FIXED full URI recognizing in SIP SIMPLE messages target
+	- FIXED Lua GetCallState() returning nil instead of 0 / CALL_STATE_CLOSED if call was not found
 */
 
