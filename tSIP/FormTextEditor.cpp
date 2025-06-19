@@ -60,8 +60,9 @@ AnsiString TfrmTextEditor::GetText(void)
 {
 	AnsiString ret;
 	unsigned int nLength = m_se->SendEditor(SCI_GETLENGTH, 0, 0);
-	ret.SetLength(nLength+2);
+	ret.SetLength(nLength+1);	// +1 for null-termination required by Scintilla
 	m_se->SendEditor(SCI_GETTEXT, nLength+1, (WPARAM)ret.data());
+	ret.SetLength(nLength);		// remove trailing null-termination (not a part of AnsiString)
 	return ret;
 }
 
