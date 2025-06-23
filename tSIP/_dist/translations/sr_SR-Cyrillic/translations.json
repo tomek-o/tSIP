@@ -1,0 +1,100 @@
+{
+  "Call": {
+    "stateDescription": {
+      "CLOSED": " - НЕАКТИВАН - ",
+      "ESTABLISHED": "Повезан",
+      "INCOMING": "Долазни позив",
+      "OUTGOING": "Позивање...",
+      "PROGRESS": "Стање позива",
+      "RINGING": "Повратно звоно",
+      "TRANSFER": "Пренос",
+      "TRANSFER_OOD": "Пренос ООД",
+      "TRYING": "Покушавам..."
+    },
+    "stateName": {
+      "CLOSED": "ЗАТВОРЕНО",
+      "ESTABLISHED": "УСПОСТАВЉЕНО",
+      "INCOMING": "ДОЛАЗНИ ПОЗИВ",
+      "OUTGOING": "ОДЛАЗНИ ПОЗИВ",
+      "PROGRESS": "СТАЊЕ",
+      "RINGING": "ЗВОНИ",
+      "TRANSFER": "ПРЕНОС",
+      "TRANSFER_OOD": "ПРЕНОС ООД",
+      "TRYING": "ПОКУШАВАМ"
+    }
+  },
+  "TfrmContactEditor": {
+    "btnApply": "Примени",
+    "btnCancel": "Откажи",
+    "caption": "Додај/измени контакт",
+    "lblCompany": "Предузеће",
+    "lblContactFile": "Датотека",
+    "lblDescription": "Опис",
+    "lblNote": "Напомена",
+    "lblNumber1": "Број #1",
+    "lblNumber2": "Број #2",
+    "lblNumber3": "Број #3",
+    "msgFileNotSpecified": "Датотека не може бити мењана, није наведено ием датотеке"
+  },
+  "TfrmContacts": {
+    "miAdd": "Додај",
+    "miDelete": "Обриши",
+    "miEdit": "Измени",
+    "multiItemCallText": "Позив...",
+    "multiItemMessageText": "Порука...",
+    "noNumberUriText": "нема броја/URI",
+    "singleItemCallText": "Позив:",
+    "singleItemMessageText": "Порука:"
+  },
+  "TfrmHistory": {
+    "callTimeText": "Време позива:",
+    "codecText": "Кодек:",
+    "incomingCallText": "Долазни позив",
+    "miAddEditPhonebook": "Додај/измени слог у именик",
+    "miCopyNumber": "Копирај број",
+    "miHttpQuery": "HTTP упит",
+    "miMessage": "Порука",
+    "miOpenInExplorer": "Отвори у менаџеру датотека",
+    "miRecordFile": "Датотека снимка",
+    "miRecordFileOpen": "Отвори у подразумеваном програму",
+    "nameNumber": "Име/број",
+    "notCompletedText": "(није завршено)",
+    "outgoingCallText": "Одлазни позив",
+    "replyCode": "Код одговора:",
+    "replyLine": "Линија одговора:",
+    "timestamp": "Време",
+    "unansweredText": "(неодговорен)"
+  },
+  "TfrmMain": {
+    "btnHangup": "Прекини везу",
+    "btnMakeCall": "Позови/Одговори",
+    "edTransferHint": "Пренеси на ... [Enter]",
+    "miAbout": "О програму...",
+    "miClearCallsHistory": "Облиши историју позива",
+    "miCommonSettings": "Подешавања",
+    "miExit": "Излаз",
+    "miFile": "Датотека",
+    "miHelp": "Помоћ",
+    "miImportContactsFromCsv": "Увези контакте из CSV датотеке",
+    "miImportContactsFromXml": "Увези контакте из XML датотеке",
+    "miMessages": "Поруке",
+    "miMinimizeTray": "Смањи у SysTray",
+    "miPatchButtonSettings": "Печуј / ажурирај подешавања дугмета из JSON",
+    "miRefreshTranslationFromFile": "Освежи преводе из датотеке",
+    "miScriptPluginVariables": "Променљиве скрипти и додатака",
+    "miScripting": "Прозор скрипте",
+    "miSettings": "Подешавања",
+    "miSettingsPatch": "Печуј / ажурирај главна подешавања из JSON",
+    "miTools": "Алатке",
+    "miTroubleshooting": "Решавање проблема",
+    "miView": "Преглед",
+    "miViewLog": "Лог",
+    "tsContacts": "Контакти",
+    "tsDialpad": "Бирач",
+    "tsHistory": "Историја"
+  },
+  "TfrmTrayNotifier": {
+    "btnAnswer": "Одговор",
+    "btnHangup": "Затворана веза"
+  }
+}
