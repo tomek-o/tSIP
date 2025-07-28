@@ -4175,7 +4175,7 @@ void TfrmMain::UpdateMainCallDisplay(void)
 		}
 		else if (cbCallURI->Text != call->dialString)
 		{
-        	cbCallURI->Text = call->dialString;
+			cbCallURI->Text = call->dialString;
 		}
 		lblCallState->Caption = call->getStateTranslatedDescription();
 		lbl2ndParty->Caption = GetClip(call->getPeerUri(), appSettings.Display.bUserOnlyClip);

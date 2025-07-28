@@ -205,11 +205,22 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 				cfg.imgEarly = btnJson.get("imgEarly", cfg.imgEarly).asString();
 				cfg.imgConfirmed = btnJson.get("imgConfirmed", cfg.imgConfirmed).asString();
 
-				ButtonConf::BlfActionDuringCall blfActionDuringCall =
-					static_cast<ButtonConf::BlfActionDuringCall>(btnJson.get("blfActionDuringCall", cfg.blfActionDuringCall).asInt());
-				if (blfActionDuringCall >= ButtonConf::BLF_IN_CALL_NONE && cfg.blfActionDuringCall < ButtonConf::BLF_IN_CALL_LIMITER)
 				{
-					cfg.blfActionDuringCall = blfActionDuringCall;
+					ButtonConf::BlfActionDuringCall blfActionDuringCall =
+						static_cast<ButtonConf::BlfActionDuringCall>(btnJson.get("blfActionDuringCall", cfg.blfActionDuringCall).asInt());
+					if (blfActionDuringCall >= ButtonConf::BLF_IN_CALL_NONE && cfg.blfActionDuringCall < ButtonConf::BLF_IN_CALL_LIMITER)
+					{
+						cfg.blfActionDuringCall = blfActionDuringCall;
+					}
+				}
+
+				{
+					ButtonConf::BlfRemoteIdentityDisplay blfRemoteIdentityDisplay =
+						static_cast<ButtonConf::BlfRemoteIdentityDisplay>(btnJson.get("blfRemoteIdentityDisplay", cfg.blfRemoteIdentityDisplay).asInt());
+					if (blfRemoteIdentityDisplay >= 0 && cfg.blfRemoteIdentityDisplay < ButtonConf::BLF_REMOTE_IDENTITY_DISPLAY_LIMITER)
+					{
+						cfg.blfRemoteIdentityDisplay = blfRemoteIdentityDisplay;
+					}
 				}
 
 				cfg.blfDtmfPrefixDuringCall = btnJson.get("blfDtmfPrefixDuringCall", cfg.blfDtmfPrefixDuringCall).asString();
@@ -577,6 +588,10 @@ int ProgrammableButtons::Write(void)
 		if (saveAllSettings || (cfg.blfActionDuringCall != defaultBtn.blfActionDuringCall))
 		{
 			jsonBtn["blfActionDuringCall"] = cfg.blfActionDuringCall;
+		}
+		if (saveAllSettings || (cfg.blfRemoteIdentityDisplay != defaultBtn.blfRemoteIdentityDisplay))
+		{
+			jsonBtn["blfRemoteIdentityDisplay"] = cfg.blfRemoteIdentityDisplay;
 		}
 		if (saveAllSettings || (cfg.blfDtmfPrefixDuringCall != defaultBtn.blfDtmfPrefixDuringCall))
 		{

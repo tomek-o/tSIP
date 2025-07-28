@@ -39,6 +39,7 @@ __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageLis
 	label2CenterHorizontally(true),
 	scalingPercentage(scalingPercentage),
 	once(false),
+	blfRemoteIdentityDisplayCfg(ButtonConf::BLF_REMOTE_IDENTITY_DISPLAY_NAME_OR_NUMBER),
 	configuredLines(1),
 	raised(true),
 	onMouseUpDownCb(NULL),
@@ -341,6 +342,8 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	memcpy(colors, cfg.colors, sizeof(colors));
 	UpdateColors();
 
+	blfRemoteIdentityDisplayCfg = cfg.blfRemoteIdentityDisplay;
+
 	LoadBitmap(bmpIdle, cfg.imgIdle.c_str());
 	LoadBitmap(bmpTerminated, cfg.imgTerminated.c_str());
 	LoadBitmap(bmpEarly, cfg.imgEarly.c_str());
@@ -429,13 +432,28 @@ void TProgrammableButton::SetState(enum dialog_info_status state, bool updateRem
 			{
 				ridCaption = "<- ";
 			}
-			if (remoteIdentityDisplay.Length())
+
+			switch (blfRemoteIdentityDisplayCfg)
 			{
-				ridCaption += remoteIdentityDisplay;
-			}
-			else
-			{
-				ridCaption += remoteIdentity;
+				case ButtonConf::BLF_REMOTE_IDENTITY_DISPLAY_NAME_OR_NUMBER:
+					if (remoteIdentityDisplay.Length())
+					{
+						ridCaption += remoteIdentityDisplay;
+					}
+					else
+					{
+						ridCaption += remoteIdentity;
+					}
+					break;
+				case ButtonConf::BLF_REMOTE_IDENTITY_DISPLAY_NAME_AND_NUMBER_MULTI_LINE:
+					ridCaption += remoteIdentityDisplay + "\r\n" + remoteIdentity;
+					break;
+				case ButtonConf::BLF_REMOTE_IDENTITY_DISPLAY_NAME_AND_NUMBER_SAME_LINE:
+					ridCaption += remoteIdentityDisplay + "    " + remoteIdentity;
+					break;
+				default:
+					ridCaption += "UNHANDLED REMOTE IDENTITY DISPLAY TYPE!";
+					break;
 			}
 			label2->Caption = ridCaption;
 			SetLines(2);

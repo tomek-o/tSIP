@@ -82,6 +82,11 @@ __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
 	lblNoVideo->Visible = true;
 #endif
 
+	for (int i=0; i<ButtonConf::BLF_REMOTE_IDENTITY_DISPLAY_LIMITER; i++)
+	{
+		cbBlfRemoteIdentityDisplay->Items->Add(ButtonConf::GetBlfRemoteIdentityDisplayDescription(static_cast<ButtonConf::BlfRemoteIdentityDisplay>(i)));
+	}
+
 	for (int i=0; i<pageControl->PageCount; i++)
 	{
 		pageControl->Pages[i]->TabVisible = false;
@@ -204,6 +209,7 @@ void TfrmButtonEdit::ApplyConf(void)
 	edBlfOverrideConfirmed->Text = cfg->blfOverrideConfirmed.number.c_str();
 
 	cbBlfActionDuringCall->ItemIndex = cfg->blfActionDuringCall;
+	cbBlfRemoteIdentityDisplay->ItemIndex = cfg->blfRemoteIdentityDisplay;
 	edBlfDtmfPrefixDuringCall->Text = cfg->blfDtmfPrefixDuringCall.c_str();
 
 	edBlfExpires->Text = cfg->expires;
@@ -312,6 +318,7 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->blfOverrideConfirmed.number = edBlfOverrideConfirmed->Text.c_str();
 
 	cfg->blfActionDuringCall = static_cast<ButtonConf::BlfActionDuringCall>(cbBlfActionDuringCall->ItemIndex);
+	cfg->blfRemoteIdentityDisplay = static_cast<ButtonConf::BlfRemoteIdentityDisplay>(cbBlfRemoteIdentityDisplay->ItemIndex);
 	cfg->blfDtmfPrefixDuringCall = edBlfDtmfPrefixDuringCall->Text.c_str();
 
 	{

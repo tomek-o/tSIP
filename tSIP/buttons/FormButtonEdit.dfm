@@ -60,7 +60,7 @@ object frmButtonEdit: TfrmButtonEdit
     Top = 78
     Width = 529
     Height = 322
-    ActivePage = tsGeneral
+    ActivePage = tsBehavior
     Align = alClient
     TabHeight = 10
     TabOrder = 2
@@ -435,10 +435,17 @@ object frmButtonEdit: TfrmButtonEdit
           end
           object lblBlfExpires: TLabel
             Left = 3
-            Top = 181
+            Top = 197
             Width = 51
             Height = 13
             Caption = 'Expires [s]'
+          end
+          object Label4: TLabel
+            Left = 3
+            Top = 173
+            Width = 155
+            Height = 13
+            Caption = 'BLF remote identity display style'
           end
           object grboxBlfOverride: TGroupBox
             Left = 3
@@ -532,11 +539,20 @@ object frmButtonEdit: TfrmButtonEdit
           end
           object edBlfExpires: TEdit
             Left = 116
-            Top = 178
+            Top = 194
             Width = 45
             Height = 21
             TabOrder = 3
             Text = '600'
+          end
+          object cbBlfRemoteIdentityDisplay: TComboBox
+            Left = 223
+            Top = 170
+            Width = 287
+            Height = 21
+            Style = csDropDownList
+            ItemHeight = 13
+            TabOrder = 4
           end
         end
         object tsBehaviorPaging: TTabSheet

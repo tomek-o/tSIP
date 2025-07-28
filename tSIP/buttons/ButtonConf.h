@@ -133,6 +133,19 @@ public:
 		BLF_IN_CALL_LIMITER
 	} blfActionDuringCall;
 
+	/** \brief Display style configuration for BLF remote identity
+	*/
+	enum BlfRemoteIdentityDisplay
+	{
+		BLF_REMOTE_IDENTITY_DISPLAY_NAME_OR_NUMBER = 0,			///< use display name if present, otherwise number
+		BLF_REMOTE_IDENTITY_DISPLAY_NAME_AND_NUMBER_MULTI_LINE,	///< multiline caption: display name in the first line, number in the second
+		BLF_REMOTE_IDENTITY_DISPLAY_NAME_AND_NUMBER_SAME_LINE,	///< display name and number separated with spaces
+
+		BLF_REMOTE_IDENTITY_DISPLAY_LIMITER
+	} blfRemoteIdentityDisplay;
+
+	static const char* GetBlfRemoteIdentityDisplayDescription(enum BlfRemoteIdentityDisplay val);
+
 	/** Prefix to be added when BLF is pressed during call
 		and BLF is configured to send DTMF
 	*/
@@ -221,6 +234,7 @@ public:
 			blfOverrideConfirmed == right.blfOverrideConfirmed &&
 
 			blfActionDuringCall == right.blfActionDuringCall &&
+            blfRemoteIdentityDisplay == right.blfRemoteIdentityDisplay &&
             blfDtmfPrefixDuringCall == right.blfDtmfPrefixDuringCall
 			);
 	}

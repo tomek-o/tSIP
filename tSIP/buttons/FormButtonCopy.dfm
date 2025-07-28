@@ -92,7 +92,7 @@ object frmButtonCopy: TfrmButtonCopy
     Width = 145
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 0
   end
   object cbTarget: TComboBox
@@ -101,7 +101,7 @@ object frmButtonCopy: TfrmButtonCopy
     Width = 145
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 2
   end
   object grboxCopy: TGroupBox
@@ -347,7 +347,7 @@ object frmButtonCopy: TfrmButtonCopy
     Width = 145
     Height = 21
     Style = csDropDownList
-    ItemHeight = 13
+    ItemHeight = 0
     TabOrder = 3
   end
   object popupCopy: TPopupMenu

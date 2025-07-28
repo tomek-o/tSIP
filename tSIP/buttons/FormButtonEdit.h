@@ -186,6 +186,8 @@ __published:	// IDE-managed Components
 	TImage *imgEarly;
 	TImage *imgConfirmed;
 	TLabel *Label3;
+	TLabel *Label4;
+	TComboBox *cbBlfRemoteIdentityDisplay;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);

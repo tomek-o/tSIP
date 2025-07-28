@@ -42,6 +42,7 @@ private:
 	bool once;
 
 	ButtonConf::Color colors[ButtonConf::EL_LIMITER];
+	ButtonConf::BlfRemoteIdentityDisplay blfRemoteIdentityDisplayCfg;
 
 	int configuredLines;
 	bool spaceLabelsYEqually;

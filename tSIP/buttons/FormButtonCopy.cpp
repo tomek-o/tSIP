@@ -167,6 +167,7 @@ void TfrmButtonCopy::CopyButton(int src, int dst)
 		btnDst.blfOverrideConfirmed = btnSrc.blfOverrideConfirmed;
 
 		btnDst.blfActionDuringCall = btnSrc.blfActionDuringCall;
+		btnDst.blfRemoteIdentityDisplay = btnSrc.blfRemoteIdentityDisplay;
 		btnDst.blfDtmfPrefixDuringCall = btnSrc.blfDtmfPrefixDuringCall;
 	}
 

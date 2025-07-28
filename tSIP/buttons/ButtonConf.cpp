@@ -18,6 +18,22 @@ ButtonConf::ButtonConf(void)
 	Reset();
 }
 
+const char* ButtonConf::GetBlfRemoteIdentityDisplayDescription(enum ButtonConf::BlfRemoteIdentityDisplay val)
+{
+	switch (val)
+	{
+	case BLF_REMOTE_IDENTITY_DISPLAY_NAME_OR_NUMBER:
+		return "name or number";
+	case BLF_REMOTE_IDENTITY_DISPLAY_NAME_AND_NUMBER_MULTI_LINE:
+		return "name + number in two lines of Caption #2";
+	case BLF_REMOTE_IDENTITY_DISPLAY_NAME_AND_NUMBER_SAME_LINE:
+		return "name + number in the same lines";
+
+	default:
+		return "???";
+	}
+}
+
 void ButtonConf::Reset(void)
 {
 	parentId = BUTTON_CONTAINER_MAIN;
@@ -93,6 +109,7 @@ void ButtonConf::Reset(void)
 	blfOverrideConfirmed.Reset();
 
 	blfActionDuringCall = BLF_IN_CALL_TRANSFER;
+	blfRemoteIdentityDisplay = BLF_REMOTE_IDENTITY_DISPLAY_NAME_OR_NUMBER;	
 	blfDtmfPrefixDuringCall = "";
 
 	audioTxMod = AudioModules::winwave2;
