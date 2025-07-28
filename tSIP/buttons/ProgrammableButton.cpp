@@ -5,6 +5,7 @@
 #include "ProgrammableButton.h"
 #include "ButtonConf.h"
 #include "Paths.h"
+#include "common/TelecomUtils.h"
 #pragma package(smart_init)
 
 // #define ON_MOUSE_ENTER_LEAVE
@@ -432,6 +433,8 @@ void TProgrammableButton::SetState(enum dialog_info_status state, bool updateRem
 			{
 				ridCaption = "<- ";
 			}
+
+            remoteIdentity = GetClip(remoteIdentity, true);
 
 			switch (blfRemoteIdentityDisplayCfg)
 			{
