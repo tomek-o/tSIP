@@ -109,6 +109,13 @@ object frmButtonContainer: TfrmButtonContainer
     OnPopup = popupAddPanelPopup
     Left = 24
     Top = 248
+    object miContainerName: TMenuItem
+      Caption = '<container name>'
+      Enabled = False
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
     object miAddEditPanel: TMenuItem
       Caption = 'Add/edit button (panel)'
     end

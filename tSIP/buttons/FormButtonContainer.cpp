@@ -7,6 +7,7 @@
 #include "FormButtonContainerConf.h"
 #include "ProgrammableButton.h"
 #include "ProgrammableButtons.h"
+#include "ButtonContainers.h"
 #include "SpeedDialStatus.h"
 #include "Settings.h"
 #include "UaMain.h"
@@ -109,6 +110,9 @@ void TfrmButtonContainer::UpdatePopupSettings(void)
 
 void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
 {
+	AnsiString text;
+	text.sprintf("Container: %s", GetButtonContainerName(static_cast<ButtonContainerId>(containerId)));
+	miContainerName->Caption = text;
 	miAddEditPanel->Clear();
 	TMenuItem *item, *itemGroup = NULL;
 	enum { GROUP_SIZE = 25 };
@@ -120,11 +124,10 @@ void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
 	#if 0
 		if (i > 0 && i % 50 == 0)
 		{
-            // scroll disappears if this is used
+			// scroll disappears if this is used
 			item->Break = mbBarBreak;
 		}
 	#endif
-		AnsiString text;
 
 		if ((i % GROUP_SIZE) == 0)
 		{

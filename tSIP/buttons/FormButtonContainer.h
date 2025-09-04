@@ -38,6 +38,8 @@ __published:	// IDE-managed Components
 	TPanel *movingFrame;
 	TMenuItem *miConfigureButtonContainer;
 	TLabel *lblCaption;
+	TMenuItem *N1;
+	TMenuItem *miContainerName;
 	void __fastcall popupAddPanelPopup(TObject *Sender);
 	void __fastcall miAddEditPanelClick(TObject *Sender);
 	void __fastcall miCopyPanelClick(TObject *Sender);
