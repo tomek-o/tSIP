@@ -11,6 +11,7 @@
 #include "Settings.h"
 #include "UaMain.h"
 #include "Log.h"
+#include <algorithm>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -109,9 +110,10 @@ void TfrmButtonContainer::UpdatePopupSettings(void)
 void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
 {
 	miAddEditPanel->Clear();
-	TMenuItem *item;
+	TMenuItem *item, *itemGroup = NULL;
+	enum { GROUP_SIZE = 25 };
 	miAddEditPanel->AutoHotkeys = maManual;
-	for (int i=0; i<buttons.btnConf.size(); i++)
+	for (unsigned int i=0; i<buttons.btnConf.size(); i++)
 	{
 		item = new TMenuItem(popupAddPanel);
 		item->Tag = i;
@@ -122,8 +124,17 @@ void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
 			item->Break = mbBarBreak;
 		}
 	#endif
-		item->AutoHotkeys = maManual;
 		AnsiString text;
+
+		if ((i % GROUP_SIZE) == 0)
+		{
+			itemGroup = new TMenuItem(popupAddPanel);
+			unsigned int limit = std::min(i+GROUP_SIZE-1, buttons.btnConf.size());
+			text.sprintf("#%03d ... #%03d", i, limit);
+			itemGroup->Caption = text;
+			miAddEditPanel->Add(itemGroup);
+		}
+		item->AutoHotkeys = maManual;
 		AnsiString caption = "[empty caption]";
 		ButtonConf &cfg = buttons.btnConf[i];
 		if (cfg.caption != "")
@@ -135,10 +146,10 @@ void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
 				caption = caption.SubString(1, BUTTON_CAPTION_MAX_DISPLAY_LENGTH) + "...";
 			}
 		}
-		text.sprintf("Button #%02d: %s", i, caption.c_str());
+		text.sprintf("#%03d: %s   |   %s", i, caption.c_str(), Button::TypeName(cfg.type));
 		item->Caption = text;
 		item->OnClick = miAddEditPanelClick;
-		miAddEditPanel->Add(item);
+		itemGroup->Add(item);
 	}
 }
 //---------------------------------------------------------------------------
