@@ -119,6 +119,9 @@ object frmButtonContainer: TfrmButtonContainer
     object miAddEditPanel: TMenuItem
       Caption = 'Add/edit button (panel)'
     end
+    object miBringHerePanel: TMenuItem
+      Caption = 'Bring here button'
+    end
     object miCopyPanel: TMenuItem
       Caption = 'Copy button properties'
       OnClick = miCopyPanelClick

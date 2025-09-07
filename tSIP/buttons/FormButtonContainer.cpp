@@ -108,15 +108,14 @@ void TfrmButtonContainer::UpdatePopupSettings(void)
 	panelMain->PopupMenu = useContextMenu ? popupAddPanel : NULL;
 }
 
-void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
+void TfrmButtonContainer::FillButtonsPopup(TMenuItem* miParent, TNotifyEvent onClick)
 {
 	AnsiString text;
-	text.sprintf("Container: %s", GetButtonContainerName(static_cast<ButtonContainerId>(containerId)));
-	miContainerName->Caption = text;
-	miAddEditPanel->Clear();
+
+	miParent->Clear();
 	TMenuItem *item, *itemGroup = NULL;
 	enum { GROUP_SIZE = 25 };
-	miAddEditPanel->AutoHotkeys = maManual;
+	miParent->AutoHotkeys = maManual;
 	for (unsigned int i=0; i<buttons.btnConf.size(); i++)
 	{
 		item = new TMenuItem(popupAddPanel);
@@ -135,7 +134,7 @@ void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
 			unsigned int limit = std::min(i+GROUP_SIZE-1, buttons.btnConf.size());
 			text.sprintf("#%03d ... #%03d", i, limit);
 			itemGroup->Caption = text;
-			miAddEditPanel->Add(itemGroup);
+			miParent->Add(itemGroup);
 		}
 		item->AutoHotkeys = maManual;
 		AnsiString caption = "[empty caption]";
@@ -151,9 +150,20 @@ void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
 		}
 		text.sprintf("#%03d: %s   |   %s", i, caption.c_str(), Button::TypeName(cfg.type));
 		item->Caption = text;
-		item->OnClick = miAddEditPanelClick;
+		item->OnClick = onClick;
 		itemGroup->Add(item);
 	}
+}
+
+void __fastcall TfrmButtonContainer::popupAddPanelPopup(TObject *Sender)
+{
+	AnsiString text;
+	text.sprintf("Container: %s", GetButtonContainerName(static_cast<ButtonContainerId>(containerId)));
+	miContainerName->Caption = text;
+	FillButtonsPopup(miAddEditPanel, miAddEditPanelClick);
+	FillButtonsPopup(miBringHerePanel, miBringHerePanelClick);
+
+	popupPosition = this->ScreenToClient(Mouse->CursorPos);
 }
 //---------------------------------------------------------------------------
 
@@ -165,6 +175,19 @@ void __fastcall TfrmButtonContainer::miAddEditPanelClick(TObject *Sender)
 		return;
 	int id = item->Tag;
 	buttons.Edit(id);
+}
+
+void __fastcall TfrmButtonContainer::miBringHerePanelClick(TObject *Sender)
+{
+	TMenuItem *item = dynamic_cast<TMenuItem*>(Sender);
+	assert(item);
+	if (item == NULL)
+		return;
+	int id = item->Tag;
+
+	int left = popupPosition.x * 100/scalingPercentage;
+	int top = popupPosition.y * 100/scalingPercentage;
+	buttons.Bring(id, left, top, containerId);
 }
 
 void TfrmButtonContainer::UpdateBackgroundImage(AnsiString file, bool transparent)

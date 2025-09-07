@@ -40,6 +40,7 @@ __published:	// IDE-managed Components
 	TLabel *lblCaption;
 	TMenuItem *N1;
 	TMenuItem *miContainerName;
+	TMenuItem *miBringHerePanel;
 	void __fastcall popupAddPanelPopup(TObject *Sender);
 	void __fastcall miAddEditPanelClick(TObject *Sender);
 	void __fastcall miCopyPanelClick(TObject *Sender);
@@ -47,7 +48,7 @@ __published:	// IDE-managed Components
 	void __fastcall panelMainMouseDown(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y);
 	void __fastcall imgBackgroundMouseDown(TObject *Sender, TMouseButton Button,
-          TShiftState Shift, int X, int Y);
+		  TShiftState Shift, int X, int Y);
 	void __fastcall miConfigureButtonContainerClick(TObject *Sender);
 public:
 	typedef void (__closure *CallbackSetKeepForeground)(bool disable);
@@ -70,8 +71,11 @@ private:	// User declarations
 	bool hideEmptyStatus;
 
 	int editedPanelId;
+	TPoint popupPosition;
 
 	ProgrammableButtons &buttons;
+	void FillButtonsPopup(TMenuItem* miParent, TNotifyEvent onClick);
+	void __fastcall miBringHerePanelClick(TObject *Sender);
 public:		// User declarations
 	__fastcall TfrmButtonContainer(TComponent* Owner, ProgrammableButtons &buttons,
 		unsigned int containerId,

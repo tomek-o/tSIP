@@ -106,6 +106,8 @@ public:
 
 	void Edit(int id);
 
+	void Bring(int id, int left, int top, int containerId);
+
 	void Move(int id, bool moveGroup);
 
 	void Resize(int id);

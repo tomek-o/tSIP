@@ -1299,6 +1299,24 @@ void ProgrammableButtons::Edit(int id)
 	}
 }
 
+void ProgrammableButtons::Bring(int id, int left, int top, int containerId)
+{
+	ButtonConf cfg = btnConf[id];	// copy
+	cfg.left = left;
+	cfg.top = top;
+	cfg.parentId = containerId;
+
+	if (!cfg.visible)
+	{
+		if (Application->MessageBox("Make also button visible?", Application->Title.c_str(), MB_YESNO | MB_ICONQUESTION) == IDYES)
+			cfg.visible = true;
+	}
+
+	ApplyButtonCfg(id, cfg);
+	TfrmButtonContainer *container = GetBtnContainer(id);
+	container->Repaint();
+}
+
 void ProgrammableButtons::Move(int id, bool moveGroup)
 {
 	editedPanelId = id;
