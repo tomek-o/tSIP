@@ -1248,5 +1248,15 @@ Version 0.3.09
 	- added option to disable text messaging (SIP SIMPLE MESSAGE) altogether
 	- FIXED full URI recognizing in SIP SIMPLE messages target
 	- FIXED Lua GetCallState() returning nil instead of 0 / CALL_STATE_CLOSED if call was not found
+
+Version 0.3.10
+	- added Serbian translation (thanks to pedjas)
+	- button containers popup menu
+		- splitting buttons into groups of 25 each
+		- added container name
+		- added "Bring button here" option as a new way of arranging buttons, changing button position, parent container and optionally making it visible
+	- gzrtp: increased mbuf size if about to run out
+	- added remote identity display style configuration for each BLF button, allowing to display both number and name from remote identity
+	- BLF remote identity display: extracting CLIP/number from URI
 */
 
