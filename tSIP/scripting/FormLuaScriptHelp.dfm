@@ -134,6 +134,7 @@ object frmLuaScriptHelp: TfrmLuaScriptHelp
     ViewStyle = vsReport
     OnData = lvSymbolsData
     OnSelectItem = lvSymbolsSelectItem
+    ExplicitTop = -3
   end
   object popupList: TPopupMenu
     Left = 16

@@ -44,6 +44,8 @@ void TfrmLuaScriptHelp::Filter(void)
 	static const std::vector<ScriptExec::Symbol>& symbols = ScriptExec::GetSymbols();
 	entries.clear();
 
+	int selected = -1;
+
 	AnsiString needle = UpperCase(edFilter->Text);
 	if (needle == "")
 	{
@@ -63,12 +65,20 @@ void TfrmLuaScriptHelp::Filter(void)
 				)
 			{
 				entries.push_back(symbol);
+				if ((selected < 0) && (UpperCase(symbol.name) == needle))
+					selected = entries.size() - 1;
 			}
 		}
 	}
 
 	lvSymbols->Items->Count = entries.size();
 	lvSymbols->Invalidate();
+	if (selected >= 0)
+	{
+		TListItem *item = lvSymbols->Items->Item[selected];
+		item->Selected = true;
+		item->MakeVisible(false);
+	}
 }
 
 void TfrmLuaScriptHelp::SetCallbackRunScript(CallbackRunScript cb)
@@ -79,12 +89,12 @@ void TfrmLuaScriptHelp::SetCallbackRunScript(CallbackRunScript cb)
 
 void __fastcall TfrmLuaScriptHelp::edFilterChange(TObject *Sender)
 {
-	Filter();
 	lvSymbols->ClearSelection();
-	if (lvSymbols->Items->Count == 1)
+	Filter();
+	if (!lvSymbols->Selected && lvSymbols->Items->Count == 1)
 	{
-    	lvSymbols->Items->Item[0]->Selected = true;
-	}	
+		lvSymbols->Items->Item[0]->Selected = true;
+	}
 	if (!lvSymbols->Selected)
 		memoDescription->Clear();
 }
@@ -142,4 +152,11 @@ void __fastcall TfrmLuaScriptHelp::FormKeyPress(TObject *Sender, char &Key)
     }	
 }
 //---------------------------------------------------------------------------
+
+void TfrmLuaScriptHelp::ShowForKeyword(AnsiString text)
+{
+	edFilter->Text = text;
+	Filter();
+	Show();
+}
 

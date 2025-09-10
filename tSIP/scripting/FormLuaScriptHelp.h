@@ -44,6 +44,7 @@ public:		// User declarations
 	__fastcall TfrmLuaScriptHelp(TComponent* Owner);
 	typedef int (__closure *CallbackRunScript)(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
 	static void SetCallbackRunScript(CallbackRunScript cb);
+	void ShowForKeyword(AnsiString text);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmLuaScriptHelp *frmLuaScriptHelp;
