@@ -173,9 +173,6 @@ void TScEdit::setLuaStyle(void)
 	SendEditor(SCI_STYLESETFORE, SCE_LUA_WORD2,				(int)RGB(0x00, 0x80, 0xCF));
 	SendEditor(SCI_STYLESETFORE, SCE_LUA_WORD3,				(int)RGB(0x80, 0x00, 0xFF));
 	SendEditor(SCI_STYLESETFORE, SCE_LUA_WORD4,				(int)RGB(0x00, 0x00, 0xA0));
-
-	SendEditor(SCI_SETCARETLINEVISIBLE, TRUE);
-	SendEditor(SCI_SETCARETLINEBACK, 0xb0ffff);
 #endif		
 }
 
@@ -222,6 +219,10 @@ void TScEdit::SetExtraStyle(void)
 #endif
 	// Wider (2 pixels) caret
 	SendEditor(SCI_SETCARETWIDTH, 2, 0);
+
+	// Caret line highlighting
+	SendEditor(SCI_SETCARETLINEVISIBLE, TRUE);
+	SendEditor(SCI_SETCARETLINEBACK, 0xb0ffff);
 }
 
 void TScEdit::setStyle(enum ScEditStyle style)
