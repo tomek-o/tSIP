@@ -35,15 +35,6 @@ void __fastcall TfrmLuaScriptHelp::lvSymbolsData(TObject *Sender,
 //---------------------------------------------------------------------------
 void __fastcall TfrmLuaScriptHelp::FormShow(TObject *Sender)
 {
-	const std::vector<ScriptExec::Symbol>& symbols = ScriptExec::GetSymbols();
-	if (symbols.empty())
-	{
-		// run once empty script to fill global function list
-		bool breakRequest = false;
-		bool handled = true;
-		callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, "", breakRequest, handled);
-	}
-
 	Filter();
 }
 //---------------------------------------------------------------------------

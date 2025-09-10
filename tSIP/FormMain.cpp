@@ -392,6 +392,13 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 
 	cbCallURI->Clear();
 	UpdateCallHistory();
+
+	{
+		// Lua: run once empty script to fill global function list used by Lua help and Scintilla highlighting
+		bool breakRequest = false;
+		bool handled = true;
+		RunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, "", breakRequest, handled);
+	}
 }
 //---------------------------------------------------------------------------
 
