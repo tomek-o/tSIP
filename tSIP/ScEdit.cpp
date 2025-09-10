@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "ScEdit.h"
+#include "scripting/ScriptExec.h"
 #define SCI_NAMESPACE	// required because of class name collision ("Action")
 #include <Scintilla.h>
 #include <SciLexer.h>
@@ -106,18 +107,21 @@ void TScEdit::setLuaStyle(void)
 	static const char lua_type1[] = "abs acos asin atan atan2 ceil cos deg exp floor format frexp gsub ldexp log log10 max min mod rad random randomseed sin sqrt strbyte strchar strfind strlen strlower strrep strsub strupper tan string.byte string.char string.dump string.find string.len string.lower string.rep string.sub string.upper string.format string.gfind string.gsub table.concat table.foreach table.foreachi table.getn table.sort table.insert table.remove table.setn math.abs math.acos math.asin math.atan math.atan2 math.ceil math.cos math.deg math.exp math.floor math.frexp math.ldexp math.log math.log10 math.max math.min math.mod math.pi math.rad math.random math.randomseed math.sin math.sqrt math.tan";
 	static const char lua_type2[] = "openfile closefile readfrom writeto appendto remove rename flush seek tmpfile tmpname read write clock date difftime execute exit getenv setlocale time coroutine.create coroutine.resume coroutine.status coroutine.wrap coroutine.yield io.close io.flush io.input io.lines io.open io.output io.read io.tmpfile io.type io.write io.stdin io.stdout io.stderr os.clock os.date os.difftime os.execute os.exit os.getenv os.remove os.rename os.setlocale os.time os.tmpname";
 
+	static const std::vector<ScriptExec::Symbol>& symbols = ScriptExec::GetSymbols();
+	static AnsiString lua_custom;
+	for (std::vector<ScriptExec::Symbol>::const_iterator iter = symbols.begin(); iter != symbols.end(); ++iter)
+	{
+		lua_custom += AnsiString(iter->name) + " ";
+	}
 
 	SendEditor(SCI_SETLEXER, SCLEX_LUA);
 	SendEditor(SCI_SETSTYLEBITS, SendEditor(SCI_GETSTYLEBITSNEEDED));
 
-	SendEditor(SCI_SETKEYWORDS, 0,
-		reinterpret_cast<LPARAM>(lua_instre1));
-	SendEditor(SCI_SETKEYWORDS, 1,
-		reinterpret_cast<LPARAM>(lua_instre2));
-	SendEditor(SCI_SETKEYWORDS, 2,
-		reinterpret_cast<LPARAM>(lua_type1));
-	SendEditor(SCI_SETKEYWORDS, 3,
-		reinterpret_cast<LPARAM>(lua_type2));
+	SendEditor(SCI_SETKEYWORDS, 0, reinterpret_cast<LPARAM>(lua_instre1));
+	SendEditor(SCI_SETKEYWORDS, 1, reinterpret_cast<LPARAM>(lua_instre2));
+	SendEditor(SCI_SETKEYWORDS, 2, reinterpret_cast<LPARAM>(lua_type1));
+	SendEditor(SCI_SETKEYWORDS, 3, reinterpret_cast<LPARAM>(lua_type2));
+	SendEditor(SCI_SETKEYWORDS, 4, reinterpret_cast<LPARAM>(lua_custom.c_str()));
 
 
 	SendEditor(SCI_STYLECLEARALL);
@@ -137,9 +141,8 @@ void TScEdit::setLuaStyle(void)
 	SendEditor(SCI_STYLESETFORE, SCE_LUA_WORD3,				(int)RGB(0x80, 0x00, 0xFF));
 	SendEditor(SCI_STYLESETFORE, SCE_LUA_WORD4,				(int)RGB(0x00, 0x00, 0xA0));
 
-
-	//SendEditor(SCI_SETMARGINTYPEN, 0, SC_MARGIN_NUMBER);
-	//SendEditor(SCI_SETMARGINWIDTHN, 0, SendEditor(SCI_TEXTWIDTH, STYLE_LINENUMBER, "_9999"));		// TODO: do this dynamic, look for "SetLineNumberWidth" in scite code
+	SendEditor(SCI_STYLESETFORE, SCE_LUA_WORD5,				(int)RGB(0x00, 0x00, 0x60));
+	SendEditor(SCI_STYLESETHOTSPOT, SCE_LUA_WORD5, 1);
 
 	//SendEditor(SCI_SETMARGINTYPEN, 1, SC_MARGIN_SYMBOL);
 	//SendEditor(SCI_SETMARGINWIDTHN, 1, 16);
