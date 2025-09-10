@@ -5,6 +5,7 @@
 
 #include "FormTextEditor.h"
 #include "ScEdit.h"
+#include "scripting/FormLuaScriptHelp.h"
 #define SCI_NAMESPACE
 #include <Scintilla.h>
 #include <SciLexer.h>
@@ -86,9 +87,9 @@ void __fastcall TfrmTextEditor::WMNotify(TMessage &Message)
     {
         switch (lpnmh->code)
         {
-        case SCN_MARGINCLICK:
-        {
-            SCNotification* notify = (SCNotification*)Message.LParam;
+		case SCN_MARGINCLICK:
+		{
+			SCNotification* notify = (SCNotification*)Message.LParam;
 
             //const int modifiers = notify->modifiers;
             const int position = notify->position;
@@ -135,6 +136,30 @@ void __fastcall TfrmTextEditor::WMNotify(TMessage &Message)
 		}
 		break;
 
+		case SCN_HOTSPOTRELEASECLICK:
+		{
+			SCNotification* notify = (SCNotification*)Message.LParam;
+			int startPosition = m_se->SendEditor(SCI_WORDSTARTPOSITION, notify->position, false);
+			int endPosition = m_se->SendEditor(SCI_WORDENDPOSITION, notify->position, false);
+
+			// GetTextRange
+			AnsiString word;
+			unsigned int nLength = endPosition - startPosition;
+			word.SetLength(nLength+1);	// +1 for null-termination required by Scintilla
+			Sci_TextRange tr;
+			tr.chrg.cpMin = startPosition;
+			tr.chrg.cpMax = endPosition;
+			tr.lpstrText = (char*)word.data();
+			m_se->SendEditor(SCI_GETTEXTRANGE, 0, (WPARAM)&tr);
+			word.SetLength(nLength);		// remove trailing null-termination (not a part of AnsiString)
+
+			if (frmLuaScriptHelp == NULL)
+			{
+				Application->CreateForm(__classid(TfrmLuaScriptHelp), &frmLuaScriptHelp);
+			}
+			frmLuaScriptHelp->ShowForKeyword(word);
+		}
+		break;
 
 		default:
 		break;
