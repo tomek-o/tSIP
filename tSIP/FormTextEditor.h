@@ -17,11 +17,13 @@ class TScEdit;
 class TfrmTextEditor : public TForm
 {
 __published:	// IDE-managed Components
+	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 private:	// User declarations
 	TScEdit * m_se;
 	typedef void (__closure *CallbackTextChange)(void);
 	AnsiString fontName;
 	int fontSize;
+	AnsiString GetTextRange(int startPosition, int endPosition);
 protected:
 	void __fastcall WMNotify(TMessage &Message);
 	BEGIN_MESSAGE_MAP

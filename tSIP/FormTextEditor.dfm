@@ -12,9 +12,9 @@ object frmTextEditor: TfrmTextEditor
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
-  ExplicitWidth = 320
-  ExplicitHeight = 240
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
 end

@@ -135,24 +135,14 @@ void __fastcall TfrmTextEditor::WMNotify(TMessage &Message)
 				m_se->SendEditor(SCI_BRACEHIGHLIGHT, -1, -1);
 		}
 		break;
-
+#if 0
 		case SCN_HOTSPOTRELEASECLICK:
 		{
 			SCNotification* notify = (SCNotification*)Message.LParam;
 			int startPosition = m_se->SendEditor(SCI_WORDSTARTPOSITION, notify->position, false);
 			int endPosition = m_se->SendEditor(SCI_WORDENDPOSITION, notify->position, false);
 
-			// GetTextRange
-			AnsiString word;
-			unsigned int nLength = endPosition - startPosition;
-			word.SetLength(nLength+1);	// +1 for null-termination required by Scintilla
-			Sci_TextRange tr;
-			tr.chrg.cpMin = startPosition;
-			tr.chrg.cpMax = endPosition;
-			tr.lpstrText = (char*)word.data();
-			m_se->SendEditor(SCI_GETTEXTRANGE, 0, (WPARAM)&tr);
-			word.SetLength(nLength);		// remove trailing null-termination (not a part of AnsiString)
-
+			AnsiString word = GetTextRange(startPosition, endPosition);
 			if (frmLuaScriptHelp == NULL)
 			{
 				Application->CreateForm(__classid(TfrmLuaScriptHelp), &frmLuaScriptHelp);
@@ -160,7 +150,7 @@ void __fastcall TfrmTextEditor::WMNotify(TMessage &Message)
 			frmLuaScriptHelp->ShowForKeyword(word);
 		}
 		break;
-
+#endif
 		default:
 		break;
 		}
@@ -239,7 +229,38 @@ AnsiString TfrmTextEditor::GetSelectedText(void)
 	return text;
 }
 
+AnsiString TfrmTextEditor::GetTextRange(int startPosition, int endPosition)
+{
+	AnsiString text;
+	unsigned int nLength = endPosition - startPosition;
+	text.SetLength(nLength+1);	// +1 for null-termination required by Scintilla
+	Sci_TextRange tr;
+	tr.chrg.cpMin = startPosition;
+	tr.chrg.cpMax = endPosition;
+	tr.lpstrText = (char*)text.data();
+	m_se->SendEditor(SCI_GETTEXTRANGE, 0, (WPARAM)&tr);
+	text.SetLength(nLength);		// remove trailing null-termination (not a part of AnsiString)
+	return text;
+}
 
-
-
+void __fastcall TfrmTextEditor::FormKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+	if (Key == VK_F1)
+	{
+		int pos = m_se->SendEditor(SCI_GETCURRENTPOS, 0, 0);
+		int startPosition = m_se->SendEditor(SCI_WORDSTARTPOSITION, pos, false);
+		int endPosition = m_se->SendEditor(SCI_WORDENDPOSITION, pos, false);
+		AnsiString word = GetTextRange(startPosition, endPosition);
+		if (word != "")
+		{
+			if (frmLuaScriptHelp == NULL)
+			{
+				Application->CreateForm(__classid(TfrmLuaScriptHelp), &frmLuaScriptHelp);
+			}
+			frmLuaScriptHelp->ShowForKeyword(word);
+		}
+	}
+}
+//---------------------------------------------------------------------------
 
