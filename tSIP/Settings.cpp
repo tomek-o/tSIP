@@ -611,6 +611,7 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 		{
 			Logging.iMaxFileSize = iMaxFileSize;
 		}
+		LoggingJson.getBool("Timestamps", Logging.timestamps);
 		unsigned int iLogRotate = LoggingJson.get("LogRotate", Logging.iLogRotate).asUInt();
 		if (iLogRotate <= Settings::_Logging::MAX_LOGROTATE)
 		{
@@ -958,6 +959,7 @@ int Settings::Write(AnsiString asFileName)
 		jLogging["LogToFile"] = Logging.bLogToFile;
 		jLogging["Flush"] = Logging.bFlush;
 		jLogging["MaxFileSize"] = Logging.iMaxFileSize;
+		jLogging["Timestamps"] = Logging.timestamps;
 		jLogging["LogRotate"] = Logging.iLogRotate;
 		jLogging["MaxUiLogLines"] = Logging.iMaxUiLogLines;
 		jLogging["WindowWidth"] = Logging.windowWidth;

@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsMessages
+    ActivePage = tsLogging
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -4363,7 +4363,7 @@ object frmSettings: TfrmSettings
       ImageIndex = 1
       object lblUiCapacity: TLabel
         Left = 5
-        Top = 172
+        Top = 196
         Width = 194
         Height = 13
         Caption = 'Visible (buffered) log lines in log window:'
@@ -4386,14 +4386,14 @@ object frmSettings: TfrmSettings
       end
       object lblLoggingConsoleFont: TLabel
         Left = 5
-        Top = 202
+        Top = 226
         Width = 79
         Height = 13
         Caption = 'Log window font'
       end
       object cmbMaxUiLogLines: TComboBox
         Left = 365
-        Top = 169
+        Top = 193
         Width = 111
         Height = 21
         Style = csDropDownList
@@ -4466,7 +4466,7 @@ object frmSettings: TfrmSettings
       end
       object edLoggingConsoleFont: TEdit
         Left = 98
-        Top = 199
+        Top = 223
         Width = 201
         Height = 21
         TabOrder = 6
@@ -4474,7 +4474,7 @@ object frmSettings: TfrmSettings
       end
       object btnLoggingConsoleFontSelect: TButton
         Left = 305
-        Top = 197
+        Top = 221
         Width = 26
         Height = 25
         Caption = '...'
@@ -4483,7 +4483,7 @@ object frmSettings: TfrmSettings
       end
       object chbLogAubuf: TCheckBox
         Left = 5
-        Top = 143
+        Top = 167
         Width = 325
         Height = 17
         Caption = 'Logging for audio buffers'
@@ -4496,6 +4496,14 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Log only first lines (Request-Line/Status-Line) from messages'
         TabOrder = 9
+      end
+      object chbLogTimestamps: TCheckBox
+        Left = 5
+        Top = 142
+        Width = 325
+        Height = 17
+        Caption = 'Add timestamps'
+        TabOrder = 10
       end
     end
     object tsUaConfOpus: TTabSheet

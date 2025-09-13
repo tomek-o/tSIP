@@ -3121,6 +3121,7 @@ void TfrmMain::UpdateLogConfig(void)
 		log->SetFile("");
 	log->SetFlush(appSettings.Logging.bFlush);
 	log->SetMaxFileSize(appSettings.Logging.iMaxFileSize);
+	log->SetTimestamps(appSettings.Logging.timestamps);
 	log->SetLogRotateCnt(appSettings.Logging.iLogRotate);
 }
 

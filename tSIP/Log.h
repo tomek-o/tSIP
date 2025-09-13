@@ -30,6 +30,7 @@ public:
 	void SetLogToFile(bool);
 	void SetFlush(bool state);
 	void SetMaxFileSize(unsigned int size);
+	void SetTimestamps(bool enabled);
 	/** Set total maximum number of files used for "logrotate" scheme (apart from main file).
 		Equivalent of "rotate" parameter for logrotate - number of old files to keep.
 		Old files are named like main file but with with ".x" added after file extension 
@@ -60,6 +61,7 @@ private:
 	bool bFlush;
 	int iLogLevel;
 	unsigned int maxFileSize;
+	bool timestamps;
 	unsigned int maxLogrotateCnt;
 };
 

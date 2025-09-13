@@ -199,6 +199,7 @@ public:
             DEF_MAX_FILE_SIZE = 10*1024*1024
         };
 		int iMaxFileSize;
+		bool timestamps;
 		enum {
 			MAX_LOGROTATE = 5
 		};
@@ -215,6 +216,7 @@ public:
 			bLogToFile(false),
 			bFlush(false),
 			iMaxFileSize(Settings::_Logging::DEF_MAX_FILE_SIZE),
+			timestamps(false),
 			iLogRotate(Settings::_Logging::DEF_LOGROTATE),
 			iMaxUiLogLines(5000),
 			windowWidth(630), windowHeight(400)

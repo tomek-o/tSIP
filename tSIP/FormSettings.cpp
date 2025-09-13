@@ -374,6 +374,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbLogMessages->Checked = tmpSettings.uaConf.logMessages;
 	chbLogMessagesOnlyFirstLines->Checked = tmpSettings.uaConf.logMessagesOnlyFirstLine;
 	chbLogAubuf->Checked = tmpSettings.uaConf.logAubuf;
+	chbLogTimestamps->Checked = tmpSettings.Logging.timestamps;
 	cmbMaxUiLogLines->ItemIndex = -1;
 	for (int i=0; i<cmbMaxUiLogLines->Items->Count; i++)
 	{
@@ -818,6 +819,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.logMessages = chbLogMessages->Checked;
 	tmpSettings.uaConf.logMessagesOnlyFirstLine = chbLogMessagesOnlyFirstLines->Checked;
 	tmpSettings.uaConf.logAubuf = chbLogAubuf->Checked;
+	tmpSettings.Logging.timestamps = chbLogTimestamps->Checked;
 
 	tmpSettings.Display.bUserOnlyClip = chbUserOnlyClip->Checked;
 	tmpSettings.Display.bDecodeUtfDisplayToAnsi = chbDecodeUtfDisplayToAnsi->Checked;

@@ -32,6 +32,7 @@ CLog::CLog()
 	bFlush = false;
 	callbackLog = NULL;
 	maxFileSize = 0;
+	timestamps = false;
 	maxLogrotateCnt = 1;
 };
 
@@ -79,6 +80,11 @@ void CLog::SetMaxFileSize(unsigned int size)
     maxFileSize = size;
 }
 
+void CLog::SetTimestamps(bool enabled)
+{
+	timestamps = enabled;
+}
+
 void CLog::SetLogRotateCnt(unsigned int cnt)
 {
     maxLogrotateCnt = cnt;
@@ -95,21 +101,20 @@ void CLog::log(char *lpData, ...)
 	va_list ap;
 	char buf[2048]; //determines max message length
 
-	/*
-	After looking inside RTL sources it seems that this is thread-safe (when linking
-	with MT version).
-	*/
-	//int size = strftime(buf, sizeof(buf), "%Y-%m-%d %T", localtime(&timebuffer.time));
-#if 0
-	struct timeb timebuffer;
-	ftime( &timebuffer );
-	int size = strftime(buf, sizeof(buf), "%T", localtime(&timebuffer.time));
-	int res = snprintf(buf+size, sizeof(buf)-size, ".%03hu ", timebuffer.millitm);
-	buf[sizeof(buf)-1] = '\0';
-	size += res;
-#else
-	int size = 0;
-#endif
+	int size;
+	if (timestamps)
+	{
+		struct timeb timebuffer;
+		ftime( &timebuffer );
+		size = strftime(buf, sizeof(buf), "%T", localtime(&timebuffer.time));
+		int res = snprintf(buf+size, sizeof(buf)-size, ".%03hu ", timebuffer.millitm);
+		buf[sizeof(buf)-1] = '\0';
+		size += res;
+	}
+	else
+	{
+		size = 0;
+	}
 
 	if ((int)sizeof(buf)-size-2 > 0)
 	{
