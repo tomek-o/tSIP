@@ -43,6 +43,7 @@ private:
 	typedef void (__closure *CallbackHideTrayNotifier)(void);
 	typedef int (__closure *CallbackUpdateSettings)(AnsiString json);
 	typedef int (__closure *CallbackUpdateButtons)(AnsiString json);
+	typedef int (__closure *CallbackUpdateButton)(unsigned int btnId, AnsiString json);
 	typedef void (__closure *CallbackMainMenuShow)(bool state);
 	typedef void (__closure *CallbackApplicationShow)(bool focused);
 	typedef void (__closure *CallbackApplicationHide)(void);
@@ -65,6 +66,7 @@ private:
 	CallbackHideTrayNotifier onHideTrayNotifier;
 	CallbackUpdateSettings onUpdateSettings;
 	CallbackUpdateButtons onUpdateButtons;
+	CallbackUpdateButton onUpdateButton;
 	CallbackMainMenuShow onMainMenuShow;
 	CallbackApplicationShow onApplicationShow;
 	CallbackApplicationHide onApplicationHide;
@@ -105,6 +107,7 @@ public:
 		CallbackHideTrayNotifier onHideTrayNotifier,
 		CallbackUpdateSettings onUpdateSettings,
 		CallbackUpdateButtons onUpdateButtons,
+		CallbackUpdateButton onUpdateButton,
 		CallbackMainMenuShow onMainMenuShow,
 		CallbackApplicationShow onApplicationShow,
 		CallbackApplicationHide onApplicationHide,

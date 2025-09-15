@@ -225,6 +225,8 @@ private:	// User declarations
 	int UpdateSettingsFromJson(AnsiString json);
 	void UpdateSettings(const Settings &prev);
 	int UpdateButtonsFromJson(AnsiString json);
+	/// \brief Update single button
+	int UpdateButtonFromJson(unsigned int btnId, AnsiString json);
 	void UpdateAutoAnswer(void);
 	void UpdateClip(unsigned int callUid);
 	void SetMainWindowLayout(int id);

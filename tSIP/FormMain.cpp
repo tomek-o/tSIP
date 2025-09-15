@@ -774,6 +774,33 @@ int TfrmMain::UpdateButtonsFromJson(AnsiString json)
 	return 0;
 }
 
+int TfrmMain::UpdateButtonFromJson(unsigned int btnId, AnsiString json)
+{
+	if (btnId >= buttons.btnConf.size())
+		return -1;
+	const ButtonConf prev = buttons.btnConf[btnId];
+	ButtonConf &conf = buttons.btnConf[btnId];
+	if (conf.FromText(json.c_str()))
+		return -2;
+
+	if (conf != prev)
+	{
+		buttons.SetConfig(btnId, conf);
+		int status = buttons.Write();
+		if (status != 0)
+		{
+			LOG("Failed to write button configuration!\n");
+		}
+		Calls::OnButtonConfigChange();
+		if (conf.UaRestartNeeded(prev))
+		{
+			buttons.UpdateContacts(appSettings.uaConf.contacts);
+			Ua::Instance().Restart();
+		}
+	}
+	return 0;
+}
+
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
 	UA->Destroy();
@@ -3086,7 +3113,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 		&ShowTrayNotifier,
 		&HideTrayNotifier,
 		&UpdateSettingsFromJson,
-		&UpdateButtonsFromJson,
+		&UpdateButtonsFromJson, &UpdateButtonFromJson,
 		&MainMenuShow,
 		&ApplicationShow,
 		&ApplicationHide,

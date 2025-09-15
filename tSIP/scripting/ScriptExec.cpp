@@ -2006,6 +2006,26 @@ static int l_UpdateButtons(lua_State* L)
 	return 1;
 }
 
+static int l_UpdateButton(lua_State* L)
+{
+	int id = lua_tointeger( L, 1 );
+	if (id < 0 || id >= buttons.btnConf.size())
+	{
+		LOG("Lua error: invalid button id = %d\n", id);
+		return 0;
+	}
+
+	const char* json = lua_tostring(L, 2);
+	if (json == NULL)
+	{
+		LOG("Lua error: missing parameter (json)\n");
+		return 0;
+	}
+	int status = GetContext(L)->onUpdateButton(id, json);
+	lua_pushinteger(L, status);
+	return 1;
+}
+
 static int l_SetHandled(lua_State* L)
 {
 	bool handled = lua_tointeger( L, 1 );
@@ -2228,6 +2248,7 @@ ScriptExec::ScriptExec(
 	CallbackHideTrayNotifier onHideTrayNotifier,
 	CallbackUpdateSettings onUpdateSettings,
 	CallbackUpdateButtons onUpdateButtons,
+	CallbackUpdateButton onUpdateButton,
 	CallbackMainMenuShow onMainMenuShow,
 	CallbackApplicationShow onApplicationShow,
 	CallbackApplicationHide onApplicationHide,
@@ -2254,6 +2275,7 @@ ScriptExec::ScriptExec(
 	onHideTrayNotifier(onHideTrayNotifier),
 	onUpdateSettings(onUpdateSettings),
 	onUpdateButtons(onUpdateButtons),
+	onUpdateButton(onUpdateButton),
 	onMainMenuShow(onMainMenuShow),
 	onApplicationShow(onApplicationShow),
 	onApplicationHide(onApplicationHide),
@@ -2272,7 +2294,7 @@ ScriptExec::ScriptExec(
 		onShowTrayNotifier &&
 		onHideTrayNotifier &&
 		onUpdateSettings &&
-		onUpdateButtons &&
+		onUpdateButtons && onUpdateButton &&
 		onMainMenuShow &&
 		onApplicationShow &&
 		onApplicationHide &&
@@ -2415,6 +2437,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetAudioDevicesList, "GetAudioDevicesList", "Get table/array of audio device names for specified module and direction", "local devices = GetAudioDevicesList(moduleName, direction)\nwhere: moduleName = \"winwave\", \"winwave2\" or \"portaudio\", direction = \"in\" (recording device) or \"out\" (playback device).");
 	lua_register2(L, ScriptImp::l_UpdateSettings, "UpdateSettings", "Update main settings with JSON", "Application provisioning or changing settings while running. JSON is merged. Example:\nlocal settings = [[\n{\n   \"uaConf\" : {\n      \"audioCfgAlert\" : {\n         \"volume\" : 0.1\n      },\n      \"audioCfgRing\" : {\n         \"volume\" : 0.2\n      }\n   }\n}\n]]\n\nUpdateSettings(settings)");
 	lua_register2(L, ScriptImp::l_UpdateButtons, "UpdateButtons", "Update buttons settings with JSON", "Provisioning for buttons or changing settings while running. JSON is merged. Example:\nUpdateButtons('{\"btnConf\":[{\"caption\":\"    REDIAL\"}]}')");
+	lua_register2(L, ScriptImp::l_UpdateButton, "UpdateButton", "Update single button settings with JSON", "Provisioning or changing settings while running for a single button. JSON is merged. Example:\nUpdateButton(BUTTON_ID, '{\"caption\":\"    REDIAL\"}')");
 
 	lua_register2(L, ScriptImp::l_SetHandled, "SetHandled", "Set \"handled\" flag associated with script trigger event", "Possibility of skipping default event handling after script was called (replacing default behavior with script), Example: SetHandled(1).");
 
