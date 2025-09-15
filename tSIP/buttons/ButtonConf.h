@@ -8,6 +8,11 @@
 #include <string>
 #include <mem.h>
 
+namespace Json
+{
+	class Value;
+}
+
 class ButtonConf
 {
 public:
@@ -19,7 +24,8 @@ public:
 	bool visible;	// hide whole button
 	bool down;
 	bool inactive;
-	int left, top, width, height;
+	int left, top;
+	unsigned int width, height;
 	unsigned int bevelWidth;
 	bool customFrame;
 
@@ -154,7 +160,7 @@ public:
 	struct Font
 	{
 		std::string name;
-		int size;
+		unsigned int size;
 		bool bold, italic, underline, strikeout;
 		Font(void):
 			name("Tahoma"),
@@ -249,6 +255,10 @@ public:
 	bool UaRestartNeeded(const ButtonConf& right) const;
 
 	void Reset(void);
+
+	void FromJson(const Json::Value &btnJson);
+	void ToJson(Json::Value &jsonBtn, bool saveAllSettings) const;
+	int FromText(const char* jsonText);
 };
 
 #endif
