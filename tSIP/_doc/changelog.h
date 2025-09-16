@@ -1258,5 +1258,10 @@ Version 0.3.10
 	- gzrtp: increased mbuf size if about to run out
 	- added remote identity display style configuration for each BLF button, allowing to display both number and name from remote identity
 	- BLF remote identity display: extracting CLIP/number from URI
+	- improved Lua editor
+		- dynamically adding custom tSIP Lua functions as keywoards
+		- showing Lua help window when F1 is pressed for custom function
+	- added option adding timestamp to each log line
+	- added Lua UpdateButton(buttonId, json) function
 */
 

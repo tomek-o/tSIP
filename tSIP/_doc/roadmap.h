@@ -122,7 +122,5 @@ switch automatically to line with new outgoing call if there is only one call
 
 support for multiple simultaneous RTP streaming - treat streaming as call
 
-- button editor: button to blink edited button to find it
-
 */
 
