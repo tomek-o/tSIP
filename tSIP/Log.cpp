@@ -126,7 +126,32 @@ void CLog::log(char *lpData, ...)
 		size = sizeof(buf) - 2;
 
 	buf[size] = '\0';
+	write(buf, size);
+}
 
+void CLog::logRaw(char *lpData, ...)
+{
+	ScopedLock<Mutex> lock(mutex);
+	va_list ap;
+	char buf[2048]; //determines max message length
+
+	int size = 0;
+
+	if ((int)sizeof(buf)-size-2 > 0)
+	{
+		va_start(ap, lpData);
+		size += vsnprintf(buf + size, sizeof(buf)-size-2, lpData, ap);
+		va_end(ap);
+	}
+	if (size > (int)sizeof(buf) - 2)
+		size = sizeof(buf) - 2;
+
+	buf[size] = '\0';
+	write(buf, size);
+}
+
+void CLog::write(const char* buf, int size)
+{
 	if (bLogToFile && fout)
 	{
 		fwrite(buf, size, 1, fout);

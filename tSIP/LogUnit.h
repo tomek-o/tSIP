@@ -74,7 +74,7 @@ private:	// User declarations
 		
 public:		// User declarations
 	__fastcall TfrmLog(TComponent* Owner);
-	void OnLog(char *buf);                         ///< add text to log window
+	void OnLog(const char *buf);                         ///< add text to log window
 	void SetLogLinesLimit(int lines) {
     	iMaxUiLogLines = lines;
 	}

@@ -444,11 +444,11 @@ static int print_handler_log(const char *p, size_t size, void *arg)
 		// CG access overrun if p points to single character variable (write_padded)
 		char tmp[4] = {0, 0, 0, 0};
 		memcpy(tmp, p, size);
-		LOG("%.*s", size, tmp);		
+		CLog::Instance()->logRaw("%.*s", size, tmp);
 	}
 	else
 	{
-		LOG("%.*s", size, p);
+		CLog::Instance()->logRaw("%.*s", size, p);
 	}
 	return 0;
 }
@@ -648,6 +648,7 @@ static int app_init(void)
 		}
 	}
 
+	LOG("");	// add optional timestamp before net_debug logs
 	net_debug(&pf_log, NULL);
 
 	cfg->avt.rtp_ports.min = appSettings.uaConf.avt.portMin;

@@ -33,7 +33,7 @@ __fastcall TfrmLog::TfrmLog(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 
-void TfrmLog::OnLog(char *buf)
+void TfrmLog::OnLog(const char *buf)
 {
 	ScopedLock<Mutex> lock(mutex);
 	/** \note DO NOT use any VCL code for safety */

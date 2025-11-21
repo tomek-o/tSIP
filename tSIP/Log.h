@@ -21,8 +21,10 @@ enum E_LOGLEVEL
 class CLog: public CSingleton<CLog>
 {
 public:
-    /** \brief Log formatted text with timestamp */
+    /** \brief Log formatted text with optional timestamp */
 	void log(char *lpData, ...);
+	/** \brief Log formatted text without timestamp */
+	void logRaw(char *lpData, ...);
 	/** \brief Select output log file
 	 *  \return zero on no error
 	 */
@@ -43,7 +45,7 @@ public:
 	void Close(void);
 	/** \brief OnLog callback declaration
 	*/
-	typedef void (__closure *CallbackLog)(char *buf);
+	typedef void (__closure *CallbackLog)(const char *buf);
 	/** \brief Callback called when new log line is added
 	 *
 	 *  If set, this callback is called when new log line is added. This can
@@ -63,6 +65,7 @@ private:
 	unsigned int maxFileSize;
 	bool timestamps;
 	unsigned int maxLogrotateCnt;
+	void write(const char* buf, int size);
 };
 
 /** \brief Macro to avoid unnecessary typing
