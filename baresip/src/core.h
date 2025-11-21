@@ -110,7 +110,7 @@ typedef void (audio_event_h)(int key, bool end, void *arg);
 typedef void (audio_err_h)(int err, const char *str, void *arg);
 
 int audio_alloc(struct audio **ap, const struct config *cfg,
-		struct call *call, struct sdp_session *sdp_sess, int label,
+		struct call *call, struct sdp_session *sdp_sess,
 		const struct mnat *mnat, struct mnat_sess *mnat_sess,
 		const struct menc *menc, struct menc_sess *menc_sess,
 		uint32_t ptime, const struct list *aucodecl,
@@ -280,7 +280,7 @@ typedef void (stream_rtcp_h)(struct rtcp_msg *msg, void *arg);
 typedef void (stream_error_h)(struct stream *strm, int err, void *arg);
 int  stream_alloc(struct stream **sp, const struct config_avt *cfg,
 		  struct call *call, struct sdp_session *sdp_sess,
-		  const char *name, int label,
+		  const char *name,
 		  int rtp_sock_rx_buf_size,
 		  const struct mnat *mnat, struct mnat_sess *mnat_sess,
 		  const struct menc *menc, struct menc_sess *menc_sess,
@@ -288,7 +288,7 @@ int  stream_alloc(struct stream **sp, const struct config_avt *cfg,
 int stream_alloc2(struct stream **sp, const struct config_avt *cfg,
 		 struct sdp_media * sdp,
          int af,
-		 const char *name, int label,
+		 const char *name,
 		 stream_rtp_h *rtph, stream_rtcp_h *rtcph, void *arg);		  
 struct sdp_media *stream_sdpmedia(const struct stream *s);
 int  stream_start(struct stream *s);
@@ -353,7 +353,7 @@ struct vidsrc *vidsrc_get(struct vidsrc_st *st);
 struct video;
 
 int  video_alloc(struct video **vp, const struct config *cfg,
-		 struct call *call, struct sdp_session *sdp_sess, int label,
+		 struct call *call, struct sdp_session *sdp_sess,
 		 const struct mnat *mnat, struct mnat_sess *mnat_sess,
 		 const struct menc *menc, struct menc_sess *menc_sess,
 		 const char *content, const struct list *vidcodecl);

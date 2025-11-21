@@ -313,7 +313,7 @@ static void tmr_stats_handler(void *arg)
 
 int stream_alloc(struct stream **sp, const struct config_avt *cfg,
 		 struct call *call, struct sdp_session *sdp_sess,
-		 const char *name, int label,
+		 const char *name,
 		 int rtp_sock_rx_buf_size,
 		 const struct mnat *mnat, struct mnat_sess *mnat_sess,
 		 const struct menc *menc, struct menc_sess *menc_sess,
@@ -361,11 +361,6 @@ int stream_alloc(struct stream **sp, const struct config_avt *cfg,
 	if (err)
 		goto out;
 
-	if (label) {
-		err |= sdp_media_set_lattr(s->sdp, true,
-					   "label", "%d", label);
-	}
-
 	/* RFC 5761 */
 	if (cfg->rtcp_mux)
 		err |= sdp_media_set_lattr(s->sdp, true, "rtcp-mux", NULL);
@@ -409,7 +404,7 @@ int stream_alloc(struct stream **sp, const struct config_avt *cfg,
 int stream_alloc2(struct stream **sp, const struct config_avt *cfg,
  		 struct sdp_media * sdp,
 		 int af,
-		 const char *name, int label,
+		 const char *name,
 		 stream_rtp_h *rtph, stream_rtcp_h *rtcph, void *arg)
 {
 	struct stream *s;
@@ -454,11 +449,6 @@ int stream_alloc2(struct stream **sp, const struct config_avt *cfg,
 		goto out;
 #endif
 	s->sdp = mem_ref(sdp);
-
-	if (label) {
-		err |= sdp_media_set_lattr(s->sdp, true,
-					   "label", "%d", label);
-	}
 
 	if (err)
 		goto out;

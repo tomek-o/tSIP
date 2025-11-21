@@ -502,7 +502,6 @@ int call_alloc(struct call **callp, const struct config *cfg, struct list *lst,
 	struct le *le;
 	enum vidmode vidmode = prm ? prm->vidmode : VIDMODE_OFF;
 	bool use_video = true, got_offer = false;
-	int label = 0;
 	int err = 0;
 
 	if (!cfg || !local_uri || !acc || !ua)
@@ -575,7 +574,7 @@ int call_alloc(struct call **callp, const struct config *cfg, struct list *lst,
 
 	/* Audio stream */
 	err = audio_alloc(&call->audio, cfg, call,
-			  call->sdp, ++label,
+			  call->sdp,
 			  acc->mnat, call->mnats, acc->menc, call->mencs,
 			  acc->ptime, account_aucodecl(call->acc),
 			  audio_event_handler, audio_error_handler, call);
@@ -592,7 +591,7 @@ int call_alloc(struct call **callp, const struct config *cfg, struct list *lst,
 	/* Video stream */
 	if (use_video) {
  		err = video_alloc(&call->video, cfg,
-				  call, call->sdp, ++label,
+				  call, call->sdp,
 				  acc->mnat, call->mnats,
 				  acc->menc, call->mencs,
 				  "main",

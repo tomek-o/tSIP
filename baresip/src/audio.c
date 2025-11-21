@@ -598,7 +598,7 @@ static int add_telev_codec(struct audio *a)
 
 
 int audio_alloc(struct audio **ap, const struct config *cfg,
-		struct call *call, struct sdp_session *sdp_sess, int label,
+		struct call *call, struct sdp_session *sdp_sess,
 		const struct mnat *mnat, struct mnat_sess *mnat_sess,
 		const struct menc *menc, struct menc_sess *menc_sess,
 		uint32_t ptime, const struct list *aucodecl,
@@ -624,7 +624,7 @@ int audio_alloc(struct audio **ap, const struct config *cfg,
 	rx = &a->rx;
 
 	err = stream_alloc(&a->strm, &cfg->avt, call, sdp_sess,
-			   "audio", label,
+			   "audio",
 			   16*1024,
 			   mnat, mnat_sess, menc, menc_sess,
 			   stream_recv_handler, NULL, a);
@@ -721,7 +721,7 @@ int audio_alloc2(struct audio **ap, const struct config *cfg,
 	err = stream_alloc2(&a->strm, &cfg->avt,
 				sdp,
 			   AF_INET,
-			   "audio", 0,
+			   "audio",
 			   stream_recv_handler, NULL, a);
 	if (err)
 		goto out;

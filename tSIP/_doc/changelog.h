@@ -1263,5 +1263,10 @@ Version 0.3.10
 		- showing Lua help window when F1 is pressed for custom function
 	- added option adding timestamp to each log line
 	- added Lua UpdateButton(buttonId, json) function
+
+Version 0.3.11
+	- openh264.dll is now directly distributed due to patent expiration in most of the world
+	- fixed broken network debug logs if timestamps for logs are enabled
+	- remove unused "label" attribute from SDP
 */
 
