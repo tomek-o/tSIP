@@ -4505,6 +4505,14 @@ object frmSettings: TfrmSettings
         Caption = 'Add timestamps'
         TabOrder = 10
       end
+      object chbLogShowWindowAtStartup: TCheckBox
+        Left = 5
+        Top = 250
+        Width = 325
+        Height = 17
+        Caption = 'Show log window at startup'
+        TabOrder = 11
+      end
     end
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'

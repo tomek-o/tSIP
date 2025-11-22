@@ -896,6 +896,9 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 
 	tmrScript2->Interval = appSettings.Scripts.timer2;
 	tmrScript2->Enabled = true;
+
+	if (appSettings.Logging.showWindowAtStartup)
+		frmLog->Show();
 }
 //---------------------------------------------------------------------------
 

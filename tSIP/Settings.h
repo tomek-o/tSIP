@@ -212,6 +212,8 @@ public:
 		Font consoleFont;
 		unsigned int windowWidth, windowHeight;
 
+		bool showWindowAtStartup;
+
 		_Logging(void):
 			bLogToFile(false),
 			bFlush(false),
@@ -219,7 +221,8 @@ public:
 			timestamps(false),
 			iLogRotate(Settings::_Logging::DEF_LOGROTATE),
 			iMaxUiLogLines(5000),
-			windowWidth(630), windowHeight(400)
+			windowWidth(630), windowHeight(400),
+			showWindowAtStartup(false)
 		{
 			consoleFont.name = "Courier New";
         }

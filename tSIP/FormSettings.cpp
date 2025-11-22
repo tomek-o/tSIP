@@ -390,6 +390,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	}
 	cbLogMaxFileSize->Text = tmpSettings.Logging.iMaxFileSize;
 	cbLogRotate->ItemIndex = tmpSettings.Logging.iLogRotate;
+	chbLogShowWindowAtStartup->Checked = tmpSettings.Logging.showWindowAtStartup;
 	ShowFonts();
 
 	chbUserOnlyClip->Checked = tmpSettings.Display.bUserOnlyClip;
@@ -820,6 +821,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.logMessagesOnlyFirstLine = chbLogMessagesOnlyFirstLines->Checked;
 	tmpSettings.uaConf.logAubuf = chbLogAubuf->Checked;
 	tmpSettings.Logging.timestamps = chbLogTimestamps->Checked;
+	tmpSettings.Logging.showWindowAtStartup = chbLogShowWindowAtStartup->Checked;
 
 	tmpSettings.Display.bUserOnlyClip = chbUserOnlyClip->Checked;
 	tmpSettings.Display.bDecodeUtfDisplayToAnsi = chbDecodeUtfDisplayToAnsi->Checked;
