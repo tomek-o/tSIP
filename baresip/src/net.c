@@ -232,19 +232,18 @@ int net_init(const struct config_net *cfg, int af)
 #endif
 	}
 
-	(void)re_printf("Local network address:");
-
 	if (sa_isset(&net.laddr, SA_ADDR)) {
-		(void)re_printf(" IPv4=%s:%j",
-				 net.ifname, &net.laddr);
+		(void)re_printf("Local IPv4 interface = %s, address = %j\n", net.ifname, &net.laddr);
+	} else {
+		(void)re_printf("Local IPv4 address not set\n");
 	}
 #ifdef HAVE_INET6
 	if (sa_isset(&net.laddr6, SA_ADDR)) {
-		(void)re_printf(" IPv6=%s:%j",
-				 net.ifname6, &net.laddr6);
+		(void)re_printf("Local IPv6 interface = %s, address = %j\n", net.ifname6, &net.laddr6);
+	} else {
+		(void)re_printf("Local IPv6 address not set\n");
 	}
 #endif
-	(void)re_printf("\n");
 
 	return err;
 }
