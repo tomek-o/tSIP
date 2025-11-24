@@ -1,0 +1,100 @@
+{
+  "Call": {
+    "stateDescription": {
+      "CLOSED": " - Serbest - ",
+      "ESTABLISHED": "Bağlandı",
+      "INCOMING": "Gelen çağrı",
+      "OUTGOING": "Aranıyor...",
+      "PROGRESS": "Çağrı durumu ilerliyor",
+      "RINGING": "Çalma tonu",
+      "TRANSFER": "Aktarılıyor",
+      "TRANSFER_OOD": "OOD aktarımı",
+      "TRYING": "Deniyor..."
+    },
+    "stateName": {
+      "CLOSED": "KAPALI",
+      "ESTABLISHED": "BAĞLANDI",
+      "INCOMING": "GELEN",
+      "OUTGOING": "GİDEN",
+      "PROGRESS": "İLERLEME",
+      "RINGING": "ÇALIYOR",
+      "TRANSFER": "AKTARIM",
+      "TRANSFER_OOD": "OOD AKTARIM",
+      "TRYING": "DENENİYOR"
+    }
+  },
+  "TfrmContactEditor": {
+    "btnApply": "Uygula",
+    "btnCancel": "İptal",
+    "caption": "Kişi ekle/düzenle",
+    "lblCompany": "Şirket",
+    "lblContactFile": "Dosya",
+    "lblDescription": "Açıklama",
+    "lblNote": "Not",
+    "lblNumber1": "Numara #1",
+    "lblNumber2": "Numara #2",
+    "lblNumber3": "Numara #3",
+    "msgFileNotSpecified": "Dosya düzenlenemedi, dosya belirtilmemiş"
+  },
+  "TfrmContacts": {
+    "miAdd": "Ekle",
+    "miDelete": "Sil",
+    "miEdit": "Düzenle",
+    "multiItemCallText": "Ara...",
+    "multiItemMessageText": "Mesaj...",
+    "noNumberUriText": "numara/URI yok",
+    "singleItemCallText": "Ara:",
+    "singleItemMessageText": "Mesaj:"
+  },
+  "TfrmHistory": {
+    "callTimeText": "Arama süresi:",
+    "codecText": "Kodek:",
+    "incomingCallText": "Gelen çağrı",
+    "miAddEditPhonebook": "Telefon rehberi kaydı ekle/düzenle",
+    "miCopyNumber": "Numarayı kopyala",
+    "miHttpQuery": "HTTP sorgusu",
+    "miMessage": "Mesaj",
+    "miOpenInExplorer": "Dosya yöneticisinde aç",
+    "miRecordFile": "Kayıt dosyası",
+    "miRecordFileOpen": "Varsayılan uygulamada aç",
+    "nameNumber": "İsim/numara",
+    "notCompletedText": "(tamamlanmadı)",
+    "outgoingCallText": "Giden çağrı",
+    "replyCode": "Cevap kodu:",
+    "replyLine": "Cevap satırı:",
+    "timestamp": "Zaman damgası",
+    "unansweredText": "(cevaplanmadı)"
+  },
+  "TfrmMain": {
+    "btnHangup": "Kapat",
+    "btnMakeCall": "Ara/Yanıtla",
+    "edTransferHint": "Şuraya aktar... [Enter]",
+    "miAbout": "Hakkında...",
+    "miClearCallsHistory": "Çağrı geçmişini temizle",
+    "miCommonSettings": "Ayarlar",
+    "miExit": "Çıkış",
+    "miFile": "Dosya",
+    "miHelp": "Yardım",
+    "miImportContactsFromCsv": "CSV dosyasından kişiler içe aktar",
+    "miImportContactsFromXml": "XML dosyasından kişiler içe aktar",
+    "miMessages": "Mesajlar",
+    "miMinimizeTray": "Sistem tepsisine küçült",
+    "miPatchButtonSettings": "Buton ayarlarını JSON ile yamala/güncelle",
+    "miRefreshTranslationFromFile": "Çeviriyi dosyadan yenile",
+    "miScriptPluginVariables": "Script ve eklenti değişkenleri",
+    "miScripting": "Script penceresi",
+    "miSettings": "Yapılandırma",
+    "miSettingsPatch": "Ana ayarları JSON ile yamala/güncelle",
+    "miTools": "Araçlar",
+    "miTroubleshooting": "Sorun giderme",
+    "miView": "Görünüm",
+    "miViewLog": "Kayıtlar",
+    "tsContacts": "Kişiler",
+    "tsDialpad": "Tuş takımı",
+    "tsHistory": "Geçmiş"
+  },
+  "TfrmTrayNotifier": {
+    "btnAnswer": "Yanıtla",
+    "btnHangup": "Kapat"
+  }
+}
