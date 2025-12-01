@@ -29,6 +29,7 @@ AnsiString PhoneInterface::profileDir;
 PhoneInterface::CallbackKey PhoneInterface::callbackKey = NULL;
 PhoneInterface::CallbackPagingTx PhoneInterface::callbackPagingTx = NULL;
 PhoneInterface::CallbackClearDial PhoneInterface::callbackClearDial = NULL;
+PhoneInterface::CallbackRedial PhoneInterface::callbackRedial = NULL;
 PhoneInterface::CallbackGetNumberDescription PhoneInterface::callbackGetNumberDescription = NULL;
 TPopupMenu* PhoneInterface::trayPopupMenu = NULL;
 
@@ -84,6 +85,7 @@ enum PhoneEventType
 	PHONE_EVENT_KEY,
 	PHONE_PAGING_TX,
 	PHONE_CLEAR_DIAL,
+	PHONE_REDIAL,
 };
 
 struct PhoneEvent
@@ -487,6 +489,15 @@ void __stdcall PhoneInterface::OnClearDial(void *cookie)
 	EnqueueEvent(event);
 }
 
+void __stdcall PhoneInterface::OnRedial(void *cookie)
+{
+	PhoneEvent event;
+	event.cookie = cookie;
+	event.type = PHONE_REDIAL;
+	LOG("Phone: Redial\n");
+	EnqueueEvent(event);
+}
+
 int __stdcall PhoneInterface::OnGetNumberDescription(void *cookie, const char* number, char* description, int descriptionSize)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
@@ -669,6 +680,7 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSetPagingTxCallback(NULL),
 	dllSetPagingTxState(NULL),
 	dllSetClearDialCallback(NULL),
+	dllSetRedialCallback(NULL),
 	dllSetGetNumberDescriptionCallback(NULL),
 	dllSetSetVariableCallback(NULL),
 	dllSetClearVariableCallback(NULL),
@@ -748,6 +760,7 @@ int PhoneInterface::Load(void)
 
 	dllSetPagingTxCallback = (pfSetPagingTxCallback)GetProcAddress(hInstance, "SetPagingTxCallback");
 	dllSetClearDialCallback = (pfSetClearDialCallback)GetProcAddress(hInstance, "SetClearDialCallback");
+	dllSetRedialCallback = (pfSetRedialCallback)GetProcAddress(hInstance, "SetRedialCallback");
 
 	dllSetGetNumberDescriptionCallback = (pfSetGetNumberDescriptionCallback)GetProcAddress(hInstance, "SetGetNumberDescriptionCallback");
 
@@ -786,6 +799,11 @@ int PhoneInterface::Load(void)
 	if (dllSetClearDialCallback)
 	{
 		dllSetClearDialCallback(&OnClearDial);
+	}
+
+	if (dllSetRedialCallback)
+	{
+		dllSetRedialCallback(&OnRedial);
 	}
 
 	if (dllSetGetNumberDescriptionCallback)
@@ -898,6 +916,12 @@ void PhoneInterface::Poll(void)
 	case PHONE_CLEAR_DIAL: {
 		if (dev->callbackClearDial)
 			dev->callbackClearDial();
+		break;
+	}
+
+	case PHONE_REDIAL: {
+		if (dev->callbackRedial)
+			dev->callbackRedial();
 		break;
 	}
 

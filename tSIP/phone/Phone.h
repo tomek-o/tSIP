@@ -167,6 +167,10 @@ typedef int (__stdcall *CALLBACK_PAGING_TX)(void *cookie, const char* target, co
 	\note uses cookie from "standard" callbacks
 */
 typedef void (__stdcall *CALLBACK_CLEAR_DIAL)(void *cookie);
+/** \brief Redial
+	\note uses cookie from "standard" callbacks
+*/
+typedef void (__stdcall *CALLBACK_REDIAL)(void *cookie);
 /** \brief Get description for the number (phonebook, etc.)
 	\param description buffer to store description (NULL-terminated, truncated if necessary)
 	\param descriptionSize size of descripton buffer in bytes
@@ -283,6 +287,8 @@ DECLARE_FN(void, SetPagingTxCallback, CALLBACK_PAGING_TX lpPagingTx);
 DECLARE_FN(int, SetPagingTxState, int state);
 
 DECLARE_FN(void, SetClearDialCallback, CALLBACK_CLEAR_DIAL lpClearDial);
+
+DECLARE_FN(void, SetRedialCallback, CALLBACK_REDIAL lpRedial);
 
 DECLARE_FN(void, SetGetNumberDescriptionCallback, CALLBACK_GET_NUMBER_DESCRIPTION lpGetNumberDescription);
 

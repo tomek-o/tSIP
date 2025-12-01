@@ -873,6 +873,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackKey = OnPhoneKey;
 	PhoneInterface::callbackPagingTx = OnPhonePagingTx;
 	PhoneInterface::callbackClearDial = OnPhoneClearDial;
+	PhoneInterface::callbackRedial = Redial;
 	PhoneInterface::callbackGetNumberDescription = OnGetNumberDescription;
 	PhoneInterface::trayPopupMenu = popupTray;
 
@@ -3105,7 +3106,7 @@ int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRe
 {
 	ScriptExec scriptExec(
 		static_cast<enum ScriptSource>(srcType), srcId, breakRequest, handled,
-		&MakeCall, &Hangup, &Answer, &OnGetDial, &OnSetDial,
+		&MakeCall, &Hangup, &Answer, &Redial, &OnGetDial, &OnSetDial,
 		&DialString,
 		&OnGetContactName,
 		&OnGetStreamingState,

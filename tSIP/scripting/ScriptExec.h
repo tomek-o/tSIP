@@ -29,6 +29,7 @@ private:
 	typedef int (__closure *CallbackCall)(AnsiString number, unsigned int &callUid);
 	typedef void (__closure *CallbackHangup)(unsigned int callUid, int sipCode, AnsiString reason);
 	typedef void (__closure *CallbackAnswer)(unsigned int callUid);
+	typedef void (__closure *CallbackRedial)(void);
 	typedef std::string (__closure *CallbackGetDial)(void);
 	typedef void (__closure *CallbackSetDial)(std::string number);
 	typedef void (__closure *CallbackSendDtmf)(const std::string& digits, bool runScript);
@@ -52,6 +53,7 @@ private:
 	CallbackCall onCall;
 	CallbackHangup onHangup;
 	CallbackAnswer onAnswer;
+	CallbackRedial onRedial;
 	CallbackGetDial onGetDial;
 	CallbackSetDial onSetDial;
 	CallbackSendDtmf onSendDtmf;
@@ -93,6 +95,7 @@ public:
 		CallbackCall onCall,
 		CallbackHangup onHangup,
 		CallbackAnswer onAnswer,
+		CallbackRedial onRedial,
 		CallbackGetDial onGetDial,
 		CallbackSetDial onSetDial,
 		CallbackSendDtmf onSendDtmf,

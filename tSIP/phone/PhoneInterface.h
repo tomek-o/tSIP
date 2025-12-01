@@ -75,6 +75,8 @@ private:
 
 	pfSetClearDialCallback dllSetClearDialCallback;
 
+	pfSetRedialCallback dllSetRedialCallback;
+
 	pfSetGetNumberDescriptionCallback dllSetGetNumberDescriptionCallback;
 
 	pfSetSetVariableCallback dllSetSetVariableCallback;
@@ -103,6 +105,7 @@ private:
 	typedef void (__closure *CallbackKey)(int keyCode, int state);
 	typedef int (__closure *CallbackPagingTx)(const char* target, const char* filename, const char* codecname);
 	typedef void (__closure *CallbackClearDial)(void);
+	typedef void (__closure *CallbackRedial)(void);
 	typedef int (__closure *CallbackGetNumberDescription)(const char* number, char* description, int descriptionSize);
 
 	static std::list<PhoneConf> cfg;
@@ -154,6 +157,7 @@ public:
 	static CallbackKey callbackKey;
 	static CallbackPagingTx callbackPagingTx;
 	static CallbackClearDial callbackClearDial;
+	static CallbackRedial callbackRedial;
 	static CallbackGetNumberDescription callbackGetNumberDescription;
 	static TPopupMenu *trayPopupMenu;
 
@@ -163,6 +167,7 @@ public:
 	static void __stdcall OnKey(void *cookie, int keyCode, int state);
 	static int __stdcall OnPagingTx(void *cookie, const char* target, const char* filename, const char* codecname);
 	static void __stdcall OnClearDial(void *cookie);
+	static void __stdcall OnRedial(void *cookie);
 	static int __stdcall OnGetNumberDescription(void *cookie, const char* number, char* description, int descriptionSize);
 	static int __stdcall OnSetVariable(void *cookie, const char* name, const char* value);
 	static int __stdcall OnClearVariable(void *cookie, const char* name);
