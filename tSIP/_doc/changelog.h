@@ -1265,8 +1265,12 @@ Version 0.3.10
 	- added Lua UpdateButton(buttonId, json) function
 
 Version 0.3.11
-	- openh264.dll is now directly distributed due to patent expiration in most of the world
+	- openh264.dll is now directly distributed due to patents expiration in most of the world
 	- fixed broken network debug logs if timestamps for logs are enabled
-	- remove unused "label" attribute from SDP
+	- removed unused "label" attribute from SDP
+	- added Turkish translation (thanks to mahirgul)
+	- added redial function to plugin interface
+	- added Lua Redial() function
+	- increased default size of script editor window
 */
 
