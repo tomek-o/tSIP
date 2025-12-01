@@ -2,8 +2,8 @@ object frmLuaScript: TfrmLuaScript
   Left = 0
   Top = 0
   Caption = 'Script'
-  ClientHeight = 379
-  ClientWidth = 493
+  ClientHeight = 460
+  ClientWidth = 620
   Color = clBtnFace
   Constraints.MinHeight = 300
   Constraints.MinWidth = 300
@@ -23,20 +23,23 @@ object frmLuaScript: TfrmLuaScript
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 259
-    Width = 493
+    Top = 340
+    Width = 620
     Height = 120
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 0
+    ExplicitTop = 259
+    ExplicitWidth = 493
     object pnlBottom2: TPanel
       Left = 0
       Top = 79
-      Width = 493
+      Width = 620
       Height = 41
       Align = alBottom
       BevelOuter = bvNone
       TabOrder = 0
+      ExplicitWidth = 493
       object lblExecutionTime: TLabel
         Left = 301
         Top = 13
@@ -74,7 +77,7 @@ object frmLuaScript: TfrmLuaScript
     object lvValidation: TListView
       Left = 0
       Top = 0
-      Width = 493
+      Width = 620
       Height = 79
       Align = alClient
       Columns = <
@@ -102,6 +105,7 @@ object frmLuaScript: TfrmLuaScript
       ViewStyle = vsReport
       OnData = lvValidationData
       OnDblClick = lvValidationDblClick
+      ExplicitWidth = 493
     end
   end
   object MainMenu: TMainMenu
