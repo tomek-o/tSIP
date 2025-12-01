@@ -85,6 +85,7 @@ public:
 		struct vidframe vidframe;
 		//uint64_t timestamp = (uint64_t)(sample_time * VIDEO_TIMEBASE);
 		if (buf_len != buf_len_RGB32 * 4) {
+			// Observed when using virtual directshow camera
 			DEBUG_WARNING("dshow: BufferCB got %uB, required %uB (%ux%u)\n", buf_len, buf_len_RGB32 * 4, src->size.w, src->size.h);
 			return S_OK;
 		}
