@@ -443,11 +443,6 @@ void TfrmButtonEdit::SetType(Button::Type type)
 		//chbNoIcon->Checked = false;
 		tsBehaviorBlf->Visible = true;
 		break;
-	case Button::MWI:
-		tsBehaviorBlf->Visible = true;
-		edNumber->Visible = false;
-		lblNumber->Visible = false;			
-		break;
 	case Button::PRESENCE:
 		tsBehaviorBlf->Visible = true;
 		break;
