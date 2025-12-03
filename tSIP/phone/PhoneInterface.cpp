@@ -318,6 +318,18 @@ void PhoneInterface::UpdatePagingTxState(int state)
 	}
 }
 
+void PhoneInterface::UpdateMwi(int accountId, unsigned int newMsg, unsigned int oldMsg)
+{
+	ScopedLock<Mutex> lock(mutexInstances);
+
+	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
+	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
+	{
+		itinst->second->SetMwi(accountId, newMsg, oldMsg);
+	}
+}
+
+
 int PhoneInterface::SendMessageText(AnsiString asDllName, AnsiString text)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
@@ -679,6 +691,7 @@ PhoneInterface::PhoneInterface(AnsiString asDllName):
 	dllSendMessageText(NULL),
 	dllSetPagingTxCallback(NULL),
 	dllSetPagingTxState(NULL),
+	dllSetMwi(NULL),
 	dllSetClearDialCallback(NULL),
 	dllSetRedialCallback(NULL),
 	dllSetGetNumberDescriptionCallback(NULL),
@@ -759,6 +772,8 @@ int PhoneInterface::Load(void)
 	dllSendMessageText = (pfSendMessageText)GetProcAddress(hInstance, "SendMessageText");
 
 	dllSetPagingTxCallback = (pfSetPagingTxCallback)GetProcAddress(hInstance, "SetPagingTxCallback");
+	dllSetPagingTxState = (pfSetPagingTxState)GetProcAddress(hInstance, "SetPagingTxState");
+	dllSetMwi = (pfSetMwi)GetProcAddress(hInstance, "SetMwi");	
 	dllSetClearDialCallback = (pfSetClearDialCallback)GetProcAddress(hInstance, "SetClearDialCallback");
 	dllSetRedialCallback = (pfSetRedialCallback)GetProcAddress(hInstance, "SetRedialCallback");
 

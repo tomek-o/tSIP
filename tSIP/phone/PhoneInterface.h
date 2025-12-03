@@ -72,6 +72,7 @@ private:
 
     pfSetPagingTxCallback dllSetPagingTxCallback;
 	pfSetPagingTxState dllSetPagingTxState;
+	pfSetMwi dllSetMwi;
 
 	pfSetClearDialCallback dllSetClearDialCallback;
 
@@ -134,6 +135,8 @@ public:
 	static void UpdateMuteState(unsigned int callUid, int state);
 
 	static void UpdatePagingTxState(int state);
+
+	static void UpdateMwi(int accountId, unsigned int newMsg, unsigned int oldMsg);
 
 	static int SendMessageText(AnsiString asDllName, AnsiString text);
 
@@ -255,6 +258,13 @@ public:
 	{
 		if (dllSetPagingTxState)
 			return dllSetPagingTxState(state);
+		return -1;
+	}
+
+	int SetMwi(int accountId, unsigned int newMsg, unsigned int oldMsg)
+	{
+		if (dllSetMwi)
+			return dllSetMwi(accountId, newMsg, oldMsg);
 		return -1;
 	}
 

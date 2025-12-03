@@ -2232,6 +2232,7 @@ void TfrmMain::PollCallbackQueue(void)
 		{
 			SetNotificationIcon(cb.mwiNewMsg > 0);
 			buttons.UpdateMwiState(cb.mwiNewMsg, cb.mwiOldMsg);
+			PhoneInterface::UpdateMwi(0 /* account id */, cb.mwiNewMsg, cb.mwiOldMsg);
 			break;
 		}
 		case Callback::PAGING_TX_STATE:
@@ -3813,6 +3814,25 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 		if (call)
 		{
 			call->setMute(!call->mute);
+		}
+		break;
+	}
+	case KEY_VOICEMAIL: {
+		// call to number from first found MWI key
+		LOG("Received VOICEMAIL key code from plugin\n");
+		for (unsigned int i=0; i<buttons.btnConf.size(); i++)
+		{
+			const ButtonConf &cfg = buttons.btnConf[i];
+			if (cfg.type == Button::MWI)
+			{
+				if (cfg.number != "")
+				{
+					unsigned int callUid;
+					LOG("Calling number from the first MWI button = %s\n", cfg.number.c_str());
+					MakeCall(cfg.number.c_str(), callUid);
+				}
+				break;
+			}
 		}
 		break;
 	}

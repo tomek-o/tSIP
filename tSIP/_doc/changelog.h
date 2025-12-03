@@ -1269,7 +1269,10 @@ Version 0.3.11
 	- fixed broken network debug logs if timestamps for logs are enabled
 	- removed unused "label" attribute from SDP
 	- added Turkish translation (thanks to mahirgul)
-	- added redial function to plugin interface
+	- added redial function to plugin interface - used in Polycom CX300 plugin
+	- added MWI (voicemail state) information passing to plugins - allows to control voicemail LED (integrated into [1] button) on Polycom CX300
+	- added VOICEMAIL key type to plugin interface, calling number from the first one found MWI key - used in Polycom CX300 plugin when button [1] is pressed long
+	- MWI button editor: main number is shown, BLF page is hidden
 	- added Lua Redial() function
 	- increased default size of script editor window
 */

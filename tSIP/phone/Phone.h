@@ -78,7 +78,8 @@ enum E_KEY
 	KEY_APP,
 	KEY_CALL_MAKE_ANSWER,
 	KEY_CALL_HANGUP,
-	KEY_MUTE_TOGGLE
+	KEY_MUTE_TOGGLE,
+	KEY_VOICEMAIL,
 };
 
 static inline const char* GetPhoneKeyName(enum E_KEY key)
@@ -127,6 +128,8 @@ static inline const char* GetPhoneKeyName(enum E_KEY key)
 		return "CALL HANGUP";
 	case KEY_MUTE_TOGGLE:
 		return "MUTE TOGGLE";
+	case KEY_VOICEMAIL:
+		return "VOICEMAIL";
     default:
         return "???";
     }
@@ -285,6 +288,13 @@ DECLARE_FN(int, SetMuteState, unsigned int callUid, int state);
  */
 DECLARE_FN(void, SetPagingTxCallback, CALLBACK_PAGING_TX lpPagingTx);
 DECLARE_FN(int, SetPagingTxState, int state);
+
+/** \brief Pass MWI/voicemail status - added 2025.12
+	\param accountId account # to be possibly used in future version
+	\param newMsg number of new messages
+	\param oldMsg number old (typically = saved) messages
+*/
+DECLARE_FN(int, SetMwi, int accountId, unsigned int newMsg, unsigned int oldMsg);
 
 DECLARE_FN(void, SetClearDialCallback, CALLBACK_CLEAR_DIAL lpClearDial);
 
