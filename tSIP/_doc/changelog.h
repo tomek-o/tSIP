@@ -1275,5 +1275,6 @@ Version 0.3.11
 	- MWI button editor: main number is shown, BLF page is hidden
 	- added Lua Redial() function
 	- increased default size of script editor window
+	- few other minor changes
 */
 

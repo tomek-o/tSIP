@@ -3819,7 +3819,7 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 	}
 	case KEY_VOICEMAIL: {
 		// call to number from first found MWI key
-		LOG("Received VOICEMAIL key code from plugin\n");
+		bool found = false;
 		for (unsigned int i=0; i<buttons.btnConf.size(); i++)
 		{
 			const ButtonConf &cfg = buttons.btnConf[i];
@@ -3828,11 +3828,16 @@ void TfrmMain::OnPhoneKey(int keyCode, int state)
 				if (cfg.number != "")
 				{
 					unsigned int callUid;
-					LOG("Calling number from the first MWI button = %s\n", cfg.number.c_str());
+					LOG("Received VOICEMAIL key code from plugin, calling number from the first MWI button = %s\n", cfg.number.c_str());
 					MakeCall(cfg.number.c_str(), callUid);
+					found = true;
+					break;
 				}
-				break;
 			}
+		}
+		if (!found)
+		{
+			LOG("Received VOICEMAIL key code from plugin, but MWI button with number to call is not found\n");
 		}
 		break;
 	}
