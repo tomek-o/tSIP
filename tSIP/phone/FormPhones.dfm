@@ -55,7 +55,7 @@ object frmPhones: TfrmPhones
       end
       item
         Caption = 'Name'
-        Width = 150
+        Width = 220
       end
       item
         Caption = 'Version'
