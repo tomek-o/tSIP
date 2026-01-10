@@ -14,6 +14,8 @@ object frmButtonContainer: TfrmButtonContainer
   Font.Style = []
   KeyPreview = True
   OldCreateOrder = False
+  ExplicitWidth = 320
+  ExplicitHeight = 240
   PixelsPerInch = 96
   TextHeight = 13
   object panelMain: TPanel

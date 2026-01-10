@@ -313,10 +313,11 @@ void TfrmButtonContainer::StartEditingButton(int editedPanelId)
 
 void TfrmButtonContainer::UpdateMovingFrame(int x, int y, int width, int height)
 {
-	movingFrame->Left = x;
-	movingFrame->Top = y;
-	movingFrame->Width = width;
-	movingFrame->Height = height;
+	const float scale = static_cast<float>(scalingPercentage) / 100;
+	movingFrame->Left = x * scale;
+	movingFrame->Top = y * scale;
+	movingFrame->Width = width * scale;
+	movingFrame->Height = height * scale;
 	movingFrame->BringToFront();
 	UpdateMovingFrameCaption();
 }

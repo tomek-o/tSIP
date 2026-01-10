@@ -943,8 +943,9 @@ void ProgrammableButtons::Move(int id, bool moveGroup)
 
 	// move mouse to top left button corner
 	TPoint tp, tp2;
-	tp.x = btnConf[id].left;
-	tp.y = btnConf[id].top;
+	const float scale = static_cast<float>(scalingPercentage) / 100;
+	tp.x = btnConf[id].left * scale;
+	tp.y = btnConf[id].top * scale;
 	tp2 = container->ClientToScreen(tp);
 	::SetCursorPos(tp2.x, tp2.y);
 
@@ -960,8 +961,9 @@ void ProgrammableButtons::Resize(int id)
 
 	// move mouse to bottom right button corder
 	TPoint tp, tp2;
-	tp.x = btnConf[id].left + btnConf[id].width;
-	tp.y = btnConf[id].top + btnConf[id].height;
+	const float scale = static_cast<float>(scalingPercentage) / 100;
+	tp.x = (btnConf[id].left + btnConf[id].width) * scale;
+	tp.y = (btnConf[id].top + btnConf[id].height) * scale;
 	tp2 = container->ClientToScreen(tp);
 	::SetCursorPos(tp2.x, tp2.y);
 
@@ -1113,7 +1115,6 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 			width = MIN_PANEL_WIDTH;
 		if (height < MIN_PANEL_HEIGHT)
 			height = MIN_PANEL_HEIGHT;
-
 		container->UpdateMovingFrame(cfg.left, cfg.top, width, height);
 	}
 }

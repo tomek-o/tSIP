@@ -209,16 +209,10 @@ void __fastcall TProgrammableButton::Paint(void)
 
 void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 {
-	int percentage;
 	if (!once)
 	{
-		percentage = 100;
 		SetDown(cfg.down);
 		Visible = cfg.visible;
-	}
-	else
-	{
-		percentage = scalingPercentage;
 	}
 	SetInactive(cfg.inactive);
 	SetVisible(cfg.visible);
@@ -275,10 +269,11 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	}
 	label2->Font->Style = style;
 
-	Left = cfg.left * percentage/100;
-	Top = cfg.top * percentage/100;
-	Width = cfg.width * percentage/100;
-	Height = cfg.height * percentage/100;
+	const float scale = static_cast<float>(scalingPercentage) / 100;
+	Left = cfg.left * scale;
+	Top = cfg.top * scale;
+	Width = cfg.width * scale;
+	Height = cfg.height * scale;
 
 	SetLines(cfg.captionLines);
 
@@ -630,11 +625,6 @@ void TProgrammableButton::SetLines(int cnt)
 
 void TProgrammableButton::SetImage(Graphics::TBitmap *bmp)
 {
-	int percentage = 100;
-	if (!once)
-	{
-		percentage = scalingPercentage;
-    }
 	image->Picture = NULL;	// clear picture
 	if (bmp->Height > 0 && bmp->Width > 0)
 	{

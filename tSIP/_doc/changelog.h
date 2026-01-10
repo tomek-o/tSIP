@@ -1276,5 +1276,9 @@ Version 0.3.11
 	- added Lua Redial() function
 	- increased default size of script editor window
 	- few other minor changes
+
+Version 0.3.11.1
+	- BREAKING: programmable buttons positions and sizes are now affected by GUI scaling
+	- fixed programmable buttons moving and resizing when GUI scaling is used
 */
 
