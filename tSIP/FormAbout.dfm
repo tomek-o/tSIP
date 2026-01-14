@@ -277,7 +277,7 @@ object frmAbout: TfrmAbout
       Width = 493
       Height = 13
       Caption = 
-        'Copyright '#169' 2011 - 2025 Tomasz Ostrowski, distributed under BSD ' +
+        'Copyright '#169' 2011 - 2026 Tomasz Ostrowski, distributed under BSD ' +
         '3-Clause License like re/rem/baresip.'
       IsControl = True
     end
