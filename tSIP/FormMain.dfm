@@ -168,18 +168,10 @@ object frmMain: TfrmMain
       object tsContacts: TTabSheet
         Caption = 'Contacts'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object tsHistory: TTabSheet
         Caption = 'History'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
@@ -321,6 +313,7 @@ object frmMain: TfrmMain
       Font.Style = [fsBold]
       ItemHeight = 19
       ParentFont = False
+      PopupMenu = popupCbCallUri
       TabOrder = 0
       Text = '3000'
       OnChange = cbCallURIChange
@@ -1041,5 +1034,23 @@ object frmMain: TfrmMain
     OnTimer = tmrScript2Timer
     Left = 317
     Top = 171
+  end
+  object popupCbCallUri: TPopupMenu
+    Left = 352
+    Top = 227
+    object miCopy: TMenuItem
+      Caption = 'Copy'
+      ShortCut = 16451
+      OnClick = miCopyClick
+    end
+    object miPaste: TMenuItem
+      Caption = 'Paste'
+      ShortCut = 16470
+      OnClick = miPasteClick
+    end
+    object miPasteAndCall: TMenuItem
+      Caption = 'Paste and call'
+      OnClick = miPasteAndCallClick
+    end
   end
 end

@@ -4318,3 +4318,25 @@ void __fastcall TfrmMain::miScriptPluginVariablesClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmMain::miCopyClick(TObject *Sender)
+{
+	if (cbCallURI->SelText.Length())
+		Clipboard()->AsText = cbCallURI->SelText;
+	else
+		Clipboard()->AsText = cbCallURI->Text;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miPasteClick(TObject *Sender)
+{
+	SendMessage(cbCallURI->Handle, WM_PASTE, 0, 0);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miPasteAndCallClick(TObject *Sender)
+{
+	SendMessage(cbCallURI->Handle, WM_PASTE, 0, 0);
+	btnMakeCallClick(NULL);
+}
+//---------------------------------------------------------------------------
+
