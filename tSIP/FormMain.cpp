@@ -412,6 +412,7 @@ void TfrmMain::InitButtons(void)
 	buttons.UpdateContacts(appSettings.uaConf.contacts);
 
 	buttons.SetScalingPercentage(appSettings.gui.scalingPct);
+	const float scale = static_cast<float>(appSettings.gui.scalingPct) / 100;
 
 	{
 		const int id = BUTTON_CONTAINER_DIALPAD;
@@ -457,6 +458,11 @@ void TfrmMain::InitButtons(void)
 		container->ApplyConfig();
 		//container->Align = alClient;
 		container->Visible = true;
+
+		lbl2ndPartyDesc->Font->Size *= scale;
+		lbl2ndParty->Font->Size *= scale;
+		lblCallState->Font->Size *= scale;
+		btnSpeedDialPanel->Font->Size *= scale;
 	}
 
 	{
