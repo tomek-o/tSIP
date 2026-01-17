@@ -73,6 +73,7 @@ object frmMain: TfrmMain
             Font.Name = 'Tahoma'
             Font.Style = []
             ParentFont = False
+            PopupMenu = popupTransfer
             TabOrder = 0
             OnEnter = edTransferEnter
             OnKeyPress = edTransferKeyPress
@@ -1038,19 +1039,37 @@ object frmMain: TfrmMain
   object popupCbCallUri: TPopupMenu
     Left = 352
     Top = 227
-    object miCopy: TMenuItem
+    object miCallCopy: TMenuItem
       Caption = 'Copy'
       ShortCut = 16451
-      OnClick = miCopyClick
+      OnClick = miCallCopyClick
     end
-    object miPaste: TMenuItem
+    object miCallPaste: TMenuItem
       Caption = 'Paste'
       ShortCut = 16470
-      OnClick = miPasteClick
+      OnClick = miCallPasteClick
     end
-    object miPasteAndCall: TMenuItem
+    object miCallPasteAndCall: TMenuItem
       Caption = 'Paste and call'
-      OnClick = miPasteAndCallClick
+      OnClick = miCallPasteAndCallClick
+    end
+  end
+  object popupTransfer: TPopupMenu
+    Left = 384
+    Top = 227
+    object miTransferCopy: TMenuItem
+      Caption = 'Copy'
+      ShortCut = 16451
+      OnClick = miTransferCopyClick
+    end
+    object miTransferPaste: TMenuItem
+      Caption = 'Paste'
+      ShortCut = 16470
+      OnClick = miTransferPasteClick
+    end
+    object miTransferPasteAndTransfer: TMenuItem
+      Caption = 'Paste and transfer'
+      OnClick = miTransferPasteAndTransferClick
     end
   end
 end

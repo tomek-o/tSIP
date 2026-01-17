@@ -4324,7 +4324,7 @@ void __fastcall TfrmMain::miScriptPluginVariablesClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmMain::miCopyClick(TObject *Sender)
+void __fastcall TfrmMain::miCallCopyClick(TObject *Sender)
 {
 	if (cbCallURI->SelText.Length())
 		Clipboard()->AsText = cbCallURI->SelText;
@@ -4333,16 +4333,42 @@ void __fastcall TfrmMain::miCopyClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmMain::miPasteClick(TObject *Sender)
+void __fastcall TfrmMain::miCallPasteClick(TObject *Sender)
 {
 	SendMessage(cbCallURI->Handle, WM_PASTE, 0, 0);
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TfrmMain::miPasteAndCallClick(TObject *Sender)
+void __fastcall TfrmMain::miCallPasteAndCallClick(TObject *Sender)
 {
 	SendMessage(cbCallURI->Handle, WM_PASTE, 0, 0);
 	btnMakeCallClick(NULL);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miTransferCopyClick(TObject *Sender)
+{
+	if (edTransfer->SelText.Length())
+		Clipboard()->AsText = edTransfer->SelText;
+	else
+		Clipboard()->AsText = edTransfer->Text;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miTransferPasteClick(TObject *Sender)
+{
+	SendMessage(edTransfer->Handle, WM_PASTE, 0, 0);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miTransferPasteAndTransferClick(TObject *Sender)
+{
+	SendMessage(edTransfer->Handle, WM_PASTE, 0, 0);
+	Call *call = Calls::GetCurrentCall();
+	if (call)
+	{
+		UA->Transfer(call->uid, edTransfer->Text);
+	}
 }
 //---------------------------------------------------------------------------
 

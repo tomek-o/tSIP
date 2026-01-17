@@ -100,9 +100,13 @@ __published:	// IDE-managed Components
 	TMenuItem *miScriptPluginVariables;
 	TMenuItem *miSeparatorMessages;
 	TPopupMenu *popupCbCallUri;
-	TMenuItem *miCopy;
-	TMenuItem *miPaste;
-	TMenuItem *miPasteAndCall;
+	TMenuItem *miCallCopy;
+	TMenuItem *miCallPaste;
+	TMenuItem *miCallPasteAndCall;
+	TPopupMenu *popupTransfer;
+	TMenuItem *miTransferCopy;
+	TMenuItem *miTransferPaste;
+	TMenuItem *miTransferPasteAndTransfer;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall actShowAboutExecute(TObject *Sender);
 	void __fastcall actShowSettingsExecute(TObject *Sender);
@@ -156,9 +160,12 @@ __published:	// IDE-managed Components
           TMouseButton Button, TShiftState Shift, int X, int Y);
 	void __fastcall cbCallURIChange(TObject *Sender);
 	void __fastcall miScriptPluginVariablesClick(TObject *Sender);
-	void __fastcall miCopyClick(TObject *Sender);
-	void __fastcall miPasteClick(TObject *Sender);
-	void __fastcall miPasteAndCallClick(TObject *Sender);
+	void __fastcall miCallCopyClick(TObject *Sender);
+	void __fastcall miCallPasteClick(TObject *Sender);
+	void __fastcall miCallPasteAndCallClick(TObject *Sender);
+	void __fastcall miTransferCopyClick(TObject *Sender);
+	void __fastcall miTransferPasteClick(TObject *Sender);
+	void __fastcall miTransferPasteAndTransferClick(TObject *Sender);
 private:	// User declarations
 	static void TranslateForm(void* obj);
 
