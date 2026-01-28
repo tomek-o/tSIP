@@ -60,7 +60,6 @@
 #endif
 
 #include <math.h>
-#include <float.h>
 #include "speex/speex_preprocess.h"
 #include "speex/speex_echo.h"
 #include "arch.h"
@@ -68,10 +67,7 @@
 #include "filterbank.h"
 #include "math_approx.h"
 #include "os_support.h"
-
-#ifndef M_PI
-#define M_PI 3.14159263
-#endif
+#include <float.h>
 
 #define LOUDNESS_EXP 5.f
 #define AMP_SCALE .001f
@@ -992,7 +988,7 @@ EXPORT int speex_preprocess_run(SpeexPreprocessState *st, spx_int16_t *x)
 
    /* Perform overlap and add */
    for (i=0;i<N3;i++)
-      x[i] = st->outbuf[i] + st->frame[i];
+      x[i] = WORD2INT(ADD32(EXTEND32(st->outbuf[i]), EXTEND32(st->frame[i])));
    for (i=0;i<N4;i++)
       x[N3+i] = st->frame[N3+i];
    

@@ -1,4 +1,4 @@
-/* Copyright (C) 2006-2008 CSIRO, Jean-Marc Valin, Xiph.Org Foundation
+﻿/* Copyright (C) 2006-2008 CSIRO, Jean-Marc Valin, Xiph.Org Foundation
 
    File: scal.c
    Shaped comb-allpass filter for channel decorrelation
@@ -51,6 +51,10 @@ The algorithm implemented here is described in:
 #include "smallft.h"
 #include <math.h>
 #include <stdlib.h>
+
+#ifndef M_PI
+#define M_PI           3.14159265358979323846  /* pi */
+#endif
 
 #define ALLPASS_ORDER 20
 
@@ -147,8 +151,10 @@ EXPORT void speex_decorrelate(SpeexDecorrState *st, const spx_int16_t *in, spx_i
    amount = .01*strength;
    for (ch=0;ch<st->channels;ch++)
    {
-      int i;
-      int N=2*st->frame_size;
+	  int i;
+#ifdef VORBIS_PSYCHO
+	  int N=2*st->frame_size;
+#endif	  
       float beta, beta2;
       float *x;
       float max_alpha = 0;
@@ -171,7 +177,7 @@ EXPORT void speex_decorrelate(SpeexDecorrState *st, const spx_int16_t *in, spx_i
          buff[i+st->frame_size] = in[i*st->channels+ch];
 
       x = buff+st->frame_size;
-      beta = 1.-.3*amount*amount;
+
       if (amount>1)
          beta = 1-sqrt(.4*amount);
       else

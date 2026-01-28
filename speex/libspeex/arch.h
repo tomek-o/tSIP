@@ -7,18 +7,18 @@
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-   
+
    - Redistributions of source code must retain the above copyright
    notice, this list of conditions and the following disclaimer.
-   
+
    - Redistributions in binary form must reproduce the above copyright
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
-   
+
    - Neither the name of the Xiph.org Foundation nor the names of its
    contributors may be used to endorse or promote products derived from
    this software without specific prior written permission.
-   
+
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -37,10 +37,10 @@
 
 #ifndef SPEEX_VERSION
 #define SPEEX_MAJOR_VERSION 1         /**< Major Speex version. */
-#define SPEEX_MINOR_VERSION 1         /**< Minor Speex version. */
-#define SPEEX_MICRO_VERSION 15        /**< Micro Speex version. */
+#define SPEEX_MINOR_VERSION 2         /**< Minor Speex version. */
+#define SPEEX_MICRO_VERSION 1         /**< Micro Speex version. */
 #define SPEEX_EXTRA_VERSION ""        /**< Extra Speex version. */
-#define SPEEX_VERSION "speex-1.2beta3"  /**< Speex version string. */
+#define SPEEX_VERSION "speex-1.2.1"   /**< Speex version string. */
 #endif
 
 #ifdef OS_SUPPORT_CUSTOM
@@ -78,9 +78,7 @@
 
 #endif
 
-#ifndef OUTSIDE_SPEEX
-#include "speex/speex_types.h"
-#endif
+#include <speex/speex_types.h>
 
 #define ABS(x) ((x) < 0 ? (-(x)) : (x))      /**< Absolute integer value. */
 #define ABS16(x) ((x) < 0 ? (-(x)) : (x))    /**< Absolute 16-bit value.  */
@@ -93,7 +91,7 @@
 #ifdef FIXED_POINT
 
 typedef spx_int16_t spx_word16_t;
-typedef spx_int32_t   spx_word32_t;
+typedef spx_int32_t spx_word32_t;
 typedef spx_word32_t spx_mem_t;
 typedef spx_word16_t spx_coef_t;
 typedef spx_word16_t spx_lsp_t;
@@ -113,6 +111,9 @@ typedef spx_word32_t spx_sig_t;
 #define SIG_SHIFT    14
 #define GAIN_SHIFT   6
 
+#define WORD2INT(x) ((x) < -32767 ? -32768 : ((x) > 32766 ? 32767 : (x)))
+
+#define EPSILON 1
 #define VERY_SMALL 0
 #define VERY_LARGE32 ((spx_word32_t)2147483647)
 #define VERY_LARGE16 ((spx_word16_t)32767)
@@ -154,6 +155,7 @@ typedef float spx_word32_t;
 #define GAIN_SCALING_1 1.f
 
 
+#define EPSILON 1e-15f
 #define VERY_SMALL 1e-15f
 #define VERY_LARGE32 1e15f
 #define VERY_LARGE16 1e15f
@@ -175,6 +177,7 @@ typedef float spx_word32_t;
 #define VSHR32(a,shift) (a)
 #define SATURATE16(x,a) (x)
 #define SATURATE32(x,a) (x)
+#define SATURATE32PSHR(x,shift,a) (x)
 
 #define PSHR(a,shift)       (a)
 #define SHR(a,shift)       (a)
@@ -189,16 +192,13 @@ typedef float spx_word32_t;
 #define MULT16_16(a,b)     ((spx_word32_t)(a)*(spx_word32_t)(b))
 #define MAC16_16(c,a,b)     ((c)+(spx_word32_t)(a)*(spx_word32_t)(b))
 
-#define MULT16_32_Q11(a,b)     ((a)*(b))
 #define MULT16_32_Q13(a,b)     ((a)*(b))
 #define MULT16_32_Q14(a,b)     ((a)*(b))
 #define MULT16_32_Q15(a,b)     ((a)*(b))
 #define MULT16_32_P15(a,b)     ((a)*(b))
 
-#define MAC16_32_Q11(c,a,b)     ((c)+(a)*(b))
 #define MAC16_32_Q15(c,a,b)     ((c)+(a)*(b))
 
-#define MAC16_16_Q11(c,a,b)     ((c)+(a)*(b))
 #define MAC16_16_Q13(c,a,b)     ((c)+(a)*(b))
 #define MAC16_16_P13(c,a,b)     ((c)+(a)*(b))
 #define MULT16_16_Q11_32(a,b)     ((a)*(b))
@@ -214,18 +214,19 @@ typedef float spx_word32_t;
 #define DIV32(a,b)     (((spx_word32_t)(a))/(spx_word32_t)(b))
 #define PDIV32(a,b)     (((spx_word32_t)(a))/(spx_word32_t)(b))
 
-
+#define WORD2INT(x) ((x) < -32767.5f ? -32768 : \
+                    ((x) > 32766.5f ? 32767 : (spx_int16_t)floor(.5 + (x))))
 #endif
 
 
 #if defined (CONFIG_TI_C54X) || defined (CONFIG_TI_C55X)
 
 /* 2 on TI C5x DSP */
-#define BYTES_PER_CHAR 2 
+#define BYTES_PER_CHAR 2
 #define BITS_PER_CHAR 16
 #define LOG2_BITS_PER_CHAR 4
 
-#else 
+#else
 
 #define BYTES_PER_CHAR 1
 #define BITS_PER_CHAR 8
