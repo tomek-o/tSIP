@@ -8,13 +8,11 @@
 			<Option Name="GUID">{F0C559FB-00A4-4848-B2B0-DA5D99B5E4BE}</Option>
 		</Option>
 	</PersonalityInfo>
-	<Default.Personality>  
-    
-    <Projects>
+	<Default.Personality>  <Projects>
       <Projects Name="baresip.lib">baresip\mk\win32-tc\baresip.bdsproj</Projects>
-      <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
       <Projects Name="libspeex.lib">speex\build\libspeex.bdsproj</Projects>
-      <Projects Name="Targets">baresip.lib tSIP.exe libspeex.lib</Projects>
+      <Projects Name="tSIP.exe">tSIP\tSIP.bdsproj</Projects>
+      <Projects Name="Targets">baresip.lib libspeex.lib tSIP.exe</Projects>
     </Projects>
     <Dependencies>
       <Dependency GUID="{5A2C6F65-D176-4077-829F-5D6CA6F17D03}">
