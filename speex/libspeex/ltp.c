@@ -706,7 +706,7 @@ int cdbk_offset
    if (count_lost && pitch > subframe_offset)
    {
       spx_word16_t gain_sum;
-      if (1) {
+      {
 #ifdef FIXED_POINT
          spx_word16_t tmp = count_lost < 4 ? last_pitch_gain : SHR16(last_pitch_gain,1);
          if (tmp>62)

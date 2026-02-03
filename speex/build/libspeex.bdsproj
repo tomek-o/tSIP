@@ -148,7 +148,11 @@
           <property category="win32.*.win32b.bcc32" name="option.tWD.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.tWM.enabled" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.w.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.waus.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.wccc.enabled" value="0"/>
           <property category="win32.*.win32b.bcc32" name="option.wcsu.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.wpia.enabled" value="0"/>
+          <property category="win32.*.win32b.bcc32" name="option.wrch.enabled" value="0"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.1" value="..\libspeex"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.2" value="..\_PROJEKTY\libre\tSIP\speex\build"/>
           <property category="win32.*.win32b.dcc32" name="option.I.arg.merge" value="1"/>
