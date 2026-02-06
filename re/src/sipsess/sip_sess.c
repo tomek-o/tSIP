@@ -159,7 +159,8 @@ int sipsess_alloc(struct sipsess **sessp, struct sipsess_sock *sock,
 		  sipsess_offer_h *offerh, sipsess_answer_h *answerh,
 		  sipsess_progr_h *progrh, sipsess_estab_h *estabh,
 		  sipsess_info_h *infoh, sipsess_refer_h *referh,
-		  sipsess_close_h *closeh, void *arg)
+		  sipsess_close_h *closeh, sipsess_update_h *updateh,
+		  void *arg)
 {
 	struct sipsess *sess;
 	int err;
@@ -190,6 +191,7 @@ int sipsess_alloc(struct sipsess **sessp, struct sipsess_sock *sock,
 	sess->infoh   = infoh;
 	sess->referh  = referh;
 	sess->closeh  = closeh  ? closeh  : internal_close_handler;
+	sess->updateh = updateh;
 	sess->arg     = arg;
 
  out:
@@ -231,4 +233,19 @@ void sipsess_terminate(struct sipsess *sess, int err,
 struct sip_dialog *sipsess_dialog(const struct sipsess *sess)
 {
 	return sess ? sess->dlg : NULL;
+}
+
+/**
+ * Return true if a target refresh (re-INVITE or UPDATE) is currently allowed
+ *
+ * @param sess      SIP Session
+ *
+ * @return True if a target refresh is currently allowed, otherwise false
+ */
+bool sipsess_refresh_allowed(const struct sipsess *sess)
+{
+	if (!sess)
+		return false;
+
+	return !sess->terminated && !sess->awaiting_answer /* sess->neg_state == SDP_NEG_DONE */;
 }

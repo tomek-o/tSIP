@@ -23,6 +23,7 @@ typedef void (sipsess_info_h)(struct sip *sip, const struct sip_msg *msg,
 typedef void (sipsess_refer_h)(struct sip *sip, const struct sip_msg *msg,
 			       void *arg);
 typedef void (sipsess_close_h)(int err, const struct sip_msg *msg, void *arg);
+typedef void (sipsess_update_h)(struct sip *sip, const struct sip_msg *msg, void *arg);
 
 
 int  sipsess_listen(struct sipsess_sock **sockp, struct sip *sip,
@@ -37,7 +38,9 @@ int  sipsess_connect(struct sipsess **sessp, struct sipsess_sock *sock,
 		     sipsess_offer_h *offerh, sipsess_answer_h *answerh,
 		     sipsess_progr_h *progrh, sipsess_estab_h *estabh,
 		     sipsess_info_h *infoh, sipsess_refer_h *referh,
-		     sipsess_close_h *closeh, void *arg, const char *fmt, ...);
+			 sipsess_close_h *closeh,
+			 sipsess_update_h *updateh,
+			 void *arg, const char *fmt, ...);
 
 int  sipsess_accept(struct sipsess **sessp, struct sipsess_sock *sock,
 		    const struct sip_msg *msg, uint16_t scode,
@@ -46,7 +49,9 @@ int  sipsess_accept(struct sipsess **sessp, struct sipsess_sock *sock,
 		    sip_auth_h *authh, void *aarg, bool aref,
 		    sipsess_offer_h *offerh, sipsess_answer_h *answerh,
 		    sipsess_estab_h *estabh, sipsess_info_h *infoh,
-		    sipsess_refer_h *referh, sipsess_close_h *closeh,
+			sipsess_refer_h *referh,
+			sipsess_close_h *closeh,
+			sipsess_update_h *updateh,
 		    void *arg, const char *fmt, ...);
 
 int  sipsess_progress(struct sipsess *sess, uint16_t scode,
@@ -59,6 +64,7 @@ int  sipsess_reject(struct sipsess *sess, uint16_t scode, const char *reason,
 int  sipsess_modify(struct sipsess *sess, struct mbuf *desc);
 int  sipsess_info(struct sipsess *sess, const char *ctype, struct mbuf *body,
 		  sip_resp_h *resph, void *arg);
+bool sipsess_refresh_allowed(const struct sipsess *sess);
 void sipsess_close_all(struct sipsess_sock *sock);
 struct sip_dialog *sipsess_dialog(const struct sipsess *sess);
 

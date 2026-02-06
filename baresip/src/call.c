@@ -1187,6 +1187,17 @@ static int sipsess_offer_handler(struct mbuf **descp,
 	return status;
 }
 
+static void sipsess_update_handler(struct sip *sip,
+				 const struct sip_msg *msg, void *arg)
+{
+	struct call *call = arg;
+
+	MAGIC_CHECK(call);
+
+	call_update_pai(call, msg);
+
+	call_event_handler(call, CALL_EVENT_UPDATE_RECEIVED, "%s", call->peer_uri);
+}
 
 static int sipsess_answer_handler(const struct sip_msg *msg, void *arg)
 {
@@ -1608,7 +1619,8 @@ int call_accept(struct call *call, struct sipsess_sock *sess_sock,
 			     auth_handler, call->acc, true,
 			     sipsess_offer_handler, sipsess_answer_handler,
 			     sipsess_estab_handler, sipsess_info_handler,
-			     sipsess_refer_handler, sipsess_close_handler,
+				 sipsess_refer_handler, sipsess_close_handler,
+				 sipsess_update_handler,
 			     call, "Allow: %s\r\n", uag_allowed_methods());
 	if (err) {
 		DEBUG_WARNING("sipsess_accept: %m\n", err);
@@ -1726,7 +1738,8 @@ static int send_invite(struct call *call)
 			      sipsess_offer_handler, sipsess_answer_handler,
 			      sipsess_progr_handler, sipsess_estab_handler,
 			      sipsess_info_handler, sipsess_refer_handler,
-			      sipsess_close_handler, call,
+				  sipsess_close_handler, sipsess_update_handler,
+				  call,
 				  "Allow: %s\r\n%s%H", uag_allowed_methods(),
 				  call->extra_hdr_lines,
 			      ua_print_supported, call->ua);

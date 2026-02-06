@@ -81,19 +81,37 @@ int sipsess_reply_2xx(struct sipsess *sess, const struct sip_msg *msg,
 		      uint16_t scode, const char *reason, struct mbuf *desc,
 		      const char *fmt, va_list *ap)
 {
-	struct sipsess_reply *reply;
+	struct sipsess_reply *reply = NULL;
 	int err = ENOMEM;
+	//bool sdp = mbuf_get_left(msg->mb) > 0;
+	bool non_invite = !pl_strcmp(&msg->met, "PRACK")
+			  || !pl_strcmp(&msg->met, "UPDATE");
 
-	reply = mem_zalloc(sizeof(*reply), destructor);
-	if (!reply)
-		goto out;
+	if (!non_invite) {
+		//if (sess->neg_state == SDP_NEG_NONE && !mbuf_get_left(desc))
+		//	return EINVAL;
+		//else if (sess->neg_state == SDP_NEG_DONE)
+		//	desc = NULL;
 
-	list_append(&sess->replyl, &reply->le, reply);
-	reply->seq  = msg->cseq.num;
-	reply->msg  = mem_ref((void *)msg);
-	reply->sess = sess;
+		//if (sess->prack_waiting_cnt > 0)
+		//	return EAGAIN;
 
-	err = sip_treplyf(&sess->st, &reply->mb, sess->sip,
+		reply = mem_zalloc(sizeof(*reply), destructor);
+		if (!reply)
+			goto out;
+
+		list_append(&sess->replyl, &reply->le, reply);
+
+		reply->seq  = msg->cseq.num;
+		reply->msg  = mem_ref((void *)msg);
+		reply->sess = sess;
+	}
+
+	//if (non_invite && sess->neg_state != SDP_NEG_REMOTE_OFFER)
+	//	desc = NULL;
+
+	err = sip_treplyf(non_invite ? NULL : &sess->st,
+			  reply ? &reply->mb : NULL, sess->sip,
 			  msg, true, scode, reason,
 			  "Contact: <sip:%s@%J%s>\r\n"
 			  "%v"
@@ -113,8 +131,21 @@ int sipsess_reply_2xx(struct sipsess *sess, const struct sip_msg *msg,
 	if (err)
 		goto out;
 
-	tmr_start(&reply->tmr, 64 * SIP_T1, tmr_handler, reply);
-	tmr_start(&reply->tmrg, SIP_T1, retransmit_handler, reply);
+	//if (!non_invite)
+	//	(void)list_ledata(list_apply(&sess->replyl, false,
+	//			  cancel_1xx_timers, NULL));
+
+	//if (mbuf_get_left(desc)) {
+	//	if (sdp)
+	//		sess->neg_state = SDP_NEG_DONE;
+	//	else if (!non_invite)
+	//		sess->neg_state = SDP_NEG_LOCAL_OFFER;
+	//}
+
+	if (reply) {
+		tmr_start(&reply->tmr, 64 * SIP_T1, tmr_handler, reply);
+		tmr_start(&reply->tmrg, SIP_T1, retransmit_handler, reply);
+	}
 
 	if (!mbuf_get_left(msg->mb) && desc) {
 		reply->awaiting_answer = true;
@@ -123,7 +154,8 @@ int sipsess_reply_2xx(struct sipsess *sess, const struct sip_msg *msg,
 
  out:
 	if (err) {
-		sess->st = mem_deref(sess->st);
+		if (!non_invite)
+			sess->st = mem_deref(sess->st);
 		mem_deref(reply);
 	}
 

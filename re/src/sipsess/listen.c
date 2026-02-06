@@ -15,6 +15,7 @@
 #include <re_msg.h>
 #include <re_sip.h>
 #include <re_sipsess.h>
+#include <re_sys.h>
 #include "sipsess.h"
 
 
@@ -181,12 +182,14 @@ static void ack_handler(struct sipsess_sock *sock, const struct sip_msg *msg)
 }
 
 
-static void reinvite_handler(struct sipsess_sock *sock,
+static void target_refresh_handler(struct sipsess_sock *sock,
 			     const struct sip_msg *msg)
 {
 	struct sip *sip = sock->sip;
+	bool is_invite;
+	bool sdp;
 	struct sipsess *sess;
-	struct mbuf *desc;
+	struct mbuf *desc = NULL;
 	char m[256];
 	int err;
 
@@ -196,29 +199,55 @@ static void reinvite_handler(struct sipsess_sock *sock,
 		return;
 	}
 
+	is_invite = !pl_strcmp(&msg->met, "INVITE");
+	sdp = (mbuf_get_left(msg->mb) > 0);
+
 	if (!sip_dialog_rseq_valid(sess->dlg, msg)) {
 		(void)sip_treply(NULL, sip, msg, 500, "Server Internal Error");
 		return;
 	}
 
-	if (sess->st || sess->awaiting_answer) {
-		(void)sip_treplyf(NULL, NULL, sip, msg, false,
-				  500, "Server Internal Error",
-				  "Retry-After: 5\r\n"
-				  "Content-Length: 0\r\n"
-				  "\r\n");
+	if ((is_invite && sess->st)
+	    || (sdp && sess->awaiting_answer)) {
+		if (!sess->established) {
+			uint32_t wait = rand_u16() % 11;
+			(void)sip_treplyf(NULL, NULL, sip, msg, false,
+					  500, "Server Internal Error",
+					  "Retry-After: %u\r\n"
+					  "Content-Length: 0\r\n"
+					  "\r\n", wait);
+		}
+		else {
+			(void)sip_treply(NULL, sip, msg, 491,
+					 "Request Pending");
+		}
 		return;
 	}
 
-	if (sess->req) {
+	if (is_invite && sess->req) {
 		(void)sip_treply(NULL, sip, msg, 491, "Request Pending");
 		return;
 	}
 
-	err = sess->offerh(&desc, msg, sess->arg);
-	if (err) {
+	if (sdp && !sipsess_refresh_allowed(sess)) {
 		(void)sip_reply(sip, msg, 488, "Not Acceptable Here");
 		return;
+	}
+
+	if (is_invite || sdp) {
+		//sess->neg_state = sdp ? SDP_NEG_REMOTE_OFFER :
+		//		  SDP_NEG_LOCAL_OFFER;
+		err = sess->offerh(&desc, msg, sess->arg);
+		if (err) {
+			(void)sip_reply(sip, msg, 488,
+					str_error(err, m, sizeof(m)));
+			//sess->neg_state = SDP_NEG_DONE;
+			return;
+		}
+	}
+
+	if (!pl_strcmp(&msg->met, "UPDATE")) {
+	    sess->updateh(sip, msg, sess->arg);
 	}
 
 	(void)sip_dialog_update(sess->dlg, msg);
@@ -248,10 +277,14 @@ static bool request_handler(const struct sip_msg *msg, void *arg)
 	if (!pl_strcmp(&msg->met, "INVITE")) {
 
 		if (pl_isset(&msg->to.tag))
-			reinvite_handler(sock, msg);
+			target_refresh_handler(sock, msg);
 		else
 			invite_handler(sock, msg);
 
+		return true;
+	}
+	else if (!pl_strcmp(&msg->met, "UPDATE")) {
+		target_refresh_handler(sock, msg);
 		return true;
 	}
 	else if (!pl_strcmp(&msg->met, "ACK")) {

@@ -253,6 +253,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode, -1, "", "", -1, "", "", "", "");
 		break;
 	case UA_EVENT_CALL_REINVITE_RECEIVED:
+	case UA_EVENT_CALL_UPDATE_RECEIVED:
 		{
 			const char* pai_peer_uri = call_pai_peeruri(call);
 			if (pai_peer_uri == NULL)
