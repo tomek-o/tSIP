@@ -1279,6 +1279,13 @@ Version 0.3.11
 
 Version 0.3.11.1
 	- BREAKING: programmable buttons positions and sizes are now affected by GUI scaling
+	- added font scaling for few elements of call panel
 	- fixed programmable buttons moving and resizing when GUI scaling is used
+	- added custom popup menus to dialing combobox and transfer edit
+	- updated speex to 1.2.1 / git 2026.01.28
+	- added MESSAGE and UPDATE to "Allowed" methods
+	- handling incoming UPDATE, using PAI to update call info
+	- fixed possible double "transport" param being added to dialed URI (one from user, one from account settings)
+	- minor fixes to dialing combobox filling from history: duplicated content after updating and possibly wrong order when sorting by time	
 */
 
