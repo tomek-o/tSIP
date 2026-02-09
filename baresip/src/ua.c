@@ -696,6 +696,7 @@ int ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuse
 	return err;
 }
 
+
 /**
  * Appends params to mbuf if params do not already exist in mbuf.
  *
@@ -704,32 +705,52 @@ int ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuse
  *
  * @return 0 if success, otherwise errorcode
  */
-static int append_params(struct mbuf *mb, struct pl *params)
+static int mbuf_append_params(struct mbuf *mb, const struct pl *params)
 {
-	char param[512];
-	char *str = NULL;
-	char *pstr;
-	char *token;
-	int err;
-
-	if (!mb || !params)
+	if (!mb || !params) {
 		return EINVAL;
+	} else {
+		struct pl cur = *params;
+		const char *e = cur.p + cur.l;
+		struct pl par = PL_INIT;
+		while (!re_regex(cur.p, cur.l, ";[ \t\r\n]*[~ \t\r\n=;]*",
+				NULL, &par)) {
+			char *buf;
+			int err = pl_strdup(&buf, &par);
+			if (err) {
+				return err;
+			} else {
+				struct pl value = PL_INIT;
+				(void)msg_param_decode(&cur, buf, &value);
+				{
+					struct pl pl;
+					pl.p = (const char*) mb->buf;
+					pl.l = mb->pos;
+					if (msg_param_exists(&pl, buf, &par) != 0) {
+						if (pl_isset(&value))
+							err = mbuf_printf(mb, ";%r=%r", &par, &value);
+						else
+							err = mbuf_printf(mb, ";%r", &par);
+					}
 
-	err = pl_strdup(&str, params);
-	if (err || !str)
-		return err ? err : ENOMEM;
+					mem_deref(buf);
 
-	pstr = str;
-	while((token = strtok(pstr, ";")) != NULL) {
-		re_snprintf(param, sizeof(param), ";%s", token);
-		if (re_regex((const char *)mb->buf, mb->end, param))
-			mbuf_write_str(mb, param);
+					/* skip over the parameter */
+					if (pl_isset(&value))
+						cur.p = value.p + value.l;
+					else
+						cur.p = par.p + par.l;
 
-		pstr = NULL;
+					cur.l = e - cur.p;
+
+					if (err)
+						return err;
+				}
+			}
+		}
+
+		return 0;
 	}
-
-	mem_deref(str);
-	return 0;
 }
 
 
@@ -822,7 +843,7 @@ int ua_connect(struct ua *ua, unsigned int callUid, struct call **callp,
 	}
 
 	/* Append any optional URI parameters */
-	err |= append_params(dialbuf, &ua->acc->luri.params);
+	err |= mbuf_append_params(dialbuf, &ua->acc->luri.params);
 	if (err)
 		goto out;
 
