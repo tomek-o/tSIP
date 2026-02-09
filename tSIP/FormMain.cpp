@@ -57,6 +57,7 @@
 #include "common\base64.h"
 
 #include <Clipbrd.hpp>
+#include <algorithm>
 #include <assert.h>
 #include <stdio.h>
 #include <math.h>
@@ -931,13 +932,28 @@ void TfrmMain::UpdateCallHistory(void)
 		// add only outgoing calls
 		if (entry.incoming == false)
 		{
-			if (numbers.find(entry.uri.c_str()) == numbers.end())
+			if (appSettings.frmMain.dialComboboxOrder == Settings::_frmMain::DialComboboxOrderByNumber)
 			{
-				numbers.insert(entry.uri.c_str());
-				numbersByDate.push_back(entry.uri.c_str());
+				if (numbers.find(entry.uri.c_str()) == numbers.end())
+				{
+					numbers.insert(entry.uri.c_str());
+				}
+			}
+			else if (appSettings.frmMain.dialComboboxOrder == Settings::_frmMain::DialComboboxOrderByTime)
+			{
+			#pragma warn -8091	// incorrectly issued by BDS2006
+				std::vector<std::string>::iterator iter = std::find(numbersByDate.begin(), numbersByDate.end(), entry.uri.c_str());
+			#pragma warn .8091
+				if (iter == numbersByDate.end())
+					numbersByDate.push_back(entry.uri.c_str());
+			}
+			else
+			{
+				assert(!"Unhandled dialCombobox sorting order!");
 			}
 		}
 	}
+	cbCallURI->Items->Clear();
 	if (appSettings.frmMain.dialComboboxOrder == Settings::_frmMain::DialComboboxOrderByNumber)
 	{
 		std::set<std::string>::iterator iter;
