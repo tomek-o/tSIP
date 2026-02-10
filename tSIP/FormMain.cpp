@@ -926,6 +926,7 @@ void TfrmMain::UpdateCallHistory(void)
 	const std::deque<History::Entry>& entries = history.GetEntries();
 	std::set<std::string> numbers;
 	std::vector<std::string> numbersByDate;
+	enum { COMBOBOX_ITEM_LIMIT = 25 };
 	for (unsigned int i=0; i<std::min(100u, entries.size()); i++)
 	{
 		const History::Entry &entry = entries[i];
@@ -937,6 +938,8 @@ void TfrmMain::UpdateCallHistory(void)
 				if (numbers.find(entry.uri.c_str()) == numbers.end())
 				{
 					numbers.insert(entry.uri.c_str());
+					if (numbers.size() >= COMBOBOX_ITEM_LIMIT)
+						break;
 				}
 			}
 			else if (appSettings.frmMain.dialComboboxOrder == Settings::_frmMain::DialComboboxOrderByTime)
@@ -944,8 +947,11 @@ void TfrmMain::UpdateCallHistory(void)
 			#pragma warn -8091	// incorrectly issued by BDS2006
 				std::vector<std::string>::iterator iter = std::find(numbersByDate.begin(), numbersByDate.end(), entry.uri.c_str());
 			#pragma warn .8091
-				if (iter == numbersByDate.end())
+				if (iter == numbersByDate.end()) {
 					numbersByDate.push_back(entry.uri.c_str());
+					if (numbersByDate.size() >= COMBOBOX_ITEM_LIMIT)
+						break;
+				}
 			}
 			else
 			{
