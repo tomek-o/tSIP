@@ -215,7 +215,7 @@ static void udp_recv_handler(const struct sa *src, struct mbuf *mb, void *arg)
 }
 
 
-static int udp_range_listen(struct rtp_sock *rs, const struct sa *ip,
+static int udp_range_listen(struct rtp_sock *rs, const struct sa *ip, bool no_ip_bind,
 			    uint16_t min_port, uint16_t max_port)
 {
 	struct sa rtcp;
@@ -233,12 +233,12 @@ static int udp_range_listen(struct rtp_sock *rs, const struct sa *ip,
 		port &= 0xfffe;
 
 		sa_set_port(&rs->local, port);
-		err = udp_listen(&us_rtp, &rs->local, udp_recv_handler, rs);
+		err = udp_listen(&us_rtp, &rs->local, no_ip_bind, udp_recv_handler, rs);
 		if (err)
 			continue;
 
 		sa_set_port(&rtcp, port + 1);
-		err = udp_listen(&us_rtcp, &rtcp, rtcp_recv_handler, rs);
+		err = udp_listen(&us_rtcp, &rtcp, no_ip_bind, rtcp_recv_handler, rs);
 		if (err) {
 			mem_deref(us_rtp);
 			continue;
@@ -299,6 +299,7 @@ int rtp_alloc(struct rtp_sock **rsp)
  * @return 0 for success, otherwise errorcode
  */
 int rtp_listen(struct rtp_sock **rsp, int proto, const struct sa *ip,
+		   bool no_ip_bind,
 	       uint16_t min_port, uint16_t max_port, bool enable_rtcp,
 	       rtp_recv_h *recvh, rtcp_recv_h *rtcph, void *arg)
 {
@@ -327,7 +328,7 @@ int rtp_listen(struct rtp_sock **rsp, int proto, const struct sa *ip,
 	switch (proto) {
 
 	case IPPROTO_UDP:
-		err = udp_range_listen(rs, ip, min_port, max_port);
+		err = udp_range_listen(rs, ip, no_ip_bind, min_port, max_port);
 		break;
 
 	default:

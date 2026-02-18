@@ -90,7 +90,7 @@ typedef void (dtls_close_h)(int err, void *arg);
 
 struct dtls_sock;
 
-int dtls_listen(struct dtls_sock **sockp, const struct sa *laddr,
+int dtls_listen(struct dtls_sock **sockp, const struct sa *laddr, bool no_ip_bind,
 		struct udp_sock *us, uint32_t htsize, int layer,
 		dtls_conn_h *connh, void *arg);
 struct udp_sock *dtls_udp_sock(struct dtls_sock *sock);

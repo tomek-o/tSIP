@@ -23,7 +23,7 @@ struct udp_sock;
 typedef void (udp_recv_h)(const struct sa *src, struct mbuf *mb, void *arg);
 
 
-int  udp_listen(struct udp_sock **usp, const struct sa *local,
+int  udp_listen(struct udp_sock **usp, const struct sa *local, bool no_ip_bind,
 		udp_recv_h *rh, void *arg);
 void udp_connect(struct udp_sock *us, bool conn);
 int  udp_send(struct udp_sock *us, const struct sa *dst, struct mbuf *mb);

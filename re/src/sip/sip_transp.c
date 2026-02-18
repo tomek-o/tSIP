@@ -726,7 +726,7 @@ int sip_transp_init(struct sip *sip, uint32_t sz)
  *
  * @return 0 if success, otherwise errorcode
  */
-int sip_transp_add(struct sip *sip, enum sip_transp tp,
+int sip_transp_add(struct sip *sip, enum sip_transp tp, bool no_ip_bind,
 		   const struct sa *laddr, ...)
 {
 	struct sip_transport *transp;
@@ -758,12 +758,12 @@ int sip_transp_add(struct sip *sip, enum sip_transp tp,
 	switch (tp) {
 
 	case SIP_TRANSP_UDP:
-		err = udp_listen((struct udp_sock **)&transp->sock, laddr,
+		err = udp_listen((struct udp_sock **)&transp->sock, laddr, no_ip_bind,
 				 udp_recv_handler, transp);
 		if (err)
 			break;
 		err = udp_local_get(transp->sock, &transp->laddr);
-		if (transp->laddr.u.in.sin_addr.S_un.S_addr == INADDR_ANY)
+		if (no_ip_bind && transp->laddr.u.in.sin_addr.S_un.S_addr == INADDR_ANY)
 		{
 			transp->laddr.u.in.sin_addr = laddr->u.in.sin_addr;
 		}
@@ -781,12 +781,12 @@ int sip_transp_add(struct sip *sip, enum sip_transp tp,
 		/*@fallthrough@*/
 
 	case SIP_TRANSP_TCP:
-		err = tcp_listen((struct tcp_sock **)&transp->sock, laddr,
+		err = tcp_listen((struct tcp_sock **)&transp->sock, laddr, no_ip_bind,
 				 tcp_connect_handler, transp);
 		if (err)
 			break;
 		err = tcp_sock_local_get(transp->sock, &transp->laddr);
-		if (transp->laddr.u.in.sin_addr.S_un.S_addr == INADDR_ANY)
+		if (no_ip_bind && transp->laddr.u.in.sin_addr.S_un.S_addr == INADDR_ANY)
 		{
 			transp->laddr.u.in.sin_addr = laddr->u.in.sin_addr;
 		}

@@ -289,7 +289,7 @@ int nat_mapping_alloc(struct nat_mapping **nmp, const struct sa *laddr,
 	switch (proto) {
 
 	case IPPROTO_UDP:
-		err = udp_listen(&nm->us, &nm->laddr, udp_recv_handler, nm);
+		err = udp_listen(&nm->us, &nm->laddr, false, udp_recv_handler, nm);
 		if (err)
 			goto out;
 		err = udp_local_get(nm->us, &nm->laddr);

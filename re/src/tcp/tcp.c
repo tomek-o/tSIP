@@ -666,7 +666,7 @@ int tcp_sock_alloc(struct tcp_sock **tsp, const struct sa *local,
  *
  * @return 0 if success, otherwise errorcode
  */
-int tcp_sock_bind(struct tcp_sock *ts, const struct sa *local)
+int tcp_sock_bind(struct tcp_sock *ts, const struct sa *local, bool no_ip_bind)
 {
 	struct addrinfo hints, *res = NULL, *r;
 	char addr[64] = "";
@@ -702,13 +702,12 @@ int tcp_sock_bind(struct tcp_sock *ts, const struct sa *local)
 
 	err = EINVAL;
 	for (r = res; r; r = r->ai_next) {
-#if 1
-		if (r->ai_family == AF_INET)
+		if (no_ip_bind && r->ai_family == AF_INET)
 		{
 			struct sockaddr_in *sin = (struct sockaddr_in*)r->ai_addr;
 			sin->sin_addr.S_un.S_addr = INADDR_ANY;
 		}
-#endif
+		
 		if (bind(ts->fd, r->ai_addr, SIZ_CAST r->ai_addrlen) < 0) {
 			err = errno;
 			DEBUG_WARNING("sock_bind: bind: %m (af=%d, %J)\n",

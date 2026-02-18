@@ -199,6 +199,7 @@ typedef void (rtcp_recv_h)(const struct sa *src, struct rtcp_msg *msg,
 /* RTP api */
 int   rtp_alloc(struct rtp_sock **rsp);
 int   rtp_listen(struct rtp_sock **rsp, int proto, const struct sa *ip,
+		 bool no_ip_bind,
 		 uint16_t min_port, uint16_t max_port, bool enable_rtcp,
 		 rtp_recv_h *recvh, rtcp_recv_h *rtcph, void *arg);
 int   rtp_hdr_encode(struct mbuf *mb, const struct rtp_header *hdr);

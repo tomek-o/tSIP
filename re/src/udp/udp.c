@@ -253,7 +253,7 @@ static void udp_read_handler6(int flags, void *arg)
  *
  * @return 0 if success, otherwise errorcode
  */
-int udp_listen(struct udp_sock **usp, const struct sa *local,
+int udp_listen(struct udp_sock **usp, const struct sa *local, bool no_ip_bind,
 	       udp_recv_h *rh, void *arg)
 {
 	struct addrinfo hints, *res = NULL, *r;
@@ -329,13 +329,12 @@ int udp_listen(struct udp_sock **usp, const struct sa *local,
 			continue;
 		}
 
-#if 1
-		if (r->ai_family == AF_INET)
+		if (no_ip_bind && r->ai_family == AF_INET)
 		{
 			struct sockaddr_in *sin = (struct sockaddr_in*)r->ai_addr;
 			sin->sin_addr.S_un.S_addr = INADDR_ANY;
 		}
-#endif
+
 		if (bind(fd, r->ai_addr, SIZ_CAST r->ai_addrlen) < 0) {
 			err = errno;
 			DEBUG_INFO("listen: bind(): %m (%J)\n", err, local);
@@ -503,7 +502,7 @@ int udp_send_anon(const struct sa *dst, struct mbuf *mb)
 	if (!dst || !mb)
 		return EINVAL;
 
-	err = udp_listen(&us, NULL, NULL, NULL);
+	err = udp_listen(&us, NULL, true, NULL, NULL);
 	if (err)
 		return err;
 

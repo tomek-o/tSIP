@@ -285,7 +285,7 @@ int nat_hairpinning_alloc(struct nat_hairpinning **nhp,
 	switch (proto) {
 
 	case IPPROTO_UDP:
-		err = udp_listen(&nh->us, NULL, udp_recv_handler, nh);
+		err = udp_listen(&nh->us, NULL, true, udp_recv_handler, nh);
 		break;
 
 	case IPPROTO_TCP:
@@ -304,7 +304,7 @@ int nat_hairpinning_alloc(struct nat_hairpinning **nhp,
 		if (err)
 			break;
 
-		err = tcp_sock_bind(nh->ts, &local);
+		err = tcp_sock_bind(nh->ts, &local, false);
 		if (err)
 			break;
 

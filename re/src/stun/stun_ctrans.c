@@ -260,7 +260,7 @@ int stun_ctrans_request(struct stun_ctrans **ctp, struct stun *stun, int proto,
 		tmr_start(&ct->tmr, ct->ival, timeout_handler, ct);
 
 		if (!sock) {
-			err = udp_listen((struct udp_sock **)&ct->sock, NULL,
+			err = udp_listen((struct udp_sock **)&ct->sock, NULL, true,
 					 udp_recv_handler, stun);
 			if (err)
 				break;

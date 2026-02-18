@@ -657,6 +657,7 @@ static int app_init(void)
 	cfg->avt.jbuf_del.min = appSettings.uaConf.avt.jbufDelayMin;
 	cfg->avt.jbuf_del.max = appSettings.uaConf.avt.jbufDelayMax;
 	cfg->avt.rtp_timeout = appSettings.uaConf.avt.rtpTimeout;
+	cfg->avt.no_ip_bind = appSettings.uaConf.noIpBind;
 
 	cfg->messages.reply_code = appSettings.uaConf.messages.replyCode;
 	strncpyz(cfg->messages.reply_reason, appSettings.uaConf.messages.replyReason.c_str(), sizeof(cfg->messages.reply_reason));
@@ -717,7 +718,7 @@ static int app_init(void)
 		uaName = appSettings.uaConf.userAgent.c_str();
     }
 
-	err = ua_init(uaName.c_str(), true, true, true, false);
+	err = ua_init(uaName.c_str(), true, true, true, appSettings.uaConf.noIpBind, false);
 	if (err)
 		return err;
 

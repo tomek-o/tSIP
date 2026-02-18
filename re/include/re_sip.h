@@ -295,7 +295,7 @@ void sip_log_messages(struct sip *sip, bool log, bool only_first_lines);
 
 
 /* transport */
-int  sip_transp_add(struct sip *sip, enum sip_transp tp,
+int  sip_transp_add(struct sip *sip, enum sip_transp tp, bool no_ip_bind,
 		    const struct sa *laddr, ...);
 int  sip_transp_add_ccert(struct sip *sip, const struct uri *uri,
 			  const char *ccertfile);

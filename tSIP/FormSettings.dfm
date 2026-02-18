@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsLogging
+    ActivePage = tsNetwork
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -219,21 +219,21 @@ object frmSettings: TfrmSettings
       end
       object lblRtpPortRange: TLabel
         Left = 3
-        Top = 152
+        Top = 170
         Width = 130
         Height = 13
         Caption = 'RTP/RTCP local  port range'
       end
       object lblRtpPortMin: TLabel
         Left = 205
-        Top = 152
+        Top = 170
         Width = 16
         Height = 13
         Caption = 'min'
       end
       object lblRtpPortMax: TLabel
         Left = 280
-        Top = 152
+        Top = 170
         Width = 20
         Height = 13
         Caption = 'max'
@@ -258,21 +258,21 @@ object frmSettings: TfrmSettings
       end
       object lblRtpJitterBufDelay: TLabel
         Left = 3
-        Top = 176
+        Top = 194
         Width = 151
         Height = 13
         Caption = 'RTP jitter buffer delay (frames)'
       end
       object lblJbufDelayMin: TLabel
         Left = 205
-        Top = 176
+        Top = 194
         Width = 16
         Height = 13
         Caption = 'min'
       end
       object lblJbufDelayMax: TLabel
         Left = 280
-        Top = 176
+        Top = 194
         Width = 20
         Height = 13
         Caption = 'max'
@@ -288,7 +288,7 @@ object frmSettings: TfrmSettings
       end
       object lblRtpTimeout: TLabel
         Left = 3
-        Top = 200
+        Top = 218
         Width = 140
         Height = 13
         Caption = 'RTP timeout; 0 = disabled [s]'
@@ -309,28 +309,28 @@ object frmSettings: TfrmSettings
       end
       object edRtpPortMin: TEdit
         Left = 227
-        Top = 149
+        Top = 167
         Width = 42
         Height = 21
         TabOrder = 1
       end
       object edRtpPortMax: TEdit
         Left = 305
-        Top = 149
+        Top = 167
         Width = 42
         Height = 21
         TabOrder = 2
       end
       object edJbufDelayMin: TEdit
         Left = 227
-        Top = 173
+        Top = 191
         Width = 42
         Height = 21
         TabOrder = 3
       end
       object edJbufDelayMax: TEdit
         Left = 305
-        Top = 173
+        Top = 191
         Width = 42
         Height = 21
         TabOrder = 4
@@ -344,7 +344,7 @@ object frmSettings: TfrmSettings
       end
       object edRtpTimeout: TEdit
         Left = 227
-        Top = 197
+        Top = 215
         Width = 42
         Height = 21
         TabOrder = 6
@@ -359,6 +359,14 @@ object frmSettings: TfrmSettings
         ItemHeight = 13
         TabOrder = 7
         OnChange = cbNetworkInterfacesChange
+      end
+      object chbNoIpBind: TCheckBox
+        Left = 3
+        Top = 130
+        Width = 174
+        Height = 17
+        Caption = 'Do not bind to IP'
+        TabOrder = 8
       end
     end
     object tsAccount: TTabSheet

@@ -53,6 +53,7 @@ static struct {
 	struct sipsess_sock *sock;     /**< SIP Session socket              */
 	struct sipevent_sock *evsock;  /**< SIP Event socket                */
 	uint32_t transports;           /**< Supported transports mask       */
+	bool no_ip_bind;
 	bool prefer_ipv6;              /**< Force IPv6 transport            */
 #ifdef USE_TLS
 	struct tls *tls;               /**< TLS Context                     */
@@ -66,6 +67,7 @@ static struct {
 	NULL,
 	NULL,
 	0,
+	false,
 	false,
 #ifdef USE_TLS
 	NULL,
@@ -1161,9 +1163,9 @@ static int add_transp_af(const struct sa *laddr)
 	}
 
 	if (u32mask_enabled(uag.transports, SIP_TRANSP_UDP))
-		err |= sip_transp_add(uag.sip, SIP_TRANSP_UDP, &local);
+		err |= sip_transp_add(uag.sip, SIP_TRANSP_UDP, uag.no_ip_bind, &local);
 	if (u32mask_enabled(uag.transports, SIP_TRANSP_TCP))
-		err |= sip_transp_add(uag.sip, SIP_TRANSP_TCP, &local);
+		err |= sip_transp_add(uag.sip, SIP_TRANSP_TCP, uag.no_ip_bind, &local);
 	if (err) {
 		DEBUG_WARNING("ua: SIP Transport failed: %m\n", err);
 		return err;
@@ -1217,7 +1219,7 @@ static int add_transp_af(const struct sa *laddr)
 		if (sa_isset(&local, SA_PORT))
 			sa_set_port(&local, sa_port(&local) + 1);
 
-		err = sip_transp_add(uag.sip, SIP_TRANSP_TLS, &local, uag.tls);
+		err = sip_transp_add(uag.sip, SIP_TRANSP_TLS, uag.no_ip_bind, &local, uag.tls);
 		if (err) {
 			DEBUG_WARNING("ua: SIP/TLS transport failed: %m\n", err);
 			return err;
@@ -1429,7 +1431,7 @@ static const struct cmd cmdv[] = {
  *
  * @return 0 if success, otherwise errorcode
  */
-int ua_init(const char *software, bool udp, bool tcp, bool tls, bool prefer_ipv6)
+int ua_init(const char *software, bool udp, bool tcp, bool tls, bool no_ip_bind, bool prefer_ipv6)
 {
 	struct config *cfg = conf_config();
 	uint32_t bsize;
@@ -1457,6 +1459,7 @@ int ua_init(const char *software, bool udp, bool tcp, bool tls, bool prefer_ipv6
 		//u32mask_enable(&uag.transports, SIP_TRANSP_WS,  true);
 		//u32mask_enable(&uag.transports, SIP_TRANSP_WSS, true);
 	}
+	uag.no_ip_bind = no_ip_bind;
 	uag.prefer_ipv6 = prefer_ipv6;
 
 	list_init(&uag.ual);

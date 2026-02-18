@@ -262,7 +262,7 @@ static int stream_sock_alloc(struct stream *s, int af, int rtp_sock_rx_buf_size)
 	/* we listen on all interfaces */
 	sa_init(&laddr, af);
 
-	err = rtp_listen(&s->rtp, IPPROTO_UDP, &laddr,
+	err = rtp_listen(&s->rtp, IPPROTO_UDP, &laddr, s->cfg.no_ip_bind,
 			 s->cfg.rtp_ports.min, s->cfg.rtp_ports.max,
 			 s->rtcp, rtp_recv, rtcp_handler, s);
 	if (err)

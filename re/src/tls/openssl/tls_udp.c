@@ -797,7 +797,7 @@ static bool recv_handler(struct sa *src, struct mbuf *mb, void *arg)
  *
  * @return 0 if success, otherwise errorcode
  */
-int dtls_listen(struct dtls_sock **sockp, const struct sa *laddr,
+int dtls_listen(struct dtls_sock **sockp, const struct sa *laddr, bool no_ip_bind,
 		struct udp_sock *us, uint32_t htsize, int layer,
 		dtls_conn_h *connh, void *arg)
 {
@@ -815,7 +815,7 @@ int dtls_listen(struct dtls_sock **sockp, const struct sa *laddr,
 		sock->us = mem_ref(us);
 	}
 	else {
-		err = udp_listen(&sock->us, laddr, NULL, NULL);
+		err = udp_listen(&sock->us, laddr, no_ip_bind, NULL, NULL);
 		if (err)
 			goto out;
 	}

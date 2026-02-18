@@ -19,7 +19,7 @@
  *
  * @return 0 if success, otherwise errorcode
  */
-int tcp_listen(struct tcp_sock **tsp, const struct sa *local,
+int tcp_listen(struct tcp_sock **tsp, const struct sa *local, bool no_ip_bind,
 	       tcp_conn_h *ch, void *arg)
 {
 	struct tcp_sock *ts = NULL;
@@ -32,7 +32,7 @@ int tcp_listen(struct tcp_sock **tsp, const struct sa *local,
 	if (err)
 		goto out;
 
-	err = tcp_sock_bind(ts, local);
+	err = tcp_sock_bind(ts, local, no_ip_bind);
 	if (err)
 		goto out;
 

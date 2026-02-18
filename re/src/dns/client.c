@@ -856,7 +856,7 @@ int dnsc_alloc(struct dnsc **dcpp, const struct dnsc_conf *conf,
 	if (err)
 		goto out;
 
-	err = udp_listen(&dnsc->us, NULL, udp_recv_handler, dnsc);
+	err = udp_listen(&dnsc->us, NULL, true, udp_recv_handler, dnsc);
 	if (err)
 		goto out;
 

@@ -292,11 +292,11 @@ int nat_lifetime_alloc(struct nat_lifetime **nlp, const struct sa *srv,
 	if (err)
 		goto out;
 
-	err = udp_listen(&nl->us_x, NULL, udp_recv_handler_x, nl);
+	err = udp_listen(&nl->us_x, NULL, true, udp_recv_handler_x, nl);
 	if (err)
 		goto out;
 
-	err = udp_listen(&nl->us_y, NULL, udp_recv_handler_y, nl);
+	err = udp_listen(&nl->us_y, NULL, true, udp_recv_handler_y, nl);
 	if (err)
 		goto out;
 

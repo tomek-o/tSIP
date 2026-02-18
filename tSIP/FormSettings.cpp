@@ -235,6 +235,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		}
 		UpdateNetworkInterface();
 	}
+	chbNoIpBind->Checked = tmpSettings.uaConf.noIpBind;
 
 	edRtpPortMin->Text = tmpSettings.uaConf.avt.portMin;
 	edRtpPortMax->Text = tmpSettings.uaConf.avt.portMax;
@@ -899,6 +900,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	{
 		tmpSettings.uaConf.netIfName = networkInterfaces[cbNetworkInterfaces->ItemIndex].name.c_str();
 	}
+	tmpSettings.uaConf.noIpBind = chbNoIpBind->Checked;
 	tmpSettings.uaConf.avt.portMin = StrToIntDef(edRtpPortMin->Text, 0);
 	tmpSettings.uaConf.avt.portMax = StrToIntDef(edRtpPortMax->Text, 0);
 	if (tmpSettings.uaConf.avt.ValidatePorts())

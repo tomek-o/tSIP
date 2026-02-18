@@ -516,6 +516,7 @@ public:
 
 	std::string netLocal;
 	std::string netIfName;	///< baresip config_net.ifname
+	bool noIpBind;
 
 	struct Avt {
 		unsigned int portMin;
@@ -722,6 +723,7 @@ public:
 		logAubuf = false;
 		loopRingWithoutSilence = false;
 		startAudioSourceAtCallStart = false;
+		noIpBind = false;
 		autoAnswer = false;
 		autoAnswerCode = 200;
 		autoAnswerReason = "OK";
@@ -793,6 +795,8 @@ public:
 		if (netLocal != right.netLocal)
 			return false;
 		if (netIfName != right.netIfName)
+			return false;
+		if (noIpBind != right.noIpBind)
 			return false;
 		if (avt != right.avt)
 			return false;
