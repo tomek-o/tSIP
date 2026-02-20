@@ -1060,3 +1060,34 @@ void TfrmButtonEdit::UpdateImgPreview(void)
 	}
 }
 
+void __fastcall TfrmButtonEdit::btnSelectVideoInputFileClick(TObject *Sender)
+{
+	int TODO__INITIAL_DIR_FAILS_ON_WIN10; // https://stackoverflow.com/questions/71595750/why-does-delphi-topendialog-fail-to-open-in-the-initial-directory
+	dlgOpenDeviceFile->InitialDir = Paths::GetProfileDir();
+	dlgOpenDeviceFile->Filter = "Video files|*.mp4;*.mkv;*.avi;*.mpg;*.wmv;*.flv;*.mov;*.rmvb;*.webm;*.3gp;*.asf|All files|*.*";
+	TEdit *edit = edVideoInputFile;
+	if (edit->Text != "")
+	{
+		if (FileExists(Paths::GetProfileDir() + "\\" + edit->Text))
+		{
+			dlgOpenDeviceFile->FileName = Paths::GetProfileDir() + "\\" + edit->Text;
+		}
+		else
+		{
+			dlgOpenDeviceFile->FileName = edit->Text;
+		}
+	}
+	if (dlgOpenDeviceFile->Execute())
+	{
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenDeviceFile->FileName)))
+		{
+			edit->Text = dlgOpenDeviceFile->FileName;
+		}
+		else
+		{
+			edit->Text = ExtractFileName(dlgOpenDeviceFile->FileName);
+		}
+	}
+}
+//---------------------------------------------------------------------------
+

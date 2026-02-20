@@ -413,7 +413,7 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 0
         Width = 521
         Height = 302
-        ActivePage = tsBehaviorBlf
+        ActivePage = tsBehaviorSwitchVideoSource
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -853,6 +853,7 @@ object frmButtonEdit: TfrmButtonEdit
             Caption = '...'
             TabOrder = 2
             Visible = False
+            OnClick = btnSelectVideoInputFileClick
           end
           object cbVideoInputDev: TComboBox
             Left = 148

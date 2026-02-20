@@ -1286,6 +1286,7 @@ Version 0.3.11.1
 	- added MESSAGE and UPDATE to "Allowed" methods
 	- handling incoming UPDATE, using PAI to update call info
 	- fixed possible double "transport" param being added to dialed URI (one from user, one from account settings)
-	- minor fixes to dialing combobox filling from history: duplicated content after updating and possibly wrong order when sorting by time	
+	- minor fixes to dialing combobox filling from history: duplicated content after updating and possibly wrong order when sorting by time
+	- fixed not working button selecting file for video source switching function in button editor
 */
 

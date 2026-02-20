@@ -211,6 +211,7 @@ __published:	// IDE-managed Components
 	void __fastcall chbSpaceLabelsYEquallyClick(TObject *Sender);
 	void __fastcall cbVideoInputModChange(TObject *Sender);
 	void __fastcall tvSelectorChange(TObject *Sender, TTreeNode *Node);
+	void __fastcall btnSelectVideoInputFileClick(TObject *Sender);
 private:	// User declarations
 	bool confirmed;
 	bool refreshAudioDevList;
