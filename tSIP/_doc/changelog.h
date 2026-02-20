@@ -1277,7 +1277,7 @@ Version 0.3.11
 	- increased default size of script editor window
 	- few other minor changes
 
-Version 0.3.11.1
+Version 0.3.12
 	- BREAKING: programmable buttons positions and sizes are now affected by GUI scaling
 	- added font scaling for few elements of call panel
 	- fixed programmable buttons moving and resizing when GUI scaling is used
@@ -1287,6 +1287,7 @@ Version 0.3.11.1
 	- handling incoming UPDATE, using PAI to update call info
 	- fixed possible double "transport" param being added to dialed URI (one from user, one from account settings)
 	- minor fixes to dialing combobox filling from history: duplicated content after updating and possibly wrong order when sorting by time
+	- added Network / "Do not bind to IP" setting
 	- fixed not working button selecting file for video source switching function in button editor
 */
 
