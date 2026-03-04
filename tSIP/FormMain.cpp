@@ -409,7 +409,11 @@ void TfrmMain::InitButtons(void)
 	asButtonsFile.sprintf("%s\\%s_buttons.json", Paths::GetProfileDir().c_str(),
 		ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
 	buttons.SetFilename(asButtonsFile);
-	buttons.Read();
+	int btnReadStatus = buttons.Read();
+	if (btnReadStatus != 0)
+	{
+		LOG("Failed to read button configuration (status = %d), existing file was left unchanged\n", btnReadStatus);
+	}
 	buttons.UpdateContacts(appSettings.uaConf.contacts);
 
 	buttons.SetScalingPercentage(appSettings.gui.scalingPct);
@@ -535,7 +539,10 @@ void TfrmMain::Finalize(void)
 	appSettings.Logging.windowWidth = frmLog->Width;
 	appSettings.Logging.windowHeight = frmLog->Height;
 
-	appSettings.Write(Paths::GetConfig());
+	if (appSettings.Write(Paths::GetConfig()) != 0)
+	{
+		LOG("Failed to write main configuration\n");
+	}
 	if (appSettings.history.noStoreToFile == false)
 	{
 		history.Write();
@@ -739,7 +746,10 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	tmrScript2->Interval = appSettings.Scripts.timer2;
 	tmrScript2->Enabled = true;
 
-	appSettings.Write(Paths::GetConfig());
+	if (appSettings.Write(Paths::GetConfig()) != 0)
+	{
+		LOG("Failed to write main configuration\n");
+	}
 }
 
 int TfrmMain::UpdateButtonsFromJson(AnsiString json)
@@ -1219,7 +1229,10 @@ int TfrmMain::OnPluginEnable(const char* dllName, bool state)
 	if (changed)
 	{
 		PhoneInterface::SetCfg(appSettings.phoneConf);
-		appSettings.Write(Paths::GetConfig());
+		if (appSettings.Write(Paths::GetConfig()) != 0)
+		{
+			LOG("Failed to write main configuration\n");
+		}
 		return 0;
 	}
 	return -1;
@@ -3051,7 +3064,10 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 			appSettings.uaConf.autoAnswerReason = cfg.sipReason;
 			UpdateAutoAnswer();
 		}
-		appSettings.Write(Paths::GetConfig());		
+		if (appSettings.Write(Paths::GetConfig()) != 0)
+		{
+			LOG("Failed to write main configuration\n");
+		}
 		break;
 	case Button::ZRTP_VERIFY_SAS:
 		UA->ZrtpVerifySas(true);

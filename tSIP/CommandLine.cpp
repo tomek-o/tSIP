@@ -132,7 +132,7 @@ void CommandLine::Execute(char* buf, int paramcnt)
 	AnsiString asCallParam;
 	asCallParam.sprintf("/%s=", Branding::appProto.c_str());
 	const char* const szCallParam = asCallParam.c_str();
-	for (int i=1; i<=paramcnt; i++)
+	for (int i=1; i<paramcnt; i++)
 	{
 		AnsiString asParam = buf + (MAX_CMD_PARAM_LEN*i);
         //LOG("asParam = %s\n", asParam.c_str());

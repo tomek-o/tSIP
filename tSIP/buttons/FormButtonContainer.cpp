@@ -10,6 +10,7 @@
 #include "ButtonContainers.h"
 #include "SpeedDialStatus.h"
 #include "Settings.h"
+#include "Paths.h"
 #include "UaMain.h"
 #include "Log.h"
 #include <algorithm>
@@ -287,8 +288,10 @@ void __fastcall TfrmButtonContainer::miConfigureButtonContainerClick(
 		{
 			appSettings.buttonContainers[containerId] = tmp;
 			ApplyConfig();
-			AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
-			appSettings.Write(asConfigFile);
+			if (appSettings.Write(Paths::GetConfig()) != 0)
+			{
+				LOG("Failed to write main configuration\n");
+			}
 		}
 	}
 	callbackSetKeepForeground(true);
