@@ -5,6 +5,7 @@
 
 #include "Settings.h"
 #include "common\KeybKeys.h"
+#include "common\SettingsUtils.h"
 #include "ProgrammableButtons.h"
 #include "ButtonContainers.h"
 #include "AudioModules.h"
@@ -13,7 +14,6 @@
 #include <algorithm>
 #include <fstream>
 #include <json/json.h>
-#include <windows.h>
 
 //---------------------------------------------------------------------------
 
@@ -223,7 +223,7 @@ int Settings::Read(AnsiString asFileName)
 		bool parsingSuccessful = reader.parse( strConfig, root );
 		if ( !parsingSuccessful )
 		{
-			AnsiString backupFile = asFileName + ".bak";
+			AnsiString backupFile = SettingsUtils::GetBakFileName(asFileName);
 			std::ifstream ifsBackup(backupFile.c_str(), std::ios::in | std::ios::binary);
 			if (!ifsBackup.is_open())
 			{
@@ -1234,51 +1234,7 @@ int Settings::Write(AnsiString asFileName)
 	}
 
 	std::string outputConfig = writer.write( root );
-
-	try
-	{
-		AnsiString tmpFile = asFileName + ".tmp";
-		AnsiString backupFile = asFileName + ".bak";
-
-		FILE *fp = fopen(tmpFile.c_str(), "wb");
-		if (fp == NULL)
-		{
-			return 1;
-		}
-
-		int ret = fwrite(outputConfig.data(), outputConfig.size(), 1, fp);
-		fflush(fp);
-		fclose(fp);
-		if (ret != 1)
-		{
-			DeleteFile(tmpFile.c_str());
-			return 1;
-		}
-
-		if (FileExists(asFileName))
-		{
-			if (!ReplaceFile(asFileName.c_str(), tmpFile.c_str(), backupFile.c_str(),
-					REPLACEFILE_WRITE_THROUGH, NULL, NULL))
-			{
-				DeleteFile(tmpFile.c_str());
-				return 1;
-			}
-		}
-		else
-		{
-			if (!MoveFileEx(tmpFile.c_str(), asFileName.c_str(), MOVEFILE_WRITE_THROUGH | MOVEFILE_COPY_ALLOWED))
-			{
-				DeleteFile(tmpFile.c_str());
-				return 1;
-			}
-		}
-	}
-	catch(...)
-	{
-    	return 1;
-	}
-
-	return 0;
+	return SettingsUtils::AtomicUpdateWithBackup(asFileName, outputConfig);
 }
 
 void Settings::_ScriptWindow::AddMru(AnsiString item)

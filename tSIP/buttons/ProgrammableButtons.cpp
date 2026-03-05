@@ -16,13 +16,13 @@
 #include "Settings.h"	// just for transition from column-based version < 0.2
 #include "Sizes.h"
 #include "ua/Calls.h"
-#include "common/TimeCounter.h" 
+#include "common/TimeCounter.h"
+#include "common/SettingsUtils.h" 
 #include <assert.h>
 #include <algorithm>
 #include <fstream> 
 #include <json/json.h>
 #include <Forms.hpp>
-#include <windows.h>
 
 //---------------------------------------------------------------------------
 
@@ -234,7 +234,7 @@ int ProgrammableButtons::ReadFile(AnsiString name)
 		bool parsingSuccessful = reader.parse( strConfig, root );
 		if ( !parsingSuccessful )
 		{
-			AnsiString backupFile = name + ".bak";
+			AnsiString backupFile = SettingsUtils::GetBakFileName(name);
 			std::ifstream ifsBackup(backupFile.c_str(), std::ios::in | std::ios::binary);
 			if (!ifsBackup.is_open())
 			{
@@ -333,46 +333,8 @@ int ProgrammableButtons::Write(void)
 	{
 		//TimeCounter tc("Writing buttons configuration file");
 		std::string outputConfig = writer.write( root );		// Debug: ~300 ms
-		AnsiString tmpFile = filename + ".tmp";
-		AnsiString backupFile = filename + ".bak";
-
-		FILE *fp = fopen(tmpFile.c_str(), "wb");
-		if (fp)
-		{
-			int ret = fwrite(outputConfig.data(), outputConfig.size(), 1, fp);
-			fflush(fp);
-			fclose(fp);
-			if (ret != 1)
-			{
-				DeleteFile(tmpFile.c_str());
-				return 1;
-			}
-		}
-		else
-		{
-			return 1;
-		}
-
-		if (FileExists(filename))
-		{
-			if (!ReplaceFile(filename.c_str(), tmpFile.c_str(), backupFile.c_str(),
-					REPLACEFILE_WRITE_THROUGH, NULL, NULL))
-			{
-				DeleteFile(tmpFile.c_str());
-				return 1;
-			}
-		}
-		else
-		{
-			if (!MoveFileEx(tmpFile.c_str(), filename.c_str(), MOVEFILE_WRITE_THROUGH | MOVEFILE_COPY_ALLOWED))
-			{
-				DeleteFile(tmpFile.c_str());
-				return 1;
-			}
-		}
+		return SettingsUtils::AtomicUpdateWithBackup(filename, outputConfig);
 	}
-
-	return 0;
 }
 
 void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)

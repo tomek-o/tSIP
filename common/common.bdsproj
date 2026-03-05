@@ -179,6 +179,7 @@
         <FILE FILENAME="StaticCheck.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="TrayIcon.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="TrayIcon" FORMNAME="" DESIGNCLASS="" ADDITIONAL="TrayIcon.h"/>
         <FILE FILENAME="NetworkUtils.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="NetworkUtils" FORMNAME="" DESIGNCLASS="" ADDITIONAL="NetworkUtils.h"/>
+        <FILE FILENAME="SettingsUtils.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="SettingsUtils" FORMNAME="" DESIGNCLASS="" ADDITIONAL="SettingsUtils.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
