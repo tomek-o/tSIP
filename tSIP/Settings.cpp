@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <fstream>
 #include <json/json.h>
+#include <windows.h>
 
 //---------------------------------------------------------------------------
 
@@ -128,6 +129,8 @@ Settings::_Branding::_Branding(void):
 
 Settings::Settings(void)
 {
+	configWriteAllowed = true;
+
 	Display.bUserOnlyClip = false;
 	Display.bDecodeUtfDisplayToAnsi = false;
 	Display.bUsePAssertedIdentity = false;
@@ -206,18 +209,57 @@ int Settings::Read(AnsiString asFileName)
 
 	try
 	{
-		std::ifstream ifs(asFileName.c_str());
+		std::ifstream ifs(asFileName.c_str(), std::ios::in | std::ios::binary);
+		if (!ifs.is_open())
+		{
+			return READ_FILE_NOT_FOUND;
+		}
 		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
 		ifs.close();
+		if (strConfig.empty())
+		{
+			return READ_EMPTY_FILE;
+		}
 		bool parsingSuccessful = reader.parse( strConfig, root );
 		if ( !parsingSuccessful )
 		{
-			return 2;
+			AnsiString backupFile = asFileName + ".bak";
+			std::ifstream ifsBackup(backupFile.c_str(), std::ios::in | std::ios::binary);
+			if (!ifsBackup.is_open())
+			{
+				return READ_PARSE_ERROR;
+			}
+			std::string strConfigBackup((std::istreambuf_iterator<char>(ifsBackup)), std::istreambuf_iterator<char>());
+			ifsBackup.close();
+			if (strConfigBackup.empty())
+			{
+				return READ_PARSE_ERROR;
+			}
+			parsingSuccessful = reader.parse(strConfigBackup, root);
+			if (!parsingSuccessful)
+			{
+				return READ_PARSE_ERROR;
+			}
+			if (root.type() != Json::objectValue)
+			{
+				return READ_INVALID_ROOT;
+			}
+			int rc = UpdateFromJsonValue(root);
+			if (rc != 0)
+			{
+				return rc;
+			}
+			return READ_RECOVERED_FROM_BACKUP;
 		}
 	}
 	catch(...)
 	{
-		return 1;
+		return READ_IO_ERROR;
+	}
+
+	if (root.type() != Json::objectValue)
+	{
+		return READ_INVALID_ROOT;
 	}
 	
 	return UpdateFromJsonValue(root);
@@ -847,6 +889,11 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 
 int Settings::Write(AnsiString asFileName)
 {
+	if (!configWriteAllowed)
+	{
+		return 2;
+	}
+
 	Json::Value root;
 	Json::StyledWriter writer;
 
@@ -1190,9 +1237,41 @@ int Settings::Write(AnsiString asFileName)
 
 	try
 	{
-		std::ofstream ofs(asFileName.c_str());
-		ofs << outputConfig;
-		ofs.close();
+		AnsiString tmpFile = asFileName + ".tmp";
+		AnsiString backupFile = asFileName + ".bak";
+
+		FILE *fp = fopen(tmpFile.c_str(), "wb");
+		if (fp == NULL)
+		{
+			return 1;
+		}
+
+		int ret = fwrite(outputConfig.data(), outputConfig.size(), 1, fp);
+		fflush(fp);
+		fclose(fp);
+		if (ret != 1)
+		{
+			DeleteFile(tmpFile.c_str());
+			return 1;
+		}
+
+		if (FileExists(asFileName))
+		{
+			if (!ReplaceFile(asFileName.c_str(), tmpFile.c_str(), backupFile.c_str(),
+					REPLACEFILE_WRITE_THROUGH, NULL, NULL))
+			{
+				DeleteFile(tmpFile.c_str());
+				return 1;
+			}
+		}
+		else
+		{
+			if (!MoveFileEx(tmpFile.c_str(), asFileName.c_str(), MOVEFILE_WRITE_THROUGH | MOVEFILE_COPY_ALLOWED))
+			{
+				DeleteFile(tmpFile.c_str());
+				return 1;
+			}
+		}
 	}
 	catch(...)
 	{
