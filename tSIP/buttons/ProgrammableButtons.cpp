@@ -111,6 +111,9 @@ int ProgrammableButtons::LoadFromJsonValue(const Json::Value &root)
 {
 	int status = -1;
 
+	if (root.type() != Json::objectValue)
+		return status;
+
 	appVersion.FromJson(root["info"]);
 
 	const Json::Value &btnConfJson = root["btnConf"];
@@ -193,12 +196,7 @@ int ProgrammableButtons::ReadFromString(AnsiString json)
 	bool parsingSuccessful = reader.parse( json.c_str(), root );
 	if ( !parsingSuccessful )
 	{
-		return READ_PARSE_ERROR;
-	}
-
-	if (root.type() != Json::objectValue)
-	{
-		return READ_INVALID_ROOT;
+		return -1;
 	}
 
 	// assume this is newest configuration version if version is not present in text
@@ -208,59 +206,7 @@ int ProgrammableButtons::ReadFromString(AnsiString json)
 		appVersion.FromAppExe();
 		appVersion.ToJson(root["info"]);
 	}
-	
-	return LoadFromJsonValue(root);
-}
 
-
-int ProgrammableButtons::ReadFile(AnsiString name)
-{
-	Json::Value root;   // will contains the root value after parsing.
-	Json::Reader reader;
-
-	try
-	{
-		std::ifstream ifs(name.c_str(), std::ios::in | std::ios::binary);
-		if (!ifs.is_open())
-		{
-			return READ_FILE_NOT_FOUND;
-		}
-		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-		ifs.close();
-		if (strConfig.empty())
-		{
-			return READ_PARSE_ERROR;
-		}
-		bool parsingSuccessful = reader.parse( strConfig, root );
-		if ( !parsingSuccessful )
-		{
-			AnsiString backupFile = SettingsUtils::GetBakFileName(name);
-			std::ifstream ifsBackup(backupFile.c_str(), std::ios::in | std::ios::binary);
-			if (!ifsBackup.is_open())
-			{
-				return READ_PARSE_ERROR;
-			}
-			std::string strBackup((std::istreambuf_iterator<char>(ifsBackup)), std::istreambuf_iterator<char>());
-			ifsBackup.close();
-			if (strBackup.empty())
-			{
-				return READ_PARSE_ERROR;
-			}
-			parsingSuccessful = reader.parse(strBackup, root);
-			if (!parsingSuccessful)
-			{
-				return READ_PARSE_ERROR;
-			}
-		}
-	}
-	catch(...)
-	{
-		return READ_IO_ERROR;
-	}
-	if (root.type() != Json::objectValue)
-	{
-		return READ_INVALID_ROOT;
-	}
 	return LoadFromJsonValue(root);
 }
 
@@ -269,9 +215,11 @@ int ProgrammableButtons::Read(void)
 	TimeCounter tc("Reading buttons configuration");
 	assert(filename != "");
 
-	int readStatus = ReadFile(filename);
-	if (readStatus == 0)
+	Json::Value root;
+	enum SettingsUtils::ReadStatus readStatus = SettingsUtils::ReadFileOrBackup(filename, root);
+	if (readStatus == SettingsUtils::READ_OK || readStatus == SettingsUtils::READ_RECOVERED_FROM_BACKUP)
 	{
+		int rc = LoadFromJsonValue(root);
 		{
 			// regular log might not work yet - use OutputDebugString
 			char s[100];
@@ -284,15 +232,21 @@ int ProgrammableButtons::Read(void)
 			updated = false;
 		}
 
-		return 0;
+		return rc;
 	}
 
-	if (readStatus == READ_FILE_NOT_FOUND)
+	if (readStatus == SettingsUtils::READ_FILE_NOT_FOUND)
 	{
 		// earlier versions stored btn config in main file - try to read it
 		AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
-		int rc = ReadFile(asConfigFile);
-		if (rc != 0)
+		int rc = SettingsUtils::ReadFileOrBackup(asConfigFile, root);
+		if (rc == SettingsUtils::READ_OK)
+		{
+			rc = LoadFromJsonValue(root);
+			if (rc != 0)
+				SetInitialSettings();
+		}
+		else
 		{
 			SetInitialSettings();
 		}
@@ -303,7 +257,6 @@ int ProgrammableButtons::Read(void)
 	}
 
 	return readStatus;
-	//notifyObservers();
 }
 
 int ProgrammableButtons::Write(void)

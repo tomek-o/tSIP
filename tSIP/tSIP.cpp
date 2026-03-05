@@ -90,16 +90,16 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			ShowMessage("Failed to set path for current directory");
 		}
 
-		int readStatus = appSettings.Read(Paths::GetConfig());
-		if (readStatus == Settings::READ_PARSE_ERROR || readStatus == Settings::READ_IO_ERROR ||
-			readStatus == Settings::READ_INVALID_ROOT || readStatus == Settings::READ_EMPTY_FILE)
+		SettingsUtils::ReadStatus readStatus = appSettings.Read(Paths::GetConfig());
+		if (readStatus == SettingsUtils::READ_PARSE_ERROR || readStatus == SettingsUtils::READ_IO_ERROR ||
+			readStatus == SettingsUtils::READ_EMPTY_FILE)
 		{
 			appSettings.SetConfigWriteAllowed(false);
 			AnsiString msg;
 			msg.sprintf("Failed to load main config file.\n\nPath:\n%s\n\nAutomatic config writes are disabled for this run to avoid overwriting existing data.\nFix/restore config and restart application.", Paths::GetConfig().c_str());
 			ShowMessage(msg);
 		}
-		else if (readStatus == Settings::READ_RECOVERED_FROM_BACKUP)
+		else if (readStatus == SettingsUtils::READ_RECOVERED_FROM_BACKUP)
 		{
 			AnsiString msg;
 			msg.sprintf("Main config file was invalid and was recovered from backup.\n\nPath:\n%s", Paths::GetConfig().c_str());

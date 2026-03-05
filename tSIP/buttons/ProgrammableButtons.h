@@ -33,7 +33,6 @@ private:
 	AnsiString filename;
 	bool saveAllSettings;
 	bool updated;
-	int ReadFile(AnsiString name);
 	int LoadFromJsonValue(const Json::Value &root);
 
 	std::vector<TProgrammableButton*> btns;
@@ -75,14 +74,6 @@ public:
 	int Read(void);
 	int ReadFromString(AnsiString json);
 	int Write(void);
-	enum ReadStatus
-	{
-		READ_OK = 0,
-		READ_IO_ERROR = 1,
-		READ_PARSE_ERROR = 2,
-		READ_INVALID_ROOT = 3,
-		READ_FILE_NOT_FOUND = 4
-	};
 
 	enum { BASIC_PANEL_CONSOLE_BTNS = 15 };
 	enum { EXTRA_BTNS = 200 };

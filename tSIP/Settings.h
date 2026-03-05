@@ -16,6 +16,7 @@
 #include "TrayNotifierConf.h"
 #include "history/HistoryConf.h"
 #include "VideoConf.h"
+#include "common/SettingsUtils.h"
 #include <deque>
 #include <list>
 
@@ -52,18 +53,7 @@ private:
 		BrandingInitializer(void);
 	} brandingInitializer;
 public:
-	enum ReadStatus
-	{
-		READ_OK = 0,
-		READ_IO_ERROR = 1,
-		READ_PARSE_ERROR = 2,
-		READ_INVALID_ROOT = 3,
-		READ_FILE_NOT_FOUND = 4,
-		READ_EMPTY_FILE = 5,
-		READ_RECOVERED_FROM_BACKUP = 6
-	};
-
-	int Read(AnsiString asFileName);
+	enum SettingsUtils::ReadStatus Read(AnsiString asFileName);
 	int Write(AnsiString asFileName);
 	int UpdateFromText(AnsiString text);
 	void SetConfigWriteAllowed(bool state) {
@@ -414,7 +404,7 @@ public:
 	Settings(void);
 
 private:
-	int UpdateFromJsonValue(const Json::Value &root);
+	void UpdateFromJsonValue(const Json::Value &root);
 };
 
 extern Settings appSettings;

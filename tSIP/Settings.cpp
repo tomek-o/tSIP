@@ -12,7 +12,6 @@
 #include "Sizes.h"
 #include "Branding.h"
 #include <algorithm>
-#include <fstream>
 #include <json/json.h>
 
 //---------------------------------------------------------------------------
@@ -199,74 +198,25 @@ int Settings::UpdateFromText(AnsiString text)
 		appVersion.ToJson(root["info"]);
 	}
 
-	return UpdateFromJsonValue(root);
+	UpdateFromJsonValue(root);
+	return 0;
 }
 
-int Settings::Read(AnsiString asFileName)
+enum SettingsUtils::ReadStatus Settings::Read(AnsiString asFileName)
 {
 	Json::Value root;   // will contains the root value after parsing.
-	Json::Reader reader;
 
-	try
-	{
-		std::ifstream ifs(asFileName.c_str(), std::ios::in | std::ios::binary);
-		if (!ifs.is_open())
-		{
-			return READ_FILE_NOT_FOUND;
-		}
-		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-		ifs.close();
-		if (strConfig.empty())
-		{
-			return READ_EMPTY_FILE;
-		}
-		bool parsingSuccessful = reader.parse( strConfig, root );
-		if ( !parsingSuccessful )
-		{
-			AnsiString backupFile = SettingsUtils::GetBakFileName(asFileName);
-			std::ifstream ifsBackup(backupFile.c_str(), std::ios::in | std::ios::binary);
-			if (!ifsBackup.is_open())
-			{
-				return READ_PARSE_ERROR;
-			}
-			std::string strConfigBackup((std::istreambuf_iterator<char>(ifsBackup)), std::istreambuf_iterator<char>());
-			ifsBackup.close();
-			if (strConfigBackup.empty())
-			{
-				return READ_PARSE_ERROR;
-			}
-			parsingSuccessful = reader.parse(strConfigBackup, root);
-			if (!parsingSuccessful)
-			{
-				return READ_PARSE_ERROR;
-			}
-			if (root.type() != Json::objectValue)
-			{
-				return READ_INVALID_ROOT;
-			}
-			int rc = UpdateFromJsonValue(root);
-			if (rc != 0)
-			{
-				return rc;
-			}
-			return READ_RECOVERED_FROM_BACKUP;
-		}
-	}
-	catch(...)
-	{
-		return READ_IO_ERROR;
-	}
-
-	if (root.type() != Json::objectValue)
-	{
-		return READ_INVALID_ROOT;
-	}
-	
-	return UpdateFromJsonValue(root);
+	enum SettingsUtils::ReadStatus status = SettingsUtils::ReadFileOrBackup(asFileName, root);
+	if (status == SettingsUtils::READ_OK || status == SettingsUtils::READ_RECOVERED_FROM_BACKUP)
+		UpdateFromJsonValue(root);
+	return status;
 }
 
-int Settings::UpdateFromJsonValue(const Json::Value &root)
+void Settings::UpdateFromJsonValue(const Json::Value &root)
 {
+	if (root.type() != Json::objectValue)
+		return;
+
 	info.appVersion.FromJson(root["info"]);
 
 	uaConf.fromJson(root["uaConf"], info.appVersion);
@@ -883,8 +833,6 @@ int Settings::UpdateFromJsonValue(const Json::Value &root)
 			}
 		}
 	}
-
-	return 0;
 }
 
 int Settings::Write(AnsiString asFileName)
