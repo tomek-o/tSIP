@@ -46,7 +46,7 @@ int auplay_register(struct auplay **app, const char *name,
 	ap->name   = name;
 	ap->alloch = alloch;
 
-	(void)re_printf("auplay: %s\n", name);
+	/* (void)re_printf("auplay: %s\n", name); */
 
 	*app = ap;
 

@@ -23,7 +23,7 @@ void menc_register(struct menc *menc)
 
 	list_append(&mencl, &menc->le, menc);
 
-	(void)re_printf("mediaenc: %s\n", menc->id);
+	/* (void)re_printf("mediaenc: %s\n", menc->id); */
 }
 
 

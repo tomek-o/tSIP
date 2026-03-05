@@ -45,7 +45,7 @@ int ausrc_register(struct ausrc **asp, const char *name, ausrc_alloc_h *alloch)
 	as->name   = name;
 	as->alloch = alloch;
 
-	(void)re_printf("ausrc: %s\n", name);
+	/* (void)re_printf("ausrc: %s\n", name); */
 
 	*asp = as;
 

@@ -24,7 +24,7 @@ void aucodec_register(struct aucodec *ac)
 
 	list_append(&aucodecl, &ac->le, ac);
 
-	(void)re_printf("aucodec: %s/%u/%u\n", ac->name, ac->srate, ac->ch);
+	/* (void)re_printf("aucodec: %s/%u/%u\n", ac->name, ac->srate, ac->ch); */
 }
 
 
