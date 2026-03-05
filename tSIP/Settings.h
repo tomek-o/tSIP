@@ -46,14 +46,32 @@ struct Font
 class Settings
 {
 private:
+	bool configWriteAllowed;
 	struct BrandingInitializer
 	{
 		BrandingInitializer(void);
 	} brandingInitializer;
 public:
+	enum ReadStatus
+	{
+		READ_OK = 0,
+		READ_IO_ERROR = 1,
+		READ_PARSE_ERROR = 2,
+		READ_INVALID_ROOT = 3,
+		READ_FILE_NOT_FOUND = 4,
+		READ_EMPTY_FILE = 5,
+		READ_RECOVERED_FROM_BACKUP = 6
+	};
+
 	int Read(AnsiString asFileName);
 	int Write(AnsiString asFileName);
 	int UpdateFromText(AnsiString text);
+	void SetConfigWriteAllowed(bool state) {
+		configWriteAllowed = state;
+	}
+	bool IsConfigWriteAllowed(void) const {
+		return configWriteAllowed;
+	}
 	struct _gui
 	{
 		enum { SCALING_MIN = 50 };

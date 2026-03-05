@@ -22,6 +22,7 @@
 #include <fstream> 
 #include <json/json.h>
 #include <Forms.hpp>
+#include <windows.h>
 
 //---------------------------------------------------------------------------
 
@@ -192,12 +193,12 @@ int ProgrammableButtons::ReadFromString(AnsiString json)
 	bool parsingSuccessful = reader.parse( json.c_str(), root );
 	if ( !parsingSuccessful )
 	{
-		return 2;
+		return READ_PARSE_ERROR;
 	}
 
 	if (root.type() != Json::objectValue)
 	{
-		return 3;
+		return READ_INVALID_ROOT;
 	}
 
 	// assume this is newest configuration version if version is not present in text
@@ -219,18 +220,46 @@ int ProgrammableButtons::ReadFile(AnsiString name)
 
 	try
 	{
-		std::ifstream ifs(name.c_str());
+		std::ifstream ifs(name.c_str(), std::ios::in | std::ios::binary);
+		if (!ifs.is_open())
+		{
+			return READ_FILE_NOT_FOUND;
+		}
 		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
 		ifs.close();
+		if (strConfig.empty())
+		{
+			return READ_PARSE_ERROR;
+		}
 		bool parsingSuccessful = reader.parse( strConfig, root );
 		if ( !parsingSuccessful )
 		{
-			return 2;
+			AnsiString backupFile = name + ".bak";
+			std::ifstream ifsBackup(backupFile.c_str(), std::ios::in | std::ios::binary);
+			if (!ifsBackup.is_open())
+			{
+				return READ_PARSE_ERROR;
+			}
+			std::string strBackup((std::istreambuf_iterator<char>(ifsBackup)), std::istreambuf_iterator<char>());
+			ifsBackup.close();
+			if (strBackup.empty())
+			{
+				return READ_PARSE_ERROR;
+			}
+			parsingSuccessful = reader.parse(strBackup, root);
+			if (!parsingSuccessful)
+			{
+				return READ_PARSE_ERROR;
+			}
 		}
 	}
 	catch(...)
 	{
-		return 1;
+		return READ_IO_ERROR;
+	}
+	if (root.type() != Json::objectValue)
+	{
+		return READ_INVALID_ROOT;
 	}
 	return LoadFromJsonValue(root);
 }
@@ -240,7 +269,8 @@ int ProgrammableButtons::Read(void)
 	TimeCounter tc("Reading buttons configuration");
 	assert(filename != "");
 
-	if (ReadFile(filename) == 0)
+	int readStatus = ReadFile(filename);
+	if (readStatus == 0)
 	{
 		{
 			// regular log might not work yet - use OutputDebugString
@@ -256,7 +286,8 @@ int ProgrammableButtons::Read(void)
 
 		return 0;
 	}
-	else
+
+	if (readStatus == READ_FILE_NOT_FOUND)
 	{
 		// earlier versions stored btn config in main file - try to read it
 		AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
@@ -270,6 +301,8 @@ int ProgrammableButtons::Read(void)
 		Write();
 		return 0;
 	}
+
+	return readStatus;
 	//notifyObservers();
 }
 
@@ -300,19 +333,42 @@ int ProgrammableButtons::Write(void)
 	{
 		//TimeCounter tc("Writing buttons configuration file");
 		std::string outputConfig = writer.write( root );		// Debug: ~300 ms
-		FILE *fp = fopen(filename.c_str(), "wb");
+		AnsiString tmpFile = filename + ".tmp";
+		AnsiString backupFile = filename + ".bak";
+
+		FILE *fp = fopen(tmpFile.c_str(), "wb");
 		if (fp)
 		{
 			int ret = fwrite(outputConfig.data(), outputConfig.size(), 1, fp);
+			fflush(fp);
 			fclose(fp);
 			if (ret != 1)
 			{
+				DeleteFile(tmpFile.c_str());
 				return 1;
 			}
 		}
 		else
 		{
 			return 1;
+		}
+
+		if (FileExists(filename))
+		{
+			if (!ReplaceFile(filename.c_str(), tmpFile.c_str(), backupFile.c_str(),
+					REPLACEFILE_WRITE_THROUGH, NULL, NULL))
+			{
+				DeleteFile(tmpFile.c_str());
+				return 1;
+			}
+		}
+		else
+		{
+			if (!MoveFileEx(tmpFile.c_str(), filename.c_str(), MOVEFILE_WRITE_THROUGH | MOVEFILE_COPY_ALLOWED))
+			{
+				DeleteFile(tmpFile.c_str());
+				return 1;
+			}
 		}
 	}
 
