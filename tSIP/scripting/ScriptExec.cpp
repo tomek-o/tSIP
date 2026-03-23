@@ -447,6 +447,16 @@ static int l_ForceDirectories(lua_State* L)
 	return 1;
 }
 
+static int l_FileExists(lua_State* L)
+{
+	const char* str = lua_tostring(L, -1);
+	if (str == NULL)
+		return 0;
+	bool exists = FileExists(str);
+	lua_pushboolean(L, exists);
+	return 1;
+}
+
 static int l_FindWindowByCaptionAndExeName(lua_State* L)
 {
 	static Mutex mutex;
@@ -2344,6 +2354,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetClipboardText, "GetClipboardText", "Get clipboard content as text", "");
 	lua_register2(L, ScriptImp::l_SetClipboardText, "SetClipboardText", "Copy text to clipboard", "");
 	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "Equivalent of VCL function with same name.");
+	lua_register2(L, ScriptImp::l_FileExists, "FileExists", "Check if specified file exists", "Returning bool.\nExample: local exists = FileExists(filename)");
 	lua_register2(L, ScriptImp::l_FindWindowByCaptionAndExeName, "FindWindowByCaptionAndExeName", "Search for window by caption and executable name", "");
 	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns status (0 on success) and allocated call ID. May fail if current call number reaches limit.");
 	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect or reject current incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
