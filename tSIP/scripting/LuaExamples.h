@@ -393,7 +393,13 @@ const LuaExample luaExamples [] =
 	"\tprint(string.format(\"type = %d, missing description\", callState))\n"
 	"end\n"
 	"local execSourceId = GetExecSourceId()\n"
-	"print(string.format(\", numeric value = %d\\n\", callState))"
+	"print(string.format(\", numeric value = %d\\n\", callState))\n"
+	"\n"
+	"print(\"Helper functions:\\n\")\n"
+	"print(string.format(\"    GetCallStateName(): %s\\n\", GetCallStateName(callState)));\n"
+	"print(string.format(\"    GetCallStateDescription(): %s\\n\", GetCallStateDescription(callState)));\n"
+	"print(string.format(\"    GetCallStateTranslatedName(): %s\\n\", GetCallStateTranslatedName(callState)));\n"
+	"print(string.format(\"    GetCallStateTranslatedDescription(): %s\\n\", GetCallStateTranslatedDescription(callState)));"
 	}
 	,
 	{

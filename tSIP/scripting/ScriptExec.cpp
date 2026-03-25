@@ -1323,6 +1323,34 @@ static int l_GetAudioErrorCount(lua_State* L)
 	return 1;
 }
 
+static int l_GetCallStateName(lua_State* L)
+{
+	int state = lua_tointeger( L, 1 );
+	lua_pushstring(L, Callback::GetCallStateName(static_cast<enum Callback::ua_state_e>(state)));
+	return 1;
+}
+
+static int l_GetCallStateDescription(lua_State* L)
+{
+	int state = lua_tointeger( L, 1 );
+	lua_pushstring(L, Callback::GetCallStateDescription(static_cast<enum Callback::ua_state_e>(state)));
+	return 1;
+}
+
+static int l_GetCallStateTranslatedName(lua_State* L)
+{
+	int state = lua_tointeger( L, 1 );
+	lua_pushstring(L, Callback::GetCallStateTranslatedName(static_cast<enum Callback::ua_state_e>(state)).c_str());
+	return 1;
+}
+
+static int l_GetCallStateTranslatedDescription(lua_State* L)
+{
+	int state = lua_tointeger( L, 1 );
+	lua_pushstring(L, Callback::GetCallStateTranslatedDescription(static_cast<enum Callback::ua_state_e>(state)).c_str());
+	return 1;
+}
+
 static int l_GetRegistrationState(lua_State* L)
 {
 	int state = GetContext(L)->onGetRegistrationState();
@@ -2402,6 +2430,11 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetContactName, "GetContactName", "Get number description from phonebook", "");
 	lua_register2(L, ScriptImp::l_GetStreamingState, "GetStreamingState", "Get current state of RTP streaming", "");
 	lua_register2(L, ScriptImp::l_GetAudioErrorCount, "GetAudioErrorCount", "Get number of audio device errors during the call", "Used to detect end-of-file event for wave input files. Takes one, optional argument: call UID.");
+
+	lua_register2(L, ScriptImp::l_GetCallStateName, "GetCallStateName", "Get the name of specified call state value", "");
+	lua_register2(L, ScriptImp::l_GetCallStateDescription, "GetCallStateDescription", "Get the description of specified call state value", "");
+	lua_register2(L, ScriptImp::l_GetCallStateTranslatedName, "GetCallStateTranslatedName", "Get the translated name of specified call state value", "");
+	lua_register2(L, ScriptImp::l_GetCallStateTranslatedDescription, "GetCallStateTranslatedDescription", "Get the translated description of specified call state value", "");
 
 	lua_register2(L, ScriptImp::l_SetVariable, "SetVariable", "Set value for variable with specified name", "Example: SetVariable(\"runcount\", count).");
 	lua_register2(L, ScriptImp::l_GetVariable, "GetVariable", "Get variable value and isSet flag for variable with specified name", "Example: local count, var_isset = GetVariable(\"runcount\")");
