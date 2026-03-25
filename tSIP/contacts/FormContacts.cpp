@@ -57,7 +57,7 @@ __fastcall TfrmContacts::TfrmContacts(TComponent* Owner, Contacts *contacts, Cal
 void TfrmContacts::FilterContacts(void)
 {
 	FilteredEntry fentry;
-	AnsiString needle = UpperCase(edFilter->Text);
+	AnsiString needle = AnsiUpperCase(edFilter->Text);
 	filteredContacts.clear();
 	std::vector<Contacts::Entry>& entries = contacts->GetEntries();
 	if (needle == "")
@@ -75,12 +75,12 @@ void TfrmContacts::FilterContacts(void)
 		for (int i=0; i<entries.size(); i++)
 		{
 			Contacts::Entry& entry = entries[i];
-			if (UpperCase(entry.description).Pos(needle) > 0 ||
-				UpperCase(entry.company).Pos(needle) > 0 ||			
-				UpperCase(entry.uri1).Pos(needle) > 0 ||
-				UpperCase(entry.uri2).Pos(needle) > 0 ||
-				UpperCase(entry.uri3).Pos(needle) > 0 ||
-				(filterUsingNote?(UpperCase(entry.note).Pos(needle)):false)
+			if (AnsiUpperCase(entry.description).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.company).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.uri1).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.uri2).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.uri3).Pos(needle) > 0 ||
+				(filterUsingNote?(AnsiUpperCase(entry.note).Pos(needle)):false)
 				)
 			{
 				fentry.id = i;

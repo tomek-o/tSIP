@@ -94,7 +94,7 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 void TfrmHistory::FilterHistory(void)
 {
 	FilteredEntry fentry;
-	AnsiString needle = UpperCase(edFilter->Text);
+	AnsiString needle = AnsiUpperCase(edFilter->Text);
 	filteredEntries.clear();
 	const std::deque<History::Entry>& entries = history->GetEntries();
 	if (needle == "")
@@ -113,12 +113,12 @@ void TfrmHistory::FilterHistory(void)
 		{
 			const History::Entry& entry = entries[i];
 			if (
-				UpperCase(entry.uri.c_str()).Pos(needle) > 0 ||
-				UpperCase(entry.peerName.c_str()).Pos(needle) > 0 ||
-				UpperCase(entry.contactName.c_str()).Pos(needle) > 0 ||
-				UpperCase(entry.paiUri.c_str()).Pos(needle) > 0 ||
-				UpperCase(entry.paiPeerName.c_str()).Pos(needle) > 0 ||
-				UpperCase(entry.paiContactName.c_str()).Pos(needle) > 0
+				AnsiUpperCase(entry.uri.c_str()).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.peerName.c_str()).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.contactName.c_str()).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.paiUri.c_str()).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.paiPeerName.c_str()).Pos(needle) > 0 ||
+				AnsiUpperCase(entry.paiContactName.c_str()).Pos(needle) > 0
 				)
 			{
 				fentry.id = i;
