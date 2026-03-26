@@ -1289,5 +1289,15 @@ Version 0.3.12
 	- minor fixes to dialing combobox filling from history: duplicated content after updating and possibly wrong order when sorting by time
 	- added Network / "Do not bind to IP" setting
 	- fixed not working button selecting file for video source switching function in button editor
+
+Version 0.3.13
+	- atomic (more resilient to sudden power loss) configuration updating (main + buttons)
+	- removed startup logs from registering codecs and modules
+	- fixed off-by-one error when reading command line parameters
+	- fixed missing profile path use when updating button container configuration
+	- fixed issue with contacts and history filtering with matching when using different case characters from non-ASCII set (now: using AnsiUpperCase)
+	- Lua: added FileExists(fileName) function (VCL equivalent) 
+	- Lua: added GetCallStateName(state), GetCallStateDescription(state), GetCallStateTranslatedName(state), GetCallStateTranslatedDescription(state) helper functions
+	- Lua editor: changed brace highlighting colors to make it more clear
 */
 
