@@ -58,7 +58,7 @@ int vidisp_register(struct vidisp **vp, const char *name,
 	vd->disph   = disph;
 	vd->hideh   = hideh;
 
-	(void)re_printf("vidisp: %s\n", name);
+	/* (void)re_printf("vidisp: %s\n", name); */
 
 	*vp = vd;
 	return 0;

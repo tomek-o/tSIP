@@ -54,7 +54,7 @@ int vidsrc_register(struct vidsrc **vsp, const char *name,
 	vs->alloch  = alloch;
 	vs->updateh = updateh;
 
-	(void)re_printf("vidsrc: %s\n", name);
+	/* (void)re_printf("vidsrc: %s\n", name); */
 
 	*vsp = vs;
 

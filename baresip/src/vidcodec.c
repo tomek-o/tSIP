@@ -22,12 +22,13 @@ void vidcodec_register(struct vidcodec *vc)
 		return;
 
 	list_append(&vidcodecl, &vc->le, vc);
-
+#if 0
 	if (vc->variant) {
 		(void)re_printf("vidcodec: %s, variant: %s\n", vc->name, vc->variant);
 	} else {
 		(void)re_printf("vidcodec: %s\n", vc->name);
 	}
+#endif	
 }
 
 
