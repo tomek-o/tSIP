@@ -18,6 +18,8 @@
 #include "UaConf.h"
 #include "baresip_base_config.h"
 #include <stdio.h>
+#include <algorithm>
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -25,21 +27,43 @@ TfrmButtonEdit *frmButtonEdit = NULL;
 
 namespace {
 	ButtonConf::Color colors[ButtonConf::EL_LIMITER];
+
+	// sort button types by description, alphabetically
+	std::vector<Button::Type> sortedTypes;
+	bool CompareTypes(const Button::Type type1, const Button::Type type2)
+	{
+		return (strcmp(Button::TypeName(type1), Button::TypeName(type2)) < 0);
+	}
+	bool typesInitialized = false;
+	void InitTypes(void)
+	{
+		if (typesInitialized)
+			return;
+		typesInitialized = true;
+		for (int i=0; i<Button::TYPE_LIMITER; i++)
+		{
+			sortedTypes.push_back(static_cast<Button::Type>(i));
+		}
+	#pragma warn -8091	// incorrectly issued by BDS2006
+		std::stable_sort(sortedTypes.begin(), sortedTypes.end(), CompareTypes);
+	#pragma warn .8091
+	}
 }
 //---------------------------------------------------------------------------
 __fastcall TfrmButtonEdit::TfrmButtonEdit(TComponent* Owner)
 	: TForm(Owner),
 	lastTab(NULL)
 {
-    pageControl->ActivePage = tsGeneral;
-	for (int i=0; i<Button::TYPE_LIMITER; i++)
+	InitTypes();
+	pageControl->ActivePage = tsGeneral;
+	for (int i=0; i<sortedTypes.size(); i++)
 	{
-		cbType->Items->Add(Button::TypeName((Button::Type)i));
+		cbType->Items->Add(Button::TypeName(sortedTypes[i]));
 	}
 	cbParentId->Clear();
 	for (int i=0; i<BUTTON_CONTAINER__COUNT; i++)
 	{
-    	cbParentId->Items->Add(GetButtonContainerName(static_cast<enum ButtonContainerId>(i)));
+		cbParentId->Items->Add(GetButtonContainerName(static_cast<enum ButtonContainerId>(i)));
 	}
 	cbInactiveColor->Items->Clear();
 	for (int i=0; i<Color::clLimiter; i++)
@@ -144,7 +168,14 @@ void __fastcall TfrmButtonEdit::ShowModal(ButtonConf *cfg, int btnId)
 
 void TfrmButtonEdit::ApplyConf(void)
 {
-	cbType->ItemIndex = cfg->type;
+	for (unsigned int i=0; i<sortedTypes.size(); i++)
+	{
+		if (cfg->type == sortedTypes[i])
+		{
+			cbType->ItemIndex = i;
+			break;
+		}
+	}
 	if (cfg->parentId >= 0 && cfg->parentId < cbParentId->Items->Count)
 	{
 		cbParentId->ItemIndex = cfg->parentId;
@@ -264,7 +295,7 @@ void TfrmButtonEdit::ApplyConf(void)
 void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 {
 	confirmed = true;
-	cfg->type = static_cast<Button::Type>(cbType->ItemIndex);
+	cfg->type = sortedTypes[cbType->ItemIndex];
 	cfg->parentId = cbParentId->ItemIndex;
 	cfg->captionLines = cbCaptionLines->ItemIndex + 1;
 	cfg->caption = memoCaption1->Text.c_str();
@@ -386,13 +417,15 @@ void __fastcall TfrmButtonEdit::btnCancelClick(TObject *Sender)
 
 void __fastcall TfrmButtonEdit::cbTypeChange(TObject *Sender)
 {
-	SetType(static_cast<Button::Type>(cbType->ItemIndex));	
+	SetType(sortedTypes[cbType->ItemIndex]);	
 }
 //---------------------------------------------------------------------------
 
 void TfrmButtonEdit::SetType(Button::Type type)
 {
-	memoHelp->Text = Button::TypeDescription(type);
+	AnsiString description;
+	description.sprintf("%s\r\nNumeric type value (for scripting or provisioning) = %d.", Button::TypeDescription(type), static_cast<int>(type));
+	memoHelp->Text = description;
 
 	edNumber->Visible = true;
 	lblNumber->Visible = true;

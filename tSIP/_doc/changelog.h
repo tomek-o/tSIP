@@ -1299,5 +1299,6 @@ Version 0.3.13
 	- Lua: added FileExists(fileName) function (VCL equivalent) 
 	- Lua: added GetCallStateName(state), GetCallStateDescription(state), GetCallStateTranslatedName(state), GetCallStateTranslatedDescription(state) helper functions
 	- Lua editor: changed brace highlighting colors to make it more clear
+	- button editor: button types are now sorted by name, alphabetically
 */
 
