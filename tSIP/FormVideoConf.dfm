@@ -107,14 +107,14 @@ object frmVideoConf: TfrmVideoConf
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 1
+    TabOrder = 10
   end
   object edDisplayParentId: TEdit
     Left = 152
     Top = 247
     Width = 62
     Height = 21
-    TabOrder = 2
+    TabOrder = 11
   end
   object chbSelfviewEnable: TCheckBox
     Left = 8
@@ -122,7 +122,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 325
     Height = 17
     Caption = 'enable selfview (show video from local source)'
-    TabOrder = 3
+    TabOrder = 12
   end
   object chbSelfviewPip: TCheckBox
     Left = 19
@@ -130,7 +130,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 325
     Height = 17
     Caption = 'show selfview as picture-in-picture'
-    TabOrder = 4
+    TabOrder = 13
   end
   object cbInputDev: TComboBox
     Left = 152
@@ -139,7 +139,7 @@ object frmVideoConf: TfrmVideoConf
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 5
+    TabOrder = 2
   end
   object cbInputMod: TComboBox
     Left = 152
@@ -148,7 +148,7 @@ object frmVideoConf: TfrmVideoConf
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 6
+    TabOrder = 1
     OnChange = cbInputModChange
   end
   object edInputFile: TEdit
@@ -156,7 +156,7 @@ object frmVideoConf: TfrmVideoConf
     Top = 52
     Width = 320
     Height = 21
-    TabOrder = 7
+    TabOrder = 3
     Visible = False
   end
   object btnSelectInputFile: TButton
@@ -165,7 +165,7 @@ object frmVideoConf: TfrmVideoConf
     Width = 21
     Height = 19
     Caption = '...'
-    TabOrder = 8
+    TabOrder = 4
     Visible = False
     OnClick = btnSelectInputFileClick
   end
@@ -174,28 +174,28 @@ object frmVideoConf: TfrmVideoConf
     Top = 112
     Width = 49
     Height = 21
-    TabOrder = 9
+    TabOrder = 5
   end
   object edHeight: TEdit
     Left = 296
     Top = 112
     Width = 49
     Height = 21
-    TabOrder = 10
+    TabOrder = 6
   end
   object edBitrate: TEdit
     Left = 152
     Top = 136
     Width = 73
     Height = 21
-    TabOrder = 11
+    TabOrder = 7
   end
   object edFps: TEdit
     Left = 152
     Top = 160
     Width = 49
     Height = 21
-    TabOrder = 12
+    TabOrder = 8
   end
   object chbDshowSkipReadingBackMediaFormat: TCheckBox
     Left = 8
@@ -205,7 +205,7 @@ object frmVideoConf: TfrmVideoConf
     Caption = 
       'DirectShow camera input: skip reading back set media format (wor' +
       'karound for possible OBS-camera bug)'
-    TabOrder = 13
+    TabOrder = 14
   end
   object cbOutputMod: TComboBox
     Left = 152
@@ -214,7 +214,7 @@ object frmVideoConf: TfrmVideoConf
     Height = 21
     Style = csDropDownList
     ItemHeight = 13
-    TabOrder = 14
+    TabOrder = 9
     OnChange = cbOutputModChange
   end
   object dlgOpenDeviceFile: TOpenDialog

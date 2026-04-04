@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsNetwork
+    ActivePage = tsMultipleCalls
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -98,7 +98,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Window always on top'
-        TabOrder = 0
+        TabOrder = 2
       end
       object chbStartMinimizedToTray: TCheckBox
         Left = 3
@@ -106,14 +106,14 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Start minimized to tray'
-        TabOrder = 1
+        TabOrder = 3
       end
       object edGuiScaling: TEdit
         Left = 178
         Top = 188
         Width = 42
         Height = 21
-        TabOrder = 2
+        TabOrder = 8
       end
       object chbXBtnMinimize: TCheckBox
         Left = 3
@@ -121,7 +121,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Minimize to tray when "X" button is pressed'
-        TabOrder = 3
+        TabOrder = 4
       end
       object chbRestoreMainWindowOnIncomingCall: TCheckBox
         Left = 3
@@ -129,7 +129,7 @@ object frmSettings: TfrmSettings
         Width = 382
         Height = 17
         Caption = 'Restore minimized or bring to front main window on incoming call'
-        TabOrder = 4
+        TabOrder = 5
       end
       object chbSingleInstance: TCheckBox
         Left = 3
@@ -139,7 +139,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Single instance (bring previous instance to front if already run' +
           'ning)'
-        TabOrder = 5
+        TabOrder = 10
       end
       object chbNoBeepOnEnterKey: TCheckBox
         Left = 3
@@ -149,7 +149,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not beep when using [Enter] in main window to dial or transfe' +
           'r call'
-        TabOrder = 6
+        TabOrder = 11
       end
       object chbFrmMainShowWhenAnsweringCall: TCheckBox
         Left = 3
@@ -159,7 +159,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Show main form when answering call (using tray notifier, shortcu' +
           't, script, ...)'
-        TabOrder = 7
+        TabOrder = 6
       end
       object chbFrmMainShowWhenMakingCall: TCheckBox
         Left = 3
@@ -169,7 +169,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Show main form when making call (using shortcut, script, command' +
           ' line / protocol handler...)'
-        TabOrder = 8
+        TabOrder = 7
       end
       object chbNoTaskbarButtonRestore: TCheckBox
         Left = 3
@@ -179,7 +179,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not restore taskbar button when restoring application from tr' +
           'ay'
-        TabOrder = 9
+        TabOrder = 12
       end
       object chbNoTrayIcon: TCheckBox
         Left = 3
@@ -187,7 +187,7 @@ object frmSettings: TfrmSettings
         Width = 526
         Height = 17
         Caption = 'Do not create tray icon (restart required)'
-        TabOrder = 10
+        TabOrder = 9
       end
       object cbTranslation: TComboBox
         Left = 75
@@ -196,7 +196,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 11
+        TabOrder = 0
       end
       object chbTranslationLogMissingKeys: TCheckBox
         Left = 75
@@ -204,7 +204,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Log keys missing in translation file'
-        TabOrder = 12
+        TabOrder = 1
       end
     end
     object tsNetwork: TTabSheet
@@ -312,42 +312,42 @@ object frmSettings: TfrmSettings
         Top = 167
         Width = 42
         Height = 21
-        TabOrder = 1
+        TabOrder = 4
       end
       object edRtpPortMax: TEdit
         Left = 305
         Top = 167
         Width = 42
         Height = 21
-        TabOrder = 2
+        TabOrder = 5
       end
       object edJbufDelayMin: TEdit
         Left = 227
         Top = 191
         Width = 42
         Height = 21
-        TabOrder = 3
+        TabOrder = 6
       end
       object edJbufDelayMax: TEdit
         Left = 305
         Top = 191
         Width = 42
         Height = 21
-        TabOrder = 4
+        TabOrder = 7
       end
       object edIfName: TEdit
         Left = 227
         Top = 104
         Width = 334
         Height = 21
-        TabOrder = 5
+        TabOrder = 2
       end
       object edRtpTimeout: TEdit
         Left = 227
         Top = 215
         Width = 42
         Height = 21
-        TabOrder = 6
+        TabOrder = 8
         Text = '0'
       end
       object cbNetworkInterfaces: TComboBox
@@ -357,7 +357,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 7
+        TabOrder = 1
         OnChange = cbNetworkInterfacesChange
       end
       object chbNoIpBind: TCheckBox
@@ -366,7 +366,7 @@ object frmSettings: TfrmSettings
         Width = 174
         Height = 17
         Caption = 'Do not bind to IP'
-        TabOrder = 8
+        TabOrder = 3
       end
     end
     object tsAccount: TTabSheet
@@ -411,6 +411,8 @@ object frmSettings: TfrmSettings
     object tsTls: TTabSheet
       Caption = 'TLS'
       ImageIndex = 25
+      ExplicitLeft = 6
+      ExplicitTop = 14
       object lblTlsClientCertificate: TLabel
         Left = 5
         Top = 3
@@ -431,14 +433,14 @@ object frmSettings: TfrmSettings
         Width = 526
         Height = 17
         Caption = 'Verify server certificate'
-        TabOrder = 0
+        TabOrder = 5
       end
       object edTlsCertificate: TEdit
         Left = 96
         Top = 0
         Width = 180
         Height = 21
-        TabOrder = 1
+        TabOrder = 0
       end
       object edTlsCaFile: TEdit
         Left = 96
@@ -462,7 +464,7 @@ object frmSettings: TfrmSettings
         Width = 22
         Height = 21
         Caption = '...'
-        TabOrder = 4
+        TabOrder = 1
         OnClick = btnSelectTlsClick
       end
       object chbTlsUseWindowsRootCaStore: TCheckBox
@@ -471,7 +473,7 @@ object frmSettings: TfrmSettings
         Width = 526
         Height = 17
         Caption = 'Use CA certificates from Windows root store'
-        TabOrder = 5
+        TabOrder = 4
       end
     end
     object tsMainWindow: TTabSheet
@@ -650,63 +652,63 @@ object frmSettings: TfrmSettings
         Caption = 
           'Hide call panel (dialing combobox, call state labels, Call and H' +
           'angup buttons)'
-        TabOrder = 0
+        TabOrder = 8
       end
       object edMainPanelExpandedLeft: TEdit
         Left = 365
         Top = 305
         Width = 35
         Height = 21
-        TabOrder = 1
+        TabOrder = 18
       end
       object edMainPanelCollapsedLeft: TEdit
         Left = 365
         Top = 284
         Width = 35
         Height = 21
-        TabOrder = 2
+        TabOrder = 16
       end
       object edExpandedWidth: TEdit
         Left = 366
         Top = 21
         Width = 35
         Height = 21
-        TabOrder = 3
+        TabOrder = 2
       end
       object edCollapsedWidth: TEdit
         Left = 366
         Top = 0
         Width = 35
         Height = 21
-        TabOrder = 4
+        TabOrder = 0
       end
       object edMainPanelExpandedTop: TEdit
         Left = 451
         Top = 305
         Width = 35
         Height = 21
-        TabOrder = 5
+        TabOrder = 19
       end
       object edMainPanelCollapsedTop: TEdit
         Left = 451
         Top = 284
         Width = 35
         Height = 21
-        TabOrder = 6
+        TabOrder = 17
       end
       object edExpandedHeight: TEdit
         Left = 452
         Top = 21
         Width = 35
         Height = 21
-        TabOrder = 7
+        TabOrder = 3
       end
       object edCollapsedHeight: TEdit
         Left = 452
         Top = 0
         Width = 35
         Height = 21
-        TabOrder = 8
+        TabOrder = 1
       end
       object cbFrmMainLayout: TComboBox
         Left = 152
@@ -716,7 +718,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 9
+        TabOrder = 7
         Text = 
           'default, call panel above main panel (Dialpad, Contacts, History' +
           ')'
@@ -734,7 +736,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 10
+        TabOrder = 20
         Text = 'by number'
         Items.Strings = (
           'by number'
@@ -746,35 +748,35 @@ object frmSettings: TfrmSettings
         Width = 486
         Height = 17
         Caption = 'Hide main panel (Dialpad/Contacts/History)'
-        TabOrder = 11
+        TabOrder = 15
       end
       object edCallPanelCollapsedLeft: TEdit
         Left = 366
         Top = 165
         Width = 35
         Height = 21
-        TabOrder = 12
+        TabOrder = 9
       end
       object edCallPanelExpandedLeft: TEdit
         Left = 366
         Top = 186
         Width = 35
         Height = 21
-        TabOrder = 13
+        TabOrder = 11
       end
       object edCallPanelCollapsedTop: TEdit
         Left = 452
         Top = 165
         Width = 35
         Height = 21
-        TabOrder = 14
+        TabOrder = 10
       end
       object edCallPanelExpandedTop: TEdit
         Left = 452
         Top = 186
         Width = 35
         Height = 21
-        TabOrder = 15
+        TabOrder = 12
       end
       object chbFrmMainUseClientAreaSizes: TCheckBox
         Left = 3
@@ -782,21 +784,21 @@ object frmSettings: TfrmSettings
         Width = 486
         Height = 17
         Caption = 'Use client area sizes instead of absolute sizes'
-        TabOrder = 16
+        TabOrder = 4
       end
       object edExpandingPosLeftOffset: TEdit
         Left = 366
         Top = 68
         Width = 35
         Height = 21
-        TabOrder = 17
+        TabOrder = 5
       end
       object edExpandingPosTopOffset: TEdit
         Left = 452
         Top = 68
         Width = 35
         Height = 21
-        TabOrder = 18
+        TabOrder = 6
       end
       object chbFrmMainHideMakeCallButton: TCheckBox
         Left = 26
@@ -804,7 +806,7 @@ object frmSettings: TfrmSettings
         Width = 486
         Height = 17
         Caption = 'Hide "Call/Answer" button'
-        TabOrder = 19
+        TabOrder = 13
       end
       object chbFrmMainHideHangupButton: TCheckBox
         Left = 26
@@ -812,7 +814,7 @@ object frmSettings: TfrmSettings
         Width = 486
         Height = 17
         Caption = 'Hide "Hangup" button'
-        TabOrder = 20
+        TabOrder = 14
       end
     end
     object tsDialpad: TTabSheet
@@ -898,14 +900,14 @@ object frmSettings: TfrmSettings
         Caption = 
           'Snap to grid when moving/resizing buttons (hold Shift to overrid' +
           'e)     grid size:'
-        TabOrder = 5
+        TabOrder = 6
       end
       object edSpeedDialGridSize: TEdit
         Left = 400
         Top = 174
         Width = 31
         Height = 21
-        TabOrder = 6
+        TabOrder = 7
       end
       object chbSpeedDialSaveAllSettings: TCheckBox
         Left = 3
@@ -915,7 +917,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Save all button settings, even same as default (larger JSON file' +
           ' but possibly easier to edit or compare)'
-        TabOrder = 7
+        TabOrder = 8
       end
       object cbDialogInfoPreferredState: TComboBox
         Left = 359
@@ -925,7 +927,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 8
+        TabOrder = 5
         Text = 'first one'
         Items.Strings = (
           'first one'
@@ -998,21 +1000,21 @@ object frmSettings: TfrmSettings
         Top = 26
         Width = 49
         Height = 21
-        TabOrder = 0
+        TabOrder = 1
       end
       object edAutoAnswerDelayMin: TEdit
         Left = 168
         Top = 74
         Width = 57
         Height = 21
-        TabOrder = 1
+        TabOrder = 3
       end
       object edAutoAnswerDelayMax: TEdit
         Left = 272
         Top = 74
         Width = 57
         Height = 21
-        TabOrder = 2
+        TabOrder = 4
       end
       object chbAutoAnswer: TCheckBox
         Left = 3
@@ -1020,7 +1022,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Auto answer after time'
-        TabOrder = 3
+        TabOrder = 0
       end
       object chbAutoAnswerCallInfo: TCheckBox
         Left = 3
@@ -1030,14 +1032,14 @@ object frmSettings: TfrmSettings
         Caption = 
           'Auto answer when Call-Info with answer-after param or Answer-Aft' +
           'er=X value is received (intercom)'
-        TabOrder = 4
+        TabOrder = 5
       end
       object edAutoAnswerCallInfoDelayMin: TEdit
         Left = 272
         Top = 143
         Width = 57
         Height = 21
-        TabOrder = 5
+        TabOrder = 6
         Text = '0'
       end
       object chbAnswerOnEventTalk: TCheckBox
@@ -1046,7 +1048,7 @@ object frmSettings: TfrmSettings
         Width = 363
         Height = 17
         Caption = 'Answer on receiving NOTIFY with Event: talk'
-        TabOrder = 6
+        TabOrder = 7
       end
       object chbHandleOodRefer: TCheckBox
         Left = 3
@@ -1054,7 +1056,7 @@ object frmSettings: TfrmSettings
         Width = 446
         Height = 17
         Caption = 'Handle incoming out-of-dialog REFER requests'
-        TabOrder = 7
+        TabOrder = 8
       end
       object memoCallsExtraHeaderLines: TMemo
         Left = 219
@@ -1067,7 +1069,7 @@ object frmSettings: TfrmSettings
         Font.Name = 'Courier New'
         Font.Style = []
         ParentFont = False
-        TabOrder = 8
+        TabOrder = 9
       end
       object chbDisconnectCallOnAudioError: TCheckBox
         Left = 3
@@ -1077,14 +1079,14 @@ object frmSettings: TfrmSettings
         Caption = 
           'Disconnect call on audio error (disable when using "on audio err' +
           'or" script event)'
-        TabOrder = 9
+        TabOrder = 10
       end
       object edAutoAnswerReason: TEdit
         Left = 381
         Top = 26
         Width = 148
         Height = 21
-        TabOrder = 10
+        TabOrder = 2
       end
     end
     object tsMessages: TTabSheet
@@ -1116,7 +1118,7 @@ object frmSettings: TfrmSettings
         Top = 32
         Width = 121
         Height = 21
-        TabOrder = 0
+        TabOrder = 1
       end
       object btnMessagesSelectRing: TButton
         Left = 285
@@ -1124,7 +1126,7 @@ object frmSettings: TfrmSettings
         Width = 22
         Height = 21
         Caption = '...'
-        TabOrder = 1
+        TabOrder = 2
         OnClick = btnMessagesSelectRingClick
       end
       object edMessagesReplyCode: TEdit
@@ -1132,14 +1134,14 @@ object frmSettings: TfrmSettings
         Top = 64
         Width = 44
         Height = 21
-        TabOrder = 2
+        TabOrder = 3
       end
       object edMessagesReplyReason: TEdit
         Left = 354
         Top = 64
         Width = 175
         Height = 21
-        TabOrder = 3
+        TabOrder = 4
       end
       object chbMessagesDoNotReply: TCheckBox
         Left = 3
@@ -1149,7 +1151,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not reply to incoming messages  (ONLY for SIP testing purpose' +
           's)'
-        TabOrder = 4
+        TabOrder = 5
       end
       object chbMessagesEnabled: TCheckBox
         Left = 3
@@ -1159,7 +1161,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Enable (if not enabled: incoming MESSAGEs would be ignored, rela' +
           'ted menu items hidden)'
-        TabOrder = 5
+        TabOrder = 0
       end
     end
     object tsDisplay: TTabSheet
@@ -1217,7 +1219,7 @@ object frmSettings: TfrmSettings
         Width = 518
         Height = 17
         Caption = 'Hide "Help" menu'
-        TabOrder = 2
+        TabOrder = 3
       end
       object chbKioskMode: TCheckBox
         Left = 3
@@ -1225,7 +1227,7 @@ object frmSettings: TfrmSettings
         Width = 398
         Height = 17
         Caption = 'Kiosk mode (fullscreen, no main menu, no status bar, no border)'
-        TabOrder = 3
+        TabOrder = 4
       end
       object chbHideMouseCursor: TCheckBox
         Left = 3
@@ -1233,7 +1235,7 @@ object frmSettings: TfrmSettings
         Width = 398
         Height = 17
         Caption = 'Hide mouse cursor'
-        TabOrder = 4
+        TabOrder = 6
       end
       object chbHideToolsMenu: TCheckBox
         Left = 3
@@ -1241,7 +1243,7 @@ object frmSettings: TfrmSettings
         Width = 518
         Height = 17
         Caption = 'Hide "Tools" menu'
-        TabOrder = 5
+        TabOrder = 2
       end
       object chbHideSpeedDialToggleButton: TCheckBox
         Left = 3
@@ -1249,7 +1251,7 @@ object frmSettings: TfrmSettings
         Width = 398
         Height = 17
         Caption = 'Hide speed dial toggle button (button with "<<" / ">>")'
-        TabOrder = 6
+        TabOrder = 5
       end
       object chbHideStatusBar: TCheckBox
         Left = 3
@@ -1273,7 +1275,7 @@ object frmSettings: TfrmSettings
         Width = 398
         Height = 17
         Caption = 'Hide Dialpad'
-        TabOrder = 9
+        TabOrder = 10
       end
       object chbFrmMainBorderless: TCheckBox
         Left = 3
@@ -1281,7 +1283,7 @@ object frmSettings: TfrmSettings
         Width = 398
         Height = 17
         Caption = 'Make main window borderless; this removes also main menu'
-        TabOrder = 10
+        TabOrder = 9
       end
     end
     object tsLockingSettingsPages: TTabSheet
@@ -1401,7 +1403,7 @@ object frmSettings: TfrmSettings
         Width = 22
         Height = 21
         Caption = '...'
-        TabOrder = 2
+        TabOrder = 3
         OnClick = btnSelectImageClick
       end
       object edTrayNotificationImage: TEdit
@@ -1409,7 +1411,7 @@ object frmSettings: TfrmSettings
         Top = 27
         Width = 121
         Height = 21
-        TabOrder = 3
+        TabOrder = 2
       end
       object chbCustomUserAgent: TCheckBox
         Left = 3
@@ -1425,7 +1427,7 @@ object frmSettings: TfrmSettings
         Width = 223
         Height = 17
         Caption = 'Custom application title (text in taskbar)'
-        TabOrder = 5
+        TabOrder = 6
       end
       object chbFrmMainUseCustomCaption: TCheckBox
         Left = 3
@@ -1433,21 +1435,21 @@ object frmSettings: TfrmSettings
         Width = 191
         Height = 17
         Caption = 'Custom caption for main window'
-        TabOrder = 6
+        TabOrder = 8
       end
       object edUserAgent: TEdit
         Left = 231
         Top = 52
         Width = 121
         Height = 21
-        TabOrder = 7
+        TabOrder = 5
       end
       object edFrmMainCustomApplicationTitle: TEdit
         Left = 231
         Top = 75
         Width = 193
         Height = 21
-        TabOrder = 8
+        TabOrder = 7
       end
       object edFrmMainCustomCaption: TEdit
         Left = 231
@@ -1941,7 +1943,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 2
+        TabOrder = 4
         OnChange = cbSoundOutputModChange
       end
       object cbSoundOutputDev: TComboBox
@@ -1951,7 +1953,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 3
+        TabOrder = 5
       end
       object cbSoundAlertOutputMod: TComboBox
         Left = 121
@@ -1960,7 +1962,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 4
+        TabOrder = 6
         OnChange = cbSoundAlertOutputModChange
       end
       object cbSoundAlertOutputDev: TComboBox
@@ -1970,7 +1972,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 5
+        TabOrder = 7
       end
       object cbSoundOutputIntercomMod: TComboBox
         Left = 121
@@ -1979,7 +1981,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 6
+        TabOrder = 13
         OnChange = cbSoundOutputIntercomModChange
       end
       object cbSoundOutputIntercomDev: TComboBox
@@ -1989,7 +1991,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 7
+        TabOrder = 14
       end
       object btnSelectWaveFile: TButton
         Left = 447
@@ -1997,7 +1999,7 @@ object frmSettings: TfrmSettings
         Width = 21
         Height = 19
         Caption = '...'
-        TabOrder = 8
+        TabOrder = 3
         OnClick = btnSelectWaveFileClick
       end
       object edSoundInputWave: TEdit
@@ -2005,7 +2007,7 @@ object frmSettings: TfrmSettings
         Top = 41
         Width = 320
         Height = 21
-        TabOrder = 9
+        TabOrder = 2
       end
       object cbSoundRingOutputDev: TComboBox
         Left = 121
@@ -2014,7 +2016,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 10
+        TabOrder = 9
       end
       object cbSoundRingOutputMod: TComboBox
         Left = 121
@@ -2023,7 +2025,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 11
+        TabOrder = 10
         OnChange = cbSoundRingOutputModChange
       end
       object edPortaudioInSuggestedLatency: TEdit
@@ -2031,14 +2033,14 @@ object frmSettings: TfrmSettings
         Top = 403
         Width = 49
         Height = 21
-        TabOrder = 12
+        TabOrder = 15
       end
       object edPortaudioOutSuggestedLatency: TEdit
         Left = 330
         Top = 403
         Width = 49
         Height = 21
-        TabOrder = 13
+        TabOrder = 16
       end
       object chbStartAudioSourceAtCallStart: TCheckBox
         Left = 3
@@ -2048,7 +2050,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Start audio input (e.g. microphone) before call is confirmed (mi' +
           'ght help with some Bluetooth devices delay)'
-        TabOrder = 14
+        TabOrder = 17
       end
       object trbarSoundAlertVolume: TTrackBar
         Left = 121
@@ -2057,7 +2059,7 @@ object frmSettings: TfrmSettings
         Height = 25
         Max = 100
         Frequency = 10
-        TabOrder = 15
+        TabOrder = 8
         ThumbLength = 15
         TickMarks = tmTopLeft
       end
@@ -2068,7 +2070,7 @@ object frmSettings: TfrmSettings
         Height = 25
         Max = 100
         Frequency = 10
-        TabOrder = 16
+        TabOrder = 11
         ThumbLength = 15
         TickMarks = tmTopLeft
       end
@@ -2079,7 +2081,7 @@ object frmSettings: TfrmSettings
         Height = 25
         Max = 100
         Frequency = 10
-        TabOrder = 17
+        TabOrder = 12
         ThumbLength = 15
         TickMarks = tmTopLeft
       end
@@ -2265,35 +2267,35 @@ object frmSettings: TfrmSettings
         Caption = 
           'Enable AGC (Automatic Gain Control - keeping volume even) for RX' +
           ' (received audio, speaker) direction'
-        TabOrder = 9
+        TabOrder = 14
       end
       object edAudioRxAgcTarget: TEdit
         Left = 206
         Top = 330
         Width = 49
         Height = 21
-        TabOrder = 10
+        TabOrder = 15
       end
       object edAudioRxAgcMaxGain: TEdit
         Left = 206
         Top = 352
         Width = 49
         Height = 21
-        TabOrder = 11
+        TabOrder = 16
       end
       object edAudioRxAgcAttackRate: TEdit
         Left = 206
         Top = 374
         Width = 49
         Height = 21
-        TabOrder = 12
+        TabOrder = 17
       end
       object edAudioRxAgcReleaseRate: TEdit
         Left = 206
         Top = 396
         Width = 49
         Height = 21
-        TabOrder = 13
+        TabOrder = 18
       end
       object chbAudioTxGateEnabled: TCheckBox
         Left = 3
@@ -2303,35 +2305,35 @@ object frmSettings: TfrmSettings
         Caption = 
           'Enable audio gate (preventing picking up background noise) for m' +
           'icrophone path (transmitted audio) direction'
-        TabOrder = 14
+        TabOrder = 9
       end
       object edAudioTxGateReleaseMs: TEdit
         Left = 206
         Top = 276
         Width = 49
         Height = 21
-        TabOrder = 15
+        TabOrder = 13
       end
       object edAudioTxGateAttackMs: TEdit
         Left = 206
         Top = 254
         Width = 49
         Height = 21
-        TabOrder = 16
+        TabOrder = 12
       end
       object edAudioTxGateHoldMs: TEdit
         Left = 206
         Top = 232
         Width = 49
         Height = 21
-        TabOrder = 17
+        TabOrder = 11
       end
       object edAudioTxGateCloseThreshold: TEdit
         Left = 206
         Top = 210
         Width = 49
         Height = 21
-        TabOrder = 18
+        TabOrder = 10
       end
     end
     object tsRecording: TTabSheet
@@ -2414,7 +2416,7 @@ object frmSettings: TfrmSettings
         Top = 61
         Width = 247
         Height = 21
-        TabOrder = 2
+        TabOrder = 3
       end
       object btnSelectCustomRecDir: TButton
         Left = 420
@@ -2422,7 +2424,7 @@ object frmSettings: TfrmSettings
         Width = 21
         Height = 21
         Caption = '...'
-        TabOrder = 3
+        TabOrder = 4
         OnClick = btnSelectCustomRecDirClick
       end
       object cbRecordingChannels: TComboBox
@@ -2433,7 +2435,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 4
+        TabOrder = 5
         Text = 'mono (both sides mixed or one side only)'
         OnChange = cbRecordingChannelsChange
         Items.Strings = (
@@ -2448,7 +2450,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 1
-        TabOrder = 5
+        TabOrder = 8
         Text = 'automatic - call confirmed state'
         Items.Strings = (
           'manual (Lua script or button)'
@@ -2463,7 +2465,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 6
+        TabOrder = 9
         Text = 'both local and remote (mixed)'
         OnChange = cbRecDirTypeChange
         Items.Strings = (
@@ -2477,7 +2479,7 @@ object frmSettings: TfrmSettings
         Width = 75
         Height = 21
         Caption = 'Open'
-        TabOrder = 7
+        TabOrder = 2
         OnClick = btnOpenRecordingFolderClick
       end
       object chbRecordingNoNumberB64Encoding: TCheckBox
@@ -2488,7 +2490,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not encode number/URI with filesystem-safe base64; not compat' +
           'ible with RecordViewer.exe'
-        TabOrder = 8
+        TabOrder = 10
       end
       object cbRecordingFileFormat: TComboBox
         Left = 167
@@ -2498,7 +2500,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 9
+        TabOrder = 6
         Text = 'WAVE'
         OnChange = cbRecordingChannelsChange
         Items.Strings = (
@@ -2510,7 +2512,7 @@ object frmSettings: TfrmSettings
         Top = 144
         Width = 121
         Height = 21
-        TabOrder = 10
+        TabOrder = 7
       end
     end
     object tsCodecs: TTabSheet
@@ -2720,7 +2722,7 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'Mode'
       end
-      object chAddFilterWMCopyData: TCheckBox
+      object chbAddFilterWMCopyData: TCheckBox
         Left = 26
         Top = 83
         Width = 511
@@ -2728,7 +2730,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Allow WM_COPYDATA to be passed to when elevated (e.g. running as' +
           ' admin under debugger)'
-        TabOrder = 0
+        TabOrder = 2
       end
       object btnCreateIntegrationProtocol: TButton
         Left = 214
@@ -2744,7 +2746,7 @@ object frmSettings: TfrmSettings
         Top = 19
         Width = 81
         Height = 21
-        TabOrder = 2
+        TabOrder = 0
         Text = 'tel'
       end
       object cbSipAccessUrlMode: TComboBox
@@ -2755,7 +2757,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 3
+        TabOrder = 6
         Text = 'always passive (only using "Access-URL" button)'
         Items.Strings = (
           'always passive (only using "Access-URL" button)'
@@ -2774,7 +2776,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not use "sip:" prefix for direct IP calls (clean passed text ' +
           'even if starts with "sip:")'
-        TabOrder = 4
+        TabOrder = 3
       end
       object chbDoNotPassParametersToPreviousInstance: TCheckBox
         Left = 26
@@ -2784,7 +2786,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not pass parameters to previous instance (run new instance on' +
           ' each click / command line call)'
-        TabOrder = 5
+        TabOrder = 4
       end
       object chbAcceptCommandLineScript: TCheckBox
         Left = 26
@@ -2792,7 +2794,7 @@ object frmSettings: TfrmSettings
         Width = 511
         Height = 17
         Caption = 'Accept scripts from command line'
-        TabOrder = 6
+        TabOrder = 5
       end
     end
     object tsHotkeys: TTabSheet
@@ -2854,7 +2856,7 @@ object frmSettings: TfrmSettings
         Width = 438
         Height = 17
         Caption = 'on incoming call'
-        TabOrder = 0
+        TabOrder = 4
       end
       object chbContactPopupShowOnOutgoing: TCheckBox
         Left = 13
@@ -2862,14 +2864,14 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'on outgoing call'
-        TabOrder = 1
+        TabOrder = 5
       end
       object edContactHttpQuery: TEdit
         Left = 109
         Top = 242
         Width = 385
         Height = 21
-        TabOrder = 2
+        TabOrder = 8
         Text = 'https://www.google.com/search?q=[number]'
       end
       object chbContactFilterUsingNote: TCheckBox
@@ -2878,7 +2880,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Include "Note" field when filtering contacts'
-        TabOrder = 3
+        TabOrder = 10
       end
       object cbHttpQueryOpenMode: TComboBox
         Left = 109
@@ -2888,7 +2890,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 4
+        TabOrder = 9
         Text = 'Manual only (HTTP query button)'
         Items.Strings = (
           'Manual only (HTTP query button)'
@@ -2901,7 +2903,7 @@ object frmSettings: TfrmSettings
         Width = 438
         Height = 17
         Caption = 'on incoming call'
-        TabOrder = 5
+        TabOrder = 6
       end
       object chbContactOpenFileOnOutgoing: TCheckBox
         Left = 13
@@ -2909,14 +2911,14 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'on outgoing call'
-        TabOrder = 6
+        TabOrder = 7
       end
       object edContactsFile: TEdit
         Left = 13
         Top = 20
         Width = 454
         Height = 21
-        TabOrder = 7
+        TabOrder = 0
       end
       object btnSelectContactsFile: TButton
         Left = 473
@@ -2924,7 +2926,7 @@ object frmSettings: TfrmSettings
         Width = 22
         Height = 21
         Caption = '...'
-        TabOrder = 8
+        TabOrder = 1
         OnClick = btnSelectContactsFileClick
       end
       object chbContactsCheckIfFileUpdated: TCheckBox
@@ -2933,14 +2935,14 @@ object frmSettings: TfrmSettings
         Width = 164
         Height = 17
         Caption = 'Check if file is updated every'
-        TabOrder = 9
+        TabOrder = 2
       end
       object edContactsCheckIfFileUpdated: TEdit
         Left = 183
         Top = 45
         Width = 42
         Height = 21
-        TabOrder = 10
+        TabOrder = 3
         Text = '60'
       end
       object chbContactStoreNoteInSeparateFile: TCheckBox
@@ -2971,7 +2973,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Prefer P-Asserted-Identity information for display if available ' +
           '(see also: "Display" tab)'
-        TabOrder = 1
+        TabOrder = 2
       end
       object chbHistoryUsePaiForDialIfAvailable: TCheckBox
         Left = 3
@@ -2981,7 +2983,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Prefer P-Asserted-Identity information for dialing if available ' +
           '(see also: "Display" tab)'
-        TabOrder = 2
+        TabOrder = 3
       end
       object chbHistoryShowHint: TCheckBox
         Left = 3
@@ -2989,7 +2991,7 @@ object frmSettings: TfrmSettings
         Width = 446
         Height = 17
         Caption = 'Show hint with additional information for history entries'
-        TabOrder = 3
+        TabOrder = 4
       end
       object chbHistoryFormatCallDurationAsHourMinSec: TCheckBox
         Left = 3
@@ -2997,7 +2999,7 @@ object frmSettings: TfrmSettings
         Width = 446
         Height = 17
         Caption = 'Format call duration time as hours:minutes:seconds'
-        TabOrder = 4
+        TabOrder = 10
       end
       object chbHistoryShowCodecNameInHint: TCheckBox
         Left = 21
@@ -3039,7 +3041,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Do not add calls with reason "Call completed elsewhere" to histo' +
           'ry'
-        TabOrder = 9
+        TabOrder = 1
       end
       object chbHistoryShowRecordFileInHint: TCheckBox
         Left = 21
@@ -3047,7 +3049,7 @@ object frmSettings: TfrmSettings
         Width = 446
         Height = 17
         Caption = 'Show record file in hint'
-        TabOrder = 10
+        TabOrder = 9
       end
     end
     object tsPhones: TTabSheet
@@ -4406,7 +4408,7 @@ object frmSettings: TfrmSettings
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
-        TabOrder = 0
+        TabOrder = 8
         Items.Strings = (
           '100'
           '200'
@@ -4422,7 +4424,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Log to file'
-        TabOrder = 1
+        TabOrder = 0
       end
       object chbLogMessages: TCheckBox
         Left = 5
@@ -4430,7 +4432,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Log received and transmitted SIP messages'
-        TabOrder = 2
+        TabOrder = 4
       end
       object chbLogFlush: TCheckBox
         Left = 5
@@ -4438,7 +4440,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Flush log file on each line added'
-        TabOrder = 3
+        TabOrder = 1
       end
       object cbLogMaxFileSize: TComboBox
         Left = 365
@@ -4446,7 +4448,7 @@ object frmSettings: TfrmSettings
         Width = 111
         Height = 21
         ItemHeight = 13
-        TabOrder = 4
+        TabOrder = 2
         Items.Strings = (
           '1048576'
           '2097152'
@@ -4462,7 +4464,7 @@ object frmSettings: TfrmSettings
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 1
-        TabOrder = 5
+        TabOrder = 3
         Text = '1'
         Items.Strings = (
           '0'
@@ -4477,7 +4479,7 @@ object frmSettings: TfrmSettings
         Top = 223
         Width = 201
         Height = 21
-        TabOrder = 6
+        TabOrder = 9
         Text = 'abcABC 123 () [] <>,.'
       end
       object btnLoggingConsoleFontSelect: TButton
@@ -4486,7 +4488,7 @@ object frmSettings: TfrmSettings
         Width = 26
         Height = 25
         Caption = '...'
-        TabOrder = 7
+        TabOrder = 10
         OnClick = btnLoggingConsoleFontSelectClick
       end
       object chbLogAubuf: TCheckBox
@@ -4495,7 +4497,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Logging for audio buffers'
-        TabOrder = 8
+        TabOrder = 7
       end
       object chbLogMessagesOnlyFirstLines: TCheckBox
         Left = 21
@@ -4503,7 +4505,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Log only first lines (Request-Line/Status-Line) from messages'
-        TabOrder = 9
+        TabOrder = 5
       end
       object chbLogTimestamps: TCheckBox
         Left = 5
@@ -4511,7 +4513,7 @@ object frmSettings: TfrmSettings
         Width = 325
         Height = 17
         Caption = 'Add timestamps'
-        TabOrder = 10
+        TabOrder = 6
       end
       object chbLogShowWindowAtStartup: TCheckBox
         Left = 5
@@ -4553,7 +4555,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Auto answer incoming call if enabled in settings even if there i' +
           's another call already active'
-        TabOrder = 0
+        TabOrder = 3
       end
       object chbCallsAutoHoldWhenSwitchingCalls: TCheckBox
         Left = 3
@@ -4561,7 +4563,7 @@ object frmSettings: TfrmSettings
         Width = 438
         Height = 17
         Caption = 'Automatically hold/unhold when switching between calls'
-        TabOrder = 1
+        TabOrder = 4
       end
       object chbCallsAutoSwitchToCallAnsweredFromTray: TCheckBox
         Left = 3
@@ -4571,7 +4573,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Automatically switch to new call when answering using tray notif' +
           'ier window'
-        TabOrder = 2
+        TabOrder = 5
       end
       object chbAutoAnswerSecondCallEnabled: TCheckBox
         Left = 3
@@ -4579,21 +4581,21 @@ object frmSettings: TfrmSettings
         Width = 284
         Height = 17
         Caption = 'Deny incoming call if other call is active, using SIP code'
-        TabOrder = 3
+        TabOrder = 0
       end
       object edAutoAnswerSecondCallCode: TEdit
         Left = 291
         Top = 28
         Width = 49
         Height = 21
-        TabOrder = 4
+        TabOrder = 1
       end
       object edAutoAnswerSecondCallReason: TEdit
         Left = 416
         Top = 28
         Width = 141
         Height = 21
-        TabOrder = 5
+        TabOrder = 2
       end
     end
   end

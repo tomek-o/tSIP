@@ -91,7 +91,7 @@ __published:	// IDE-managed Components
 	TLabel *lblAutoAnswerCallInfoDelayMin;
 	TEdit *edAutoAnswerCallInfoDelayMin;
 	TTabSheet *tsIntegration;
-	TCheckBox *chAddFilterWMCopyData;
+	TCheckBox *chbAddFilterWMCopyData;
 	TButton *btnCreateIntegrationProtocol;
 	TLabel *lblProtocolName;
 	TEdit *edProtocolName;

@@ -167,7 +167,7 @@ object frmAccount: TfrmAccount
     Style = csDropDownList
     ItemHeight = 13
     ItemIndex = 0
-    TabOrder = 2
+    TabOrder = 3
     Text = 'UDP'
     OnChange = cbTransportChange
     Items.Strings = (
@@ -186,7 +186,7 @@ object frmAccount: TfrmAccount
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 4
     OnChange = edUserChange
   end
   object edPassword: TEdit
@@ -201,7 +201,7 @@ object frmAccount: TfrmAccount
     Font.Style = []
     ParentFont = False
     PasswordChar = '*'
-    TabOrder = 4
+    TabOrder = 6
     OnChange = edPasswordChange
   end
   object edExpires: TEdit
@@ -215,7 +215,7 @@ object frmAccount: TfrmAccount
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
-    TabOrder = 5
+    TabOrder = 8
     Text = '0'
     OnChange = edExpiresChange
   end
@@ -230,7 +230,7 @@ object frmAccount: TfrmAccount
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 11
     OnChange = edAuthUserChange
   end
   object edStunServer: TEdit
@@ -244,7 +244,7 @@ object frmAccount: TfrmAccount
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
-    TabOrder = 7
+    TabOrder = 15
     OnChange = edStunServerChange
   end
   object edOutbound1: TEdit
@@ -258,7 +258,7 @@ object frmAccount: TfrmAccount
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
-    TabOrder = 8
+    TabOrder = 16
     OnChange = edOutbound1Change
   end
   object chbAnswerAny: TCheckBox
@@ -269,7 +269,7 @@ object frmAccount: TfrmAccount
     Caption = 
       'Answer any call/message with this account (use as "local account' +
       '")'
-    TabOrder = 9
+    TabOrder = 19
     OnClick = chbAnswerAnyClick
     OnKeyPress = chbAnswerAnyKeyPress
   end
@@ -284,7 +284,7 @@ object frmAccount: TfrmAccount
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
-    TabOrder = 10
+    TabOrder = 20
     Text = '20'
     OnChange = edPtimeChange
   end
@@ -299,7 +299,7 @@ object frmAccount: TfrmAccount
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
-    TabOrder = 11
+    TabOrder = 13
     OnChange = edCuserChange
   end
   object chbHideRegServer: TCheckBox
@@ -308,7 +308,7 @@ object frmAccount: TfrmAccount
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
-    TabOrder = 12
+    TabOrder = 2
     OnClick = chbHideRegServerClick
   end
   object chbHideUser: TCheckBox
@@ -317,7 +317,7 @@ object frmAccount: TfrmAccount
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
-    TabOrder = 13
+    TabOrder = 5
     OnClick = chbHideUserClick
   end
   object chbHidePassword: TCheckBox
@@ -326,7 +326,7 @@ object frmAccount: TfrmAccount
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
-    TabOrder = 14
+    TabOrder = 7
     OnClick = chbHidePasswordClick
   end
   object chbHideAuthUser: TCheckBox
@@ -335,7 +335,7 @@ object frmAccount: TfrmAccount
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
-    TabOrder = 15
+    TabOrder = 12
     OnClick = chbHideAuthUserClick
   end
   object chbHideCuser: TCheckBox
@@ -344,7 +344,7 @@ object frmAccount: TfrmAccount
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
-    TabOrder = 16
+    TabOrder = 14
     OnClick = chbHideCuserClick
   end
   object cbDtmfTxFormat: TComboBox
@@ -355,7 +355,7 @@ object frmAccount: TfrmAccount
     Style = csDropDownList
     ItemHeight = 13
     ItemIndex = 0
-    TabOrder = 17
+    TabOrder = 18
     Text = 'RFC2833'
     OnChange = cbDtmfTxFormatChange
     Items.Strings = (
@@ -374,7 +374,7 @@ object frmAccount: TfrmAccount
     Font.Name = 'Courier New'
     Font.Style = []
     ParentFont = False
-    TabOrder = 18
+    TabOrder = 9
     OnChange = edDisplayNameChange
   end
   object chbHideDisplayName: TCheckBox
@@ -383,7 +383,7 @@ object frmAccount: TfrmAccount
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
-    TabOrder = 19
+    TabOrder = 10
     OnClick = chbHideDisplayNameClick
   end
   object cbMediaEncryption: TComboBox
@@ -394,7 +394,7 @@ object frmAccount: TfrmAccount
     Style = csDropDownList
     ItemHeight = 13
     ItemIndex = 0
-    TabOrder = 20
+    TabOrder = 21
     Text = '[none]'
     OnChange = cbMediaEncryptionChange
     Items.Strings = (
@@ -412,7 +412,7 @@ object frmAccount: TfrmAccount
     Style = csDropDownList
     ItemHeight = 13
     ItemIndex = 0
-    TabOrder = 21
+    TabOrder = 17
     Text = 'UDP'
     OnChange = cbOutbound1TransportChange
     Items.Strings = (

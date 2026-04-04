@@ -415,7 +415,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbCustomUserAgent->Checked = tmpSettings.uaConf.customUserAgent;
 	edUserAgent->Text = tmpSettings.uaConf.userAgent.c_str();
 
-	chAddFilterWMCopyData->Checked = tmpSettings.Integration.bAddFilterWMCopyData;
+	chbAddFilterWMCopyData->Checked = tmpSettings.Integration.bAddFilterWMCopyData;
 	edProtocolName->Text = tmpSettings.Integration.asProtocol;
 	chbDoNotUseSipPrefixForDirectIpCalls->Checked = tmpSettings.Integration.bDoNotUseSipPrefixForDirectIpCalls;
 	chbDoNotPassParametersToPreviousInstance->Checked = tmpSettings.Integration.bDoNotPassParametersToPreviousInstance;
@@ -846,7 +846,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.customUserAgent = chbCustomUserAgent->Checked;
 	tmpSettings.uaConf.userAgent = edUserAgent->Text.c_str();
 
-	tmpSettings.Integration.bAddFilterWMCopyData = chAddFilterWMCopyData->Checked;
+	tmpSettings.Integration.bAddFilterWMCopyData = chbAddFilterWMCopyData->Checked;
 	tmpSettings.Integration.asProtocol = edProtocolName->Text;
 	tmpSettings.Integration.bDoNotUseSipPrefixForDirectIpCalls = chbDoNotUseSipPrefixForDirectIpCalls->Checked;
 	tmpSettings.Integration.bDoNotPassParametersToPreviousInstance = chbDoNotPassParametersToPreviousInstance->Checked;
