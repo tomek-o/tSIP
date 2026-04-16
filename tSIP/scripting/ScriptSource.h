@@ -25,4 +25,6 @@ enum ScriptSource {
 	SCRIPT_SRC_LIMITER
 };
 
+const char* GetScriptSourceName(enum ScriptSource source);
+
 #endif

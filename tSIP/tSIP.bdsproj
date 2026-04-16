@@ -487,7 +487,6 @@
         <FILE FILENAME="Troubleshooting.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="Troubleshooting" FORMNAME="" DESIGNCLASS="" ADDITIONAL="Troubleshooting.h"/>
         <FILE FILENAME="scripting\FormLuaScript.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLuaScript" FORMNAME="frmLuaScript" DESIGNCLASS="" ADDITIONAL="scripting\FormLuaScript.h"/>
         <FILE FILENAME="scripting\LuaExamples.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="scripting\ScriptSource.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="scripting\LuaState.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaState" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaState.h"/>
         <FILE FILENAME="scripting\LuaWinapi.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaWinapi" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaWinapi.h"/>
         <FILE FILENAME="phone\PhoneConf.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
@@ -527,6 +526,7 @@
         <FILE FILENAME="scripting\FormScriptPluginVariables.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormScriptPluginVariables" FORMNAME="frmScriptPluginVariables" DESIGNCLASS="" ADDITIONAL="scripting\FormScriptPluginVariables.h"/>
         <FILE FILENAME="buttons\FormButtonContainerConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonContainerConf" FORMNAME="frmButtonContainerConf" DESIGNCLASS="" ADDITIONAL="buttons\FormButtonContainerConf.h"/>
         <FILE FILENAME="TrayNotifierConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="TrayNotifierConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="TrayNotifierConf.h"/>
+        <FILE FILENAME="scripting\ScriptSource.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScriptSource" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\ScriptSource.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -535,7 +535,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">3</VersionInfo>
           <VersionInfo Name="Release">12</VersionInfo>
-          <VersionInfo Name="Build">0</VersionInfo>
+          <VersionInfo Name="Build">1</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -547,7 +547,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.3.12.0</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.3.12.1</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>

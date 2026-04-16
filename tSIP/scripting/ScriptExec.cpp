@@ -2542,8 +2542,13 @@ void ScriptExec::Run(const char* script)
 	if(res != 0)
 	{
 		AnsiString txt;
-		txt.sprintf("Execution error:\n%s", lua_tostring(L, -1));
-		MessageBox(NULL, txt.c_str(), "Lua", MB_ICONINFORMATION);
+		txt.sprintf("Execution error\n\n"
+			"Script source type: %s, source id: %d\n\n%s",
+            GetScriptSourceName(srcType), srcId,
+			lua_tostring(L, -1));
+		AnsiString title;
+		title.sprintf("%s - Lua", Application->Title.c_str());
+		MessageBox(NULL, txt.c_str(), title.c_str(), MB_ICONINFORMATION);
 	}
 	running = false;
 
