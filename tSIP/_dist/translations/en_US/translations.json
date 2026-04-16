@@ -23,6 +23,24 @@
       "TRYING": "TRYING"
     }
   },
+  "Registration": {
+    "stateDescription": {
+      "REGISTERING": "Registering",
+      "REGISTER_FAIL": "Error registering",
+      "REGISTER_OK": "Registered",
+      "UNREGISTERING": "Unregistering...",
+      "UNREGISTER_FAIL": "Unregistering error",
+      "UNREGISTER_OK": "Unregistered"
+    },
+    "stateName": {
+      "REGISTERING": "REGISTERING",
+      "REGISTER_FAIL": "REGISTER_FAIL",
+      "REGISTER_OK": "REGISTER_OK",
+      "UNREGISTERING": "UNREGISTERING",
+      "UNREGISTER_FAIL": "UNREGISTER_FAIL",
+      "UNREGISTER_OK": "UNREGISTER_OK"
+    }
+  },
   "TfrmContactEditor": {
     "btnApply": "Apply",
     "btnCancel": "Cancel",

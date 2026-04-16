@@ -122,3 +122,89 @@ AnsiString Callback::GetCallStateTranslatedDescription(enum ua_state_e state)
 	}
 }
 
+
+const char* Callback::GetRegStateName(enum reg_state_e state)
+{
+	switch (state)
+	{
+	case REG_STATE_UNREGISTER_OK:
+		return "UNREGISTER_OK";
+	case REG_STATE_REGISTERING:
+		return "REGISTERING";
+	case REG_STATE_REGISTER_OK:
+		return "REGISTER_OK";
+	case REG_STATE_REGISTER_FAIL:
+		return "REGISTER_FAIL";
+	case REG_STATE_UNREGISTERING:
+		return "UNREGISTERING";
+	case REG_STATE_UNREGISTER_FAIL:
+		return "UNREGISTER_FAIL";
+	default:
+		return "???";
+	}
+}
+
+const char* Callback::GetRegStateDescription(enum reg_state_e state)
+{
+	switch (state)
+	{
+	case REG_STATE_UNREGISTER_OK:
+		return "Unregistered";
+	case REG_STATE_REGISTERING:
+		return "Registering";
+	case REG_STATE_REGISTER_OK:
+		return "Registered";
+	case REG_STATE_REGISTER_FAIL:
+		return "Error registering";
+	case REG_STATE_UNREGISTERING:
+		return "Unregistering...";
+	case REG_STATE_UNREGISTER_FAIL:
+		return "Unregistering error";
+	default:
+		return "???";
+	}
+}
+
+AnsiString Callback::GetRegStateTranslatedName(enum reg_state_e state)
+{
+	switch (state)
+	{
+	case REG_STATE_UNREGISTER_OK:
+		return Translate2("Registration.stateName.UNREGISTER_OK", GetRegStateName(state));
+	case REG_STATE_REGISTERING:
+		return Translate2("Registration.stateName.REGISTERING", GetRegStateName(state));
+	case REG_STATE_REGISTER_OK:
+		return Translate2("Registration.stateName.REGISTER_OK", GetRegStateName(state));
+	case REG_STATE_REGISTER_FAIL:
+		return Translate2("Registration.stateName.REGISTER_FAIL", GetRegStateName(state));
+	case REG_STATE_UNREGISTERING:
+		return Translate2("Registration.stateName.UNREGISTERING", GetRegStateName(state));
+	case REG_STATE_UNREGISTER_FAIL:
+		return Translate2("Registration.stateName.UNREGISTER_FAIL", GetRegStateName(state));
+	default:
+		return "???";
+	}
+}
+
+AnsiString Callback::GetRegStateTranslatedDescription(enum reg_state_e state)
+{
+	switch (state)
+	{
+	case REG_STATE_UNREGISTER_OK:
+		return Translate2("Registration.stateDescription.UNREGISTER_OK", GetRegStateDescription(state));
+	case REG_STATE_REGISTERING:
+		return Translate2("Registration.stateDescription.REGISTERING", GetRegStateDescription(state));
+	case REG_STATE_REGISTER_OK:
+		return Translate2("Registration.stateDescription.REGISTER_OK", GetRegStateDescription(state));
+	case REG_STATE_REGISTER_FAIL:
+		return Translate2("Registration.stateDescription.REGISTER_FAIL", GetRegStateDescription(state));
+	case REG_STATE_UNREGISTERING:
+		return Translate2("Registration.stateDescription.UNREGISTERING", GetRegStateDescription(state));
+	case REG_STATE_UNREGISTER_FAIL:
+		return Translate2("Registration.stateDescription.UNREGISTER_FAIL", GetRegStateDescription(state));
+	default:
+		return "???";
+	}
+}
+
+

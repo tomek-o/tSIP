@@ -1303,5 +1303,6 @@ Version 0.3.13
 	- Lua error message shows now more context: event type name and id
 	- Lua: more strict argument checking for integer arguments of functions like SetButtonCaption
 	- Lua: added GetExecSourceTypeName(optional_sourceType) function
+	- added names + descriptions for registration states, with translation
 */
 

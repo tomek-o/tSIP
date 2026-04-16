@@ -1990,28 +1990,22 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::REG_STATE:
 		{
-			AnsiString asRegText;
+			AnsiString asRegText = Callback::GetRegStateTranslatedDescription(cb.reg_state);
 			switch(cb.reg_state)
 			{
 			case Callback::REG_STATE_REGISTERING:
-				asRegText = "Registering";
 				break;
 			case Callback::REG_STATE_REGISTER_OK:
-				asRegText = "Registered";
 				SetErrorIcon(false);
 				break;
 			case Callback::REG_STATE_REGISTER_FAIL:
-				asRegText = "Error registering";
 				SetErrorIcon(true);
 				break;
 			case Callback::REG_STATE_UNREGISTERING:
-				asRegText = "Unregistering...";
 				break;
 			case Callback::REG_STATE_UNREGISTER_OK:
-				asRegText = "Unregistered";
 				break;
 			case Callback::REG_STATE_UNREGISTER_FAIL:
-				asRegText = "Unregistering error";
 				break;
 			default:
 				assert(!"Unhandled reg state");

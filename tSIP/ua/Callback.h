@@ -65,6 +65,12 @@ public:
 
 		REG_STATE__LIMITER
 	} reg_state;
+
+	static const char* GetRegStateName(enum reg_state_e state);
+	static const char* GetRegStateDescription(enum reg_state_e state);
+	static AnsiString GetRegStateTranslatedName(enum reg_state_e state);
+	static AnsiString GetRegStateTranslatedDescription(enum reg_state_e state);
+
 	AnsiString prm;
 
 	enum paging_tx_state_e
