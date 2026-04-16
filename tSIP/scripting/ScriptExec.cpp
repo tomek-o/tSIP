@@ -158,7 +158,7 @@ Call* GetCall(lua_State *L)
 	Call *call = NULL;
 	if (argCount >= 1)
 	{
-		unsigned int callUid = lua_tointegerx(L, 1, NULL);
+		unsigned int callUid = luaL_checkinteger(L, 1);
 		call = Calls::FindByUid(callUid);
 	}
 	else
@@ -288,8 +288,8 @@ int ScriptExec::l_Beep(lua_State *L)
 	/*
 	To refer to elements in the stack, the API uses indices. The first element in the stack (that is, the element that was pushed first) has index 1, the next one has index 2, and so on. We can also access elements using the top of the stack as our reference, using negative indices. In that case, -1 refers to the element at the top (that is, the last element pushed), -2 to the previous element, and so on. For instance, the call lua_tostring(L, -1) returns the value at the top of the stack as a string.
 	*/
-	int freq = lua_tointegerx(L, 1, NULL);
-	int time = lua_tointegerx(L, 2, NULL);
+	int freq = luaL_checkinteger(L, 1);
+	int time = luaL_checkinteger(L, 2);
 	if (freq > 0 && time > 0)
 	{
 		Beep(freq, time);
@@ -370,7 +370,7 @@ static int l_InputQuery(lua_State* L)
 static int l_Sleep(lua_State* L)
 {
 	int ret = 0;
-	int time = lua_tointegerx(L, -1, NULL);
+	int time = luaL_checkinteger(L, -1);
 	clock_t t1 = clock();
 	long elapsed = 0;
 	ScriptExec* context = GetContext(L);
@@ -528,7 +528,7 @@ static int l_Hangup(lua_State* L)
 	int sipCode = DEFAULT_CODE;
 	if (argCount >= 1)
 	{
-		sipCode = lua_tointeger(L, 1);
+		sipCode = luaL_checkinteger(L, 1);
 		if (sipCode < 400 || sipCode > 699)
 			sipCode = DEFAULT_CODE;
 	}
@@ -554,7 +554,7 @@ static int l_Hangup2(lua_State* L)
 	int sipCode = DEFAULT_CODE;
 	if (argCount >= 2)
 	{
-		sipCode = lua_tointeger(L, 2);
+		sipCode = luaL_checkinteger(L, 2);
 		if (sipCode < 400 || sipCode > 699)
 			sipCode = DEFAULT_CODE;
 	}
@@ -574,7 +574,7 @@ static int l_HangupAll(lua_State* L)
 	int sipCode = DEFAULT_CODE;
 	if (argCount >= 1)
 	{
-		sipCode = lua_tointeger(L, 1);
+		sipCode = luaL_checkinteger(L, 1);
 		if (sipCode < 400 || sipCode > 699)
 			sipCode = DEFAULT_CODE;
 	}
@@ -618,7 +618,7 @@ static int l_SetMute(lua_State* L)
 		int argCount = lua_gettop(L);
 		if (argCount >= 2)
 		{
-			int state = lua_tointeger(L, 2);
+			int state = luaL_checkinteger(L, 2);
 			call->setMute(state);
 		}
 		else
@@ -671,7 +671,7 @@ static int l_SetHold(lua_State* L)
 		int argCount = lua_gettop(L);
 		if (argCount >= 2)
 		{
-			int state = lua_tointeger(L, 2);
+			int state = luaL_checkinteger(L, 2);
 			call->setHold(state);
 		}
 		else
@@ -838,7 +838,7 @@ static int l_SwitchAudioSource2(lua_State* L)
 	int argCount = lua_gettop(L);
 	if (argCount >= 1)
 	{
-		callUid = lua_tointegerx(L, 1, NULL);
+		callUid = luaL_checkinteger(L, 1);
 	}
 	else
 	{
@@ -903,7 +903,7 @@ static int l_SwitchAudioPlayer2(lua_State* L)
 	int argCount = lua_gettop(L);
 	if (argCount >= 1)
 	{
-		callUid = lua_tointegerx(L, 1, NULL);
+		callUid = luaL_checkinteger(L, 1);
 	}
 	else
 	{
@@ -954,7 +954,7 @@ static int l_SwitchVideoSource2(lua_State* L)
 	int argCount = lua_gettop(L);
 	if (argCount >= 1)
 	{
-		callUid = lua_tointegerx(L, 1, NULL);
+		callUid = luaL_checkinteger(L, 1);
 	}
 	else
 	{
@@ -1009,7 +1009,7 @@ static int l_GenerateTones2(lua_State* L)
 	int argCount = lua_gettop(L);
 	if (argCount >= 1)
 	{
-		callUid = lua_tointegerx(L, 1, NULL);
+		callUid = luaL_checkinteger(L, 1);
 	}
 	else
 	{
@@ -1043,7 +1043,7 @@ static int l_BlindTransfer2(lua_State* L)
 	int argCount = lua_gettop(L);
 	if (argCount >= 2)
 	{
-		unsigned int callUid = lua_tointegerx(L, 1, NULL);
+		unsigned int callUid = luaL_checkinteger(L, 1);
 		const char* str = lua_tostring( L, 2 );
 		if (str == NULL)
 		{
@@ -1064,8 +1064,8 @@ static int l_AttendedTransfer(lua_State* L)
 	int argCount = lua_gettop(L);
 	if (argCount >= 2)
 	{
-		unsigned int callUid1 = lua_tointegerx(L, 1, NULL);
-		unsigned int callUid2 = lua_tointegerx(L, 2, NULL);
+		unsigned int callUid1 = luaL_checkinteger(L, 1);
+		unsigned int callUid2 = luaL_checkinteger(L, 2);
 		UA->TransferReplace(callUid1, callUid2);
 	}
 	else
@@ -1096,7 +1096,7 @@ static int l_GetCallUidFromLineButton(lua_State* L)
 	int argCount = lua_gettop(L);
 	if (argCount == 1)
 	{
-		unsigned int buttonId = lua_tointegerx(L, 1, NULL);
+		unsigned int buttonId = luaL_checkinteger(L, 1);
 		const std::map<unsigned int, Call> calls = Calls::GetCalls();
 		for (std::map<unsigned int, Call>::const_iterator iter = calls.begin(); iter != calls.end(); ++iter)
 		{
@@ -1129,7 +1129,7 @@ static int l_SetCurrentCallUid(lua_State* L)
 	int argCount = lua_gettop(L);
 	if (argCount >= 1)
 	{
-		unsigned int callUid = lua_tointegerx(L, 1, NULL);
+		unsigned int callUid = luaL_checkinteger(L, 1);
 		int status = Calls::SetCurrentCallUid(callUid);
 		lua_pushnumber(L, status);
 		return 1;
@@ -1325,28 +1325,28 @@ static int l_GetAudioErrorCount(lua_State* L)
 
 static int l_GetCallStateName(lua_State* L)
 {
-	int state = lua_tointeger( L, 1 );
+	int state = luaL_checkinteger( L, 1 );
 	lua_pushstring(L, Callback::GetCallStateName(static_cast<enum Callback::ua_state_e>(state)));
 	return 1;
 }
 
 static int l_GetCallStateDescription(lua_State* L)
 {
-	int state = lua_tointeger( L, 1 );
+	int state = luaL_checkinteger( L, 1 );
 	lua_pushstring(L, Callback::GetCallStateDescription(static_cast<enum Callback::ua_state_e>(state)));
 	return 1;
 }
 
 static int l_GetCallStateTranslatedName(lua_State* L)
 {
-	int state = lua_tointeger( L, 1 );
+	int state = luaL_checkinteger( L, 1 );
 	lua_pushstring(L, Callback::GetCallStateTranslatedName(static_cast<enum Callback::ua_state_e>(state)).c_str());
 	return 1;
 }
 
 static int l_GetCallStateTranslatedDescription(lua_State* L)
 {
-	int state = lua_tointeger( L, 1 );
+	int state = luaL_checkinteger( L, 1 );
 	lua_pushstring(L, Callback::GetCallStateTranslatedDescription(static_cast<enum Callback::ua_state_e>(state)).c_str());
 	return 1;
 }
@@ -1374,7 +1374,7 @@ static int l_Reregister(lua_State* L)
 
 static int l_SetButtonCaption(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
 	if (str == NULL)
 		str = "";
@@ -1388,7 +1388,7 @@ static int l_SetButtonCaption(lua_State* L)
 
 static int l_SetButtonCaption2(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
 	if (str == NULL)
 		str = "";
@@ -1402,7 +1402,7 @@ static int l_SetButtonCaption2(lua_State* L)
 
 static int l_SetButtonDown(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	int state = lua_tointeger( L, 2 );
 	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
@@ -1414,7 +1414,7 @@ static int l_SetButtonDown(lua_State* L)
 
 static int l_GetButtonDown(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	bool down = false;
 	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
@@ -1427,7 +1427,7 @@ static int l_GetButtonDown(lua_State* L)
 
 static int l_GetButtonMouseDown(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	bool down = false;
 	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
@@ -1440,7 +1440,7 @@ static int l_GetButtonMouseDown(lua_State* L)
 
 static int l_GetButtonBlfState(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
 	{
@@ -1453,7 +1453,7 @@ static int l_GetButtonBlfState(lua_State* L)
 
 static int l_GetButtonHandle(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
 	if (str == NULL)
 		str = "";
@@ -1468,7 +1468,7 @@ static int l_GetButtonHandle(lua_State* L)
 
 static int l_SetButtonInactive(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	int state = lua_tointeger( L, 2 );
 	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
@@ -1480,7 +1480,7 @@ static int l_SetButtonInactive(lua_State* L)
 
 static int l_SetButtonVisible(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	int state = lua_tointeger( L, 2 );
 	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
@@ -1492,7 +1492,7 @@ static int l_SetButtonVisible(lua_State* L)
 
 static int l_SetButtonImage(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	const char* str = lua_tostring( L, 2 );
 	TProgrammableButton *btn = buttons.GetBtn(id);
 	if (btn)
@@ -1504,7 +1504,7 @@ static int l_SetButtonImage(lua_State* L)
 
 static int l_ProgrammableButtonClick(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	TProgrammableButton* btn = buttons.GetBtn(id);
 	if (btn)
 		btn->OnClick(btn);
@@ -1745,7 +1745,7 @@ static int l_GetContactId(lua_State* L)
 
 static int l_GetBlfState(lua_State* L)
 {
-	int contactId = lua_tointeger( L, 1 );
+	int contactId = luaL_checkinteger( L, 1 );
 	if (contactId < 0 || contactId >= appSettings.uaConf.contacts.size())
 	{
 		LOG("GetBlfState: invalid contactId = %d\n", contactId);
@@ -2052,7 +2052,7 @@ static int l_UpdateButtons(lua_State* L)
 
 static int l_UpdateButton(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	if (id < 0 || id >= buttons.btnConf.size())
 	{
 		LOG("Lua error: invalid button id = %d\n", id);
@@ -2079,7 +2079,7 @@ static int l_SetHandled(lua_State* L)
 
 static int l_GetButtonType(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	if (id < 0 || id >= buttons.btnConf.size())
 	{
 		LOG("Lua error: no button configuration for id = %d\n", id);
@@ -2092,7 +2092,7 @@ static int l_GetButtonType(lua_State* L)
 
 static int l_GetButtonNumber(lua_State* L)
 {
-	int id = lua_tointeger( L, 1 );
+	int id = luaL_checkinteger( L, 1 );
 	if (id < 0 || id >= buttons.btnConf.size())
 	{
 		LOG("Lua error: no button configuration for id = %d\n", id);
@@ -2166,14 +2166,14 @@ static int l_ClearCustomRequests(lua_State* L)
 
 static int l_DeleteCustomRequest(lua_State* L)
 {
-	int uid = lua_tointeger( L, 1 );
+	int uid = luaL_checkinteger( L, 1 );
 	UaCustomRequests::DeleteRequest(uid);
 	return 0;
 }
 
 static int l_GetCustomRequest(lua_State* L)
 {
-	int uid = lua_tointeger(L, 1);
+	int uid = luaL_checkinteger(L, 1);
 	struct UaCustomRequests::Request* request = UaCustomRequests::GetRequest(uid);
 	if (request == NULL)
 		return 0;
@@ -2185,7 +2185,7 @@ static int l_GetCustomRequest(lua_State* L)
 
 static int l_GetCustomRequestReply(lua_State* L)
 {
-	int uid = lua_tointeger(L, 1);
+	int uid = luaL_checkinteger(L, 1);
 	struct UaCustomRequests::Request* request = UaCustomRequests::GetRequest(uid);
 	if (request == NULL)
 		return 0;
@@ -2197,7 +2197,7 @@ static int l_GetCustomRequestReply(lua_State* L)
 
 static int l_GetCustomRequestReplyText(lua_State* L)
 {
-	int uid = lua_tointeger(L, 1);
+	int uid = luaL_checkinteger(L, 1);
 	struct UaCustomRequests::Request* request = UaCustomRequests::GetRequest(uid);
 	if (request == NULL)
 		return 0;
@@ -2252,7 +2252,7 @@ static int l_SendTextMessage(lua_State* L)
 static int l_SetAppStatus(lua_State* L)
 {
 	const char* id = lua_tostring( L, 1 );
-	int priority = lua_tointeger(L, 2);
+	int priority = luaL_checkinteger(L, 2);
 	const char* text = lua_tostring( L, 3 );
 	SetAppStatus(id, priority, text);
 	return 0;
