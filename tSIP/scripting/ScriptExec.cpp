@@ -1323,6 +1323,7 @@ static int l_GetAudioErrorCount(lua_State* L)
 	return 1;
 }
 
+
 static int l_GetCallStateName(lua_State* L)
 {
 	int state = luaL_checkinteger( L, 1 );
@@ -1350,6 +1351,36 @@ static int l_GetCallStateTranslatedDescription(lua_State* L)
 	lua_pushstring(L, Callback::GetCallStateTranslatedDescription(static_cast<enum Callback::ua_state_e>(state)).c_str());
 	return 1;
 }
+
+
+static int l_GetRegStateName(lua_State* L)
+{
+	int state = luaL_checkinteger( L, 1 );
+	lua_pushstring(L, Callback::GetRegStateName(static_cast<enum Callback::reg_state_e>(state)));
+	return 1;
+}
+
+static int l_GetRegStateDescription(lua_State* L)
+{
+	int state = luaL_checkinteger( L, 1 );
+	lua_pushstring(L, Callback::GetRegStateDescription(static_cast<enum Callback::reg_state_e>(state)));
+	return 1;
+}
+
+static int l_GetRegStateTranslatedName(lua_State* L)
+{
+	int state = luaL_checkinteger( L, 1 );
+	lua_pushstring(L, Callback::GetRegStateTranslatedName(static_cast<enum Callback::reg_state_e>(state)).c_str());
+	return 1;
+}
+
+static int l_GetRegStateTranslatedDescription(lua_State* L)
+{
+	int state = luaL_checkinteger( L, 1 );
+	lua_pushstring(L, Callback::GetRegStateTranslatedDescription(static_cast<enum Callback::reg_state_e>(state)).c_str());
+	return 1;
+}
+
 
 static int l_GetRegistrationState(lua_State* L)
 {
@@ -2447,6 +2478,11 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetCallStateDescription, "GetCallStateDescription", "Get the description of specified call state value", "");
 	lua_register2(L, ScriptImp::l_GetCallStateTranslatedName, "GetCallStateTranslatedName", "Get the translated name of specified call state value", "");
 	lua_register2(L, ScriptImp::l_GetCallStateTranslatedDescription, "GetCallStateTranslatedDescription", "Get the translated description of specified call state value", "");
+
+	lua_register2(L, ScriptImp::l_GetRegStateName, "GetRegStateName", "Get the name of specified call registration value", "");
+	lua_register2(L, ScriptImp::l_GetRegStateDescription, "GetRegStateDescription", "Get the description of specified registration state value", "");
+	lua_register2(L, ScriptImp::l_GetRegStateTranslatedName, "GetRegStateTranslatedName", "Get the translated name of specified registration state value", "");
+	lua_register2(L, ScriptImp::l_GetRegStateTranslatedDescription, "GetRegStateTranslatedDescription", "Get the translated description of specified registration state value", "");
 
 	lua_register2(L, ScriptImp::l_SetVariable, "SetVariable", "Set value for variable with specified name", "Example: SetVariable(\"runcount\", count).");
 	lua_register2(L, ScriptImp::l_GetVariable, "GetVariable", "Get variable value and isSet flag for variable with specified name", "Example: local count, var_isset = GetVariable(\"runcount\")");

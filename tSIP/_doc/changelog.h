@@ -1304,5 +1304,7 @@ Version 0.3.13
 	- Lua: more strict argument checking for integer arguments of functions like SetButtonCaption
 	- Lua: added GetExecSourceTypeName(optional_sourceType) function
 	- added names + descriptions for registration states, with translation
+	- Lua: added GetRegStateName(state), GetRegStateDescription(state), GetRegStateTranslatedName(state), GetRegStateTranslatedDescription(state) helper functions for registration states
+	
 */
 
