@@ -1707,6 +1707,18 @@ static int l_GetExecSourceType(lua_State* L)
 	return 1;
 }
 
+static int l_GetExecSourceTypeName(lua_State* L)
+{
+	enum ScriptSource srcType = GetContext(L)->srcType;
+	int argCnt = lua_gettop(L);
+	if (argCnt >= 1)
+	{
+		srcType = static_cast<ScriptSource>(luaL_checkinteger(L, 1));
+	}
+	lua_pushstring(L, GetScriptSourceName(srcType));
+	return 1;
+}
+
 static int l_GetExecSourceId(lua_State* L)
 {
 	lua_pushinteger(L, GetContext(L)->srcId);
@@ -2472,6 +2484,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_PluginSendMessageText, "PluginSendMessageText", "Send text to specified plugin", "");
 	lua_register2(L, ScriptImp::l_PluginEnable, "PluginEnable", "Enable/disable specified plugin", "Example: PluginEnable(\"TTS.dll\", 0/1)");
 	lua_register2(L, ScriptImp::l_GetExecSourceType, "GetExecSourceType", "Get type of event that triggered script execution", "See also: GetExecSourceId().");
+	lua_register2(L, ScriptImp::l_GetExecSourceTypeName, "GetExecSourceTypeName", "Get name of type of script execution source", "GetExecSourceTypeName(typeId) - get name of specific type\nGetExecSourceTypeName() - get name of source type that triggered this script execution");
 	lua_register2(L, ScriptImp::l_GetExecSourceId, "GetExecSourceId", "Get ID of object that triggered script (depending on trigger type)", "See also: GetExecSourceType().");
 	lua_register2(L, ScriptImp::l_GetRecordFile, "GetRecordFile", "Get name of recording file from current call or call that ended", "");
 	lua_register2(L, ScriptImp::l_GetContactId, "GetContactId", "Get contact ID for specified number/URI", "");
