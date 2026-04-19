@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsMultipleCalls
+    ActivePage = tsAccount
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -379,7 +379,7 @@ object frmSettings: TfrmSettings
         Height = 31
         Align = alBottom
         BevelOuter = bvNone
-        TabOrder = 0
+        TabOrder = 1
         object btnAddAccount: TButton
           Left = 464
           Top = 4
@@ -405,14 +405,12 @@ object frmSettings: TfrmSettings
         Width = 564
         Height = 417
         Align = alClient
-        TabOrder = 1
+        TabOrder = 0
       end
     end
     object tsTls: TTabSheet
       Caption = 'TLS'
       ImageIndex = 25
-      ExplicitLeft = 6
-      ExplicitTop = 14
       object lblTlsClientCertificate: TLabel
         Left = 5
         Top = 3

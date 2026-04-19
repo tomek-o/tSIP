@@ -79,7 +79,7 @@ object frmContactEditor: TfrmContactEditor
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 6
+    TabOrder = 9
     DesignSize = (
       434
       37)
@@ -155,7 +155,7 @@ object frmContactEditor: TfrmContactEditor
     Width = 324
     Height = 21
     Anchors = [akLeft, akRight, akBottom]
-    TabOrder = 7
+    TabOrder = 6
   end
   object btnFileSelect: TButton
     Left = 377
@@ -164,7 +164,7 @@ object frmContactEditor: TfrmContactEditor
     Height = 21
     Anchors = [akRight, akBottom]
     Caption = '...'
-    TabOrder = 8
+    TabOrder = 7
     OnClick = btnFileSelectClick
   end
   object btnFileOpen: TBitBtn
@@ -173,7 +173,7 @@ object frmContactEditor: TfrmContactEditor
     Width = 22
     Height = 21
     Anchors = [akRight, akBottom]
-    TabOrder = 9
+    TabOrder = 8
     OnClick = btnFileOpenClick
     Glyph.Data = {
       36030000424D3603000000000000360000002800000010000000100000000100

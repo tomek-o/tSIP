@@ -1301,10 +1301,10 @@ Version 0.3.13
 	- Lua editor: changed brace highlighting colors to make it more clear
 	- button editor: button types are now sorted by name, alphabetically
 	- Lua error message shows now more context: event type name and id
-	- Lua: more strict argument checking for integer arguments of functions like SetButtonCaption
+	- Lua: more strict argument type checking for integer arguments of functions like SetButtonCaption
 	- Lua: added GetExecSourceTypeName(optional_sourceType) function
 	- added names + descriptions for registration states, with translation
 	- Lua: added GetRegStateName(state), GetRegStateDescription(state), GetRegStateTranslatedName(state), GetRegStateTranslatedDescription(state) helper functions for registration states
-	
+	- fixed tab order in multiple windows
 */
 

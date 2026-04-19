@@ -167,7 +167,7 @@ object frmAccount: TfrmAccount
     Style = csDropDownList
     ItemHeight = 13
     ItemIndex = 0
-    TabOrder = 3
+    TabOrder = 2
     Text = 'UDP'
     OnChange = cbTransportChange
     Items.Strings = (
@@ -308,7 +308,7 @@ object frmAccount: TfrmAccount
     Width = 145
     Height = 17
     Caption = 'Hide/do not store in file'
-    TabOrder = 2
+    TabOrder = 3
     OnClick = chbHideRegServerClick
   end
   object chbHideUser: TCheckBox
