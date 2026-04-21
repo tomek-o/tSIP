@@ -100,8 +100,6 @@ update Lua to 5.3.x, remove CVS tags from Lua source
 - wrong BLF remote identity displayed with FreePBX after call confirmed + call waiting (two dialogs) info; call confirmed probably without remote identity
 (=> multiple independent dialogs in dialog-info, handling of missing remote identity specific to dialog)
 
-TODO: TLS not working (UDP used instead) when outbound proxy is specified?
-
 CRM application communicating through TCPServer plugin
 
 - H.264 config: profile
