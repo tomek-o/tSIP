@@ -138,7 +138,7 @@ int decode_update(struct viddec_state **vdsp, const struct vidcodec *vc,
 		goto out;
 	}
 
-	re_printf("video decoder %s (%s)\n", vc->name, fmtp);
+	re_printf("video decoder %s, fmtp [%s]\n", vc->name, fmtp);
 
  out:
 	if (err)
