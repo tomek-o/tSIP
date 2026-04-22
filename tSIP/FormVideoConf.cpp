@@ -169,7 +169,10 @@ void __fastcall TfrmVideoConf::btnSelectInputFileClick(TObject *Sender)
 		}
 		else
 		{
-			dlgOpenDeviceFile->FileName = edInputFile->Text;
+			if (edInputFile->Text.Pos("://") == 0)	// avoid putting url into open dialog - apparently it prevents it from showing
+			{
+				dlgOpenDeviceFile->FileName = edInputFile->Text;
+			}
 		}
 	}
 	if (dlgOpenDeviceFile->Execute())
