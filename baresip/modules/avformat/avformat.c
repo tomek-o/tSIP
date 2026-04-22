@@ -247,13 +247,12 @@ static int open_codec(struct stream *s, const struct AVStream *strm, int i,
 	if (!codec && use_codec) {
 		codec = avcodec_find_decoder(ctx->codec_id);
 		if (!codec) {
-			DEBUG_INFO("avformat: can't find codec %i\n", ctx->codec_id);
+			DEBUG_WARNING("avformat: can't find decoder for codec with id = %i\n", ctx->codec_id);
 			return ENOENT;
 		}
 	}
 
 	if (use_codec) {
-
 		ret = avcodec_open2(ctx, codec, NULL);
 		if (ret < 0) {
 			DEBUG_WARNING("avformat: error opening codec (%i)\n", ret);
@@ -478,7 +477,14 @@ int avformat_shared_alloc(struct shared **shp, const char *dev,
 		case AVMEDIA_TYPE_AUDIO:
 			err = open_codec(&st->au, strm, i, ctx, true);
 			if (err) {
-				DEBUG_WARNING("avformat: failed to open audio codec, err = %d\n", err);
+				const AVCodecDescriptor *desc = avcodec_descriptor_get(ctx->codec_id);
+				if (desc) {
+					DEBUG_WARNING("avformat: failed to open audio codec, codec id = %d, name = %s (%s), err = %d\n",
+						ctx->codec_id, desc->name, desc->long_name, err);
+				} else {
+					DEBUG_WARNING("avformat: failed to open audio codec, codec_id = %d (no descriptor found) err = %d\n",
+						ctx->codec_id, err);
+				}
 				if (video == false) {
 					goto out;
 				}
@@ -488,7 +494,14 @@ int avformat_shared_alloc(struct shared **shp, const char *dev,
 		case AVMEDIA_TYPE_VIDEO:
 			err = open_codec(&st->vid, strm, i, ctx, true /*!st->is_pass_through*/);
 			if (err) {
-				DEBUG_WARNING("avformat: failed to open video codec, err = %d\n", err);
+				const AVCodecDescriptor *desc = avcodec_descriptor_get(ctx->codec_id);
+				if (desc) {
+					DEBUG_WARNING("avformat: failed to open video codec, codec id = %d, name = %s (%s), err = %d\n",
+						ctx->codec_id, desc->name, desc->long_name, err);
+				} else {
+					DEBUG_WARNING("avformat: failed to open video codec, codec_id = %d (no descriptor found) err = %d\n",
+						ctx->codec_id, err);
+				}
 				if (video == true) {
 					goto out;
 				}
