@@ -29,6 +29,7 @@
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 #include "common/Os.h"
+#include "baresip_base_config.h"
 #include <Clipbrd.hpp>
 #include "CustomDateUtils.hpp"
 #include <psapi.h>
@@ -2310,6 +2311,17 @@ static int l_ShowLogWindow(lua_State* L)
 	return 0;
 }
 
+static int l_CheckSoftphoneVideoSupport(lua_State* L)
+{
+#ifdef USE_VIDEO
+	lua_pushboolean(L, true);
+#else
+	lua_pushboolean(L, false);
+#endif
+	return 1;
+}
+
+
 };	// ScriptImp
 
 
@@ -2569,6 +2581,8 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SetAppStatus, "SetAppStatus", "Set status visible as hint in system tray", "");
 
 	lua_register2(L, ScriptImp::l_ShowLogWindow, "ShowLogWindow", "Show and bring to front log window", "");
+
+	lua_register2(L, ScriptImp::l_CheckSoftphoneVideoSupport, "CheckSoftphoneVideoSupport", "Check if softphone is built with video support", "Can be used inside script requiring video support if it is not accidentally started with softphone version without video. Returns bool.\nlocal videoSupported = CheckSoftphoneVideoSupport()\nprint(\"Video support: \".. tostring(videoSupported) ..\"\\n\");");	
 
 	// add library
 	luaL_requiref(L, "tsip_winapi", luaopen_tsip_winapi, 0);
