@@ -1306,5 +1306,11 @@ Version 0.3.13
 	- added names + descriptions for registration states, with translation
 	- Lua: added GetRegStateName(state), GetRegStateDescription(state), GetRegStateTranslatedName(state), GetRegStateTranslatedDescription(state) helper functions for registration states
 	- fixed tab order in multiple windows
+
+Version 0.3.xx
+	- avformat module: added codec names and long names if codec opening failed
+	- video configuration window: fixed issue with open dialog not showing up when url was entered in source edit field
+	- Lua: added CheckSoftphoneVideoSupport() function - checking if softphone was built with video support
+	- Lua editor: use /scripts subfolder as default for open/save dialogs
 */
 

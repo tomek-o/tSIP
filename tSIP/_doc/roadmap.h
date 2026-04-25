@@ -106,7 +106,7 @@ CRM application communicating through TCPServer plugin
 - video recording
 - direction selection (sendonly/recvonly/sendrecv)
 - VP8, VP9 - could ffmpeg be used?
-- RTSP as video source - needs testing
+- RTSP as video source - unusable picture (very heavily distorted?) with my Vivotek IP8133W camera
 
 Bug (untested yet, but quite likely): bad audio quality after changing codec
 from G.711a to G.722 during the call after re-INVITE from FreePBX 16. Re-INVITE

@@ -76,6 +76,19 @@ bool GetNextLine(AnsiString &Line, AnsiString &buf, char &lastchar)
 	return false;
 }
 
+AnsiString GetDefaultDir(void)
+{
+	AnsiString lastDir = appSettings.ScriptWindow.lastDir;
+	if (lastDir != "" && DirectoryExists(lastDir))
+	{
+		return lastDir;
+	}
+	else
+	{
+		return Paths::GetProfileDir() + "\\scripts";
+	}
+}
+
 }	// namespace
 
 void TfrmLuaScript::SetCallbackRunScript(CallbackRunScript cb)
@@ -221,7 +234,7 @@ void __fastcall TfrmLuaScript::actFileOpenExecute(TObject *Sender)
 {
 	if (CheckFileNotSavedDialog())
 		return;
-	OpenDialog->InitialDir = appSettings.ScriptWindow.lastDir;
+	OpenDialog->InitialDir = GetDefaultDir();
 	if (OpenDialog->Execute())
 	{
 		appSettings.ScriptWindow.lastDir = ExtractFileDir(OpenDialog->FileName);
@@ -279,7 +292,7 @@ void __fastcall TfrmLuaScript::actFileSaveExecute(TObject *Sender)
 
 void __fastcall TfrmLuaScript::actFileSaveAsExecute(TObject *Sender)
 {
-	SaveDialog->InitialDir = appSettings.ScriptWindow.lastDir;
+	SaveDialog->InitialDir = GetDefaultDir();
 	if (asCurrentFile != "")
 	{
     	SaveDialog->FileName = asCurrentFile;
