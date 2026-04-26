@@ -2431,9 +2431,10 @@ void ScriptExec::Run(const char* script)
 		"  \tShowMessage(\"Result is other than \\\"Yes\\\"\")\n"
 		"  end  ");
 	lua_register2(L, ScriptImp::l_InputQuery, "InputQuery", "Display modal dialog allowing to take text input from the user", "Example: local text, isAccepted = InputQuery(caption, prompt, defaultText).");
-	lua_register2(L, ScriptImp::l_Sleep, "Sleep", "Pause script for specified time (miliseconds)", "Function returns non-zero if it exited due to user break, zero if full delay passed. Example: Sleep(100).");
+	lua_register2(L, ScriptImp::l_Sleep, "Sleep", "Pause script for specified time (miliseconds)", "Function returns 1 if it exited due to user break, returns 0 if full delay passed. Example: Sleep(100).");
+	lua_register2(L, ScriptImp::l_Sleep, "SleepWithCheckBreak", "Pause script for specified time (miliseconds)", "Function returns 1 if it exited due to user break, returns 0 if full delay passed. Example: SleepWithCheckBreak(100). Works same was as Sleep(delay), it is alias with more meaningful name.");
 	lua_register2(L, l_Beep, "Beep", "Equivalent of WinAPI Beep(frequency, time)", "Example: Beep(400, 250).");
-	lua_register2(L, ScriptImp::l_CheckBreak, "CheckBreak", "Check if \"Break\" button was pressed by the user", "Allowing to interrupt scripts");
+	lua_register2(L, ScriptImp::l_CheckBreak, "CheckBreak", "Check if \"Break\" button was pressed by the user", "Allowing to interrupt scripts. Returns 0 or 1.");
 	lua_register2(L, ScriptImp::l_GetClipboardText, "GetClipboardText", "Get clipboard content as text", "");
 	lua_register2(L, ScriptImp::l_SetClipboardText, "SetClipboardText", "Copy text to clipboard", "");
 	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "Equivalent of VCL function with same name.");
