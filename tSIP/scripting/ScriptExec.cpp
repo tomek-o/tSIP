@@ -377,7 +377,7 @@ static int l_Sleep(lua_State* L)
 	ScriptExec* context = GetContext(L);
 	if (context->breakReq)
 	{
-		ret = -1;
+		ret = 1;
 	}
 	else
 	{
@@ -385,7 +385,7 @@ static int l_Sleep(lua_State* L)
 		{
 			if (context->breakReq)
 			{
-				ret = -1;
+				ret = 1;
 				break;
 			}
 			Application->ProcessMessages();
@@ -393,7 +393,7 @@ static int l_Sleep(lua_State* L)
 			elapsed = timediff(t1, clock());
 			if (context->breakReq)
 			{
-				ret = -1;
+				ret = 1;
 				break;
 			}
 		}
