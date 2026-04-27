@@ -34,9 +34,9 @@ void TfrmTrayNotifier::TranslateForm(void* obj)
 
 __fastcall TfrmTrayNotifier::TfrmTrayNotifier(TComponent* Owner)
 	: TForm(Owner),
+	callUid(0),
 	OnHangup(NULL),
-	OnAnswer(NULL),
-	callUid(0)
+	OnAnswer(NULL)
 {
 	RegisterTranslationCb(this, TranslateForm);
 	Width = appSettings.trayNotifier.iWidth;
@@ -62,7 +62,7 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 	bool monitorFound = false;
 	for (int i=0; i<Screen->MonitorCount; i++)
 	{
-		TMonitor *monitor = Screen->Monitors[i];
+		const TMonitor *monitor = Screen->Monitors[i];
 		enum { MARGIN = 30 };
 		if (
 			(Left + Width + MARGIN >= monitor->Left) &&
@@ -79,7 +79,7 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 	{
 		if (Screen->MonitorCount > 0)
 		{
-			TMonitor *monitor = Screen->Monitors[0];
+			const TMonitor *monitor = Screen->Monitors[0];
 			if (monitor)
 			{
            		enum { MARGIN = 30 };

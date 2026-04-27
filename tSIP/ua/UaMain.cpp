@@ -898,7 +898,7 @@ static int app_start(void)
 	}
 	if (appSettings.uaConf.accounts.size() > 0)
 	{
-		UaConf::Account &acc = appSettings.uaConf.accounts[0];
+		const UaConf::Account &acc = appSettings.uaConf.accounts[0];
 		for (int i=0; i<appSettings.uaConf.contacts.size(); i++) {
 			UaConf::Contact contact = appSettings.uaConf.contacts[i];
 			if (contact.user == "")

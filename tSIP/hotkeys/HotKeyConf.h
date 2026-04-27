@@ -31,11 +31,12 @@ struct HotKeyConf
 		return true;
 	}
 
-	HotKeyConf(void) {
-		keyCode = "";
-		vkCode = -1;
-		modifiers = SHIFT | CTRL | ALT;
-		global = false;
+	HotKeyConf(void):
+		keyCode(""),
+		vkCode(-1),
+		modifiers(SHIFT | CTRL | ALT),
+		global(false)
+	{
 	}
 
 	AnsiString GetDescription(void) const;

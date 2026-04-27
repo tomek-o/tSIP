@@ -138,10 +138,9 @@ void TfrmMessage::AddIncomingMessage(AnsiString contentType, AnsiString body)
     memoMain->SelAttributes->Color = clBlack;
     memoMain->Paragraph->FirstIndent = 0;
 
-    int current_time = time(NULL);
-    char buf [30];
-	tm *t;
-	t = localtime ((long*)&current_time);
+	time_t currentTime = time(NULL);
+	const tm *t = localtime(&currentTime);
+	char buf [30];
 	strftime (buf, sizeof (buf), "%H:%M:%S", t);
 	int TODO__PEER_DISPLAY;
 	memoMain->Lines->Add ((AnsiString)"Peer: (" + buf + ") ");

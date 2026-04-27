@@ -43,8 +43,8 @@ __fastcall TProgrammableButton::TProgrammableButton(TComponent* Owner, TImageLis
 	blfRemoteIdentityDisplayCfg(ButtonConf::BLF_REMOTE_IDENTITY_DISPLAY_NAME_OR_NUMBER),
 	configuredLines(1),
 	raised(true),
-	onMouseUpDownCb(NULL),
-	bmpIdle(NULL), bmpTerminated(NULL), bmpEarly(NULL), bmpConfirmed(NULL)
+	bmpIdle(NULL), bmpTerminated(NULL), bmpEarly(NULL), bmpConfirmed(NULL),
+	onMouseUpDownCb(NULL)
 {
 	assert(imgList);
 

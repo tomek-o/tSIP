@@ -178,10 +178,10 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 	}
 
 	{
-		UaConf::Aec aec = static_cast<UaConf::Aec>(uaConfJson.get("aec", aec).asInt());
-		if (aec >= 0 && aec < UaConf::AEC_LIMIT)
+		UaConf::Aec tmpAec = static_cast<UaConf::Aec>(uaConfJson.get("aec", aec).asInt());
+		if (tmpAec >= 0 && tmpAec < UaConf::AEC_LIMIT)
 		{
-			this->aec = aec;
+			this->aec = tmpAec;
 		}
 	}
 

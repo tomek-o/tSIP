@@ -30,7 +30,7 @@ int l_WinapiSendMessage(lua_State* L)
 	unsigned int msg = lua_tointegerx(L, 2, NULL);
 	unsigned int wParam = lua_tointegerx(L, 3, NULL);
 	unsigned int lParam = lua_tointegerx(L, 4, NULL);
-	int ret = SendMessage((HWND)hWnd, msg, wParam, lParam);
+	int ret = SendMessage(reinterpret_cast<HWND>(hWnd), msg, wParam, lParam);
 	lua_pushnumber(L, ret);
 	return 1;
 }

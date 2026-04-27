@@ -34,7 +34,7 @@ struct SettingsAppVersion
 		FileVersionLS = 0;
 	}
 	void FromJson(const Json::Value &jv);
-	void ToJson(Json::Value &jv);
+	void ToJson(Json::Value &jv) const;
 	void FromAppExe(void);
 };					
 

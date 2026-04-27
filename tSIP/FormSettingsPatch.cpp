@@ -51,10 +51,10 @@ void __fastcall TfrmSettingsPatch::FormKeyDown(TObject *Sender, WORD &Key,
 
 void __fastcall TfrmSettingsPatch::WmDropFiles(TWMDropFiles& Message)
 {
-	char buff[MAX_PATH];
-	HDROP hDrop = (HDROP)Message.Drop;
+	HDROP hDrop = reinterpret_cast<HDROP>(Message.Drop);
 	int numFiles = DragQueryFile(hDrop, -1, NULL, NULL);
 	if (numFiles > 0) {
+		char buff[MAX_PATH];
 		DragQueryFile(hDrop, 0, buff, sizeof(buff));
 		TStringList *stringList = new TStringList;		
 		try

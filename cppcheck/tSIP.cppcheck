@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="1">
+    <platform>win32A</platform>
+    <analyze-all-vs-configs>false</analyze-all-vs-configs>
+    <check-headers>true</check-headers>
+    <check-unused-templates>true</check-unused-templates>
+    <inline-suppression>true</inline-suppression>
+    <max-ctu-depth>2</max-ctu-depth>
+    <max-template-recursion>100</max-template-recursion>
     <includedir>
-        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP/portaudio/include"/>
-        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP/re/include"/>
-        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP/rem/include"/>
-        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP/speex/include"/>
+        <dir name="../portaudio/include"/>
+        <dir name="../re/include"/>
+        <dir name="../rem/include"/>
+        <dir name="../baresip/include"/>
+        <dir name="../speex/include"/>
+        <dir name="../jsoncpp/include"/>
+        <dir name="../lua/src"/>
+        <dir name="../tSIP/buttons"/>
+        <dir name="../tSIP/hotkeys"/>
+        <dir name="../tSIP/phone"/>
+        <dir name="../tSIP/history"/>
+        <dir name="../tSIP/contacts"/>
+        <dir name="../tSIP/ua"/>
+        <dir name="../tSIP/scripting"/>
+        <dir name="../tSIP/"/>
+        <dir name="../"/>
     </includedir>
     <defines>
         <define name="WIN32"/>
+        <define name="__CPPCHECK__"/>
     </defines>
     <paths>
-        <dir name="D:/Dokumenty/_PROJEKTY/libre/tSIP"/>
+        <dir name="../tSIP"/>
     </paths>
+    <libraries>
+        <library>vcl</library>
+        <library>windows</library>
+    </libraries>
+    <suppressions>
+        <suppression>missingIncludeSystem</suppression>
+        <suppression>noExplicitConstructor</suppression>
+        <suppression>normalCheckLevelMaxBranches</suppression>
+        <suppression>useStlAlgorithm</suppression>
+        <suppression>stricmpCalled</suppression>
+    </suppressions>
+    <check-level-normal/>
 </project>

@@ -18,6 +18,10 @@ protected:
         changed = false;
     }
 public:
+	Observable(void):
+		changed(false)
+	{
+	}
     virtual void addObserver(Observer& o)
     {
         observers.insert(&o);

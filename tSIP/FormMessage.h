@@ -41,14 +41,14 @@ public:		// User declarations
 	void __fastcall MyWndProc (Messages::TMessage &Msg);
 	void _SendMsg();
 	void SetTarget(AnsiString target);
-	AnsiString GetTarget(void) {
+	AnsiString GetTarget(void) const {
 		return target;
 	}
 	void SetIncoming(void) {
 		incoming = true;
 	}
-	bool GetIncoming(void) {
-    	return incoming;
+	bool GetIncoming(void) const {
+		return incoming;
 	}
 	void AddIncomingMessage(AnsiString contentType, AnsiString body);
 	int HandleMessageStatus(int requestUid, int requestError, int sipCode, AnsiString reason);

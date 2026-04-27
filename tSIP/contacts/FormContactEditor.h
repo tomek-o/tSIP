@@ -55,7 +55,7 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmContactEditor(TComponent* Owner);
 	int __fastcall Start(Contacts::Entry *entry, bool storeNoteInSeparateFile);
-	bool isConfirmed(void) {
+	bool isConfirmed(void) const {
 		return confirmed;
 	}
 };

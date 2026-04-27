@@ -91,7 +91,7 @@ unsigned int CountIncomingForms(void)
 	unsigned int incomingCount = 0;
 	for (iter = messageWindows.begin(); iter != messageWindows.end(); ++iter)
 	{
-		TfrmMessage *frmIter = *(iter);
+		const TfrmMessage *frmIter = *(iter);
 		if (frmIter->GetIncoming())
 		{
 			incomingCount++;

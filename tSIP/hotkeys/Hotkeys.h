@@ -19,7 +19,7 @@ public:
 	HotKeys(void);
 	/** \brief Find key in configuration
 	*/
-	const HotKeyConf* Find(const std::list<HotKeyConf> &conf, WORD &Key, TShiftState Shift, bool global);
+	const HotKeyConf* Find(const std::list<HotKeyConf> &conf, WORD Key, TShiftState Shift, bool global);
 	const HotKeyConf* FindGlobal(int id);
 	int RegisterGlobal(const std::list<HotKeyConf> &conf, HWND hwnd);
 	void Unregister(HWND hwnd);

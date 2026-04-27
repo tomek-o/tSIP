@@ -12,7 +12,7 @@ TfrmButtonCopy *frmButtonCopy = NULL;
 
 //---------------------------------------------------------------------------
 __fastcall TfrmButtonCopy::TfrmButtonCopy(TComponent* Owner)
-	: TForm(Owner), buttons(buttons)
+	: TForm(Owner), buttons(NULL)
 {
 
 }
@@ -25,7 +25,7 @@ void TfrmButtonCopy::SetButtons(ProgrammableButtons *buttons, int sourceBtnId)
 	cbTargetTo->Items->Clear();
 	for (int i=0; i<buttons->btnConf.size(); i++) {
 		AnsiString caption;
-		ButtonConf &cfg = buttons->btnConf[i];
+		const ButtonConf &cfg = buttons->btnConf[i];
 		if (cfg.caption != "")
 			caption.sprintf("%d: %s", i, cfg.caption.c_str());
 		else
@@ -69,7 +69,7 @@ void __fastcall TfrmButtonCopy::btnApplyClick(TObject *Sender)
 		for (int i=0; i<cbTarget->Items->Count; i++)
 		{
 			int dst = i;
-			ButtonConf &btnDst = buttons->btnConf[dst];
+			const ButtonConf &btnDst = buttons->btnConf[dst];
 			if (btnDst.visible == false)
 			{
 				continue;

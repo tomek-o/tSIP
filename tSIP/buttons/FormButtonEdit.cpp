@@ -282,10 +282,10 @@ void TfrmButtonEdit::ApplyConf(void)
 		style << fsStrikeOut;
 	edCaption2Font->Font->Style = style;
 
-	cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod.c_str());
-	cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod.c_str());
+	cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod);
+	cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod);
 
-	cbVideoInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(cfg->videoRxMod.c_str());
+	cbVideoInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(cfg->videoRxMod);
 	cbVideoInputModChange(NULL);
 	edVideoInputFile->Text = cfg->videoRxMod.c_str();
 
@@ -498,7 +498,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 			refreshAudioDevList = false;
 			AudioDevicesList::Instance().Refresh();
 		}
-		cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod.c_str());
+		cbSoundInputMod->ItemIndex = AudioModules::GetInputModuleCbIndex(cfg->audioRxMod);
 		cbSoundInputModChange(NULL);
 
 		break;
@@ -512,7 +512,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 			refreshAudioDevList = false;
 			AudioDevicesList::Instance().Refresh();
 		}
-		cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod.c_str());
+		cbSoundOutputMod->ItemIndex = AudioModules::GetOutputModuleCbIndex(cfg->audioTxMod);
 		cbSoundOutputModChange(NULL);
 
 		break;
@@ -535,7 +535,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 			refreshVideoDevList = false;
 			VideoDevicesList::Instance().Refresh();
 		}
-		cbVideoInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(cfg->videoRxMod.c_str());
+		cbVideoInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(cfg->videoRxMod);
 		cbVideoInputModChange(NULL);	
 		break;
 
@@ -547,7 +547,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 void __fastcall TfrmButtonEdit::SelectImgClick(TObject *Sender)
 {
 	TEdit *edit = NULL;
-	TButton *btn = dynamic_cast<TButton*>(Sender);
+	const TButton *btn = dynamic_cast<TButton*>(Sender);
 	if (btn == btnSelectImgIdle)
 		edit = edImgIdle;
 	else if (btn == btnSelectImgTerminated)
@@ -846,7 +846,7 @@ void TfrmButtonEdit::UpdateColorView(void)
 {
 	if (cbColorElement->ItemIndex < 0)
 		cbColorElement->ItemIndex = 0;
-	ButtonConf::Color &color = colors[cbColorElement->ItemIndex];
+	const ButtonConf::Color &color = colors[cbColorElement->ItemIndex];
 	
 	int colorId;
 
@@ -907,7 +907,7 @@ void TfrmButtonEdit::UpdateColors(void)
 
 void TfrmButtonEdit::UpdateColorsPreview(void)
 {
-	ButtonConf::Color &color = colors[cbColorElement->ItemIndex];
+	const ButtonConf::Color &color = colors[cbColorElement->ItemIndex];
 	shColorIdle->Brush->Color = static_cast<TColor>(color.idle);
 	shColorInactive->Brush->Color = static_cast<TColor>(color.inactive);
 	shColorInactiveDown->Brush->Color = static_cast<TColor>(color.inactiveDown);

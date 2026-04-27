@@ -32,7 +32,7 @@ ControlQueue::ControlQueue()
 int ControlQueue::GetCommand(Command& cmd)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *tmpcmd = fifo.getReadable();
+	const Command *tmpcmd = fifo.getReadable();
 	if (tmpcmd == NULL)
 	{
 		return 1;

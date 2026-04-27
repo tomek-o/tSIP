@@ -97,7 +97,11 @@ ProgrammableButtons::ProgrammableButtons(void):
 	panelMovingGroup(false),
 	panelIsResizing(false),
 	editedPanelId(-1),
-	scalingPercentage(100)	
+	scalingPercentage(100),
+	callbackClick(NULL),
+	callbackMouseUpDown(NULL),
+	callbackSetKeepForeground(NULL),
+	callbackRestartUa(NULL)
 {
 	btnConf.resize(GetTotalCnt());
 
@@ -419,7 +423,6 @@ void ProgrammableButtons::SetInitialSettings(void)
 	cfg->label2Left = 4;
 	cfg->label2Top = 17;	
 	cfg->label2CenterHorizontally = false;	
-	cfg->labelLeft = 4;
 	cfg->type = Button::HTTP_QUERY;
 	top += HEIGHT;
 	cfg->top = top;

@@ -12,8 +12,8 @@
 #pragma package(smart_init)
 
 ButtonContainerConf::ButtonContainerConf(void):
-	backgroundColor(clBtnFace),
-	backgroundImageTransparent(false)
+	backgroundImageTransparent(false),
+	backgroundColor(clBtnFace)
 {
 }
 

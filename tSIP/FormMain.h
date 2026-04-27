@@ -202,7 +202,7 @@ private:	// User declarations
 	bool muteRing;
 	void AutoAnswer(Call &call);
 	void ProgrammableButtonClick(int buttonId);
-	void StartRing(Call &call, AnsiString wavFile = "ring.wav");
+	void StartRing(const Call &call, AnsiString wavFile = "ring.wav");
 	AnsiString RingFile(AnsiString alertInfo);
 	void Redial(void);
 	void HttpQuery(const Call* call);
@@ -271,11 +271,13 @@ public:		// User declarations
 	void SetTrayIconHint(AnsiString text);
 	void InitButtons(void);	
 
+#ifndef __CPPCHECK__
 	BEGIN_MESSAGE_MAP
 		MESSAGE_HANDLER(WM_COPYDATA, TWMCopyData, WMCopyData)
 		MESSAGE_HANDLER(WM_ENDSESSION, TWMEndSession, WMEndSession)
 		VCL_MESSAGE_HANDLER(WM_HOTKEY, TWMHotKey, WMHotKey)
 	END_MESSAGE_MAP(TForm)
+#endif	
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmMain *frmMain;

@@ -24,8 +24,7 @@ class ProgrammableButtons
 {
 private:
 	// non-copyable: contains VCL components
-	ProgrammableButtons(const ProgrammableButtons& source) {
-	};
+	ProgrammableButtons(const ProgrammableButtons& source);
 	ProgrammableButtons& operator=(const ProgrammableButtons&);
 
     TdmButtons *dmButtons;

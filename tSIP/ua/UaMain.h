@@ -9,7 +9,9 @@
 class Ua
 {
 private:
-	Ua() {
+	Ua():
+		thread(NULL)
+	{
 	};
 	Ua(const Ua& source);
 	Ua& operator=(const Ua&);

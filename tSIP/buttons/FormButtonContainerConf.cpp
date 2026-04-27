@@ -53,7 +53,7 @@ void __fastcall TfrmButtonContainerConf::FormShow(TObject *Sender)
 void __fastcall TfrmButtonContainerConf::btnSelectBackgroundBitmapClick(
       TObject *Sender)
 {
-	AnsiString &fname = tmpConfig.backgroundImage;
+	const AnsiString &fname = tmpConfig.backgroundImage;
 	openDialog->Filter = "Bitmaps (*.bmp)|*.bmp|All files|*.*";
 	AnsiString dir = ExtractFileDir(Application->ExeName) + "\\img\\";
 	openDialog->InitialDir = dir;

@@ -288,7 +288,7 @@ public:
 		return -1;
 	}
 
-	const struct ConnectionInfo& GetConnectionInfo(void) {
+	const struct ConnectionInfo& GetConnectionInfo(void) const {
 		return connInfo;
 	}
 

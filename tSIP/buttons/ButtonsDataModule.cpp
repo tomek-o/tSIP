@@ -22,12 +22,14 @@ void __fastcall TdmButtons::popupPanelPopup(TObject *Sender)
 	TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(popupPanel->PopupComponent);
 	assert(panel);
 	int id = panel->Tag;
-
-	AnsiString text;
 	const ButtonConf &cfg = buttons.btnConf[id];
-	AnsiString typeText = Button::TypeName(cfg.type);
-	text.sprintf("Button #%d: %s", id, typeText.c_str());;
-	miInfo->Caption = text;
+
+	{
+		AnsiString text;
+		AnsiString typeText = Button::TypeName(cfg.type);
+		text.sprintf("Button #%d: %s", id, typeText.c_str());;
+		miInfo->Caption = text;
+	}
 
 	// "button group" = buttons with higher id placed on the button with lower id,
 	// working as kind of background/frame

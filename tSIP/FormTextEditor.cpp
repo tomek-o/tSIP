@@ -20,11 +20,11 @@ using namespace Scintilla;
 //---------------------------------------------------------------------------
 __fastcall TfrmTextEditor::TfrmTextEditor(TComponent* Owner)
 	: TForm(Owner),
-	callbackTextChange(NULL),
 	m_se(NULL),
 	fontName("Courier New"),
 	fontSize(10),
-	scStyle(SC_STYLE_LUA)	
+	callbackTextChange(NULL),
+	scStyle(SC_STYLE_LUA)
 {
 	static bool once = false;
 	if (!once)
@@ -89,7 +89,7 @@ void __fastcall TfrmTextEditor::WMNotify(TMessage &Message)
         {
 		case SCN_MARGINCLICK:
 		{
-			SCNotification* notify = (SCNotification*)Message.LParam;
+			const SCNotification* notify = reinterpret_cast<const SCNotification*>(Message.LParam);
 
             //const int modifiers = notify->modifiers;
             const int position = notify->position;
@@ -138,7 +138,7 @@ void __fastcall TfrmTextEditor::WMNotify(TMessage &Message)
 #if 0
 		case SCN_HOTSPOTRELEASECLICK:
 		{
-			SCNotification* notify = (SCNotification*)Message.LParam;
+			SCNotification* notify = reinterpret_cast<SCNotification*>(Message.LParam);
 			int startPosition = m_se->SendEditor(SCI_WORDSTARTPOSITION, notify->position, false);
 			int endPosition = m_se->SendEditor(SCI_WORDENDPOSITION, notify->position, false);
 
@@ -166,7 +166,7 @@ void TfrmTextEditor::Search(AnsiString text, const TStringSearchOptions &so)
 		m_se->SendEditor(SCI_CHARRIGHT);
 		m_se->SendEditor(SCI_SEARCHANCHOR);
 		m_se->SendEditor(SCI_SEARCHNEXT,
-			so.Contains(soMatchCase)?SCFIND_MATCHCASE:0 | so.Contains(soWholeWord)?SCFIND_WHOLEWORD:0,
+			(so.Contains(soMatchCase)?SCFIND_MATCHCASE:0) | (so.Contains(soWholeWord)?SCFIND_WHOLEWORD:0),
 			(LPARAM)text.c_str());
 		m_se->SendEditor(SCI_SCROLLCARET);
 	}
@@ -174,7 +174,7 @@ void TfrmTextEditor::Search(AnsiString text, const TStringSearchOptions &so)
 	{
 		m_se->SendEditor(SCI_SEARCHANCHOR);
 		m_se->SendEditor(SCI_SEARCHPREV,
-			so.Contains(soMatchCase)?SCFIND_MATCHCASE:0 | so.Contains(soWholeWord)?SCFIND_WHOLEWORD:0,
+			(so.Contains(soMatchCase)?SCFIND_MATCHCASE:0) | (so.Contains(soWholeWord)?SCFIND_WHOLEWORD:0),
 			(LPARAM)text.c_str());
 		m_se->SendEditor(SCI_SCROLLCARET);
 	}
@@ -237,7 +237,7 @@ AnsiString TfrmTextEditor::GetTextRange(int startPosition, int endPosition)
 	Sci_TextRange tr;
 	tr.chrg.cpMin = startPosition;
 	tr.chrg.cpMax = endPosition;
-	tr.lpstrText = (char*)text.data();
+	tr.lpstrText = const_cast<char*>(static_cast<const char*>(text.data()));
 	m_se->SendEditor(SCI_GETTEXTRANGE, 0, (WPARAM)&tr);
 	text.SetLength(nLength);		// remove trailing null-termination (not a part of AnsiString)
 	return text;

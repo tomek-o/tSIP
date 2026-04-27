@@ -29,7 +29,7 @@ CallbackQueue::CallbackQueue()
 int CallbackQueue::GetCallback(Callback& cb)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *tmpcb = fifo.getReadable();
+	const Callback *tmpcb = fifo.getReadable();
 	if (tmpcb == NULL)
 	{
 		return 1;

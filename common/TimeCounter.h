@@ -38,7 +38,7 @@ public:
 		}
 	}
 
-	double getTimeMs(void)
+	double getTimeMs(void) const
 	{
 		LARGE_INTEGER endTime;
 		double nCalcTime;

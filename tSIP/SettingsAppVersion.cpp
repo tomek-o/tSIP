@@ -14,7 +14,7 @@ void SettingsAppVersion::FromJson(const Json::Value &jv)
 	}
 }
 
-void SettingsAppVersion::ToJson(Json::Value &jv)
+void SettingsAppVersion::ToJson(Json::Value &jv) const
 {
 	jv["FileVersionMS"] = FileVersionMS;
 	jv["FileVersionLS"] = FileVersionLS;

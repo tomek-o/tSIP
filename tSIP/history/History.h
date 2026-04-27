@@ -69,6 +69,10 @@ public:
 		}
 	};
 
+	History(void):
+		callbackGetContactName(NULL)
+	{
+	}
 	void AddEntry(Entry& entry);
 	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString uri);	
 private:

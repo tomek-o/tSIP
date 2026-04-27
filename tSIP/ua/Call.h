@@ -40,7 +40,7 @@ public:
 	Callback::ua_state_e GetState(void) const {
 		return state;
 	}
-	void ShowOnLineButton(void);
+	void ShowOnLineButton(void) const;
 	int lastScode;			///< last SIP code (on disconnected)
 	AnsiString lastReplyLine;
 	AnsiString recordFile;

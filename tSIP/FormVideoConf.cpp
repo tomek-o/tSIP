@@ -39,7 +39,7 @@ void TfrmVideoConf::SetCfg(VideoConf *cfg, UaConf *uaCfg)
 
 	chbEnabled->Checked = cfg->enabled;
 
-	cbInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(uaCfg->video.videoSource.mod.c_str());
+	cbInputMod->ItemIndex = VideoModules::GetInputModuleCbIndex(uaCfg->video.videoSource.mod);
 	cbInputModChange(NULL);
 
 	if (uaCfg->video.videoSource.mod == VideoModules::avformat)
@@ -47,7 +47,7 @@ void TfrmVideoConf::SetCfg(VideoConf *cfg, UaConf *uaCfg)
 		edInputFile->Text = uaCfg->video.videoSource.dev.c_str();
 	}
 
-	cbOutputMod->ItemIndex = VideoModules::GetOutputModuleCbIndex(uaCfg->video.videoDisplay.mod.c_str());
+	cbOutputMod->ItemIndex = VideoModules::GetOutputModuleCbIndex(uaCfg->video.videoDisplay.mod);
     cbOutputModChange(NULL);
 
 	cbDisplayParentType->ItemIndex = cfg->displayParentType;

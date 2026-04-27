@@ -40,12 +40,13 @@ __fastcall TfrmButtonContainer::TfrmButtonContainer(TComponent* Owner,
 	bool showStatus, int statusPanelHeight, bool hideEmptyStatus)
 	:
 	TForm(Owner),
-	buttons(buttons), containerId(containerId),
+	containerId(containerId),
 	callbackSetKeepForeground(callbackSetKeepForeground),
 	scalingPercentage(scalingPercentage),
 	showStatus(showStatus),
 	hideEmptyStatus(hideEmptyStatus),
-	editedPanelId(0)
+	editedPanelId(0),
+	buttons(buttons)
 {
 	assert(callbackSetKeepForeground);
 	if (width > 0)
@@ -139,7 +140,7 @@ void TfrmButtonContainer::FillButtonsPopup(TMenuItem* miParent, TNotifyEvent onC
 		}
 		item->AutoHotkeys = maManual;
 		AnsiString caption = "[empty caption]";
-		ButtonConf &cfg = buttons.btnConf[i];
+		const ButtonConf &cfg = buttons.btnConf[i];
 		if (cfg.caption != "")
 		{
 			enum { BUTTON_CAPTION_MAX_DISPLAY_LENGTH = 64 };

@@ -1006,7 +1006,7 @@ void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
 {
 	if (pagingTx.active)
 		return;
-	Call* call = Calls::GetCurrentCall();
+	const Call* call = Calls::GetCurrentCall();
 	if (call == NULL)
 	{
 		AnsiString target = cbCallURI->Text.Trim();
@@ -1074,7 +1074,7 @@ int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 
 void __fastcall TfrmMain::btnHangupClick(TObject *Sender)
 {
-	Call* call = Calls::GetCurrentCall();
+	const Call* call = Calls::GetCurrentCall();
 	if (call)
 	{
 		Hangup(call->uid);
@@ -3622,7 +3622,7 @@ void TfrmMain::ProgrammableButtonClick(int buttonId)
 		btn->OnClick(btn);
 }
 
-void TfrmMain::StartRing(Call &call, AnsiString wavFile)
+void TfrmMain::StartRing(const Call &call, AnsiString wavFile)
 {
 	UA->StartRing(call.uid, wavFile);
 	PhoneInterface::UpdateRing(1);
@@ -4396,7 +4396,7 @@ void __fastcall TfrmMain::miTransferPasteClick(TObject *Sender)
 void __fastcall TfrmMain::miTransferPasteAndTransferClick(TObject *Sender)
 {
 	SendMessage(edTransfer->Handle, WM_PASTE, 0, 0);
-	Call *call = Calls::GetCurrentCall();
+	const Call *call = Calls::GetCurrentCall();
 	if (call)
 	{
 		UA->Transfer(call->uid, edTransfer->Text);

@@ -25,8 +25,8 @@ void __fastcall TfrmPhones::lvDllsData(TObject *Sender, TListItem *Item)
 
 	Item->Caption = iter->dllName;
 #else
-	DllInfo &info = PhoneInterface::dlls[id];
-	PhoneConf *pconf = FindCfg(info.name);
+	const DllInfo &info = PhoneInterface::dlls[id];
+	const PhoneConf *pconf = FindCfg(info.name);
 	if (pconf)
 	{
     	Item->Caption = "yes";
@@ -68,7 +68,7 @@ void TfrmPhones::ToggleActivation(void)
 	if (!lvDlls->Selected)
 		return;
 	int id = lvDlls->Selected->Index;
-	DllInfo &info = PhoneInterface::dlls[id];
+	const DllInfo &info = PhoneInterface::dlls[id];
 	AnsiString dllName = info.name;
 	std::list<PhoneConf>::iterator iter;
 	for (iter = cfg->begin(); iter != cfg->end(); ++iter)

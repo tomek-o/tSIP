@@ -28,7 +28,7 @@ private:	// User declarations
 public:		// User declarations
 	void SetData(Contacts::Entry *entry, bool storeNoteInSeparateFile);
 	__fastcall TfrmContactPopup(TComponent* Owner);
-	bool isNoteModified(void);
+	bool isNoteModified(void) const;
 	void InvalidateData(void);
 	void AppendNoteText(AnsiString text);
 	void UpdateEntry(void);

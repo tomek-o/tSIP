@@ -216,10 +216,10 @@ public:
 		float volume;
 		float volumeMulti;		/**< Volume used for ring if there is > 1 call */
 		AudioCfg(void):
+			mod(AudioModules::winwave2),
 			volume(1.0f),
 			volumeMulti(0.25f)
 		{
-			mod = AudioModules::winwave2;
 		}
 		bool operator==(const AudioCfg& right) const;
 		bool operator!=(const AudioCfg& right) const {
@@ -715,25 +715,26 @@ public:
 		}
 	} video;
 
-	UaConf() {
- 		disableUa = false;
-		aec = AEC_NONE;
-		logMessages = false;
-		logMessagesOnlyFirstLine = false;
-		logAubuf = false;
-		loopRingWithoutSilence = false;
-		startAudioSourceAtCallStart = false;
-		noIpBind = false;
-		autoAnswer = false;
-		autoAnswerCode = 200;
-		autoAnswerReason = "OK";
-		autoAnswerDelayMin = 0;
-		autoAnswerDelayMax = 0;
-		autoAnswerCallInfo = false;
-		autoAnswerCallInfoDelayMin = 0;
-		answerOnEventTalk = false;
-		handleOodRefer = false;
-		customUserAgent = false;
+	UaConf():
+		disableUa(false),
+		logMessages(false),
+		logMessagesOnlyFirstLine(false),
+		logAubuf(false),
+		startAudioSourceAtCallStart(false),
+		loopRingWithoutSilence(false),
+		aec(AEC_NONE),
+		noIpBind(false),
+		autoAnswer(false),
+		autoAnswerCode(200),
+		autoAnswerReason("OK"),
+		autoAnswerDelayMin(0),
+		autoAnswerDelayMax(0),
+		autoAnswerCallInfo(false),
+		autoAnswerCallInfoDelayMin(0),
+		answerOnEventTalk(false),
+		handleOodRefer(false),
+		customUserAgent(false)
+	{
 		contacts.resize(CONTACTS_CNT);
 	}
 

@@ -18,19 +18,18 @@ namespace {
 
 	std::string UrlDecode(const std::string &SRC) {
 		std::string ret;
-		char ch;
-		int i, ii;
+		unsigned int i, ii;
 		for (i=0; i<SRC.length(); i++) {
-			if (int(SRC[i])=='%') {
+			if (int(SRC[i]) == '%') {
 				sscanf(SRC.substr(i+1,2).c_str(), "%x", &ii);
-				ch=static_cast<char>(ii);
-				ret+=ch;
-				i=i+2;
+				char ch = static_cast<char>(ii);
+				ret += ch;
+				i = i+2;
 			} else {
-				ret+=SRC[i];
+				ret += SRC[i];
 			}
 		}
-		return (ret);
+		return ret;
 	}
 
 	const char* PROGRAMMABLE_BTN_STR = "PROGRAMMABLE_BTN_";
@@ -142,11 +141,13 @@ void CommandLine::Execute(char* buf, int paramcnt)
 				asParam.SubString(strlen(szCallParam)+1, asParam.Length() - strlen(szCallParam)).Trim();
 
 			AnsiString asCommandPart;
-			int i = asCallTo.Pos(":");
-			if (i && i < 9)
-				asCommandPart = asCallTo.SubString(i+1, asCallTo.Length()-i);
-			else
-				asCommandPart = asCallTo;
+			{
+				int pos = asCallTo.Pos(":");
+				if (pos && pos < 9)
+					asCommandPart = asCallTo.SubString(pos+1, asCallTo.Length()-pos);
+				else
+					asCommandPart = asCallTo;
+			}
 
 			asCallTo = UrlDecode(asCallTo.c_str()).c_str();
 

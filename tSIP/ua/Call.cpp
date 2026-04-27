@@ -125,7 +125,7 @@ AnsiString Call::getStateTranslatedDescription(void) const
 	return Callback::GetCallStateTranslatedDescription(state);
 }
 
-void Call::ShowOnLineButton(void)
+void Call::ShowOnLineButton(void) const
 {
 	if (btnId < 0)
 		return;

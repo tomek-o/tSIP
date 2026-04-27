@@ -84,25 +84,25 @@ public:
 	AnsiString GetCaption(void) const;
 	AnsiString GetCaption2(void) const;
 	void SetState(enum dialog_info_status state, bool updateRemoteIdentity, enum dialog_info_direction direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
-	enum dialog_info_status GetState(void) {
+	enum dialog_info_status GetState(void) const {
 		return state;
 	}
 	void SetDown(bool state);
-	bool GetDown(void)
+	bool GetDown(void) const
 	{
-    	return down;
+		return down;
 	}
 	bool GetMouseDown(void) const
 	{
 		return mouseDownState;
 	}
 	void SetInactive(bool state);
-	bool GetInactive(void)
+	bool GetInactive(void) const
 	{
 		return inactive;
 	}
 	void SetVisible(bool state);
-	bool GetVisible(void)
+	bool GetVisible(void) const
 	{
 		return visible;
 	}
@@ -112,10 +112,7 @@ public:
 	void ClearPresenceState(void);
 	void UpdateCallbacks(void);
 	void SetScaling(int percentage) {
-		if (scalingPercentage != percentage)
-		{
-			scalingPercentage = percentage;
-		}
+		scalingPercentage = percentage;
 	}
 	void SetMouseUpDownCallback(CallbackMouseUpDown cb)
 	{

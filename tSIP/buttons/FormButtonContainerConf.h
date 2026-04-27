@@ -50,7 +50,7 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmButtonContainerConf(TComponent* Owner);
 	void __fastcall ShowModal(int containerId, ButtonContainerConf *cfg);
-	bool isConfirmed(void) {
+	bool isConfirmed(void) const {
 		return confirmed;
 	}	
 };

@@ -25,11 +25,11 @@ inline void strncpyz(char* dst, const char* src, int dstsize) {
 	dst[dstsize-1] = '\0';
 }
 
-Font::Font(void)
+Font::Font(void):
+	name("Tahoma"),
+	size(8),
+	style(TFontStyles())
 {
-	name = "Tahoma";
-	size = 8;
-	style = TFontStyles();
 }
 
 Settings::BrandingInitializer::BrandingInitializer(void)
@@ -72,9 +72,9 @@ Settings::_frmMain::_frmMain(void):
 	bHideHelp(false),
 	bKioskMode(false),
 	bHideStatusBar(false),
-	bBorderless(false),
 	bHideMainMenu(false),
 	bHideDialpad(false),
+	bBorderless(false),
 	bHideSpeedDialToggleButton(false),
 	bHideMouseCursor(false),
 	bShowWhenAnsweringCall(false),
@@ -95,10 +95,10 @@ Settings::_frmSpeedDial::_frmSpeedDial(void):
 	useGrid(true),
 	gridSize(_frmSpeedDial::DEFAULT_GRID_SIZE),
 	showStatus(false),
+	statusPanelHeight(_frmSpeedDial::DEF_STATUS_PANEL_HEIGHT),
 	hideEmptyStatus(false),
 	dragApplicationWithButtonContainer(false),
-	saveAllSettings(false),
-	statusPanelHeight(_frmSpeedDial::DEF_STATUS_PANEL_HEIGHT)
+	saveAllSettings(false)
 {
 }
 
@@ -377,10 +377,6 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		}
 	}
 
-	int maxX = GetSystemMetrics(SM_CXSCREEN);
-	/** \todo Ugly fixed taskbar margin */
-	int maxY = GetSystemMetrics(SM_CYSCREEN) - 32;
-
 	{
 		const Json::Value &frmMainJson = root["frmMain"];
 		int iWidth = frmMainJson.get("AppCollapsedWidth", frmMain.collapsedWidth).asInt();
@@ -417,16 +413,6 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMainJson.getInt("MainPanelExpandedTop", frmMain.expandedMainPanelTop);
 
 		frmMain.bSpeedDialVisible = frmMainJson.get("SpeedDialVisible", frmMain.bSpeedDialVisible).asBool();
-		if (frmMain.bSpeedDialVisible)
-		{
-			iWidth = frmMain.expandedWidth;
-			iHeight = frmMain.expandedHeight;
-		}
-		else
-		{
-			iWidth = frmMain.collapsedWidth;
-			iHeight = frmMain.collapsedHeight;
-		}
 
 		frmMainJson.getBool("UseClientAreaSizes", frmMain.bUseClientAreaSizes);
 

@@ -76,7 +76,7 @@ Call* Calls::FindByUid(unsigned int uid)
 		return &iter->second;
 }
 
-Call* Calls::FindByAutoAnswerTimer(Extctrls::TTimer *tmr)
+Call* Calls::FindByAutoAnswerTimer(const Extctrls::TTimer *tmr)
 {
 	std::map<unsigned int, Call>::iterator iter;
 	for (iter = entries.begin(); iter != entries.end(); ++iter)
@@ -112,7 +112,7 @@ int Calls::SetCurrentCallUid(unsigned int uid)
 	ScopedLock<Mutex> lock(mutex);
 	if (currentCallUid == uid)
 		return 0;
-	Call* call = FindByUid(uid);
+	const Call* call = FindByUid(uid);
 	if (call == NULL)
 		return -1;
 	if (call->btnId >= 0)
@@ -210,10 +210,10 @@ int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 			for (std::set<unsigned int>::iterator iter = lineButtonIds.begin(); iter != lineButtonIds.end(); ++iter)
 			{
 				unsigned int id = *iter;
-				TProgrammableButton *btn = buttons.GetBtn(*iter);
+				const TProgrammableButton *btn = buttons.GetBtn(*iter);
 				if (!btn || !btn->GetDown())
 					continue;
-				Call *callFromBtn = FindCallFromLineButton(id);
+				const Call *callFromBtn = FindCallFromLineButton(id);
 				if (callFromBtn == NULL)
 				{
 					call->btnId = id;
@@ -228,7 +228,7 @@ int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 		for (std::set<unsigned int>::iterator iter = lineButtonIds.begin(); iter != lineButtonIds.end(); ++iter)
 		{
 			unsigned int id = *iter;
-			Call *callFromBtn = FindCallFromLineButton(id);
+			const Call *callFromBtn = FindCallFromLineButton(id);
 			if (callFromBtn == NULL)
 			{
 				call->btnId = id;
@@ -252,7 +252,7 @@ int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 				}
 				else
 				{
-					TProgrammableButton *btn = buttons.GetBtn(*iter);
+					const TProgrammableButton *btn = buttons.GetBtn(*iter);
 					if (btn && btn->GetDown())
 					{
 						currentCallUid = call->uid;

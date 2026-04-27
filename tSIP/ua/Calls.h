@@ -14,7 +14,7 @@ namespace Calls
 {
 	Call* Alloc(void);
 	Call* FindByUid(unsigned int uid);
-	Call* FindByAutoAnswerTimer(Extctrls::TTimer *tmr);
+	Call* FindByAutoAnswerTimer(const Extctrls::TTimer *tmr);
 	void RemoveByUid(unsigned int uid);
 	Call* GetCurrentCall(void);
 	unsigned int GetCurrentCallUid(void);

@@ -30,10 +30,10 @@ void TrayNotifierConf::ElementConf::toJson(Json::Value &jv) const
 }
 
 TrayNotifierConf::TrayNotifierConf(void):
-	iHeight(105),
-	iWidth(213),
 	iPosX(30),	// overriden later, depending on screen size
 	iPosY(30),	// overriden later, depending on screen size
+	iHeight(105),
+	iWidth(213),
 	showOnIncoming(false),
 	skipIfMainWindowVisible(false),
 	showOnOutgoing(false),

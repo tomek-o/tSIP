@@ -477,7 +477,8 @@ void __fastcall TfrmLuaScript::WMDropFiles(TWMDropFiles &message)
     AnsiString FileName;
     FileName.SetLength(MAX_PATH);
 
-	int Count = DragQueryFile((HDROP)message.Drop, 0xFFFFFFFF, NULL, MAX_PATH);
+	HDROP hDrop = reinterpret_cast<HDROP>(message.Drop);
+	int Count = DragQueryFile(hDrop, 0xFFFFFFFF, NULL, MAX_PATH);
 
 	// ignore all files but first one
 	if (Count > 1)
@@ -492,13 +493,13 @@ void __fastcall TfrmLuaScript::WMDropFiles(TWMDropFiles &message)
 			// looks cryptic but that's only because it is. Hey, Why do you think
 			// Delphi and C++Builder are so popular anyway? Look up DragQueryFile
 			// the Win32.hlp Windows API help file.
-			FileName.SetLength(DragQueryFile((HDROP)message.Drop, index,FileName.c_str(), MAX_PATH));
+			FileName.SetLength(DragQueryFile(hDrop, index,FileName.c_str(), MAX_PATH));
             //appSettings.Editor.asDefaultDir = ExtractFileDir(FileName);
 			OpenFile(FileName);
 		}
 	}
     // tell the OS that you're finished...
-	DragFinish((HDROP) message.Drop);
+	DragFinish(hDrop);
 }
 
 void __fastcall TfrmLuaScript::miCloseWindowClick(TObject *Sender)

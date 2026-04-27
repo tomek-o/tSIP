@@ -137,7 +137,7 @@ void __fastcall TfrmContactEditor::WndProc(Messages::TMessage &Message)
         // handle RichEdit link being clicked
         if (((LPNMHDR)Message.LParam)->code == EN_LINK)
 		{
-            ENLINK* p = (ENLINK *)Message.LParam;
+            const ENLINK* p = (ENLINK *)Message.LParam;
             if (p->msg == WM_LBUTTONDOWN)
             {
 				SendMessage(memoNote->Handle, EM_EXSETSEL, 0, (LPARAM)&(p->chrg));

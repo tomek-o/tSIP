@@ -234,7 +234,7 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmButtonEdit(TComponent* Owner);
 	void __fastcall ShowModal(ButtonConf *cfg, int btnId);
-	bool isConfirmed(void) {
+	bool isConfirmed(void) const {
 		return confirmed;
 	}
 };

@@ -21,7 +21,7 @@ HotKeys::HotKeys(void):
 {
 }
 
-const HotKeyConf* HotKeys::Find(const std::list<HotKeyConf> &conf, WORD &Key, TShiftState Shift, bool global)
+const HotKeyConf* HotKeys::Find(const std::list<HotKeyConf> &conf, WORD Key, TShiftState Shift, bool global)
 {
 	std::list<HotKeyConf>::const_iterator iter;
 	for (iter = conf.begin(); iter != conf.end(); ++iter)

@@ -1879,11 +1879,8 @@ void __fastcall TfrmSettings::btnLoggingConsoleFontSelectClick(TObject *Sender)
 
 void TfrmSettings::ShowFonts(void)
 {
-	TEdit *ed;
-	struct Font *font;
-
-	ed = this->edLoggingConsoleFont;
-	font = &tmpSettings.Logging.consoleFont;
+	TEdit *ed = this->edLoggingConsoleFont;
+	const struct Font *font = &tmpSettings.Logging.consoleFont;
 
 	ed->Font->Name = font->name;
 	ed->Font->Size = font->size;

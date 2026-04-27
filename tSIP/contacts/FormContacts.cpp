@@ -316,14 +316,13 @@ void __fastcall TfrmContacts::edFilterChange(TObject *Sender)
 
 void __fastcall TfrmContacts::edFilterKeyPress(TObject *Sender, char &Key)
 {
-	TListView *lv = lvContacts;
 	if (Key == VK_RETURN)
 	{
-		if (lv->Items->Count > 0)
+		if (lvContacts->Items->Count > 0)
 		{
-			lv->Items->Item[0]->Selected = true;
-			lv->Items->Item[0]->Focused = true;
-			lv->SetFocus();
+			lvContacts->Items->Item[0]->Selected = true;
+			lvContacts->Items->Item[0]->Focused = true;
+			lvContacts->SetFocus();
 		}
     }	
 }

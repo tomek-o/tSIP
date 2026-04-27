@@ -190,7 +190,7 @@ void TScEdit::SetExtraStyle(void)
 	// Add line numbers
 	SendEditor(SCI_SETMARGINTYPEN, 0, SC_MARGIN_NUMBER);
 #if 1
-	char *text = "00";
+	const char *text = "00";
 	int width = SendEditor(SCI_TEXTWIDTH, STYLE_LINENUMBER, (WPARAM)text);
 	SendEditor(SCI_SETMARGINWIDTHN, 0, width+4);
 #endif
@@ -241,7 +241,7 @@ void TScEdit::updateMarginWidth(bool force)
 	{
 		int n = (int)log10(lines);
 		lineCount = static_cast<int>(pow(10.0, n) + 0.5);
-		char *text;
+		const char *text;
 		switch (n)
 		{
 		case 0:
