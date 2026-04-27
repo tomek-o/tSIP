@@ -62,7 +62,7 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 	bool monitorFound = false;
 	for (int i=0; i<Screen->MonitorCount; i++)
 	{
-		const TMonitor *monitor = Screen->Monitors[i];
+		TMonitor *monitor = Screen->Monitors[i];
 		enum { MARGIN = 30 };
 		if (
 			(Left + Width + MARGIN >= monitor->Left) &&
@@ -79,7 +79,7 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 	{
 		if (Screen->MonitorCount > 0)
 		{
-			const TMonitor *monitor = Screen->Monitors[0];
+			TMonitor *monitor = Screen->Monitors[0];
 			if (monitor)
 			{
            		enum { MARGIN = 30 };
