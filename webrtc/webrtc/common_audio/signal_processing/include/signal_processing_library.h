@@ -169,7 +169,7 @@ extern "C" {
 // code will be assigned.
 // Note that this function MUST be called in any application that uses SPL
 // functions.
-void WebRtcSpl_Init();
+void WebRtcSpl_Init(void);
 
 // Get SPL Version
 int16_t WebRtcSpl_get_version(char* version, int16_t length_in_bytes);

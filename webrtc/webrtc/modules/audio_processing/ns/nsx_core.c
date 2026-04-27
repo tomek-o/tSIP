@@ -2224,7 +2224,7 @@ int WebRtcNsx_ProcessCore(NsxInst_t* inst, short* speechFrame, short* speechFram
     } else {
       tmpU32no2 = WEBRTC_SPL_LSHIFT_U32(magnU16[i], postShifts); // Q(prevQNoise)
     }
-    if (prevNoiseU16[i] > tmpU32no2) {
+    if ((uint32_t)prevNoiseU16[i] > tmpU32no2) {
       sign = -1;
       tmpU32no1 = prevNoiseU16[i] - tmpU32no2;
     } else {

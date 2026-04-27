@@ -244,6 +244,9 @@
         <FILE FILENAME="webrtc\modules\audio_processing\processing_component.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="webrtc\modules\audio_processing\splitting_filter.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="webrtc\modules\audio_processing\voice_detection_impl.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\include\real_fft.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\include\signal_processing_library.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="webrtc\common_audio\signal_processing\include\spl_inl.h" CONTAINERID="" LOCALCOMMAND=""/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
