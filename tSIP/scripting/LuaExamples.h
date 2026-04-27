@@ -896,4 +896,35 @@ const LuaExample luaExamples [] =
 	"\n"
 	"print(\"End of calls list\\n\")\n"
 	}
+	,
+	{
+	"Switch periodically audio source between radio stations"
+	,
+	"-- switch periodically audio source between few radio stations from the list\n"
+	"\n"
+	"if (CheckSoftphoneVideoSupport() == false) then\n"
+	"\tShowMessage(\"This script requires softphone version with built-in video support!\")\n"
+	"\treturn\n"
+	"end\n"
+	"\n"
+	"local stations = {\n"
+	"\t\"http://stream3.polskieradio.pl:8950/\",\t-- PR1\n"
+	"\t\"http://mp3.polskieradio.pl:8902/\",\t\t-- PR2\n"
+	"\t\"http://mp3.polskieradio.pl:8904\",\t\t-- PR3\n"
+	"\t\"http://live.r357.eu\",\n"
+	"\t\"http://stream4.nadaje.com:15476/radiobialystok\",\n"
+	"\t\"http://streamplus20.leonex.de:16010\",\n"
+	"\t\"http://stream.rockantenne.de/gothic/stream/mp3?aw_0_1st.playerid=radio.de\"\n"
+	"}\n"
+	"\n"
+	"while true do\n"
+	"\tfor i = 1, #stations do\n"
+	"\t\tprint(string.format(\"Switching audio source to %s\\n\", stations[i]))\n"
+	"\t\tSwitchAudioSource(\"avformat\", stations[i])\n"
+	"\t\tif SleepWithCheckBreak(20000) ~= 0 then\n"
+	"\t\t\treturn\n"
+	"\t\tend\n"
+	"\tend\n"
+	"end"
+	}
 };

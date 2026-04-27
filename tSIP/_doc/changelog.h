@@ -1311,6 +1311,7 @@ Version 0.3.xx
 	- avformat module: added codec names and long names if codec opening failed
 	- video configuration window: fixed issue with open dialog not showing up when url was entered in source edit field
 	- Lua: added CheckSoftphoneVideoSupport() function - checking if softphone was built with video support
+	- Lua: added script example switching periodically audio source between few internet radio stations (for softphone version with video/avformat) - mostly to have few radio links available at convenience
 	- Lua editor: use /scripts subfolder as default for open/save dialogs
 */
 
