@@ -413,7 +413,7 @@ object frmButtonEdit: TfrmButtonEdit
         Top = 0
         Width = 521
         Height = 302
-        ActivePage = tsBehaviorSwitchVideoSource
+        ActivePage = tsBehaviorBlf
         Align = alClient
         Style = tsFlatButtons
         TabOrder = 0
@@ -518,7 +518,7 @@ object frmButtonEdit: TfrmButtonEdit
           object cbBlfActionDuringCall: TComboBox
             Left = 223
             Top = 122
-            Width = 145
+            Width = 287
             Height = 21
             Style = csDropDownList
             ItemHeight = 13
@@ -528,7 +528,8 @@ object frmButtonEdit: TfrmButtonEdit
             Items.Strings = (
               'none'
               'send digits (DTMF)'
-              'blind transfer')
+              'blind transfer'
+              'switch to free LINE and make another call')
           end
           object edBlfDtmfPrefixDuringCall: TEdit
             Left = 251

@@ -11,6 +11,7 @@
 #include "Globals.h"
 #include "NetInterfaces.h"
 #include "Paths.h"
+#include "Log.h"
 
 #include <re.h>
 #include <baresip.h>
@@ -363,7 +364,6 @@ namespace {
 		if (lineButtonCount > 1)
 			return false;
 
-		ButtonConf defaultBtnConf;
 		const std::vector<ButtonConf> &conf = buttons.btnConf;
 		for (unsigned int i=0; i<conf.size(); i++)
 		{
@@ -381,7 +381,6 @@ namespace {
 		if (lineButtonCount > 1)
 			return false;
 
-		ButtonConf defaultBtnConf;
 		const std::vector<ButtonConf> &conf = buttons.btnConf;
 		for (unsigned int i=0; i<conf.size(); i++)
 		{
@@ -389,6 +388,26 @@ namespace {
 			if (c.type == Button::CONFERENCE_START)
 			{
 				return true;
+			}
+		}
+		return false;
+	}
+
+	bool CheckButtonNewCallDuringCallWithSingleLine(void)
+	{
+		if (lineButtonCount > 1)
+			return false;
+		const std::vector<ButtonConf> &conf = buttons.btnConf;
+		for (unsigned int i=0; i<conf.size(); i++)
+		{
+			const ButtonConf &c = conf[i];
+			if (c.type == Button::SPEED_DIAL || c.type == Button::PRESENCE || c.type == Button::BLF)
+			{
+				if (c.blfActionDuringCall == ButtonConf::BLF_IN_CALL_MAKE_ANOTHER_CALL)
+				{
+					LOG("More than one LINE button is required to be able to make another call if call is already active on button #%u\n", i);
+					return true;
+				}
 			}
 		}
 		return false;
@@ -456,6 +475,7 @@ namespace {
 		{ LevelWarning, "Defining single LINE button is not useful", "Defining single LINE button would give same behavior as not defining any LINE button at all.", CheckSingleLine },
 		{ LevelWarning, "Attended transfer requires min. 2 lines", "Define at least two line buttons to use attended transfer.", CheckAttendedTransferWithSingleLine },
 		{ LevelWarning, "Conference function requires min. 2 lines", "Define at least two line buttons to use conference function.", CheckConferenceWithSingleLine },
+		{ LevelWarning, "Making another call during call requires min. 2 lines", "Found SPEED_DIAL, BLF or PRESENCE button (see log for ID) with action during the call set to making another call, but this requires at least TWO LINE BUTTONS defined.", CheckButtonNewCallDuringCallWithSingleLine },
 	};
 
 	enum Level getItemLevel(int typeId)

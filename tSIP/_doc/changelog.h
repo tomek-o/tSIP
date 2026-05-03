@@ -1313,5 +1313,6 @@ Version 0.3.xx
 	- Lua: added CheckSoftphoneVideoSupport() function - checking if softphone was built with video support
 	- Lua: added script example switching periodically audio source between few internet radio stations (for softphone version with video/avformat) - mostly to have few radio links available at convenience
 	- Lua editor: use /scripts subfolder as default for open/save dialogs
+	- added another type of action for SPEED_DIAL, BLF and PRESENCE buttons during call: making other call (switching to other line), possibly as a start of attended transfer or conference
 */
 

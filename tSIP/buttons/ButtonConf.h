@@ -135,6 +135,7 @@ public:
 		BLF_IN_CALL_NONE = 0,
 		BLF_IN_CALL_DTMF,
 		BLF_IN_CALL_TRANSFER,
+		BLF_IN_CALL_MAKE_ANOTHER_CALL,	// could later start attended transfer or conference
 		
 		BLF_IN_CALL_LIMITER
 	} blfActionDuringCall;

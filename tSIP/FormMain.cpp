@@ -2734,7 +2734,6 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		Call *call = Calls::GetCurrentCall();
 		if (call && call->connected)
 		{
-            int TODO__ATTENDED_TRANSFER_WITH_BLF;	// nothing to do?
 			switch (cfg.blfActionDuringCall)
 			{
 			case ButtonConf::BLF_IN_CALL_NONE:
@@ -2746,6 +2745,15 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 				break;
 			case ButtonConf::BLF_IN_CALL_TRANSFER:
 				UA->Transfer(call->uid, dial.c_str()); 			
+				break;
+			case ButtonConf::BLF_IN_CALL_MAKE_ANOTHER_CALL:
+				{
+					unsigned int callUid;
+					if (MakeCall(dial.c_str(), callUid) == 0)
+					{
+						Calls::SetCurrentCallUid(callUid);
+					}
+				}
 				break;
 			default:
 				assert(0);
