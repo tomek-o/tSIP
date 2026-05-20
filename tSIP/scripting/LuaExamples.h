@@ -496,6 +496,34 @@ const LuaExample luaExamples [] =
 	}
 	,
 	{
+	"Send PUBLISH with note",
+
+	"local target = \"sip:148@192.168.1.148:6080\"\n"
+	"\n"
+	"local body = [[\n"
+	"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+	"<presence xmlns=\"urn:ietf:params:xml:ns:pidf\"\n"
+	"          entity=\"sip:alice@example.com\">\n"
+	"  <tuple id=\"t1\">\n"
+	"    <status>\n"
+	"      <basic>open</basic>\n"
+	"    </status>\n"
+	"    <note>note test text 123</note>\n"
+	"  </tuple>\n"
+	"</presence>\n"
+	"]]\n"
+	"\n"
+	"local requestUid = SendCustomRequest(target, \"PUBLISH\",\n"
+	"\t\"Event: presence\\r\\nContent-Type: application/pidf+xml\\r\\nContent-Length: \" .. string.len(body) .. \"\\r\\n\\r\\n\" ..\n"
+	"\tbody\n"
+	"\t)\n"
+	"if requestUid <= 0 then\n"
+	"\tprint(string.format(\"Error sending custom request to %s\\n\", target))\n"
+	"\treturn\n"
+	"end"
+	}
+	,
+	{
 	"Scan local network (192.168.0.*:5060) with OPTIONS",
 
 	"function string.starts(String, Start)\n"
