@@ -1317,7 +1317,9 @@ Version 0.3.14
 		- added example sending PUBLISH with "billion laughts" body
 		- added example sending PUBLISH with note
 		- Lua editor: use /scripts subfolder as default for open/save dialogs
-	- added another type of action for SPEED_DIAL, BLF and PRESENCE buttons during call: making other call (switching to other line), possibly as a start of attended transfer or conference
+	- added new action types for SPEED_DIAL, BLF and PRESENCE buttons during confirmed call
+		- making other call (switching to other line), possibly as a start of attended transfer or conference
+		- blind transfer if Ctrl key is not pressed, making another call if Ctrl is pressed (possibly for consultation, attended transfer or conference)
 	- height of main panel and call controls are now configurable; example showing how to add LINE buttons to call controls panel would be added
 	- fixed some minor inconsistencies when switching main window layout (call controls separated or inside of dialpad) without restarting 
 */

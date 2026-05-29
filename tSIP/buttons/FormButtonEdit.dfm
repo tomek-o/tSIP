@@ -440,7 +440,7 @@ object frmButtonEdit: TfrmButtonEdit
             Height = 13
             Caption = 'Expires [s]'
           end
-          object Label4: TLabel
+          object lblBlfRemoteIdentityDisplayStyle: TLabel
             Left = 3
             Top = 173
             Width = 155
@@ -516,20 +516,19 @@ object frmButtonEdit: TfrmButtonEdit
             end
           end
           object cbBlfActionDuringCall: TComboBox
-            Left = 223
+            Left = 214
             Top = 122
-            Width = 287
+            Width = 299
             Height = 21
             Style = csDropDownList
             ItemHeight = 13
-            ItemIndex = 2
             TabOrder = 1
-            Text = 'blind transfer'
             Items.Strings = (
               'none'
               'send digits (DTMF)'
               'blind transfer'
-              'switch to free LINE and make another call')
+              'switch to free LINE and make another call'
+              'blind transfer by default, make 2nd call if Ctrl is pressed')
           end
           object edBlfDtmfPrefixDuringCall: TEdit
             Left = 251
@@ -547,9 +546,9 @@ object frmButtonEdit: TfrmButtonEdit
             Text = '600'
           end
           object cbBlfRemoteIdentityDisplay: TComboBox
-            Left = 223
+            Left = 214
             Top = 170
-            Width = 287
+            Width = 299
             Height = 21
             Style = csDropDownList
             ItemHeight = 13

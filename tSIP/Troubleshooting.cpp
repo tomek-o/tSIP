@@ -403,7 +403,8 @@ namespace {
 			const ButtonConf &c = conf[i];
 			if (c.type == Button::SPEED_DIAL || c.type == Button::PRESENCE || c.type == Button::BLF)
 			{
-				if (c.blfActionDuringCall == ButtonConf::BLF_IN_CALL_MAKE_ANOTHER_CALL)
+				if (c.blfActionDuringCall == ButtonConf::BLF_IN_CALL_MAKE_ANOTHER_CALL ||
+                    c.blfActionDuringCall == ButtonConf::BLF_IN_CALL_TRANSFER_OR_MAKE_ANOTHER_CALL)
 				{
 					LOG("More than one LINE button is required to be able to make another call if call is already active on button #%u\n", i);
 					return true;

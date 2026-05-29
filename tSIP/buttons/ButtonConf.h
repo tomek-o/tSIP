@@ -135,7 +135,8 @@ public:
 		BLF_IN_CALL_NONE = 0,
 		BLF_IN_CALL_DTMF,
 		BLF_IN_CALL_TRANSFER,
-		BLF_IN_CALL_MAKE_ANOTHER_CALL,	// could later start attended transfer or conference
+		BLF_IN_CALL_MAKE_ANOTHER_CALL,							///< could later start attended transfer or conference
+		BLF_IN_CALL_TRANSFER_OR_MAKE_ANOTHER_CALL,				///< blind transfer if Ctrl is not pressed, making another call if Ctrl is pressed (possibly for attended transfer)
 		
 		BLF_IN_CALL_LIMITER
 	} blfActionDuringCall;

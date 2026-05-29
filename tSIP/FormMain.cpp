@@ -2744,10 +2744,26 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 				DialString(dial, false);
 				break;
 			case ButtonConf::BLF_IN_CALL_TRANSFER:
-				UA->Transfer(call->uid, dial.c_str()); 			
+				UA->Transfer(call->uid, dial.c_str());
 				break;
 			case ButtonConf::BLF_IN_CALL_MAKE_ANOTHER_CALL:
 				{
+					unsigned int callUid;
+					if (MakeCall(dial.c_str(), callUid) == 0)
+					{
+						Calls::SetCurrentCallUid(callUid);
+					}
+				}
+				break;
+			case ButtonConf::BLF_IN_CALL_TRANSFER_OR_MAKE_ANOTHER_CALL:
+				if ((GetAsyncKeyState(VK_CONTROL) & 0x8000) == 0)
+				{
+					// Ctrl not pressed => blind transfer
+					UA->Transfer(call->uid, dial.c_str());
+				}
+				else
+				{
+					// Ctrl pressed => making new call, possibly for attended transfer
 					unsigned int callUid;
 					if (MakeCall(dial.c_str(), callUid) == 0)
 					{
