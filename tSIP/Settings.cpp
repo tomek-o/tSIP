@@ -43,10 +43,10 @@ Settings::_frmMain::_frmMain(void):
 	collapsedWidth(275), collapsedHeight(429),
 	expandedWidth(606), expandedHeight(429),
 	expandingPosLeftOffset(0), expandingPosTopOffset(0),
-	collapsedCallPanelLeft(0), collapsedCallPanelTop(0),
-	expandedCallPanelLeft(0), expandedCallPanelTop(0),
-	collapsedMainPanelLeft(0), collapsedMainPanelTop(0),
-	expandedMainPanelLeft(0), expandedMainPanelTop(0),
+	collapsedCallPanelLeft(0), collapsedCallPanelTop(0), expandedCallPanelLeft(0), expandedCallPanelTop(0),
+	callPanelHeight(121),
+	collapsedMainPanelLeft(0), collapsedMainPanelTop(0), expandedMainPanelLeft(0), expandedMainPanelTop(0),
+	mainPanelHeight(363),
 	bWindowMaximized(false),
 	bAlwaysOnTop(false),
 	bStartMinimizedToTray(false),	
@@ -86,7 +86,7 @@ Settings::_frmMain::_frmMain(void):
 	bShowSettingsIfAccountSettingIsHidden(false),
 	bNoTaskbarButtonRestore(false),
 	bNoTrayIcon(false),
-	layout(0),
+	layout(LayoutCallControlsSeparate),
 	dialComboboxOrder(DialComboboxOrderByNumber)
 {
 }
@@ -406,11 +406,13 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMainJson.getInt("CallPanelCollapsedTop", frmMain.collapsedCallPanelTop);
 		frmMainJson.getInt("CallPanelExpandedLeft", frmMain.expandedCallPanelLeft);
 		frmMainJson.getInt("CallPanelExpandedTop", frmMain.expandedCallPanelTop);
+		frmMainJson.getInt("CallPanelHeight", frmMain.callPanelHeight);
 
 		frmMainJson.getInt("MainPanelCollapsedLeft", frmMain.collapsedMainPanelLeft);
 		frmMainJson.getInt("MainPanelCollapsedTop", frmMain.collapsedMainPanelTop);
 		frmMainJson.getInt("MainPanelExpandedLeft", frmMain.expandedMainPanelLeft);
 		frmMainJson.getInt("MainPanelExpandedTop", frmMain.expandedMainPanelTop);
+		frmMainJson.getInt("MainPanelHeight", frmMain.mainPanelHeight);
 
 		frmMain.bSpeedDialVisible = frmMainJson.get("SpeedDialVisible", frmMain.bSpeedDialVisible).asBool();
 
@@ -536,7 +538,13 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		frmMain.bShowSettingsIfAccountSettingIsHidden = frmMainJson.get("ShowSettingsIfAccountSettingIsHidden", frmMain.bShowSettingsIfAccountSettingIsHidden).asBool();
 		frmMainJson.getBool("NoTaskbarButtonRestore", frmMain.bNoTaskbarButtonRestore);
 		frmMainJson.getBool("NoTrayIcon", frmMain.bNoTrayIcon);
-		frmMainJson.getInt("Layout", frmMain.layout);
+		{
+			int tmp = frmMainJson.get("Layout", frmMain.layout).asInt();
+			if (tmp >= 0 && tmp < _frmMain::Layout_Limiter)
+			{
+            	frmMain.layout = static_cast<_frmMain::Layout>(tmp);
+			}
+		}
 		{
 			int tmp = frmMainJson.get("DialComboboxOrder", frmMain.dialComboboxOrder).asInt();
 			if (tmp >= 0 && tmp < _frmMain::DialComboboxOrder_Limiter)
@@ -854,11 +862,13 @@ int Settings::Write(AnsiString asFileName)
 		jv["CallPanelCollapsedTop"] = frmMain.collapsedCallPanelTop;
 		jv["CallPanelExpandedLeft"] = frmMain.expandedCallPanelLeft;
 		jv["CallPanelExpandedTop"] = frmMain.expandedCallPanelTop;
+		jv["CallPanelHeight"] = frmMain.callPanelHeight;
 
 		jv["MainPanelCollapsedLeft"] = frmMain.collapsedMainPanelLeft;
 		jv["MainPanelCollapsedTop"] = frmMain.collapsedMainPanelTop;
 		jv["MainPanelExpandedLeft"] = frmMain.expandedMainPanelLeft;
 		jv["MainPanelExpandedTop"] = frmMain.expandedMainPanelTop;
+		jv["MainPanelHeight"] = frmMain.mainPanelHeight;
 
 		jv["Maximized"] = frmMain.bWindowMaximized;
 		jv["AlwaysOnTop"] = frmMain.bAlwaysOnTop;

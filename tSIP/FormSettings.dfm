@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsAccount
+    ActivePage = tsMainWindow
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -493,7 +493,7 @@ object frmSettings: TfrmSettings
       end
       object lblFrmMainMainPanelPositionCollapsed: TLabel
         Left = 2
-        Top = 287
+        Top = 308
         Width = 310
         Height = 13
         Caption = 
@@ -502,7 +502,7 @@ object frmSettings: TfrmSettings
       end
       object lblFrmMainMainlPanelPositionExpanded: TLabel
         Left = 2
-        Top = 308
+        Top = 329
         Width = 181
         Height = 13
         Caption = 'Main panel position in expanded state'
@@ -530,7 +530,7 @@ object frmSettings: TfrmSettings
       end
       object lblMainPanelExpandedLeft: TLabel
         Left = 335
-        Top = 308
+        Top = 329
         Width = 16
         Height = 13
         Caption = 'left'
@@ -551,14 +551,14 @@ object frmSettings: TfrmSettings
       end
       object lblMainPanelCollapsedTop: TLabel
         Left = 415
-        Top = 287
+        Top = 308
         Width = 16
         Height = 13
         Caption = 'top'
       end
       object lblMainPanelExpandedTop: TLabel
         Left = 415
-        Top = 308
+        Top = 329
         Width = 16
         Height = 13
         Caption = 'top'
@@ -572,7 +572,7 @@ object frmSettings: TfrmSettings
       end
       object lblDialComboboxSortOrder: TLabel
         Left = 3
-        Top = 353
+        Top = 380
         Width = 134
         Height = 13
         Caption = 'Dialing combobox sort order'
@@ -642,6 +642,20 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'height'
       end
+      object lblCallPanelHeight: TLabel
+        Left = 3
+        Top = 210
+        Width = 79
+        Height = 13
+        Caption = 'Call panel height'
+      end
+      object lblMainPanelHeight: TLabel
+        Left = 2
+        Top = 350
+        Width = 84
+        Height = 13
+        Caption = 'Main panel height'
+      end
       object chbFrmMainHideCallPanel: TCheckBox
         Left = 2
         Top = 147
@@ -654,17 +668,17 @@ object frmSettings: TfrmSettings
       end
       object edMainPanelExpandedLeft: TEdit
         Left = 365
-        Top = 305
+        Top = 326
         Width = 35
         Height = 21
-        TabOrder = 18
+        TabOrder = 19
       end
       object edMainPanelCollapsedLeft: TEdit
         Left = 365
-        Top = 284
+        Top = 305
         Width = 35
         Height = 21
-        TabOrder = 16
+        TabOrder = 17
       end
       object edExpandedWidth: TEdit
         Left = 366
@@ -682,17 +696,17 @@ object frmSettings: TfrmSettings
       end
       object edMainPanelExpandedTop: TEdit
         Left = 451
-        Top = 305
+        Top = 326
         Width = 35
         Height = 21
-        TabOrder = 19
+        TabOrder = 20
       end
       object edMainPanelCollapsedTop: TEdit
         Left = 451
-        Top = 284
+        Top = 305
         Width = 35
         Height = 21
-        TabOrder = 17
+        TabOrder = 18
       end
       object edExpandedHeight: TEdit
         Left = 452
@@ -728,13 +742,13 @@ object frmSettings: TfrmSettings
       end
       object cbDialComboboxOrder: TComboBox
         Left = 152
-        Top = 350
+        Top = 377
         Width = 145
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 20
+        TabOrder = 22
         Text = 'by number'
         Items.Strings = (
           'by number'
@@ -742,11 +756,11 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainHideMainPanel: TCheckBox
         Left = 2
-        Top = 266
+        Top = 287
         Width = 486
         Height = 17
         Caption = 'Hide main panel (Dialpad/Contacts/History)'
-        TabOrder = 15
+        TabOrder = 16
       end
       object edCallPanelCollapsedLeft: TEdit
         Left = 366
@@ -800,19 +814,33 @@ object frmSettings: TfrmSettings
       end
       object chbFrmMainHideMakeCallButton: TCheckBox
         Left = 26
-        Top = 208
+        Top = 229
         Width = 486
         Height = 17
         Caption = 'Hide "Call/Answer" button'
-        TabOrder = 13
+        TabOrder = 14
       end
       object chbFrmMainHideHangupButton: TCheckBox
         Left = 26
-        Top = 227
+        Top = 248
         Width = 486
         Height = 17
         Caption = 'Hide "Hangup" button'
-        TabOrder = 14
+        TabOrder = 15
+      end
+      object edCallPanelHeight: TEdit
+        Left = 366
+        Top = 207
+        Width = 35
+        Height = 21
+        TabOrder = 13
+      end
+      object edMainPanelHeight: TEdit
+        Left = 365
+        Top = 347
+        Width = 35
+        Height = 21
+        TabOrder = 21
       end
     end
     object tsDialpad: TTabSheet

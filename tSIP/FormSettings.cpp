@@ -273,11 +273,13 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edCallPanelCollapsedTop->Text = tmpSettings.frmMain.collapsedCallPanelTop;
 	edCallPanelExpandedLeft->Text = tmpSettings.frmMain.expandedCallPanelLeft;
 	edCallPanelExpandedTop->Text = tmpSettings.frmMain.expandedCallPanelTop;
+	edCallPanelHeight->Text = tmpSettings.frmMain.callPanelHeight;
 
 	edMainPanelCollapsedLeft->Text = tmpSettings.frmMain.collapsedMainPanelLeft;
 	edMainPanelCollapsedTop->Text = tmpSettings.frmMain.collapsedMainPanelTop;
 	edMainPanelExpandedLeft->Text = tmpSettings.frmMain.expandedMainPanelLeft;
 	edMainPanelExpandedTop->Text = tmpSettings.frmMain.expandedMainPanelTop;
+	edMainPanelHeight->Text = tmpSettings.frmMain.mainPanelHeight;
 
 	std::vector<AnsiString> translations = EnumerateTranslations();
 	cbTranslation->Clear();
@@ -705,11 +707,13 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		StrToIntDef2(edCallPanelCollapsedTop->Text, tmpSettings.frmMain.collapsedCallPanelTop);
 		StrToIntDef2(edCallPanelExpandedLeft->Text, tmpSettings.frmMain.expandedCallPanelLeft);
 		StrToIntDef2(edCallPanelExpandedTop->Text, tmpSettings.frmMain.expandedCallPanelTop);
+		StrToIntDef2(edCallPanelHeight->Text, tmpSettings.frmMain.callPanelHeight);
 
 		StrToIntDef2(edMainPanelCollapsedLeft->Text, tmpSettings.frmMain.collapsedMainPanelLeft);
 		StrToIntDef2(edMainPanelCollapsedTop->Text, tmpSettings.frmMain.collapsedMainPanelTop);
 		StrToIntDef2(edMainPanelExpandedLeft->Text, tmpSettings.frmMain.expandedMainPanelLeft);
 		StrToIntDef2(edMainPanelExpandedTop->Text, tmpSettings.frmMain.expandedMainPanelTop);
+		StrToIntDef2(edMainPanelHeight->Text, tmpSettings.frmMain.mainPanelHeight);
 	}
 
 	if (cbTranslation->ItemIndex == 0)
@@ -1097,7 +1101,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bNoTaskbarButtonRestore = chbNoTaskbarButtonRestore->Checked;
 	tmpSettings.frmMain.bNoTrayIcon = chbNoTrayIcon->Checked;
 
-	tmpSettings.frmMain.layout = cbFrmMainLayout->ItemIndex;
+	tmpSettings.frmMain.layout = static_cast<Settings::_frmMain::Layout>(cbFrmMainLayout->ItemIndex);
 	tmpSettings.frmMain.dialComboboxOrder = static_cast<Settings::_frmMain::DialComboboxOrder>(cbDialComboboxOrder->ItemIndex);
 
 	frmUaConfOpus->Apply();

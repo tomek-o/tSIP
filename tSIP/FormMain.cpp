@@ -280,8 +280,6 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	pnlCallControls->DoubleBuffered = true;
 	pnlDialpad->DoubleBuffered = true;
 
-	SetMainWindowLayout(appSettings.frmMain.layout);
-
 	Application->OnRestore = OnRestore;
 }
 
@@ -346,6 +344,7 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 
 	initialScaling = static_cast<double>(appSettings.gui.scalingPct) / 100;
 	UpdateSize();
+	SetMainWindowLayout(appSettings.frmMain.layout);
 	btnSpeedDialPanel->Visible = !appSettings.frmMain.bHideSpeedDialToggleButton;
 	UpdateDialpad();
 
@@ -691,10 +690,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		this->FormStyle = fsStayOnTop;
 	else
 		this->FormStyle = fsNormal;
-	if (appSettings.frmMain.layout != prev.frmMain.layout)
-	{
-		SetMainWindowLayout(appSettings.frmMain.layout);
-	}
+	SetMainWindowLayout(appSettings.frmMain.layout);
 	if (appSettings.frmMain.dialComboboxOrder != prev.frmMain.dialComboboxOrder)
 	{
 		UpdateCallHistory();
@@ -881,7 +877,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	Ua::Instance().Start();
 	SetStatus("Initializing...");
 
-    //LOG("Registering hotkeys...\n");
+	//LOG("Registering hotkeys...\n");
 	RegisterGlobalHotKeys();
 
 	FocusCbCallUri();
@@ -1309,20 +1305,22 @@ void TfrmMain::ApplicationClose(void)
 	actExit->Execute();
 }
 
-void TfrmMain::SetMainWindowLayout(int id)
+void TfrmMain::SetMainWindowLayout(Settings::_frmMain::Layout layout)
 {
-	if (id == 0)
+	if (layout == Settings::_frmMain::LayoutCallControlsSeparate)
 	{
 		pnlCallControls->Parent = this;
-		pcMain->Height = ClientHeight - StatusBar->Height - pnlCallControls->Height;
-		pcMain->Top = pnlCallControls->Height;
+		pcMain->Height = pnlMain->Height - pnlCallControls->Height;
+		pcMain->Top = pnlCallControls->Top + pnlCallControls->Height;
+		pnlDialpad->Height = tsDialpad->Height;
 	}
-	else if (id == 1)
+	else if (layout == Settings::_frmMain::LayoutCallControlsInsideDialpad)
 	{
+		// call controls inside dialpad tab
 		pnlCallControls->Parent = tsDialpad;
-		pnlCallControls->Left = -3;
-		pcMain->Height = ClientHeight - StatusBar->Height;
+		pcMain->Height = pnlMain->Height;
 		pcMain->Top = 0;
+		pnlDialpad->Height = tsDialpad->Height - (pnlCallControls->Top + pnlCallControls->Height);
 	}
 }
 
@@ -1364,8 +1362,10 @@ void TfrmMain::UpdateSize(void)
 
 	pnlCallControls->Left = callPanelLeft;
 	pnlCallControls->Top = callPanelTop;
+	pnlCallControls->Height = appSettings.frmMain.callPanelHeight;
 	pnlMain->Left = mainPanelLeft;
 	pnlMain->Top = mainPanelTop;
+	pnlMain->Height = appSettings.frmMain.mainPanelHeight;
 }
 
 void TfrmMain::UpdateDialpad(void)

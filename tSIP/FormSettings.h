@@ -562,6 +562,10 @@ __published:	// IDE-managed Components
 	TCheckBox *chbLogTimestamps;
 	TCheckBox *chbLogShowWindowAtStartup;
 	TCheckBox *chbNoIpBind;
+	TLabel *lblCallPanelHeight;
+	TEdit *edCallPanelHeight;
+	TLabel *lblMainPanelHeight;
+	TEdit *edMainPanelHeight;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

@@ -243,7 +243,7 @@ private:	// User declarations
 	int UpdateButtonFromJson(unsigned int btnId, AnsiString json);
 	void UpdateAutoAnswer(void);
 	void UpdateClip(unsigned int callUid);
-	void SetMainWindowLayout(int id);
+	void SetMainWindowLayout(Settings::_frmMain::Layout layout);
 	void LoadTranslation(void);
 	void UpdateSize(void);
 	void UpdateDialpad(void);

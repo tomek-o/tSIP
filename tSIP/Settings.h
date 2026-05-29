@@ -86,13 +86,15 @@ public:
 		int expandedWidth, expandedHeight;		///< width, height with console visible
 		int expandingPosLeftOffset, expandingPosTopOffset;	///< moving window when expanding/collapsing
 
-		// call panel position
+		// call panel position and size
 		int collapsedCallPanelLeft, collapsedCallPanelTop;
 		int expandedCallPanelLeft, expandedCallPanelTop;
+		int callPanelHeight;
 
-		// main panel position
+		// main panel position and size
 		int collapsedMainPanelLeft, collapsedMainPanelTop;
 		int expandedMainPanelLeft, expandedMainPanelTop;
+		int mainPanelHeight;
 		
 		bool bWindowMaximized;			///< is main window maximized?
 		bool bAlwaysOnTop;
@@ -153,7 +155,12 @@ public:
 			AnsiString bmpConsoleShow;
 		} bitmaps;
 
-		int layout;
+		enum Layout {
+			LayoutCallControlsSeparate = 0,
+			LayoutCallControlsInsideDialpad,
+
+			Layout_Limiter
+		} layout;
 
 		enum DialComboboxOrder {
 			DialComboboxOrderByNumber = 0,
