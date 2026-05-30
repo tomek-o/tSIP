@@ -117,7 +117,7 @@ void __fastcall TfrmButtonCopy::btnApplyClick(TObject *Sender)
 		cbSource->ItemIndex = src;
 	}
 	buttons->Write();
-	applied = true;
+	buttons->UpdateAll();
 }
 
 //---------------------------------------------------------------------------
@@ -341,12 +341,6 @@ void __fastcall TfrmButtonCopy::btnSelectAllClick(TObject *Sender)
 void __fastcall TfrmButtonCopy::btnDeselectAllClick(TObject *Sender)
 {
 	SetCheckboxes(false);
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmButtonCopy::FormShow(TObject *Sender)
-{
-	applied = false;	
 }
 //---------------------------------------------------------------------------
 

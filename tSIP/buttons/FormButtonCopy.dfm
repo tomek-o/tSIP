@@ -16,7 +16,6 @@ object frmButtonCopy: TfrmButtonCopy
   KeyPreview = True
   OldCreateOrder = False
   OnKeyPress = FormKeyPress
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object lblSource: TLabel
@@ -92,7 +91,7 @@ object frmButtonCopy: TfrmButtonCopy
     Width = 145
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 0
   end
   object cbTarget: TComboBox
@@ -101,7 +100,7 @@ object frmButtonCopy: TfrmButtonCopy
     Width = 145
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 2
   end
   object grboxCopy: TGroupBox
@@ -347,7 +346,7 @@ object frmButtonCopy: TfrmButtonCopy
     Width = 145
     Height = 21
     Style = csDropDownList
-    ItemHeight = 0
+    ItemHeight = 13
     TabOrder = 3
   end
   object popupCopy: TPopupMenu
