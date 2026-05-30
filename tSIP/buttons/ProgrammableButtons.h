@@ -133,6 +133,7 @@ public:
 
 	void SetConfig(int btnId, const ButtonConf &conf);
 	void CopyConfig(int sourceBtnId);
+	void CreateGrid(int sourceBtnId);
 };
 
 #endif

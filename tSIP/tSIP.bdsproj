@@ -527,6 +527,7 @@
         <FILE FILENAME="buttons\FormButtonContainerConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonContainerConf" FORMNAME="frmButtonContainerConf" DESIGNCLASS="" ADDITIONAL="buttons\FormButtonContainerConf.h"/>
         <FILE FILENAME="TrayNotifierConf.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="TrayNotifierConf" FORMNAME="" DESIGNCLASS="" ADDITIONAL="TrayNotifierConf.h"/>
         <FILE FILENAME="scripting\ScriptSource.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScriptSource" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\ScriptSource.h"/>
+        <FILE FILENAME="buttons\FormButtonGridEdit.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormButtonGridEdit" FORMNAME="frmButtonGridEdit" DESIGNCLASS="" ADDITIONAL="buttons\FormButtonGridEdit.h"/>
       </FILELIST>
       <IDEOPTIONS>
         <VersionInfo>
@@ -601,10 +602,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

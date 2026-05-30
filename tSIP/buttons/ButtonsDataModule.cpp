@@ -114,3 +114,12 @@ void __fastcall TdmButtons::miMoveSpeedDialGroupClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TdmButtons::miCreateGridClick(TObject *Sender)
+{
+	TProgrammableButton* panel = dynamic_cast<TProgrammableButton*>(popupPanel->PopupComponent);
+	assert(panel);
+	int id = panel->Tag;
+	buttons.CreateGrid(id);
+}
+//---------------------------------------------------------------------------
+

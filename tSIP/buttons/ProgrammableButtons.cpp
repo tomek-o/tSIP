@@ -12,6 +12,7 @@
 #include "FormButtonContainer.h"
 #include "FormButtonEdit.h"
 #include "FormButtonCopy.h"
+#include "FormButtonGridEdit.h"
 #include "SettingsAppVersion.h"
 #include "Settings.h"	// just for transition from column-based version < 0.2
 #include "Sizes.h"
@@ -1124,9 +1125,16 @@ void ProgrammableButtons::CopyConfig(int sourceBtnId)
 	callbackSetKeepForeground(false);
 	frmButtonCopy->ShowModal();
 	callbackSetKeepForeground(true);
+}
 
-	if (frmButtonCopy->IsApplied())
+void ProgrammableButtons::CreateGrid(int sourceBtnId)
+{
+	if (frmButtonGridEdit == NULL)
 	{
-		UpdateAll();
+		Application->CreateForm(__classid(TfrmButtonGridEdit), &frmButtonGridEdit);
 	}
+	frmButtonGridEdit->SetButtons(this, sourceBtnId);
+	callbackSetKeepForeground(false);
+	frmButtonGridEdit->ShowModal();
+	callbackSetKeepForeground(true);
 }

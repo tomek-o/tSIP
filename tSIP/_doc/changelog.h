@@ -1312,7 +1312,7 @@ Version 0.3.14
 	- video configuration window: fixed issue with open dialog not showing up when url was entered in source edit field
 	- Lua:
 		- added CheckSoftphoneVideoSupport() function - checking if softphone was built with video support
-		- SleepWithCheckBreak as alias to Sleep; returned value on user break is now consistent with CheckBreak function allowing to write some loops in a more concise way
+		- added SleepWithCheckBreak function as alias to Sleep; returned value on user break is now consistent with CheckBreak function allowing to write some loops with delays in a more concise way
 		- added script example switching periodically audio source between few internet radio stations (for softphone version with video/avformat) - mostly to have few radio links available at convenience
 		- added example sending PUBLISH with "billion laughts" body
 		- added example sending PUBLISH with note
@@ -1321,6 +1321,8 @@ Version 0.3.14
 		- making other call (switching to other line), possibly as a start of attended transfer or conference
 		- blind transfer if Ctrl key is not pressed, making another call if Ctrl is pressed (possibly for consultation, attended transfer or conference)
 	- height of main panel and call controls are now configurable; example showing how to add LINE buttons to call controls panel would be added
-	- fixed some minor inconsistencies when switching main window layout (call controls separated or inside of dialpad) without restarting 
+	- fixed some minor inconsistencies when switching main window layout (call controls separated or inside of dialpad) without restarting
+	- new button editor window, arranging buttons from specified range in a regular grid
+	- button properties copy dialog: "Copy" button applies new settings without closing dialog, similar to new dialog for arranging grid
 */
 

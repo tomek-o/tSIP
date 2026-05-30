@@ -18,9 +18,9 @@ USEFORM("LogUnit.cpp", frmLog);
 USEFORM("FormAccount.cpp", frmAccount);
 USEFORM("FormTrayNotifier.cpp", frmTrayNotifier);
 USEFORM("FormTextEditor.cpp", frmTextEditor);
-USEFORM("FormTroubleshooting.cpp", frmTroubleshooting);
 USEFORM("scripting\FormLuaScript.cpp", frmLuaScript);
 USEFORM("phone\FormPhones.cpp", frmPhones);
+USEFORM("FormTroubleshooting.cpp", frmTroubleshooting);
 USEFORM("FormMessage.cpp", frmMessage);
 USEFORM("ua\FormUaConfOpus.cpp", frmUaConfOpus);
 USEFORM("FormSettingsPatch.cpp", frmSettingsPatch);
@@ -31,6 +31,7 @@ USEFORM("scripting\FormLuaScriptHelp.cpp", frmLuaScriptHelp);
 USEFORM("FormVideoConf.cpp", frmVideoConf);
 USEFORM("scripting\FormScriptPluginVariables.cpp", frmScriptPluginVariables);
 USEFORM("buttons\FormButtonContainerConf.cpp", frmButtonContainerConf);
+USEFORM("buttons\FormButtonGridEdit.cpp", frmButtonGridEdit);
 //---------------------------------------------------------------------------
 #include "baresip_base_config.h"
 

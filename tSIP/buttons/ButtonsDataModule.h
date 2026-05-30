@@ -27,6 +27,7 @@ __published:	// IDE-managed Components
 	TMenuItem *miCopyCaption2;
 	TMenuItem *miCopyButtonProperties;
 	TMenuItem *miMoveSpeedDialGroup;
+	TMenuItem *miCreateGrid;
 	void __fastcall popupPanelPopup(TObject *Sender);
 	void __fastcall miEditSpeedDialClick(TObject *Sender);
 	void __fastcall miMoveSpeedDialClick(TObject *Sender);
@@ -35,6 +36,7 @@ __published:	// IDE-managed Components
 	void __fastcall miCopyCaption2Click(TObject *Sender);
 	void __fastcall miCopyButtonPropertiesClick(TObject *Sender);
 	void __fastcall miMoveSpeedDialGroupClick(TObject *Sender);
+	void __fastcall miCreateGridClick(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
 	__fastcall TdmButtons(TComponent* Owner);

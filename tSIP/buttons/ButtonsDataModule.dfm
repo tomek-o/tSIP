@@ -40,6 +40,10 @@ object dmButtons: TdmButtons
       Caption = 'Copy button properties'
       OnClick = miCopyButtonPropertiesClick
     end
+    object miCreateGrid: TMenuItem
+      Caption = 'Arrange buttons in a grid'
+      OnClick = miCreateGridClick
+    end
     object miContainerMenu: TMenuItem
       Caption = 'Container menu'
       Visible = False
