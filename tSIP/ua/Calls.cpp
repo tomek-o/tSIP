@@ -300,6 +300,7 @@ void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 		currentCallUid = call->uid;
 		if (autoHold)
 			call->setHold(false);
+		buttons.UpdateBtnState(Button::HOLD, call->hold);
 	}
 	else
 	{
