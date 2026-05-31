@@ -20,6 +20,10 @@ __fastcall TfrmButtonCopy::TfrmButtonCopy(TComponent* Owner)
 void TfrmButtonCopy::SetButtons(ProgrammableButtons *buttons, int sourceBtnId)
 {
 	this->buttons = buttons;
+
+	int prevTargetId = cbTarget->ItemIndex;
+	int prevTargetToId = cbTargetTo->ItemIndex;
+
 	cbSource->Items->Clear();
 	cbTarget->Items->Clear();
 	cbTargetTo->Items->Clear();
@@ -43,8 +47,22 @@ void TfrmButtonCopy::SetButtons(ProgrammableButtons *buttons, int sourceBtnId)
 	{
 		cbSource->ItemIndex = 0;
 	}
-	cbTarget->ItemIndex = 0;
-	cbTargetTo->ItemIndex = 0;
+	if (prevTargetId >= 0 && prevTargetId < cbTarget->Items->Count)
+	{
+		cbTarget->ItemIndex = prevTargetId;
+	}
+	else
+	{
+		cbTarget->ItemIndex = 0;
+	}
+	if (prevTargetToId >= 0 && prevTargetToId < cbTarget->Items->Count)
+	{
+		cbTargetTo->ItemIndex = prevTargetToId;
+	}
+	else
+	{
+		cbTargetTo->ItemIndex = 0;
+	}
 
 	cbTargetType->OnChange(NULL);
 }
