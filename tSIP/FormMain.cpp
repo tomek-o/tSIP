@@ -1961,9 +1961,9 @@ void TfrmMain::PollCallbackQueue(void)
 			Call *call = Calls::FindByUid(cb.callUid);
 			if (call)
 			{
-				call->uri = cb.caller;
+				UpdateUriOnReinvite(call->uri, cb.caller);
 				call->peerName = GetPeerName(cb.callerName);
-				call->paiPeerUri = cb.paiPeerUri;
+				UpdateUriOnReinvite(call->paiPeerUri, cb.paiPeerUri);
 				call->paiPeerName = GetPeerName(cb.paiPeerName);
 				call->ShowOnLineButton();
 				if (call == Calls::GetCurrentCall())
@@ -4324,6 +4324,13 @@ void TfrmMain::UpdateMainCallDisplay(void)
 		{
 			lbl2ndPartyDesc->Caption = call->getPeerName();
 		}
+	}
+}
+
+void TfrmMain::UpdateUriOnReinvite(AnsiString &target, AnsiString source)
+{
+	if (GetClip(target, true) != GetClip(source, true)) {
+		target = GetClip(source, appSettings.Display.bUserOnlyClip);
 	}
 }
 
