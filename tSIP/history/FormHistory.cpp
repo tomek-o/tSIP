@@ -10,6 +10,7 @@
 #include "SIMPLE_Messages.h"
 #include "UaGlobals.h"
 #include "Translate.h"
+#include "common/TelecomUtils.h"
 #include "Branding.h"
 #include "Settings.h"
 #include <assert.h>
@@ -185,7 +186,7 @@ void __fastcall TfrmHistory::lvHistoryData(TObject *Sender, TListItem *Item)
 			contactName = entry.paiPeerName;
 			if (contactName == "")
 			{
-				contactName = entry.paiUri;
+				contactName = GetClip(entry.paiUri.c_str(), appSettings.Display.bUserOnlyClip);
 			}
 		}
 		Item->SubItems->Add(contactName);
@@ -198,7 +199,7 @@ void __fastcall TfrmHistory::lvHistoryData(TObject *Sender, TListItem *Item)
 			contactName = entry.peerName;
 			if (contactName == "")
 			{
-				contactName = entry.uri;
+				contactName = GetClip(entry.uri.c_str(), appSettings.Display.bUserOnlyClip);
 			}
 		}
 		Item->SubItems->Add(contactName);
