@@ -172,6 +172,11 @@ enum e_opus_application {
 	OPUS_APP_VOIP
 };
 
+/** Call config */
+struct config_call {
+	uint32_t local_timeout; /**< Incoming call timeout [sec] 0=off    */
+};
+
 /** Core configuration */
 struct config {
 	/** SIP User-Agent */
@@ -187,6 +192,8 @@ struct config {
 		bool use_windows_root_ca_store;
 		bool verify_server;     /**< Enable SIP TLS verify server   */
 	} sip;
+
+	struct config_call call;	
 
 	/** Audio */
 	struct config_audio {

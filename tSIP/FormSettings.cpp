@@ -509,6 +509,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbAutoAnswerCallInfo->Checked = tmpSettings.uaConf.autoAnswerCallInfo;
 	edAutoAnswerCallInfoDelayMin->Text = tmpSettings.uaConf.autoAnswerCallInfoDelayMin;
 
+	edIncomingCallLocalTimeout->Text = tmpSettings.uaConf.incomingCallLocalTimeout;
+
 	chbAnswerOnEventTalk->Checked = tmpSettings.uaConf.answerOnEventTalk;
 
 	chbHandleOodRefer->Checked = tmpSettings.uaConf.handleOodRefer;
@@ -981,6 +983,12 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	if (val < 0)
 		val = 0;
 	tmpSettings.uaConf.autoAnswerCallInfoDelayMin = val;
+
+	val = StrToIntDef(edIncomingCallLocalTimeout->Text, -1);
+	if (val >= 0)
+	{
+		tmpSettings.uaConf.incomingCallLocalTimeout = val;
+	}
 
 	tmpSettings.uaConf.answerOnEventTalk = chbAnswerOnEventTalk->Checked;
 

@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 468
-    ActivePage = tsMainWindow
+    ActivePage = tsCalls
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -1009,7 +1009,7 @@ object frmSettings: TfrmSettings
       end
       object lblCallsExtraHeaderLines: TLabel
         Left = 3
-        Top = 242
+        Top = 265
         Width = 210
         Height = 13
         Caption = 'Extra/custom header lines for outgoing calls'
@@ -1020,6 +1020,15 @@ object frmSettings: TfrmSettings
         Width = 33
         Height = 13
         Caption = 'reason'
+      end
+      object lblIncomingCallLocalTimeout: TLabel
+        Left = 3
+        Top = 176
+        Width = 332
+        Height = 13
+        Caption = 
+          'Local timeout for answering incoming call                    s  ' +
+          '(0 = disabled)'
       end
       object edAutoAnswerCode: TEdit
         Left = 272
@@ -1070,7 +1079,7 @@ object frmSettings: TfrmSettings
       end
       object chbAnswerOnEventTalk: TCheckBox
         Left = 3
-        Top = 184
+        Top = 208
         Width = 363
         Height = 17
         Caption = 'Answer on receiving NOTIFY with Event: talk'
@@ -1078,7 +1087,7 @@ object frmSettings: TfrmSettings
       end
       object chbHandleOodRefer: TCheckBox
         Left = 3
-        Top = 207
+        Top = 230
         Width = 446
         Height = 17
         Caption = 'Handle incoming out-of-dialog REFER requests'
@@ -1086,7 +1095,7 @@ object frmSettings: TfrmSettings
       end
       object memoCallsExtraHeaderLines: TMemo
         Left = 219
-        Top = 239
+        Top = 262
         Width = 310
         Height = 44
         Font.Charset = DEFAULT_CHARSET
@@ -1099,7 +1108,7 @@ object frmSettings: TfrmSettings
       end
       object chbDisconnectCallOnAudioError: TCheckBox
         Left = 3
-        Top = 289
+        Top = 312
         Width = 462
         Height = 17
         Caption = 
@@ -1113,6 +1122,14 @@ object frmSettings: TfrmSettings
         Width = 148
         Height = 21
         TabOrder = 2
+      end
+      object edIncomingCallLocalTimeout: TEdit
+        Left = 207
+        Top = 173
+        Width = 41
+        Height = 21
+        TabOrder = 11
+        Text = '120'
       end
     end
     object tsMessages: TTabSheet

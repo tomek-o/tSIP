@@ -31,6 +31,11 @@ static struct config core_config = {
 		false
 	},
 
+	/** Call */
+	{
+    	120	/* local timeout for (unanswered) incoming calls */
+	},
+
 	/** Audio */
 	{
 		"","",

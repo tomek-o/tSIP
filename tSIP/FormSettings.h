@@ -566,6 +566,8 @@ __published:	// IDE-managed Components
 	TEdit *edCallPanelHeight;
 	TLabel *lblMainPanelHeight;
 	TEdit *edMainPanelHeight;
+	TLabel *lblIncomingCallLocalTimeout;
+	TEdit *edIncomingCallLocalTimeout;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

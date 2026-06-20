@@ -623,6 +623,8 @@ public:
 	bool autoAnswerCallInfo;	///< auto-answer when Call-Info with answer-after is present in incoming INVITE
 	unsigned int autoAnswerCallInfoDelayMin;	///< minimum delay when auto answering intercom/paging calls [ms]
 
+	unsigned int incomingCallLocalTimeout;
+
 	bool answerOnEventTalk;		///< answer when NOTIFY with "Event: talk" is received (CRM integration through asterisk AMI)
 
 	bool handleOodRefer;		///< handle incoming out-of-dialog refer
@@ -731,6 +733,7 @@ public:
 		autoAnswerDelayMax(0),
 		autoAnswerCallInfo(false),
 		autoAnswerCallInfoDelayMin(0),
+		incomingCallLocalTimeout(120),
 		answerOnEventTalk(false),
 		handleOodRefer(false),
 		customUserAgent(false)
@@ -802,6 +805,8 @@ public:
 		if (avt != right.avt)
 			return false;
 		if (messages != right.messages)
+			return false;
+		if (incomingCallLocalTimeout != right.incomingCallLocalTimeout)
 			return false;
 		if (customUserAgent != right.customUserAgent)
 			return false;

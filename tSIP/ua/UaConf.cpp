@@ -270,6 +270,8 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 	autoAnswerCallInfo = uaConfJson.get("autoAnswerCallInfo", autoAnswerCallInfo).asBool();
 	autoAnswerCallInfoDelayMin = uaConfJson.get("autoAnswerCallInfoDelayMin", autoAnswerCallInfoDelayMin).asUInt();
 
+	uaConfJson.getUInt("incomingCallLocalTimeout", incomingCallLocalTimeout);
+
 	answerOnEventTalk = uaConfJson.get("answerOnEventTalk", answerOnEventTalk).asBool();
 
 	handleOodRefer = uaConfJson.get("handleOodRefer", handleOodRefer).asBool();
@@ -411,6 +413,8 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	uaConfJson["autoAnswerDelayMax"] = autoAnswerDelayMax;
 	uaConfJson["autoAnswerCallInfo"] = autoAnswerCallInfo;
 	uaConfJson["autoAnswerCallInfoDelayMin"] = autoAnswerCallInfoDelayMin;
+
+	uaConfJson["incomingCallLocalTimeout"] = incomingCallLocalTimeout;
 
 	uaConfJson["answerOnEventTalk"] = answerOnEventTalk;
 

@@ -28,11 +28,6 @@
 #define FOREACH_STREAM						\
 	for (le = call->streaml.head; le; le = le->next)
 
-enum {
-	PTIME           = 20,    /**< Packet time for audio               */
-	LOCAL_TIMEOUT   = 120,   /**< Incoming call timeout in [seconds]  */
-};
-
 
 /** Call States */
 enum state {
@@ -88,6 +83,7 @@ struct call {
 	call_event_h *eh;         /**< Event handler                        */
 	call_dtmf_h *dtmfh;       /**< DTMF handler                         */
 	void *arg;                /**< Handler argument                     */
+	struct config_call config_call;  /**< Call config                   */
 	uint32_t rtp_timeout_ms;  /**< RTP Timeout in [ms]                  */
 	struct play *play;        /**< Playback for ring, ringback, etc.    */	
 };
@@ -235,7 +231,7 @@ static void invite_timeout(void *arg)
 	struct call *call = arg;
 
 	(void)re_printf("%s: Local timeout after %u seconds\n",
-			call->peer_uri, LOCAL_TIMEOUT);
+			call->peer_uri, call->config_call.local_timeout);
 
 	call_event_handler(call, CALL_EVENT_CLOSED, "Local timeout");
 }
@@ -512,6 +508,8 @@ int call_alloc(struct call **callp, const struct config *cfg, struct list *lst,
 		return ENOMEM;
 
 	MAGIC_INIT(call);
+
+	call->config_call = cfg->call;	
 
 	tmr_init(&call->tmr_inv);
 
@@ -1639,7 +1637,10 @@ int call_accept(struct call *call, struct sipsess_sock *sess_sock,
 	set_state(call, STATE_INCOMING);
 
 	/* New call */
-	tmr_start(&call->tmr_inv, LOCAL_TIMEOUT*1000, invite_timeout, call);
+	if (call->config_call.local_timeout) {
+		tmr_start(&call->tmr_inv, call->config_call.local_timeout*1000,
+			  invite_timeout, call);
+	}
 
 	if (!call->acc->mnat)
 		call_event_handler(call, CALL_EVENT_INCOMING, "%s", call->peer_uri);

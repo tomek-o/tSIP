@@ -665,6 +665,8 @@ static int app_init(void)
 
 	cfg->recording.enabled = appSettings.uaConf.recording.enabled;
 
+	cfg->call.local_timeout = appSettings.uaConf.incomingCallLocalTimeout;
+
 	cfg->audio_preproc_tx.enabled = appSettings.uaConf.audioPreprocTx.enabled;
 	cfg->audio_preproc_tx.denoise_enabled = appSettings.uaConf.audioPreprocTx.denoiseEnabled;
 	cfg->audio_preproc_tx.agc_enabled = appSettings.uaConf.audioPreprocTx.agcEnabled;
