@@ -3515,7 +3515,7 @@ void TfrmMain::HandleCommandLine(void)
 	{
 		return;
 	}
-	LOG("Handling commnand line\n");
+	LOG("Handling command line\n");
 	if (cmd.action == CommandLine::ACTION_HANGUP)
 	{
 		LOG("action = HANGUP\n");
