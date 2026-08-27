@@ -2034,6 +2034,8 @@ void TfrmMain::PollCallbackQueue(void)
 				}
 			}
 
+			SetStatus(asRegText);		
+
 			if (cb.reg_state == Callback::REG_STATE_REGISTER_OK) {
 				HandleCommandLine();
 				PhoneInterface::UpdateRegistrationState(1);
@@ -2042,8 +2044,6 @@ void TfrmMain::PollCallbackQueue(void)
 			{
 				PhoneInterface::UpdateRegistrationState(0);
 			}
-
-			SetStatus(asRegText);
 
 			if (appSettings.Scripts.onRegistrationState != "")
 			{
