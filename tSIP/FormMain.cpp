@@ -3515,8 +3515,11 @@ void TfrmMain::HandleCommandLine(void)
 	{
 		return;
 	}
+	CommandLine::Action action = cmd.action;
+	cmd.action = CommandLine::ACTION_NONE;	// clear immediately - executing script inside might take a long time
+
 	LOG("Handling command line\n");
-	if (cmd.action == CommandLine::ACTION_HANGUP)
+	if (action == CommandLine::ACTION_HANGUP)
 	{
 		LOG("action = HANGUP\n");
 		Call* call = Calls::GetCurrentCall();
@@ -3525,7 +3528,7 @@ void TfrmMain::HandleCommandLine(void)
 			Hangup(call->uid);
 		}
 	}
-	else if (cmd.action == CommandLine::ACTION_ANSWER)
+	else if (action == CommandLine::ACTION_ANSWER)
 	{
 		LOG("action = ANSWER\n");
 		Call* call = Calls::GetCurrentCall();
@@ -3534,7 +3537,7 @@ void TfrmMain::HandleCommandLine(void)
 			Answer(call->uid);
 		}
 	}
-	else if (cmd.action == CommandLine::ACTION_CALL)
+	else if (action == CommandLine::ACTION_CALL)
 	{
 		AnsiString target = cmd.asTarget.Trim();
 		LOG("action = CALL, target = %s\n", target.c_str());
@@ -3555,7 +3558,7 @@ void TfrmMain::HandleCommandLine(void)
 			}
 		}
 	}
-	else if (cmd.action == CommandLine::ACTION_SHOWWINDOW)
+	else if (action == CommandLine::ACTION_SHOWWINDOW)
 	{
 		LOG("action = SHOWWINDOW\n");
 		if (!Visible) {
@@ -3568,17 +3571,17 @@ void TfrmMain::HandleCommandLine(void)
 		SetWindowPos (Handle, HWND_TOP, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 		FocusCbCallUri();
 	}
-	else if (cmd.action == CommandLine::ACTION_APP_QUIT)
+	else if (action == CommandLine::ACTION_APP_QUIT)
 	{
 		LOG("action = APP_QUIT\n");	
     	actExit->Execute();
 	}
-	else if (cmd.action == CommandLine::ACTION_PROGRAMMABLE_BTN)
+	else if (action == CommandLine::ACTION_PROGRAMMABLE_BTN)
 	{
 		LOG("action = PROGRAMMABLE_BTN\n");	
 		ProgrammableButtonClick(cmd.programmableBtnId);
 	}
-	else if (cmd.action == CommandLine::ACTION_RECORD_START)
+	else if (action == CommandLine::ACTION_RECORD_START)
 	{
 		Call* call = Calls::GetCurrentCall();
 		if (call)
@@ -3586,7 +3589,7 @@ void TfrmMain::HandleCommandLine(void)
 			StartRecording(*call);
 		}
 	}
-	else if (cmd.action == CommandLine::ACTION_RECORD_PAUSE)
+	else if (action == CommandLine::ACTION_RECORD_PAUSE)
 	{
 		Call* call = Calls::GetCurrentCall();
 		if (call)
@@ -3606,7 +3609,7 @@ void TfrmMain::HandleCommandLine(void)
 			LOG("RECORD_PAUSE: no current call\n");
 		}
 	}
-	else if (cmd.action == CommandLine::ACTION_SCRIPT)
+	else if (action == CommandLine::ACTION_SCRIPT)
 	{
 		LOG("Command line script:\n%s\n", cmd.script.c_str());
 		if (appSettings.Integration.bAcceptCommandLineScript == false)
@@ -3618,7 +3621,7 @@ void TfrmMain::HandleCommandLine(void)
 		bool handled = false;
 		RunScript(SCRIPT_SRC_COMMAND_LINE, 0, cmd.script, breakReq, handled);
 	}
-	else if (cmd.action == CommandLine::ACTION_SCRIPT_FILE)
+	else if (action == CommandLine::ACTION_SCRIPT_FILE)
 	{
 		LOG("Command line script file:\n%s\n", cmd.script.c_str());
 		if (appSettings.Integration.bAcceptCommandLineScript == false)
@@ -3636,7 +3639,6 @@ void TfrmMain::HandleCommandLine(void)
 	{
     	LOG("Unhandled action type!\n");
 	}
-	cmd.action = CommandLine::ACTION_NONE;
 }
 
 void TfrmMain::ProgrammableButtonClick(int buttonId)
