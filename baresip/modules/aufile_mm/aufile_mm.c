@@ -33,7 +33,8 @@ struct ausrc_st {
 	struct tmr tmr;
 	struct aufile *aufile;
 	struct aubuf *aubuf;
-	struct aufile_prm fprm;	
+	struct aufile_prm fprm;
+	uint8_t ch;		/* target (call) channel count */
 	uint32_t ptime;
 	size_t sampc;
 	bool run;
@@ -183,6 +184,21 @@ static int read_file(struct ausrc_st *st)
 			mb->end *= sizeof(short);
 		}
 
+		if (st->fprm.channels == 2 && st->ch == 1) {
+			int16_t *samples = (int16_t *)mb->buf;
+			size_t n_pairs = mb->end / (2 * sizeof(int16_t));
+			size_t i;
+
+			for (i = 0; i < n_pairs; i++) {
+				int32_t l = samples[2 * i];
+				int32_t r = samples[2 * i + 1];
+
+				samples[i] = (int16_t)((l + r) / 2);
+			}
+
+			mb->end = n_pairs * sizeof(int16_t);
+		}
+
 		aubuf_append(st->aubuf, mb);
 
 		mb = mem_deref(mb);
@@ -226,10 +242,17 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	DEBUG_INFO(LOG_PROMPT"%s: %u Hz, %d channels\n", dev, st->fprm.srate, st->fprm.channels);
 
 	if (st->fprm.channels != prm->ch) {
-		DEBUG_WARNING(LOG_PROMPT"input file (%s) must have channels = %d\n", dev, prm->ch);
-		err = ENODEV;
-		goto out;
+		/* allow a stereo file to be down-mixed to mono for a
+		 * single-channel call */
+		if (st->fprm.channels == 2 && prm->ch == 1) {
+			DEBUG_INFO(LOG_PROMPT"input file (%s) is stereo, down-mixing to mono\n", dev);
+		} else {
+			DEBUG_WARNING(LOG_PROMPT"input file (%s) must have channels = %d\n", dev, prm->ch);
+			err = ENODEV;
+			goto out;
+		}
 	}
+	st->ch = prm->ch;
 	if (st->fprm.fmt != AUFMT_S16LE && st->fprm.fmt != AUFMT_PCMA && st->fprm.fmt != AUFMT_PCMU) {
 		DEBUG_WARNING(LOG_PROMPT"input file must have S16LE, G.711a or G.711u format\n");
 		err = ENODEV;
