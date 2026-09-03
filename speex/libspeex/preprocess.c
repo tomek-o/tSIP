@@ -325,21 +325,29 @@ static void compute_gain_floor(int noise_suppress, int effective_echo_suppress, 
       noise_gain = EXTRACT16(MIN32(Q15_ONE,SHR32(spx_exp(MULT16_16(QCONST16(0.11513,11),noise_suppress)),1)));
       gain_ratio = EXTRACT16(MIN32(Q15_ONE,SHR32(spx_exp(MULT16_16(QCONST16(.2302585f,11),effective_echo_suppress-noise_suppress)),1)));
 
-      /* gain_floor = sqrt [ (noise*noise_floor + echo*echo_floor) / (noise+echo) ] */
+      /* gain_floor = sqrt [ (noise*noise_floor + echo*echo_floor) / (noise+echo) ]
+       * num/den are clamped so a corrupted/negative echo estimate can't send a
+       * negative or zero argument into DIV32_16_Q15()/spx_sqrt() */
       for (i=0;i<len;i++)
-         gain_floor[i] = MULT16_16_Q15(noise_gain,
-                                       spx_sqrt(SHL32(EXTEND32(DIV32_16_Q15(PSHR32(noise[i],NOISE_SHIFT) + MULT16_32_Q15(gain_ratio,echo[i]),
-                                             (1+PSHR32(noise[i],NOISE_SHIFT) + echo[i]) )),15)));
+      {
+         spx_word32_t num = MAX32(EXTEND32(0), PSHR32(noise[i],NOISE_SHIFT) + MULT16_32_Q15(gain_ratio,echo[i]));
+         spx_word32_t den = MAX32(EXTEND32(1), 1+PSHR32(noise[i],NOISE_SHIFT) + echo[i]);
+         gain_floor[i] = MULT16_16_Q15(noise_gain, spx_sqrt(SHL32(EXTEND32(DIV32_16_Q15(num, den)),15)));
+      }
    } else {
       spx_word16_t echo_gain, gain_ratio;
       echo_gain = EXTRACT16(MIN32(Q15_ONE,SHR32(spx_exp(MULT16_16(QCONST16(0.11513,11),effective_echo_suppress)),1)));
       gain_ratio = EXTRACT16(MIN32(Q15_ONE,SHR32(spx_exp(MULT16_16(QCONST16(.2302585f,11),noise_suppress-effective_echo_suppress)),1)));
 
-      /* gain_floor = sqrt [ (noise*noise_floor + echo*echo_floor) / (noise+echo) ] */
+      /* gain_floor = sqrt [ (noise*noise_floor + echo*echo_floor) / (noise+echo) ]
+       * num/den are clamped so a corrupted/negative echo estimate can't send a
+       * negative or zero argument into DIV32_16_Q15()/spx_sqrt() */
       for (i=0;i<len;i++)
-         gain_floor[i] = MULT16_16_Q15(echo_gain,
-                                       spx_sqrt(SHL32(EXTEND32(DIV32_16_Q15(MULT16_32_Q15(gain_ratio,PSHR32(noise[i],NOISE_SHIFT)) + echo[i],
-                                             (1+PSHR32(noise[i],NOISE_SHIFT) + echo[i]) )),15)));
+      {
+         spx_word32_t num = MAX32(EXTEND32(0), MULT16_32_Q15(gain_ratio,PSHR32(noise[i],NOISE_SHIFT)) + echo[i]);
+         spx_word32_t den = MAX32(EXTEND32(1), 1+PSHR32(noise[i],NOISE_SHIFT) + echo[i]);
+         gain_floor[i] = MULT16_16_Q15(echo_gain, spx_sqrt(SHL32(EXTEND32(DIV32_16_Q15(num, den)),15)));
+      }
    }
 }
 
@@ -383,9 +391,19 @@ static void compute_gain_floor(int noise_suppress, int effective_echo_suppress, 
    noise_floor = exp(.2302585f*noise_suppress);
    echo_floor = exp(.2302585f*effective_echo_suppress);
 
-   /* Compute the gain floor based on different floors for the background noise and residual echo */
+   /* Compute the gain floor based on different floors for the background noise and residual echo.
+    * num/den are clamped so a corrupted/negative echo estimate can't send a negative
+    * argument into sqrt() (-> NaN) or an argument close to zero into the second sqrt(). */
    for (i=0;i<len;i++)
-      gain_floor[i] = FRAC_SCALING*sqrt(noise_floor*PSHR32(noise[i],NOISE_SHIFT) + echo_floor*echo[i])/sqrt(1+PSHR32(noise[i],NOISE_SHIFT) + echo[i]);
+   {
+      float num = noise_floor*PSHR32(noise[i],NOISE_SHIFT) + echo_floor*echo[i];
+      float den = 1+PSHR32(noise[i],NOISE_SHIFT) + echo[i];
+      if (num < 0.f)
+         num = 0.f;
+      if (den < 1e-5f)
+         den = 1e-5f;
+      gain_floor[i] = FRAC_SCALING*sqrt(num)/sqrt(den);
+   }
 }
 
 #endif
@@ -746,15 +764,18 @@ EXPORT int speex_preprocess_run(SpeexPreprocessState *st, spx_int16_t *x)
    {
       speex_echo_get_residual(st->echo_state, st->residual_echo, N);
 #ifndef FIXED_POINT
-      /* If there are NaNs or ridiculous values, it'll show up in the DC and we just reset everything to zero */
-      if (!(st->residual_echo[0] >=0 && st->residual_echo[0]<N*1e9f))
+      /* If there are NaNs or ridiculous values, reset just the offending bin(s) to zero.
+       * Checking only bin 0 (as before) misses corruption confined to other bins, which
+       * would otherwise flow into echo_noise/tot_noise and can make sqrt() arguments in
+       * compute_gain_floor()/hypergeom_gain() go negative (-> NaN), corrupting the frame. */
+      for (i=0;i<N;i++)
       {
-         for (i=0;i<N;i++)
+         if (!(st->residual_echo[i] >=0 && st->residual_echo[i]<N*1e9f))
             st->residual_echo[i] = 0;
       }
 #endif
       for (i=0;i<N;i++)
-         st->echo_noise[i] = MAX32(MULT16_32_Q15(QCONST16(.6f,15),st->echo_noise[i]), st->residual_echo[i]);
+         st->echo_noise[i] = MAX32(EXTEND32(0), MAX32(MULT16_32_Q15(QCONST16(.6f,15),st->echo_noise[i]), st->residual_echo[i]));
       filterbank_compute_bank32(st->bank, st->echo_noise, st->echo_noise+N);
    } else {
       for (i=0;i<N+M;i++)
