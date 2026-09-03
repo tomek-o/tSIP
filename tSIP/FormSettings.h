@@ -383,6 +383,7 @@ __published:	// IDE-managed Components
 	TLabel *lblMessagesReply2;
 	TEdit *edMessagesReplyReason;
 	TCheckBox *chbMessagesDoNotReply;
+	TCheckBox *chbMessagesHistoryEnabled;
 	TLabel *lblOnRecorderState;
 	TEdit *edScriptOnRecorderStateFile;
 	TButton *btnSelectedScriptOnRecorderStateChange;

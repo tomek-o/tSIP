@@ -45,6 +45,7 @@
 #include "Troubleshooting.h"
 #include "FormTroubleshooting.h"
 #include "SIMPLE_Messages.h"
+#include "MessageHistory.h"
 #include "Globals.h"
 #include "PortaudioLock.h"
 #include "Translate.h"
@@ -341,6 +342,10 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 		ChangeFileExt(ExtractFileName(Application->ExeName), "").c_str());
 	history.SetFilename(asHistoryFile);
 	history.Read(&OnGetContactName);
+
+	AnsiString asMessageHistoryDir;
+	asMessageHistoryDir.sprintf("%s\\messages", Paths::GetProfileDir().c_str());
+	MessageHistory::SetDir(asMessageHistoryDir);
 
 	initialScaling = static_cast<double>(appSettings.gui.scalingPct) / 100;
 	UpdateSize();

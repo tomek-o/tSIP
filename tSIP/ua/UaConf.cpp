@@ -253,6 +253,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		uaMessagesJson.getInt("replyCode", messages.replyCode);
 		uaMessagesJson.getString("replyReason", messages.replyReason);
 		uaMessagesJson.getBool("doNotReply", messages.doNotReply);
+		uaMessagesJson.getBool("historyEnabled", messages.historyEnabled);
 	}
 
 	autoAnswer = uaConfJson.get("autoAnswer", autoAnswer).asBool();
@@ -404,6 +405,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		jv["replyCode"] = messages.replyCode;
 		jv["replyReason"] = messages.replyReason;
 		jv["doNotReply"] = messages.doNotReply;
+		jv["historyEnabled"] = messages.historyEnabled;
 	}
 
 	uaConfJson["autoAnswer"] = autoAnswer;

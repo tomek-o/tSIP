@@ -591,18 +591,21 @@ public:
 		int replyCode;
 		std::string replyReason;
 		bool doNotReply;
+		bool historyEnabled;
 		Messages(void):
 			enabled(true),
 			replyCode(200),
 			replyReason("OK"),
-			doNotReply(false)
+			doNotReply(false),
+			historyEnabled(true)
 		{}
 		bool operator==(const UaConf::Messages& right) const {
 			if (
                 enabled == right.enabled &&
 				replyCode == right.replyCode &&
 				replyReason == right.replyReason &&
-                doNotReply == right.doNotReply
+                doNotReply == right.doNotReply &&
+                historyEnabled == right.historyEnabled
 				)
 			{
 				return true;

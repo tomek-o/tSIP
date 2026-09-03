@@ -11,6 +11,7 @@
 #include <Buttons.hpp>
 
 #include <set>
+#include <time.h>
 //---------------------------------------------------------------------------
 class TfrmMessage : public TForm
 {
@@ -24,18 +25,28 @@ __published:	// IDE-managed Components
 	TPanel *pnlButtons;
 	TButton *btnSend;
 	TSpeedButton *btnSendOnEnter;
+	TTimer *tmrHistoryScroll;
     void __fastcall memoInputKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
     void __fastcall FormCreate(TObject *Sender);
     void __fastcall btnSendOnEnterClick(TObject *Sender);
     void __fastcall btnSendClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall edTargetChange(TObject *Sender);
+	void __fastcall tmrHistoryScrollTimer(TObject *Sender);
 private:	// User declarations
 	AnsiString target;
 	bool targetSet;
 	bool incoming;
 	void UpdateTarget(AnsiString val);
 	std::set<int> requestIds;
+	unsigned int loadedHistoryCount;
+	bool hasMoreHistory;
+	bool loadingMoreHistory;
+	void LoadHistory(void);
+	void LoadMoreHistory(void);
+	void CheckHistoryScrollTop(void);
+	void AppendHistoryEntry(bool incoming, time_t t, AnsiString contentType, AnsiString utf8Body);
+	void InsertHistoryEntryAtTop(int &insertPos, bool incoming, time_t t, AnsiString contentType, AnsiString utf8Body);
 public:		// User declarations
 	__fastcall TfrmMessage(TComponent* Owner);
 	void __fastcall MyWndProc (Messages::TMessage &Msg);

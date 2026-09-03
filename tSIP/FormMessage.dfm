@@ -153,4 +153,11 @@ object frmMessage: TfrmMessage
       OnChange = edTargetChange
     end
   end
+  object tmrHistoryScroll: TTimer
+    Enabled = False
+    Interval = 250
+    OnTimer = tmrHistoryScrollTimer
+    Left = 250
+    Top = 10
+  end
 end
