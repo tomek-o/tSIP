@@ -128,7 +128,8 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 		}
 		return result;
 	}
-	return TRUE;
+	findWindowData.hWndFound = hWnd;
+	return FALSE;
 }
 
 std::vector<ScriptExec::Symbol> symbols;
@@ -206,6 +207,7 @@ void ScriptExec::QueuePush(const char* name, const char* value)
 
 int ScriptExec::QueuePop(const char* name, AnsiString &value)
 {
+	ScopedLock<Mutex> lock(mutexQueues);
 	std::map<AnsiString, std::deque<AnsiString> >::iterator it;
 	it = queues.find(name);
 	if (it != queues.end())
@@ -224,6 +226,7 @@ int ScriptExec::QueuePop(const char* name, AnsiString &value)
 
 int ScriptExec::QueueClear(const char* name)
 {
+	ScopedLock<Mutex> lock(mutexQueues);
 	std::map<AnsiString, std::deque<AnsiString> >::iterator it;
 	it = queues.find(name);
 	if (it != queues.end())
@@ -236,6 +239,7 @@ int ScriptExec::QueueClear(const char* name)
 
 int ScriptExec::QueueGetSize(const char* name)
 {
+	ScopedLock<Mutex> lock(mutexQueues);
 	std::map<AnsiString, std::deque<AnsiString> >::iterator it;
 	it = queues.find(name);
 	if (it != queues.end())
@@ -464,6 +468,7 @@ static int l_FindWindowByCaptionAndExeName(lua_State* L)
 
 	ScopedLock<Mutex> lock(mutex);
 	findWindowData.hWndFound = NULL;
+	findWindowData.exeName = NULL;
 
 	findWindowData.windowName = lua_tostring(L, 1);
 	const char* exeName = lua_tostring(L, 2);
@@ -482,11 +487,11 @@ static int l_FindWindowByCaptionAndExeName(lua_State* L)
 				dosExeName.cat_printf("%s%s", targetPath, &exeName[2]);
 				findWindowData.exeName = dosExeName.c_str();
 			}
+			else
+			{
+				LOG("Lua FindWindowByCaptionAndExeName: QueryDosDevice failed for drive %.2s\n", exeName);
+			}
 		}
-	}
-	else
-	{
-		findWindowData.exeName = NULL;
 	}
 	if (findWindowData.windowName == NULL && findWindowData.exeName == NULL)
 	{
@@ -1018,10 +1023,10 @@ static int l_GenerateTones2(lua_State* L)
 		return 0;
 	}
 	UA->GenerateTone(callUid,
-		lua_tonumber(L, 1), lua_tonumber(L, 2),	// amplitude, frequency
-		lua_tonumber(L, 3), lua_tonumber(L, 4),
-		lua_tonumber(L, 5), lua_tonumber(L, 6),
-		lua_tonumber(L, 7), lua_tonumber(L, 8)
+		lua_tonumber(L, 2), lua_tonumber(L, 3),	// amplitude, frequency
+		lua_tonumber(L, 4), lua_tonumber(L, 5),
+		lua_tonumber(L, 6), lua_tonumber(L, 7),
+		lua_tonumber(L, 8), lua_tonumber(L, 9)
 	);
 	return 0;
 }
@@ -1636,6 +1641,7 @@ static int l_ClearVariable(lua_State* L)
 
 static int l_ClearAllVariables(lua_State* L)
 {
+	ScopedLock<Mutex> lock(mutexVariables);
 	variables.clear();
 	return 0;
 }
@@ -1808,12 +1814,17 @@ static int l_GetBlfState(lua_State* L)
 static int l_RecordStart(lua_State* L)
 {
 	const char* file = lua_tostring( L, 1 );
+	if (file == NULL)
+	{
+		LOG("Lua RecordStart error: file argument is nil or missing\n");
+		lua_pushinteger(L, -1);
+		return 1;
+	}
 	int channels = lua_tointeger( L, 2 );
 	int side = lua_tointeger( L, 3 );		// optional, introduced in tSIP 0.1.66
 	int fileFormat = lua_tointeger( L, 4 );	// optional, introduced in tSIP 0.2.9
-	unsigned int bitrate = lua_tointeger( L, 5 );
-	if (bitrate <= 0)
-		bitrate = 64000;
+	int bitrateArg = lua_tointeger( L, 5 );
+	unsigned int bitrate = (bitrateArg > 0) ? (unsigned int)bitrateArg : 64000;
 
 	int argCount = lua_gettop(L);
 	Call *call = NULL;

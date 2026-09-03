@@ -557,7 +557,7 @@ TfrmButtonContainer* ProgrammableButtons::GetBtnContainer(int btnId)
 {
     assert(btnId >= 0 && btnId < btnConf.size());
 	const ButtonConf &cfg = btnConf[btnId];
-	if (cfg.parentId <= ARRAY_SIZE(frmButtonContainers))
+	if (cfg.parentId < ARRAY_SIZE(frmButtonContainers))
 	{
 		return frmButtonContainers[cfg.parentId];
 	}

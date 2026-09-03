@@ -61,14 +61,17 @@ AnsiString CleanUri(AnsiString uri)
 {
 	AnsiString res = uri;
 	int start = uri.Pos("<");
-	if (start == 0)
+	if (start > 0)
+		start++;  // skip the '<' itself
+	else
 		start = 1;
 	int end = uri.Pos(">");
-	if (end == 0 || (uri.Pos(";") < end))
-		end = uri.Pos(";");
-	if (start && end && end > start)
+	int semi = uri.Pos(";");
+	if (end == 0 || (semi > 0 && semi < end))
+		end = semi;
+	if (end > start)
 	{
-		res = uri.SubString(start, end-start);
+		res = uri.SubString(start, end - start);
 	}
 	return res;
 }

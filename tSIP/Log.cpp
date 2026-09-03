@@ -106,7 +106,8 @@ void CLog::log(char *lpData, ...)
 	{
 		struct timeb timebuffer;
 		ftime( &timebuffer );
-		size = strftime(buf, sizeof(buf), "%T", localtime(&timebuffer.time));
+		struct tm *tm_info = localtime(&timebuffer.time);
+		size = tm_info ? strftime(buf, sizeof(buf), "%T", tm_info) : 0;
 		int res = snprintf(buf+size, sizeof(buf)-size, ".%03hu ", timebuffer.millitm);
 		buf[sizeof(buf)-1] = '\0';
 		size += res;
@@ -187,8 +188,12 @@ void CLog::write(const char* buf, int size)
 					DeleteFile(file1);
 					RenameFile(sFile.c_str(), file1);
 				}
-				// truncate				
-				fout = fopen(sFile.c_str(),"wt+");								
+				// truncate
+				fout = fopen(sFile.c_str(),"wt+");
+				if (!fout)
+				{
+					sFile = "";
+				}
             }
         }
 	}

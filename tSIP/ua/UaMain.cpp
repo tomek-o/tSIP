@@ -220,7 +220,9 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			const char* codec_name = "";
 			const struct audio* au = call_audio(call);
 			if (au) {
-				codec_name = audio_get_rx_aucodec_name(au);
+				const char* name = audio_get_rx_aucodec_name(au);
+				if (name)
+					codec_name = name;
 			}
 
 			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, pai_peer_uri, pai_peer_name, codec_name, "");
@@ -307,7 +309,7 @@ static void custom_req_response_handler(int err, const struct sip_msg *msg, void
 
 	if (err) {
 		DEBUG_WARNING("custom request uid %d reply error: %m\n", requestUid, err);
-	} else {
+	} else if (msg) {
 		if (msg->scode < 200) {
 			DEBUG_WARNING("Reply for custom request uid %d: scode = %d\n", requestUid, msg->scode);
 		} else 	if (msg->scode < 300) {
@@ -495,9 +497,8 @@ static void simple_message_response_handler(int err, const struct sip_msg *msg, 
 	if (msg && (msg->reason.l > 0))
 	{
 		//reason.sprintf("%.*s", msg->reason.l, msg->reason.p);
-		reason.SetLength(msg->reason.l + 1);
+		reason.SetLength(msg->reason.l);
 		memcpy(&reason[1], msg->reason.p, msg->reason.l);
-		reason[msg->reason.l + 1] = '\0';
 	}
 	UA_CB->OnMessageStatus(requestId, err, msg?msg->scode:0, reason);
 }
@@ -625,9 +626,10 @@ static int app_init(void)
 		std::vector<NetInterface> interfaces;
 		GetNetInterfaces(interfaces);
 		if (!interfaces.empty()) {
+			static const char* APIPA_PREFIX = "169.254.";
 			for (unsigned int i=0; i<interfaces.size(); i++) {
 				const NetInterface &netIf = interfaces[i];
-				if (netIf.ip == "0.0.0.0" || strncmp(netIf.ip.c_str(), "169.154.", strlen("169.154.")) == 0) {
+				if (netIf.ip == "0.0.0.0" || strncmp(netIf.ip.c_str(), APIPA_PREFIX, strlen(APIPA_PREFIX)) == 0) {
 					continue;
 				}
 			#if 0
@@ -1050,7 +1052,7 @@ extern "C" void control_handler(void)
 		quit(0);
 	}
 	
-	int err;
+	int err = 0;
 	Command cmd;
 	if (UA->GetCommand(cmd))
 	{
@@ -1142,7 +1144,10 @@ extern "C" void control_handler(void)
 		if (cmdCall)
 		{
 			struct audio *audio = call_audio(cmdCall);
-			audio_mute(audio, cmd.bEnabled);
+			if (audio)
+				audio_mute(audio, cmd.bEnabled);
+			else
+				DEBUG_WARNING("MUTE: no audio stream for call\n");
 		}
 		break;
 	case Command::HANGUP:
@@ -1306,6 +1311,10 @@ extern "C" void control_handler(void)
 		if (cmdCall)
 		{
 			struct audio* a = call_audio(cmdCall);
+			if (!a) {
+				DEBUG_WARNING("SWITCH_AUDIO_PLAYER: no audio stream for call\n");
+				break;
+			}
 			err = audio_set_player(a, cmd.audioMod.c_str(), cmd.audioDev.c_str());
 			if (err) {
 				DEBUG_WARNING("failed to set audio output (%m)\n", err);

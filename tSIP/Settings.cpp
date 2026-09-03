@@ -21,6 +21,8 @@
 Settings appSettings;
 
 inline void strncpyz(char* dst, const char* src, int dstsize) {
+	if (dstsize <= 0)
+		return;
 	strncpy(dst, src, dstsize);
 	dst[dstsize-1] = '\0';
 }
@@ -252,7 +254,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 			new_acc.dtmf_tx_format = acc.get("dtmf_tx_format", new_acc.dtmf_tx_format).asInt();
 			new_acc.answer_any = acc.get("answer_any", new_acc.answer_any).asBool();
 			int ptime = acc.get("ptime", new_acc.ptime).asInt();
-			if (ptime >= UaConf::Account::MIN_PTIME && new_acc.ptime < UaConf::Account::MAX_PTIME)
+			if (ptime >= UaConf::Account::MIN_PTIME && ptime < UaConf::Account::MAX_PTIME)
 			{
 				new_acc.ptime = ptime;
 			}
@@ -372,7 +374,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 	{
 		const Json::Value &guiJson = root["gui"];
 		int scalingPct = guiJson.get("scalingPct", gui.scalingPct).asInt();
-		if (gui.scalingPct >= gui.SCALING_MIN && gui.scalingPct < gui.SCALING_MAX) {
+		if (scalingPct >= gui.SCALING_MIN && scalingPct < gui.SCALING_MAX) {
 			gui.scalingPct = scalingPct;
 		}
 	}
@@ -593,7 +595,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		Logging.bLogToFile = LoggingJson.get("LogToFile", Logging.bLogToFile).asBool();
 		Logging.bFlush = LoggingJson.get("Flush", Logging.bFlush).asBool();
 		int iMaxFileSize = LoggingJson.get("MaxFileSize", Logging.iMaxFileSize).asInt();
-		if (iMaxFileSize >= Settings::_Logging::MIN_MAX_FILE_SIZE && Logging.iMaxFileSize <= Settings::_Logging::MAX_MAX_FILE_SIZE)
+		if (iMaxFileSize >= Settings::_Logging::MIN_MAX_FILE_SIZE && iMaxFileSize <= Settings::_Logging::MAX_MAX_FILE_SIZE)
 		{
 			Logging.iMaxFileSize = iMaxFileSize;
 		}

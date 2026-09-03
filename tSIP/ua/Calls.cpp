@@ -293,7 +293,8 @@ void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 		}
 	}
 
-	btn->SetDown(true);
+	if (btn)
+		btn->SetDown(true);
 	Call *call = FindCallFromLineButton(id);
 	if (call)
 	{

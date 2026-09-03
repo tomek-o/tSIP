@@ -1906,7 +1906,7 @@ void TfrmMain::PollCallbackQueue(void)
 							Contacts::Entry *entry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 							if (entry)
 							{
-								desc = lastContactEntry->description;
+								desc = entry->description;
 							}
 							else
 							{
@@ -2152,6 +2152,8 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::DLG_INFO_STATE:
 		{
+			if (cb.contactId < 0 || cb.contactId >= (int)appSettings.uaConf.contacts.size())
+				break;
 			enum dialog_info_direction direction = DIALOG_INFO_DIR_UNKNOWN;
 			AnsiString remoteIdentity;
 			AnsiString remoteIdentityDisplay;
@@ -2218,7 +2220,7 @@ void TfrmMain::PollCallbackQueue(void)
 						direction = ddata->direction;
 						remoteIdentity = ddata->identity;
 						remoteIdentityDisplay = GetPeerName(ddata->identity_display);
-						if (!remoteIdentity.Length() && !remoteIdentity.Length() && appSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing)
+						if (!remoteIdentity.Length() && !remoteIdentityDisplay.Length() && appSettings.frmMain.bSpeedDialKeepPreviousDialogInfoRemoteIdentityIfMissing)
 						{
 							updateRemoteIdentity = false;
 						}
@@ -2250,6 +2252,8 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::PRESENCE_STATE:
 		{
+			if (cb.contactId < 0 || cb.contactId >= (int)appSettings.uaConf.contacts.size())
+				break;
 			AnsiString note = cb.presenceNote;
 			if (appSettings.frmMain.bSpeedDialIgnorePresenceNote)
 			{

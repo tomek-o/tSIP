@@ -96,9 +96,13 @@ int Contacts::Write(void)
 	try
 	{
 		std::ofstream ofs(filename.c_str());
+		if (!ofs.is_open())
+		{
+			return 1;
+		}
 		ofs << outputConfig;
 		ofs.close();
-		GetFileWriteTime(filename, &ft);		
+		GetFileWriteTime(filename, &ft);
 	}
 	catch(...)
 	{

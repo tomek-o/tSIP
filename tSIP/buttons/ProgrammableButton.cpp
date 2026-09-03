@@ -682,7 +682,7 @@ void TProgrammableButton::SetImageTop(void)
 	if (centerImageVertically)
 	{
 		//image->Top = (Height - image->Height)/2;
-		image->Top = (Height - (image->Height * 100/scalingPercentage))/2;// * percentage/100;
+		image->Top = scalingPercentage ? (Height - (image->Height * 100/scalingPercentage))/2 : 0;
 	}
 	else
 	{

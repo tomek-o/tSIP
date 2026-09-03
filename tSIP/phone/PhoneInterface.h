@@ -52,6 +52,8 @@ private:
 
 	static std::map<AnsiString, class PhoneInterface*> instances;
 
+	static bool IsValidInstance(void* cookie);	
+
 	static AnsiString asDllDir;
 	AnsiString filename;	///< dll name (with full path)
 	HINSTANCE hInstance;	///< dll instance ptr

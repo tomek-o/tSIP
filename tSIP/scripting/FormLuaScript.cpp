@@ -556,6 +556,7 @@ void __fastcall TfrmLuaScript::btnLuacheckClick(TObject *Sender)
 	{
 		MessageBox(this->Handle, "Failed to create pipe.", this->Caption.c_str(), MB_ICONEXCLAMATION);
 		CloseHandle(hStdInPipeRead);
+		CloseHandle(hStdInPipeWrite);
 		return;
 	}
 
@@ -610,6 +611,8 @@ void __fastcall TfrmLuaScript::btnLuacheckClick(TObject *Sender)
 	{
 		MessageBox(this->Handle, "Failed to start luacheck.exe.", this->Caption.c_str(), MB_ICONEXCLAMATION);
 		CloseHandle(hStdOutPipeRead);
+		CloseHandle(hStdOutPipeWrite);
+		CloseHandle(hStdInPipeRead);
 		CloseHandle(hStdInPipeWrite);
 		return;
 	}

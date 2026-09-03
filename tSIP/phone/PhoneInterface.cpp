@@ -21,6 +21,7 @@
 
 std::vector<DllInfo> PhoneInterface::dlls;
 std::map<AnsiString, class PhoneInterface*> PhoneInterface::instances;
+
 AnsiString PhoneInterface::asDllDir;
 std::list<PhoneConf> PhoneInterface::cfg;
 
@@ -91,6 +92,7 @@ enum PhoneEventType
 struct PhoneEvent
 {
 	void *cookie;
+	AnsiString deviceFilename;
 
 	enum PhoneEventType type;
 
@@ -141,6 +143,19 @@ int EnqueueEvent(const PhoneEvent &event)
 }
 
 }	// namespace
+
+
+/** Check whether cookie is a live PhoneInterface* without dereferencing it.
+    Must be called with mutexInstances held. */
+bool PhoneInterface::IsValidInstance(void* cookie)
+{
+	for (std::map<AnsiString, class PhoneInterface*>::iterator it = PhoneInterface::instances.begin(); it != PhoneInterface::instances.end(); ++it)
+	{
+		if (it->second == cookie)
+			return true;
+	}
+	return false;
+}
 
 
 void PhoneInterface::EnumerateDlls(AnsiString dir)
@@ -468,6 +483,12 @@ void __stdcall PhoneInterface::OnKey(void *cookie, int keyCode, int state)
 {
 	PhoneEvent event;
 	event.cookie = cookie;
+	{
+		ScopedLock<Mutex> lock(mutexInstances);
+		if (!IsValidInstance(cookie))
+			return;
+		event.deviceFilename = LowerCase(reinterpret_cast<PhoneInterface*>(cookie)->filename);
+	}
 	event.type = PHONE_EVENT_KEY;
 	event.keyCode = keyCode;
 	event.keyState = state;
@@ -478,15 +499,26 @@ int __stdcall PhoneInterface::OnPagingTx(void *cookie, const char* target, const
 {
 	PhoneEvent event;
 	event.cookie = cookie;
+	{
+		ScopedLock<Mutex> lock(mutexInstances);
+		if (!IsValidInstance(cookie))
+			return -1;
+		event.deviceFilename = LowerCase(reinterpret_cast<PhoneInterface*>(cookie)->filename);
+	}
 	event.type = PHONE_PAGING_TX;
-	event.pagingTx.target = target;
-	event.pagingTx.filename = filename;
-	event.pagingTx.codecname = codecname;
 	if (filename == NULL)
 	{
 		LOG("Phone: invalid argument for PagingTx, filename == NULL\n");
 		return -1;
 	}
+	if (target == NULL || codecname == NULL)
+	{
+		LOG("Phone: invalid argument for PagingTx, target or codecname == NULL\n");
+		return -1;
+	}
+	event.pagingTx.target = target;
+	event.pagingTx.filename = filename;
+	event.pagingTx.codecname = codecname;
 	LOG("Phone: pagingTx, target = %s, filename = %s, codecname = %s\n", target, filename, codecname);
 
 	return EnqueueEvent(event);
@@ -496,6 +528,12 @@ void __stdcall PhoneInterface::OnClearDial(void *cookie)
 {
 	PhoneEvent event;
 	event.cookie = cookie;
+	{
+		ScopedLock<Mutex> lock(mutexInstances);
+		if (!IsValidInstance(cookie))
+			return;
+		event.deviceFilename = LowerCase(reinterpret_cast<PhoneInterface*>(cookie)->filename);
+	}
 	event.type = PHONE_CLEAR_DIAL;
 	LOG("Phone: ClearDial\n");
 	EnqueueEvent(event);
@@ -505,6 +543,12 @@ void __stdcall PhoneInterface::OnRedial(void *cookie)
 {
 	PhoneEvent event;
 	event.cookie = cookie;
+	{
+		ScopedLock<Mutex> lock(mutexInstances);
+		if (!IsValidInstance(cookie))
+			return;
+		event.deviceFilename = LowerCase(reinterpret_cast<PhoneInterface*>(cookie)->filename);
+	}
 	event.type = PHONE_REDIAL;
 	LOG("Phone: Redial\n");
 	EnqueueEvent(event);
@@ -513,13 +557,10 @@ void __stdcall PhoneInterface::OnRedial(void *cookie)
 int __stdcall PhoneInterface::OnGetNumberDescription(void *cookie, const char* number, char* description, int descriptionSize)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	//LOG("Phone: GetNumberDescription\n");
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
+	if (!IsValidInstance(cookie))
 		return -1;
-	}
+	class PhoneInterface *dev = reinterpret_cast<class PhoneInterface*>(cookie);
+	//LOG("Phone: GetNumberDescription\n");
 	if (dev->callbackGetNumberDescription)
 		return dev->callbackGetNumberDescription(number, description, descriptionSize);
 	return -2;
@@ -528,36 +569,24 @@ int __stdcall PhoneInterface::OnGetNumberDescription(void *cookie, const char* n
 int __stdcall PhoneInterface::OnSetVariable(void *cookie, const char* name, const char* value)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
+	if (!IsValidInstance(cookie))
 		return -1;
-	}
 	return ScriptExec::SetVariable(name, value);
 }
 
 int __stdcall PhoneInterface::OnClearVariable(void *cookie, const char* name)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
+	if (!IsValidInstance(cookie))
 		return -1;
-	}
 	return ScriptExec::ClearVariable(name);
 }
 
 int __stdcall PhoneInterface::OnQueuePush(void *cookie, const char* name, const char* value)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
+	if (!IsValidInstance(cookie))
 		return -1;
-	}
 	ScriptExec::QueuePush(name, value);
 	return 0;
 }
@@ -565,13 +594,11 @@ int __stdcall PhoneInterface::OnQueuePush(void *cookie, const char* name, const 
 int __stdcall PhoneInterface::OnQueuePop(void *cookie, const char* name, char* value, unsigned int valueSize)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
+	if (!IsValidInstance(cookie))
 		return -1;
-	}
 
+	if (valueSize == 0)
+		return -1;
 	AnsiString asValue;
 	int ret = ScriptExec::QueuePop(name, asValue);
 	strncpy(value, asValue.c_str(), valueSize-1);
@@ -582,24 +609,16 @@ int __stdcall PhoneInterface::OnQueuePop(void *cookie, const char* name, char* v
 int __stdcall PhoneInterface::OnQueueClear(void *cookie, const char* name)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
+	if (!IsValidInstance(cookie))
 		return -1;
-	}
 	return ScriptExec::QueueClear(name);
 }
 
 int __stdcall PhoneInterface::OnQueueGetSize(void *cookie, const char* name)
 {
 	ScopedLock<Mutex> lock(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
-	{
+	if (!IsValidInstance(cookie))
 		return -1;
-	}
 	return ScriptExec::QueueGetSize(name);
 }
 
@@ -607,6 +626,12 @@ int __stdcall PhoneInterface::OnRunScriptAsync(void *cookie, const char* script)
 {
 	PhoneEvent event;
 	event.cookie = cookie;
+	{
+		ScopedLock<Mutex> lock(mutexInstances);
+		if (!IsValidInstance(cookie))
+			return -1;
+		event.deviceFilename = LowerCase(reinterpret_cast<PhoneInterface*>(cookie)->filename);
+	}
 	event.type = PHONE_EVENT_SCRIPT;
 	event.script = script;
 	return EnqueueEvent(event);
@@ -616,6 +641,12 @@ int __stdcall PhoneInterface::OnSetAppStatus(void *cookie, const char* id, int p
 {
 	PhoneEvent event;
 	event.cookie = cookie;
+	{
+		ScopedLock<Mutex> lock(mutexInstances);
+		if (!IsValidInstance(cookie))
+			return -1;
+		event.deviceFilename = LowerCase(reinterpret_cast<PhoneInterface*>(cookie)->filename);
+	}
 	event.type = PHONE_EVENT_APP_STATUS;
 	event.appStatus.id = id;
 	event.appStatus.priority = priority;
@@ -889,13 +920,13 @@ void PhoneInterface::Poll(void)
 	eventQueue.pop_front();
 
 	ScopedLock<Mutex> lockInstances(mutexInstances);
-	class PhoneInterface *dev;
-	dev = reinterpret_cast<class PhoneInterface*>(event.cookie);
-	if (instances.find(LowerCase(dev->filename)) == instances.end())
+	std::map<AnsiString, class PhoneInterface*>::iterator itinst = instances.find(event.deviceFilename);
+	if (itinst == instances.end())
 	{
-        LOG("PhoneInterface: device %p not found!\n", dev);
+		LOG("PhoneInterface: device %p not found!\n", event.cookie);
 		return;
 	}
+	class PhoneInterface *dev = itinst->second;
 
 	switch (event.type)
 	{
