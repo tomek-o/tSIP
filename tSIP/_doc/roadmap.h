@@ -79,8 +79,6 @@ ping plugin: add context menu to history
 
 DEBUG_INFO: w³¹cznik
 
-aufile: required 1ch
-
 tSIP: help on button types (+ images)
 tSIP: directory import from vcard
 tSIP: verify wave file format when selecting for wave source audio device
