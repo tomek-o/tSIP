@@ -105,6 +105,8 @@ int Color::IntTColorToId(int color)
 	for (unsigned int i=0; i<sizeof(entries)/sizeof(entries[0]); i++)
 	{
 		const Entry &entry = entries[i];
+		if (entry.id == Color::clCustom)
+			continue;  // sentinel/fallback only - its placeholder value (0) collides with clBlack's real value
 		if (entry.color == color)
 		{
 			return entry.id;
