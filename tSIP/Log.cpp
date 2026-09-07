@@ -162,8 +162,18 @@ void CLog::write(const char* buf, int size)
 		}
 		if (maxFileSize != 0)
 		{
-			int size = ftell(fout);
-			if (size > maxFileSize)
+			long fileSize = ftell(fout);
+			if (fileSize < 0)
+			{
+				// bad stream (e.g. file removed while open) - recreate it
+				fclose(fout);
+				fout = fopen(sFile.c_str(), "at+");
+				if (!fout)
+				{
+					sFile = "";
+				}
+			}
+			else if ((unsigned long)fileSize > maxFileSize)
 			{
 				fclose(fout);
 				if (maxLogrotateCnt > 0)
