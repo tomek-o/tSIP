@@ -78,6 +78,7 @@ Call* Calls::FindByUid(unsigned int uid)
 
 Call* Calls::FindByAutoAnswerTimer(const Extctrls::TTimer *tmr)
 {
+	ScopedLock<Mutex> lock(mutex);
 	std::map<unsigned int, Call>::iterator iter;
 	for (iter = entries.begin(); iter != entries.end(); ++iter)
 	{
@@ -329,7 +330,7 @@ void Calls::OnButtonConfigChange(void)
 	std::map<unsigned int, Call>::iterator iter;
 
 	// disconnect current call if switching from single-call to multi-call configuration
-	if (prevLineButtonIds.size() < 1 && lineButtonIds.size() > 1)
+	if (prevLineButtonIds.size() < 1 && lineButtonIds.size() >= 1)
 	{
 		for (iter = entries.begin(); iter != entries.end(); ++iter)
 		{
