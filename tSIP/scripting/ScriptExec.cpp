@@ -354,7 +354,7 @@ static int LuaError( lua_State *L )
 
 static int l_ShowMessage( lua_State* L )
 {
-	AnsiString msg = lua_tostring(L, -1);
+	AnsiString msg = lua_tostring(L, 1);
 	MessageBox(NULL, msg.c_str(), "Lua message", MB_ICONINFORMATION);
 	lua_pushnumber( L, 0 );
 	return 1;
@@ -375,7 +375,7 @@ static int l_InputQuery(lua_State* L)
 static int l_Sleep(lua_State* L)
 {
 	int ret = 0;
-	int time = luaL_checkinteger(L, -1);
+	int time = luaL_checkinteger(L, 1);
 	clock_t t1 = clock();
 	long elapsed = 0;
 	ScriptExec* context = GetContext(L);
@@ -424,7 +424,7 @@ static int l_GetClipboardText( lua_State* L )
 
 static int l_SetClipboardText( lua_State* L )
 {
-	const char* str = lua_tostring( L, -1 );
+	const char* str = lua_tostring( L, 1 );
 	if (str == NULL)
 	{
 		LOG("Lua error: str == NULL\n");
@@ -437,7 +437,7 @@ static int l_SetClipboardText( lua_State* L )
 /** \return 0 on success */
 static int l_ForceDirectories(lua_State* L)
 {
-	const char* str = lua_tostring(L, -1);
+	const char* str = lua_tostring(L, 1);
 	if (DirectoryExists(str))
 	{
 		lua_pushnumber(L, 0);
@@ -454,7 +454,7 @@ static int l_ForceDirectories(lua_State* L)
 
 static int l_FileExists(lua_State* L)
 {
-	const char* str = lua_tostring(L, -1);
+	const char* str = lua_tostring(L, 1);
 	if (str == NULL)
 		return 0;
 	bool exists = FileExists(str);
@@ -508,7 +508,7 @@ static int l_FindWindowByCaptionAndExeName(lua_State* L)
 
 static int l_Call(lua_State* L)
 {
-	const char* str = lua_tostring( L, -1 );
+	const char* str = lua_tostring( L, 1 );
 	if (str == NULL)
 	{
 		LOG("Lua error: str == NULL\n");
@@ -724,7 +724,7 @@ static int l_GetHold(lua_State* L)
 
 static int l_SetDial(lua_State* L)
 {
-	const char* str = lua_tostring( L, -1 );
+	const char* str = lua_tostring( L, 1 );
 	if (str == NULL)
 	{
 		LOG("Lua error: str == NULL\n");
@@ -743,7 +743,7 @@ static int l_GetDial(lua_State* L)
 
 static int l_SetInitialCallTarget(lua_State* L)
 {
-	const char* str = lua_tostring( L, -1 );
+	const char* str = lua_tostring( L, 1 );
 	if (str == NULL)
 	{
 		LOG("Lua error: str == NULL\n");
@@ -763,7 +763,7 @@ static int l_SetInitialCallTarget(lua_State* L)
 
 static int l_SetCallTarget(lua_State* L)
 {
-	const char* str = lua_tostring( L, -1 );
+	const char* str = lua_tostring( L, 1 );
 	if (str == NULL)
 	{
 		LOG("Lua error: str == NULL\n");
@@ -985,7 +985,7 @@ static int l_SwitchVideoSource2(lua_State* L)
 
 static int l_SendDtmf(lua_State* L)
 {
-	const char* str = lua_tostring( L, -1 );
+	const char* str = lua_tostring( L, 1 );
 	if (str == NULL)
 	{
 		LOG("Lua error: str == NULL\n");
@@ -1033,7 +1033,7 @@ static int l_GenerateTones2(lua_State* L)
 
 static int l_BlindTransfer(lua_State* L)
 {
-	const char* str = lua_tostring( L, -1 );
+	const char* str = lua_tostring( L, 1 );
 	if (str == NULL)
 	{
         LOG("Lua BlindTransfer error: str == NULL\n");
@@ -1299,7 +1299,7 @@ static int l_GetCallDurationFromConfirmed(lua_State* L)
 
 static int l_GetContactName(lua_State* L)
 {
-	const char* number = lua_tostring( L, -1 );
+	const char* number = lua_tostring( L, 1 );
 	if (number == NULL)
 	{
 		LOG("Lua GetContactName error: number == NULL\n");
@@ -1741,13 +1741,13 @@ static int l_SetTrayIcon(lua_State* L)
 
 static int l_GetExecSourceType(lua_State* L)
 {
-	lua_pushinteger(L, GetContext(L)->srcType);
+	lua_pushinteger(L, GetContext(L)->context.srcType);
 	return 1;
 }
 
 static int l_GetExecSourceTypeName(lua_State* L)
 {
-	enum ScriptSource srcType = GetContext(L)->srcType;
+	enum ScriptSource srcType = GetContext(L)->context.srcType;
 	int argCnt = lua_gettop(L);
 	if (argCnt >= 1)
 	{
@@ -1759,7 +1759,25 @@ static int l_GetExecSourceTypeName(lua_State* L)
 
 static int l_GetExecSourceId(lua_State* L)
 {
-	lua_pushinteger(L, GetContext(L)->srcId);
+	lua_pushinteger(L, GetContext(L)->context.srcId);
+	return 1;
+}
+
+static int l_GetSimpleMessageRxFrom(lua_State* L)
+{
+	lua_pushstring(L, GetContext(L)->context.simpleMessageFrom.c_str());
+	return 1;
+}
+
+static int l_GetSimpleMessageRxBody(lua_State* L)
+{
+	lua_pushstring(L, GetContext(L)->context.simpleMessageBody.c_str());
+	return 1;
+}
+
+static int l_GetSimpleMessageRxContentType(lua_State* L)
+{
+	lua_pushstring(L, GetContext(L)->context.simpleMessageContentType.c_str());
 	return 1;
 }
 
@@ -2337,8 +2355,7 @@ static int l_CheckSoftphoneVideoSupport(lua_State* L)
 
 
 ScriptExec::ScriptExec(
-	enum ScriptSource srcType,
-	int srcId,
+	const ScriptContext &context,
 	bool &breakReq,
 	bool &handled,
 	CallbackCall onCall,
@@ -2365,8 +2382,7 @@ ScriptExec::ScriptExec(
 	CallbackApplicationHide onApplicationHide,
 	CallbackApplicationClose onApplicationClose
 	):
-	srcType(srcType),
-	srcId(srcId),
+	context(context),
 	breakReq(breakReq),
 	handled(handled),
 	onCall(onCall),
@@ -2546,6 +2562,9 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetExecSourceType, "GetExecSourceType", "Get type of event that triggered script execution", "See also: GetExecSourceId().");
 	lua_register2(L, ScriptImp::l_GetExecSourceTypeName, "GetExecSourceTypeName", "Get name of type of script execution source", "GetExecSourceTypeName(typeId) - get name of specific type\nGetExecSourceTypeName() - get name of source type that triggered this script execution");
 	lua_register2(L, ScriptImp::l_GetExecSourceId, "GetExecSourceId", "Get ID of object that triggered script (depending on trigger type)", "See also: GetExecSourceType().");
+	lua_register2(L, ScriptImp::l_GetSimpleMessageRxFrom, "GetSimpleMessageRxFrom", "Get sender of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
+	lua_register2(L, ScriptImp::l_GetSimpleMessageRxBody, "GetSimpleMessageRxBody", "Get body text of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
+	lua_register2(L, ScriptImp::l_GetSimpleMessageRxContentType, "GetSimpleMessageRxContentType", "Get Content-Type of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
 	lua_register2(L, ScriptImp::l_GetRecordFile, "GetRecordFile", "Get name of recording file from current call or call that ended", "");
 	lua_register2(L, ScriptImp::l_GetContactId, "GetContactId", "Get contact ID for specified number/URI", "");
 	lua_register2(L, ScriptImp::l_GetBlfState, "GetBlfState", "Get BLF state of specified contact (by contact ID)", "To be used in \"on BLF change\" (GetExecSourceId() as contact id / argument) or together with GetContactId(number).\nReturning number, state, remote identity number/URI, remote identity display name and call direction.");
@@ -2619,7 +2638,7 @@ void ScriptExec::Run(const char* script)
 		AnsiString txt;
 		txt.sprintf("Execution error\n\n"
 			"Script source type: %s, source id: %d\n\n%s",
-            GetScriptSourceName(srcType), srcId,
+            GetScriptSourceName(context.srcType), context.srcId,
 			lua_tostring(L, -1));
 		AnsiString title;
 		title.sprintf("%s - Lua", Application->Title.c_str());

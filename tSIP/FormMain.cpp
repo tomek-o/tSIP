@@ -261,6 +261,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 
 	TfrmLuaScript::SetCallbackRunScript(&RunScript);
 	PhoneInterface::SetCallbackRunScript(&RunScript);
+	SIMPLE_Messages::SetCallbackRunScriptFile(&RunScriptFile2);
 
 	if (appSettings.frmMain.trayNotificationImage != "")
 	{
@@ -2371,20 +2372,6 @@ void TfrmMain::PollCallbackQueue(void)
 			if (appSettings.uaConf.messages.enabled)
 			{
 				SIMPLE_Messages::OnIncomingMessage(cb.caller, cb.contentType, cb.body);
-				AnsiString file = appSettings.Messages.ring;
-				if (file != "")
-				{
-					AnsiString fileFull;
-					fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), file.c_str());
-					if (FileExists(fileFull))
-					{
-						UA->StartRing2(file);
-					}
-					else
-					{
-						LOG("Ring file (%s) for MESSAGE not found\n", file.c_str());
-					}
-				}
 			}
 			else
 			{
@@ -3144,6 +3131,12 @@ void TfrmMain::OnRestartUa(void)
 
 void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog)
 {
+	ScriptContext context(static_cast<enum ScriptSource>(srcType), srcId);
+	RunScriptFile2(context, filename, handled, showLog);
+}
+
+void TfrmMain::RunScriptFile2(const ScriptContext &context, AnsiString filename, bool &handled, bool showLog)
+{
 	if (showLog)
 	{
     	LOG("Running Lua script: %s\n", ExtractFileName(filename).c_str());
@@ -3165,7 +3158,7 @@ void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool &
 			return;
 		}
 		bool breakReq = false;
-		RunScript(srcType, srcId, scriptText, breakReq, handled);
+		RunScript2(context, scriptText, breakReq, handled);
 	}
 	else
 	{
@@ -3177,8 +3170,14 @@ void TfrmMain::RunScriptFile(int srcType, int srcId, AnsiString filename, bool &
 
 int TfrmMain::RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled)
 {
+	ScriptContext context(static_cast<enum ScriptSource>(srcType), srcId);
+	return RunScript2(context, script, breakRequest, handled);
+}
+
+int TfrmMain::RunScript2(const ScriptContext &context, AnsiString script, bool &breakRequest, bool &handled)
+{
 	ScriptExec scriptExec(
-		static_cast<enum ScriptSource>(srcType), srcId, breakRequest, handled,
+		context, breakRequest, handled,
 		&MakeCall, &Hangup, &Answer, &Redial, &OnGetDial, &OnSetDial,
 		&DialString,
 		&OnGetContactName,

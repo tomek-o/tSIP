@@ -452,6 +452,10 @@ __published:	// IDE-managed Components
 	TEdit *edScriptOnEncryptionStateFile;
 	TButton *btnSelectedScriptOnEncryptionStateChange;
 	TBitBtn *btnSelectedScriptOnEncryptionStateEdit;
+	TLabel *lblOnSimpleMessageRx;
+	TEdit *edScriptOnSimpleMessageRxFile;
+	TButton *btnSelectedScriptOnSimpleMessageRxChange;
+	TBitBtn *btnSelectedScriptOnSimpleMessageRxEdit;
 	TTabSheet *tsTls;
 	TCheckBox *chbTlsVerifyServerCertificate;
 	TLabel *lblTlsClientCertificate;

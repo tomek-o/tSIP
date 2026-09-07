@@ -620,6 +620,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edScriptOnAudioErrorFile->Text = tmpSettings.Scripts.onAudioDeviceError;
 	edScriptOnCustomRequestReplyFile->Text = tmpSettings.Scripts.onCustomRequestReply;
 	edScriptOnContactNoteOpenFile->Text = tmpSettings.Scripts.onContactNoteOpen;
+	edScriptOnSimpleMessageRxFile->Text = tmpSettings.Scripts.onSimpleMessageRx;
 
 	chbShowSettingsIfAnyAccountSettingsIsHidden->Checked = tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden;
 
@@ -1105,6 +1106,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Scripts.onAudioDeviceError = edScriptOnAudioErrorFile->Text;
 	tmpSettings.Scripts.onCustomRequestReply = edScriptOnCustomRequestReplyFile->Text;
 	tmpSettings.Scripts.onContactNoteOpen = edScriptOnContactNoteOpenFile->Text;
+	tmpSettings.Scripts.onSimpleMessageRx = edScriptOnSimpleMessageRxFile->Text;
 
 	tmpSettings.frmMain.bShowSettingsIfAccountSettingIsHidden = chbShowSettingsIfAnyAccountSettingsIsHidden->Checked;
 
@@ -1714,6 +1716,10 @@ void __fastcall TfrmSettings::btnSelectedScriptClick(
 	{
     	edit = edScriptOnContactNoteOpenFile;
 	}
+	else if (Sender == btnSelectedScriptOnSimpleMessageRxChange)
+	{
+		edit = edScriptOnSimpleMessageRxFile;
+	}
 	else
 	{
 		assert(0);
@@ -1825,6 +1831,11 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 	{
 		edit = edScriptOnContactNoteOpenFile;
 		eventName = "on_contact_note_open";
+	}
+	else if (Sender == btnSelectedScriptOnSimpleMessageRxEdit)
+	{
+		edit = edScriptOnSimpleMessageRxFile;
+		eventName = "on_simple_message_rx";
 	}
 	else
 	{

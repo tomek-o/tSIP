@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 
 #include "ScriptSource.h"
+#include "ScriptContext.h"
 #include "LuaWinapi.h"
 #include "baresip_dialog_info_direction.h"
 
@@ -88,8 +89,7 @@ private:
 	bool running;
 public:
 	ScriptExec(
-		enum ScriptSource srcType,
-		int srcId,
+		const ScriptContext &context,
 		bool &breakReq,
 		bool &handled,
 		CallbackCall onCall,
@@ -167,8 +167,7 @@ public:
 
 	static const std::vector<Symbol>& GetSymbols(void);
 private:
-	enum ScriptSource srcType;
-	int srcId;
+	ScriptContext context;
 };
 
 #endif

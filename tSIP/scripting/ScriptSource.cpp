@@ -41,6 +41,8 @@ const char* GetScriptSourceName(enum ScriptSource source)
 		return "on encryption state";
 	case SCRIPT_SRC_HOTKEY:
 		return "hotkey";
+	case SCRIPT_SRC_ON_SIMPLE_MESSAGE_RX:
+		return "on SIP SIMPLE message (RX)";
 	default:
 		return "???";
 	}

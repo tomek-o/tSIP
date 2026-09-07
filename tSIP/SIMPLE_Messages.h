@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 
 #include <System.hpp>
+#include "scripting/ScriptContext.h"
 
 /** \note Using just "Messages.h" for name creates some conflict (VCL?)
 */
@@ -13,6 +14,9 @@ class TfrmMessage;
 
 namespace SIMPLE_Messages
 {
+	typedef void (__closure *CallbackRunScriptFile)(const ScriptContext &context, AnsiString filename, bool &handled, bool showLog);
+	void SetCallbackRunScriptFile(CallbackRunScriptFile cb);
+
 	void RegisterWindow(TfrmMessage *frmMessage);
 	void UnregisterWindow(TfrmMessage *frmMessage);
 	void CloseAllWindows(void);

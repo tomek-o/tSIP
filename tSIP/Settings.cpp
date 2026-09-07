@@ -740,6 +740,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		Scripts.onAudioDeviceError = ScriptsJson.get("OnAudioDeviceError", Scripts.onAudioDeviceError.c_str()).asString().c_str();
 		ScriptsJson.getAString("OnCustomRequestReply", Scripts.onCustomRequestReply);
 		ScriptsJson.getAString("OnContactNoteOpen", Scripts.onContactNoteOpen);
+		ScriptsJson.getAString("OnSimpleMessageRx", Scripts.onSimpleMessageRx);
 	}
 
 	{
@@ -1049,6 +1050,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["OnAudioDeviceError"] = Scripts.onAudioDeviceError.c_str();
 		jv["OnCustomRequestReply"] = Scripts.onCustomRequestReply;
 		jv["OnContactNoteOpen"] = Scripts.onContactNoteOpen;
+		jv["OnSimpleMessageRx"] = Scripts.onSimpleMessageRx;
 	}
 
 	uaConf.toJson(root["uaConf"]);

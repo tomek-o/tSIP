@@ -361,6 +361,7 @@ public:
 		AnsiString onAudioDeviceError;
 		AnsiString onCustomRequestReply;
 		AnsiString onContactNoteOpen;	///< after contact note window is opened
+		AnsiString onSimpleMessageRx;		///< on incoming SIP SIMPLE (instant) MESSAGE
 
 		AnsiString lastScriptWindowDir;
 	} Scripts;

@@ -4,7 +4,7 @@ object frmSettings: TfrmSettings
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Settings'
-  ClientHeight = 505
+  ClientHeight = 533
   ClientWidth = 700
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -22,7 +22,7 @@ object frmSettings: TfrmSettings
   TextHeight = 13
   object pnlBottom: TPanel
     Left = 0
-    Top = 468
+    Top = 496
     Width = 700
     Height = 37
     Align = alBottom
@@ -56,7 +56,7 @@ object frmSettings: TfrmSettings
     Left = 128
     Top = 0
     Width = 572
-    Height = 468
+    Height = 496
     ActivePage = tsCalls
     Align = alClient
     TabHeight = 10
@@ -3599,14 +3599,14 @@ object frmSettings: TfrmSettings
       end
       object lblScriptOnBlf: TLabel
         Left = 5
-        Top = 214
+        Top = 215
         Width = 131
         Height = 13
         Caption = 'on BLF (dialog-info) change'
       end
       object lblScriptOnDial: TLabel
         Left = 5
-        Top = 240
+        Top = 241
         Width = 77
         Height = 13
         Caption = 'on dial (keypad)'
@@ -3620,7 +3620,7 @@ object frmSettings: TfrmSettings
       end
       object lblScriptOnAudioError: TLabel
         Left = 5
-        Top = 316
+        Top = 317
         Width = 102
         Height = 13
         Caption = 'on audio device error'
@@ -3688,6 +3688,13 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = 'on ZRTP encryption state'
       end
+      object lblOnSimpleMessageRx: TLabel
+        Left = 5
+        Top = 453
+        Width = 128
+        Height = 13
+        Caption = 'on SIP SIMPLE message (RX)'
+      end
       object edScriptOnCallStateChangeFile: TEdit
         Left = 148
         Top = 56
@@ -3738,7 +3745,7 @@ object frmSettings: TfrmSettings
       end
       object edScriptOnTimerFile: TEdit
         Left = 148
-        Top = 158
+        Top = 159
         Width = 212
         Height = 21
         TabOrder = 6
@@ -4518,6 +4525,57 @@ object frmSettings: TfrmSettings
           FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
           FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
       end
+      object edScriptOnSimpleMessageRxFile: TEdit
+        Left = 148
+        Top = 450
+        Width = 212
+        Height = 21
+        TabOrder = 50
+      end
+      object btnSelectedScriptOnSimpleMessageRxChange: TButton
+        Left = 363
+        Top = 450
+        Width = 22
+        Height = 21
+        Caption = '...'
+        TabOrder = 51
+        OnClick = btnSelectedScriptClick
+      end
+      object btnSelectedScriptOnSimpleMessageRxEdit: TBitBtn
+        Left = 390
+        Top = 450
+        Width = 22
+        Height = 21
+        TabOrder = 52
+        OnClick = btnSelectedScriptEditClick
+        Glyph.Data = {
+          36030000424D3603000000000000360000002800000010000000100000000100
+          18000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000
+          000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFF000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000
+          D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8
+          FF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFF00000000D8FF000000FFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
+      end
     end
     object tsLogging: TTabSheet
       Caption = 'Logging'
@@ -4766,7 +4824,7 @@ object frmSettings: TfrmSettings
     Left = 0
     Top = 0
     Width = 128
-    Height = 468
+    Height = 496
     Align = alLeft
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText

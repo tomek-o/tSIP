@@ -7,7 +7,11 @@
 #include "FormMessage.h"
 #include "Log.h"
 #include "Settings.h"
+#include "Paths.h"
+#include "scripting/ScriptSource.h"
+#include "ua/ControlQueue.h"
 #include <set>
+#include <assert.h>
 
 //---------------------------------------------------------------------------
 
@@ -20,6 +24,13 @@ namespace SIMPLE_Messages
 {
 
 std::set<TfrmMessage*> messageWindows;
+CallbackRunScriptFile callbackRunScriptFile = NULL;
+
+void SetCallbackRunScriptFile(CallbackRunScriptFile cb)
+{
+	assert(cb);
+	callbackRunScriptFile = cb;
+}
 
 void RegisterWindow(TfrmMessage *frmMessage)
 {
@@ -103,6 +114,38 @@ unsigned int CountIncomingForms(void)
 void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body)
 {
 	LOG("Received message from %s: ContentType %s, body [%s]\n", caller.c_str(), contentType.c_str(), body.c_str());
+
+	if (appSettings.Scripts.onSimpleMessageRx != "" && callbackRunScriptFile)
+	{
+		AnsiString asScriptFile;
+		bool handled = false;
+		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onSimpleMessageRx.c_str());
+		ScriptContext context(SCRIPT_SRC_ON_SIMPLE_MESSAGE_RX, -1);
+		context.simpleMessageFrom = caller;
+		context.simpleMessageBody = body;
+		context.simpleMessageContentType = contentType;
+		callbackRunScriptFile(context, asScriptFile.c_str(), handled, true);
+		if (handled)
+		{
+			return;
+		}
+	}
+
+	AnsiString file = appSettings.Messages.ring;
+	if (file != "")
+	{
+		AnsiString fileFull;
+		fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), file.c_str());
+		if (FileExists(fileFull))
+		{
+			UA->StartRing2(file);
+		}
+		else
+		{
+			LOG("Ring file (%s) for MESSAGE not found\n", file.c_str());
+		}
+	}
+
 	TfrmMessage *frm = FindForm(caller);
 	if (frm == NULL && CountIncomingForms() > 25)
 	{

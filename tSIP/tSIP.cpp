@@ -75,6 +75,7 @@ USEFORM("buttons\FormButtonGridEdit.cpp", frmButtonGridEdit);
 #include "Log.h"
 #include "Branding.h"
 #include "Translate.h"
+#include "SelfTests.h"
 
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -189,7 +190,11 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			);
 
 		LOG("Main config file: %s\n", Paths::GetConfig().c_str());
-		
+
+#ifdef _DEBUG
+		RunSelfTests();
+#endif
+
 		Application->Run();
 	}
 	catch (Exception &exception)

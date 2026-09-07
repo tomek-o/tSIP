@@ -10,6 +10,7 @@
 
 #include "Settings.h"
 #include "ProgrammableButtons.h"
+#include "ScriptContext.h"
 #include <Menus.hpp>
 #include <ActnList.hpp>
 #include <ImgList.hpp>
@@ -231,6 +232,7 @@ private:	// User declarations
 	void RegisterGlobalHotKeys(void);
 	void ExecAction(const struct Action& action);
 	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
+	int RunScript2(const ScriptContext &context, AnsiString script, bool &breakRequest, bool &handled);
 
 	bool notificationIconState;
 	void SetNotificationIcon(bool state);
@@ -272,6 +274,7 @@ public:		// User declarations
 	void OnRestartUa(void);
 	void obsUpdate(Observable* o, Argument * arg);
 	void RunScriptFile(int srcType, int srcId, AnsiString filename, bool &handled, bool showLog = true);
+	void RunScriptFile2(const ScriptContext &context, AnsiString filename, bool &handled, bool showLog = true);
 	void SetTrayIconHint(AnsiString text);
 	void InitButtons(void);	
 
