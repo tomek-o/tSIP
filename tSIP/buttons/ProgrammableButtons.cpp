@@ -245,7 +245,7 @@ int ProgrammableButtons::Read(void)
 		// earlier versions stored btn config in main file - try to read it
 		AnsiString asConfigFile = ChangeFileExt( Application->ExeName, ".json" );
 		int rc = SettingsUtils::ReadFileOrBackup(asConfigFile, root);
-		if (rc == SettingsUtils::READ_OK)
+		if (rc == SettingsUtils::READ_OK || rc == SettingsUtils::READ_RECOVERED_FROM_BACKUP)
 		{
 			rc = LoadFromJsonValue(root);
 			if (rc != 0)
