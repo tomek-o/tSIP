@@ -34,7 +34,7 @@ public:
 			double val = getTimeMs();
 			char s[100];
 			snprintf(s, sizeof(s), "%s  %.3f ms\n", name, val);
-			LOG(s);
+			LOG("%s", s);
 		}
 	}
 

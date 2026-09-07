@@ -72,7 +72,12 @@ int SettingsUtils::AtomicUpdateWithBackup(AnsiString fileName, const std::string
 		return 1;
 	}
 
-	int ret = fwrite(content.data(), content.size(), 1, fp);
+	// fwrite() with size=0 always returns 0, even on success - skip it for empty content
+	int ret = 1;
+	if (content.size() > 0)
+	{
+		ret = fwrite(content.data(), content.size(), 1, fp);
+	}
 	fflush(fp);
 	fclose(fp);
 	if (ret != 1)
