@@ -48,6 +48,7 @@
     "miClearCallsHistory": "Очистить историю звонков",
     "miCommonSettings": "Настройки",
     "miExit": "Выход",
+    "miExportContactsToCsv": "Экспорт контактов в CSV",
     "miFile": "Выход",
     "miHelp": "Справка",
     "miImportContactsFromCsv": "Импорт контактов из CSV",

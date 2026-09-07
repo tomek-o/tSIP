@@ -211,6 +211,7 @@ void TfrmMain::TranslateForm(void* obj)
 	TRANSLATE_TMP("TfrmMain.miPatchButtonSettings", frm->miPatchButtonSettings->Caption);
 	TRANSLATE_TMP("TfrmMain.miImportContactsFromCsv", frm->miImportContactsFromCsv->Caption);
 	TRANSLATE_TMP("TfrmMain.miImportContactsFromXml", frm->miImportContactsFromXml->Caption);
+	TRANSLATE_TMP("TfrmMain.miExportContactsToCsv", frm->miExportContactsToCsv->Caption);
 	TRANSLATE_TMP("TfrmMain.miClearCallsHistory", frm->miClearCallsHistory->Caption);
 	TRANSLATE_TMP("TfrmMain.miRefreshTranslationFromFile", frm->miRefreshTranslationFromFile->Caption);
 	TRANSLATE_TMP("TfrmMain.miScripting", frm->miScripting->Caption);
@@ -4235,6 +4236,19 @@ void __fastcall TfrmMain::miImportContactsFromXmlClick(TObject *Sender)
 		else
 		{
 			Application->MessageBox("Failed to load contacts", "XML import", MB_ICONSTOP);
+		}
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miExportContactsToCsvClick(TObject *Sender)
+{
+	saveDialogContactsCsv->FileName = "";
+	if (saveDialogContactsCsv->Execute())
+	{
+		if (contacts.WriteCsv(saveDialogContactsCsv->FileName) != 0)
+		{
+			Application->MessageBox("Failed to write CSV file", "CSV export", MB_ICONSTOP);
 		}
 	}
 }

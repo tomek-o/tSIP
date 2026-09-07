@@ -16,6 +16,32 @@
 
 #pragma package(smart_init)
 
+namespace
+{
+	/** \brief Quote a CSV field if it contains the separator, a quote, or a
+	 *  newline, doubling any embedded quotes (RFC 4180 style, matching what
+	 *  FormContactsCsvImport's parser understands).
+	 */
+	AnsiString CsvQuote(AnsiString field)
+	{
+		bool needsQuote = field.Pos(",") > 0 || field.Pos("\"") > 0 ||
+			field.Pos("\r") > 0 || field.Pos("\n") > 0;
+		if (!needsQuote)
+			return field;
+
+		AnsiString result = "\"";
+		for (int i = 1; i <= field.Length(); i++)
+		{
+			if (field[i] == '"')
+				result += "\"\"";
+			else
+				result += field[i];
+		}
+		result += "\"";
+		return result;
+	}
+}
+
 Contacts::Contacts(void)
 {
 	memset(&ft, 0, sizeof(ft));
@@ -109,6 +135,37 @@ int Contacts::Write(void)
     	return 1;
 	}
 		
+	return 0;
+}
+
+int Contacts::WriteCsv(AnsiString fileName)
+{
+	try
+	{
+		std::ofstream ofs(fileName.c_str(), std::ios::out | std::ios::binary);
+		if (!ofs.is_open())
+		{
+			return 1;
+		}
+
+		ofs << "Description,Number1,Number2,Number3,Company,Note\r\n";
+		for (unsigned int i=0; i<entries.size(); i++)
+		{
+			Entry &entry = entries[i];
+			ofs << CsvQuote(entry.description).c_str() << ","
+			    << CsvQuote(entry.uri1).c_str() << ","
+			    << CsvQuote(entry.uri2).c_str() << ","
+			    << CsvQuote(entry.uri3).c_str() << ","
+			    << CsvQuote(entry.company).c_str() << ","
+			    << CsvQuote(entry.note).c_str() << "\r\n";
+		}
+		ofs.close();
+	}
+	catch(...)
+	{
+		return 1;
+	}
+
 	return 0;
 }
 

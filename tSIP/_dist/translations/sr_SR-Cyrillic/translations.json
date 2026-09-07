@@ -73,6 +73,7 @@
     "miClearCallsHistory": "Облиши историју позива",
     "miCommonSettings": "Подешавања",
     "miExit": "Излаз",
+    "miExportContactsToCsv": "Извези контакте у CSV датотеку",
     "miFile": "Датотека",
     "miHelp": "Помоћ",
     "miImportContactsFromCsv": "Увези контакте из CSV датотеке",

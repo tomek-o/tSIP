@@ -368,6 +368,10 @@ object frmMain: TfrmMain
         Caption = 'Import contacts from XML file'
         OnClick = miImportContactsFromXmlClick
       end
+      object miExportContactsToCsv: TMenuItem
+        Caption = 'Export contacts to CSV file'
+        OnClick = miExportContactsToCsvClick
+      end
       object miClearCallsHistory: TMenuItem
         Caption = 'Clear calls history'
         OnClick = miClearCallsHistoryClick
@@ -881,6 +885,14 @@ object frmMain: TfrmMain
     Title = 'Open CSV file'
     Left = 416
     Top = 307
+  end
+  object saveDialogContactsCsv: TSaveDialog
+    DefaultExt = 'csv'
+    Filter = 'CSV files (*.csv)|*.csv|All files (*.*)|*.*'
+    Options = [ofOverwritePrompt, ofNoChangeDir, ofEnableSizing]
+    Title = 'Export contacts to CSV file'
+    Left = 416
+    Top = 339
   end
   object imgListIcons: TImageList
     Left = 448

@@ -57,6 +57,7 @@ public:
 	}
 	int Read(void);
 	int Write(void);
+	int WriteCsv(AnsiString fileName);
 	int ReadXml(AnsiString name);
 	void Update(void)
 	{

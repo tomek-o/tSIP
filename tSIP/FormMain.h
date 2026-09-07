@@ -68,7 +68,9 @@ __published:	// IDE-managed Components
 	TTimer *tmrAntirepeat;
 	TAction *actContactsCsvImport;
 	TMenuItem *miImportContactsFromCsv;
+	TMenuItem *miExportContactsToCsv;
 	TOpenDialog *openDialog;
+	TSaveDialog *saveDialogContactsCsv;
 	TImageList *imgListIcons;
 	TTimer *tmrScript;
 	TMenuItem *miClearCallsHistory;
@@ -153,6 +155,7 @@ __published:	// IDE-managed Components
 	void __fastcall miSettingsPatchClick(TObject *Sender);
 	void __fastcall miPatchButtonSettingsClick(TObject *Sender);
 	void __fastcall miImportContactsFromXmlClick(TObject *Sender);
+	void __fastcall miExportContactsToCsvClick(TObject *Sender);
 	void __fastcall miRefreshTranslationFromFileClick(TObject *Sender);
 	void __fastcall btnResetMicVolumeMouseUp(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y);

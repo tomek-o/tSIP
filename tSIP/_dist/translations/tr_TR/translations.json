@@ -73,6 +73,7 @@
     "miClearCallsHistory": "Çağrı geçmişini temizle",
     "miCommonSettings": "Ayarlar",
     "miExit": "Çıkış",
+    "miExportContactsToCsv": "CSV dosyasına kişiler dışa aktar",
     "miFile": "Dosya",
     "miHelp": "Yardım",
     "miImportContactsFromCsv": "CSV dosyasından kişiler içe aktar",

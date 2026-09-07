@@ -91,6 +91,7 @@
     "miClearCallsHistory": "Clear calls history",
     "miCommonSettings": "Settings",
     "miExit": "Exit",
+    "miExportContactsToCsv": "Export contacts to CSV file",
     "miFile": "File",
     "miHelp": "Help",
     "miImportContactsFromCsv": "Import contacts from CSV file",

@@ -80,6 +80,7 @@
     "miClearCallsHistory": "Wyczyść historię połączeń",
     "miCommonSettings": "Konfiguracja ogólna",
     "miExit": "Zakończ",
+    "miExportContactsToCsv": "Eksportuj kontakty do pliku CSV",
     "miFile": "Plik",
     "miHelp": "Pomoc",
     "miImportContactsFromCsv": "Importuj kontakty z pliku CSV",
