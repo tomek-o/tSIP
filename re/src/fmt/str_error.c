@@ -92,14 +92,24 @@ const char *str_error(int errnum, char *buf, size_t sz)
 		return "Failed to open audio output device";
 	default:
 		strncpy(buf, strerror(errnum), sz);
+		buf[sz - 1] = '\0';
 		{
-			// get rid of trailing \n character
-			char* last;
+			// this text can end up embedded directly in SIP protocol
+			// text (see "%m" in re_fmt.h); strerror() is not
+			// guaranteed to be free of characters (e.g. embedded
+			// CR/LF) that would corrupt such use, so replace any
+			// control characters with a space and trim what's left
+			char *p;
 			char code_buf[64];
-			buf[sz - 1] = '\0';
-			last = &buf[strlen(buf)-1];
-			if (*last == '\n') {
-				*last = '\0';
+			size_t len;
+			for (p = buf; *p; p++) {
+				if ((unsigned char)*p < 0x20) {
+					*p = ' ';
+				}
+			}
+			len = strlen(buf);
+			while (len > 0 && buf[len - 1] == ' ') {
+				buf[--len] = '\0';
 			}
 			// as strerror often returns meaningless "Unknown error"
 			// - adding numeric code

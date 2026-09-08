@@ -1383,9 +1383,6 @@ static void sipsess_conn_handler(const struct sip_msg *msg, void *arg)
 
  error:
 	mem_deref(call);
-	{
-	int TODO__GET_RID_OF_PERCENT_M_IN_REPLIES;	// unparseable messages
-    }
 	(void)re_snprintf(str, sizeof(str), "Error (%m)", err);
 	(void)sip_treply(NULL, uag.sip, msg, 500, str);
 }
