@@ -1763,19 +1763,19 @@ static int l_GetExecSourceId(lua_State* L)
 	return 1;
 }
 
-static int l_GetSimpleMessageRxFrom(lua_State* L)
+static int l_GetSimpleMessageFrom(lua_State* L)
 {
 	lua_pushstring(L, GetContext(L)->context.simpleMessageFrom.c_str());
 	return 1;
 }
 
-static int l_GetSimpleMessageRxBody(lua_State* L)
+static int l_GetSimpleMessageBody(lua_State* L)
 {
 	lua_pushstring(L, GetContext(L)->context.simpleMessageBody.c_str());
 	return 1;
 }
 
-static int l_GetSimpleMessageRxContentType(lua_State* L)
+static int l_GetSimpleMessageContentType(lua_State* L)
 {
 	lua_pushstring(L, GetContext(L)->context.simpleMessageContentType.c_str());
 	return 1;
@@ -2459,14 +2459,14 @@ void ScriptExec::Run(const char* script)
 		"  end  ");
 	lua_register2(L, ScriptImp::l_InputQuery, "InputQuery", "Display modal dialog allowing to take text input from the user", "Example: local text, isAccepted = InputQuery(caption, prompt, defaultText).");
 	lua_register2(L, ScriptImp::l_Sleep, "Sleep", "Pause script for specified time (miliseconds)", "Function returns 1 if it exited due to user break, returns 0 if full delay passed. Example: Sleep(100).");
-	lua_register2(L, ScriptImp::l_Sleep, "SleepWithCheckBreak", "Pause script for specified time (miliseconds)", "Function returns 1 if it exited due to user break, returns 0 if full delay passed. Example: SleepWithCheckBreak(100). Works same was as Sleep(delay), it is alias with more meaningful name.");
+	lua_register2(L, ScriptImp::l_Sleep, "SleepWithCheckBreak", "Pause script for specified time (miliseconds)", "Function returns 1 if it exited due to user break, returns 0 if full delay passed. Example: SleepWithCheckBreak(100). Works same way as Sleep(delay), it is alias with more meaningful name.");
 	lua_register2(L, l_Beep, "Beep", "Equivalent of WinAPI Beep(frequency, time)", "Example: Beep(400, 250).");
 	lua_register2(L, ScriptImp::l_CheckBreak, "CheckBreak", "Check if \"Break\" button was pressed by the user", "Allowing to interrupt scripts. Returns 0 or 1.");
 	lua_register2(L, ScriptImp::l_GetClipboardText, "GetClipboardText", "Get clipboard content as text", "");
 	lua_register2(L, ScriptImp::l_SetClipboardText, "SetClipboardText", "Copy text to clipboard", "");
 	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "Equivalent of VCL function with same name.");
 	lua_register2(L, ScriptImp::l_FileExists, "FileExists", "Check if specified file exists", "Returning bool.\nExample: local exists = FileExists(filename)");
-	lua_register2(L, ScriptImp::l_FindWindowByCaptionAndExeName, "FindWindowByCaptionAndExeName", "Search for window by caption and executable name", "");
+	lua_register2(L, ScriptImp::l_FindWindowByCaptionAndExeName, "FindWindowByCaptionAndExeName", "Search for window by exact caption text and/or full exe path", "windowName: exact window title text to match, case-sensitive (nil to not filter by title); exeName: full path of the executable that created the window, case-insensitive (nil to not filter by exe). At least one of the two must be given.\nBoth checks require an exact match, not partial/substring matching.\nReturns window handle (as a number) if a matching window is found, 0 otherwise.\nExample: local hwnd = FindWindowByCaptionAndExeName(\"Calculator\", nil)");
 	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns status (0 on success) and allocated call ID. May fail if current call number reaches limit.");
 	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect or reject current incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_Hangup2, "Hangup2", "Disconnect or reject specific incoming call", "Examples:\n    Hangup2(callUid)\n    Hangup2(callUid, sipCode, reasonText)");
@@ -2487,12 +2487,12 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SwitchAudioPlayer, "SwitchAudioPlayer", "Change audio output during the call", "Example: SwitchAudioPlayer(\"winwave2\", \"Headphones\").");
 	lua_register2(L, ScriptImp::l_SwitchAudioPlayer2, "SwitchAudioPlayer2", "Change audio output for the specified call", "Example: SwitchAudioPlayer2(callUid, \"winwave2\", \"Headphones\").");
 	lua_register2(L, ScriptImp::l_SwitchVideoSource, "SwitchVideoSource", "Change video source during the call", "Example: SwitchVideoSource(\"avformat\", \"file.mp4\").");
-	lua_register2(L, ScriptImp::l_SwitchVideoSource2, "SwitchVideoSource2", "Change video source for the specified call", "Example: SwitchVideoSource(callUid, \"avformat\", \"file.mp4\").");
+	lua_register2(L, ScriptImp::l_SwitchVideoSource2, "SwitchVideoSource2", "Change video source for the specified call", "Example: SwitchVideoSource2(callUid, \"avformat\", \"file.mp4\").");
 	lua_register2(L, ScriptImp::l_SendDtmf, "SendDtmf", "Send DTMF symbols during the call", "Accepts single DTMF or whole string");
 	lua_register2(L, ScriptImp::l_GenerateTones, "GenerateTones", "Generate up to 4 tones with specified amplitude and frequency", "Tone generator is able to generate up to 4 sine waves at the same time, each one with separate amplitude and frequency setting. Sum of sine waves is saturated. Tone generator is placed before softvol module (software volume control sliders) in transmit chain and replaces \"regular\" audio source when is activated.\nGenerateTones function takes up to 8 parameters (up to 4 pairs of amplitude + frequency). Amplitude is interpreted as a fraction of full-scale.\nCalling this function without arguments stops generator.\nExample generating 1000 Hz at 0.2 FS + 3000 Hz at 0.1 FS:\n\tGenerateTones(0.2, 1000, 0.1, 3000)");
 	lua_register2(L, ScriptImp::l_GenerateTones2, "GenerateTones2", "Second version of GenerateTones function, taking call ID as first argument", "Tone generator is able to generate up to 4 sine waves at the same time, each one with separate amplitude and frequency setting. Sum of sine waves is saturated. Tone generator is placed before softvol module (software volume control sliders) in transmit chain and replaces \"regular\" audio source when is activated.\nGenerateTones2 function takes up to 9 parameters (call ID + up to 4 pairs of amplitude + frequency). Amplitude is interpreted as a fraction of full-scale.\nCalling this function without arguments stops generator.\nExample generating 1000 Hz at 0.2 FS + 3000 Hz at 0.1 FS:\n\tGenerateTones2(callUid, 0.2, 1000, 0.1, 3000)");
-	lua_register2(L, ScriptImp::l_BlindTransfer, "BlindTransfer", "Send REFER during the call", "");
-	lua_register2(L, ScriptImp::l_BlindTransfer2, "BlindTransfer2", "Send REFER for specific call", "Example: BlindTransfer(callUid, target)");
+	lua_register2(L, ScriptImp::l_BlindTransfer, "BlindTransfer", "Send REFER during the current call", "Example: BlindTransfer(target)");
+	lua_register2(L, ScriptImp::l_BlindTransfer2, "BlindTransfer2", "Send REFER for specific call", "Example: BlindTransfer2(callUid, target)");
 	lua_register2(L, ScriptImp::l_AttendedTransfer, "AttendedTransfer", "Attended transfer using two already established calls", "Example: AttendedTransfer(callUid1, callUid2)");
 	lua_register2(L, ScriptImp::l_GetCalls, "GetCalls", "Get a table with UIDs of currently active calls", "");
 	lua_register2(L, ScriptImp::l_GetCallUidFromLineButton, "GetCallUidFromLineButton", "Get call UID assigned to specified line button", "Allows to e.g. create answer/hangup button associated with specified line button.\nExample: local callUid = GetCallUidFromLineButton(buttonId)");
@@ -2501,17 +2501,17 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetCallState, "GetCallState", "Get state of current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallButtonId, "GetCallButtonId", "Get button ID assigned to current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetRecorderState, "GetRecorderState", "Check if recording is running for current or specified call", "Takes one, optional argument: call UID.");
-	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verfication state. Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verification state. Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_IsCallIncoming, "IsCallIncoming", "Check if current or specified call is incoming", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallPeer, "GetCallPeer", "Get number/URI of caller/callee from current or specified call", "Takes one, optional argument: call UID.");
-	lua_register2(L, ScriptImp::l_GetCallPeerName, "GetCallPeerName", "Get name of caller/callee from current or specified call", "Takes one, optional argument: call UID. Returns 0 results, display name or (depending on settings) PAI display name.");
+	lua_register2(L, ScriptImp::l_GetCallPeerName, "GetCallPeerName", "Get name of caller/callee from current or specified call", "Takes one, optional argument: call UID.\nReturns 0 results if the call is not found, otherwise 1 result: display name or (depending on settings) PAI display name.");
 	lua_register2(L, ScriptImp::l_GetCallInitialRxInvite, "GetCallInitialRxInvite", "Get full text of initial received INVITE", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallCodecName, "GetCallCodecName", "Get name of codec used during current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallReason, "GetCallReason", "Get SIP Reason associated with current or specified call", "Takes one, optional argument: call UID. Returns reason from request line or from Reason line like \"Call completed elsewhere\"");
 	lua_register2(L, ScriptImp::l_GetCallDurationFromStart, "GetCallDurationFromStart", "Get time in ms from the call start/creation", "Returns milliseconds passed since call was created (call incoming event or making call).\nTakes one, optional argument: call UID.");
-	lua_register2(L, ScriptImp::l_GetCallDurationFromConfirmed, "GetCallDurationFromConfirmed", "Get time in ms from the call start/creation", "Returns milliseconds passed since call was confirmed.\nIf call was not confirmed or does not exits, nothing is returned.\nTakes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetCallDurationFromConfirmed, "GetCallDurationFromConfirmed", "Get time in ms from the call confirmation", "Returns milliseconds passed since call was confirmed.\nIf call was not confirmed or does not exist, nothing is returned.\nTakes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetContactName, "GetContactName", "Get number description from phonebook", "");
-	lua_register2(L, ScriptImp::l_GetStreamingState, "GetStreamingState", "Get current state of RTP streaming", "");
+	lua_register2(L, ScriptImp::l_GetStreamingState, "GetStreamingState", "Get current state of audio paging (\"streaming\") feature", "Returns 0 (idle) or 1 (actively sending paging audio). Not tied to a specific call - reflects the audio paging/broadcast feature shown as \"Streaming...\" in the main window, started via a \"paging TX\" button.");
 	lua_register2(L, ScriptImp::l_GetAudioErrorCount, "GetAudioErrorCount", "Get number of audio device errors during the call", "Used to detect end-of-file event for wave input files. Takes one, optional argument: call UID.");
 
 	lua_register2(L, ScriptImp::l_GetCallStateName, "GetCallStateName", "Get the name of specified call state value", "");
@@ -2542,7 +2542,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_ResetCall, "ResetCall", "Clear whole call state", "Use with care!");
 	lua_register2(L, ScriptImp::l_GetPreviousCallStatusCode, "GetPreviousCallStatusCode", "Get status code of call that ended", "");
 	lua_register2(L, ScriptImp::l_GetPreviousCallReplyLine, "GetPreviousCallReplyLine", "Get SIP reply line from the call that ended", "");
-	lua_register2(L, ScriptImp::l_ShellExecute, "ShellExecute", "Run another application (WinAPI equivalent)", "");
+	lua_register2(L, ScriptImp::l_ShellExecute, "ShellExecute", "Run another application or open a file/URL (WinAPI ShellExecute wrapper)", "Direct wrapper for the WinAPI ShellExecute(NULL, verb, file, parameters, directory, showCmd) function - see its documentation for exact parameter/return value meaning.\nverb: operation, e.g. \"open\", \"explore\", \"print\" (nil/\"\" for default)\nfile: file, folder, URL or executable to run\nparameters: command-line parameters if file is an executable (nil if none)\ndirectory: working directory (nil for current)\nshowCmd: window show state, e.g. 0 = hidden, 1 = normal (SW_* constant)\nReturns instance handle (> 32) on success, or an error code (<= 32) on failure.\nExample: ShellExecute(\"open\", \"https://example.com\", nil, nil, 1)");
 	lua_register2(L, ScriptImp::l_SetTrayIcon, "SetTrayIcon", "Change tray icon bitmap", "");
 	lua_register2(L, ScriptImp::l_GetRegistrationState, "GetRegistrationState", "Check if softphone is registered", "");
 	lua_register2(L, ScriptImp::l_Unregister, "Unregister", "Unregister SIP account", "");
@@ -2552,23 +2552,23 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SetButtonDown, "SetButtonDown", "Change button state to down/pressed", "Example: SetButtonDown(buttonId, buttonState).");
 	lua_register2(L, ScriptImp::l_GetButtonDown, "GetButtonDown", "Check if button is down", "Example state = GetButtonDown(buttonId) -- returning 0 or 1.");
 	lua_register2(L, ScriptImp::l_GetButtonMouseDown, "GetButtonMouseDown", "Check is mouse button is pressed on programmable button", "");
-	lua_register2(L, ScriptImp::l_GetButtonBlfState, "GetButtonBlfState", "Get BLF state from the button", "");
+	lua_register2(L, ScriptImp::l_GetButtonBlfState, "GetButtonBlfState", "Get BLF (dialog-info) state from the button", "Takes button id as argument. Returns dialog-info state as an integer: 0 = unknown (not subscribed / subscription failed), 1 = terminated, 2 = early (ringing), 3 = confirmed (in call).\nSee also: GetBlfState() for a richer, contact-based version also returning remote identity and call direction.");
 	lua_register2(L, ScriptImp::l_GetButtonHandle, "GetButtonHandle", "Get Windows HANDLE for specified button", "");	
 	lua_register2(L, ScriptImp::l_SetButtonInactive, "SetButtonInactive", "Prevent button from being pressed, set its state to inactive", "");
 	lua_register2(L, ScriptImp::l_SetButtonVisible, "SetButtonVisible", "Show/hide button", "");
 	lua_register2(L, ScriptImp::l_SetButtonImage, "SetButtonImage", "Set button bitmap", "");
-	lua_register2(L, ScriptImp::l_PluginSendMessageText, "PluginSendMessageText", "Send text to specified plugin", "");
+	lua_register2(L, ScriptImp::l_PluginSendMessageText, "PluginSendMessageText", "Send text to specified plugin", "PluginSendMessageText(dllName, buffer).\ndllName: file name of the plugin DLL that should receive the message.\nbuffer: arbitrary text, interpreted by the plugin itself - there is no fixed protocol/format, it depends on the specific plugin.\nReturns -1 if dllName or buffer is missing.\nExample: PluginSendMessageText(\"myplugin.dll\", \"some text\")");
 	lua_register2(L, ScriptImp::l_PluginEnable, "PluginEnable", "Enable/disable specified plugin", "Example: PluginEnable(\"TTS.dll\", 0/1)");
-	lua_register2(L, ScriptImp::l_GetExecSourceType, "GetExecSourceType", "Get type of event that triggered script execution", "See also: GetExecSourceId().");
+	lua_register2(L, ScriptImp::l_GetExecSourceType, "GetExecSourceType", "Get type of event that triggered script execution (see: enum ScriptSource)", "Returns a ScriptSource enum value (see ScriptSource.h) identifying why this script is running - e.g. button press, incoming call state change, timer, etc.\nUse GetExecSourceTypeName() (called with no argument) to get this as a human-readable name instead of a number.\nSee also: GetExecSourceId().");
 	lua_register2(L, ScriptImp::l_GetExecSourceTypeName, "GetExecSourceTypeName", "Get name of type of script execution source", "GetExecSourceTypeName(typeId) - get name of specific type\nGetExecSourceTypeName() - get name of source type that triggered this script execution");
 	lua_register2(L, ScriptImp::l_GetExecSourceId, "GetExecSourceId", "Get ID of object that triggered script (depending on trigger type)", "See also: GetExecSourceType().");
-	lua_register2(L, ScriptImp::l_GetSimpleMessageRxFrom, "GetSimpleMessageRxFrom", "Get sender of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
-	lua_register2(L, ScriptImp::l_GetSimpleMessageRxBody, "GetSimpleMessageRxBody", "Get body text of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
-	lua_register2(L, ScriptImp::l_GetSimpleMessageRxContentType, "GetSimpleMessageRxContentType", "Get Content-Type of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
+	lua_register2(L, ScriptImp::l_GetSimpleMessageFrom, "GetSimpleMessageFrom", "Get sender of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
+	lua_register2(L, ScriptImp::l_GetSimpleMessageBody, "GetSimpleMessageBody", "Get body text of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
+	lua_register2(L, ScriptImp::l_GetSimpleMessageContentType, "GetSimpleMessageContentType", "Get Content-Type of the incoming SIP SIMPLE MESSAGE that triggered this script", "To be used in \"on SIP SIMPLE message (RX)\" event only.");
 	lua_register2(L, ScriptImp::l_GetRecordFile, "GetRecordFile", "Get name of recording file from current call or call that ended", "");
 	lua_register2(L, ScriptImp::l_GetContactId, "GetContactId", "Get contact ID for specified number/URI", "");
 	lua_register2(L, ScriptImp::l_GetBlfState, "GetBlfState", "Get BLF state of specified contact (by contact ID)", "To be used in \"on BLF change\" (GetExecSourceId() as contact id / argument) or together with GetContactId(number).\nReturning number, state, remote identity number/URI, remote identity display name and call direction.");
-	lua_register2(L, ScriptImp::l_RecordStart, "RecordStart", "Start recording", "Example: RecordStart(filename, channels, side, fileFormat, bitrate, optionalCallUid).");
+	lua_register2(L, ScriptImp::l_RecordStart, "RecordStart", "Start recording current or specified call", "RecordStart(filename, channels, side, fileFormat, bitrate, optionalCallUid).\nchannels: 1 = mono, 2 = stereo.\nside: 0 = both parties mixed, 1 = local/microphone only, 2 = remote only.\nfileFormat: 0 = WAV, 1 = Opus/OGG.\nbitrate: bits/sec, used for Opus only; 0 or omitted defaults to 64000.\noptionalCallUid: current call if omitted.");
 	lua_register2(L, ScriptImp::l_GetExeName, "GetExeName", "Get name and full path of this executable",  "");
 	lua_register2(L, ScriptImp::l_GetProfileDir, "GetProfileDir", "Get folder name where settings and other files are stored", "");
 	lua_register2(L, ScriptImp::l_GetRecordingState, "GetRecordingState", "Check if softphone is recording at the moment", "");
@@ -2586,7 +2586,7 @@ void ScriptExec::Run(const char* script)
 
 	lua_register2(L, ScriptImp::l_SetHandled, "SetHandled", "Set \"handled\" flag associated with script trigger event", "Possibility of skipping default event handling after script was called (replacing default behavior with script), Example: SetHandled(1).");
 
-	lua_register2(L, ScriptImp::l_GetButtonType, "GetButtonType", "Get type of the button with specified id", "");
+	lua_register2(L, ScriptImp::l_GetButtonType, "GetButtonType", "Get type of the button with specified id (see enum Button::Type)", "Returns button type as an integer matching enum Button::Type (buttons/ButtonType.h) - e.g. 0 = DISABLED, 1 = SPEED_DIAL, 2 = BLF, 3 = DTMF; many more types exist. When selecting a type in the \"Type\" dropdown of the button editor (\"Edit button\") window, its numeric value is shown in the help text next to the dropdown (\"Numeric type value (for scripting or provisioning) = ...\").");
 	lua_register2(L, ScriptImp::l_GetButtonNumber, "GetButtonNumber", "Get number/URI from button configuration", "");
 
 	lua_register2(L, ScriptImp::l_MainMenuShow, "MainMenuShow", "Show/hide main menu (e.g. in kiosk applications)", "");
@@ -2597,19 +2597,19 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SendCustomRequest, "SendCustomRequest", "Send custom SIP request", "Example: requestUid = SendCustomRequest(uri, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional");
 	lua_register2(L, ScriptImp::l_ClearCustomRequests, "ClearCustomRequests", "Delete status info of custom SIP requests", "");
 	lua_register2(L, ScriptImp::l_DeleteCustomRequest, "DeleteCustomRequest", "Delete single custom request info", "");
-	lua_register2(L, ScriptImp::l_GetCustomRequest, "GetCustomRequest", "Get information about custom request", "");
-	lua_register2(L, ScriptImp::l_GetCustomRequestReply, "GetCustomRequestReply", "Get reply SIP code for custom request", "");
+	lua_register2(L, ScriptImp::l_GetCustomRequest, "GetCustomRequest", "Get details of a sent custom SIP request", "Takes custom request UID (from SendCustomRequest()) as argument.\nReturns 3 values: uri (target URI), method (SIP method), extraHeaderLines (extra header lines sent with the request).\nReturns no values if the given UID is unknown (e.g. already removed via DeleteCustomRequest()).\nSee also: GetCustomRequestReply() for the reply to this request.");
+	lua_register2(L, ScriptImp::l_GetCustomRequestReply, "GetCustomRequestReply", "Get reply for custom SIP request", "Takes custom request UID (from SendCustomRequest()) as argument.\nReturns 3 values: haveReply (1 if a reply or timeout was already received, 0 if still waiting), error (0 = reply received normally, non-zero = transport/timeout error), sipStatusCode (valid only if error == 0).\nReturns no values if the given UID is unknown (e.g. already removed via DeleteCustomRequest()).\nExample: local haveReply, err, sipStatusCode = GetCustomRequestReply(requestUid)");
 	lua_register2(L, ScriptImp::l_GetCustomRequestReplyText, "GetCustomRequestReplyText", "Get full text of received reply for custom request", "");
 
-	lua_register2(L, ScriptImp::l_GetAudioRxSignalLevel, "GetAudioRxSignalLevel", "Get amplitude of received audio from the call", "Lenny/IVR-like applications");
+	lua_register2(L, ScriptImp::l_GetAudioRxSignalLevel, "GetAudioRxSignalLevel", "Get amplitude of received audio from the call", "Returns the peak absolute value of received (RX) 16-bit PCM audio samples over the last ~100 ms, so the range is 0-32767 (linear, not dB or a normalized 0-1 value).\nUseful for VAD/Lenny/IVR-like applications detecting speech vs. silence.");
 
 	lua_register2(L, ScriptImp::l_ReadContacts, "ReadContacts", "Read again contacts from default JSON file", "This function can be used to reload phonebook from file after provisioning, e.g. after fetching JSON file using curl using provisioning script.");
 	lua_register2(L, ScriptImp::l_ReadXmlContacts, "ReadXmlContacts", "Read contacts from XML Yealink-like file", "");
 	lua_register2(L, ScriptImp::l_AppendContactNoteText, "AppendContactNoteText", "Add text to note from currently opened contact popup", "");
 
-	lua_register2(L, ScriptImp::l_SendTextMessage, "SendTextMessage", "Send SIP SIMPLE message", "Example: SendTextMesssage(target, text, sendImmediately)\nOpens text messaging window and optionally sends immediately text.");
+	lua_register2(L, ScriptImp::l_SendTextMessage, "SendTextMessage", "Send SIP SIMPLE message", "Example: SendTextMessage(target, text, sendImmediately)\nOpens text messaging window and optionally sends immediately text.");
 
-	lua_register2(L, ScriptImp::l_SetAppStatus, "SetAppStatus", "Set status visible as hint in system tray", "");
+	lua_register2(L, ScriptImp::l_SetAppStatus, "SetAppStatus", "Set part of application status (status bar text + tray icon hint)", "SetAppStatus(id, priority, text).\nid: any string of your choosing that identifies this particular status entry, so a later call with the same id replaces it (or removes it, if text = \"\").\npriority: lower number = higher priority.\ntext: the status text itself.\nThe status bar shows only the highest-priority (lowest-numbered) active status, while the tray icon hint lists all active statuses combined.\nExample: SetAppStatus(\"myPlugin\", 10, \"Connected\")");
 
 	lua_register2(L, ScriptImp::l_ShowLogWindow, "ShowLogWindow", "Show and bring to front log window", "");
 
