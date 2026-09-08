@@ -461,6 +461,17 @@ int auplay_alloc(struct auplay_st **stp, const char *name,
 unsigned int softvol_get_rx_level(void);
 
 /*
+ * Force RTSP transport used by the avformat module for subsequently opened
+ * sources (module-wide, not per-source). One of "tcp", "udp",
+ * "udp_multicast", "http", "https", or "" to leave it up to the library
+ * default. Must be called before opening an RTSP avformat source for it to
+ * take effect; the avformat module does not read this from a config file.
+ * Returns 0 on success, EINVAL if transport names an unrecognized value
+ * (in which case the previous value is left unchanged).
+ */
+int avformat_set_rtsp_transport(const char *transport);
+
+/*
  * Audio Filter
  */
 

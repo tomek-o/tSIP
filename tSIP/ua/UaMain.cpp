@@ -711,6 +711,10 @@ static int app_init(void)
 	cfg->video.selfview.enabled = appSettings.uaConf.video.selfview.enabled;
 	cfg->video.selfview.pip = appSettings.uaConf.video.selfview.pip;
 	cfg->video.dshow.skip_reading_back_media_format = appSettings.uaConf.video.dshow.skipReadingBackMediaFormat;
+	if (avformat_set_rtsp_transport(appSettings.uaConf.video.rtspTransport.c_str()) != 0)
+	{
+		LOG("app_init: invalid video.rtspTransport setting ('%s'), ignoring\n", appSettings.uaConf.video.rtspTransport.c_str());
+	}
 #endif
 	configure();
 

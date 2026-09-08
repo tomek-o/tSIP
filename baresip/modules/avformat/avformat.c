@@ -576,6 +576,28 @@ void avformat_shared_set_video(struct shared *sh, struct vidsrc_st *st)
 }
 
 
+int avformat_set_rtsp_transport(const char *transport)
+{
+	if (!transport)
+		return EINVAL;
+
+	if (*transport != '\0' &&
+	    0!=strcmp(transport, "tcp") &&
+	    0!=strcmp(transport, "udp") &&
+	    0!=strcmp(transport, "udp_multicast") &&
+	    0!=strcmp(transport, "http") &&
+	    0!=strcmp(transport, "https")) {
+		DEBUG_WARNING("avformat: avformat_set_rtsp_transport: unrecognized"
+			" value '%s'\n", transport);
+		return EINVAL;
+	}
+
+	str_ncpy(rtsp_transport, transport, sizeof(rtsp_transport));
+
+	return 0;
+}
+
+
 static int module_init(void)
 {
 	int err;

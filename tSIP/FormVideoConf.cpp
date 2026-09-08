@@ -47,6 +47,16 @@ void TfrmVideoConf::SetCfg(VideoConf *cfg, UaConf *uaCfg)
 		edInputFile->Text = uaCfg->video.videoSource.dev.c_str();
 	}
 
+	if (uaCfg->video.rtspTransport == "")
+	{
+		cbRtspTransport->ItemIndex = 0;
+	}
+	else
+	{
+		int idx = cbRtspTransport->Items->IndexOf(uaCfg->video.rtspTransport.c_str());
+		cbRtspTransport->ItemIndex = (idx >= 0) ? idx : 0;
+	}
+
 	cbOutputMod->ItemIndex = VideoModules::GetOutputModuleCbIndex(uaCfg->video.videoDisplay.mod);
     cbOutputModChange(NULL);
 
@@ -81,6 +91,15 @@ void TfrmVideoConf::Apply(void)
 		}
 	}
 
+	if (cbRtspTransport->ItemIndex <= 0)
+	{
+		uaCfg->video.rtspTransport = "";
+	}
+	else
+	{
+		uaCfg->video.rtspTransport = cbRtspTransport->Text.c_str();
+	}
+
 	uaCfg->video.videoDisplay.mod = VideoModules::GetOutputModuleFromCbIndex(cbOutputMod->ItemIndex);
 
 	cfg->displayParentType = static_cast<VideoConf::DisplayParentType>(cbDisplayParentType->ItemIndex);
@@ -106,6 +125,8 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 		edInputFile->Visible = false;
 		cbInputDev->Visible = true;
 		lblInputDevice->Visible = true;
+		lblRtspTransport->Visible = false;
+		cbRtspTransport->Visible = false;
 		VideoDevicesList::FillComboBox(cbInputDev, mod, false, uaCfg->video.videoSource.dev.c_str());
 	}
 	else if (mod == VideoModules::nullvideo ||
@@ -117,6 +138,8 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 		edInputFile->Visible = false;
 		cbInputDev->Visible = false;
 		lblInputDevice->Visible = false;
+		lblRtspTransport->Visible = false;
+		cbRtspTransport->Visible = false;
 	}
 	else if (mod == VideoModules::avformat)
 	{
@@ -124,6 +147,8 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 		edInputFile->Visible = true;
 		cbInputDev->Visible = false;
 		lblInputDevice->Visible = false;
+		lblRtspTransport->Visible = true;
+		cbRtspTransport->Visible = true;
 	}
 	else
 	{
@@ -132,6 +157,8 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 		edInputFile->Visible = false;
 		cbInputDev->Visible = false;
 		lblInputDevice->Visible = false;
+		lblRtspTransport->Visible = false;
+		cbRtspTransport->Visible = false;
 	}
 }
 //---------------------------------------------------------------------------

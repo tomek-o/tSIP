@@ -30,6 +30,8 @@ __published:	// IDE-managed Components
 	TComboBox *cbInputMod;
 	TEdit *edInputFile;
 	TButton *btnSelectInputFile;
+	TLabel *lblRtspTransport;
+	TComboBox *cbRtspTransport;
 	TLabel *lblTransmittedVideo;
 	TLabel *lblWidth;
 	TEdit *edWidth;

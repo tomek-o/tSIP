@@ -660,6 +660,8 @@ public:
 		unsigned int bitrate;
 		unsigned int fps;
 
+		std::string rtspTransport;	///< force RTSP transport for avformat video/audio sources; one of "", "tcp", "udp", "udp_multicast", "http", "https" ("" = library default)
+
 		struct Selfview {
 			bool enabled;
 			bool pip;
@@ -711,6 +713,7 @@ public:
 				height == right.height &&
 				bitrate == right.bitrate &&
 				fps == right.fps &&
+				rtspTransport == right.rtspTransport &&
 				selfview == right.selfview &&
 				dshow == right.dshow
 			);

@@ -17,14 +17,14 @@ object frmVideoConf: TfrmVideoConf
   TextHeight = 13
   object lblDisplayParentType: TLabel
     Left = 8
-    Top = 226
+    Top = 241
     Width = 94
     Height = 13
     Caption = 'Display parent type'
   end
   object lblDisplayParentId: TLabel
     Left = 8
-    Top = 250
+    Top = 265
     Width = 80
     Height = 13
     Caption = 'Display parent id'
@@ -52,42 +52,50 @@ object frmVideoConf: TfrmVideoConf
   end
   object lblTransmittedVideo: TLabel
     Left = 8
-    Top = 96
+    Top = 111
     Width = 86
     Height = 13
     Caption = 'Transmitted video'
   end
+  object lblRtspTransport: TLabel
+    Left = 7
+    Top = 80
+    Width = 73
+    Height = 13
+    Caption = 'RTSP transport'
+    Visible = False
+  end
   object lblWidth: TLabel
     Left = 100
-    Top = 115
+    Top = 130
     Width = 26
     Height = 13
     Caption = 'width'
   end
   object lblHeight: TLabel
     Left = 244
-    Top = 115
+    Top = 130
     Width = 30
     Height = 13
     Caption = 'height'
   end
   object lblBitrate: TLabel
     Left = 100
-    Top = 139
+    Top = 154
     Width = 32
     Height = 13
     Caption = 'bitrate'
   end
   object lblFps: TLabel
     Left = 100
-    Top = 163
+    Top = 178
     Width = 15
     Height = 13
     Caption = 'fps'
   end
   object lblDisplayModule: TLabel
     Left = 8
-    Top = 202
+    Top = 217
     Width = 71
     Height = 13
     Caption = 'Display module'
@@ -102,7 +110,7 @@ object frmVideoConf: TfrmVideoConf
   end
   object cbDisplayParentType: TComboBox
     Left = 152
-    Top = 223
+    Top = 238
     Width = 320
     Height = 21
     Style = csDropDownList
@@ -111,14 +119,14 @@ object frmVideoConf: TfrmVideoConf
   end
   object edDisplayParentId: TEdit
     Left = 152
-    Top = 247
+    Top = 262
     Width = 62
     Height = 21
     TabOrder = 11
   end
   object chbSelfviewEnable: TCheckBox
     Left = 8
-    Top = 281
+    Top = 296
     Width = 325
     Height = 17
     Caption = 'enable selfview (show video from local source)'
@@ -126,7 +134,7 @@ object frmVideoConf: TfrmVideoConf
   end
   object chbSelfviewPip: TCheckBox
     Left = 19
-    Top = 304
+    Top = 319
     Width = 325
     Height = 17
     Caption = 'show selfview as picture-in-picture'
@@ -169,37 +177,54 @@ object frmVideoConf: TfrmVideoConf
     Visible = False
     OnClick = btnSelectInputFileClick
   end
+  object cbRtspTransport: TComboBox
+    Left = 152
+    Top = 77
+    Width = 150
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 15
+    Visible = False
+    Items.Strings = (
+      '(library default)'
+      'tcp'
+      'udp'
+      'udp_multicast'
+      'http'
+      'https')
+  end
   object edWidth: TEdit
     Left = 152
-    Top = 112
+    Top = 127
     Width = 49
     Height = 21
     TabOrder = 5
   end
   object edHeight: TEdit
     Left = 296
-    Top = 112
+    Top = 127
     Width = 49
     Height = 21
     TabOrder = 6
   end
   object edBitrate: TEdit
     Left = 152
-    Top = 136
+    Top = 151
     Width = 73
     Height = 21
     TabOrder = 7
   end
   object edFps: TEdit
     Left = 152
-    Top = 160
+    Top = 175
     Width = 49
     Height = 21
     TabOrder = 8
   end
   object chbDshowSkipReadingBackMediaFormat: TCheckBox
     Left = 8
-    Top = 336
+    Top = 351
     Width = 521
     Height = 17
     Caption = 
@@ -209,7 +234,7 @@ object frmVideoConf: TfrmVideoConf
   end
   object cbOutputMod: TComboBox
     Left = 152
-    Top = 199
+    Top = 214
     Width = 320
     Height = 21
     Style = csDropDownList

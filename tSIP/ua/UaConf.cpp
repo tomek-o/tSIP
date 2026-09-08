@@ -302,6 +302,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		jv.getUInt("height", video.height);
 		jv.getUInt("bitrate", video.bitrate);
 		jv.getUInt("fps", video.fps);
+		jv.getString("rtspTransport", video.rtspTransport);
 		{
 			const Json::Value &jsv = jv["selfview"];
 			Video::Selfview &selfview = video.selfview;
@@ -481,6 +482,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		jv["height"] = video.height;
 		jv["bitrate"] = video.bitrate;
 		jv["fps"] = video.fps;
+		jv["rtspTransport"] = video.rtspTransport;
 		{
 			Json::Value &jsv = jv["selfview"];
 			const Video::Selfview &selfview = video.selfview;
