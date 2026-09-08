@@ -383,9 +383,6 @@ static void tcp_recv_handler(int flags, void *arg)
 			While I wasn't able to reproduce this (test with pjsua on same PC)
 			it apparently helps.
 		*/
-		{
-            int TODO__RUN_ONE_MORE_TEST;
-        }
 		conn_close(tc, 0);
 		goto out;
 	}

@@ -182,7 +182,7 @@ int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_ca
 		goto out;
 
 	pl_dialbuf.p = dialbuf->buf;
-	pl_dialbuf.l = dialbuf->size;
+	pl_dialbuf.l = dialbuf->end;
 	err = sip_addr_decode(&addr, &pl_dialbuf);
 	if (err)
 		goto out;
