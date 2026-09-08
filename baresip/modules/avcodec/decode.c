@@ -12,6 +12,7 @@
 #pragma warn -8056	// disable "Integer arithmetic overflow" warning
 #endif
 #include <libavcodec/avcodec.h>
+#include <libavutil/pixdesc.h>
 #ifdef __BORLANDC__
 #pragma warn .8056
 #endif
@@ -47,6 +48,7 @@ struct viddec_state {
 	size_t frag_start;
 	bool frag;
 	uint16_t frag_seq;
+	bool warned_pixfmt;
 
 	struct {
 		unsigned n_key;
@@ -202,6 +204,17 @@ static int ffdecode(struct viddec_state *st, struct vidframe *frame,
 		frame->size.w = st->ctx->width;
 		frame->size.h = st->ctx->height;
 		frame->fmt    = VID_FMT_YUV420P;
+
+		if (!st->warned_pixfmt &&
+		    st->pict->format != AV_PIX_FMT_YUV420P &&
+		    st->pict->format != AV_PIX_FMT_YUVJ420P) {
+			st->warned_pixfmt = true;
+			DEBUG_WARNING("avcodec: decoded frame pixel format is"
+				" %s, but treating it as YUV420P"
+				" (TODO__VID_FMT) - picture will likely be"
+				" corrupted\n",
+				av_get_pix_fmt_name(st->pict->format));
+		}
 
 		if (st->pict->key_frame) {
 
