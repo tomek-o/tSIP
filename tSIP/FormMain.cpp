@@ -846,12 +846,6 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	// make sure window position is not outside of available monitors
 	OnRestore(NULL);
 
-	{
-		// trying to fight with inconsistent state of tray notifier when trying to show it without activation
-		frmTrayNotifier->Show();
-		frmTrayNotifier->Hide();
-	}
-
 	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
 	
 	edTransfer->Enabled = true;

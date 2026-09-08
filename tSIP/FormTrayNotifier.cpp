@@ -91,10 +91,9 @@ void TfrmTrayNotifier::ShowWithoutFocus(void)
 	}
 
 #if 0
-	/** \todo frmTrayNotifier steals focus at first call */
+	/** \note steals focus at first call */
 	Visible = true;
 #else
-	/** \todo frmTrayNotifier: no focus stealed, but inconsistent window state */
 	ShowWindow(Handle, SW_SHOWNOACTIVATE);
 	SetWindowPos(Handle, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	//frmTrayNotifier->BringToFront();
