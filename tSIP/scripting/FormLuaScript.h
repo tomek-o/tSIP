@@ -47,6 +47,10 @@ __published:	// IDE-managed Components
 	TMenuItem *miCustomLuaFunctions;
 	TMenuItem *miFileNew;
 	TLabel *lblExecutionTime;
+	TMenuItem *miExportFunctionsToHtml;
+	TSaveDialog *saveDialogExportHtml;
+	TMenuItem *miExportExamplesToHtml;
+	TSaveDialog *saveDialogExportExamplesHtml;
 	void __fastcall btnExecuteClick(TObject *Sender);
 	void __fastcall btnBreakClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
@@ -63,6 +67,8 @@ __published:	// IDE-managed Components
 	void __fastcall lvValidationDblClick(TObject *Sender);
 	void __fastcall miCustomLuaFunctionsClick(TObject *Sender);
 	void __fastcall miFileNewClick(TObject *Sender);
+	void __fastcall miExportFunctionsToHtmlClick(TObject *Sender);
+	void __fastcall miExportExamplesToHtmlClick(TObject *Sender);
 private:	// User declarations
 	bool breakRequest;
 	volatile bool running;

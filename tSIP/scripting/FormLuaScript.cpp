@@ -10,6 +10,9 @@
 #include "common/BtnController.h"
 #include "common/TimeCounter.h" 
 #include "LuaExamples.h"
+#include "LuaFunctionsHtmlExport.h"
+#include "LuaExamplesHtmlExport.h"
+#include "Branding.h"
 #include "Settings.h"
 #include "ScriptSource.h"
 #include "Log.h"
@@ -17,6 +20,7 @@
 #include <memory>
 #include <assert.h>
 #include <stdio.h>
+#include <string.h>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -87,6 +91,19 @@ AnsiString GetDefaultDir(void)
 	{
 		return Paths::GetProfileDir() + "\\scripts";
 	}
+}
+
+/** \brief Replace characters not allowed in Windows file names with '_' */
+AnsiString SanitizeFileName(AnsiString name)
+{
+	for (int i = 1; i <= name.Length(); i++)
+	{
+		if (strchr("\\/:*?\"<>|", name[i]) != NULL)
+		{
+			name[i] = '_';
+		}
+	}
+	return name;
 }
 
 }	// namespace
@@ -226,7 +243,7 @@ void __fastcall TfrmLuaScript::LoadExample(TObject *Sender)
 	}
 	modified = false;
 	SetText(luaExamples[id].lua);
-	asCurrentFile.sprintf("Example%d.lua", id+1);
+	asCurrentFile = SanitizeFileName(luaExamples[id].name) + ".lua";
 	SetTitle(asCurrentFile, modified);
 }
 
@@ -756,6 +773,32 @@ void __fastcall TfrmLuaScript::miCustomLuaFunctionsClick(TObject *Sender)
 		Application->CreateForm(__classid(TfrmLuaScriptHelp), &frmLuaScriptHelp);
 	}
 	frmLuaScriptHelp->Show();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScript::miExportFunctionsToHtmlClick(TObject *Sender)
+{
+	saveDialogExportHtml->FileName = SanitizeFileName(Branding::appName) + "_lua_functions.html";
+	if (saveDialogExportHtml->Execute())
+	{
+		if (LuaFunctionsHtmlExport::Write(saveDialogExportHtml->FileName) != 0)
+		{
+			Application->MessageBox("Failed to write HTML file", "Export custom Lua functions", MB_ICONSTOP);
+		}
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScript::miExportExamplesToHtmlClick(TObject *Sender)
+{
+	saveDialogExportExamplesHtml->FileName = SanitizeFileName(Branding::appName) + "_lua_examples.html";
+	if (saveDialogExportExamplesHtml->Execute())
+	{
+		if (LuaExamplesHtmlExport::Write(saveDialogExportExamplesHtml->FileName) != 0)
+		{
+			Application->MessageBox("Failed to write HTML file", "Export Lua examples", MB_ICONSTOP);
+		}
+	}
 }
 //---------------------------------------------------------------------------
 

@@ -144,6 +144,14 @@ object frmLuaScript: TfrmLuaScript
         Caption = 'Custom Lua functions'
         OnClick = miCustomLuaFunctionsClick
       end
+      object miExportFunctionsToHtml: TMenuItem
+        Caption = 'Export custom Lua functions to HTML'
+        OnClick = miExportFunctionsToHtmlClick
+      end
+      object miExportExamplesToHtml: TMenuItem
+        Caption = 'Export Lua examples to HTML'
+        OnClick = miExportExamplesToHtmlClick
+      end
     end
   end
   object OpenDialog: TOpenDialog
@@ -161,6 +169,22 @@ object frmLuaScript: TfrmLuaScript
       '|*.*'
     Options = [ofHideReadOnly, ofNoChangeDir, ofExtensionDifferent, ofEnableSizing]
     Left = 72
+    Top = 208
+  end
+  object saveDialogExportHtml: TSaveDialog
+    DefaultExt = 'html'
+    Filter = 'HTML files (*.html)|*.html|All files (*.*)|*.*'
+    Options = [ofOverwritePrompt, ofNoChangeDir, ofEnableSizing]
+    Title = 'Export custom Lua functions to HTML file'
+    Left = 136
+    Top = 208
+  end
+  object saveDialogExportExamplesHtml: TSaveDialog
+    DefaultExt = 'html'
+    Filter = 'HTML files (*.html)|*.html|All files (*.*)|*.*'
+    Options = [ofOverwritePrompt, ofNoChangeDir, ofEnableSizing]
+    Title = 'Export Lua examples to HTML file'
+    Left = 168
     Top = 208
   end
   object actionList: TActionList

@@ -54,10 +54,6 @@ object frmMain: TfrmMain
       OnChange = pcMainChange
       object tsDialpad: TTabSheet
         Caption = 'Dialpad'
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object pnlDialpad: TPanel
           Left = 0
           Top = -1
@@ -324,7 +320,7 @@ object frmMain: TfrmMain
       Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
-      ItemHeight = 0
+      ItemHeight = 19
       ParentFont = False
       PopupMenu = popupCbCallUri
       TabOrder = 0
@@ -357,6 +353,9 @@ object frmMain: TfrmMain
       object miCommonSettings: TMenuItem
         Action = actShowSettings
       end
+      object miSeparatorSettingsPatch: TMenuItem
+        Caption = '-'
+      end
       object miSettingsPatch: TMenuItem
         Caption = 'Patch / update main settings with JSON'
         OnClick = miSettingsPatchClick
@@ -364,6 +363,9 @@ object frmMain: TfrmMain
       object miPatchButtonSettings: TMenuItem
         Caption = 'Patch / update button settings with JSON'
         OnClick = miPatchButtonSettingsClick
+      end
+      object miSeparatorContactsImport: TMenuItem
+        Caption = '-'
       end
       object miImportContactsFromCsv: TMenuItem
         Action = actContactsCsvImport
@@ -375,6 +377,9 @@ object frmMain: TfrmMain
       object miExportContactsToCsv: TMenuItem
         Caption = 'Export contacts to CSV file'
         OnClick = miExportContactsToCsvClick
+      end
+      object miSeparatorMaintenance: TMenuItem
+        Caption = '-'
       end
       object miClearCallsHistory: TMenuItem
         Caption = 'Clear calls history'

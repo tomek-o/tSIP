@@ -102,6 +102,9 @@ __published:	// IDE-managed Components
 	TBitBtn *btnResetSpeakerVolume;
 	TMenuItem *miScriptPluginVariables;
 	TMenuItem *miSeparatorMessages;
+	TMenuItem *miSeparatorSettingsPatch;
+	TMenuItem *miSeparatorContactsImport;
+	TMenuItem *miSeparatorMaintenance;
 	TPopupMenu *popupCbCallUri;
 	TMenuItem *miCallCopy;
 	TMenuItem *miCallPaste;
