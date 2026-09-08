@@ -6,6 +6,9 @@
 #include "MessageHistory.h"
 #include "Settings.h"
 #include "ControlQueue.h"
+#include "Globals.h"
+#include "Contacts.h"
+#include "common/TelecomUtils.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -25,11 +28,25 @@ __fastcall TfrmMessage::TfrmMessage(TComponent* Owner)
 	: TForm(Owner),
 	targetSet(false),
 	incoming(false),
+	peerLabelCacheValid(false),
 	loadedHistoryCount(0),
 	hasMoreHistory(false),
 	loadingMoreHistory(false)
 {
 	SIMPLE_Messages::RegisterWindow(this);
+}
+
+/** \brief Label identifying the peer for a message line: contact description if known, else the raw URI/number.
+	Cached since target doesn't change once set, and history loading calls this once per message. */
+AnsiString TfrmMessage::GetPeerLabel(void)
+{
+	if (!peerLabelCacheValid)
+	{
+		Contacts::Entry *entry = contacts.GetEntry(CleanUri(target));
+		peerLabelCache = (entry && entry->description != "") ? entry->description : target;
+		peerLabelCacheValid = true;
+	}
+	return peerLabelCache;
 }
 //---------------------------------------------------------------------------
 void __fastcall TfrmMessage::MyWndProc (Messages::TMessage &Msg)
@@ -200,7 +217,7 @@ void TfrmMessage::InsertHistoryEntryAtTop(int &insertPos, bool incoming, time_t 
 	char buf[32];
 	strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", tv);
 
-	AnsiString headerLine = (incoming ? (AnsiString)"Peer: (" : (AnsiString)"Me: (") + buf + ") \r\n";
+	AnsiString headerLine = (incoming ? GetPeerLabel() : (AnsiString)"Me") + ": (" + buf + ") \r\n";
 	memoMain->SelStart = insertPos;
 	memoMain->SelLength = 0;
 	memoMain->SelAttributes->Size = 8;
@@ -274,7 +291,7 @@ void TfrmMessage::AppendHistoryEntry(bool incoming, time_t t, AnsiString content
 	memoMain->SelAttributes->Style = TFontStyles() << fsBold;
 	memoMain->SelAttributes->Color = incoming ? clBlack : clDkGray;
 	memoMain->Paragraph->FirstIndent = 0;
-	memoMain->Lines->Add ((incoming ? (AnsiString)"Peer: (" : (AnsiString)"Me: (") + buf + ") ");
+	memoMain->Lines->Add ((incoming ? GetPeerLabel() : (AnsiString)"Me") + ": (" + buf + ") ");
 
 	memoMain->SelAttributes->Size = 10;
 	memoMain->SelAttributes->Style = TFontStyles();
@@ -304,8 +321,7 @@ void TfrmMessage::AddIncomingMessage(AnsiString contentType, AnsiString body)
 	const tm *t = localtime(&currentTime);
 	char buf [30];
 	strftime (buf, sizeof (buf), "%H:%M:%S", t);
-	int TODO__PEER_DISPLAY;
-	memoMain->Lines->Add ((AnsiString)"Peer: (" + buf + ") ");
+	memoMain->Lines->Add (GetPeerLabel() + ": (" + buf + ") ");
 
     memoMain->SelAttributes->Size = 10;
     memoMain->SelAttributes->Style = TFontStyles();

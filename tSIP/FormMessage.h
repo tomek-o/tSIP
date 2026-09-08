@@ -38,6 +38,9 @@ private:	// User declarations
 	bool targetSet;
 	bool incoming;
 	void UpdateTarget(AnsiString val);
+	AnsiString peerLabelCache;
+	bool peerLabelCacheValid;
+	AnsiString GetPeerLabel(void);
 	std::set<int> requestIds;
 	unsigned int loadedHistoryCount;
 	bool hasMoreHistory;
