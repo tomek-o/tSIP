@@ -26,6 +26,12 @@ static int module_close(void)
 }
 
 
+void dialog_info_resubscribe(void)
+{
+	dialog_info_subscriber_resubscribe();
+}
+
+
 const struct mod_export DECL_EXPORTS(dialog_info) = {
 	"dialog-info",
 	"application",

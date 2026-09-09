@@ -1409,6 +1409,12 @@ static int l_Reregister(lua_State* L)
 	return 0;
 }
 
+static int l_Resubscribe(lua_State* L)
+{
+	UA->Resubscribe();
+	return 0;
+}
+
 static int l_SetButtonCaption(lua_State* L)
 {
 	int id = luaL_checkinteger( L, 1 );
@@ -2577,6 +2583,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetRegistrationState, "GetRegistrationState", "Check if softphone is registered", "");
 	lua_register2(L, ScriptImp::l_Unregister, "Unregister", "Unregister SIP account", "");
 	lua_register2(L, ScriptImp::l_Reregister, "Reregister", "Re-register SIP account", "");
+	lua_register2(L, ScriptImp::l_Resubscribe, "Resubscribe", "Force an immediate re-SUBSCRIBE of presence and dialog-info (BLF) subscriptions", "Useful e.g. to recover after the SIP server loses subscription state without waiting for the normal retry/refresh interval.");
 	lua_register2(L, ScriptImp::l_SetButtonCaption, "SetButtonCaption", "Set text for the first line of the button", "Example: SetButtonCaption(buttonId, text).");
 	lua_register2(L, ScriptImp::l_SetButtonCaption2, "SetButtonCaption2", "Set text for the second line of the button", "Example: SetButtonCaption2(buttonId, text).");
 	lua_register2(L, ScriptImp::l_SetButtonDown, "SetButtonDown", "Change button state to down/pressed", "Example: SetButtonDown(buttonId, buttonState).");

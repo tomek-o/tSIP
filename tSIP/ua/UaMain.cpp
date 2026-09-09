@@ -1003,16 +1003,13 @@ static void app_close(void)
 	mem_debug();
 }
 
-extern "C" void dialog_info_subscriber_close(void);
-extern "C" void subscriber_close(void);
-
 static void quit(int sig)
 {
 	if (!app.terminating) {
 		/** \todo Closing dialog-info subscriber here shouldn't be necessary? */
 		dialog_info_subscriber_close();
 		/** \todo Closing presence subscriber here shouldn't be necessary? */
-		subscriber_close();
+		presence_subscriber_close();
 		ua_stop_all(false);
 		app.terminating = true;
 		return;
@@ -1183,6 +1180,11 @@ extern "C" void control_handler(void)
 	case Command::UNREGISTER: {
 		struct ua* ua = ua_cur();
 		ua_unregister(ua);
+		break;
+	}
+	case Command::RESUBSCRIBE: {
+		presence_resubscribe();
+		dialog_info_resubscribe();
 		break;
 	}
 	case Command::START_RING: {

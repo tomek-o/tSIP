@@ -48,7 +48,8 @@ namespace Button
 		CONFERENCE_START,
 		CALL_MAKE_OR_ANSWER,
 		CALL_ANSWER,
-		
+		RESUBSCRIBE,	// force an immediate re-SUBSCRIBE of presence and dialog-info (BLF) subscriptions
+
 		TYPE_LIMITER
 	};
 	const char* TypeName(enum Type type);

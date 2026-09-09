@@ -97,6 +97,8 @@ const char* Button::TypeName(enum Type type)
 		return "Make or answer the call";
 	case CALL_ANSWER:
 		return "Answer the current call";
+	case RESUBSCRIBE:
+		return "Resubscribe";
 
 	default:
 		return "???";
@@ -188,6 +190,8 @@ const char* Button::TypeDescription(enum Type type)
 		return "Make a new call or answer the current call (like default Call/Answer button in the main window).";
 	case CALL_ANSWER:
 		return "Answer the current call (like default Call/Answer button but only for incoming call).";
+	case RESUBSCRIBE:
+		return "Force an immediate re-SUBSCRIBE of presence and dialog-info (BLF) subscriptions. Useful e.g. to recover after the SIP server loses subscription state without waiting for the normal retry/refresh interval.";
 
 	default:
 		return "???";

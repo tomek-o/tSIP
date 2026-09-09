@@ -40,6 +40,7 @@ public:
 		CALL_START_AUDIO_EXTRA_SOURCE,
 		CONFERENCE_START,
 		SEND_CUSTOM_CALL_REQUEST,	///< send a SIP request of an arbitrary method within an existing call's dialog
+		RESUBSCRIBE,		///< force an immediate re-SUBSCRIBE of presence and dialog-info (BLF) subscriptions
 
 		TYPE__LIMITER
 	} type;

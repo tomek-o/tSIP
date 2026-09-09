@@ -4,4 +4,5 @@
 
 int  dialog_info_subscriber_init(void);
 void dialog_info_subscriber_close(void);
+void dialog_info_subscriber_resubscribe(void);
 

@@ -12,11 +12,11 @@ static int module_init(void)
 {
 	int err;
 
-	err = subscriber_init();
+	err = presence_subscriber_init();
 	if (err)
 		return err;
 
-	err = notifier_init();
+	err = presence_notifier_init();
 	if (err)
 		return err;
 
@@ -26,10 +26,16 @@ static int module_init(void)
 
 static int module_close(void)
 {
-	notifier_close();
-	subscriber_close();
+	presence_notifier_close();
+	presence_subscriber_close();
 
 	return 0;
+}
+
+
+void presence_resubscribe(void)
+{
+	presence_subscriber_resubscribe();
 }
 
 

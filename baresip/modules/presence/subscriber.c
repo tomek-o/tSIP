@@ -258,7 +258,7 @@ static int presence_alloc(struct contact *contact, unsigned int expires)
 }
 
 
-int subscriber_init(void)
+int presence_subscriber_init(void)
 {
 	struct le *le;
 	int err = 0;
@@ -287,7 +287,22 @@ int subscriber_init(void)
 }
 
 
-void subscriber_close(void)
+void presence_subscriber_close(void)
 {
 	list_flush(&presencel);
+}
+
+
+void presence_subscriber_resubscribe(void)
+{
+	struct le *le;
+
+	for (le = list_head(&presencel); le; le = le->next) {
+
+		struct presence *pres = le->data;
+
+		tmr_cancel(&pres->tmr);
+		pres->sub = mem_deref(pres->sub);
+		tmr_start(&pres->tmr, 0, tmr_handler, pres);
+	}
 }

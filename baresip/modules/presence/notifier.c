@@ -253,7 +253,7 @@ static bool sub_handler(const struct sip_msg *msg, void *arg)
 }
 
 
-int notifier_init(void)
+int presence_notifier_init(void)
 {
 	int err;
 
@@ -265,7 +265,7 @@ int notifier_init(void)
 }
 
 
-void notifier_close(void)
+void presence_notifier_close(void)
 {
 	cmd_unregister(cmdv);
 	list_flush(&notifierl);

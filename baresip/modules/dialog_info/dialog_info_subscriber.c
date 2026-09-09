@@ -475,3 +475,18 @@ void dialog_info_subscriber_close(void)
 {
 	list_flush(&dialog_infol);
 }
+
+
+void dialog_info_subscriber_resubscribe(void)
+{
+	struct le *le;
+
+	for (le = list_head(&dialog_infol); le; le = le->next) {
+
+		struct dialog_info *dlg_info = le->data;
+
+		tmr_cancel(&dlg_info->tmr);
+		dlg_info->sub = mem_deref(dlg_info->sub);
+		tmr_start(&dlg_info->tmr, 0, tmr_handler, dlg_info);
+	}
+}

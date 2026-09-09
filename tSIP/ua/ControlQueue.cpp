@@ -53,6 +53,16 @@ void ControlQueue::ReRegister(int accountId)
 	fifo.push();
 }
 
+void ControlQueue::Resubscribe(void)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::RESUBSCRIBE;
+	fifo.push();
+}
+
 void ControlQueue::UnRegister(int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);

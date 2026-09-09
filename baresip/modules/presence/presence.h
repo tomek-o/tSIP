@@ -5,9 +5,10 @@
  */
 
 
-int  subscriber_init(void);
-void subscriber_close(void);
+int  presence_subscriber_init(void);
+void presence_subscriber_close(void);
+void presence_subscriber_resubscribe(void);
 
 
-int  notifier_init(void);
-void notifier_close(void);
+int  presence_notifier_init(void);
+void presence_notifier_close(void);

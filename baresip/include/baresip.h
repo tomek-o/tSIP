@@ -369,6 +369,11 @@ const char      *contact_presence_str(enum presence_status status);
 void			contact_set_dialog_info(struct contact *c, const struct dialog_data *ddata, unsigned int ddata_cnt);
 const char		*contact_dialog_info_str(enum dialog_info_status status);
 
+void presence_resubscribe(void);
+void presence_subscriber_close(void);
+
+void dialog_info_resubscribe(void);
+void dialog_info_subscriber_close(void);
 
 /*
  * Media Context

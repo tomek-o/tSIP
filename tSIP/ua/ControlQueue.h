@@ -35,6 +35,7 @@ public:
 	void SetAubufLogging(bool enabled);	
 	void ReRegister(int accountId);
 	void UnRegister(int accountId);
+	void Resubscribe(void);
 	void StartRing(unsigned int callUid, AnsiString wavFile);
 	void PlayStop(unsigned int callUid);
 	void StartRing2(AnsiString wavFile);
