@@ -1367,6 +1367,19 @@ extern "C" void control_handler(void)
 		}
 		break;
 	}
+	case Command::SEND_CUSTOM_CALL_REQUEST: {
+		if (cmdCall) {
+			err = call_send_custom_request(cmdCall, cmd.method.c_str(), cmd.extraHeaderLines.c_str(),
+						custom_req_response_handler, reinterpret_cast<void*>(cmd.requestId));
+			if (err != 0) {
+				DEBUG_WARNING("Failed to send custom call request (%m)\n", err);
+				UA_CB->NotifyCustomRequestStatus(cmd.requestId, err, 0, "");
+			}
+		} else {
+			UA_CB->NotifyCustomRequestStatus(cmd.requestId, ENOTCONN, 0, "");
+		}
+		break;
+	}
 	case Command::SEND_MESSAGE: {
 		err = message_send(ua_cur(), cmd.target.c_str(), cmd.text.c_str(), (void*)cmd.requestId);
 		DEBUG_WARNING("Sending message to %s: status = %d\n", cmd.target.c_str(), err);

@@ -39,6 +39,14 @@ void Clear(void);
 */
 int Send(int &uid, AnsiString uri, AnsiString method, AnsiString extraHeaderLines);
 
+/** \brief Send a SIP request of an arbitrary method within an existing call's dialog
+	(unlike Send(), which always starts a new, separate SIP transaction/dialog to a
+	given URI)
+	\param uid returned pseudo-unique id of created request
+	\return 0 on success
+*/
+int SendCustomCallRequest(int &uid, unsigned int callUid, AnsiString method, AnsiString extraHeaderLines);
+
 /** \return 0 if request uid is found (it may be deleted before receving reply)
 */
 int NotifyReply(int uid, int err, int sipStatusCode, AnsiString replyText);

@@ -88,6 +88,8 @@ typedef void (call_dtmf_h)(struct call *call, char key, void *arg);
 int  call_modify(struct call *call);
 int  call_hold(struct call *call, bool hold);
 int  call_send_digit(struct call *call, char key);
+int  call_send_custom_request(struct call *call, const char *method,
+			      const char *hdrs, sip_resp_h *resph, void *arg);
 int  call_start_tone(struct call *call, unsigned int tone_id, float amplitude, float frequency);
 int  call_stop_tone(struct call *call, unsigned int tone_id);
 /** \brief Start call audio source (only), e.g. microphone

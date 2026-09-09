@@ -399,6 +399,36 @@ int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString
 	return 0;
 }
 
+int ControlQueue::SendCustomCallRequest(int requestId, unsigned int callUid, AnsiString method, AnsiString extraHeaderLines)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return -1;
+	cmd->type = Command::SEND_CUSTOM_CALL_REQUEST;
+	cmd->requestId = requestId;
+	cmd->callUid = callUid;
+	cmd->method = method;
+	if (extraHeaderLines != "")
+	{
+		if (extraHeaderLines.Length() < 2)
+		{
+			extraHeaderLines += "\r\n";
+		}
+		else
+		{
+			AnsiString end = extraHeaderLines.SubString(extraHeaderLines.Length() - 1, 2);
+			if (end != "\r\n")
+			{
+        		extraHeaderLines += "\r\n";
+			}
+        }
+    }
+	cmd->extraHeaderLines = extraHeaderLines;
+	fifo.push();
+	return 0;
+}
+
 int ControlQueue::SendMessage(int requestId, int accountId, AnsiString target, AnsiString text)
 {
 	ScopedLock<Mutex> lock(mutex);

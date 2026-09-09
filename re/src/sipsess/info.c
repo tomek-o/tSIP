@@ -111,7 +111,7 @@ int sipsess_info(struct sipsess *sess, const char *ctype, struct mbuf *body,
 	if (!sip_dialog_established(sess->dlg))
 		return ENOTCONN;
 
-	err = sipsess_request_alloc(&req, sess, ctype, body, resph, arg);
+	err = sipsess_request_alloc(&req, sess, ctype, body, NULL, NULL, resph, arg);
 	if (err)
 		return err;
 

@@ -64,6 +64,8 @@ int  sipsess_reject(struct sipsess *sess, uint16_t scode, const char *reason,
 int  sipsess_modify(struct sipsess *sess, struct mbuf *desc);
 int  sipsess_info(struct sipsess *sess, const char *ctype, struct mbuf *body,
 		  sip_resp_h *resph, void *arg);
+int  sipsess_send_request(struct sipsess *sess, const char *method,
+			  const char *hdrs, sip_resp_h *resph, void *arg);
 bool sipsess_refresh_allowed(const struct sipsess *sess);
 void sipsess_close_all(struct sipsess_sock *sock);
 struct sip_dialog *sipsess_dialog(const struct sipsess *sess);

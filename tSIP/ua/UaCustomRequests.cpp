@@ -81,6 +81,28 @@ int UaCustomRequests::Send(int &uid, AnsiString uri, AnsiString method, AnsiStri
 	return status;
 }
 
+int UaCustomRequests::SendCustomCallRequest(int &uid, unsigned int callUid, AnsiString method, AnsiString extraHeaderLines)
+{
+	int status;
+
+	int requestUid = AllocUid();
+
+	Request req;
+	req.uid = requestUid;
+	req.method = method;
+	req.extraHeaderLines = extraHeaderLines;
+
+	status = UA->SendCustomCallRequest(requestUid, callUid, method, extraHeaderLines);
+
+	if (status == 0)
+	{
+		requests[req.uid] = req;
+		uid = req.uid;
+	}
+
+	return status;
+}
+
 int UaCustomRequests::NotifyReply(int uid, int err, int sipStatusCode, AnsiString replyText)
 {
 	LOG("UaCustomRequests: NotifyReply for %d: err = %d, SIP status code = %d\n", uid, err, sipStatusCode);

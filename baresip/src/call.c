@@ -1109,6 +1109,27 @@ int call_send_digit(struct call *call, char key)
 	}
 }
 
+/**
+ * Send a SIP request of an arbitrary method within the call's dialog
+ *
+ * @param call   Call object
+ * @param method SIP method
+ * @param hdrs   Extra header lines and body, e.g.
+ *               "Content-Type: application/hook-flash\r\nContent-Length: 0\r\n\r\n"
+ * @param resph  Response handler, may be NULL
+ * @param arg    Handler argument
+ *
+ * @return 0 if success, otherwise errorcode
+ */
+int call_send_custom_request(struct call *call, const char *method,
+			     const char *hdrs, sip_resp_h *resph, void *arg)
+{
+	if (!call || !call->sess || !method || !hdrs)
+		return EINVAL;
+
+	return sipsess_send_request(call->sess, method, hdrs, resph, arg);
+}
+
 int call_start_tone(struct call *call, unsigned int tone_id, float amplitude, float frequency)
 {
 	if (!call)

@@ -39,12 +39,13 @@ public:
 		SWITCH_VIDEO_SOURCE,
 		CALL_START_AUDIO_EXTRA_SOURCE,
 		CONFERENCE_START,
+		SEND_CUSTOM_CALL_REQUEST,	///< send a SIP request of an arbitrary method within an existing call's dialog
 
 		TYPE__LIMITER
 	} type;
 
 	AnsiString target;
-	AnsiString extraHeaderLines;	///< extra/custom header lines for outgoing calls and custom requests
+	AnsiString extraHeaderLines;	///< extra/custom header lines for outgoing calls, SEND_CUSTOM_REQUEST and SEND_CUSTOM_CALL_REQUEST
 	int accountId;
 	unsigned int callUid;
 	unsigned int callReplaceUid;	///< used by TRANSFER_REPLACE / attended transfer
@@ -69,7 +70,7 @@ public:
 	void *vidispParentHandle;
 
 	int requestId;					///< sending custom messages and sending MESSAGE messages
-	AnsiString method;				///< SEND_CUSTOM_REQUEST
+	AnsiString method;				///< SEND_CUSTOM_REQUEST, SEND_CUSTOM_CALL_REQUEST
 	AnsiString text;				///< SEND_MESSAGE
 
 	struct Tone {

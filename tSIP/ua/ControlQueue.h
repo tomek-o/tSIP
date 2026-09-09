@@ -54,6 +54,7 @@ public:
 	void SwitchVideoSource(unsigned int callUid, AnsiString videoMod, AnsiString videoDev);
 	void UpdateVolume(void);
 	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines);
+	int SendCustomCallRequest(int requestId, unsigned int callUid, AnsiString method, AnsiString extraHeaderLines);
 	int SendMessage(int requestId, int accountId, AnsiString target, AnsiString text);
 	int ZrtpVerifySas(bool state);
 	int ConferenceStart(void);

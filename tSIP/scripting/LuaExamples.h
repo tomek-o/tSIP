@@ -1015,4 +1015,25 @@ const LuaExample luaExamples [] =
 	"\tSetHandled(1)\n"
 	"end"
 	}
+	,
+	{
+	"Send SIP INFO with hook flash"
+	,
+	"-- Send SIP INFO with the \"application/hook-flash\" content type.\n"
+	"-- Some gateways instead expect application/dtmf-relay with body \"Signal=hookflash\".\n"
+	"\n"
+	"local callUid = GetCurrentCallUid()\n"
+	"if callUid == 0 then\n"
+	"\tprint(\"No current call\\n\")\n"
+	"\treturn\n"
+	"end\n"
+	"\n"
+	"local requestUid = SendCustomCallRequest(callUid, \"INFO\", \"Content-Type: application/hook-flash\\r\\nContent-Length: 0\\r\\n\\r\\n\")\n"
+	"if requestUid <= 0 then\n"
+	"\tprint(\"Error sending INFO (hook flash)\\n\")\n"
+	"\treturn\n"
+	"end\n"
+	"\n"
+	"print(string.format(\"Sent SIP INFO (hook flash), requestUid = %d\\n\", requestUid))"
+	}
 };

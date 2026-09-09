@@ -61,6 +61,8 @@ struct sipsess_request {
 	struct mbuf *body;
 	sip_resp_h *resph;
 	void *arg;
+	char *method;	/* used by sipsess_send_request() only, NULL otherwise (defaults to INFO) */
+	char *hdrs;	/* used by sipsess_send_request() only: raw header/body blob instead of ctype/body */
 };
 
 
@@ -87,4 +89,5 @@ int  sipsess_reinvite(struct sipsess *sess, bool reset_ls);
 int  sipsess_bye(struct sipsess *sess, bool reset_ls);
 int  sipsess_request_alloc(struct sipsess_request **reqp, struct sipsess *sess,
 			   const char *ctype, struct mbuf *body,
+			   const char *method, const char *hdrs,
 			   sip_resp_h *resph, void *arg);

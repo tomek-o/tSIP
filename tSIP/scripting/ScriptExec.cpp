@@ -2237,6 +2237,30 @@ static int l_SendCustomRequest(lua_State* L)
 	return 1;
 }
 
+static int l_SendCustomCallRequest(lua_State* L)
+{
+	unsigned int callUid = luaL_checkinteger(L, 1);
+	const char* method = lua_tostring(L, 2);
+	if (method == NULL)
+	{
+		LOG("Lua error: method == NULL for SendCustomCallRequest()\n");
+		return 0;
+	}
+	AnsiString extraHeaderLines;
+	const char* extraHeaderLinesStr = lua_tostring(L, 3);
+	if (extraHeaderLinesStr != NULL)
+	{
+		extraHeaderLines = extraHeaderLinesStr;
+	}
+
+	int uid = -1;
+	int status = UaCustomRequests::SendCustomCallRequest(uid, callUid, method, extraHeaderLines);
+	if (status != 0)
+		uid = -1;
+	lua_pushinteger(L, uid);
+	return 1;
+}
+
 static int l_ClearCustomRequests(lua_State* L)
 {
 	UaCustomRequests::Clear();
@@ -2602,6 +2626,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_SetApplicationExitCode, "SetApplicationExitCode", "Set the process exit code returned to the OS on exit", "Does not close the application by itself - combine with ApplicationClose(). Note: Lua's own os.exit(code) is unreliable in this application (it may not propagate the requested code) - use this function instead.\nExample: SetExitCode(1); ApplicationClose()\nTo test from the Windows command line: launch with \"start /wait \"\" softphone.exe\" (running the exe directly does not work - it must be launched via start /wait), trigger the script that calls SetExitCode()+ApplicationClose(), then once the prompt returns run \"echo %errorlevel%\" to see the code. The empty \"\" after /wait is a required placeholder window title, needed so start does not mistake a quoted exe path for the title.");
 
 	lua_register2(L, ScriptImp::l_SendCustomRequest, "SendCustomRequest", "Send custom SIP request", "Example: requestUid = SendCustomRequest(uri, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional");
+	lua_register2(L, ScriptImp::l_SendCustomCallRequest, "SendCustomCallRequest", "Send custom SIP request within an existing call's dialog", "Unlike SendCustomRequest(), this reuses the call's own dialog (Call-ID, tags), so the peer recognizes it as belonging to the call - required by most peers for in-call signaling such as sending INFO, otherwise they may reply 481 Call/Transaction Does Not Exist.\nExample: requestUid = SendCustomCallRequest(callUid, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional");
 	lua_register2(L, ScriptImp::l_ClearCustomRequests, "ClearCustomRequests", "Delete status info of custom SIP requests", "");
 	lua_register2(L, ScriptImp::l_DeleteCustomRequest, "DeleteCustomRequest", "Delete single custom request info", "");
 	lua_register2(L, ScriptImp::l_GetCustomRequest, "GetCustomRequest", "Get details of a sent custom SIP request", "Takes custom request UID (from SendCustomRequest()) as argument.\nReturns 3 values: uri (target URI), method (SIP method), extraHeaderLines (extra header lines sent with the request).\nReturns no values if the given UID is unknown (e.g. already removed via DeleteCustomRequest()).\nSee also: GetCustomRequestReply() for the reply to this request.");
