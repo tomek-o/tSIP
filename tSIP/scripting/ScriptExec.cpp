@@ -2202,6 +2202,12 @@ static int l_ApplicationClose(lua_State* L)
 	return 0;
 }
 
+static int l_SetApplicationExitCode(lua_State* L)
+{
+	applicationExitCode = luaL_checkinteger(L, 1);
+	return 0;
+}
+
 static int l_SendCustomRequest(lua_State* L)
 {
 	const char* uri = lua_tostring(L, 1);
@@ -2593,6 +2599,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_ApplicationShow, "ApplicationShow", "Show application (restoring minimized or from tray)", "Example: ApplicationShow(focused)");
 	lua_register2(L, ScriptImp::l_ApplicationHide, "ApplicationHide", "Hide application to tray", "");
 	lua_register2(L, ScriptImp::l_ApplicationClose, "ApplicationClose", "Close this program", "");
+	lua_register2(L, ScriptImp::l_SetApplicationExitCode, "SetApplicationExitCode", "Set the process exit code returned to the OS on exit", "Does not close the application by itself - combine with ApplicationClose(). Note: Lua's own os.exit(code) is unreliable in this application (it may not propagate the requested code) - use this function instead.\nExample: SetExitCode(1); ApplicationClose()\nTo test from the Windows command line: launch with \"start /wait \"\" softphone.exe\" (running the exe directly does not work - it must be launched via start /wait), trigger the script that calls SetExitCode()+ApplicationClose(), then once the prompt returns run \"echo %errorlevel%\" to see the code. The empty \"\" after /wait is a required placeholder window title, needed so start does not mistake a quoted exe path for the title.");
 
 	lua_register2(L, ScriptImp::l_SendCustomRequest, "SendCustomRequest", "Send custom SIP request", "Example: requestUid = SendCustomRequest(uri, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional");
 	lua_register2(L, ScriptImp::l_ClearCustomRequests, "ClearCustomRequests", "Delete status info of custom SIP requests", "");

@@ -15,3 +15,4 @@ History history;
 Contacts contacts;
 HotKeys hotKeys;
 ProgrammableButtons buttons;
+int applicationExitCode = 0;

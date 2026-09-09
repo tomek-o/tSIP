@@ -76,6 +76,7 @@ USEFORM("buttons\FormButtonGridEdit.cpp", frmButtonGridEdit);
 #include "Branding.h"
 #include "Translate.h"
 #include "SelfTests.h"
+#include "Globals.h"
 
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -212,7 +213,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			Application->ShowException(&exception);
 		}
 	}
-	CLog::Instance()->Close();	
-	return 0;
+	CLog::Instance()->Close();
+	return applicationExitCode;
 }
 //---------------------------------------------------------------------------
