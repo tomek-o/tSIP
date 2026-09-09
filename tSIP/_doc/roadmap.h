@@ -29,7 +29,6 @@ Outdated / not the only one TODO list.
 - contact groups
 - different ringtones for different contacts
 - detect: no input snd dev
-- call history: master/detail view, adding to phonebook
 - number processing / "LCR" / dialplan
 
 - buttons: Dialpad/Contacts/History and equivalent hotkey actions replacing existing tab row

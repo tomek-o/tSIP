@@ -1324,5 +1324,23 @@ Version 0.3.14
 	- fixed some minor inconsistencies when switching main window layout (call controls separated or inside of dialpad) without restarting
 	- new button editor window, arranging buttons from specified range in a regular grid
 	- button properties copy dialog: "Copy" button applies new settings without closing dialog, similar to new dialog for arranging grid
+
+Version 0.3.15
+	- not updating CLIP on reINVITE if user part of the URI was not changed
+	- using Display.bUserOnlyClip setting also for call history
+	- added setting for incoming call answer timeout (previously and current default: 120 s)
+	- FIXED: possible double (or more) script execution if long running script was triggered from command line and registration was used
+	- aufile (wave file as audio source): accepting also stereo files for mono calls (downmixing)
+	- added messages (SIMPLE) history, saved per contact to NDJSON files
+	- added new Lua scripting event, triggered on incoming SIP (SIMPLE) MESSAGE
+	- added function exporting contacts to CSV
+	- Lua window: added functions exporting Lua functions description and examples to HTML
+	- added transport selection for RTSP video (audio?) source
+	- Lua: added SetApplicationExitCode(value) function
+	- added Lua function sending custom messages within call context with Lua example sending INFO hook-flash
+	- added "Resubscribe" button and Lua function (restarting presence + dialog-info subscriptions)
+	- added setting for call history size limit
+	- removed tray notifier window "priming"/flashing at the startup
+	- multiple minor fixes
 */
 
