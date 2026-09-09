@@ -41,6 +41,7 @@ private:
 	bool panelIsResizing;
 	int editedPanelId;
 	int scalingPercentage;
+	int trayScalingPercentage;	///< scalingPercentage equivalent for the tray notifier's own container, frozen at Create() just like scalingPercentage
 
 	typedef void (__closure *CallbackClick)(int id, TProgrammableButton* btn);
 	typedef void (__closure *CallbackMouseUpDown)(int id, TProgrammableButton* btn);
@@ -51,11 +52,16 @@ private:
 	CallbackSetKeepForeground callbackSetKeepForeground;
 	CallbackRestartUa callbackRestartUa;
 
-	void __fastcall containerBackgroundClick(TObject *Sender);	
+	void __fastcall containerBackgroundClick(TObject *Sender);
 	void __fastcall SpeedDialPanelClick(TObject *Sender);
 	void OnPanelMouseUpDown(TProgrammableButton *btn);
 	TfrmButtonContainer *GetBtnContainer(int btnId);
 	void EndEditing(TfrmButtonContainer *container);
+	/** \brief Scaling percentage to use for a given button, honoring the tray notifier's
+		own scaling setting for buttons placed in its container (instead of the main
+		GUI scaling used for every other container)
+	*/
+	int GetScalingPercentageForBtn(int btnId) const;
 
 	void __fastcall miAddEditPanelClick(TObject *Sender);
 	void __fastcall tmrMovingTimer(TObject *Sender);
@@ -110,7 +116,14 @@ public:
 
 	void Resize(int id);
 
-	void UpdateAll(void);	
+	void UpdateAll(void);
+
+	/** \brief Re-snap bounds of buttons placed in the tray notifier's container to their
+		configured position/size, undoing any unwanted rescale from frmTrayNotifier's own
+		ScaleBy() cascading into them. Unlike UpdateAll(), does not touch other containers
+		and does not reset BLF/presence state or reload icon bitmaps.
+	*/
+	void RepositionTrayNotifierButtons(void);
 
 	TProgrammableButton* GetBtn(int id) {
 		if (id >= 0 && id < btns.size())

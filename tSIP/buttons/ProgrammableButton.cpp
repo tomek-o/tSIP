@@ -357,6 +357,15 @@ void TProgrammableButton::SetConfig(const ButtonConf &cfg)
 	once = true;	
 }
 
+void TProgrammableButton::UpdateBounds(const ButtonConf &cfg)
+{
+	const float scale = static_cast<float>(scalingPercentage) / 100;
+	Left = cfg.left * scale;
+	Top = cfg.top * scale;
+	Width = cfg.width * scale;
+	Height = cfg.height * scale;
+}
+
 void TProgrammableButton::UpdateCallbacks(void)
 {
 	image->OnClick = OnClick;

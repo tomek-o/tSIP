@@ -99,6 +99,7 @@ ProgrammableButtons::ProgrammableButtons(void):
 	panelIsResizing(false),
 	editedPanelId(-1),
 	scalingPercentage(100),
+	trayScalingPercentage(100),
 	callbackClick(NULL),
 	callbackMouseUpDown(NULL),
 	callbackSetKeepForeground(NULL),
@@ -568,6 +569,14 @@ TfrmButtonContainer* ProgrammableButtons::GetBtnContainer(int btnId)
 	}
 }
 
+int ProgrammableButtons::GetScalingPercentageForBtn(int btnId) const
+{
+	assert(btnId >= 0 && btnId < btnConf.size());
+	if (btnConf[btnId].parentId == BUTTON_CONTAINER_TRAY_NOTIFIER)
+		return trayScalingPercentage;
+	return scalingPercentage;
+}
+
 
 void ProgrammableButtons::Create(TComponent* Owner,
 		int scalingPercentage,
@@ -579,6 +588,7 @@ void ProgrammableButtons::Create(TComponent* Owner,
 {
 	assert(dmButtons == NULL);
 	dmButtons = new TdmButtons(NULL);
+	trayScalingPercentage = appSettings.trayNotifier.scalingPct;
 	this->callbackClick = callbackClick;
 	this->callbackSetKeepForeground = callbackSetKeepForeground;
 	this->callbackMouseUpDown = callbackMouseUpDown;
@@ -594,7 +604,7 @@ void ProgrammableButtons::Create(TComponent* Owner,
 	}
 	for (unsigned int i=0; i<btnConf.size(); i++)
 	{
-		TProgrammableButton *panel = new TProgrammableButton(Owner, dmButtons->imgList, scalingPercentage);
+		TProgrammableButton *panel = new TProgrammableButton(Owner, dmButtons->imgList, GetScalingPercentageForBtn(i));
 		panel->Tag = i;
 		//panel->AlignWithMargins = true;
 		panel->Parent = GetBtnContainer(i)->GetButtonParent();
@@ -651,6 +661,7 @@ void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
 			P.y = 0;
 		ButtonConf cfg = btnConf[editedPanelId];	// copy
 		ButtonConf initialCfg = cfg;
+		const int scalingPercentage = GetScalingPercentageForBtn(editedPanelId);
 		cfg.left = P.x * 100/scalingPercentage;
 		cfg.top = P.y * 100/scalingPercentage;
 
@@ -700,6 +711,7 @@ void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
 		if (P.y < 0)
 			P.y = 0;
 		ButtonConf cfg = btnConf[editedPanelId];	// copy
+		const int scalingPercentage = GetScalingPercentageForBtn(editedPanelId);
 		cfg.width = P.x * 100/scalingPercentage - cfg.left;
 		cfg.height = P.y * 100/scalingPercentage - cfg.top;
 
@@ -782,6 +794,7 @@ void ProgrammableButtons::ApplyButtonCfg(int id, const ButtonConf &cfg)
 		btnConf[id] = cfg;
 		TProgrammableButton* panel = btns[id];
 		panel->Parent = GetBtnContainer(id)->GetButtonParent();
+		panel->SetScaling(GetScalingPercentageForBtn(id));	// may have moved into/out of the tray notifier's container, which scales separately
 		panel->SetConfig(cfg);
 		if (cfg.type != Button::BLF)
 		{
@@ -918,7 +931,7 @@ void ProgrammableButtons::Move(int id, bool moveGroup)
 
 	// move mouse to top left button corner
 	TPoint tp, tp2;
-	const float scale = static_cast<float>(scalingPercentage) / 100;
+	const float scale = static_cast<float>(GetScalingPercentageForBtn(id)) / 100;
 	tp.x = btnConf[id].left * scale;
 	tp.y = btnConf[id].top * scale;
 	tp2 = container->ClientToScreen(tp);
@@ -936,7 +949,7 @@ void ProgrammableButtons::Resize(int id)
 
 	// move mouse to bottom right button corder
 	TPoint tp, tp2;
-	const float scale = static_cast<float>(scalingPercentage) / 100;
+	const float scale = static_cast<float>(GetScalingPercentageForBtn(id)) / 100;
 	tp.x = (btnConf[id].left + btnConf[id].width) * scale;
 	tp.y = (btnConf[id].top + btnConf[id].height) * scale;
 	tp2 = container->ClientToScreen(tp);
@@ -952,7 +965,8 @@ void ProgrammableButtons::UpdateAll(void)
 		if (id >= btns.size())
 			break;
 		TProgrammableButton* panel = btns[id];
-		panel->Parent = GetBtnContainer(id)->GetButtonParent();		
+		panel->Parent = GetBtnContainer(id)->GetButtonParent();
+		panel->SetScaling(GetScalingPercentageForBtn(id));
 		panel->SetConfig(btnConf[id]);
 	}
 	for (unsigned int i=0; i<ARRAY_SIZE(frmButtonContainers); i++)
@@ -961,12 +975,27 @@ void ProgrammableButtons::UpdateAll(void)
 	}
 }
 
+void ProgrammableButtons::RepositionTrayNotifierButtons(void)
+{
+	for (unsigned int id=0; id<btnConf.size(); id++)
+	{
+		if (btnConf[id].parentId != BUTTON_CONTAINER_TRAY_NOTIFIER)
+			continue;
+		if (id >= btns.size())
+			break;
+		btns[id]->SetScaling(trayScalingPercentage);
+		btns[id]->UpdateBounds(btnConf[id]);
+	}
+	frmButtonContainers[BUTTON_CONTAINER_TRAY_NOTIFIER]->Repaint();
+}
+
 void ProgrammableButtons::SetConfig(int btnId, const ButtonConf &conf)
 {
 	TProgrammableButton* btn = GetBtn(btnId);
 	if (btn)
 	{
-		btn->Parent = GetBtnContainer(btnId)->GetButtonParent();		
+		btn->Parent = GetBtnContainer(btnId)->GetButtonParent();
+		btn->SetScaling(GetScalingPercentageForBtn(btnId));
 		btn->SetConfig(conf);
 	}
 }
@@ -1044,6 +1073,8 @@ void __fastcall ProgrammableButtons::tmrMovingTimer(TObject *Sender)
 		P.x = 0;
 	if (P.y < 0)
 		P.y = 0;
+
+	const int scalingPercentage = GetScalingPercentageForBtn(editedPanelId);
 
 	if (panelIsMoving)
 	{

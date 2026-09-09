@@ -79,6 +79,12 @@ public:
 	__fastcall TProgrammableButton(TComponent* Owner, TImageList* imgList, int scalingPercentage);
 	__fastcall ~TProgrammableButton();
 	void SetConfig(const ButtonConf &cfg);
+	/** \brief Reapply just position/size from cfg at the current scalingPercentage, without
+		SetConfig()'s side effects (resetting BLF/presence state, reloading icon bitmaps).
+		Used to correct bounds clobbered by a parent form's ScaleBy() cascading into this
+		control after it was already correctly placed.
+	*/
+	void UpdateBounds(const ButtonConf &cfg);
 	void SetCaption(AnsiString text);
 	void SetCaption2(AnsiString text);
 	AnsiString GetCaption(void) const;

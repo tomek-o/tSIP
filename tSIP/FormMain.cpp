@@ -482,7 +482,7 @@ void TfrmMain::InitButtons(void)
 		container = new TfrmButtonContainer(frmTrayNotifier,
 			buttons,
 			id, true,
-			300, 0, appSettings.gui.scalingPct,
+			300, 0, appSettings.trayNotifier.scalingPct,	// buttons here follow the tray notifier's own scaling, not the main GUI scaling
 			&OnSetKeepForeground,
 			false, appSettings.frmSpeedDial.statusPanelHeight, appSettings.frmSpeedDial.hideEmptyStatus);
 		container->Parent = frmTrayNotifier;
@@ -731,6 +731,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	frmTrayNotifier->ScaleBy(appSettings.trayNotifier.scalingPct, 100);
 	frmTrayNotifier->Width = appSettings.trayNotifier.iWidth * appSettings.trayNotifier.scalingPct / 100;
 	frmTrayNotifier->Height = appSettings.trayNotifier.iHeight * appSettings.trayNotifier.scalingPct / 100;
+	buttons.RepositionTrayNotifierButtons();	// ScaleBy() above also rescales the tray notifier's custom button container (and its buttons) recursively - undo that, they already scale themselves
 
 	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
 
@@ -858,6 +859,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	frmTrayNotifier->ScaleBy(appSettings.trayNotifier.scalingPct, 100);
 	frmTrayNotifier->Width = appSettings.trayNotifier.iWidth * appSettings.trayNotifier.scalingPct / 100;
 	frmTrayNotifier->Height = appSettings.trayNotifier.iHeight * appSettings.trayNotifier.scalingPct / 100;
+	buttons.RepositionTrayNotifierButtons();	// ScaleBy() above also rescales the tray notifier's custom button container (and its buttons) recursively - undo that, they already scale themselves
 
 	buttons.SetSaveAllSettings(appSettings.frmSpeedDial.saveAllSettings);
 
@@ -3008,6 +3010,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		break;
 	}
+	case Button::RESUBSCRIBE:
+		UA->Resubscribe();
+		break;
 	case Button::SEND_TEXT_MESSAGE: {
 		AnsiString target = cfg.number.c_str();
 		if (target == "")

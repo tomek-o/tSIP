@@ -459,6 +459,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::CONFERENCE_START:
 	case Button::CALL_MAKE_OR_ANSWER:
 	case Button::CALL_ANSWER:
+	case Button::RESUBSCRIBE:
 		edNumber->Visible = false;
 		lblNumber->Visible = false;
 		break;

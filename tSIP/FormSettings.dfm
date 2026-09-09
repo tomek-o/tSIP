@@ -3211,7 +3211,7 @@ object frmSettings: TfrmSettings
         Top = 71
         Width = 53
         Height = 13
-        Caption = 'GUI scaling'
+        Caption = 'GUI scaling (restart required)'
       end
       object lblTrayNotifierGuiScalingPercent: TLabel
         Left = 275
