@@ -89,6 +89,7 @@ __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
 
 	SetColumnWidths(conf.listColumnWidths);
 	UpdateShowHint();
+	history->SetMaxEntries(conf.maxEntries);
 }
 //---------------------------------------------------------------------------
 
@@ -547,6 +548,8 @@ void TfrmHistory::UpdateConf(const HistoryConf &prev)
 		UpdateShowHint();
 	if (conf.usePaiForDisplayIfAvailable != prev.usePaiForDisplayIfAvailable)
 		FilterHistory();
+	if (conf.maxEntries != prev.maxEntries)
+		history->SetMaxEntries(conf.maxEntries);
 }
 
 

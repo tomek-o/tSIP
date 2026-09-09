@@ -12,6 +12,10 @@ namespace Json
 
 struct HistoryConf
 {
+	enum { MAX_ENTRIES_MIN = 20 };
+	enum { MAX_ENTRIES_DEF = 1000 };
+	enum { MAX_ENTRIES_MAX = 5000 };
+
 	bool noStoreToFile;
 	bool ignoreCallsCompletedElsewhere;
 	bool usePaiForDisplayIfAvailable;
@@ -23,6 +27,7 @@ struct HistoryConf
 	bool showLastReplyLineInHint;
 	bool showReasonInHint;
 	bool showRecordFileInHint;
+	unsigned int maxEntries;
 	std::vector<int> listColumnWidths;
 
 	HistoryConf(void);

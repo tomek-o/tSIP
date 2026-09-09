@@ -3190,6 +3190,26 @@ object frmSettings: TfrmSettings
         Caption = 'Show record file in hint'
         TabOrder = 9
       end
+      object lblHistoryMaxEntries: TLabel
+        Left = 3
+        Top = 249
+        Width = 118
+        Height = 13
+        Caption = 'Maximum history entries'
+      end
+      object cbHistoryMaxEntries: TComboBox
+        Left = 127
+        Top = 246
+        Width = 65
+        Height = 21
+        TabOrder = 11
+        Items.Strings = (
+          '100'
+          '500'
+          '1000'
+          '2000'
+          '5000')
+      end
     end
     object tsPhones: TTabSheet
       Caption = 'Plugins / phones'

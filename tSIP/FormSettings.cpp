@@ -601,6 +601,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHistoryShowLastReplyLineInHint->Checked = tmpSettings.history.showLastReplyLineInHint;
 	chbHistoryShowReasonInHint->Checked = tmpSettings.history.showReasonInHint;
 	chbHistoryShowRecordFileInHint->Checked = tmpSettings.history.showRecordFileInHint;
+	cbHistoryMaxEntries->Text = tmpSettings.history.maxEntries;
 
     edScriptOnMakeCallFile->Text = tmpSettings.Scripts.onMakeCall;
 	edScriptOnCallStateChangeFile->Text = tmpSettings.Scripts.onCallState;
@@ -1083,6 +1084,11 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.history.showLastReplyLineInHint = chbHistoryShowLastReplyLineInHint->Checked;
 	tmpSettings.history.showReasonInHint = chbHistoryShowReasonInHint->Checked;
 	tmpSettings.history.showRecordFileInHint = chbHistoryShowRecordFileInHint->Checked;
+	{
+		unsigned int tmp = StrToIntDef(cbHistoryMaxEntries->Text, tmpSettings.history.maxEntries);
+		if (tmp >= HistoryConf::MAX_ENTRIES_MIN && tmp <= HistoryConf::MAX_ENTRIES_MAX)
+			tmpSettings.history.maxEntries = tmp;
+	}
 
 	tmpSettings.Scripts.onMakeCall = edScriptOnMakeCallFile->Text;
 	tmpSettings.Scripts.onCallState = edScriptOnCallStateChangeFile->Text;

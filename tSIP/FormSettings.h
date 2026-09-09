@@ -514,6 +514,8 @@ __published:	// IDE-managed Components
 	TTrackBar *trbarSoundRingVolume;
 	TCheckBox *chbHistoryIgnoreCallsCompletedElsewhere;
 	TCheckBox *chbHistoryShowRecordFileInHint;
+	TLabel *lblHistoryMaxEntries;
+	TComboBox *cbHistoryMaxEntries;
 	TTabSheet *tsMultipleCalls;
 	TLabel *lblMultipleCalls;
 	TCheckBox *chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive;

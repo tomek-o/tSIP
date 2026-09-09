@@ -70,15 +70,17 @@ public:
 	};
 
 	History(void):
-		callbackGetContactName(NULL)
+		callbackGetContactName(NULL),
+		maxEntries(CALL_HISTORY_LIMIT)
 	{
 	}
 	void AddEntry(Entry& entry);
-	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString uri);	
+	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString uri);
 private:
 	std::deque<Entry> entries;
 	AnsiString filename;
 	CallbackGetContactName callbackGetContactName;
+	unsigned int maxEntries;
 public:
 	const std::deque<Entry>& GetEntries(void) const
 	{
@@ -91,6 +93,15 @@ public:
 	void SetFilename(AnsiString name)
 	{
 		filename = name;
+	}
+	/** \brief Set maximum number of stored history entries; older entries beyond this
+		count are dropped from AddEntry() and from Read() (a lowered limit takes effect
+		only for the currently loaded/added entries, not retroactively rewriting the file
+		until the next Write())
+	*/
+	void SetMaxEntries(unsigned int max)
+	{
+		maxEntries = max;
 	}
 	void Clear(void);
 	int Read(CallbackGetContactName callbackGetContactName);

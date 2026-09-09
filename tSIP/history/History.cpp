@@ -30,7 +30,7 @@ void History::AddEntry(History::Entry& entry)
 	entry.contactName = callbackGetContactName(entry.uri.c_str()).c_str();
 	entry.paiContactName = callbackGetContactName(entry.paiUri.c_str()).c_str();
 	entries.push_front(entry);
-	if (entries.size() > CALL_HISTORY_LIMIT)
+	if (entries.size() > maxEntries)
 	{
 		entries.pop_back();
 	}
@@ -70,7 +70,7 @@ int History::Read(CallbackGetContactName callbackGetContactName)
 
 	const Json::Value &callHistory = root["CallHistory"];
 	entries.clear();
-	for (int i=0; i<std::min((unsigned int)CALL_HISTORY_LIMIT, callHistory.size()); i++)
+	for (int i=0; i<std::min(maxEntries, callHistory.size()); i++)
 	{
 		const Json::Value &call = callHistory[i];
 		struct Entry entry;

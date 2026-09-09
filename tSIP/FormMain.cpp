@@ -848,7 +848,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	OnRestore(NULL);
 
 	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
-	
+
 	edTransfer->Enabled = true;
 	edTransfer->Text = asTransferHint;
 	edTransfer->Hint = asTransferHint;
