@@ -196,8 +196,8 @@ void __fastcall TfrmLog::FormKeyPress(TObject *Sender, char &Key)
 {
 	if (Key == VK_ESCAPE)
 	{
-        Close();
-    }	
+		Close();
+	}
 }
 //---------------------------------------------------------------------------
 
