@@ -15,7 +15,6 @@
 #include "Log.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <SysUtils.hpp>
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
 
@@ -27,7 +26,6 @@ namespace {
 CLog::CLog()
 {
 	sFile = "";
-	iLogLevel = 0;
 	bLogToFile = true;
 	bFlush = false;
 	callbackLog = NULL;
@@ -39,8 +37,11 @@ CLog::CLog()
 int CLog::SetFile(const std::string &file)
 {
 	ScopedLock<Mutex> lock(mutex);
+	if (sFile == file)
+	{
+    	return 0;
+	}
 	sFile = file;
-	iLogLevel = E_LOG_NONE;
 	if (fout)
 	{
 		fclose(fout);
@@ -88,11 +89,6 @@ void CLog::SetTimestamps(bool enabled)
 void CLog::SetLogRotateCnt(unsigned int cnt)
 {
     maxLogrotateCnt = cnt;
-}
-
-void CLog::SetLevel(int level)
-{
-	iLogLevel = level;
 }
 
 void CLog::log(char *lpData, ...)

@@ -169,7 +169,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			ShowWindow(Application->Handle, SW_HIDE); // hide taskbar button
 		}
 
-		CLog::Instance()->SetLevel(E_LOG_TRACE);
 		CLog::Instance()->callbackLog = frmLog->OnLog;
 
 		LOG("\n===================\nApplication started, build config: DEBUG: %s, CODEGUARD: %s, VIDEO: %s\n",

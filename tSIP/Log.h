@@ -7,14 +7,6 @@
 #include <string>
 #include "common/singleton.h"
 
-/** \brief Log detail level
-*/
-enum E_LOGLEVEL
-{
-	E_LOG_NONE = 0,
-	E_LOG_TRACE,
-	E_LOG_ALL
-};
 
 /** \brief Global logger
 */
@@ -61,7 +53,6 @@ private:
 	std::string sFile;
 	bool bLogToFile;
 	bool bFlush;
-	int iLogLevel;
 	unsigned int maxFileSize;
 	bool timestamps;
 	unsigned int maxLogrotateCnt;
