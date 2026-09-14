@@ -23,7 +23,7 @@
 #include "FormContactPopup.h"
 #include "FormContactEditor.h"
 #include "FormTrayNotifier.h"
-#include "LogUnit.h"
+#include "FormLog.h"
 #include "Log.h"
 #include "UaMain.h"
 #include "UaGlobals.h"
@@ -542,8 +542,8 @@ void TfrmMain::Finalize(void)
 
 	appSettings.history.listColumnWidths = frmHistory->GetColumnWidths();
 
-	appSettings.Logging.windowWidth = frmLog->Width;
-	appSettings.Logging.windowHeight = frmLog->Height;
+	appSettings.logging.windowWidth = frmLog->Width;
+	appSettings.logging.windowHeight = frmLog->Height;
 
 	if (appSettings.Write(Paths::GetConfig()) != 0)
 	{
@@ -703,7 +703,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		UpdateCallHistory();
 	}
 	UpdateLogConfig();
-	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
+	frmLog->SetLogLinesLimit(appSettings.logging.maxUiLogLines);
 	if (frmLog->Visible)
 	{
     	frmLog->UpdateUi();
@@ -847,7 +847,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	// make sure window position is not outside of available monitors
 	OnRestore(NULL);
 
-	frmLog->SetLogLinesLimit(appSettings.Logging.iMaxUiLogLines);
+	frmLog->SetLogLinesLimit(appSettings.logging.maxUiLogLines);
 
 	edTransfer->Enabled = true;
 	edTransfer->Text = asTransferHint;
@@ -914,7 +914,7 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	tmrScript2->Interval = appSettings.Scripts.timer2;
 	tmrScript2->Enabled = true;
 
-	if (appSettings.Logging.showWindowAtStartup)
+	if (appSettings.logging.showWindowAtStartup)
 		frmLog->Show();
 }
 //---------------------------------------------------------------------------
@@ -3217,14 +3217,14 @@ void __fastcall TfrmMain::btnSpeedDialPanelClick(TObject *Sender)
 void TfrmMain::UpdateLogConfig(void)
 {
 	CLog *log = CLog::Instance();
-	if (appSettings.Logging.bLogToFile)
+	if (appSettings.logging.logToFile)
 		log->SetFile((Paths::GetProfileDir() + "\\" + ChangeFileExt(ExtractFileName(Application->ExeName), ".log")).c_str());
 	else
 		log->SetFile("");
-	log->SetFlush(appSettings.Logging.bFlush);
-	log->SetMaxFileSize(appSettings.Logging.iMaxFileSize);
-	log->SetTimestamps(appSettings.Logging.timestamps);
-	log->SetLogRotateCnt(appSettings.Logging.iLogRotate);
+	log->SetFlush(appSettings.logging.flush);
+	log->SetMaxFileSize(appSettings.logging.maxFileSize);
+	log->SetTimestamps(appSettings.logging.timestamps);
+	log->SetLogRotateCnt(appSettings.logging.logRotate);
 }
 
 void TfrmMain::SetSpeedDial(bool visible)

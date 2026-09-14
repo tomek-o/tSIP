@@ -26,6 +26,8 @@ class TfrmUaConfOpus;
 class TfrmDialpadConf;
 class TfrmVideoConf;
 
+class TfraLogConf;
+
 class TfrmSettings : public TForm
 {
 __published:	// IDE-managed Components
@@ -36,9 +38,6 @@ __published:	// IDE-managed Components
 	TTabSheet *tsGeneral;
 	TTabSheet *tsLogging;
 	TCheckBox *chbAlwaysOnTop;
-	TLabel *lblUiCapacity;
-	TComboBox *cmbMaxUiLogLines;
-	TCheckBox *chbLogToFile;
 	TTabSheet *tsAccount;
 	TPanel *pnlAccountsBottom;
 	TButton *btnAddAccount;
@@ -201,9 +200,6 @@ __published:	// IDE-managed Components
 	TCheckBox *chbAudioPreprocessingTxVadEnabled;
 	TCheckBox *chbAudioPreprocessingTxDereverbEnabled;
 	TCheckBox *chbSpeedDialPopupMenu;
-	TCheckBox *chbLogFlush;
-	TLabel *lblLogMaxFileSize;
-	TComboBox *cbLogMaxFileSize;
 	TTabSheet *tsScripts;
 	TLabel *lblScriptOnCallStateFile;
 	TEdit *edScriptOnCallStateChangeFile;
@@ -249,8 +245,6 @@ __published:	// IDE-managed Components
 	TLabel *lblTrayNotifierGuiScalingPercent;
 	TTabSheet *tsLocking;
 	TCheckBox *chbTrayNotifierHideWhenAnsweringCall;
-	TLabel *lblLogRotate;
-	TComboBox *cbLogRotate;
 	TCheckBox *chbSpeedDialIgnoreDialogInfoRemoteIdentity;
 	TBitBtn *btnSelectedScriptOnMakeCallEdit;
 	TBitBtn *btnSelectedScriptOnCallStateEdit;
@@ -292,10 +286,6 @@ __published:	// IDE-managed Components
 	TCheckBox *chbHistoryShowHint;
 	TCheckBox *chbHistoryFormatCallDurationAsHourMinSec;
 	TCheckBox *chbHistoryShowCodecNameInHint;
-	TLabel *lblLoggingConsoleFont;
-	TEdit *edLoggingConsoleFont;
-	TButton *btnLoggingConsoleFontSelect;
-	TFontDialog *fontDialog;
 	TLabel *lblScriptPeriodMs;
 	TLabel *lblScriptOnTimer2;
 	TEdit *edScriptOnTimer2File;
@@ -566,8 +556,6 @@ __published:	// IDE-managed Components
 	TCheckBox *chbFrmMainHideMakeCallButton;
 	TCheckBox *chbFrmMainHideHangupButton;
 	TCheckBox *chbMessagesEnabled;
-	TCheckBox *chbLogTimestamps;
-	TCheckBox *chbLogShowWindowAtStartup;
 	TCheckBox *chbNoIpBind;
 	TLabel *lblCallPanelHeight;
 	TEdit *edCallPanelHeight;
@@ -607,7 +595,6 @@ __published:	// IDE-managed Components
 	void __fastcall cbSoundRingOutputModChange(TObject *Sender);
 	void __fastcall btnSelectedScriptEditClick(TObject *Sender);
 	void __fastcall cbRecordingChannelsChange(TObject *Sender);
-	void __fastcall btnLoggingConsoleFontSelectClick(TObject *Sender);
 	void __fastcall btnOpenRecordingFolderClick(TObject *Sender);
 	void __fastcall cbNetworkInterfacesChange(TObject *Sender);
 	void __fastcall btnSelectContactsFileClick(TObject *Sender);
@@ -637,13 +624,13 @@ private:	// User declarations
 	void AudioPreprocessingUpdate(void);
 	void VideoCodecEnableSelected(void);
 	void VideoCodecDisableSelected(void);
-	void ShowFonts(void);
 	void UpdateNetworkInterface(void);
 	TTreeNode* CreatePagesNode(TTreeNode *parent, TTabSheet *tab);
 	void CreatePages(void);
 	std::vector<AnsiString> previousHiddenSettingsPages;
 public:		// User declarations
 	__fastcall TfrmSettings(TComponent* Owner);
+	TfraLogConf *fraLogConf;
 	Settings tmpSettings;
 };
 //---------------------------------------------------------------------------

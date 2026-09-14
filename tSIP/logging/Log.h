@@ -7,17 +7,18 @@
 #include <string>
 #include "common/singleton.h"
 
-
 /** \brief Global logger
 */
 class CLog: public CSingleton<CLog>
 {
 public:
     /** \brief Log formatted text with optional timestamp */
-	void log(char *lpData, ...);
+	void log(const char *lpData, ...);
 	/** \brief Log formatted text without timestamp */
-	void logRaw(char *lpData, ...);
+	void logRaw(const char *lpData, ...);
 	/** \brief Select output log file
+	 *
+	 *  Empty file name disables logging to file.
 	 *  \return zero on no error
 	 */
 	int SetFile(const std::string &file);
@@ -31,8 +32,6 @@ public:
 		\note If limit is decreased, old files exceeding it are not deleted
 	*/
 	void SetLogRotateCnt(unsigned int cnt);
-	/** \brief Set log detail level / disable logging */
-	void SetLevel(int);
 	/** \brief Close log file */
 	void Close(void);
 	/** \brief OnLog callback declaration
@@ -48,12 +47,15 @@ public:
 	CallbackLog callbackLog;
 private:
 	CLog();
-	//~CLog() {};
+	/// Closes the log file - Destroy() would otherwise leave it open
+	~CLog();
 	friend CSingleton<CLog>;
 	std::string sFile;
 	bool bLogToFile;
 	bool bFlush;
 	unsigned int maxFileSize;
+	/// tracked locally to avoid an ftell() syscall on every logged line
+	unsigned long curFileSize;
 	bool timestamps;
 	unsigned int maxLogrotateCnt;
 	void write(const char* buf, int size);

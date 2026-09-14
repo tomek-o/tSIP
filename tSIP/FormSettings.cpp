@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FormSettings.h"
+#include "logging/FrameLogConf.h"
 #include "FormAccount.h"
 #include "FormHotkeys.h"
 #include "FormPhones.h"
@@ -62,6 +63,13 @@ namespace
 __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	: TForm(Owner), lastTab(NULL)
 {
+	fraLogConf = new TfraLogConf(tsLogging, tmpSettings.logging);
+	fraLogConf->Parent = tsLogging;
+	fraLogConf->Align = alTop;
+	fraLogConf->Height = 195;
+	fraLogConf->TabOrder = 0;
+	fraLogConf->Visible = true;
+
 	frmHotkeys = new TfrmHotkeys(tsHotkeys);
 	frmHotkeys->Parent = tsHotkeys;
 	frmHotkeys->Visible = true;
@@ -373,29 +381,10 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbRestoreMainWindowOnIncomingCall->Checked = tmpSettings.frmMain.bRestoreOnIncomingCall;
     chbSingleInstance->Checked = tmpSettings.frmMain.bSingleInstance;
 
-	chbLogToFile->Checked = tmpSettings.Logging.bLogToFile;
-	chbLogFlush->Checked = tmpSettings.Logging.bFlush;
 	chbLogMessages->Checked = tmpSettings.uaConf.logMessages;
 	chbLogMessagesOnlyFirstLines->Checked = tmpSettings.uaConf.logMessagesOnlyFirstLine;
 	chbLogAubuf->Checked = tmpSettings.uaConf.logAubuf;
-	chbLogTimestamps->Checked = tmpSettings.Logging.timestamps;
-	cmbMaxUiLogLines->ItemIndex = -1;
-	for (int i=0; i<cmbMaxUiLogLines->Items->Count; i++)
-	{
-		if ((unsigned int)StrToInt(cmbMaxUiLogLines->Items->Strings[i]) >= tmpSettings.Logging.iMaxUiLogLines)
-		{
-			cmbMaxUiLogLines->ItemIndex = i;
-			break;
-		}
-	}
-	if (cmbMaxUiLogLines->ItemIndex == -1)
-	{
-		cmbMaxUiLogLines->ItemHeight = cmbMaxUiLogLines->Items->Count - 1;
-	}
-	cbLogMaxFileSize->Text = tmpSettings.Logging.iMaxFileSize;
-	cbLogRotate->ItemIndex = tmpSettings.Logging.iLogRotate;
-	chbLogShowWindowAtStartup->Checked = tmpSettings.Logging.showWindowAtStartup;
-	ShowFonts();
+	fraLogConf->Load();
 
 	chbUserOnlyClip->Checked = tmpSettings.Display.bUserOnlyClip;
 	chbDecodeUtfDisplayToAnsi->Checked = tmpSettings.Display.bDecodeUtfDisplayToAnsi;
@@ -818,20 +807,10 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.frmMain.bRestoreOnIncomingCall = chbRestoreMainWindowOnIncomingCall->Checked;
 	tmpSettings.frmMain.bSingleInstance = chbSingleInstance->Checked;
 
-	tmpSettings.Logging.bLogToFile = chbLogToFile->Checked;
-	tmpSettings.Logging.bFlush = chbLogFlush->Checked;
-	tmpSettings.Logging.iMaxFileSize = StrToIntDef(cbLogMaxFileSize->Text, tmpSettings.Logging.iMaxFileSize);
-	if (tmpSettings.Logging.iMaxFileSize < Settings::_Logging::MIN_MAX_FILE_SIZE || tmpSettings.Logging.iMaxFileSize > Settings::_Logging::MAX_MAX_FILE_SIZE)
-	{
-		tmpSettings.Logging.iMaxFileSize = Settings::_Logging::DEF_MAX_FILE_SIZE;
-	}
-	tmpSettings.Logging.iLogRotate = cbLogRotate->ItemIndex;
-	tmpSettings.Logging.iMaxUiLogLines = StrToInt(cmbMaxUiLogLines->Text);	
 	tmpSettings.uaConf.logMessages = chbLogMessages->Checked;
 	tmpSettings.uaConf.logMessagesOnlyFirstLine = chbLogMessagesOnlyFirstLines->Checked;
 	tmpSettings.uaConf.logAubuf = chbLogAubuf->Checked;
-	tmpSettings.Logging.timestamps = chbLogTimestamps->Checked;
-	tmpSettings.Logging.showWindowAtStartup = chbLogShowWindowAtStartup->Checked;
+	fraLogConf->Apply();
 
 	tmpSettings.Display.bUserOnlyClip = chbUserOnlyClip->Checked;
 	tmpSettings.Display.bDecodeUtfDisplayToAnsi = chbDecodeUtfDisplayToAnsi->Checked;
@@ -1883,40 +1862,8 @@ void __fastcall TfrmSettings::btnSelectedScriptEditClick(
 
 
 
-void __fastcall TfrmSettings::btnLoggingConsoleFontSelectClick(TObject *Sender)
-{
-	TButton *btn = dynamic_cast<TButton*>(Sender);
-	assert(btn);
-	struct Font *font = &tmpSettings.Logging.consoleFont;
-	fontDialog->Font->Name = font->name;
-	fontDialog->Font->Size = font->size;
-	fontDialog->Font->Style = font->style;
-	if (fontDialog->Execute())
-	{
-	#if 0
-		if (btn->Tag == 2 || btn->Tag == 4)	// Scintilla: own styling
-		{
-			fontDialog->Font->Style = TFontStyles();
-			//fontDialog->Options << fdNoStyleSel;
-		}
-	#endif
-		font->name = fontDialog->Font->Name;
-		font->size = fontDialog->Font->Size;
-		font->style = fontDialog->Font->Style;
-		ShowFonts();
-	}
-}
 //---------------------------------------------------------------------------
 
-void TfrmSettings::ShowFonts(void)
-{
-	TEdit *ed = this->edLoggingConsoleFont;
-	const struct Font *font = &tmpSettings.Logging.consoleFont;
-
-	ed->Font->Name = font->name;
-	ed->Font->Size = font->size;
-	ed->Font->Style = font->style;
-}
 
 void __fastcall TfrmSettings::btnOpenRecordingFolderClick(TObject *Sender)
 {

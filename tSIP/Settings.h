@@ -16,6 +16,7 @@
 #include "TrayNotifierConf.h"
 #include "history/HistoryConf.h"
 #include "VideoConf.h"
+#include "LogConf.h"
 #include "common/SettingsUtils.h"
 #include <deque>
 #include <list>
@@ -23,26 +24,8 @@
 
 namespace Json
 {
-	struct Value;
+	class Value;
 }
-
-struct Font
-{
-	AnsiString name;
-	int size;
-	TFontStyles style;
-	Font(void);
-	bool operator==(const Font& right) const {
-		return (
-			name == right.name &&
-			size == right.size &&
-			style == right.style
-		);
-	}
-	bool operator!=(const Font& right) const {
-		return !(*this == right);
-	}
-};
 
 class Settings
 {
@@ -202,46 +185,7 @@ public:
 
 		_frmContactPopup(void);		
 	} frmContactPopup;
-	struct _Logging
-	{
-		bool bLogToFile;
-		bool bFlush;
-		enum {
-			MIN_MAX_FILE_SIZE = 0,
-			MAX_MAX_FILE_SIZE = 1000*1024*1024
-		};
-		enum {
-            DEF_MAX_FILE_SIZE = 10*1024*1024
-        };
-		int iMaxFileSize;
-		bool timestamps;
-		enum {
-			MAX_LOGROTATE = 5
-		};
-		enum {
-			DEF_LOGROTATE = 1
-		};
-		unsigned int iLogRotate;
-		unsigned int iMaxUiLogLines;		
-
-		Font consoleFont;
-		unsigned int windowWidth, windowHeight;
-
-		bool showWindowAtStartup;
-
-		_Logging(void):
-			bLogToFile(false),
-			bFlush(false),
-			iMaxFileSize(Settings::_Logging::DEF_MAX_FILE_SIZE),
-			timestamps(false),
-			iLogRotate(Settings::_Logging::DEF_LOGROTATE),
-			iMaxUiLogLines(5000),
-			windowWidth(630), windowHeight(400),
-			showWindowAtStartup(false)
-		{
-			consoleFont.name = "Courier New";
-        }
-	} Logging;
+	struct LogConf logging;
 	struct _Calls
 	{
 		AnsiString extraHeaderLines;

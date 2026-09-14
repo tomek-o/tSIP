@@ -3,6 +3,8 @@
 #include <vcl.h>
 #pragma hdrstop
 //---------------------------------------------------------------------------
+USEFORM("logging\FrameLogConf.cpp", fraLogConf); /* TFrame: File Type */
+USEFORM("logging\FormLog.cpp", frmLog);
 USEFORM("contacts\FormContactsCsvImport.cpp", frmContactsCsvImport);
 USEFORM("contacts\FormContacts.cpp", frmContacts);
 USEFORM("contacts\FormContactPopup.cpp", frmContactPopup);
@@ -14,7 +16,6 @@ USEFORM("hotkeys\FormHotkeys.cpp", frmHotkeys);
 USEFORM("FormMain.cpp", frmMain);
 USEFORM("FormSettings.cpp", frmSettings);
 USEFORM("FormAbout.cpp", frmAbout);
-USEFORM("LogUnit.cpp", frmLog);
 USEFORM("FormAccount.cpp", frmAccount);
 USEFORM("FormTrayNotifier.cpp", frmTrayNotifier);
 USEFORM("FormTextEditor.cpp", frmTextEditor);
@@ -71,7 +72,7 @@ USEFORM("buttons\FormButtonGridEdit.cpp", frmButtonGridEdit);
 #include "FormContactPopup.h"
 #include "CommandLine.h"
 #include "common\WindowsMessageFilter.h"
-#include "LogUnit.h"
+#include "FormLog.h"
 #include "Log.h"
 #include "Branding.h"
 #include "Translate.h"

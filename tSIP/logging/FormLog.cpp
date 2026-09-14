@@ -9,8 +9,9 @@
 
 #include <ClipBrd.hpp>
 
-#include "LogUnit.h"
+#include "FormLog.h"
 #include "Log.h"
+#include "common/ScopedBool.h"
 #include "common/ScopedLock.h"
 #include "common/Mutex.h"
 #include "Settings.h"
@@ -28,8 +29,14 @@ __fastcall TfrmLog::TfrmLog(TComponent* Owner)
 	updatingUi(false)
 {
 	callbackClose = NULL;
-	Width = appSettings.Logging.windowWidth;
-	Height = appSettings.Logging.windowHeight;
+	Width = appSettings.logging.windowWidth;
+	Height = appSettings.logging.windowHeight;
+}
+//---------------------------------------------------------------------------
+__fastcall TfrmLog::~TfrmLog(void)
+{
+	// created last, so destroyed first - CLog must not keep a callback here
+	CLog::Instance()->callbackLog = NULL;
 }
 //---------------------------------------------------------------------------
 
@@ -47,10 +54,16 @@ void __fastcall TfrmLog::tmrUpdateTimer(TObject *Sender)
 // note: may cause freezing when opening log window after long time
 //	if (!Visible)
 //		return;
-	ScopedLock<Mutex> lock(mutex);
-
-	if (queDisplay.empty())
-		return;
+	// take the queued entries and release the lock at once: VCL code must not
+	// run with the mutex held, or a LOG() from here would deadlock against a
+	// thread that is already inside OnLog()
+	std::deque<LogEntry> pending;
+	{
+		ScopedLock<Mutex> lock(mutex);
+		if (queDisplay.empty())
+			return;
+		queDisplay.swap(pending);
+	}
 
 	// first save the current caret location
 	int selStart = redMain->SelStart;
@@ -61,15 +74,14 @@ void __fastcall TfrmLog::tmrUpdateTimer(TObject *Sender)
 	redMain->Lines->BeginUpdate();
 
 	std::deque<LogEntry>::iterator iter;
-	for(iter = queDisplay.begin(); iter != queDisplay.end(); ++iter)
+	for(iter = pending.begin(); iter != pending.end(); ++iter)
 	{
 		redMain->SelStart = redMain->GetTextLen();
 		redMain->SelLength = 0;
 		redMain->SelAttributes->Color = iter->color;
-		redMain->SelAttributes->Name = appSettings.Logging.consoleFont.name;
+		redMain->SelAttributes->Name = appSettings.logging.consoleFont.name;
 		redMain->SelText = iter->asText;
 	}
-	queDisplay.clear();
 
 #if 0
 	while ((unsigned int)redMain->Lines->Count > iMaxUiLogLines)
@@ -157,15 +169,14 @@ void __fastcall TfrmLog::FormShow(TObject *Sender)
 
 void TfrmLog::UpdateUi(void)
 {
-	updatingUi = true;
+	ScopedBool updating(&updatingUi);
 	chbLogMessages->Checked = appSettings.uaConf.logMessages;
 	chbLogMessagesOnlyFirstLines->Visible = appSettings.uaConf.logMessages;
 	chbLogMessagesOnlyFirstLines->Checked = appSettings.uaConf.logMessagesOnlyFirstLine;
-	chbLogToFile->Checked = appSettings.Logging.bLogToFile;
-	redMain->Font->Name = appSettings.Logging.consoleFont.name;
-	redMain->Font->Size = appSettings.Logging.consoleFont.size;
-	redMain->Font->Style = appSettings.Logging.consoleFont.style;
-	updatingUi = false;	
+	chbLogToFile->Checked = appSettings.logging.logToFile;
+	redMain->Font->Name = appSettings.logging.consoleFont.name;
+	redMain->Font->Size = appSettings.logging.consoleFont.size;
+	redMain->Font->Style = appSettings.logging.consoleFont.style;
 }
 
 void __fastcall TfrmLog::miSaveToFileClick(TObject *Sender)
@@ -184,8 +195,11 @@ void __fastcall TfrmLog::miSaveToFileClick(TObject *Sender)
 
 void __fastcall TfrmLog::chbLogToFileClick(TObject *Sender)
 {
-	appSettings.Logging.bLogToFile = chbLogToFile->Checked;
-	if (appSettings.Logging.bLogToFile)
+	// setting Checked from UpdateUi() fires this handler as well
+	if (updatingUi)
+		return;
+	appSettings.logging.logToFile = chbLogToFile->Checked;
+	if (appSettings.logging.logToFile)
 		CLog::Instance()->SetFile((Paths::GetProfileDir() + "\\" + ChangeFileExt(ExtractFileName(Application->ExeName), ".log")).c_str());
 	else
 		CLog::Instance()->SetFile("");

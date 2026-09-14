@@ -27,13 +27,6 @@ inline void strncpyz(char* dst, const char* src, int dstsize) {
 	dst[dstsize-1] = '\0';
 }
 
-Font::Font(void):
-	name("Tahoma"),
-	size(8),
-	style(TFontStyles())
-{
-}
-
 Settings::BrandingInitializer::BrandingInitializer(void)
 {
 	Branding::init();
@@ -590,48 +583,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 	if (frmSpeedDial.statusPanelHeight < _frmSpeedDial::MIN_STATUS_PANEL_HEIGHT || frmSpeedDial.statusPanelHeight > _frmSpeedDial::MAX_STATUS_PANEL_HEIGHT)
 		frmSpeedDial.statusPanelHeight = _frmSpeedDial::DEF_STATUS_PANEL_HEIGHT;
 
-	{
-		const Json::Value &LoggingJson = root["Logging"];
-		Logging.bLogToFile = LoggingJson.get("LogToFile", Logging.bLogToFile).asBool();
-		Logging.bFlush = LoggingJson.get("Flush", Logging.bFlush).asBool();
-		int iMaxFileSize = LoggingJson.get("MaxFileSize", Logging.iMaxFileSize).asInt();
-		if (iMaxFileSize >= Settings::_Logging::MIN_MAX_FILE_SIZE && iMaxFileSize <= Settings::_Logging::MAX_MAX_FILE_SIZE)
-		{
-			Logging.iMaxFileSize = iMaxFileSize;
-		}
-		LoggingJson.getBool("Timestamps", Logging.timestamps);
-		unsigned int iLogRotate = LoggingJson.get("LogRotate", Logging.iLogRotate).asUInt();
-		if (iLogRotate <= Settings::_Logging::MAX_LOGROTATE)
-		{
-			Logging.iLogRotate = iLogRotate;
-		}
-		Logging.iMaxUiLogLines = LoggingJson.get("MaxUiLogLines", Logging.iMaxUiLogLines).asInt();
-		LoggingJson.getUInt("WindowWidth", Logging.windowWidth);
-		LoggingJson.getUInt("WindowHeight", Logging.windowHeight);
-		LoggingJson.getBool("ShowWindowAtStartup", Logging.showWindowAtStartup);
-		{
-			const Json::Value &jv = LoggingJson["ConsoleFont"];
-			struct Font &font = Logging.consoleFont;
-			font.name = jv.get("name", font.name.c_str()).asAString();
-			font.size = jv.get("size", font.size).asInt();
-			font.style = TFontStyles();
-			bool bold = jv.get("bold", false).asBool();
-			if (bold)
-			{
-				font.style << fsBold;
-			}
-			bool italic = jv.get("italic", false).asBool();
-			if (italic)
-			{
-				font.style << fsItalic;
-			}
-			bool underline = jv.get("underline", false).asBool();
-			if (underline)
-			{
-				font.style << fsUnderline;
-			}
-		}
-	}
+	logging.fromJson(root["Logging"]);
 
 	{
 		const Json::Value &CallsJson = root["Calls"];
@@ -949,27 +901,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["StatusPanelHeight"] = frmSpeedDial.statusPanelHeight;
 	}
 	
-	{
-		Json::Value &jLogging = root["Logging"];
-		jLogging["LogToFile"] = Logging.bLogToFile;
-		jLogging["Flush"] = Logging.bFlush;
-		jLogging["MaxFileSize"] = Logging.iMaxFileSize;
-		jLogging["Timestamps"] = Logging.timestamps;
-		jLogging["LogRotate"] = Logging.iLogRotate;
-		jLogging["MaxUiLogLines"] = Logging.iMaxUiLogLines;
-		jLogging["WindowWidth"] = Logging.windowWidth;
-		jLogging["WindowHeight"] = Logging.windowHeight;
-		jLogging["ShowWindowAtStartup"] = Logging.showWindowAtStartup;
-		{
-			Json::Value &jFont = jLogging["ConsoleFont"];
-			const struct Font &font = Logging.consoleFont;
-			jFont["name"] = font.name.c_str();
-			jFont["size"] = font.size;
-			jFont["bold"] = font.style.Contains(fsBold);
-			jFont["italic"] = font.style.Contains(fsItalic);
-			jFont["underline"] = font.style.Contains(fsUnderline);
-		}
-	}
+	logging.toJson(root["Logging"]);
 
 	{
 		Json::Value &jv = root["Calls"];

@@ -10,8 +10,8 @@
 
 //---------------------------------------------------------------------------
 
-#ifndef LogUnitH
-#define LogUnitH
+#ifndef FormLogH
+#define FormLogH
 //---------------------------------------------------------------------------
 
 #include "common/Mutex.h"
@@ -74,6 +74,7 @@ private:	// User declarations
 		
 public:		// User declarations
 	__fastcall TfrmLog(TComponent* Owner);
+	__fastcall ~TfrmLog(void);
 	void OnLog(const char *buf);                         ///< add text to log window
 	void SetLogLinesLimit(int lines) {
     	iMaxUiLogLines = lines;

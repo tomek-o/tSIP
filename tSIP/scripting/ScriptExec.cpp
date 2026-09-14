@@ -5,7 +5,7 @@
 
 #include "ScriptExec.h"
 #include "Log.h"
-#include "LogUnit.h"
+#include "FormLog.h"
 #include "LuaState.h"
 #include "lua.hpp"
 #include "AudioDevicesList.h"
