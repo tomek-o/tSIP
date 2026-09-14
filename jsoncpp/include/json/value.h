@@ -343,7 +343,11 @@ namespace Json {
 #endif
 	  void getString(const char* key, std::string &val) const;
 	  void getInt(const char* key, int &val) const;
+	  /// \brief Get int if value is in <valMin, valMax> range
+	  void getIntInRange(const char* key, int &val, int valMin, int valMax) const;
 	  void getUInt(const char* key, unsigned int &val) const;
+	  /// \brief Get unsigned int if value is in <valMin, valMax> range
+	  void getUIntInRange(const char* key, unsigned int &val, unsigned int valMin, unsigned int valMax) const;
 	  void getBool(const char* key, bool &val) const;
 	  void getDouble(const char* key, double &val) const;
 	  void getFloat(const char* key, float &val) const;
