@@ -451,7 +451,7 @@ namespace {
 			"You most likely won't be able to receive calls with this configuration."
 			, CheckNoLocalPort
 			},
-		{ LevelWarning, "Speex preprocessing enabled", "Audio preprocessing function may be unstable (rare crashes related to this functions were reported), it is for test purposes only. See Settings / \"Audio Processing\" / \"Enable audio preprocessing using speex for microphone path (transmitted audio)\".", CheckSpeexPreprocessing },
+		{ LevelHint, "Speex preprocessing enabled", "Audio preprocessing function was unstable (rare crashes related to this functions were reported), but after few fixes I'm using it since December 2025. If you experiencing any kind of crash during the calls, please report it and maybe disable Settings / \"Audio Processing\" / \"Enable audio preprocessing using speex for microphone path (transmitted audio)\".", CheckSpeexPreprocessing },
 		{ LevelWarning, "No codecs enabled", "List of enabled codecs is empty.", CheckNoCodecsEnabled },
 		{ LevelWarning, "List of enabled codecs might be too long",
 			"Having too many codecs activated might cause problems with UDP message fragmentation.",
