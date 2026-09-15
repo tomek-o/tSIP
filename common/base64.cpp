@@ -12,9 +12,13 @@ static const std::string base64_chars_fsafe =
 	"0123456789-,";
 
 
-static inline bool is_base64(unsigned char c)
+/** \note Must be checked against the alphabet actually in use: the two alphabets
+	share the alphanumeric range but differ in the last two symbols ('+'/'/' vs
+	'-'/','), so a hardcoded check would truncate FSAFE input at the first '-'.
+*/
+static inline bool is_base64(unsigned char c, const std::string &b64chars)
 {
-    return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || (c == '+') || (c == '/'));
+    return b64chars.find(c) != std::string::npos;
 }
 
 std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len, enum BASE64_ALPHABET alphabet)
@@ -91,7 +95,7 @@ std::string base64_decode(std::string const& encoded_string, enum BASE64_ALPHABE
 		b64chars = base64_chars_basic;
 	}	
 
-    while (in_len-- && ( encoded_string[in_] != '=') && is_base64(encoded_string[in_]))
+    while (in_len-- && ( encoded_string[in_] != '=') && is_base64(encoded_string[in_], b64chars))
     {
         char_array_4[i++] = encoded_string[in_];
         in_++;

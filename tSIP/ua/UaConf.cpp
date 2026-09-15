@@ -21,6 +21,9 @@ namespace
 }
 
 bool UaConf::AudioCfg::operator==(const UaConf::AudioCfg& right) const {
+	/*	volume/volumeMulti deliberately not compared: this gates UA restart and
+		volume is applied live by Command::UPDATE_VOLUME (UaMain.cpp).
+	*/
 	if (mod != right.mod)
 		return false;
 	if (dev != right.dev)

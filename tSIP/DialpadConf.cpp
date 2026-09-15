@@ -83,7 +83,7 @@ bool DialpadConf::ElementConf::operator==(const DialpadConf::ElementConf &right)
 	if (visible == right.visible &&
 		left == right.left &&
 		top == right.top &&
-		width == right.top &&
+		width == right.width &&
 		height == right.height)
 	{
 		return true;

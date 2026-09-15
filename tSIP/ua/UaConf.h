@@ -323,6 +323,9 @@ public:
 			recStart(RecStartCallConfirmed),
 			noNumberB64Encoding(false)
 		{}
+		/*	fileFormat/bitrate deliberately not compared: this gates UA restart and
+			both are read when a recording starts (FormMain.cpp, UA->Record(...)).
+		*/
 		bool operator==(const RecordingCfg& right) const {
 			return enabled == right.enabled &&
 				recDir == right.recDir &&

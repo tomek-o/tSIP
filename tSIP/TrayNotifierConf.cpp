@@ -89,7 +89,7 @@ void TrayNotifierConf::fromJson(const Json::Value &jv)
 
 
 	const Json::Value &je = jv["elements"];
-	if (jv.type() == Json::objectValue)
+	if (je.type() == Json::objectValue)
 	{
 		elements.labelDescription.fromJson(je["labelDescription"]);
 		elements.labelUri.fromJson(je["labelUri"]);

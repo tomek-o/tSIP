@@ -254,6 +254,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 
 			new_acc.hide_reg_server = acc.get("hide_reg_server", new_acc.hide_reg_server).asBool();
 			new_acc.hide_user = acc.get("hide_user", new_acc.hide_user).asBool();
+			new_acc.hide_display_name = acc.get("hide_display_name", new_acc.hide_display_name).asBool();
 			new_acc.hide_auth_user = acc.get("hide_auth_user", new_acc.hide_auth_user).asBool();
 			new_acc.hide_pwd = acc.get("hide_pwd", new_acc.hide_pwd).asBool();
 			new_acc.hide_cuser = acc.get("hide_cuser", new_acc.hide_cuser).asBool();
@@ -1106,9 +1107,10 @@ int Settings::Write(AnsiString asFileName)
 		Json::Value &jLocking = root["locking"];
 		{
 			Json::Value &jhsp = jLocking["hiddenSettingsPages"];
+			jhsp = Json::Value(Json::arrayValue);
 			for (unsigned int i=0; i<locking.hiddenSettingsPages.size(); i++)
 			{
-				jhsp[i] = locking.hiddenSettingsPages[i];
+				jhsp.append(locking.hiddenSettingsPages[i]);
 			}
 		}
 	}

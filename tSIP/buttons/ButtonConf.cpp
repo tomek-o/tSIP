@@ -126,6 +126,7 @@ void ButtonConf::Reset(void)
 	videoRxMod = VideoModules::colorbar_generator_animated;
 	videoRxDev = "";
 
+	font = Font();
 	fontLabel2 = font;
 }
 
@@ -500,23 +501,37 @@ void ButtonConf::ToJson(Json::Value &jsonBtn, bool saveAllSettings) const
 	/*
 		Since number of button types increases let's limit information types
 		saved only to those related to particular button type.
+		Not limited when saving all settings: otherwise changing button type
+		would silently discard these values on the next save.
 	*/
-	switch (type)
+	if (saveAllSettings)
 	{
-	case Button::SWITCH_AUDIO_SOURCE:
 		jsonBtn["audioRxMod"] = audioRxMod;
 		jsonBtn["audioRxDev"] = audioRxDev;
-		break;
-	case Button::SWITCH_AUDIO_PLAYER:
 		jsonBtn["audioTxMod"] = audioTxMod;
 		jsonBtn["audioTxDev"] = audioTxDev;
-		break;
-	case Button::SWITCH_VIDEO_SOURCE:
 		jsonBtn["videoRxMod"] = videoRxMod;
 		jsonBtn["videoRxDev"] = videoRxDev;
-		break;
-	default:
-		break;
+	}
+	else
+	{
+		switch (type)
+		{
+		case Button::SWITCH_AUDIO_SOURCE:
+			jsonBtn["audioRxMod"] = audioRxMod;
+			jsonBtn["audioRxDev"] = audioRxDev;
+			break;
+		case Button::SWITCH_AUDIO_PLAYER:
+			jsonBtn["audioTxMod"] = audioTxMod;
+			jsonBtn["audioTxDev"] = audioTxDev;
+			break;
+		case Button::SWITCH_VIDEO_SOURCE:
+			jsonBtn["videoRxMod"] = videoRxMod;
+			jsonBtn["videoRxDev"] = videoRxDev;
+			break;
+		default:
+			break;
+		}
 	}
 
 	{

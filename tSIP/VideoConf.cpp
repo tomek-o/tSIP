@@ -34,6 +34,8 @@ VideoConf::VideoConf(void):
 
 void VideoConf::fromJson(const Json::Value &jv)
 {
+	if (jv.type() != Json::objectValue)
+		return;
 	jv.getBool("enabled", enabled);
 
 	int tmp;
@@ -47,6 +49,7 @@ void VideoConf::fromJson(const Json::Value &jv)
 
 void VideoConf::toJson(Json::Value &jv) const
 {
+	jv = Json::Value(Json::objectValue);
 	jv["enabled"] = enabled;
 	jv["displayParentType"] = displayParentType;
 	jv["displayParentId"] = displayParentId;

@@ -208,8 +208,10 @@ public:
 			customFrame == right.customFrame &&
 			labelCenterHorizontally == right.labelCenterHorizontally &&
 			labelCenterVertically == right.labelCenterVertically &&
+			spaceLabelsYEqually == right.spaceLabelsYEqually &&
 			labelLeft == right.labelLeft &&
 			labelTop == right.labelTop &&
+			label2Left == right.label2Left &&
 			label2Top == right.label2Top &&
 			label2CenterHorizontally == right.label2CenterHorizontally &&
 			imageTransparent == right.imageTransparent &&
@@ -233,6 +235,8 @@ public:
 			audioTxDev == right.audioTxDev &&
 			audioRxMod == right.audioRxMod &&
 			audioRxDev == right.audioRxDev &&
+			videoRxMod == right.videoRxMod &&
+			videoRxDev == right.videoRxDev &&
 			font == right.font &&
 			fontLabel2 == right.fontLabel2 &&
 
