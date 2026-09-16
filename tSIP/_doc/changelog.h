@@ -1341,6 +1341,7 @@ Version 0.3.15
 	- added "Resubscribe" button and Lua function (restarting presence + dialog-info subscriptions)
 	- added setting for call history size limit
 	- removed tray notifier window "priming"/flashing at the startup
+	- timestamp is removed from log lines with RX/TX of SIP messages; it is now recommended to turn on log timestamps in logging configuration and this is now default setting
 	- multiple minor fixes
 */
 
