@@ -27,7 +27,6 @@ Outdated / not the only one TODO list.
 - encrypt password
 - contacts: master/detail view
 - contact groups
-- different ringtones for different contacts
 - detect: no input snd dev
 - number processing / "LCR" / dialplan
 

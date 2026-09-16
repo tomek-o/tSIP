@@ -2,10 +2,10 @@ object frmContactEditor: TfrmContactEditor
   Left = 0
   Top = 0
   Caption = 'Add/edit contact'
-  ClientHeight = 349
+  ClientHeight = 376
   ClientWidth = 434
   Color = clBtnFace
-  Constraints.MinHeight = 376
+  Constraints.MinHeight = 403
   Constraints.MinWidth = 442
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object frmContactEditor: TfrmContactEditor
   OnShow = FormShow
   DesignSize = (
     434
-    349)
+    376)
   PixelsPerInch = 96
   TextHeight = 13
   object lblDescription: TLabel
@@ -72,14 +72,22 @@ object frmContactEditor: TfrmContactEditor
     Anchors = [akLeft, akBottom]
     Caption = 'File'
   end
+  object lblRing: TLabel
+    Left = 8
+    Top = 315
+    Width = 22
+    Height = 13
+    Anchors = [akLeft, akBottom]
+    Caption = 'Ring'
+  end
   object pnlBottom: TPanel
     Left = 0
-    Top = 312
+    Top = 339
     Width = 434
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
-    TabOrder = 9
+    TabOrder = 11
     DesignSize = (
       434
       37)
@@ -202,6 +210,24 @@ object frmContactEditor: TfrmContactEditor
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FF000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFF}
+  end
+  object edRing: TEdit
+    Left = 48
+    Top = 312
+    Width = 324
+    Height = 21
+    Anchors = [akLeft, akRight, akBottom]
+    TabOrder = 9
+  end
+  object btnRingSelect: TButton
+    Left = 377
+    Top = 312
+    Width = 22
+    Height = 21
+    Anchors = [akRight, akBottom]
+    Caption = '...'
+    TabOrder = 10
+    OnClick = btnRingSelectClick
   end
   object openDialog: TOpenDialog
     Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]

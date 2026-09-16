@@ -38,12 +38,16 @@ __published:	// IDE-managed Components
 	TOpenDialog *openDialog;
 	TButton *btnFileSelect;
 	TBitBtn *btnFileOpen;
+	TLabel *lblRing;
+	TEdit *edRing;
+	TButton *btnRingSelect;
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormKeyPress(TObject *Sender, char &Key);
 	void __fastcall btnFileOpenClick(TObject *Sender);
 	void __fastcall btnFileSelectClick(TObject *Sender);
+	void __fastcall btnRingSelectClick(TObject *Sender);
 	void __fastcall memoNoteChange(TObject *Sender);
 private:	// User declarations
 	static void TranslateForm(void* obj);

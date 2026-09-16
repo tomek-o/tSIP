@@ -21,6 +21,11 @@ public:
 		AnsiString uri3;
 		AnsiString note;
 		AnsiString file;
+		/** \brief Custom ring WAVE file name, empty if the default ring is used.
+			Stored as a file name only - like every other ring file it has to be
+			placed in the profile directory.
+		*/
+		AnsiString ring;
 
 		bool operator==(const Entry& right) const {
 			return (description == right.description &&
@@ -29,7 +34,8 @@ public:
 					uri2 == right.uri2 &&
 					uri3 == right.uri3 &&
 					note == right.note &&
-					file == right.file
+					file == right.file &&
+					ring == right.ring
 					);
 		}
 

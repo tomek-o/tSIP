@@ -1627,11 +1627,12 @@ void TfrmMain::PollCallbackQueue(void)
 						}
 					}
 				}
+				lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 				if (answered == false && muteRing == false && !call->disconnecting)
 				{
-					StartRing(*call, RingFile(cb.alertInfo));
+					StartRing(*call, RingFile(cb.alertInfo,
+						lastContactEntry ? lastContactEntry->ring : AnsiString()));
 				}
-				lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 				if (lastContactEntry)
 				{
 					if (appSettings.frmContactPopup.showOnIncoming)
@@ -3662,8 +3663,16 @@ void TfrmMain::StartRing(const Call &call, AnsiString wavFile)
 	PhoneInterface::UpdateRing(1);
 }
 
-AnsiString TfrmMain::RingFile(AnsiString alertInfo)
+AnsiString TfrmMain::RingFile(AnsiString alertInfo, AnsiString contactRing)
 {
+	if (contactRing != "")
+	{
+		AnsiString fileFull;
+		fileFull.sprintf("%s\\%s", Paths::GetProfileDir().c_str(), contactRing.c_str());
+		if (FileExists(fileFull))
+			return contactRing;
+	}
+
 	alertInfo = LowerCase(alertInfo);
 	AnsiString needle = "bellcore-dr";
 	int pos = alertInfo.Pos(needle);

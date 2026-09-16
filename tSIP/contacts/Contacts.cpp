@@ -89,6 +89,7 @@ int Contacts::Read(void)
 		entry.uri3 = contact.get("uri3", "").asString().c_str();
 		entry.note = contact.get("note", "").asString().c_str();
 		entry.file = contact.get("file", entry.file.c_str()).asString().c_str();
+		entry.ring = contact.get("ring", "").asString().c_str();
 
 		entries.push_back(entry);
 	}
@@ -115,6 +116,11 @@ int Contacts::Write(void)
 		jv["company"] = entry.company.c_str();
 		jv["note"] = entry.note.c_str();
 		jv["file"] = entry.file.c_str();
+		// written only when set, to not grow the file for every contact
+		if (entry.ring != "")
+		{
+			jv["ring"] = entry.ring.c_str();
+		}
 	}
 
 	std::string outputConfig = writer.write( root );

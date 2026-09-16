@@ -210,7 +210,7 @@ private:	// User declarations
 	void AutoAnswer(Call &call);
 	void ProgrammableButtonClick(int buttonId);
 	void StartRing(const Call &call, AnsiString wavFile = "ring.wav");
-	AnsiString RingFile(AnsiString alertInfo);
+	AnsiString RingFile(AnsiString alertInfo, AnsiString contactRing);
 	void Redial(void);
 	void HttpQuery(const Call* call);
 	void AccessCallUrl(const Call *call);

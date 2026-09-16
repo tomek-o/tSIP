@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include "FormContactEditor.h"
+#include "Paths.h"
 #include "Translate.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -23,6 +24,7 @@ void TfrmContactEditor::TranslateForm(void* obj)
 	TRANSLATE_TMP("TfrmContactEditor.lblNumber3", frm->lblNumber3->Caption);
 	TRANSLATE_TMP("TfrmContactEditor.lblNote", frm->lblNote->Caption);
 	TRANSLATE_TMP("TfrmContactEditor.lblContactFile", frm->lblContactFile->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblRing", frm->lblRing->Caption);
 
 	TRANSLATE_TMP("TfrmContactEditor.btnApply", frm->btnApply->Caption);
 	TRANSLATE_TMP("TfrmContactEditor.btnCancel", frm->btnCancel->Caption);
@@ -53,6 +55,7 @@ void __fastcall TfrmContactEditor::btnApplyClick(TObject *Sender)
 	entry->uri2 = edNumber2->Text;
 	entry->uri3 = edNumber3->Text;
 	entry->file = edFile->Text.Trim();
+	entry->ring = edRing->Text.Trim();
 
 	if (storeNoteInSeparateFile == false)
 	{
@@ -126,6 +129,7 @@ int __fastcall TfrmContactEditor::Start(Contacts::Entry *entry, bool storeNoteIn
 	}
 	noteChanged = false;
 	edFile->Text = entry->file;
+	edRing->Text = entry->ring;
 
 	return ShowModal();
 }
@@ -196,6 +200,42 @@ void __fastcall TfrmContactEditor::btnFileSelectClick(TObject *Sender)
 	{
     	edFile->Text = openDialog->FileName;
 	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmContactEditor::btnRingSelectClick(TObject *Sender)
+{
+	/* own dialog: reusing openDialog would leave its filter and directory
+	   changed for the contact file selection */
+	TOpenDialog *dlg = new TOpenDialog(NULL);
+	TOpenOptions options;
+	options << ofHideReadOnly << ofNoChangeDir << ofEnableSizing;
+	dlg->Options = options;
+	dlg->Filter = "WAVE files (*.wav)|*.wav|All files|*.*";
+	dlg->InitialDir = Paths::GetProfileDir();
+	AnsiString fileName = Paths::GetProfileDir() + "\\" + edRing->Text;
+	if (FileExists(fileName))
+	{
+		dlg->FileName = fileName;
+	}
+	else
+	{
+		// would be a directory path with empty edit box: dialog refuses to open
+		dlg->FileName = "";
+	}
+	if (dlg->Execute())
+	{
+		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlg->FileName)))
+		{
+			MessageBox(this->Handle, "Ring file was not updated.\nFor portability ring WAVE files must be placed in application directory.", this->Caption.c_str(), MB_ICONEXCLAMATION);
+		}
+		else
+		{
+			edRing->Text = ExtractFileName(dlg->FileName);
+		}
+	}
+
+	delete dlg;
 }
 //---------------------------------------------------------------------------
 
