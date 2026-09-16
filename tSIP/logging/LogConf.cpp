@@ -9,7 +9,7 @@ LogConf::LogConf(void):
 	logToFile(false),
 	flush(false),
 	maxFileSize(DEF_MAX_FILE_SIZE),
-	timestamps(false),
+	timestamps(true),
 	logRotate(DEF_LOGROTATE),
 	maxUiLogLines(5000),
 	windowWidth(630), windowHeight(400),
