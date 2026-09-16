@@ -444,7 +444,10 @@ int re_vhprintf(const char *fmt, va_list ap, re_vprintf_h *vph, void *arg)
 			break;
 
 
-		case 'J':
+		case 'J': {
+			char ep[80];
+			size_t eplen = 0;
+
 			sa = va_arg(ap, struct sa *);
 			if (!sa)
 				break;
@@ -454,29 +457,29 @@ int re_vhprintf(const char *fmt, va_list ap, re_vprintf_h *vph, void *arg)
 				break;
 			}
 
+			/* pad "addr:port" as one field, not each part */
 #ifdef HAVE_INET6
-			if (AF_INET6 == sa_af(sa)) {
-				ch = '[';
-				err |= vph(&ch, 1, arg);
-			}
+			if (AF_INET6 == sa_af(sa))
+				ep[eplen++] = '[';
 #endif
-			err |= write_padded(addr, strlen(addr), pad, ' ',
-					    plr, NULL, vph, arg);
+			len = strlen(addr);
+			memcpy(&ep[eplen], addr, len);
+			eplen += len;
 #ifdef HAVE_INET6
-			if (AF_INET6 == sa_af(sa)) {
-				ch = ']';
-				err |= vph(&ch, 1, arg);
-			}
+			if (AF_INET6 == sa_af(sa))
+				ep[eplen++] = ']';
 #endif
+			ep[eplen++] = ':';
 
-			ch = ':';
-			err |= vph(&ch, 1, arg);
 			len = local_itoa(num, sa_port(sa), 10, false);
-			err |= write_padded(num, len, pad,
-					    plr ? ' ' : pch, plr, NULL,
-					    vph, arg);
+			memcpy(&ep[eplen], num, len);
+			eplen += len;
+
+			err |= write_padded(ep, eplen, pad, ' ',
+					    plr, NULL, vph, arg);
 
 			break;
+		}
 
 		default:
 			if (('0' <= *p) && (*p <= '9')) {
