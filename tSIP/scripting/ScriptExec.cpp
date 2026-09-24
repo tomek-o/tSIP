@@ -1103,10 +1103,10 @@ static int l_GetCallUidFromLineButton(lua_State* L)
 	if (argCount == 1)
 	{
 		unsigned int buttonId = luaL_checkinteger(L, 1);
-		const std::map<unsigned int, Call> calls = Calls::GetCalls();
-		for (std::map<unsigned int, Call>::const_iterator iter = calls.begin(); iter != calls.end(); ++iter)
+		const std::vector<Calls::CallInfo> calls = Calls::GetCallsInfo();
+		for (unsigned int i=0; i<calls.size(); i++)
 		{
-			const Call &call = iter->second;
+			const Calls::CallInfo &call = calls[i];
 			if (call.btnId == buttonId)
 			{
 				lua_pushnumber(L, call.uid);

@@ -2874,12 +2874,12 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		if (muteRing)
 		{
 			bool mutePlugins = false;
-			const std::map<unsigned int, Call>& calls = Calls::GetCalls();
-			for(std::map<unsigned int, Call>::const_iterator iter = calls.begin(); iter != calls.end(); ++iter)
+			const std::vector<Calls::CallInfo> calls = Calls::GetCallsInfo();
+			for (unsigned int i=0; i<calls.size(); i++)
 			{
-				if (iter->second.incoming)
+				if (calls[i].incoming)
 				{
-					UA->PlayStop(iter->second.uid);
+					UA->PlayStop(calls[i].uid);
 					mutePlugins = true;
 				}
 			}

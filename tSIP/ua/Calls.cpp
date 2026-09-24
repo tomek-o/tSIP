@@ -134,6 +134,8 @@ void Calls::SetPreviousCall(const Call &call)
 {
 	ScopedLock<Mutex> lock(mutex);
 	previousCall = call;
+	// timer is owned by the original call (deleted with it)
+	previousCall.tmrAutoAnswer = NULL;
 }
 
 void Calls::Clear(void)
@@ -161,10 +163,22 @@ std::vector<unsigned int> Calls::GetUids(void)
 	return ret;
 }
 
-const std::map<unsigned int, Call> Calls::GetCalls(void)
+std::vector<Calls::CallInfo> Calls::GetCallsInfo(void)
 {
 	ScopedLock<Mutex> lock(mutex);
-	return entries;
+	std::vector<CallInfo> ret;
+	ret.reserve(entries.size());
+	for (std::map<unsigned int, Call>::const_iterator iter = entries.begin(); iter != entries.end(); ++iter)
+	{
+		const Call &call = iter->second;
+		CallInfo info;
+		info.uid = call.uid;
+		info.incoming = call.incoming;
+		info.btnId = call.btnId;
+		info.state = call.GetState();
+		ret.push_back(info);
+	}
+	return ret;
 }
 
 unsigned int Calls::Count(void)

@@ -57,6 +57,8 @@ public:
 	AnsiString dialString;
 	AnsiString sipReason;
 
+	/** \note Owned (deleted in destructor) - copies of Call must not keep it,
+		use Calls::GetCallsInfo() for snapshots of call list */
 	Extctrls::TTimer *tmrAutoAnswer;
 	int autoAnswerCode;
 	bool autoAnswerIntercom;

@@ -12,6 +12,15 @@ class TProgrammableButton;
 
 namespace Calls
 {
+	/** \brief Plain call data, safe to copy (unlike Call owning e.g. timer) */
+	struct CallInfo
+	{
+		unsigned int uid;
+		bool incoming;
+		int btnId;
+		Callback::ua_state_e state;
+	};
+
 	Call* Alloc(void);
 	Call* FindByUid(unsigned int uid);
 	Call* FindByAutoAnswerTimer(const Extctrls::TTimer *tmr);
@@ -23,7 +32,7 @@ namespace Calls
 	void SetPreviousCall(const Call &call);
 	void Clear(void);
 	std::vector<unsigned int> GetUids(void);
-	const std::map<unsigned int, Call> GetCalls(void);
+	std::vector<CallInfo> GetCallsInfo(void);
 	unsigned int Count(void);
 	unsigned int CountIncoming(void);
 
