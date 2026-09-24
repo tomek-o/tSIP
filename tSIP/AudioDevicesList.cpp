@@ -9,10 +9,21 @@
 #include <Classes.hpp>
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
+#include <re.h>
+#include <baresip.h>
 
 //---------------------------------------------------------------------------
 
 #pragma package(smart_init)
+
+namespace
+{
+	void WasapiDevHandler(const char *name, void *arg)
+	{
+		std::vector<AnsiString> *v = reinterpret_cast<std::vector<AnsiString>*>(arg);
+		v->push_back(name);
+	}
+}
 
 AudioDevicesList::AudioDevicesList(void):
 	filled(false)
@@ -79,6 +90,11 @@ void AudioDevicesList::Refresh(void)
 		}
 	}
 
+	wasapiDevsIn.clear();
+	wasapiDevsOut.clear();
+	wasapi_enum_devices(false, WasapiDevHandler, &wasapiDevsIn);
+	wasapi_enum_devices(true, WasapiDevHandler, &wasapiDevsOut);
+
 	filled = true;
 }
 
@@ -100,6 +116,13 @@ void AudioDevicesList::FillComboBox(Stdctrls::TComboBox *target, AnsiString modu
 			v = &AudioDevicesList::Instance().winwaveDevsOut;
 		else
 			v = &AudioDevicesList::Instance().winwaveDevsIn;
+	}
+	else if (module == AudioModules::wasapi)
+	{
+		if (out)
+			v = &AudioDevicesList::Instance().wasapiDevsOut;
+		else
+			v = &AudioDevicesList::Instance().wasapiDevsIn;
 	}
 	else
 	{

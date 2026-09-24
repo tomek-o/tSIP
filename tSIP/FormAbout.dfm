@@ -526,14 +526,13 @@ object frmAbout: TfrmAbout
         
           'BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABI' +
           'LITY, '
-        'WHETHER '
         
-          'IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR ' +
-          'OTHERWISE) '
+          'WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIG' +
+          'ENCE OR '
         
-          'ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVI' +
-          'SED OF THE '
-        'POSSIBILITY OF SUCH DAMAGE. '
+          'OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, E' +
+          'VEN IF ADVISED '
+        'OF THE POSSIBILITY OF SUCH DAMAGE. '
         'Copyright (c) 2010 - 2015, Alfred E. Heggestad'
         'Copyright (c) 2010 - 2015, Creytiv.com'
         'All rights reserved.'
@@ -589,10 +588,9 @@ object frmAbout: TfrmAbout
         
           'Any person wishing to distribute modifications to the Software i' +
           's requested to send the modifications to '
-        'the '
         
-          'original developer so that they can be incorporated into the can' +
-          'onical version. It is also requested that '
+          'the original developer so that they can be incorporated into the' +
+          ' canonical version. It is also requested that '
         
           'these non-binding requests be included along with the license ab' +
           'ove.'
@@ -881,10 +879,10 @@ object frmAbout: TfrmAbout
         
           'WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FRO' +
           'M, OUT OF OR '
-        'IN '
         
-          'CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE' +
-          ' SOFTWARE. '
+          'IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN ' +
+          'THE '
+        'SOFTWARE. '
         ''
         ''
         '============================================='
@@ -1229,6 +1227,73 @@ object frmAbout: TfrmAbout
         
           '================================================================' +
           '============='
+        
+          'WASAPI audio module for baresip (partially based on baresip upst' +
+          'ream wasapi module):'
+        
+          '================================================================' +
+          '============='
+        ''
+        'Copyright (C) 2024 Sebastian Reimers'
+        'Copyright (C) 2024 AGFEO GmbH & Co. KG'
+        'All rights reserved.'
+        ''
+        
+          'Redistribution and use in source and binary forms, with or witho' +
+          'ut modification, are permitted provided that '
+        'the following conditions are met:'
+        
+          '1. Redistributions of source code must retain the above copyrigh' +
+          't notice, this list of conditions and the '
+        'following disclaimer.'
+        
+          '2. Redistributions in binary form must reproduce the above copyr' +
+          'ight notice, this list of conditions and the '
+        
+          'following disclaimer in the documentation and/or other materials' +
+          ' provided with the distribution.'
+        
+          '3. Neither the name of the copyright holder nor the names of its' +
+          ' contributors may be used to endorse or '
+        
+          'promote products derived from this software without specific pri' +
+          'or written permission.'
+        ''
+        
+          'THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUT' +
+          'ORS "AS IS" '
+        
+          'AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITE' +
+          'D TO, THE '
+        
+          'IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICUL' +
+          'AR PURPOSE '
+        
+          'ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRI' +
+          'BUTORS BE '
+        
+          'LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,' +
+          ' OR CONSEQUENTIAL '
+        
+          'DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUT' +
+          'E GOODS OR '
+        
+          'SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTIO' +
+          'N) HOWEVER '
+        
+          'CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRI' +
+          'CT LIABILITY, OR '
+        
+          'TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT ' +
+          'OF THE USE OF '
+        
+          'THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE' +
+          '.'
+        ''
+        ''
+        
+          '================================================================' +
+          '============='
         'ZRTPCPP:'
         
           '================================================================' +
@@ -1485,10 +1550,10 @@ object frmAbout: TfrmAbout
         
           'WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FRO' +
           'M, OUT OF OR '
-        'IN '
         
-          'CONNECTION WITH THIS SOFTWARE OR THE USE OR OTHER DEALINGS IN TH' +
-          'IS SOFTWARE.'
+          'IN CONNECTION WITH THIS SOFTWARE OR THE USE OR OTHER DEALINGS IN' +
+          ' THIS '
+        'SOFTWARE.'
         ''
         'Converted to C++ by:'
         '@author Werner Dittmann <Werner.Dittmann@t-online.de>'
@@ -2098,11 +2163,10 @@ object frmAbout: TfrmAbout
         
           'The binary form of this Software is distributed by Cisco under t' +
           'he AVC/H.264 Patent Portfolio License '
-        'from '
         
-          'MPEG LA, and is subject to the following requirements, which may' +
-          ' or may not be applicable to your use of '
-        'this software: '
+          'from MPEG LA, and is subject to the following requirements, whic' +
+          'h may or may not be applicable to your '
+        'use of this software: '
         ''
         
           'THIS PRODUCT IS LICENSED UNDER THE AVC PATENT PORTFOLIO LICENSE ' +

@@ -1343,6 +1343,7 @@ Version 0.3.15
 	- removed tray notifier window "priming"/flashing at the startup
 	- timestamp is removed from log lines with RX/TX of SIP messages; it is now recommended to turn on log timestamps in logging configuration and this is now default setting
 	- custom ring files can be assigned to contacts from phonebook
+	- added WASAPI audio module (input and output; can use loopback/output device as audio source)
 	- multiple minor fixes
 */
 

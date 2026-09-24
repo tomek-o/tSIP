@@ -22,6 +22,7 @@ using namespace AudioModules;
 const char* AudioModules::portaudio = "portaudio";
 const char* AudioModules::winwave = "winwave";
 const char* AudioModules::winwave2 = "winwave2";
+const char* AudioModules::wasapi = "wasapi";
 const char* AudioModules::aufile = "aufile";
 const char* AudioModules::aufileMm = "aufile_mm";
 const char* AudioModules::nullaudio = "nullaudio";
@@ -39,6 +40,7 @@ const AudioModuleDef audioModuleDefs [] =
 {
 	{ true, true, portaudio, "PortAudio / DirectSound" },
 	{ true, true, winwave2, "WaveIn, WaveOut" },
+	{ true, true, wasapi, "WASAPI (incl. loopback input)" },
 	{ true, false, aufile, "Wave file" },
 	{ true, false, aufileMm, "Wave file - with MM timer" },
 #ifdef USE_VIDEO

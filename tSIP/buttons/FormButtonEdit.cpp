@@ -689,7 +689,8 @@ void __fastcall TfrmButtonEdit::cbSoundInputModChange(TObject *Sender)
 	AnsiString mod = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
 	if (mod == AudioModules::portaudio ||
 		mod == AudioModules::winwave ||
-		mod == AudioModules::winwave2)
+		mod == AudioModules::winwave2 ||
+		mod == AudioModules::wasapi)
 	{
 		btnSelectWaveFile->Visible = false;
 		edSoundInputWave->Visible = false;
@@ -763,7 +764,8 @@ void __fastcall TfrmButtonEdit::cbSoundOutputModChange(TObject *Sender)
 	AnsiString mod = AudioModules::GetOutputModuleFromCbIndex(cbSoundOutputMod->ItemIndex);
 	if (mod == AudioModules::portaudio ||
 		mod == AudioModules::winwave ||
-		mod == AudioModules::winwave2)
+		mod == AudioModules::winwave2 ||
+		mod == AudioModules::wasapi)
 	{
 		if (mod == AudioModules::winwave)
 			mod = AudioModules::winwave2;	// original "winwave" was buggy/obsoletes/removed

@@ -22,6 +22,7 @@ namespace AudioModules
 	extern const char* portaudio;
 	extern const char* winwave;
 	extern const char* winwave2;
+	extern const char* wasapi;
 	extern const char* aufile;
 	extern const char* aufileMm;
 	extern const char* nullaudio;

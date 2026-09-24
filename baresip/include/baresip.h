@@ -468,6 +468,23 @@ int auplay_alloc(struct auplay_st **stp, const char *name,
 unsigned int softvol_get_rx_level(void);
 
 /*
+ * WASAPI device names - provided by wasapi module
+ */
+/** default capture/render device (Windows "communications" role) */
+#define WASAPI_DEV_DEFAULT          "Default communication device"
+/** audio source only: loopback ("what you hear") of output device, followed by output device name */
+#define WASAPI_DEV_LOOPBACK_PREFIX  "Loopback: "
+/** audio source only: loopback of default output device (Windows "console" role) */
+#define WASAPI_DEV_LOOPBACK_DEFAULT WASAPI_DEV_LOOPBACK_PREFIX "Default output device"
+
+typedef void (wasapi_dev_h)(const char *name, void *arg);
+/** \brief Enumerate device names accepted by wasapi module
+	\param out true: output devices, false: input devices (capture devices + loopback entries)
+	\return 0 on success, ENODEV if WASAPI is not available (e.g. Windows XP)
+*/
+int wasapi_enum_devices(bool out, wasapi_dev_h *h, void *arg);
+
+/*
  * Force RTSP transport used by the avformat module for subsequently opened
  * sources (module-wide, not per-source). One of "tcp", "udp",
  * "udp_multicast", "http", "https", or "" to leave it up to the library

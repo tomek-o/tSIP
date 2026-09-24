@@ -29,6 +29,8 @@ public:
 	std::vector<AnsiString> portaudioDevsOut;
 	std::vector<AnsiString> winwaveDevsIn;
 	std::vector<AnsiString> winwaveDevsOut;
+	std::vector<AnsiString> wasapiDevsIn;	///< capture devices + loopback entries
+	std::vector<AnsiString> wasapiDevsOut;
 	/** \brief Fill/initialize device lists */
 	void Refresh(void);
 	/** \brief Check if Refresh() was called at least once */

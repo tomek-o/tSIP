@@ -151,6 +151,12 @@ namespace {
 			if (adl.winwaveDevsIn.empty())
 				return true;
 		}
+		else if (cfg.mod == AudioModules::wasapi)
+		{
+			// two "default" entries (input + loopback) are always present if WASAPI is available
+			if (adl.wasapiDevsIn.size() <= 2)
+				return true;
+		}
 		return false;
 	}
 
@@ -183,6 +189,12 @@ namespace {
 		else if (cfg.mod == AudioModules::winwave || cfg.mod == AudioModules::winwave2)
 		{
 			if (adl.winwaveDevsOut.empty())
+				return true;
+		}
+		else if (cfg.mod == AudioModules::wasapi)
+		{
+			// one "default" entry is always present if WASAPI is available
+			if (adl.wasapiDevsOut.size() <= 1)
 				return true;
 		}
 		return false;

@@ -1175,7 +1175,8 @@ void __fastcall TfrmSettings::cbSoundInputModChange(TObject *Sender)
 	AnsiString mod = AudioModules::GetInputModuleFromCbIndex(cbSoundInputMod->ItemIndex);
 	if (mod == AudioModules::portaudio ||
 		mod == AudioModules::winwave ||
-		mod == AudioModules::winwave2)
+		mod == AudioModules::winwave2 ||
+		mod == AudioModules::wasapi)
 	{
 		btnSelectWaveFile->Visible = false;
 		edSoundInputWave->Visible = false;
@@ -1207,7 +1208,7 @@ void __fastcall TfrmSettings::cbSoundInputModChange(TObject *Sender)
 void TfrmSettings::ChangeSoundOutputMod(TComboBox *target, TLabel *label, TLabel *label2, TTrackBar *trbar, int moduleIndex, AnsiString selected)
 {
 	AnsiString mod = AudioModules::GetOutputModuleFromCbIndex(moduleIndex);
-	if (mod == AudioModules::portaudio || mod == AudioModules::winwave || mod == AudioModules::winwave2)
+	if (mod == AudioModules::portaudio || mod == AudioModules::winwave || mod == AudioModules::winwave2 || mod == AudioModules::wasapi)
 	{
 		target->Visible = true;
 		label->Visible = true;
@@ -1373,7 +1374,16 @@ void __fastcall TfrmSettings::btnRingSelectClick(TObject *Sender)
 	}
 	dlgOpenDeviceFile->InitialDir = Paths::GetProfileDir();
 	dlgOpenDeviceFile->Filter = "WAVE files (*.wav)|*.wav|All files|*.*";
-	dlgOpenDeviceFile->FileName = Paths::GetProfileDir() + "\\" + edit->Text;
+	AnsiString fileName = Paths::GetProfileDir() + "\\" + edit->Text;
+	if (FileExists(fileName))
+	{
+		dlgOpenDeviceFile->FileName = fileName;
+	}
+	else
+	{
+		// would be a directory path with empty edit box: dialog refuses to open
+		dlgOpenDeviceFile->FileName = "";
+	}
 	if (dlgOpenDeviceFile->Execute())
 	{
 		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenDeviceFile->FileName)))
@@ -1922,7 +1932,16 @@ void __fastcall TfrmSettings::btnMessagesSelectRingClick(TObject *Sender)
 	}
 	dlgOpenDeviceFile->InitialDir = Paths::GetProfileDir();
 	dlgOpenDeviceFile->Filter = "WAVE files (*.wav)|*.wav|All files|*.*";
-	dlgOpenDeviceFile->FileName = Paths::GetProfileDir() + "\\" + edit->Text;
+	AnsiString fileName = Paths::GetProfileDir() + "\\" + edit->Text;
+	if (FileExists(fileName))
+	{
+		dlgOpenDeviceFile->FileName = fileName;
+	}
+	else
+	{
+		// would be a directory path with empty edit box: dialog refuses to open
+		dlgOpenDeviceFile->FileName = "";
+	}
 	if (dlgOpenDeviceFile->Execute())
 	{
 		if (UpperCase(Paths::GetProfileDir()) != UpperCase(ExtractFileDir(dlgOpenDeviceFile->FileName)))
