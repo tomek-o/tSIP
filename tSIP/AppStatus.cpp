@@ -20,11 +20,9 @@ struct OrderedStatusKey
 	AnsiString id;
 	bool operator<(const OrderedStatusKey &other) const
 	{
-		if (priority < other.priority)
-			return true;
-		if (id < other.id)
-			return true;
-		return false;
+		if (priority != other.priority)
+			return priority < other.priority;
+		return id < other.id;
 	}
 };
 
