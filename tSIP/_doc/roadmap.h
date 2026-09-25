@@ -116,5 +116,7 @@ switch automatically to line with new outgoing call if there is only one call
 
 support for multiple simultaneous RTP streaming - treat streaming as call
 
+FIX hang (maybe just long timeout) when using rtsp from non-existing address as video source 
+
 */
 

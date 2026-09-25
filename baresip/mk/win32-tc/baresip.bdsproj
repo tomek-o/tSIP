@@ -527,8 +527,8 @@
         <FILE FILENAME="..\..\modules\avformat\mod_avformat.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\mixminus\mixminus.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="mixminus" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\wasapi\wasapi.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wasapi" FORMNAME="" DESIGNCLASS=""/>
-        <FILE FILENAME="..\..\modules\wasapi\wasapi.h" CONTAINERID="" LOCALCOMMAND=""/>
-        <FILE FILENAME="..\..\modules\wasapi\wasapi_com.h" CONTAINERID="" LOCALCOMMAND=""/>
+        <FILE FILENAME="..\..\modules\wasapi\wasapi.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\wasapi\wasapi_com.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\wasapi\wasapi_play.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wasapi_play" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\wasapi\wasapi_src.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="wasapi_src" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
