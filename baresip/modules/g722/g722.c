@@ -147,8 +147,11 @@ static int decode(struct audec_state *st, int16_t *sampv, size_t *sampc,
 {
 	int n;
 
-	if (!st || !sampv || !buf)
+	if (!st || !sampv || !sampc || !buf)
 		return EINVAL;
+
+	if (*sampc < len * 2)
+		return ENOMEM;
 
 	n = g722_decode(&st->dec, buf, len, sampv);
 	if (n < 0)
