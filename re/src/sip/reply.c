@@ -106,7 +106,8 @@ static int vreplyf(struct sip_strans **stp, struct mbuf **mbp, bool trans,
 	if (fmt)
 		err |= mbuf_vprintf(mb, fmt, ap);
 	else
-		err |= mbuf_printf(mb, "Content-Length: 0\r\n\r\n");
+		err |= mbuf_printf(mb, "%s: 0\r\n\r\n",
+				   sip_hname(SIP_HDR_CONTENT_LENGTH));
 
 	if (err)
 		goto out;

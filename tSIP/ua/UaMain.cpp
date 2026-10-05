@@ -726,6 +726,8 @@ static int app_init(void)
 		uaName = appSettings.uaConf.userAgent.c_str();
     }
 
+	sip_set_compact_headers(appSettings.uaConf.sip.compactHeadersRfc3261, appSettings.uaConf.sip.compactHeadersExt);
+
 	err = ua_init(uaName.c_str(), true, true, true, appSettings.uaConf.noIpBind, false);
 	if (err)
 		return err;

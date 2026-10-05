@@ -78,11 +78,12 @@ static int info_request(struct sipsess_request *req)
 	return sip_drequestf(&req->req, req->sess->sip, true, "INFO",
 			     req->sess->dlg, 0, req->sess->auth,
 			     NULL, info_resp_handler, req,
-			     "Content-Type: %s\r\n"
-			     "Content-Length: %zu\r\n"
+			     "%s: %s\r\n"
+			     "%s: %zu\r\n"
 			     "\r\n"
 			     "%b",
-			     req->ctype,
+			     sip_hname(SIP_HDR_CONTENT_TYPE), req->ctype,
+			     sip_hname(SIP_HDR_CONTENT_LENGTH),
 			     mbuf_get_left(req->body),
 			     mbuf_buf(req->body), mbuf_get_left(req->body));
 }

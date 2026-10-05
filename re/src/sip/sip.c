@@ -248,3 +248,65 @@ void sip_log_messages(struct sip *sip, bool log, bool only_first_lines)
 	sip->log_messages_only_first_lines = only_first_lines;
 }
 
+
+static bool compact_headers_rfc3261; /* RFC 3261 headers */
+static bool compact_headers_ext;     /* headers from SIP extensions */
+
+
+/**
+ * Select full or compact header names for outgoing messages
+ *
+ * @param enabled     True to use compact names of headers defined in
+ *                    RFC 3261 7.3.3 (v, f, t, i, m, c, l, e, k, s)
+ * @param ext_enabled True to use compact names also for headers defined
+ *                    in SIP extensions (Event "o", Allow-Events "u",
+ *                    Refer-To "r", Referred-By "b", Session-Expires "x");
+ *                    effective only together with enabled; some peers
+ *                    do not recognize these short forms
+ *
+ * @note Process-wide setting, applies to messages created after the call
+ */
+void sip_set_compact_headers(bool enabled, bool ext_enabled)
+{
+	compact_headers_rfc3261 = enabled;
+	compact_headers_ext = false;
+	if (enabled)
+		compact_headers_ext = ext_enabled;
+}
+
+
+/**
+ * Get header name to use in outgoing messages
+ *
+ * @param id SIP Header ID
+ *
+ * @return Compact name if enabled and header has compact form, otherwise
+ *         full name; empty string for unsupported header ID
+ */
+const char *sip_hname(enum sip_hdrid id)
+{
+	switch (id) {
+
+	/* RFC 3261 */
+	case SIP_HDR_CALL_ID:          return compact_headers_rfc3261 ? "i" : "Call-ID";
+	case SIP_HDR_CONTACT:          return compact_headers_rfc3261 ? "m" : "Contact";
+	case SIP_HDR_CONTENT_ENCODING: return compact_headers_rfc3261 ? "e" : "Content-Encoding";
+	case SIP_HDR_CONTENT_LENGTH:   return compact_headers_rfc3261 ? "l" : "Content-Length";
+	case SIP_HDR_CONTENT_TYPE:     return compact_headers_rfc3261 ? "c" : "Content-Type";
+	case SIP_HDR_FROM:             return compact_headers_rfc3261 ? "f" : "From";
+	case SIP_HDR_SUBJECT:          return compact_headers_rfc3261 ? "s" : "Subject";
+	case SIP_HDR_SUPPORTED:        return compact_headers_rfc3261 ? "k" : "Supported";
+	case SIP_HDR_TO:               return compact_headers_rfc3261 ? "t" : "To";
+	case SIP_HDR_VIA:              return compact_headers_rfc3261 ? "v" : "Via";
+
+	/* extensions: RFC 6665 (o, u), RFC 3515 (r), RFC 3892 (b), RFC 4028 (x) */
+	case SIP_HDR_ALLOW_EVENTS:     return compact_headers_ext ? "u" : "Allow-Events";
+	case SIP_HDR_EVENT:            return compact_headers_ext ? "o" : "Event";
+	case SIP_HDR_REFER_TO:         return compact_headers_ext ? "r" : "Refer-To";
+	case SIP_HDR_REFERRED_BY:      return compact_headers_ext ? "b" : "Referred-By";
+	case SIP_HDR_SESSION_EXPIRES:  return compact_headers_ext ? "x" : "Session-Expires";
+
+	default:                       return "";
+	}
+}
+

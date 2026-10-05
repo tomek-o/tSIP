@@ -465,12 +465,15 @@ static void handle_options(struct ua *ua, const struct sip_msg *msg)
 
 	err = sip_treplyf(NULL, NULL, uag.sip,
 			  msg, true, 200, "OK",
-			  "Contact: <sip:%s@%J%s>\r\n"
-			  "Content-Type: application/sdp\r\n"
-			  "Content-Length: %zu\r\n"
+			  "%s: <sip:%s@%J%s>\r\n"
+			  "%s: application/sdp\r\n"
+			  "%s: %zu\r\n"
 			  "\r\n"
 			  "%b",
+			  sip_hname(SIP_HDR_CONTACT),
 			  ua->cuser, &msg->dst, sip_transp_param(msg->tp),
+			  sip_hname(SIP_HDR_CONTENT_TYPE),
+			  sip_hname(SIP_HDR_CONTENT_LENGTH),
 			  mbuf_get_left(desc),
 			  mbuf_buf(desc),
 			  mbuf_get_left(desc));
@@ -494,7 +497,7 @@ static void handle_refer(struct ua *ua, const struct sip_msg *msg)
 	hdr = sip_msg_hdr(msg, SIP_HDR_REFER_TO);
 	if (!hdr) {
 		DEBUG_WARNING("bad REFER request from %r\n", &msg->from.auri);
-		(void)sip_treply(NULL, NULL, msg, 400, "Missing Refer-To header");
+		(void)sip_treply(NULL, uag.sip, msg, 400, "Missing Refer-To header");
 		return;
 	}
 
@@ -986,8 +989,9 @@ int ua_options_send(struct ua *ua, const char *uri,
 
 	err = sip_req_send(ua, "OPTIONS", uri, resph, arg,
 			   "Accept: application/sdp\r\n"
-			   "Content-Length: 0\r\n"
-			   "\r\n");
+			   "%s: 0\r\n"
+			   "\r\n",
+			   sip_hname(SIP_HDR_CONTENT_LENGTH));
 	if (err) {
 		DEBUG_WARNING("send options: (%m)\n", err);
 	}
@@ -1364,8 +1368,9 @@ static void sipsess_conn_handler(const struct sip_msg *msg, void *arg)
 		(void)sip_treplyf(NULL, NULL, uag.sip, msg, false,
 				  420, "Bad Extension",
 				  "Unsupported: %r\r\n"
-				  "Content-Length: 0\r\n\r\n",
-				  &hdr->val);
+				  "%s: 0\r\n\r\n",
+				  &hdr->val,
+				  sip_hname(SIP_HDR_CONTENT_LENGTH));
 		return;
 	}
 
@@ -1817,7 +1822,7 @@ int ua_print_supported(struct re_printf *pf, const struct ua *ua)
 		size_t i;
 		int err;
 
-		err = re_hprintf(pf, "Supported:");
+		err = re_hprintf(pf, "%s:", sip_hname(SIP_HDR_SUPPORTED));
 
 		for (i=0; i<ua->extensionc; i++) {
 			err |= re_hprintf(pf, "%s%r",

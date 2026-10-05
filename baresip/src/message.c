@@ -38,9 +38,10 @@ static void handle_message(struct ua *ua, const struct sip_msg *msg)
 	else {
 		(void)sip_replyf(uag_sip(), msg, 415, "Unsupported Media Type",
 				 "Accept: %s\r\n"
-				 "Content-Length: 0\r\n"
+				 "%s: 0\r\n"
 				 "\r\n",
-				 ctype_text);
+				 ctype_text,
+				 sip_hname(SIP_HDR_CONTENT_LENGTH));
 	}
 }
 
@@ -195,9 +196,11 @@ int message_send(struct ua *ua, const char *peer, const char *msg, void *resp_ca
 
 		err = sip_req_send(ua, "MESSAGE", uri, resp_handler, resp_callback_arg,
 				   "Accept: text/plain\r\n"
-				   "Content-Type: text/plain\r\n"
-				   "Content-Length: %zu\r\n"
+				   "%s: text/plain\r\n"
+				   "%s: %zu\r\n"
 				   "\r\n%s",
+				   sip_hname(SIP_HDR_CONTENT_TYPE),
+				   sip_hname(SIP_HDR_CONTENT_LENGTH),
 				   str_len(msg), msg);
 
 		mem_deref(uri);

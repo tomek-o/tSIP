@@ -256,6 +256,19 @@ AnsiString TfrmHistory::getDefaultUri(const History::Entry* entry)
 	}
 }
 
+AnsiString TfrmHistory::getDefaultPeerName(const History::Entry* entry)
+{
+	assert(entry);
+	if (conf.usePaiForDisplayIfAvailable && entry->paiUri != "")
+	{
+		return entry->paiPeerName;
+	}
+	else
+	{
+		return entry->peerName;
+	}
+}
+
 void __fastcall TfrmHistory::lvHistoryDblClick(TObject *Sender)
 {
 	History::Entry* entry = getSelectedEntry();
@@ -305,7 +318,7 @@ void __fastcall TfrmHistory::miHttpQueryClick(TObject *Sender)
 	{
 		return;
 	}
-	callbackHttpQuery(getDefaultUri(entry));
+	callbackHttpQuery(getDefaultUri(entry), getDefaultPeerName(entry));
 }
 //---------------------------------------------------------------------------
 

@@ -252,20 +252,29 @@ static inline int hdr_add(struct sip_msg *msg, const struct pl *name,
 		break;
 
 	case SIP_HDR_ACCESS_URL:
-		err = sip_access_url_decode(name, &msg->access_url, &hdr->val);
+		/* Optional custom header: a decode error (malformed value, or an
+		   arbitrary header colliding into this id via the 12-bit hdr-hash)
+		   must not drop the whole message. */
+		if (sip_access_url_decode(name, &msg->access_url, &hdr->val))
+			DEBUG_WARNING("Access-URL header not decoded (ignored):"
+				      " '%r: %r'\n", name, &hdr->val);
 		break;
 
 	case SIP_HDR_REASON:
-		err = sip_reason_decode(name, &msg->s_reason, &hdr->val);
+		/* Optional custom header: ignore decode errors (see ACCESS_URL). */
+		if (sip_reason_decode(name, &msg->s_reason, &hdr->val))
+			DEBUG_WARNING("Reason header not decoded (ignored):"
+				      " '%r: %r'\n", name, &hdr->val);
 		break;
 
 	case SIP_HDR_P_ASSERTED_IDENTITY:
-		err = sip_addr_decode((struct sip_addr *)&msg->p_asserted_identity, &hdr->val);
-		if (err == 0) {
+		/* Optional custom header: ignore decode errors (see ACCESS_URL). */
+		if (0 == sip_addr_decode((struct sip_addr *)&msg->p_asserted_identity, &hdr->val)) {
 			msg->p_asserted_identity_present = true;
 			msg->p_asserted_identity.val = hdr->val;
 		} else {
-			DEBUG_WARNING("Failed to decode P-Asserted-Identity value (ignored)\n");
+			DEBUG_WARNING("P-Asserted-Identity value not decoded"
+				      " (ignored): '%r'\n", &hdr->val);
 		}
 		break;
 

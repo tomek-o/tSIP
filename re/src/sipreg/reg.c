@@ -264,8 +264,8 @@ static int send_handler(enum sip_transp tp, const struct sa *src,
 		reg->tp = tp;
 	}
 
-	err = mbuf_printf(mb, "Contact: <sip:%s@%J%s>;expires=%u%s%s",
-			  reg->cuser, &reg->laddr, sip_transp_param(reg->tp),
+	err = mbuf_printf(mb, "%s: <sip:%s@%J%s>;expires=%u%s%s",
+			  sip_hname(SIP_HDR_CONTACT), reg->cuser, &reg->laddr, sip_transp_param(reg->tp),
 			  reg->expires,
 			  reg->params ? ";" : "",
 			  reg->params ? reg->params : "");
@@ -289,14 +289,15 @@ static int request(struct sipreg *reg, bool reset_ls)
 
 	return sip_drequestf(&reg->req, reg->sip, true, "REGISTER", reg->dlg,
 			     0, reg->auth, send_handler, response_handler, reg,
-			     "%s"
+			     "%s%s"
 			     "%b"
-			     "Content-Length: 0\r\n"
+			     "%s: 0\r\n"
 			     "\r\n",
-			     reg->regid > 0
-			     ? "Supported: outbound, path\r\n" : "",
+			     reg->regid > 0 ? sip_hname(SIP_HDR_SUPPORTED) : "",
+			     reg->regid > 0 ? ": outbound, path\r\n" : "",
 			     reg->hdrs ? mbuf_buf(reg->hdrs) : NULL,
-			     reg->hdrs ? mbuf_get_left(reg->hdrs) : (size_t)0);
+			     reg->hdrs ? mbuf_get_left(reg->hdrs) : (size_t)0,
+			     sip_hname(SIP_HDR_CONTENT_LENGTH));
 }
 
 

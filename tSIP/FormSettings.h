@@ -64,6 +64,7 @@ __published:	// IDE-managed Components
 	TComboBox *cbSoundAlertOutputMod;
 	TComboBox *cbSoundAlertOutputDev;
 	TCheckBox *chbStartMinimizedToTray;
+	TCheckBox *chbAutostart;
 	TTabSheet *tsAudioProcessing;
 	TLabel *lblAec;
 	TComboBox *cbAec;
@@ -557,6 +558,8 @@ __published:	// IDE-managed Components
 	TCheckBox *chbFrmMainHideHangupButton;
 	TCheckBox *chbMessagesEnabled;
 	TCheckBox *chbNoIpBind;
+	TCheckBox *chbSipCompactHeadersRfc3261;
+	TCheckBox *chbSipCompactHeadersExt;
 	TLabel *lblCallPanelHeight;
 	TEdit *edCallPanelHeight;
 	TLabel *lblMainPanelHeight;
@@ -591,6 +594,7 @@ __published:	// IDE-managed Components
 	void __fastcall lboxAudioCodecsEnabledDragDrop(TObject *Sender,
           TObject *Source, int X, int Y);
 	void __fastcall chbAudioPreprocessingTxEnabledClick(TObject *Sender);
+	void __fastcall chbSipCompactHeadersRfc3261Click(TObject *Sender);
 	void __fastcall btnSelectedScriptClick(TObject *Sender);
 	void __fastcall cbSoundRingOutputModChange(TObject *Sender);
 	void __fastcall btnSelectedScriptEditClick(TObject *Sender);

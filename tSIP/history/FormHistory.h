@@ -53,7 +53,7 @@ __published:	// IDE-managed Components
 public:
 	typedef int (__closure *CallbackCall)(AnsiString uri, unsigned int &callUid);
 	typedef void (__closure *CallbackPhonebookEdit)(AnsiString uri);
-	typedef void (__closure *CallbackHttpQuery)(AnsiString uri);
+	typedef void (__closure *CallbackHttpQuery)(AnsiString uri, AnsiString sipName);
 private:	// User declarations
 	static void TranslateForm(void* obj);
 	History *history;
@@ -72,6 +72,8 @@ private:	// User declarations
 	bool updating;					///< view needs to be updated on data change (window is visible)
 	History::Entry* getSelectedEntry(void);
 	AnsiString getDefaultUri(const History::Entry* entry);
+	/** \brief SIP display name matching getDefaultUri() (PAI or regular) */
+	AnsiString getDefaultPeerName(const History::Entry* entry);
 	AnsiString GetHint(TListItem *item);
 	void AddPaiToHint(AnsiString &hint, const History::Entry &entry);
 	void SetColumnWidths(const std::vector<int>& widths);

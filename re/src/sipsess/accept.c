@@ -107,18 +107,21 @@ int sipsess_accept(struct sipsess **sessp, struct sipsess_sock *sock,
 	else
 		err = sip_treplyf(&sess->st, NULL, sess->sip,
 				  msg, true, scode, reason,
-				  "Contact: <sip:%s@%J%s>\r\n"
+				  "%s: <sip:%s@%J%s>\r\n"
 				  "%v"
-				  "%s%s%s"
-				  "Content-Length: %zu\r\n"
+				  "%s%s%s%s"
+				  "%s: %zu\r\n"
 				  "\r\n"
 				  "%b",
+				  sip_hname(SIP_HDR_CONTACT),
 				  sess->cuser, &msg->dst,
 				  sip_transp_param(msg->tp),
 				  fmt, &ap,
-				  desc ? "Content-Type: " : "",
+				  desc ? sip_hname(SIP_HDR_CONTENT_TYPE) : "",
+				  desc ? ": " : "",
 				  desc ? sess->ctype : "",
 				  desc ? "\r\n" : "",
+				  sip_hname(SIP_HDR_CONTENT_LENGTH),
 				  desc ? mbuf_get_left(desc) : (size_t)0,
 				  desc ? mbuf_buf(desc) : NULL,
 				  desc ? mbuf_get_left(desc) : (size_t)0);
@@ -162,18 +165,21 @@ int sipsess_progress(struct sipsess *sess, uint16_t scode, const char *reason,
 
 	err = sip_treplyf(&sess->st, NULL, sess->sip, sess->msg, true,
 			  scode, reason,
-			  "Contact: <sip:%s@%J%s>\r\n"
+			  "%s: <sip:%s@%J%s>\r\n"
 			  "%v"
-			  "%s%s%s"
-			  "Content-Length: %zu\r\n"
+			  "%s%s%s%s"
+			  "%s: %zu\r\n"
 			  "\r\n"
 			  "%b",
+			  sip_hname(SIP_HDR_CONTACT),
 			  sess->cuser, &sess->msg->dst,
 			  sip_transp_param(sess->msg->tp),
 			  fmt, &ap,
-			  desc ? "Content-Type: " : "",
+			  desc ? sip_hname(SIP_HDR_CONTENT_TYPE) : "",
+			  desc ? ": " : "",
 			  desc ? sess->ctype : "",
 			  desc ? "\r\n" : "",
+			  sip_hname(SIP_HDR_CONTENT_LENGTH),
 			  desc ? mbuf_get_left(desc) : (size_t)0,
 			  desc ? mbuf_buf(desc) : NULL,
 			  desc ? mbuf_get_left(desc) : (size_t)0);

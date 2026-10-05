@@ -67,6 +67,6 @@ int sipsess_bye(struct sipsess *sess, bool reset_ls)
 	return sip_drequestf(&sess->req, sess->sip, true, "BYE",
 			     sess->dlg, 0, sess->auth,
 			     NULL, bye_resp_handler, sess,
-			     "Content-Length: 0\r\n"
-			     "\r\n");
+			     "%s: 0\r\n"
+			     "\r\n", sip_hname(SIP_HDR_CONTENT_LENGTH));
 }

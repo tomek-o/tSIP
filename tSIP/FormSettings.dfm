@@ -57,23 +57,27 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 572
     Height = 496
-    ActivePage = tsLogging
+    ActivePage = tsNetwork
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
     object tsGeneral: TTabSheet
       Caption = 'General'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblGuiScaling: TLabel
         Left = 3
-        Top = 191
+        Top = 214
         Width = 140
         Height = 13
         Caption = 'GUI scaling (restart required)'
       end
       object lblGuiScalingPct: TLabel
         Left = 226
-        Top = 191
+        Top = 214
         Width = 11
         Height = 13
         Caption = '%'
@@ -92,102 +96,110 @@ object frmSettings: TfrmSettings
         Height = 13
         Caption = '(may require restart)'
       end
-      object chbAlwaysOnTop: TCheckBox
+      object chbAutostart: TCheckBox
         Left = 3
         Top = 51
-        Width = 325
+        Width = 526
         Height = 17
-        Caption = 'Window always on top'
+        Caption = 'Run automatically at Windows login (autostart)'
         TabOrder = 2
       end
-      object chbStartMinimizedToTray: TCheckBox
+      object chbAlwaysOnTop: TCheckBox
         Left = 3
         Top = 74
         Width = 325
         Height = 17
-        Caption = 'Start minimized to tray'
+        Caption = 'Window always on top'
         TabOrder = 3
+      end
+      object chbStartMinimizedToTray: TCheckBox
+        Left = 3
+        Top = 97
+        Width = 325
+        Height = 17
+        Caption = 'Start minimized to tray'
+        TabOrder = 4
       end
       object edGuiScaling: TEdit
         Left = 178
-        Top = 188
+        Top = 211
         Width = 42
         Height = 21
-        TabOrder = 8
+        TabOrder = 9
       end
       object chbXBtnMinimize: TCheckBox
         Left = 3
-        Top = 96
+        Top = 119
         Width = 325
         Height = 17
         Caption = 'Minimize to tray when "X" button is pressed'
-        TabOrder = 4
+        TabOrder = 5
       end
       object chbRestoreMainWindowOnIncomingCall: TCheckBox
         Left = 3
-        Top = 119
+        Top = 142
         Width = 382
         Height = 17
         Caption = 'Restore minimized or bring to front main window on incoming call'
-        TabOrder = 5
+        TabOrder = 6
       end
       object chbSingleInstance: TCheckBox
         Left = 3
-        Top = 236
+        Top = 259
         Width = 382
         Height = 17
         Caption = 
           'Single instance (bring previous instance to front if already run' +
           'ning)'
-        TabOrder = 10
+        TabOrder = 11
       end
       object chbNoBeepOnEnterKey: TCheckBox
         Left = 3
-        Top = 257
+        Top = 280
         Width = 382
         Height = 17
         Caption = 
           'Do not beep when using [Enter] in main window to dial or transfe' +
           'r call'
-        TabOrder = 11
+        TabOrder = 12
       end
       object chbFrmMainShowWhenAnsweringCall: TCheckBox
         Left = 3
-        Top = 142
+        Top = 165
         Width = 446
         Height = 17
         Caption = 
           'Show main form when answering call (using tray notifier, shortcu' +
           't, script, ...)'
-        TabOrder = 6
+        TabOrder = 7
       end
       object chbFrmMainShowWhenMakingCall: TCheckBox
         Left = 3
-        Top = 165
+        Top = 188
         Width = 478
         Height = 17
         Caption = 
           'Show main form when making call (using shortcut, script, command' +
           ' line / protocol handler...)'
-        TabOrder = 7
+        TabOrder = 8
       end
       object chbNoTaskbarButtonRestore: TCheckBox
         Left = 3
-        Top = 280
+        Top = 303
         Width = 526
         Height = 17
         Caption = 
           'Do not restore taskbar button when restoring application from tr' +
           'ay'
-        TabOrder = 12
+        TabOrder = 13
       end
       object chbNoTrayIcon: TCheckBox
         Left = 3
-        Top = 213
+        Top = 236
         Width = 526
         Height = 17
         Caption = 'Do not create tray icon (restart required)'
-        TabOrder = 9
+        TabOrder = 10
       end
       object cbTranslation: TComboBox
         Left = 75
@@ -195,7 +207,7 @@ object frmSettings: TfrmSettings
         Width = 230
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 0
       end
       object chbTranslationLogMissingKeys: TCheckBox
@@ -368,10 +380,33 @@ object frmSettings: TfrmSettings
         Caption = 'Do not bind to IP'
         TabOrder = 3
       end
+      object chbSipCompactHeadersRfc3261: TCheckBox
+        Left = 3
+        Top = 250
+        Width = 450
+        Height = 17
+        Caption = 'Use compact SIP header names in outgoing messages (RFC 3261)'
+        TabOrder = 9
+        OnClick = chbSipCompactHeadersRfc3261Click
+      end
+      object chbSipCompactHeadersExt: TCheckBox
+        Left = 19
+        Top = 273
+        Width = 520
+        Height = 17
+        Caption = 
+          'also for extension headers (Event, Allow-Events, Refer-To, Refer' +
+          'red-By, Session-Expires)'
+        TabOrder = 10
+      end
     end
     object tsAccount: TTabSheet
       Caption = 'SIP account'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 445
@@ -411,6 +446,10 @@ object frmSettings: TfrmSettings
     object tsTls: TTabSheet
       Caption = 'TLS'
       ImageIndex = 25
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblTlsClientCertificate: TLabel
         Left = 5
         Top = 3
@@ -477,6 +516,10 @@ object frmSettings: TfrmSettings
     object tsMainWindow: TTabSheet
       Caption = 'Main window'
       ImageIndex = 23
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblMainWindowCollapsedSize: TLabel
         Left = 3
         Top = 3
@@ -728,7 +771,7 @@ object frmSettings: TfrmSettings
         Width = 337
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 7
         Text = 
@@ -746,7 +789,7 @@ object frmSettings: TfrmSettings
         Width = 145
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 22
         Text = 'by number'
@@ -850,10 +893,18 @@ object frmSettings: TfrmSettings
       Margins.Bottom = 0
       Caption = 'Dialpad'
       ImageIndex = 24
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblSpeedDialBlfSettings: TLabel
         Left = 2
         Top = 56
@@ -951,7 +1002,7 @@ object frmSettings: TfrmSettings
         Width = 138
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 5
         Text = 'first one'
@@ -972,6 +1023,10 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -1135,6 +1190,10 @@ object frmSettings: TfrmSettings
     object tsMessages: TTabSheet
       Caption = 'Messages'
       ImageIndex = 22
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblMessagesRing: TLabel
         Left = 3
         Top = 35
@@ -1218,6 +1277,10 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -1246,6 +1309,10 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -1340,6 +1407,10 @@ object frmSettings: TfrmSettings
     object tsLockingSettingsPages: TTabSheet
       Caption = 'Settings pages'
       ImageIndex = 26
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblSettingsPagesToHide: TLabel
         Left = 3
         Top = 3
@@ -1362,6 +1433,10 @@ object frmSettings: TfrmSettings
     object tsBranding: TTabSheet
       Caption = 'Branding, bitmaps'
       ImageIndex = 20
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblMainIconFile: TLabel
         Left = 3
         Top = 6
@@ -1600,6 +1675,10 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1819,6 +1898,10 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -1974,7 +2057,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 0
         OnChange = cbSoundInputModChange
       end
@@ -1984,7 +2067,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 1
       end
       object cbSoundOutputMod: TComboBox
@@ -1993,7 +2076,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 4
         OnChange = cbSoundOutputModChange
       end
@@ -2003,7 +2086,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 5
       end
       object cbSoundAlertOutputMod: TComboBox
@@ -2012,7 +2095,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 6
         OnChange = cbSoundAlertOutputModChange
       end
@@ -2022,7 +2105,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 7
       end
       object cbSoundOutputIntercomMod: TComboBox
@@ -2031,7 +2114,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 13
         OnChange = cbSoundOutputIntercomModChange
       end
@@ -2041,7 +2124,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 14
       end
       object btnSelectWaveFile: TButton
@@ -2066,7 +2149,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 9
       end
       object cbSoundRingOutputMod: TComboBox
@@ -2075,7 +2158,7 @@ object frmSettings: TfrmSettings
         Width = 320
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 10
         OnChange = cbSoundRingOutputModChange
       end
@@ -2140,6 +2223,10 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -2237,7 +2324,7 @@ object frmSettings: TfrmSettings
         Width = 206
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 2
         TabOrder = 0
         Text = 'WebRTC'
@@ -2390,6 +2477,10 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -2453,7 +2544,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 1
         Text = '\recordings\ subdirectory (relative)'
@@ -2484,7 +2575,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 5
         Text = 'mono (both sides mixed or one side only)'
@@ -2499,7 +2590,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 1
         TabOrder = 8
         Text = 'automatic - call confirmed state'
@@ -2514,7 +2605,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 9
         Text = 'both local and remote (mixed)'
@@ -2549,7 +2640,7 @@ object frmSettings: TfrmSettings
         Width = 274
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 6
         Text = 'WAVE'
@@ -2569,6 +2660,10 @@ object frmSettings: TfrmSettings
     object tsCodecs: TTabSheet
       Caption = 'Audio codecs'
       ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblAudioCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -2645,10 +2740,18 @@ object frmSettings: TfrmSettings
     object tsVideo: TTabSheet
       Caption = 'Video'
       ImageIndex = 28
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tsVideoCodecs: TTabSheet
       Caption = 'Video codecs'
       ImageIndex = 27
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblVideoCodecsAvailable: TLabel
         Left = 15
         Top = 5
@@ -2725,6 +2828,10 @@ object frmSettings: TfrmSettings
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -2806,7 +2913,7 @@ object frmSettings: TfrmSettings
         Width = 394
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 6
         Text = 'always passive (only using "Access-URL" button)'
@@ -2851,10 +2958,18 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblContactPopup: TLabel
         Left = 2
         Top = 87
@@ -2867,9 +2982,7 @@ object frmSettings: TfrmSettings
         Top = 223
         Width = 490
         Height = 13
-        Caption = 
-          'HTTP query (opens browser with last incoming phone number passed' +
-          ' as parameter on action execute)'
+        Caption = 'HTTP query (opens browser); tags: [number], [name], [sip_name], [phonebook_name]'
       end
       object lblHttpQueryStartMode: TLabel
         Left = 2
@@ -2939,7 +3052,7 @@ object frmSettings: TfrmSettings
         Width = 240
         Height = 21
         Style = csDropDownList
-        ItemHeight = 13
+        ItemHeight = 0
         ItemIndex = 0
         TabOrder = 9
         Text = 'Manual only (HTTP query button)'
@@ -3008,6 +3121,10 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblHistoryMaxEntries: TLabel
         Left = 3
         Top = 249
@@ -3114,7 +3231,7 @@ object frmSettings: TfrmSettings
         Top = 246
         Width = 65
         Height = 21
-        ItemHeight = 13
+        ItemHeight = 0
         TabOrder = 11
         Items.Strings = (
           '100'
@@ -3127,10 +3244,18 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Plugins / phones'
       ImageIndex = 13
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblTrayNotifierGuiScaling: TLabel
         Left = 3
         Top = 71
@@ -3462,6 +3587,10 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -4525,15 +4654,22 @@ object frmSettings: TfrmSettings
         Caption = 'Log only first lines (Request-Line/Status-Line) from messages'
         TabOrder = 1
       end
-
     end
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'
       ImageIndex = 21
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
     end
     object tsMultipleCalls: TTabSheet
       Caption = 'Multi-call'
       ImageIndex = 29
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object lblMultipleCalls: TLabel
         Left = 3
         Top = 3

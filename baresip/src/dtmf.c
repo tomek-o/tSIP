@@ -90,6 +90,7 @@ dtmf_queue_digit(struct dtmf_generator *pg,
 	uint32_t next_pos0 = (pg->output_pos + 1) % DTMF_MAX_DIGITS;
 	uint32_t next_pos1 = (pg->output_pos + 2) % DTMF_MAX_DIGITS;
 	uint32_t n;
+	uint32_t tone_samples, gap_samples;
 
 	if (next_pos0 == pg->input_pos || next_pos1 == pg->input_pos)
 		return (ENOMEM);
@@ -99,8 +100,9 @@ dtmf_queue_digit(struct dtmf_generator *pg,
 	else if (tone_duration == 0)
 		tone_duration = 40;	/* default in milliseconds */
 
-	/* convert to number of samples */
-	tone_duration = (tone_duration * sample_rate) / 1000;
+	/* convert to number of samples (does not fit 16 bits for longer
+	   durations at higher sample rates) */
+	tone_samples = ((uint32_t)tone_duration * sample_rate) / 1000;
 
 	if (gap_duration > 0x1fff)
 		gap_duration = 0x1fff;
@@ -108,7 +110,7 @@ dtmf_queue_digit(struct dtmf_generator *pg,
 		gap_duration = 40;	/* default in milliseconds */
 
 	/* convert to number of samples */
-	gap_duration = (gap_duration * sample_rate) / 1000;
+	gap_samples = ((uint32_t)gap_duration * sample_rate) / 1000;
 
 	/* lookup the frequency */
 	for (n = 0;; n++) {
@@ -119,11 +121,11 @@ dtmf_queue_digit(struct dtmf_generator *pg,
 	}
 
 	dtmf_set_state(pg->state + pg->output_pos,
-	    sample_rate, tone_duration,
+	    sample_rate, tone_samples,
 	    dtmf_to_freq[n].f0, dtmf_to_freq[n].f1);
 
 	dtmf_set_state(pg->state + next_pos0,
-	    sample_rate, gap_duration, 0, 0);
+	    sample_rate, gap_samples, 0, 0);
 
 	pg->output_pos = next_pos1;
 

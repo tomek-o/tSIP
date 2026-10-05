@@ -97,13 +97,15 @@ int sipsess_ack(struct sipsess_sock *sock, struct sip_dialog *dlg,
 
 	err = sip_drequestf(&ack->req, sock->sip, false, "ACK", dlg, cseq,
 			    auth, send_handler, resp_handler, ack,
-			    "%s%s%s"
-			    "Content-Length: %zu\r\n"
+			    "%s%s%s%s"
+			    "%s: %zu\r\n"
 			    "\r\n"
 			    "%b",
-			    desc ? "Content-Type: " : "",
+			    desc ? sip_hname(SIP_HDR_CONTENT_TYPE) : "",
+			    desc ? ": " : "",
 			    desc ? ctype : "",
 			    desc ? "\r\n" : "",
+			    sip_hname(SIP_HDR_CONTENT_LENGTH),
 			    desc ? mbuf_get_left(desc) : (size_t)0,
 			    desc ? mbuf_buf(desc) : NULL,
 			    desc ? mbuf_get_left(desc) : (size_t)0);

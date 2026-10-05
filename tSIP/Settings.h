@@ -82,6 +82,7 @@ public:
 		bool bWindowMaximized;			///< is main window maximized?
 		bool bAlwaysOnTop;
 		bool bStartMinimizedToTray;
+		bool bAutostart;				///< run at Windows login (HKCU Run registry key)
 		bool bSpeedDialVisible;
 		bool bUseClientAreaSizes;
 		bool bHideCallPanel;			///< do not show panel with dialing combobox, call/hangup buttons

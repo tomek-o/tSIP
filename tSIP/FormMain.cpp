@@ -57,6 +57,7 @@
 #include "common\TrayIcon.h"
 #include "common\base64.h"
 
+#include "common/Autostart.h"
 #include <Clipbrd.hpp>
 #include <algorithm>
 #include <assert.h>
@@ -302,6 +303,7 @@ __fastcall TfrmMain::~TfrmMain()
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
 	LoadTranslation();
+	UpdateAutostart();
 
 	if (appSettings.frmMain.bUseCustomCaption)
 	{
@@ -598,9 +600,36 @@ int TfrmMain::UpdateSettingsFromJson(AnsiString json)
 	return status;
 }
 
+void TfrmMain::UpdateAutostart(void)
+{
+	// entry name based on executable name: copies of the application
+	// with different names (e.g. separate profiles) have separate entries
+	AnsiString name = ExtractFileName(ChangeFileExt(Application->ExeName, ""));
+	AnsiString command = "\"" + Application->ExeName + "\"";
+	bool registered = Autostart::IsEnabled(name, command);
+
+	if (appSettings.frmMain.bAutostart)
+	{
+		// also fixes stale entry if executable was moved
+		if (!registered && !Autostart::Enable(name, command))
+		{
+			LOG("Failed to register application for autostart\n");
+		}
+	}
+	else if (registered)
+	{
+		// removing only entry that points to this executable
+		if (!Autostart::Disable(name))
+		{
+			LOG("Failed to remove autostart registration\n");
+		}
+	}
+}
+
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
 	UpdateSize();
+	UpdateAutostart();
 	if (appSettings.frmMain.bKioskMode)
 	{
 		SetKioskMode(appSettings.frmMain.bKioskMode);
@@ -2552,6 +2581,7 @@ void TfrmMain::Redial(void)
 void TfrmMain::HttpQuery(const Call *call)
 {
 	AnsiString target;
+	AnsiString sipName;
 	if (call && call->uri != "" && call->incoming)
 	{
 		target = ExtractNumberFromUri(call->uri);
@@ -2559,6 +2589,7 @@ void TfrmMain::HttpQuery(const Call *call)
 		{
 			target = CleanUri(call->uri);
 		}
+		sipName = call->getPeerName();
 	}
 	else
 	{
@@ -2569,13 +2600,14 @@ void TfrmMain::HttpQuery(const Call *call)
 			if (entry.incoming == true)
 			{
 				target = entry.uri.c_str();
+				sipName = entry.peerName;
 				break;
 			}
 		}
 	}
 	if (target != "")
 	{
-    	OnHttpQuery(target);
+		OnHttpQuery(target, sipName);
 	}
 	else
 	{
@@ -2590,11 +2622,33 @@ void TfrmMain::AccessCallUrl(const Call *call)
 	ShellExecute(NULL, "open", call->accessUrl.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 
-void TfrmMain::OnHttpQuery(AnsiString target)
+static AnsiString HttpQueryUrlEncode(const AnsiString &text)
 {
 	char buf[1024];
-	target = urlencode(buf, sizeof(buf), target.c_str());
-	AnsiString url = StringReplace(appSettings.HttpQuery.url, "[number]", target, TReplaceFlags() << rfReplaceAll);
+	return urlencode(buf, sizeof(buf), text.c_str());
+}
+
+void TfrmMain::OnHttpQuery(AnsiString target, AnsiString sipName)
+{
+	// same as displayed in main window: phonebook name if available, otherwise SIP display name
+	AnsiString phonebookName;
+	Contacts::Entry *entry = contacts.GetEntry(CleanUri(target));
+	if (entry)
+	{
+		phonebookName = entry->description;
+	}
+	// names are passed as UTF-8 (expected in URLs); phonebook names are ANSI,
+	// SIP display name is ANSI only if decoded from UTF-8 for display
+	AnsiString sipNameUtf8 = appSettings.Display.bDecodeUtfDisplayToAnsi ? ::AnsiToUtf8(sipName) : sipName;
+	AnsiString phonebookNameUtf8 = ::AnsiToUtf8(phonebookName);
+	AnsiString nameUtf8 = (entry != NULL) ? phonebookNameUtf8 : sipNameUtf8;
+
+	const TReplaceFlags flags = TReplaceFlags() << rfReplaceAll;
+	AnsiString url = appSettings.HttpQuery.url;
+	url = StringReplace(url, "[number]", HttpQueryUrlEncode(target), flags);
+	url = StringReplace(url, "[name]", HttpQueryUrlEncode(nameUtf8), flags);
+	url = StringReplace(url, "[sip_name]", HttpQueryUrlEncode(sipNameUtf8), flags);
+	url = StringReplace(url, "[phonebook_name]", HttpQueryUrlEncode(phonebookNameUtf8), flags);
 	ShellExecute(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
 }
 

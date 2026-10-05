@@ -312,7 +312,8 @@ static int send_handler(enum sip_transp tp, const struct sa *src,
 	struct sipsub *sub = arg;
 	(void)dst;
 
-	return mbuf_printf(mb, "Contact: <sip:%s@%J%s>\r\n",
+	return mbuf_printf(mb, "%s: <sip:%s@%J%s>\r\n",
+			   sip_hname(SIP_HDR_CONTACT),
                            sub->cuser, src, sip_transp_param(tp));
 }
 
@@ -339,9 +340,10 @@ static int request(struct sipsub *sub, bool reset_ls)
 				     sub->dlg, 0, sub->auth,
 				     send_handler, response_handler, sub,
 				     "%s"
-				     "Content-Length: 0\r\n"
+				     "%s: 0\r\n"
 				     "\r\n",
-				     sub->refer_hdrs);
+				     sub->refer_hdrs,
+				     sip_hname(SIP_HDR_CONTENT_LENGTH));
 	}
 	else {
 		if (sub->terminated)
@@ -351,28 +353,30 @@ static int request(struct sipsub *sub, bool reset_ls)
 			return sip_drequestf(&sub->req, sub->sip, true, "SUBSCRIBE",
 					 sub->dlg, 0, sub->auth,
 					 send_handler, response_handler, sub,
-					 "Event: %H\r\n"
+					 "%s: %H\r\n"
 					 "Accept: %s\r\n"
 					 "Expires: %u\r\n"
 					 "%s"
-					 "Content-Length: 0\r\n"
+					 "%s: 0\r\n"
 					 "\r\n",
-					 print_event, sub,
+					 sip_hname(SIP_HDR_EVENT), print_event, sub,
 					 sub->accept,
 					 sub->expires,
-					 sub->hdrs);
+					 sub->hdrs,
+					 sip_hname(SIP_HDR_CONTENT_LENGTH));
 		} else {
 			return sip_drequestf(&sub->req, sub->sip, true, "SUBSCRIBE",
 					 sub->dlg, 0, sub->auth,
 					 send_handler, response_handler, sub,
-					 "Event: %H\r\n"
+					 "%s: %H\r\n"
 					 "Expires: %u\r\n"
 					 "%s"
-					 "Content-Length: 0\r\n"
+					 "%s: 0\r\n"
 					 "\r\n",
-					 print_event, sub,
+					 sip_hname(SIP_HDR_EVENT), print_event, sub,
 					 sub->expires,
-					 sub->hdrs);
+					 sub->hdrs,
+					 sip_hname(SIP_HDR_CONTENT_LENGTH));
 		}
 	}
 }

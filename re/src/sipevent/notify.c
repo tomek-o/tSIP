@@ -180,7 +180,8 @@ static int send_handler(enum sip_transp tp, const struct sa *src,
 	struct sipnot *not = arg;
 	(void)dst;
 
-	return mbuf_printf(mb, "Contact: <sip:%s@%J%s>\r\n",
+	return mbuf_printf(mb, "%s: <sip:%s@%J%s>\r\n",
+			   sip_hname(SIP_HDR_CONTACT),
                            not->cuser, src, sip_transp_param(tp));
 }
 
@@ -225,15 +226,17 @@ static int print_content(struct re_printf *pf, const struct sipnot *not)
 {
 	if (!not->mb)
 		return re_hprintf(pf,
-				  "Content-Length: 0\r\n"
-				  "\r\n");
+				  "%s: 0\r\n"
+				  "\r\n",
+				  sip_hname(SIP_HDR_CONTENT_LENGTH));
 	else
 		return re_hprintf(pf,
-				  "Content-Type: %s\r\n"
-				  "Content-Length: %zu\r\n"
+				  "%s: %s\r\n"
+				  "%s: %zu\r\n"
 				  "\r\n"
 				  "%b",
-				  not->ctype,
+				  sip_hname(SIP_HDR_CONTENT_TYPE), not->ctype,
+				  sip_hname(SIP_HDR_CONTENT_LENGTH),
 				  mbuf_get_left(not->mb),
 				  mbuf_buf(not->mb),
 				  mbuf_get_left(not->mb));
@@ -253,11 +256,11 @@ static int notify_request(struct sipnot *not, bool reset_ls)
 	return sip_drequestf(&not->req, not->sip, true, "NOTIFY",
 			     not->dlg, 0, not->auth,
 			     send_handler, response_handler, not,
-			     "Event: %H\r\n"
+			     "%s: %H\r\n"
 			     "Subscription-State: %H\r\n"
 			     "%s"
 			     "%H",
-			     print_event, not,
+			     sip_hname(SIP_HDR_EVENT), print_event, not,
 			     print_substate, not,
 			     not->hdrs,
 			     print_content, not);
@@ -287,12 +290,14 @@ int sipnot_reply(struct sipnot *not, const struct sip_msg *msg,
 	expires = (uint32_t)(tmr_get_expire(&not->tmr) / 1000);
 
 	return sip_treplyf(NULL, NULL, not->sip, msg, true, scode, reason,
-			   "Contact: <sip:%s@%J%s>\r\n"
+			   "%s: <sip:%s@%J%s>\r\n"
 			   "Expires: %u\r\n"
-			   "Content-Length: 0\r\n"
+			   "%s: 0\r\n"
 			   "\r\n",
+			   sip_hname(SIP_HDR_CONTACT),
 			   not->cuser, &msg->dst, sip_transp_param(msg->tp),
-			   expires);
+			   expires,
+			   sip_hname(SIP_HDR_CONTENT_LENGTH));
 }
 
 

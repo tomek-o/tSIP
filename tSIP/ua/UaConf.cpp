@@ -237,6 +237,12 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 	uaConfJson.getBool("noIpBind", noIpBind);
 
 	{
+		const Json::Value &jv = uaConfJson["sip"];
+		jv.getBool("compactHeadersRfc3261", sip.compactHeadersRfc3261);
+		jv.getBool("compactHeadersExt", sip.compactHeadersExt);
+	}
+
+	{
 		const Json::Value &uaAvtJson = uaConfJson["avt"];
 		UaConf::Avt prev = avt;
 		avt.portMin = uaAvtJson.get("portMin", avt.portMin).asUInt();
@@ -397,6 +403,8 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	uaConfJson["localAddress"] = netLocal;
 	uaConfJson["ifName"] = netIfName;
 	uaConfJson["noIpBind"] = noIpBind;
+	uaConfJson["sip"]["compactHeadersRfc3261"] = sip.compactHeadersRfc3261;
+	uaConfJson["sip"]["compactHeadersExt"] = sip.compactHeadersExt;
 	uaConfJson["avt"]["portMin"] = avt.portMin;
 	uaConfJson["avt"]["portMax"] = avt.portMax;
 	uaConfJson["avt"]["jbufDelayMin"] = avt.jbufDelayMin;

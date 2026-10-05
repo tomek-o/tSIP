@@ -246,6 +246,8 @@ private:	// User declarations
 	void SetKioskMode(bool state);
 	int UpdateSettingsFromJson(AnsiString json);
 	void UpdateSettings(const Settings &prev);
+	/** \brief Make Windows autostart registration (HKCU Run) match settings */
+	void UpdateAutostart(void);
 	int UpdateButtonsFromJson(AnsiString json);
 	/// \brief Update single button
 	int UpdateButtonFromJson(unsigned int btnId, AnsiString json);
@@ -270,7 +272,11 @@ public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
 	__fastcall ~TfrmMain();
 	void OnPhonebookEdit(AnsiString uri);
-	void OnHttpQuery(AnsiString uri);
+	/** \brief Open HTTP query URL, substituting [number], [name], [sip_name], [phonebook_name]
+		\param uri number/URI of the other party
+		\param sipName SIP (or P-Asserted-Identity) display name of the other party, may be empty
+	*/
+	void OnHttpQuery(AnsiString uri, AnsiString sipName);
 	AnsiString OnGetContactName(AnsiString uri);	
 	void OnProgrammableBtnClick(int id, TProgrammableButton* btn);
 	void OnProgrammableBtnMouseUpDown(int id, TProgrammableButton* btn);

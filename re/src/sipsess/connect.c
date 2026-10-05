@@ -28,7 +28,8 @@ static int send_handler(enum sip_transp tp, const struct sa *src,
 	struct sipsess *sess = arg;
 	(void)dst;
 
-	return mbuf_printf(mb, "Contact: <sip:%s@%J%s>\r\n",
+	return mbuf_printf(mb, "%s: <sip:%s@%J%s>\r\n",
+			   sip_hname(SIP_HDR_CONTACT),
 			   sess->cuser, src, sip_transp_param(tp));
 }
 
@@ -133,15 +134,17 @@ static int invite(struct sipsess *sess)
 			     sess->dlg, 0, sess->auth,
 			     send_handler, invite_resp_handler, sess,
 			     "%b"
-			     "%s%s%s"
-			     "Content-Length: %zu\r\n"
+			     "%s%s%s%s"
+			     "%s: %zu\r\n"
 			     "\r\n"
 			     "%b",
 			     sess->hdrs ? mbuf_buf(sess->hdrs) : NULL,
 			     sess->hdrs ? mbuf_get_left(sess->hdrs) :(size_t)0,
-			     sess->desc ? "Content-Type: " : "",
+			     sess->desc ? sip_hname(SIP_HDR_CONTENT_TYPE) : "",
+			     sess->desc ? ": " : "",
 			     sess->desc ? sess->ctype : "",
 			     sess->desc ? "\r\n" : "",
+			     sip_hname(SIP_HDR_CONTENT_LENGTH),
 			     sess->desc ? mbuf_get_left(sess->desc) :(size_t)0,
 			     sess->desc ? mbuf_buf(sess->desc) : NULL,
 			     sess->desc ? mbuf_get_left(sess->desc):(size_t)0);

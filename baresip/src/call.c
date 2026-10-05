@@ -1986,7 +1986,7 @@ int call_transfer(struct call *call, const char *uri)
 			      auth_handler, call->acc, true,
 			      sipsub_notify_handler, sipsub_close_handler,
 			      call,
-			      "Refer-To: %s\r\n", nuri);
+			      "%s: %s\r\n", sip_hname(SIP_HDR_REFER_TO), nuri);
 	if (err) {
 		DEBUG_WARNING("sipevent_drefer: %m\n", err);
 	}
@@ -2070,7 +2070,8 @@ int call_replace_transfer(struct call *call, struct call *source_call)
 				  sipsess_dialog(call->sess), ua_cuser(call->ua),
 				  auth_handler, call->acc, true,
 				  sipsub_notify_handler, sipsub_close_handler,
-				  call, "Refer-To: %s?Replaces=%r\r\n",
+				  call, "%s: %s?Replaces=%r\r\n",
+				  sip_hname(SIP_HDR_REFER_TO),
 				  source_call->peer_uri, &pl);
 	if (err) {
 		DEBUG_WARNING("call: sipevent_drefer with replaces: %m\n", err);

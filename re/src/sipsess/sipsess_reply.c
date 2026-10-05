@@ -113,17 +113,20 @@ int sipsess_reply_2xx(struct sipsess *sess, const struct sip_msg *msg,
 	err = sip_treplyf(non_invite ? NULL : &sess->st,
 			  reply ? &reply->mb : NULL, sess->sip,
 			  msg, true, scode, reason,
-			  "Contact: <sip:%s@%J%s>\r\n"
+			  "%s: <sip:%s@%J%s>\r\n"
 			  "%v"
-			  "%s%s%s"
-			  "Content-Length: %zu\r\n"
+			  "%s%s%s%s"
+			  "%s: %zu\r\n"
 			  "\r\n"
 			  "%b",
+			  sip_hname(SIP_HDR_CONTACT),
 			  sess->cuser, &msg->dst, sip_transp_param(msg->tp),
 			  fmt, ap,
-			  desc ? "Content-Type: " : "",
+			  desc ? sip_hname(SIP_HDR_CONTENT_TYPE) : "",
+			  desc ? ": " : "",
 			  desc ? sess->ctype : "",
 			  desc ? "\r\n" : "",
+			  sip_hname(SIP_HDR_CONTENT_LENGTH),
 			  desc ? mbuf_get_left(desc) : (size_t)0,
 			  desc ? mbuf_buf(desc) : NULL,
 			  desc ? mbuf_get_left(desc) : (size_t)0);

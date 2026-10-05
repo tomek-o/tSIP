@@ -81,18 +81,22 @@ static int request_copy(struct mbuf **mbp, struct sip_ctrans *ct,
 		return ENOMEM;
 
 	err  = mbuf_printf(mb, "%s %r SIP/2.0\r\n", met, &ct->req->ruri);
-	err |= mbuf_printf(mb, "Via: %r\r\n", &ct->req->via.val);
+	err |= mbuf_printf(mb, "%s: %r\r\n", sip_hname(SIP_HDR_VIA),
+			   &ct->req->via.val);
 	err |= mbuf_write_str(mb, "Max-Forwards: 70\r\n");
 	err |= sip_msg_hdr_apply(ct->req, true, SIP_HDR_ROUTE,
 				 route_handler, mb) ? ENOMEM : 0;
-	err |= mbuf_printf(mb, "To: %r\r\n",
+	err |= mbuf_printf(mb, "%s: %r\r\n", sip_hname(SIP_HDR_TO),
 			   resp ? &resp->to.val : &ct->req->to.val);
-	err |= mbuf_printf(mb, "From: %r\r\n", &ct->req->from.val);
-	err |= mbuf_printf(mb, "Call-ID: %r\r\n", &ct->req->callid);
+	err |= mbuf_printf(mb, "%s: %r\r\n", sip_hname(SIP_HDR_FROM),
+			   &ct->req->from.val);
+	err |= mbuf_printf(mb, "%s: %r\r\n", sip_hname(SIP_HDR_CALL_ID),
+			   &ct->req->callid);
 	err |= mbuf_printf(mb, "CSeq: %u %s\r\n", ct->req->cseq.num, met);
 	if (ct->sip->software)
 		err |= mbuf_printf(mb, "User-Agent: %s\r\n",ct->sip->software);
-	err |= mbuf_write_str(mb, "Content-Length: 0\r\n\r\n");
+	err |= mbuf_printf(mb, "%s: 0\r\n\r\n",
+			   sip_hname(SIP_HDR_CONTENT_LENGTH));
 
 	mb->pos = 0;
 

@@ -1345,5 +1345,26 @@ Version 0.3.15
 	- custom ring files can be assigned to contacts from phonebook
 	- added WASAPI audio module (input and output; can use loopback/output device as audio source)
 	- multiple minor fixes
+
+Version 0.3.16
+	- added options to use compact SIP header names in outgoing messages (Network settings): for RFC 3261 headers and, separately, for extension headers (Event, Allow-Events, Refer-To, Referred-By, Session-Expires)
+	- FIXED: incoming SIP message was dropped if optional Access-URL, Reason or P-Asserted-Identity header could not be decoded
+	- FIXED: possible heap overflow when parsing XML (presence, dialog-info) with malformed short special tags
+	- FIXED: possible buffer overflow in G.722 decoder (large RTP packet)
+	- FIXED: possible out of bounds read when parsing multipart SDP with adjacent boundaries
+	- FIXED: presence: NOTIFY without body for pending/active subscription was rejected with 415
+	- FIXED: BLF (dialog-info): NOTIFY without body for pending/active subscription was rejected with 415 (server could terminate subscription)
+	- FIXED: call recording: possible missing fragments of transmitted audio, clock skew compensation between audio input and output was not working
+	- FIXED: out-of-dialog REFER without Refer-To header was not answered (400 reply was not sent)
+	- HTTP query (Contacts settings): new tags for URL, in addition to [number] (issue #64), e.g. https://www.example.com/newcall?caller=[number]&callername=[name]
+		- [name]: name as displayed in main window - name from phonebook if number is found there, otherwise SIP display name (or P-Asserted-Identity display name, depending on Display settings)
+		- [sip_name]: SIP (or P-Asserted-Identity) display name only, as received with the call
+		- [phonebook_name]: name from phonebook only, empty if number is not found in phonebook
+		- names are passed URL-encoded, as UTF-8; empty name gives empty parameter value
+		- tags work for automatic queries (incoming call), for HTTP query button (last incoming call) and for history context menu
+	- FIXED: video: picture-in-picture selfview was leaving distorted "echo" traces in received video (selfview was drawn into decoder reference picture)
+	- added option to run tSIP automatically at Windows login (General settings; can be combined with "Start minimized to tray")
+		- uses per-user Run registry key (no administrator rights needed), entry is named after executable, so copies with different executable names have separate entries
+		- registration is updated at startup and on settings change, also if executable was moved
 */
 

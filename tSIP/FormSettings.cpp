@@ -244,6 +244,9 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 		UpdateNetworkInterface();
 	}
 	chbNoIpBind->Checked = tmpSettings.uaConf.noIpBind;
+	chbSipCompactHeadersRfc3261->Checked = tmpSettings.uaConf.sip.compactHeadersRfc3261;
+	chbSipCompactHeadersExt->Checked = tmpSettings.uaConf.sip.compactHeadersExt;
+	chbSipCompactHeadersRfc3261Click(NULL);
 
 	edRtpPortMin->Text = tmpSettings.uaConf.avt.portMin;
 	edRtpPortMax->Text = tmpSettings.uaConf.avt.portMax;
@@ -304,6 +307,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	chbAlwaysOnTop->Checked = tmpSettings.frmMain.bAlwaysOnTop;
 	chbStartMinimizedToTray->Checked = tmpSettings.frmMain.bStartMinimizedToTray;
+	chbAutostart->Checked = tmpSettings.frmMain.bAutostart;
 
 	chbTrayNotifierShowOnIncoming->Checked = tmpSettings.trayNotifier.showOnIncoming;
 	chbSkipTrayNotifierIfMainWindowVisible->Checked = tmpSettings.trayNotifier.skipIfMainWindowVisible;
@@ -722,6 +726,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.frmMain.bAlwaysOnTop = chbAlwaysOnTop->Checked;
 	tmpSettings.frmMain.bStartMinimizedToTray = chbStartMinimizedToTray->Checked;
+	tmpSettings.frmMain.bAutostart = chbAutostart->Checked;
 	tmpSettings.trayNotifier.showOnIncoming = chbTrayNotifierShowOnIncoming->Checked;
 	tmpSettings.trayNotifier.skipIfMainWindowVisible = chbSkipTrayNotifierIfMainWindowVisible->Checked;
 	tmpSettings.trayNotifier.showOnOutgoing = this->chbTrayNotifierShowOnOutgoing->Checked;
@@ -889,6 +894,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		tmpSettings.uaConf.netIfName = networkInterfaces[cbNetworkInterfaces->ItemIndex].name.c_str();
 	}
 	tmpSettings.uaConf.noIpBind = chbNoIpBind->Checked;
+	tmpSettings.uaConf.sip.compactHeadersRfc3261 = chbSipCompactHeadersRfc3261->Checked;
+	tmpSettings.uaConf.sip.compactHeadersExt = chbSipCompactHeadersExt->Checked;
 	tmpSettings.uaConf.avt.portMin = StrToIntDef(edRtpPortMin->Text, 0);
 	tmpSettings.uaConf.avt.portMax = StrToIntDef(edRtpPortMax->Text, 0);
 	if (tmpSettings.uaConf.avt.ValidatePorts())
@@ -1640,6 +1647,14 @@ void __fastcall TfrmSettings::chbAudioPreprocessingTxEnabledClick(
       TObject *Sender)
 {
 	AudioPreprocessingUpdate();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::chbSipCompactHeadersRfc3261Click(
+      TObject *Sender)
+{
+	// extension headers only together with RFC 3261 headers
+	chbSipCompactHeadersExt->Enabled = chbSipCompactHeadersRfc3261->Checked;
 }
 //---------------------------------------------------------------------------
 

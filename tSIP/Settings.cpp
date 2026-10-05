@@ -44,7 +44,8 @@ Settings::_frmMain::_frmMain(void):
 	mainPanelHeight(363),
 	bWindowMaximized(false),
 	bAlwaysOnTop(false),
-	bStartMinimizedToTray(false),	
+	bStartMinimizedToTray(false),
+	bAutostart(false),
 	bSpeedDialVisible(false),
 	bUseClientAreaSizes(false),
 	bHideCallPanel(false),
@@ -506,6 +507,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		}
 
 		frmMain.bStartMinimizedToTray = frmMainJson.get("StartMinimizedToTray", frmMain.bStartMinimizedToTray).asBool();
+		frmMainJson.getBool("Autostart", frmMain.bAutostart);
 		frmMain.bXBtnMinimize = frmMainJson.get("XBtnMinimize", frmMain.bXBtnMinimize).asBool();
 		frmMain.bRestoreOnIncomingCall = frmMainJson.get("RestoreOnIncomingCall", frmMain.bRestoreOnIncomingCall).asBool();
 		frmMain.bSingleInstance = frmMainJson.get("SingleInstance", frmMain.bSingleInstance).asBool();
@@ -841,6 +843,7 @@ int Settings::Write(AnsiString asFileName)
 		jv["SpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated"] = frmMain.bSpeedDialIgnoreOrClearDialogInfoRemoteIdentityIfTerminated;
 		jv["DialogInfoPreferredState"] = frmMain.dialogInfoPreferredState;
 		jv["StartMinimizedToTray"] = frmMain.bStartMinimizedToTray;
+		jv["Autostart"] = frmMain.bAutostart;
 		jv["XBtnMinimize"] = frmMain.bXBtnMinimize;
 		jv["RestoreOnIncomingCall"] = frmMain.bRestoreOnIncomingCall;
 		jv["SingleInstance"] = frmMain.bSingleInstance;

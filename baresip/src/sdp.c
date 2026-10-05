@@ -174,6 +174,13 @@ int sdp_decode_multipart(const struct pl *ctype_prm, struct mbuf *mb)
 			return 0;
 
 		p.p = s.p + 2;
+
+		/* next boundary too close: part would have negative length */
+		if (e.p < p.p + bnd.l + 2) {
+			s = e;
+			continue;
+		}
+
 		p.l = e.p - p.p - bnd.l - 2;
 
 		/* valid part in "p" */

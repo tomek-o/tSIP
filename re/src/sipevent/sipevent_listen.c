@@ -323,9 +323,10 @@ static void subscribe_handler(struct sipevent_sock *sock,
 	if (expires > 0 && expires < not->expires_min) {
 		(void)sip_replyf(sip, msg, 423, "Interval Too Brief",
 				 "Min-Expires: %u\r\n"
-				 "Content-Length: 0\r\n"
+				 "%s: 0\r\n"
 				 "\r\n",
-				 not->expires_min);
+				 not->expires_min,
+				 sip_hname(SIP_HDR_CONTENT_LENGTH));
 		return;
 	}
 

@@ -291,7 +291,9 @@ int  sip_listen(struct sip_lsnr **lsnrp, struct sip *sip, bool req,
 int  sip_debug(struct re_printf *pf, const struct sip *sip);
 int  sip_send(struct sip *sip, void *sock, enum sip_transp tp,
 		  const struct sa *dst, struct mbuf *mb);
-void sip_log_messages(struct sip *sip, bool log, bool only_first_lines);		  
+void sip_log_messages(struct sip *sip, bool log, bool only_first_lines);
+void sip_set_compact_headers(bool enabled, bool ext_enabled);
+const char *sip_hname(enum sip_hdrid id);
 
 
 /* transport */

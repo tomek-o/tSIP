@@ -214,8 +214,9 @@ static void target_refresh_handler(struct sipsess_sock *sock,
 			(void)sip_treplyf(NULL, NULL, sip, msg, false,
 					  500, "Server Internal Error",
 					  "Retry-After: %u\r\n"
-					  "Content-Length: 0\r\n"
-					  "\r\n", wait);
+					  "%s: 0\r\n"
+					  "\r\n", wait,
+					  sip_hname(SIP_HDR_CONTENT_LENGTH));
 		}
 		else {
 			(void)sip_treply(NULL, sip, msg, 491,

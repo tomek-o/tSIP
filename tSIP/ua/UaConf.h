@@ -521,6 +521,25 @@ public:
 	std::string netIfName;	///< baresip config_net.ifname
 	bool noIpBind;
 
+	/** \brief Global SIP protocol options */
+	struct Sip {
+		bool compactHeadersRfc3261;	///< use compact header names (RFC 3261 7.3.3) in outgoing messages
+		bool compactHeadersExt;	///< use compact names also for extension headers (Event, Allow-Events, Refer-To, Referred-By, Session-Expires); only with compactHeadersRfc3261
+		Sip(void):
+			compactHeadersRfc3261(false),
+			compactHeadersExt(false)
+		{}
+		bool operator==(const Sip& right) const {
+			return (
+				compactHeadersRfc3261 == right.compactHeadersRfc3261 &&
+				compactHeadersExt == right.compactHeadersExt
+			);
+		}
+		bool operator!=(const Sip& right) const {
+			return !(*this == right);
+		}
+	} sip;
+
 	struct Avt {
 		unsigned int portMin;
 		unsigned int portMax;
@@ -810,6 +829,8 @@ public:
 		if (netIfName != right.netIfName)
 			return false;
 		if (noIpBind != right.noIpBind)
+			return false;
+		if (sip != right.sip)
 			return false;
 		if (avt != right.avt)
 			return false;

@@ -132,9 +132,11 @@ int sip_dialog_alloc(struct sip_dialog **dlgp,
 		if (i == 0)
 			rend = dlg->mb->pos - 2;
 	}
-	err |= mbuf_printf(dlg->mb, "To: <%s>\r\n", to_uri);
+	err |= mbuf_printf(dlg->mb, "%s: <%s>\r\n", sip_hname(SIP_HDR_TO),
+			   to_uri);
 	dlg->cpos = dlg->mb->pos;
-	err |= mbuf_printf(dlg->mb, "From: %s%s%s<%s>;tag=%016llx\r\n",
+	err |= mbuf_printf(dlg->mb, "%s: %s%s%s<%s>;tag=%016llx\r\n",
+			   sip_hname(SIP_HDR_FROM),
 			   from_name ? "\"" : "", from_name,
 			   from_name ? "\" " : "",
 			   from_uri, ltag);
@@ -244,9 +246,10 @@ int sip_dialog_accept(struct sip_dialog **dlgp, const struct sip_msg *msg)
 
 	err |= sip_msg_hdr_apply(msg, true, SIP_HDR_RECORD_ROUTE,
 				 record_route_handler, &renc) ? ENOMEM : 0;
-	err |= mbuf_printf(dlg->mb, "To: %r\r\n", &msg->from.val);
-	err |= mbuf_printf(dlg->mb, "From: %r;tag=%016llx\r\n", &msg->to.val,
-			   msg->tag);
+	err |= mbuf_printf(dlg->mb, "%s: %r\r\n", sip_hname(SIP_HDR_TO),
+			   &msg->from.val);
+	err |= mbuf_printf(dlg->mb, "%s: %r;tag=%016llx\r\n",
+			   sip_hname(SIP_HDR_FROM), &msg->to.val, msg->tag);
 	if (err)
 		goto out;
 
@@ -317,7 +320,7 @@ int sip_dialog_create(struct sip_dialog *dlg, const struct sip_msg *msg)
 
 	err |= sip_msg_hdr_apply(msg, msg->req, SIP_HDR_RECORD_ROUTE,
 				 record_route_handler, &renc) ? ENOMEM : 0;
-	err |= mbuf_printf(renc.mb, "To: %r\r\n",
+	err |= mbuf_printf(renc.mb, "%s: %r\r\n", sip_hname(SIP_HDR_TO),
 			   msg->req ? &msg->from.val : &msg->to.val);
 
 	dlg->mb->pos = dlg->cpos;
@@ -427,7 +430,7 @@ int sip_dialog_fork(struct sip_dialog **dlgp, struct sip_dialog *odlg,
 
 	err |= sip_msg_hdr_apply(msg, msg->req, SIP_HDR_RECORD_ROUTE,
 				 record_route_handler, &renc) ? ENOMEM : 0;
-	err |= mbuf_printf(dlg->mb, "To: %r\r\n",
+	err |= mbuf_printf(dlg->mb, "%s: %r\r\n", sip_hname(SIP_HDR_TO),
 			   msg->req ? &msg->from.val : &msg->to.val);
 
 	odlg->mb->pos = odlg->cpos;
@@ -544,7 +547,8 @@ int sip_dialog_encode(struct mbuf *mb, struct sip_dialog *dlg, uint32_t cseq,
 		return EINVAL;
 
 	err |= mbuf_write_mem(mb, mbuf_buf(dlg->mb), mbuf_get_left(dlg->mb));
-	err |= mbuf_printf(mb, "Call-ID: %s\r\n", dlg->callid);
+	err |= mbuf_printf(mb, "%s: %s\r\n", sip_hname(SIP_HDR_CALL_ID),
+			   dlg->callid);
 	err |= mbuf_printf(mb, "CSeq: %u %s\r\n", strcmp(met, "ACK") ?
 			   dlg->lseq++ : cseq, met);
 
