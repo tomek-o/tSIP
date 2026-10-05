@@ -43,6 +43,7 @@ struct selfview_enc {
 struct selfview_dec {
 	struct vidfilt_dec_st vf;   /**< Inheritance           */
 	struct selfview *selfview;  /**< Ref. to shared state  */
+	struct vidframe *canvas;    /**< Copy of RX frame with selfview drawn */
 };
 
 
@@ -76,6 +77,7 @@ static void decode_destructor(void *arg)
 
 	list_unlink(&st->vf.le);
 	mem_deref(st->selfview);
+	mem_deref(st->canvas);
 }
 
 
@@ -240,6 +242,30 @@ static int decode_pip(struct vidfilt_dec_st *st, struct vidframe *frame)
 	mtx_lock(&sv->lock);
 	if (sv->frame) {
 		struct vidrect rect;
+		int i;
+
+		/* Received frame data is owned by decoder (e.g. ffmpeg keeps it
+		   as reference picture for following frames) - drawing on it
+		   directly would leave "echo" of the selfview in next frames.
+		   Selfview is drawn on a private copy that is passed to display
+		   instead. */
+		if (dec->canvas && (!vidsz_cmp(&dec->canvas->size, &frame->size) ||
+				    dec->canvas->fmt != frame->fmt)) {
+			dec->canvas = mem_deref(dec->canvas);
+		}
+		if (!dec->canvas) {
+			if (vidframe_alloc(&dec->canvas, frame->fmt, &frame->size)) {
+				mtx_unlock(&sv->lock);
+				return 0;	/* show RX frame without selfview */
+			}
+			/* vidframe_copy() skips last line/column of odd-sized frame */
+			vidframe_fill(dec->canvas, 0, 0, 0);
+		}
+		vidframe_copy(dec->canvas, frame);
+		for (i=0; i<4; i++) {
+			frame->data[i]     = dec->canvas->data[i];
+			frame->linesize[i] = dec->canvas->linesize[i];
+		}
 
 		rect.w = min(sv->frame->size.w, frame->size.w/2);
 		rect.h = min(sv->frame->size.h, frame->size.h/2);
@@ -252,10 +278,6 @@ static int decode_pip(struct vidfilt_dec_st *st, struct vidframe *frame)
 		else
 			rect.y = frame->size.h/2;
 
-		/* 	This generates artifacts (looking like kind of echo of selfview) on Windows.
-			Frame is not a deep copy, *data[4] pointers are supplied by ffmpeg and
-			apparently this memory is reused by ffmpeg when video is moving.
-		*/
 		vidconv(frame, sv->frame, &rect);
 
 		vidframe_draw_rect(frame, rect.x, rect.y, rect.w, rect.h,
