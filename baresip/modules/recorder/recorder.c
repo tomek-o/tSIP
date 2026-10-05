@@ -343,7 +343,8 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		int cnt, i;
 		size_t delta;		
 		size_t sizerx = aubuf_cur_size(rec->abrx);
-		size_t sizetx = aubuf_cur_size(rec->abrx);
+		size_t sizetx = aubuf_cur_size(rec->abtx);
+		size_t extra;
 		//DEBUG_WARNING("sizerx=%d, sizetx=%d\n", (int)sizerx, (int)sizetx);
 
 		if (rec->pFile == NULL && rec->enc == NULL) {
@@ -397,20 +398,28 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 			cnt = sizerx;
 		if (sizetx < cnt)
 			cnt = sizetx;
-		// this would effectively insert some silence into one of the directions
-		cnt += delta/2;
 
-		if (cnt + (delta/2) <= sizeof(bufrx))
-		{
-			// this would effectively insert some silence into one of the directions
-			cnt += delta/2;
-		}		
+		// Compensation: read additional half of the difference from the
+		// direction that is ahead and pad the other one with the same
+		// amount of silence. Both reads must not exceed what is buffered:
+		// aubuf_read() on underrun returns only silence for the whole read.
+		extra = (delta/2) & ~(size_t)1;	// whole 16-bit samples
+		if (cnt + extra > sizeof(bufrx))
+			extra = 0;
 
-		aubuf_read(rec->abrx, bufrx, cnt);
-		aubuf_read(rec->abtx, buftx, cnt);
+		if (sizerx > sizetx) {
+			aubuf_read(rec->abrx, (uint8_t*)bufrx, cnt + extra);
+			aubuf_read(rec->abtx, (uint8_t*)buftx, cnt);
+			memset(buftx + cnt, 0, extra);
+		} else {
+			aubuf_read(rec->abrx, (uint8_t*)bufrx, cnt);
+			memset(bufrx + cnt, 0, extra);
+			aubuf_read(rec->abtx, (uint8_t*)buftx, cnt + extra);
+		}
+		cnt += extra;
 	#if 0
 		sizerx = aubuf_cur_size(rec->abrx);
-		sizetx = aubuf_cur_size(rec->abrx);
+		sizetx = aubuf_cur_size(rec->abtx);
 		DEBUG_WARNING("AFTER: sizerx=%d, sizetx=%d\n", (int)sizerx, (int)sizetx);
 	#endif
 		if (rec->paused != rec->pause_request) {
