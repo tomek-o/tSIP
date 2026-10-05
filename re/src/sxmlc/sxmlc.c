@@ -1097,6 +1097,12 @@ static TagType _parse_special_tag(const SXML_CHAR* str, int len, _TAG* tag, XMLN
 	if (sx_strncmp(str, tag->start, tag->len_start))
 		return TAG_NONE;
 
+	/* Start and end delimiters must not overlap, otherwise the content
+	   length below underflows to a huge size_t and the strncpy overflows
+	   the heap (e.g. "<?>" or "<!--->"). Treat as an unfinished tag. */
+	if (len < tag->len_start + tag->len_end)
+		return TAG_PARTIAL;
+
 	if (sx_strncmp(str + len - tag->len_end, tag->end, tag->len_end)) /* There probably is a '>' inside the tag */
 		return TAG_PARTIAL;
 
