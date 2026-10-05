@@ -227,8 +227,10 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg, bool term
 	if (!hdr || 0 != pl_strcasecmp(&hdr->val, "application/dialog-info+xml")) {
 		if (hdr) {
 			DEBUG_WARNING("dialog-info: unsupported content-type: '%r'\n", &hdr->val);
-		} else if (termconf && (mbuf_get_left(msg->mb) == 0)) {
-			/* Ignore missing content type for terminated subscription (e.g. noresource) */
+		} else if (mbuf_get_left(msg->mb) == 0) {
+			/* NOTIFY without body (e.g. pending or terminated subscription):
+			   no dialog info, accept and keep current state */
+			(void)termconf;
 			(void)sip_treply(NULL, sip, msg, 200, "OK");
 			return;
 		}
@@ -236,8 +238,9 @@ static void notify_handler(struct sip *sip, const struct sip_msg *msg, bool term
 		sip_treplyf(NULL, NULL, sip, msg, false,
 			    415, "Unsupported Media Type",
 			    "Accept: application/dialog-info+xml\r\n"
-			    "Content-Length: 0\r\n"
-				"\r\n");
+			    "%s: 0\r\n"
+				"\r\n",
+			    sip_hname(SIP_HDR_CONTENT_LENGTH));
 		return;
 	}
 
