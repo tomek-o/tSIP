@@ -474,6 +474,9 @@ int re_vhprintf(const char *fmt, va_list ap, re_vprintf_h *vph, void *arg)
 			len = local_itoa(num, sa_port(sa), 10, false);
 			memcpy(&ep[eplen], num, len);
 			eplen += len;
+			/* not needed by write_padded (length is passed), but print
+			   handlers may treat data as C string (e.g. "%.*s", CodeGuard) */
+			ep[eplen] = '\0';
 
 			err |= write_padded(ep, eplen, pad, ' ',
 					    plr, NULL, vph, arg);

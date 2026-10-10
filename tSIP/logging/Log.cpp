@@ -8,6 +8,7 @@
 #include "Log.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 #include <sys\timeb.h>
 #include <windows.h>
@@ -205,6 +206,29 @@ void CLog::logRaw(const char *lpData, ...)
 		if (size > (int)sizeof(buf) - 2)
 			size = (int)sizeof(buf) - 2;
 
+		buf[size] = '\0';
+
+		ScopedLock<StaticMutex> lock(mutex);
+		write(buf, size);
+		callback = callbackLog;
+	}
+
+	// see log(): the callback must not run with the lock held
+	if (callback)
+		callback(buf);
+}
+
+void CLog::logRawLen(const char *text, size_t len)
+{
+	char buf[2048]; //determines max message length, same as logRaw()
+	CallbackLog callback = NULL;
+
+	if (text == NULL)
+		return;
+
+	{
+		int size = (len > sizeof(buf) - 2) ? (int)sizeof(buf) - 2 : (int)len;
+		memcpy(buf, text, size);
 		buf[size] = '\0';
 
 		ScopedLock<StaticMutex> lock(mutex);

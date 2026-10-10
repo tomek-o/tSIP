@@ -16,6 +16,13 @@ public:
 	void log(const char *lpData, ...);
 	/** \brief Log formatted text without timestamp */
 	void logRaw(const char *lpData, ...);
+	/** \brief Log already formatted text without timestamp
+		\param text text, does not have to be NUL-terminated
+		\param len number of bytes to log
+		\note use instead of logRaw("%.*s", len, text) - avoids printf reading
+			(or CodeGuard checking) not NUL-terminated buffer beyond len
+	*/
+	void logRawLen(const char *text, size_t len);
 	/** \brief Select output log file
 	 *
 	 *  Empty file name disables logging to file.

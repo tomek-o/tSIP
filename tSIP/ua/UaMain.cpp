@@ -442,17 +442,9 @@ extern "C" int paging_tx_handler(enum paging_tx_event ev)
 static int print_handler_log(const char *p, size_t size, void *arg)
 {
 	(void)arg;
-	if (size < sizeof(int))
-	{
-		// CG access overrun if p points to single character variable (write_padded)
-		char tmp[4] = {0, 0, 0, 0};
-		memcpy(tmp, p, size);
-		CLog::Instance()->logRaw("%.*s", size, tmp);
-	}
-	else
-	{
-		CLog::Instance()->logRaw("%.*s", size, p);
-	}
+	// p is not NUL-terminated (e.g. single padding character or local buffer
+	// in re print.c) - copy exactly size bytes, no "%.*s" formatting
+	CLog::Instance()->logRawLen(p, size);
 	return 0;
 }
 
