@@ -1366,5 +1366,6 @@ Version 0.3.16
 	- added option to run tSIP automatically at Windows login (General settings; can be combined with "Start minimized to tray")
 		- uses per-user Run registry key (no administrator rights needed), entry is named after executable, so copies with different executable names have separate entries
 		- registration is updated at startup and on settings change, also if executable was moved
+	- FIXED video data loss in TX direction; increased socket buffers for both audio and video in both directions, matching baresip
 */
 

@@ -625,7 +625,7 @@ int audio_alloc(struct audio **ap, const struct config *cfg,
 
 	err = stream_alloc(&a->strm, &cfg->avt, call, sdp_sess,
 			   "audio",
-			   16*1024,
+			   64*1024,
 			   mnat, mnat_sess, menc, menc_sess,
 			   stream_recv_handler, NULL, a);
 	if (err)
