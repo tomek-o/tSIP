@@ -67,7 +67,7 @@
 
 
 enum {
-	MAX_BLOCKING = 100,    /**< Maximum time spent in handler in [ms] */
+	MAX_BLOCKING = 30,    /**< Maximum time spent in handler in [ms] */
 #if defined(WIN32) || defined(__WIN32__) || defined (CYGWIN)
 	DEFAULT_MAXFDS = 8192
 #else
@@ -228,7 +228,7 @@ static void fd_handler(struct re *re, int fd, int flags)
 	diff = (uint32_t)(tmr_jiffies() - tick);
 
 	if (diff > MAX_BLOCKING) {
-		DEBUG_WARNING("long async blocking: %u>%u ms (h=%p arg=%p)\n",
+		DEBUG_WARNING("fd handler: long async blocking: %u>%u ms (h=%p arg=%p)\n",
 			      diff, MAX_BLOCKING,
 			      re->fhs[fd].fh, re->fhs[fd].arg);
 	}

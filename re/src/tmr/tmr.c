@@ -60,7 +60,7 @@ static bool inspos_handler_0(struct le *le, void *arg)
 
 
 #if TMR_DEBUG
-static void call_handler(tmr_h *th, void *arg)
+static void tmr_handler_with_debug(tmr_h *th, void *arg)
 {
 	const uint64_t tick = tmr_jiffies();
 	uint32_t diff;
@@ -71,7 +71,7 @@ static void call_handler(tmr_h *th, void *arg)
 	diff = (uint32_t)(tmr_jiffies() - tick);
 
 	if (diff > MAX_BLOCKING) {
-		DEBUG_WARNING("long async blocking: %u>%u ms (h=%p arg=%p)\n",
+		DEBUG_WARNING("timer handler: long async blocking: %u>%u ms (h=%p arg=%p)\n",
 			      diff, MAX_BLOCKING, th, arg);
 	}
 }
@@ -109,7 +109,7 @@ void tmr_poll(struct list *tmrl)
 			continue;
 
 #if TMR_DEBUG
-		call_handler(th, th_arg);
+		tmr_handler_with_debug(th, th_arg);
 #else
 		th(th_arg);
 #endif
