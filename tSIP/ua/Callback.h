@@ -73,6 +73,10 @@ public:
 
 	AnsiString prm;
 
+	/** \brief AUDIO_ERROR: error code from audio module, 0 = end of file
+		(e.g. aufile WAV source); text in prm */
+	int audioErrorCode;
+
 	enum paging_tx_state_e
 	{
 		PAGING_TX_ENDED = 0,
@@ -170,7 +174,8 @@ public:
 		mwiOldMsg(-1),
 		dtmfActive(false),
 		requestUid(0),
-		requestError(0)
+		requestError(0),
+		audioErrorCode(0)
 	{
 	}
 };

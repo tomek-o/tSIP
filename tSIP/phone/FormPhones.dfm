@@ -41,6 +41,15 @@ object frmPhones: TfrmPhones
       TabOrder = 1
       OnClick = btnRefreshListClick
     end
+    object btnPluginSettings: TButton
+      Left = 342
+      Top = 4
+      Width = 161
+      Height = 25
+      Caption = 'Plugin settings...'
+      TabOrder = 2
+      OnClick = btnPluginSettingsClick
+    end
   end
   object lvDlls: TListView
     Left = 0

@@ -3,12 +3,20 @@
 //---------------------------------------------------------------------------
 
 #include "Phone.h"
+#include "tSIP_plugin_v2.h"
 #include "PhoneSettings.h"
+#include "Callback.h"
+#include "ScriptContext.h"
 #include <System.hpp>
 #include <Menus.hpp>
 #include <vector>
 #include <map>
 #include <list>
+
+namespace Json
+{
+	class Value;
+}
 
 struct PhoneConf;
 
@@ -100,6 +108,17 @@ private:
 
 	struct ConnectionInfo connInfo;
 
+	// plugin interface v2 (see tSIP_plugin_v2.h); v1 function pointers stay NULL for v2 plugin
+	bool isV2;
+	/** \brief Manual-reset event, signaled while plugin Stop() is executed:
+		Invoke() calls from plugin threads waiting for main thread are cancelled
+		(main thread is busy in Stop(), plugin may be joining these threads)
+	*/
+	HANDLE stopEventV2;
+	struct TSIP_HOST_API hostApiV2;
+	struct TSIP_PLUGIN_API pluginApiV2;
+	int LoadV2(pfTSipPluginInit init);
+
 	S_PHONE_SETTINGS settings;
 	std::list<TMenuItem*> trayMenuItems;	
 
@@ -116,6 +135,12 @@ private:
 
 	static AnsiString profileDir;
 
+	/** \brief Pass event to plugins using interface v2
+		\param type event type, e.g. "call_state"
+		\param jv event data (JSON object, UTF-8 strings)
+	*/
+	static void NotifyEventV2(const char* type, const Json::Value &jv);
+
 public:
 	/** \brief Make list of valid dlls in supplied location
 	*/
@@ -128,7 +153,11 @@ public:
 
 	static void Close(void);
 
-	static void UpdateRegistrationState(int state);
+	/** \brief Notify plugins about registration state change
+		\details v1 plugins get simplified state (1 = registered, 0 = not registered),
+		v2 plugins get "registration" event
+	*/
+	static void UpdateRegistrationState(int accountId, Callback::reg_state_e state);
 
 	static void UpdateCallState(int state, const char* display);
 
@@ -138,13 +167,76 @@ public:
 
 	static void UpdatePagingTxState(int state);
 
+	/** \brief Notify plugins about MWI state: v1 SetMwi + v2 "mwi" event */
 	static void UpdateMwi(int accountId, unsigned int newMsg, unsigned int oldMsg);
 
 	static int SendMessageText(AnsiString asDllName, AnsiString text);
 
 	static void UpdateAudioError(void);
 
-	static void UpdateProfileDir(AnsiString dir); 
+	enum ShowPluginSettingsStatus {
+		SHOW_SETTINGS_OK = 0,
+		SHOW_SETTINGS_NOT_LOADED = -1,	///< plugin is not active (not loaded)
+		SHOW_SETTINGS_NOT_SUPPORTED = -2	///< plugin does not provide settings window
+	};
+	/** \brief Show settings window of loaded plugin (v1 ShowSettings export or v2 ShowSettings) - main thread
+		\return ShowPluginSettingsStatus value
+	*/
+	static int ShowPluginSettings(AnsiString dllName, HWND parent);
+
+	static void UpdateProfileDir(AnsiString dir);
+
+	/** \brief Call information for plugin interface v2 */
+	struct CallInfoV2
+	{
+		unsigned int uid;
+		Callback::ua_state_e state;
+		bool hasDetails;		///< false if call object is not available (e.g. already closed): fields below are not valid
+		bool incoming;
+		AnsiString peerUri;		///< UTF-8
+		AnsiString peerName;	///< UTF-8
+		CallInfoV2(void):
+			uid(0),
+			state(Callback::CALL_STATE_CLOSED),
+			hasDetails(false),
+			incoming(false)
+		{}
+	};
+
+	/** \brief Notify v2 plugins about call state change ("call_state" event) */
+	static void UpdateCallStateV2(const CallInfoV2 &info);
+
+	// Handlers for plugin v2 Invoke() methods implemented by application; called in main thread.
+	// Return TSIP_OK or TSIP_ERR_* code.
+	typedef std::vector<CallInfoV2> CallInfoV2List;
+	typedef void (__closure *CallbackGetCalls)(CallInfoV2List &calls);
+	/** \param target number or URI, ANSI */
+	typedef int (__closure *CallbackMakeCall)(AnsiString target, unsigned int &callUid);
+	/** \param callUid 0 = current call */
+	typedef int (__closure *CallbackAnswer)(unsigned int callUid);
+	/** \param callUid 0 = current call
+		\param reason ANSI
+	*/
+	typedef int (__closure *CallbackHangup)(unsigned int callUid, int sipCode, AnsiString reason);
+	static CallbackGetCalls callbackGetCalls;
+	static CallbackMakeCall callbackMakeCall;
+	static CallbackAnswer callbackAnswer;
+	static CallbackHangup callbackHangup;
+
+	/** \brief Execute plugin v2 Invoke() request - main thread only */
+	static int ExecuteInvoke(AnsiString method, AnsiString jsonParams, AnsiString &jsonResult);
+
+	// plugin interface v2 host functions
+	static void __stdcall OnLogV2(void *cookie, const char *text);
+	static int __stdcall OnInvokeV2(void *cookie, const char *method, const char *jsonParams, char **jsonResult);
+	static void __stdcall OnFreeV2(void *cookie, void *ptr);
+	static int __stdcall OnSetVariableV2(void *cookie, const char *name, const char *value);
+	static int __stdcall OnGetVariableV2(void *cookie, const char *name, char **value);
+	static int __stdcall OnClearVariableV2(void *cookie, const char *name);
+	static int __stdcall OnQueuePushV2(void *cookie, const char *name, const char *value);
+	static int __stdcall OnQueuePopV2(void *cookie, const char *name, char **value);
+	static int __stdcall OnQueueGetSizeV2(void *cookie, const char *name);
+	static int __stdcall OnQueueClearV2(void *cookie, const char *name);
 
 	/** \brief Constructor
 		\param asDllName	Name of dll used by object to communicate with device
@@ -185,15 +277,33 @@ public:
 	static int __stdcall OnSetAppStatus(void *cookie, const char* id, int priority, const char* text);
 	
 	static void Poll(void);
+	/** \brief Process single queued plugin event
+		\return false if queue was empty
+	*/
+	static bool PollOne(void);
 	typedef int (__closure *CallbackRunScript)(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
 	static void SetCallbackRunScript(CallbackRunScript cb);
+	/** \brief Script execution with full context (v2 RunScript: error returned to plugin) */
+	typedef int (__closure *CallbackRunScriptContext)(const ScriptContext &context, AnsiString script, bool &breakRequest, bool &handled);
+	static CallbackRunScriptContext callbackRunScriptContext;
 
     /** \brief Show device settings window.
      *
      *  Show device settings window. Application doesn't manage any settigs related to input devices. Device dll
      *  is responsible for storing/restoring data and can supply it's own window for this settings.
      */
+	bool HasSettings(void) const {
+		if (isV2)
+			return TSIP_PLUGIN_HAS(&pluginApiV2, ShowSettings) && pluginApiV2.ShowSettings;
+		return dllShowSettings != NULL;
+	}
 	void ShowSettings(HANDLE parent) {
+		if (isV2)
+		{
+			if (TSIP_PLUGIN_HAS(&pluginApiV2, ShowSettings) && pluginApiV2.ShowSettings)
+				pluginApiV2.ShowSettings(parent);
+			return;
+		}
 		if (dllShowSettings)
 			dllShowSettings(parent);
 	}

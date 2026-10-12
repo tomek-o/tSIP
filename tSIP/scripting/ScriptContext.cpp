@@ -10,6 +10,9 @@
 
 ScriptContext::ScriptContext(enum ScriptSource srcType, int srcId):
 	srcType(srcType),
-	srcId(srcId)
+	srcId(srcId),
+	errorText(NULL),
+	outputText(NULL),
+	returnText(NULL)
 {
 }

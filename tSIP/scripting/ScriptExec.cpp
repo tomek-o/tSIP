@@ -192,6 +192,19 @@ int ScriptExec::ClearVariable(const char* name)
 	return 0;
 }
 
+int ScriptExec::GetVariable(const char* name, AnsiString &value)
+{
+	ScopedLock<Mutex> lock(mutexVariables);
+	std::map<AnsiString, AnsiString>::iterator it;
+	it = variables.find(name);
+	if (it == variables.end())
+	{
+		return -1;
+	}
+	value = it->second;
+	return 0;
+}
+
 std::map<AnsiString, AnsiString> ScriptExec::GetVariables(void)
 {
 	ScopedLock<Mutex> lock(mutexVariables);
@@ -339,6 +352,18 @@ static int LuaPrint(lua_State *L)
 	//ret.append("\n");
 	//GetContext(L)->onAddOutputText(ret.c_str());
 	LOG("%s", ret.c_str());
+	ScriptExec *exec = GetContext(L);
+	if (exec && exec->context.outputText)
+	{
+		enum { MAX_OUTPUT = 64 * 1024 };
+		AnsiString &out = *exec->context.outputText;
+		if (out.Length() < MAX_OUTPUT)
+		{
+			out += ret.c_str();
+			if (out.Length() >= MAX_OUTPUT)
+				out = out.SubString(1, MAX_OUTPUT) + "\n[output truncated]";
+		}
+	}
 	return 0;
 }
 
@@ -637,6 +662,47 @@ static int l_SetMute(lua_State* L)
 		LOG("Lua error: call for SetMute() not found\n");
 	}
 	return 0;
+}
+
+static int l_SetSidetone(lua_State* L)
+{
+	Call *call = GetCall(L);
+	if (call == NULL)
+	{
+		LOG("Lua error: call for SetSidetone() not found\n");
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	int argCount = lua_gettop(L);
+	if (argCount < 2)
+	{
+		LOG("Lua error: missing state argument for SetSidetone()\n");
+		lua_pushinteger(L, -1);
+		return 1;
+	}
+	int state = luaL_checkinteger(L, 2);
+	unsigned int level = call->sidetoneLevel;
+	if (argCount >= 3)
+	{
+		int arg = luaL_checkinteger(L, 3);
+		level = (arg < 0) ? 0 : arg;
+	}
+	lua_pushinteger(L, call->setSidetone(state != 0, level) ? 1 : 0);
+	return 1;
+}
+
+static int l_GetSidetone(lua_State* L)
+{
+	Call *call = GetCall(L);
+	if (call == NULL)
+	{
+		lua_pushinteger(L, 0);
+		lua_pushinteger(L, 0);
+		return 2;
+	}
+	lua_pushinteger(L, call->sidetone ? 1 : 0);
+	lua_pushinteger(L, call->sidetoneLevel);
+	return 2;
 }
 
 static int l_ToggleMute(lua_State* L)
@@ -2524,6 +2590,11 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_Answer, "Answer", "Answer current or specified incoming call", "Takes call UID as optional argument to answer specific call.");
 	lua_register2(L, ScriptImp::l_Redial, "Redial", "Redial - action identical to redial button", "Make call using number/URI from last outgoing call.");
 	lua_register2(L, ScriptImp::l_SetMute, "SetMute", "Set mute state for transmitted audio (microphone) of the specified call", "Examples:\nSetMute(callUid, 1) -- mute\nSetMute(callUid, 0) -- unmute");
+	lua_register2(L, ScriptImp::l_SetSidetone, "SetSidetone", "Enable/disable sidetone (transmitted audio mixed into local playback) for the specified call",
+		"SetSidetone(callUid, state, optionalLevel)\nstate: 1 = on, 0 = off\nlevel: percent of transmitted audio level, 0..200, default 50 (or previous value for the call).\n"
+		"Useful when playing audio file or radio as call source - to hear what is transmitted. Sidetone is not recorded.\n"
+		"Works only for call with audio (connected / early media). Returns actual state (1/0).\nExample: SetSidetone(GetCurrentCallUid(), 1, 70)");
+	lua_register2(L, ScriptImp::l_GetSidetone, "GetSidetone", "Get sidetone state and level for current or specified call", "local state, level = GetSidetone(optionalCallUid)");
 	lua_register2(L, ScriptImp::l_ToggleMute, "ToggleMute", "Toggle (reverse) mute state for current or specified call", "Takes callUid as optional argument.");
 	lua_register2(L, ScriptImp::l_GetMute, "GetMute", "Get mute state for current call or specified call", "Takes callUid as optional argument, returns 0/1.");
 	lua_register2(L, ScriptImp::l_SetHold, "SetHold", "Set hold state for specified call", "Example: SetHold(callUid, 1).");
@@ -2685,8 +2756,32 @@ void ScriptExec::Run(const char* script)
 	}
 	globalsSetComplete = true;
 
+	int stackBase = lua_gettop(L);
 	int res = luaL_dostring(L, script);
-	if(res != 0)
+	if (res == 0 && context.returnText)
+	{
+		// values returned by chunk (luaL_dostring: LUA_MULTRET)
+		AnsiString text;
+		int top = lua_gettop(L);
+		for (int i = stackBase + 1; i <= top; i++)
+		{
+			if (i > stackBase + 1)
+				text += "\t";
+			lua_getglobal(L, "tostring");
+			lua_pushvalue(L, i);
+			lua_call(L, 1, 1);
+			const char *s = lua_tostring(L, -1);
+			text += s ? s : "";
+			lua_pop(L, 1);
+		}
+		*context.returnText = text;
+	}
+	if (res != 0 && context.errorText)
+	{
+		const char *err = lua_tostring(L, -1);
+		*context.errorText = err ? err : "unknown error";
+	}
+	else if(res != 0)
 	{
 		AnsiString txt;
 		txt.sprintf("Execution error\n\n"

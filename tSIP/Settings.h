@@ -190,7 +190,8 @@ public:
 	struct _Calls
 	{
 		AnsiString extraHeaderLines;
-		bool bDisconnectCallOnAudioError;
+		bool bDisconnectCallOnAudioError;		///< audio device error
+		bool bDisconnectCallOnAudioFileEnd;		///< end of audio (WAV) file used as call audio source
 		bool enableAutoAnswerEvenIfAnotherCallIsActive;
 		bool autoHoldWhenSwitchingCalls;				///< automatically hold inactive / unhold new active call when switching between calls
 		bool autoSwitchToCallAnsweredFromTray;
@@ -209,6 +210,7 @@ public:
 
 		_Calls(void):
 			bDisconnectCallOnAudioError(true),
+			bDisconnectCallOnAudioFileEnd(true),
 			enableAutoAnswerEvenIfAnotherCallIsActive(false),
 			autoHoldWhenSwitchingCalls(true),
 			autoSwitchToCallAnsweredFromTray(true)

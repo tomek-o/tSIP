@@ -30,6 +30,10 @@ public:
 		float amplitude4 = 0.0f, float frequency4 = 0.0f);
 	void Hold(unsigned int callUid, bool state);
 	void Mute(unsigned int callUid, bool state);
+	/** \brief Sidetone (transmitted audio mixed into local playback) for call
+		\param level percent of transmitted audio level (0..200)
+	*/
+	void Sidetone(unsigned int callUid, bool state, unsigned int level);
 	void Hangup(unsigned int callUid, int code=0, AnsiString reason = "Busy Here");
 	void SetMsgLogging(bool enabled, bool onlyFirstLines);
 	void SetAubufLogging(bool enabled);	

@@ -41,6 +41,7 @@ public:
 		CONFERENCE_START,
 		SEND_CUSTOM_CALL_REQUEST,	///< send a SIP request of an arbitrary method within an existing call's dialog
 		RESUBSCRIBE,		///< force an immediate re-SUBSCRIBE of presence and dialog-info (BLF) subscriptions
+		SIDETONE,			///< bEnabled, code = level [%]
 
 		TYPE__LIMITER
 	} type;

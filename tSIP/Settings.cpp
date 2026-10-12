@@ -592,6 +592,9 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		const Json::Value &CallsJson = root["Calls"];
 		CallsJson.getAString("ExtraHeaderLines", Calls.extraHeaderLines);
 		CallsJson.getBool("DisconnectCallOnAudioError", Calls.bDisconnectCallOnAudioError);
+		// earlier versions: single setting for device error and end of file
+		Calls.bDisconnectCallOnAudioFileEnd = Calls.bDisconnectCallOnAudioError;
+		CallsJson.getBool("DisconnectCallOnAudioFileEnd", Calls.bDisconnectCallOnAudioFileEnd);
 		CallsJson.getBool("EnableAutoAnswerEvenIfAnotherCallIsActive", Calls.enableAutoAnswerEvenIfAnotherCallIsActive);
 		CallsJson.getBool("AutoHoldWhenSwitchingCalls", Calls.autoHoldWhenSwitchingCalls);
 		CallsJson.getBool("AutoSwitchToCallAnsweredFromTray", Calls.autoSwitchToCallAnsweredFromTray);
@@ -911,6 +914,7 @@ int Settings::Write(AnsiString asFileName)
 		Json::Value &jv = root["Calls"];
 		jv["ExtraHeaderLines"] = Calls.extraHeaderLines.c_str();
 		jv["DisconnectCallOnAudioError"] = Calls.bDisconnectCallOnAudioError;
+		jv["DisconnectCallOnAudioFileEnd"] = Calls.bDisconnectCallOnAudioFileEnd;
 		jv["EnableAutoAnswerEvenIfAnotherCallIsActive"] = Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
 		jv["AutoHoldWhenSwitchingCalls"] = Calls.autoHoldWhenSwitchingCalls;
 		jv["AutoSwitchToCallAnsweredFromTray"] = Calls.autoSwitchToCallAnsweredFromTray;

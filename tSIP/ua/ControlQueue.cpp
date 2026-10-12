@@ -215,6 +215,19 @@ void ControlQueue::Mute(unsigned int callUid, bool state)
 	fifo.push();
 }
 
+void ControlQueue::Sidetone(unsigned int callUid, bool state, unsigned int level)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::SIDETONE;
+	cmd->callUid = callUid;
+	cmd->bEnabled = state;
+	cmd->code = static_cast<int>(level);
+	fifo.push();
+}
+
 void ControlQueue::SetMsgLogging(bool enabled, bool onlyFirstLines)
 {
 	ScopedLock<Mutex> lock(mutex);

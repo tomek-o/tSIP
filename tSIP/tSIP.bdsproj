@@ -448,6 +448,7 @@
         <FILE FILENAME="logging\FormLog.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormLog" FORMNAME="frmLog" DESIGNCLASS="" ADDITIONAL="logging\FormLog.h"/>
         <FILE FILENAME="scripting\ScriptExec.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScriptExec" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\ScriptExec.h"/>
         <FILE FILENAME="phone\PhoneInterface.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PhoneInterface" FORMNAME="" DESIGNCLASS="" ADDITIONAL="phone\PhoneInterface.h"/>
+        <FILE FILENAME="phone\PluginV2Methods.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="PluginV2Methods" FORMNAME="" DESIGNCLASS="" ADDITIONAL="phone\PluginV2Methods.h"/>
         <FILE FILENAME="contacts\FormContactsCsvImport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactsCsvImport" FORMNAME="frmContactsCsvImport" DESIGNCLASS="" ADDITIONAL="contacts\FormContactsCsvImport.h"/>
         <FILE FILENAME="contacts\FormContacts.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContacts" FORMNAME="frmContacts" DESIGNCLASS="" ADDITIONAL="contacts\FormContacts.h"/>
         <FILE FILENAME="contacts\FormContactPopup.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormContactPopup" FORMNAME="frmContactPopup" DESIGNCLASS="" ADDITIONAL="contacts\FormContactPopup.h"/>

@@ -1167,9 +1167,19 @@ object frmSettings: TfrmSettings
         Width = 462
         Height = 17
         Caption = 
-          'Disconnect call on audio error (disable when using "on audio err' +
-          'or" script event)'
+          'Disconnect call on audio device error (disable when using "on au' +
+          'dio error" script event)'
         TabOrder = 10
+      end
+      object chbDisconnectCallOnAudioFileEnd: TCheckBox
+        Left = 3
+        Top = 333
+        Width = 462
+        Height = 17
+        Caption = 
+          'Disconnect call at end of audio file used as source (e.g. playin' +
+          'g announcement)'
+        TabOrder = 12
       end
       object edAutoAnswerReason: TEdit
         Left = 381

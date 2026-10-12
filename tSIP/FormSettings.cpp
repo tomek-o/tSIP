@@ -511,6 +511,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	memoCallsExtraHeaderLines->Text = tmpSettings.Calls.extraHeaderLines;
 	chbDisconnectCallOnAudioError->Checked = tmpSettings.Calls.bDisconnectCallOnAudioError;
+	chbDisconnectCallOnAudioFileEnd->Checked = tmpSettings.Calls.bDisconnectCallOnAudioFileEnd;
 	chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked = tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive;
 	chbCallsAutoHoldWhenSwitchingCalls->Checked = tmpSettings.Calls.autoHoldWhenSwitchingCalls;
 	chbCallsAutoSwitchToCallAnsweredFromTray->Checked = tmpSettings.Calls.autoSwitchToCallAnsweredFromTray;
@@ -986,6 +987,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.Calls.extraHeaderLines = memoCallsExtraHeaderLines->Text.Trim();
 	tmpSettings.Calls.bDisconnectCallOnAudioError = chbDisconnectCallOnAudioError->Checked;
+	tmpSettings.Calls.bDisconnectCallOnAudioFileEnd = chbDisconnectCallOnAudioFileEnd->Checked;
 	tmpSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive = chbCallsEnableAutoAnswerEvenIfAnotherCallIsActive->Checked;
 	tmpSettings.Calls.autoHoldWhenSwitchingCalls = chbCallsAutoHoldWhenSwitchingCalls->Checked;
 	tmpSettings.Calls.autoSwitchToCallAnsweredFromTray = chbCallsAutoSwitchToCallAnsweredFromTray->Checked;

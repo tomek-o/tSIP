@@ -106,3 +106,24 @@ void __fastcall TfrmPhones::lvDllsDblClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TfrmPhones::btnPluginSettingsClick(TObject *Sender)
+{
+	if (!lvDlls->Selected)
+	{
+		MessageBox(this->Handle, "Select plugin first.", this->Caption.c_str(), MB_ICONINFORMATION);
+		return;
+	}
+	const DllInfo &info = PhoneInterface::dlls[lvDlls->Selected->Index];
+	int status = PhoneInterface::ShowPluginSettings(info.name, this->Handle);
+	if (status == PhoneInterface::SHOW_SETTINGS_NOT_LOADED)
+	{
+		MessageBox(this->Handle, "Plugin is not active (not loaded).\r\nActivate it and apply settings first.",
+			this->Caption.c_str(), MB_ICONINFORMATION);
+	}
+	else if (status == PhoneInterface::SHOW_SETTINGS_NOT_SUPPORTED)
+	{
+		MessageBox(this->Handle, "This plugin does not provide settings window.",
+			this->Caption.c_str(), MB_ICONINFORMATION);
+	}
+}
+//---------------------------------------------------------------------------

@@ -61,6 +61,23 @@ void Call::setHold(bool state)
 	ShowOnLineButton();
 }
 
+bool Call::setSidetone(bool state, unsigned int level)
+{
+	if (connected == false && progress == false)
+	{
+		if (state)
+			LOG("Call %u: no audio yet, cannot enable sidetone\n", uid);
+		state = false;
+	}
+	if (level > 200)
+		level = 200;
+	LOG("Call %u: sidetone %s, level %u%%\n", uid, state ? "on" : "off", level);
+	sidetone = state;
+	sidetoneLevel = level;
+	UA->Sidetone(uid, state, level);
+	return sidetone;
+}
+
 void Call::setMute(bool state)
 {
 	if (connected == false && progress == false)

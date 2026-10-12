@@ -22,10 +22,12 @@ __published:	// IDE-managed Components
 	TButton *btnToggleActivation;
 	TListView *lvDlls;
 	TButton *btnRefreshList;
+	TButton *btnPluginSettings;
 	void __fastcall lvDllsData(TObject *Sender, TListItem *Item);
 	void __fastcall btnToggleActivationClick(TObject *Sender);
 	void __fastcall btnRefreshListClick(TObject *Sender);
 	void __fastcall lvDllsDblClick(TObject *Sender);
+	void __fastcall btnPluginSettingsClick(TObject *Sender);
 private:	// User declarations
 	std::list<PhoneConf> *cfg;
 	PhoneConf* FindCfg(AnsiString dllName);

@@ -293,8 +293,13 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		UA_CB->ChangeRegState(0, reg_state, prm);
 		break;
 	case UA_EVENT_AUDIO_ERROR:
-		UA_CB->NotifyAudioError(callUid);
+	{
+		// prm: "<error code>,<text>"; error code 0: end of file (e.g. aufile)
+		int errorCode = prm ? atoi(prm) : 0;
+		const char *comma = prm ? strchr(prm, ',') : NULL;
+		UA_CB->NotifyAudioError(callUid, errorCode, comma ? comma + 1 : "");
 		break;
+	}
 	default:
 		assert(!"Unhandled UA event");
 	}
@@ -1133,6 +1138,15 @@ extern "C" void control_handler(void)
 		if (cmdCall)
 		{
 			call_hold(cmdCall, cmd.bEnabled);
+		}
+		break;
+	case Command::SIDETONE:
+		if (cmdCall)
+		{
+			struct audio *audio = call_audio(cmdCall);
+			int err = audio ? sidetone_set(audio, cmd.bEnabled, static_cast<unsigned int>(cmd.code)) : ENOENT;
+			if (err)
+				DEBUG_WARNING("SIDETONE: could not set sidetone for call (%m)\n", err);
 		}
 		break;
 	case Command::MUTE:

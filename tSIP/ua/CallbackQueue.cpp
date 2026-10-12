@@ -199,7 +199,7 @@ void CallbackQueue::NotifyEventTalk(void)
 	fifo.push();
 }
 
-void CallbackQueue::NotifyAudioError(int callUid)
+void CallbackQueue::NotifyAudioError(int callUid, int errorCode, AnsiString text)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -207,6 +207,8 @@ void CallbackQueue::NotifyAudioError(int callUid)
 		return;
 	cb->type = Callback::AUDIO_ERROR;
 	cb->callUid = callUid;
+	cb->audioErrorCode = errorCode;
+	cb->prm = text;
 	fifo.push();
 }
 

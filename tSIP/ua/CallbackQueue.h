@@ -32,7 +32,7 @@ public:
 	void ChangePagingTxState(Callback::paging_tx_state_e state);
 	void NotifyEventTalk(void);
 	void SetCallData(AnsiString initialRxInvite);
-	void NotifyAudioError(int callUid);
+	void NotifyAudioError(int callUid, int errorCode, AnsiString text);
 	void NotifyCustomRequestStatus(int requestUid, int requestError, int sipStatusCode, AnsiString requestReplyText);
 	void OnMessageReceived(AnsiString caller, AnsiString contentType, AnsiString body);
 	void OnMessageStatus(int requestUid, int requestError, int sipStatusCode, AnsiString reason);

@@ -105,7 +105,7 @@ static inline const char* GetPhoneKeyName(enum E_KEY key)
 	case KEY_8:
         return "8";
 	case KEY_9:
-        return "*";
+        return "9";
 	case KEY_STAR:
         return "*";
 	case KEY_HASH:

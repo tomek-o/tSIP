@@ -130,6 +130,11 @@ int configure(void)
 		load_module2(NULL, &modname);
     }
 
+	/* sidetone mixing: processed in RX after recorder (not recorded)
+	   and before AEC (AEC reference contains sidetone) */
+	pl_set_str(&modname, "sidetone_mix");
+	load_module2(NULL, &modname);
+
 	if (cfg->recording.enabled) {
 		pl_set_str(&modname, "recorder");
 		load_module2(NULL, &modname);
@@ -139,7 +144,11 @@ int configure(void)
 	// placing it after recorder seems to be safer
 	// it may actually require separating this into two modules: softvol_tx and softvol_rx
 	pl_set_str(&modname, "softvol");
-	load_module2(NULL, &modname);	
+	load_module2(NULL, &modname);
+
+	/* sidetone source: transmitted audio after TX softvol */
+	pl_set_str(&modname, "sidetone_tap");
+	load_module2(NULL, &modname);
 
 	pl_set_str(&modname, "stun");
 	load_module2(NULL, &modname);

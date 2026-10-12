@@ -1367,5 +1367,18 @@ Version 0.3.16
 		- uses per-user Run registry key (no administrator rights needed), entry is named after executable, so copies with different executable names have separate entries
 		- registration is updated at startup and on settings change, also if executable was moved
 	- FIXED video data loss in TX direction; increased socket buffers for both audio and video in both directions, matching baresip
+	- plugins:
+		- added plugin interface v2 (see _doc/plugin_interface_v2.md, tSIP_plugin_v2.h); existing (v1) plugin interface is kept unchanged - v1 plugins should keep working without rebuilding
+			- single export tSipPluginInit, function tables with size field (append-only, compatible in both directions)
+			- JSON events: call_state (with call UID), registration, mwi
+			- generic Invoke calls, usable also from plugin threads (marshalled to main thread): GetAppInfo, GetCalls, GetRegistration, GetHistory, SearchContacts, Call, Answer, Hangup, Hold, Mute, Transfer, SendDtmf, StartRecording, SendMessage, GetMessages, ListAudioDevices, SetAudioInput, SetAudioOutput, PlayAudioFile, GetCallAudioState (incl. received audio level), Sidetone, RunScript, RestartPlugin
+			- direct thread-safe access to variables and queues shared with Lua
+			- synchronous RunScript returns script return values, print() output and Lua execution error (instead of modal error dialog blocking main thread); Invoke may return error details ({"error":...})
+			- Invoke calls from plugin threads are cancelled while plugin is being stopped (no GUI freeze when plugin joins its threads in Stop())
+		- added "Plugin settings..." button to plugin list (Settings / Plugins), showing settings window of active plugin (v1: optional ShowSettings export, v2: ShowSettings)
+		- requests queued by plugins (scripts, keys etc.) are processed faster - all pending requests at once and without waiting for the next poll timer tick
+		- FIXED possible deadlock when plugin was deactivated or tSIP was closing while plugin thread was calling tSIP functions (Invoke, RunScriptAsync, SetVariable etc.)
+	- calls: end of audio (WAV) file used as call audio source is distinguished from audio device error - separate setting "Disconnect call at end of audio file" (initialized from previous single setting); file played by plugin (PlayAudioFile) never disconnects call
+	- audio: added sidetone (transmitted audio mixed into local playback, e.g. to hear played WAV file or radio input), controlled per call: Lua SetSidetone/GetSidetone, plugin interface v2 Sidetone method; sidetone is not recorded and is processed before AEC
 */
 

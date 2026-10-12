@@ -51,6 +51,9 @@ public:
 	AnsiString codecName;
 	void* displayParentHandle;
 	unsigned int audioErrorCount;
+	/** \brief Do not disconnect call at end of audio file regardless of settings -
+		file played on request (e.g. plugin PlayAudioFile), requester decides what next */
+	bool keepCallAtAudioFileEnd;
 	int btnId;
 	bool hold;
 	bool mute;
@@ -90,9 +93,12 @@ public:
 		recording(false),
 		displayParentHandle(NULL),
 		audioErrorCount(0),
+		keepCallAtAudioFileEnd(false),
 		btnId(-1),
 		hold(false),
 		mute(false),
+		sidetone(false),
+		sidetoneLevel(50),
 		tmrAutoAnswer(NULL),
 		autoAnswerCode(200),
 		autoAnswerIntercom(false)
@@ -102,6 +108,11 @@ public:
 
 	void setHold(bool state);
 	void setMute(bool state);
+	bool sidetone;					///< transmitted audio mixed into local playback
+	unsigned int sidetoneLevel;		///< percent of transmitted audio level
+	/** \brief Enable/disable sidetone; works only if call has audio (connected or early media)
+		\return actual state */
+	bool setSidetone(bool state, unsigned int level);
 	AnsiString getPeerUri(void) const;
 	AnsiString getPeerName(void) const;
 	AnsiString getStateName(void) const;

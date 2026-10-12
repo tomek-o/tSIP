@@ -467,6 +467,10 @@ int auplay_alloc(struct auplay_st **stp, const char *name,
  */
 unsigned int softvol_get_rx_level(void);
 
+/* sidetone (modules/sidetone): transmitted audio mixed into local playback, per call */
+int sidetone_set(const struct audio *au, bool enabled, unsigned int level);
+int sidetone_get(const struct audio *au, bool *enabled, unsigned int *level);
+
 /*
  * WASAPI device names - provided by wasapi module
  */

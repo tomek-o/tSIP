@@ -11,6 +11,7 @@
 #include "Settings.h"
 #include "ProgrammableButtons.h"
 #include "ScriptContext.h"
+#include "PhoneInterface.h"
 #include <Menus.hpp>
 #include <ActnList.hpp>
 #include <ImgList.hpp>
@@ -235,6 +236,11 @@ private:	// User declarations
 	void RegisterGlobalHotKeys(void);
 	void ExecAction(const struct Action& action);
 	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
+	// plugin interface v2 Invoke() handlers (main thread)
+	void OnPluginGetCalls(PhoneInterface::CallInfoV2List &calls);
+	int OnPluginMakeCall(AnsiString target, unsigned int &callUid);
+	int OnPluginAnswer(unsigned int callUid);
+	int OnPluginHangup(unsigned int callUid, int sipCode, AnsiString reason);
 	int RunScript2(const ScriptContext &context, AnsiString script, bool &breakRequest, bool &handled);
 
 	bool notificationIconState;

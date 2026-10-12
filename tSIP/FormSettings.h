@@ -275,6 +275,7 @@ __published:	// IDE-managed Components
 	TBitBtn *btnSelectedScriptOnProgrammableButtonEdit;
 	TCheckBox *chbHideSpeedDialToggleButton;
 	TCheckBox *chbDisconnectCallOnAudioError;
+	TCheckBox *chbDisconnectCallOnAudioFileEnd;
 	TLabel *lblScriptOnAudioError;
 	TEdit *edScriptOnAudioErrorFile;
 	TButton *btnSelectedScriptOnAudioErrorChange;

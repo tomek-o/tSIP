@@ -24,6 +24,16 @@ struct ScriptContext
 	AnsiString simpleMessageContentType;
 	///@}
 
+	/** \brief If not NULL: execution error text is stored here instead of
+		showing error dialog (e.g. script run by plugin - error is returned to plugin,
+		modal dialog would block main thread)
+	*/
+	AnsiString *errorText;
+	/** \brief If not NULL: print() output is also appended here (limited size) */
+	AnsiString *outputText;
+	/** \brief If not NULL: values returned by script (return ...) as text, tab-separated */
+	AnsiString *returnText;
+
 	ScriptContext(enum ScriptSource srcType, int srcId);
 };
 

@@ -27,6 +27,8 @@ extern const struct mod_export exports_nullaudio;
 extern const struct mod_export exports_gzrtp;
 extern const struct mod_export exports_srtp;
 extern const struct mod_export exports_mixminus;
+extern const struct mod_export exports_sidetone_tap;
+extern const struct mod_export exports_sidetone_mix;
 #ifdef USE_VIDEO
 extern const struct mod_export exports_avcodec;
 extern const struct mod_export exports_dshow;
@@ -64,6 +66,8 @@ const struct mod_export *mod_table[] = {
 	&exports_gzrtp,
 	&exports_srtp,
 	&exports_mixminus,
+	&exports_sidetone_tap,
+	&exports_sidetone_mix,
 #ifdef USE_VIDEO
 	&exports_avcodec,
 	&exports_dshow,

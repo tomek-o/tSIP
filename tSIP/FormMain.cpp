@@ -6,6 +6,7 @@
 #include "FormMain.h"
 #include "CommandLine.h"
 #include "Paths.h"
+#include "PluginV2Methods.h"
 #include "Bitmaps.h"
 #include "Branding.h"
 #include "AppStatus.h"
@@ -129,6 +130,22 @@ namespace {
 			return ::Utf8ToAnsi(displayName);
 		else
 			return displayName;
+	}
+
+	PhoneInterface::CallInfoV2 GetCallInfoV2(unsigned int uid, Callback::ua_state_e state)
+	{
+		PhoneInterface::CallInfoV2 info;
+		info.uid = uid;
+		info.state = state;
+		Call *call = Calls::FindByUid(uid);
+		if (call)
+		{
+			info.hasDetails = true;
+			info.incoming = call->incoming;
+			info.peerUri = ::AnsiToUtf8(call->getPeerUri());
+			info.peerName = PluginV2Methods::PeerNameToUtf8(call->getPeerName());
+		}
+		return info;
 	}
 
 	AnsiString GetContactsFileName(void)
@@ -920,12 +937,18 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackClearDial = OnPhoneClearDial;
 	PhoneInterface::callbackRedial = Redial;
 	PhoneInterface::callbackGetNumberDescription = OnGetNumberDescription;
+	PhoneInterface::callbackGetCalls = OnPluginGetCalls;
+	PhoneInterface::callbackMakeCall = OnPluginMakeCall;
+	PhoneInterface::callbackAnswer = OnPluginAnswer;
+	PhoneInterface::callbackHangup = OnPluginHangup;
+	PhoneInterface::callbackRunScriptContext = RunScript2;
+	PluginV2Methods::SetCallbackStartRecording(StartRecording);
 	PhoneInterface::trayPopupMenu = popupTray;
 
 	PhoneInterface::EnumerateDlls(dir + "\\phone");
 	PhoneInterface::UpdateProfileDir(dir);
 	PhoneInterface::SetCfg(appSettings.phoneConf);
-	PhoneInterface::UpdateRegistrationState(0);
+	PhoneInterface::UpdateRegistrationState(0, Callback::REG_STATE_UNREGISTER_OK);
 	PhoneInterface::UpdateCallState(0, "");
 	PhoneInterface::UpdatePagingTxState(0);	
 
@@ -1972,6 +1995,8 @@ void TfrmMain::PollCallbackQueue(void)
             	frmTrayNotifier->SetCallState(cb.state);
 			}
 
+			PhoneInterface::UpdateCallStateV2(GetCallInfoV2(cb.callUid, cb.state));
+
 			if (appSettings.Scripts.onCallState != "")
 			{
 				AnsiString asScriptFile;
@@ -2071,12 +2096,8 @@ void TfrmMain::PollCallbackQueue(void)
 
 			if (cb.reg_state == Callback::REG_STATE_REGISTER_OK) {
 				HandleCommandLine();
-				PhoneInterface::UpdateRegistrationState(1);
 			}
-			else
-			{
-				PhoneInterface::UpdateRegistrationState(0);
-			}
+			PhoneInterface::UpdateRegistrationState(cb.accountId, cb.reg_state);
 
 			if (appSettings.Scripts.onRegistrationState != "")
 			{
@@ -2371,9 +2392,15 @@ void TfrmMain::PollCallbackQueue(void)
 					RunScriptFile(SCRIPT_SRC_ON_AUDIO_ERROR, cb.callUid, asScriptFile.c_str(), handled);
 				}
 				PhoneInterface::UpdateAudioError();
-				if (appSettings.Calls.bDisconnectCallOnAudioError && !handled)
+				bool endOfFile = (cb.audioErrorCode == 0);
+				LOG("Call %u: audio %s (%d, %s)\n", call->uid, endOfFile ? "end of file" : "error",
+					cb.audioErrorCode, cb.prm.c_str());
+				bool disconnect = endOfFile ?
+					(appSettings.Calls.bDisconnectCallOnAudioFileEnd && !call->keepCallAtAudioFileEnd) :
+					appSettings.Calls.bDisconnectCallOnAudioError;
+				if (disconnect && !handled)
 				{
-					LOG("Disconnecting call %u on audio error or end of file\n", call->uid);
+					LOG("Disconnecting call %u on audio %s\n", call->uid, endOfFile ? "end of file" : "error");
 					Hangup(call->uid);
 				}
 			}
@@ -2650,6 +2677,38 @@ void TfrmMain::OnHttpQuery(AnsiString target, AnsiString sipName)
 	url = StringReplace(url, "[sip_name]", HttpQueryUrlEncode(sipNameUtf8), flags);
 	url = StringReplace(url, "[phonebook_name]", HttpQueryUrlEncode(phonebookNameUtf8), flags);
 	ShellExecute(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
+}
+
+void TfrmMain::OnPluginGetCalls(PhoneInterface::CallInfoV2List &calls)
+{
+	const std::vector<Calls::CallInfo> info = Calls::GetCallsInfo();
+	for (unsigned int i=0; i<info.size(); i++)
+	{
+		calls.push_back(GetCallInfoV2(info[i].uid, info[i].state));
+	}
+}
+
+int TfrmMain::OnPluginMakeCall(AnsiString target, unsigned int &callUid)
+{
+	if (MakeCall(target, callUid) != 0)
+		return TSIP_ERR_GENERIC;
+	return TSIP_OK;
+}
+
+int TfrmMain::OnPluginAnswer(unsigned int callUid)
+{
+	if (!PluginV2Methods::ResolveCallUid(callUid))
+		return TSIP_ERR_NOT_AVAILABLE;
+	Answer(callUid);
+	return TSIP_OK;
+}
+
+int TfrmMain::OnPluginHangup(unsigned int callUid, int sipCode, AnsiString reason)
+{
+	if (!PluginV2Methods::ResolveCallUid(callUid))
+		return TSIP_ERR_NOT_AVAILABLE;
+	Hangup(callUid, sipCode, reason);
+	return TSIP_OK;
 }
 
 
