@@ -56,6 +56,7 @@ struct mix_st {
 
 static struct list states;
 static struct lock *lock = NULL;
+static int modules_open = 0;	/* tap + mix share lock */
 
 
 static void state_destructor(void *arg)
@@ -321,13 +322,30 @@ static struct aufilt sidetone_mix = {
 };
 
 
-/* Module is registered twice (two exports) so that each filter can be placed
-   at its own position in filter list (load order) */
-static int tap_module_init(void)
+static int shared_init(void)
 {
 	int err = 0;
 	if (!lock)
 		err = lock_alloc(&lock);
+	if (!err)
+		modules_open++;
+	return err;
+}
+
+
+/* lock is freed when both filters are unregistered */
+static void shared_close(void)
+{
+	if (modules_open > 0 && --modules_open == 0)
+		lock = mem_deref(lock);
+}
+
+
+/* Module is registered twice (two exports) so that each filter can be placed
+   at its own position in filter list (load order) */
+static int tap_module_init(void)
+{
+	int err = shared_init();
 	if (err)
 		return err;
 	aufilt_register(&sidetone_tap);
@@ -338,15 +356,14 @@ static int tap_module_init(void)
 static int tap_module_close(void)
 {
 	aufilt_unregister(&sidetone_tap);
+	shared_close();
 	return 0;
 }
 
 
 static int mix_module_init(void)
 {
-	int err = 0;
-	if (!lock)
-		err = lock_alloc(&lock);
+	int err = shared_init();
 	if (err)
 		return err;
 	aufilt_register(&sidetone_mix);
@@ -357,6 +374,7 @@ static int mix_module_init(void)
 static int mix_module_close(void)
 {
 	aufilt_unregister(&sidetone_mix);
+	shared_close();
 	return 0;
 }
 
