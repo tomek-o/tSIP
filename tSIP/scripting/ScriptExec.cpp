@@ -848,6 +848,37 @@ static int l_SetCallTarget(lua_State* L)
 	return 0;
 }
 
+static int l_SetCallExtraHeaderLines(lua_State* L)
+{
+	const char* str = lua_tostring( L, 1 );
+	if (str == NULL)
+	{
+		LOG("Lua error: str == NULL\n");
+		return 0;
+	}
+	Call* call = Calls::GetCurrentCall();
+	if (call)
+	{
+		call->extraHeaderLines = str;
+	}
+	else
+	{
+		LOG("Lua error: no call for SetCallExtraHeaderLines\n");
+	}
+	return 0;
+}
+
+static int l_GetCallExtraHeaderLines(lua_State* L)
+{
+	Call* call = Calls::GetCurrentCall();
+	if (call)
+	{
+		lua_pushstring( L, call->extraHeaderLines.c_str() );
+		return 1;
+	}
+	return 0;
+}
+
 static int l_GetInitialCallTarget(lua_State* L)
 {
 	Call* call = Calls::GetCurrentCall();
@@ -2659,6 +2690,10 @@ void ScriptExec::Run(const char* script)
 
 	lua_register2(L, ScriptImp::l_GetInitialCallTarget, "GetInitialCallTarget", "Get number/URI that was initially dialed by the user", "");
 	lua_register2(L, ScriptImp::l_SetInitialCallTarget, "SetInitialCallTarget", "Override number dialed by the user", "");
+	lua_register2(L, ScriptImp::l_SetCallExtraHeaderLines, "SetCallExtraHeaderLines", "Set extra header lines for INVITE of current (outgoing) call",
+		"Use in \"on making call\" script. Lines are added after extra header lines from settings.\n"
+		"Example: SetCallExtraHeaderLines(\"Subject: test\\r\\nX-Case-Id: 123\")");
+	lua_register2(L, ScriptImp::l_GetCallExtraHeaderLines, "GetCallExtraHeaderLines", "Get per-call extra header lines of current call (e.g. set by plugin)", "");
 	lua_register2(L, ScriptImp::l_SetCallTarget, "SetCallTarget", "Overwrite both initial call target and current URI of the call", "");
 	lua_register2(L, ScriptImp::l_ResetCall, "ResetCall", "Clear whole call state", "Use with care!");
 	lua_register2(L, ScriptImp::l_GetPreviousCallStatusCode, "GetPreviousCallStatusCode", "Get status code of call that ended", "");
