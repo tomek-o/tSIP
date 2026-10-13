@@ -133,10 +133,12 @@ uint64_t tmr_jiffies_usec(void)
 		QueryPerformanceFrequency(&freq);
 
 	QueryPerformanceCounter(&li);
-	li.QuadPart *= 1000000;
-	li.QuadPart /= freq.QuadPart;
-
-	jfs = li.QuadPart;
+	/* counter * 1000000 would overflow 64 bits after ~10.7 days of
+	   uptime with typical 10 MHz counter frequency - convert whole
+	   seconds and remainder separately */
+	jfs  = (uint64_t)(li.QuadPart / freq.QuadPart) * 1000000;
+	jfs += (uint64_t)(li.QuadPart % freq.QuadPart) * 1000000 /
+		(uint64_t)freq.QuadPart;
 #else
 	struct timespec now;
 	clockid_t clock_id;
