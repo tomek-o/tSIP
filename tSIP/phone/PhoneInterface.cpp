@@ -17,6 +17,8 @@
 #include <map>
 #include <deque>
 #include <set>
+#include <ctype.h>
+#include <string.h>
 
 //---------------------------------------------------------------------------
 
@@ -988,8 +990,18 @@ int PhoneInterface::ExecuteInvoke(AnsiString method, AnsiString jsonParams, Ansi
 				return TSIP_ERR_INVALID_ARG;
 			if (!callbackMakeCall)
 				return TSIP_ERR_NOT_AVAILABLE;
+			AnsiString headerLines;
+			if (!params["headers"].isNull())
+			{
+				std::string error;
+				if (!PluginV2Methods::HeadersToLines(params["headers"], headerLines, error))
+				{
+					result["error"] = error;
+					return TSIP_ERR_INVALID_ARG;
+				}
+			}
 			unsigned int callUid = 0;
-			status = callbackMakeCall(::Utf8ToAnsi(params["target"].asString().c_str()), callUid);
+			status = callbackMakeCall(::Utf8ToAnsi(params["target"].asString().c_str()), headerLines, callUid);
 			if (status == TSIP_OK)
 				result["uid"] = callUid;
 		}

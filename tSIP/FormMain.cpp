@@ -1076,6 +1076,11 @@ void __fastcall TfrmMain::btnMakeCallClick(TObject *Sender)
 
 int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 {
+	return MakeCallEx(target, "", callUid);
+}
+
+int TfrmMain::MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid)
+{
 	if (appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED)
 	{
         LOG("Cannot make call: app not started properly\n");
@@ -1091,6 +1096,7 @@ int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 	call.uri = target;
 	call.initialTarget = call.uri;
 	call.dialString = cbCallURI->Text;
+	call.extraHeaderLines = extraHeaderLines;
 	call.SetInitialState(Callback::CALL_STATE_OUTGOING);
 
 	int btnId;
@@ -1119,7 +1125,14 @@ int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 	}
 
 	call.displayParentHandle = GetDisplayParentHandle();
-	UA->Call(0, call.uid, call.initialTarget, appSettings.Calls.extraHeaderLines, appSettings.video.enabled, call.displayParentHandle);
+	AnsiString headers = appSettings.Calls.extraHeaderLines;
+	if (call.extraHeaderLines != "")
+	{
+		if (headers != "" && headers.SubString(headers.Length() - 1, 2) != "\r\n")
+			headers += "\r\n";
+		headers += call.extraHeaderLines;
+	}
+	UA->Call(0, call.uid, call.initialTarget, headers, appSettings.video.enabled, call.displayParentHandle);
 	return 0;	
 }
 
@@ -2688,9 +2701,9 @@ void TfrmMain::OnPluginGetCalls(PhoneInterface::CallInfoV2List &calls)
 	}
 }
 
-int TfrmMain::OnPluginMakeCall(AnsiString target, unsigned int &callUid)
+int TfrmMain::OnPluginMakeCall(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid)
 {
-	if (MakeCall(target, callUid) != 0)
+	if (MakeCallEx(target, extraHeaderLines, callUid) != 0)
 		return TSIP_ERR_GENERIC;
 	return TSIP_OK;
 }

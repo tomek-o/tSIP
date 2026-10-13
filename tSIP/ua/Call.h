@@ -51,6 +51,10 @@ public:
 	AnsiString codecName;
 	void* displayParentHandle;
 	unsigned int audioErrorCount;
+	/** \brief Extra header lines for outgoing INVITE of this call (added after header lines
+		from settings); "Name: value" lines separated with CRLF; set by plugin (Call method) or
+		by Lua (SetCallExtraHeaderLines, e.g. in "on making call" script) */
+	AnsiString extraHeaderLines;
 	/** \brief Do not disconnect call at end of audio file regardless of settings -
 		file played on request (e.g. plugin PlayAudioFile), requester decides what next */
 	bool keepCallAtAudioFileEnd;

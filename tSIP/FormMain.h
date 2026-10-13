@@ -187,6 +187,7 @@ private:	// User declarations
 	void ShowTrayNotifier(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	void HideTrayNotifier(void);
 	int MakeCall(AnsiString target, unsigned int &callUid);
+	int MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid);
 	void CallNumberBackspace(void);
 	void Hangup(unsigned int callUid, int sipCode = 486, AnsiString reason = "Busy Here");
 	void Answer(unsigned int callUid);
@@ -238,7 +239,7 @@ private:	// User declarations
 	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
 	// plugin interface v2 Invoke() handlers (main thread)
 	void OnPluginGetCalls(PhoneInterface::CallInfoV2List &calls);
-	int OnPluginMakeCall(AnsiString target, unsigned int &callUid);
+	int OnPluginMakeCall(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid);
 	int OnPluginAnswer(unsigned int callUid);
 	int OnPluginHangup(unsigned int callUid, int sipCode, AnsiString reason);
 	int RunScript2(const ScriptContext &context, AnsiString script, bool &breakRequest, bool &handled);

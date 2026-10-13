@@ -97,7 +97,9 @@ struct TSIP_HOST_API
 		Methods:
 		- "GetAppInfo": {} -> {"exeName", "profileDir", "pluginInterface"}
 		- "GetCalls": {} -> {"calls":[{"uid","incoming","state","stateName","peer","peerName"}]}
-		- "Call": {"target":"..."} -> {"uid":N}
+		- "Call": {"target":"...", "headers":{"Name":"value",...}} -> {"uid":N}; headers (optional):
+			extra header lines for INVITE, added after lines from settings; header names generated
+			by SIP stack (Via, From, To, Call-ID, CSeq, Contact, Route, Content-*, ...) are rejected
 		- "Answer": {"uid":N} (uid optional: current call)
 		- "Hangup": {"uid":N, "sipCode":486, "reason":"Busy Here"} (all optional)
 		- "RunScript": {"script":"...", "async":false}
@@ -136,6 +138,16 @@ struct TSIP_HOST_API
 			end of this file never disconnects the call (regardless of settings)
 		- "GetCallAudioState": {"uid":N} -> {"uid","audioErrorCount","rxLevel"}; rxLevel: peak
 			absolute value of received audio samples over last ~100 ms (0..32767, linear)
+		- "GetCallInvite": {"uid":N} (uid optional) -> {"uid","incoming","invite"}; invite: full text
+			of initial received INVITE (raw SIP message), empty for outgoing call
+		- "SendCustomRequest": {"method":"OPTIONS", "uri":"sip:..."} (out-of-dialog) or
+			{"method":"INFO", "uid":N} (within call dialog, uid optional = current call), optional
+			"headers":{"Name":"value"} -> {"requestUid":N}; INVITE, ACK, CANCEL, BYE, PRACK, UPDATE
+			are not allowed; requests are shared with Lua (GetCustomRequestReply etc.)
+		- "GetCustomRequest": {"requestUid":N, "delete":true} -> {"requestUid", "haveReply",
+			"transportError", "sipStatusCode", "reply"}; last 3 only if haveReply (transportError 0:
+			SIP reply received, otherwise e.g. timeout); delete: forget request if reply is received
+		- "DeleteCustomRequest": {"requestUid":N} - forget request (e.g. plugin stopped waiting)
 		- "Transfer": {"uid":N, "target":"..."} (uid optional) - blind transfer
 		- "SearchContacts": {"query":"...", "limit":20} -> {"contacts":[{"name",
 			"numbers":[...], optional: "company","note"}]}; case-insensitive substring match

@@ -16,6 +16,7 @@
 #include "AudioModules.h"
 #include "Paths.h"
 #include "UaMain.h"
+#include "UaCustomRequests.h"
 #include "common/Utilities.h"
 #include <json/json.h>
 #include <SysUtils.hpp>
@@ -505,8 +506,202 @@ int GetCallAudioState(const Json::Value &params, Json::Value &result)
 	return TSIP_OK;
 }
 
+/** params: uid (optional) -> {"uid", "incoming", "invite": full text of initial received INVITE
+	(raw SIP message as received, empty for outgoing call)} */
+int GetCallInvite(const Json::Value &params, Json::Value &result)
+{
+	unsigned int callUid = params.get("uid", 0).asUInt();
+	if (!PluginV2Methods::ResolveCallUid(callUid))
+		return TSIP_ERR_NOT_AVAILABLE;
+	Call *call = Calls::FindByUid(callUid);
+	result["uid"] = callUid;
+	result["incoming"] = call->incoming;
+	// SIP messages are (normally) UTF-8 already
+	result["invite"] = call->initialRxInvite.c_str();
+	return TSIP_OK;
+}
+
+/** params: method, uri (out-of-dialog request) or uid (request within call dialog, 0/missing:
+	current call), headers (optional, {"Name":"value"}) -> {"requestUid"}; reply: GetCustomRequest */
+int SendCustomRequest(const Json::Value &params, Json::Value &result)
+{
+	// methods changing dialog / call state are handled by SIP stack only
+	static const char* forbidden[] = { "INVITE", "ACK", "CANCEL", "BYE", "PRACK", "UPDATE" };
+	if (!params["method"].isString())
+		return TSIP_ERR_INVALID_ARG;
+	std::string method = params["method"].asString();
+	if (method.empty() || method.size() > 32)
+	{
+		result["error"] = "invalid method";
+		return TSIP_ERR_INVALID_ARG;
+	}
+	for (unsigned int i=0; i<method.size(); i++)
+	{
+		if (!isupper(static_cast<unsigned char>(method[i])))
+		{
+			result["error"] = "method: uppercase letters expected";
+			return TSIP_ERR_INVALID_ARG;
+		}
+	}
+	for (unsigned int i=0; i<sizeof(forbidden)/sizeof(forbidden[0]); i++)
+	{
+		if (method == forbidden[i])
+		{
+			result["error"] = "method " + method + " cannot be sent as custom request";
+			return TSIP_ERR_INVALID_ARG;
+		}
+	}
+	AnsiString headerLines;
+	if (!params["headers"].isNull())
+	{
+		std::string error;
+		if (!PluginV2Methods::HeadersToLines(params["headers"], headerLines, error))
+		{
+			result["error"] = error;
+			return TSIP_ERR_INVALID_ARG;
+		}
+	}
+	int requestUid = -1;
+	int status;
+	if (params["uri"].isString())
+	{
+		std::string uri = params["uri"].asString();
+		if (uri.empty() || uri.find_first_of(std::string("\r\n\0 ", 4)) != std::string::npos)
+		{
+			result["error"] = "invalid uri";
+			return TSIP_ERR_INVALID_ARG;
+		}
+		status = UaCustomRequests::Send(requestUid, uri.c_str(), method.c_str(), headerLines);
+	}
+	else
+	{
+		unsigned int callUid = params.get("uid", 0).asUInt();
+		if (!PluginV2Methods::ResolveCallUid(callUid))
+			return TSIP_ERR_NOT_AVAILABLE;
+		status = UaCustomRequests::SendCustomCallRequest(requestUid, callUid, method.c_str(), headerLines);
+		result["uid"] = callUid;
+	}
+	if (status != 0)
+	{
+		result["error"] = "failed to send request";
+		return TSIP_ERR_GENERIC;
+	}
+	result["requestUid"] = requestUid;
+	return TSIP_OK;
+}
+
+/** params: requestUid, delete (optional bool: forget request after reading if reply is received)
+	-> {"requestUid", "haveReply", "transportError" (transport / timeout error code, 0 = OK),
+	"sipStatusCode", "reply" (full text of reply)} */
+int GetCustomRequest(const Json::Value &params, Json::Value &result)
+{
+	if (!params["requestUid"].isIntegral())
+		return TSIP_ERR_INVALID_ARG;
+	int requestUid = params["requestUid"].asInt();
+	UaCustomRequests::Request *req = UaCustomRequests::GetRequest(requestUid);
+	if (req == NULL)
+		return TSIP_ERR_NOT_AVAILABLE;
+	result["requestUid"] = requestUid;
+	result["haveReply"] = req->haveReply;
+	if (req->haveReply)
+	{
+		// "error" is used for error description in failed Invoke - use different name
+		result["transportError"] = req->error;
+		result["sipStatusCode"] = req->sipStatusCode;
+		result["reply"] = req->replyText.c_str();
+		if (params.get("delete", false).asBool())
+			UaCustomRequests::DeleteRequest(requestUid);
+	}
+	return TSIP_OK;
+}
+
+/** params: requestUid - forget request (e.g. after timeout on plugin side) */
+int DeleteCustomRequest(const Json::Value &params, Json::Value &result)
+{
+	if (!params["requestUid"].isIntegral())
+		return TSIP_ERR_INVALID_ARG;
+	result["requestUid"] = params["requestUid"].asInt();
+	UaCustomRequests::DeleteRequest(params["requestUid"].asInt());
+	return TSIP_OK;
+}
+
 }	// namespace
 
+
+/** \brief Convert {"Name":"value",...} into header lines for INVITE.
+	See declaration.
+*/
+bool PluginV2Methods::HeadersToLines(const Json::Value &headers, AnsiString &lines, std::string &error)
+{
+	static const char* forbidden[] = {
+		"via", "v", "from", "f", "to", "t", "call-id", "i", "cseq", "contact", "m",
+		"route", "record-route", "max-forwards", "content-length", "l", "content-type", "c",
+		"content-encoding", "e", "authorization", "proxy-authorization", "expires"
+	};
+	enum { MAX_HEADERS = 20, MAX_LINE = 1000 };
+	if (!headers.isObject())
+	{
+		error = "headers: object {\"Name\":\"value\"} expected";
+		return false;
+	}
+	if (headers.size() > MAX_HEADERS)
+	{
+		error = "headers: too many headers";
+		return false;
+	}
+	std::string out;
+	Json::Value::Members names = headers.getMemberNames();
+	for (unsigned int i=0; i<names.size(); i++)
+	{
+		const std::string &name = names[i];
+		if (name.empty())
+		{
+			error = "headers: empty header name";
+			return false;
+		}
+		std::string lower;
+		for (unsigned int j=0; j<name.size(); j++)
+		{
+			unsigned char c = name[j];
+			// RFC 3261 token
+			if (!(isalnum(c) || strchr("-.!%*_+`'~", c)) || c > 127)
+			{
+				error = "headers: invalid header name \"" + name + "\"";
+				return false;
+			}
+			lower += static_cast<char>(tolower(c));
+		}
+		for (unsigned int j=0; j<sizeof(forbidden)/sizeof(forbidden[0]); j++)
+		{
+			if (lower == forbidden[j])
+			{
+				error = "headers: \"" + name + "\" cannot be set";
+				return false;
+			}
+		}
+		const Json::Value &jv = headers[name];
+		if (!jv.isString())
+		{
+			error = "headers: value of \"" + name + "\" must be string";
+			return false;
+		}
+		std::string value = jv.asString();
+		if (value.find_first_of(std::string("\r\n\0", 3)) != std::string::npos)
+		{
+			error = "headers: value of \"" + name + "\" contains CR/LF";
+			return false;
+		}
+		std::string line = name + ": " + value;
+		if (line.size() > MAX_LINE)
+		{
+			error = "headers: \"" + name + "\" too long";
+			return false;
+		}
+		out += line + "\r\n";
+	}
+	lines = ::Utf8ToAnsi(out.c_str());
+	return true;
+}
 
 void PluginV2Methods::SetCallbackStartRecording(CallbackStartRecording cb)
 {
@@ -543,6 +738,14 @@ int PluginV2Methods::Execute(const AnsiString &method, const Json::Value &params
 		return PlayAudioFile(params, result);
 	if (method == "GetCallAudioState")
 		return GetCallAudioState(params, result);
+	if (method == "GetCallInvite")
+		return GetCallInvite(params, result);
+	if (method == "SendCustomRequest")
+		return SendCustomRequest(params, result);
+	if (method == "GetCustomRequest")
+		return GetCustomRequest(params, result);
+	if (method == "DeleteCustomRequest")
+		return DeleteCustomRequest(params, result);
 	if (method == "Transfer")
 		return Transfer(params, result);
 	return TSIP_ERR_UNKNOWN_METHOD;

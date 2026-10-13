@@ -210,8 +210,9 @@ public:
 	// Return TSIP_OK or TSIP_ERR_* code.
 	typedef std::vector<CallInfoV2> CallInfoV2List;
 	typedef void (__closure *CallbackGetCalls)(CallInfoV2List &calls);
-	/** \param target number or URI, ANSI */
-	typedef int (__closure *CallbackMakeCall)(AnsiString target, unsigned int &callUid);
+	/** \param target number or URI, ANSI
+		\param extraHeaderLines validated "Name: value" lines separated with CRLF, may be empty */
+	typedef int (__closure *CallbackMakeCall)(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid);
 	/** \param callUid 0 = current call */
 	typedef int (__closure *CallbackAnswer)(unsigned int callUid);
 	/** \param callUid 0 = current call

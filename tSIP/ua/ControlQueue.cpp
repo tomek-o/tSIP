@@ -392,6 +392,27 @@ void ControlQueue::UpdateVolume(void)
 	fifo.push();
 }
 
+namespace {
+
+/** \brief Header (and body) part for custom request: SIP stack sends it as is, it must be
+	complete (end of headers = empty line). Text that contains end of headers (e.g. with body)
+	is passed unchanged; otherwise empty line is added, preceded by "Content-Length: 0" if
+	there is no Content-Length header yet.
+*/
+AnsiString CompleteCustomRequestHeaders(AnsiString text)
+{
+	if (text.Pos("\r\n\r\n") > 0)
+		return text;
+	if (text != "" && text.SubString(text.Length() - 1, 2) != "\r\n")
+		text += "\r\n";
+	AnsiString lower = AnsiString("\r\n") + text.LowerCase();
+	if (lower.Pos("\r\ncontent-length:") == 0 && lower.Pos("\r\nl:") == 0)
+		text += "Content-Length: 0\r\n";
+	return text + "\r\n";
+}
+
+}	// namespace
+
 int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines)
 {
 	ScopedLock<Mutex> lock(mutex);
@@ -417,7 +438,8 @@ int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString
 			}
         }
     }
-	cmd->extraHeaderLines = extraHeaderLines;
+	// SIP stack expects complete header part (with end of headers)
+	cmd->extraHeaderLines = CompleteCustomRequestHeaders(extraHeaderLines);
 	fifo.push();
 	return 0;
 }
@@ -447,7 +469,8 @@ int ControlQueue::SendCustomCallRequest(int requestId, unsigned int callUid, Ans
 			}
         }
     }
-	cmd->extraHeaderLines = extraHeaderLines;
+	// SIP stack expects complete header part (with end of headers)
+	cmd->extraHeaderLines = CompleteCustomRequestHeaders(extraHeaderLines);
 	fifo.push();
 	return 0;
 }
