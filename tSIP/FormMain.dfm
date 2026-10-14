@@ -169,18 +169,10 @@ object frmMain: TfrmMain
       object tsContacts: TTabSheet
         Caption = 'Contacts'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
       object tsHistory: TTabSheet
         Caption = 'History'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
       end
     end
   end
@@ -199,7 +191,7 @@ object frmMain: TfrmMain
     object lbl2ndPartyDesc: TLabel
       Left = 8
       Top = 39
-      Width = 179
+      Width = 220
       Height = 13
       AutoSize = False
       Caption = 'lbl2ndPartyDesc'
@@ -207,7 +199,7 @@ object frmMain: TfrmMain
     object lbl2ndParty: TLabel
       Left = 8
       Top = 55
-      Width = 179
+      Width = 220
       Height = 13
       AutoSize = False
       Caption = 'lbl2ndParty'
@@ -215,7 +207,7 @@ object frmMain: TfrmMain
     object lblCallState: TLabel
       Left = 8
       Top = 71
-      Width = 179
+      Width = 220
       Height = 13
       AutoSize = False
       Caption = 'lblCallState'
