@@ -17,6 +17,7 @@ struct contact {
 	int id;
 	contact_dlginfo_h *dlginfo_h;
 	contact_presence_h *presence_h;
+	struct ua *ua;		/**< UA used for subscriptions, NULL = first UA */
 
 	int dialog_data_cnt;
     struct dialog_data ddata[MAX_DIALOG_DATA_CNT];	
@@ -80,6 +81,34 @@ int contact_add(struct contact **contactp, const struct pl *addr, int id, contac
 		*contactp = c;
 
 	return err;
+}
+
+
+/**
+ * Set User-Agent used for contact subscriptions (presence, dialog-info)
+ *
+ * @param c  Contact
+ * @param ua User-Agent; NULL = first UA
+ */
+void contact_set_ua(struct contact *c, struct ua *ua)
+{
+	if (c)
+		c->ua = ua;
+}
+
+
+/**
+ * Get User-Agent used for contact subscriptions
+ *
+ * @param c Contact
+ *
+ * @return User-Agent set with contact_set_ua(), otherwise first UA
+ */
+struct ua *contact_ua(const struct contact *c)
+{
+	if (c && c->ua)
+		return c->ua;
+	return uag_find_aor(NULL);
 }
 
 

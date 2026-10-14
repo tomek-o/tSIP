@@ -3,6 +3,8 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <map>
+
 #include "FormMain.h"
 #include "CommandLine.h"
 #include "Paths.h"
@@ -86,11 +88,16 @@ namespace {
 		{}
 	} pagingTx;
 	struct Registration {
+		bool known;			///< any registration state received for account
 		int state;
+		AnsiString prm;		///< failure reason
 		Registration(void):
+			known(false),
 			state(0)
 		{}
-	} registration;
+	};
+	/** Registration state for each account (key = account id) */
+	std::map<int, Registration> registrations;
 
 	Contacts::Entry *lastContactEntry = NULL;
 	void ShowContactPopup(Contacts::Entry *entry)
@@ -144,6 +151,7 @@ namespace {
 			info.incoming = call->incoming;
 			info.peerUri = ::AnsiToUtf8(call->getPeerUri());
 			info.peerName = PluginV2Methods::PeerNameToUtf8(call->getPeerName());
+			info.accountId = call->accountId;
 		}
 		return info;
 	}
@@ -256,7 +264,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	lbl2ndParty->Caption = "";
 	lbl2ndPartyDesc->Caption = "";
 	lblCallState->Caption = "";
-	frmHistory = new TfrmHistory(this->tsHistory, &history, appSettings.history, &MakeCall, &OnPhonebookEdit, &OnHttpQuery);
+	frmHistory = new TfrmHistory(this->tsHistory, &history, appSettings.history, &MakeCallOnAccount, &OnPhonebookEdit, &OnHttpQuery);
 	frmHistory->Scale(appSettings.gui.scalingPct);
 	frmHistory->Parent = tsHistory;
 	frmHistory->Visible = true;
@@ -520,6 +528,7 @@ void TfrmMain::InitButtons(void)
 	buttons.UseContextMenu(appSettings.frmMain.bSpeedDialPopupMenu);
 
 	UpdateAutoAnswer();
+	UpdateAccountButtons();
 	Calls::OnButtonConfigChange();
 }
 
@@ -645,6 +654,8 @@ void TfrmMain::UpdateAutostart(void)
 
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
+	UpdateRegistrationStatus();
+	UpdateAccountButtons();
 	UpdateSize();
 	UpdateAutostart();
 	if (appSettings.frmMain.bKioskMode)
@@ -943,6 +954,20 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackHangup = OnPluginHangup;
 	PhoneInterface::callbackRunScriptContext = RunScript2;
 	PluginV2Methods::SetCallbackStartRecording(StartRecording);
+	ScriptExec::onSetCurrentAccount = SetCurrentAccount;
+	ScriptExec::onCallOnAccount = MakeCallOnAccount;
+	PluginV2Methods::SetCallbackSetCurrentAccount(SetCurrentAccount);
+	// account selection: tray menu and status bar click
+	miTrayAccount = new TMenuItem(popupTray);
+	miTrayAccount->Visible = false;
+	popupTray->Items->Insert(0, miTrayAccount);
+	miTrayAccountSeparator = new TMenuItem(popupTray);
+	miTrayAccountSeparator->Caption = "-";
+	miTrayAccountSeparator->Visible = false;
+	popupTray->Items->Insert(1, miTrayAccountSeparator);
+	popupTray->OnPopup = popupTrayPopup;
+	popupAccount = new TPopupMenu(this);
+	StatusBar->OnMouseUp = StatusBarMouseUp;
 	PhoneInterface::trayPopupMenu = popupTray;
 
 	PhoneInterface::EnumerateDlls(dir + "\\phone");
@@ -1042,8 +1067,25 @@ void TfrmMain::UpdateCallHistory(void)
 	}
 }
 
+/** Call state description, with account name if multiple accounts are enabled */
+AnsiString TfrmMain::GetCallStateText(const Call *call)
+{
+	AnsiString text = call->getStateTranslatedDescription();
+	AnsiString account = appSettings.GetAccountCallDisplayText(call->accountId);
+	if (account != "")
+		text.cat_sprintf(" [%s]", account.c_str());
+	return text;
+}
+
 void TfrmMain::ShowTrayNotifier(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming)
 {
+	Call *call = Calls::FindByUid(callUid);
+	if (call)
+	{
+		AnsiString account = appSettings.GetAccountCallDisplayText(call->accountId);
+		if (account != "")
+			uri.cat_sprintf(" [%s]", account.c_str());
+	}
 	frmTrayNotifier->SetData(callUid, description, uri, incoming);
 	frmTrayNotifier->ShowWithoutFocus();
 }
@@ -1079,7 +1121,12 @@ int TfrmMain::MakeCall(AnsiString target, unsigned int &callUid)
 	return MakeCallEx(target, "", callUid);
 }
 
-int TfrmMain::MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid)
+int TfrmMain::MakeCallOnAccount(AnsiString target, unsigned int &callUid, int accountId)
+{
+	return MakeCallEx(target, "", callUid, accountId);
+}
+
+int TfrmMain::MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid, int accountId)
 {
 	if (appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED)
 	{
@@ -1097,6 +1144,21 @@ int TfrmMain::MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigne
 	call.initialTarget = call.uri;
 	call.dialString = cbCallURI->Text;
 	call.extraHeaderLines = extraHeaderLines;
+	if (accountId < 0)
+	{
+		// account not specified: use account assigned to contact in phonebook (if any)
+		Contacts::Entry *entry = contacts.GetEntry(CleanUri(target));
+		if (entry && entry->accountId >= 0)
+		{
+			accountId = entry->accountId;
+		}
+	}
+	if (accountId < 0 || accountId >= (int)appSettings.uaConf.accounts.size() ||
+		!appSettings.uaConf.accounts[accountId].enabled)
+	{
+		accountId = appSettings.GetCurrentAccountId();
+	}
+	call.accountId = accountId;
 	call.SetInitialState(Callback::CALL_STATE_OUTGOING);
 
 	int btnId;
@@ -1132,7 +1194,7 @@ int TfrmMain::MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigne
 			headers += "\r\n";
 		headers += call.extraHeaderLines;
 	}
-	UA->Call(0, call.uid, call.initialTarget, headers, appSettings.video.enabled, call.displayParentHandle);
+	UA->Call(call.accountId, call.uid, call.initialTarget, headers, appSettings.video.enabled, call.displayParentHandle);
 	return 0;	
 }
 
@@ -1209,9 +1271,188 @@ int TfrmMain::OnGetStreamingState(void)
 	return pagingTx.state;
 }
 
-int TfrmMain::OnGetRegistrationState(void)
+int TfrmMain::OnGetRegistrationState(int accountId)
 {
-	return registration.state;
+	if (accountId < 0)
+		accountId = appSettings.GetCurrentAccountId();
+	std::map<int, Registration>::iterator it = registrations.find(accountId);
+	if (it == registrations.end())
+		return Callback::REG_STATE_UNREGISTER_OK;
+	return it->second.state;
+}
+
+/** Set account used by default for outgoing calls */
+void TfrmMain::SetCurrentAccount(int accountId)
+{
+	const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+	if (accountId < 0 || accountId >= (int)accounts.size())
+	{
+		LOG("SetCurrentAccount: invalid account id %d\n", accountId);
+		return;
+	}
+	if (!accounts[accountId].enabled)
+	{
+		LOG("SetCurrentAccount: account #%d is disabled\n", accountId + 1);
+		return;
+	}
+	appSettings.currentAccountId = accountId;
+	LOG("Current account: #%d\n", accountId + 1);
+	UpdateRegistrationStatus();
+	UpdateAccountButtons();
+}
+
+/** Registration state of account as short text (menus, hints) */
+AnsiString TfrmMain::GetAccountStateText(int accountId)
+{
+	const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+	if (accountId < 0 || accountId >= (int)accounts.size())
+		return "";
+	const UaConf::Account &acc = accounts[accountId];
+	if (!acc.enabled)
+		return Translate2("TfrmMain.accountDisabled", "Disabled");
+	if (acc.reg_expires == 0)
+		return Translate2("TfrmMain.noRegistration", "No registration");
+	const Registration &reg = registrations[accountId];
+	if (!reg.known)
+		return Translate2("TfrmMain.registering", "Registering...");
+	return Callback::GetRegStateTranslatedDescription(static_cast<Callback::reg_state_e>(reg.state));
+}
+
+/** Status bar hint with state of all accounts; error icon if any account failed to register */
+void TfrmMain::UpdateAccountsHint(void)
+{
+	const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+	AnsiString hint;
+	bool failed = false;
+	for (unsigned int i=0; i<accounts.size(); i++)
+	{
+		const UaConf::Account &acc = accounts[i];
+		if (acc.enabled && acc.reg_expires != 0)
+		{
+			const Registration &reg = registrations[i];
+			if (reg.known && reg.state == Callback::REG_STATE_REGISTER_FAIL)
+				failed = true;
+		}
+		if (accounts.size() > 1)
+		{
+			if (hint != "")
+				hint += "\r\n";
+			hint.cat_sprintf("%s: %s", appSettings.GetAccountDescription(i).c_str(), GetAccountStateText(i).c_str());
+		}
+	}
+	SetErrorIcon(failed);
+	StatusBar->Hint = hint;
+	StatusBar->ShowHint = (hint != "");
+}
+
+/** Fill menu with list of accounts (radio items, selecting current account) */
+void TfrmMain::FillAccountMenu(TMenuItem *parent)
+{
+	parent->Clear();
+	const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+	int current = appSettings.GetCurrentAccountId();
+	for (unsigned int i=0; i<accounts.size(); i++)
+	{
+		TMenuItem *item = new TMenuItem(parent);
+		AnsiString caption = appSettings.GetAccountDescription(i) + " - " + GetAccountStateText(i);
+		item->Caption = StringReplace(caption, "&", "&&", TReplaceFlags() << rfReplaceAll);
+		item->Tag = i;
+		item->RadioItem = true;
+		item->GroupIndex = 1;
+		item->Checked = ((int)i == current);
+		item->Enabled = accounts[i].enabled;
+		item->OnClick = miAccountClick;
+		parent->Add(item);
+	}
+}
+
+void __fastcall TfrmMain::miAccountClick(TObject *Sender)
+{
+	TMenuItem *item = dynamic_cast<TMenuItem*>(Sender);
+	if (item)
+	{
+		SetCurrentAccount(item->Tag);
+	}
+}
+
+void __fastcall TfrmMain::popupTrayPopup(TObject *Sender)
+{
+	bool multipleAccounts = (appSettings.uaConf.accounts.size() > 1);
+	miTrayAccount->Visible = multipleAccounts;
+	miTrayAccountSeparator->Visible = multipleAccounts;
+	if (multipleAccounts)
+	{
+		miTrayAccount->Caption = Translate2("TfrmMain.miTrayAccount", "Account");
+		FillAccountMenu(miTrayAccount);
+	}
+}
+
+void __fastcall TfrmMain::StatusBarMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+	if (appSettings.uaConf.accounts.size() <= 1)
+		return;
+	FillAccountMenu(popupAccount->Items);
+	TPoint pt = StatusBar->ClientToScreen(TPoint(X, Y));
+	popupAccount->Popup(pt.x, pt.y);
+}
+
+void TfrmMain::UpdateAccountButtons(void)
+{
+	int current = appSettings.GetCurrentAccountId();
+	for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+	{
+		const UaConf::Account &acc = appSettings.uaConf.accounts[i];
+		// account without registration (reg_expires = 0) is shown as available
+		bool registered = acc.enabled &&
+			(acc.reg_expires == 0 || registrations[i].state == Callback::REG_STATE_REGISTER_OK);
+		buttons.UpdateAccountState(i, (int)i == current, registered);
+	}
+}
+
+/** Show registration state of current account in status bar */
+void TfrmMain::UpdateRegistrationStatus(void)
+{
+	int accountId = appSettings.GetCurrentAccountId();
+	const Registration &reg = registrations[accountId];
+	Callback::reg_state_e state = static_cast<Callback::reg_state_e>(reg.state);
+	UpdateAccountsHint();
+
+	const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+	if (accountId >= (int)accounts.size())
+	{
+		return;
+	}
+	const UaConf::Account &acc = accounts[accountId];
+
+	AnsiString asRegText;
+	if (acc.reg_expires == 0)
+	{
+		asRegText.cat_sprintf("%s %s@%s", Translate2("TfrmMain.noRegistration", "No registration").c_str(), acc.user.c_str(), acc.reg_server.c_str());
+	}
+	else if (!reg.known)
+	{
+		asRegText.cat_sprintf("%s %s@%s", Translate2("TfrmMain.registering", "Registering...").c_str(), acc.user.c_str(), acc.reg_server.c_str());
+	}
+	else
+	{
+		asRegText += Callback::GetRegStateTranslatedDescription(state);
+		if (state != Callback::REG_STATE_UNREGISTERING &&
+			state != Callback::REG_STATE_UNREGISTER_OK &&
+			state != Callback::REG_STATE_UNREGISTER_FAIL)
+			// skipping acc info for these states (current acc info may be different)
+		{
+			asRegText.cat_sprintf(" %s@%s", acc.user.c_str(), acc.reg_server.c_str());
+			if (state != Callback::REG_STATE_REGISTER_OK)
+			{
+				if (reg.prm.Length() > 0)
+				{
+					// failure reason for registration error
+					asRegText.cat_sprintf(" (%s)", reg.prm.c_str());
+				}
+			}
+		}
+	}
+	SetStatus(asRegText);
 }
 
 void TfrmMain::OnSetTrayIcon(const char* file)
@@ -1510,7 +1751,7 @@ void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 			{
 				unsigned int delta = SecondsBetween(Now(), call->timeTalkStart);
 				AnsiString caption;
-				caption.sprintf("%s, %02d:%02d", call->getStateTranslatedDescription().c_str(), delta/60, delta%60);
+				caption.sprintf("%s, %02d:%02d", GetCallStateText(call).c_str(), delta/60, delta%60);
 				lblCallState->Caption = caption;
 			}
 		}
@@ -1589,6 +1830,8 @@ void TfrmMain::PollCallbackQueue(void)
 				// call structure was allocated earlier by UaMain thread
 				Call *call = Calls::FindByUid(cb.callUid);
 				assert(call);
+				if (cb.accountId >= 0)
+					call->accountId = cb.accountId;
 
                 if (Calls::Count() > 1)
 				{
@@ -1660,7 +1903,7 @@ void TfrmMain::PollCallbackQueue(void)
 							call->tmrAutoAnswer->Enabled = true;
 						}
 					}
-					else if (appSettings.uaConf.autoAnswer)
+					else if (IsAutoAnswerEnabled(call->accountId))
 					{
 						int time = appSettings.uaConf.autoAnswerDelayMin;
 						int delta = appSettings.uaConf.autoAnswerDelayMax - appSettings.uaConf.autoAnswerDelayMin + 1;
@@ -1669,7 +1912,7 @@ void TfrmMain::PollCallbackQueue(void)
 						{
 							time += rand32 % delta;
 						}
-						call->autoAnswerCode = appSettings.uaConf.autoAnswerCode;
+						GetAutoAnswer(call->accountId, call->autoAnswerCode, call->autoAnswerReason);
 						if (time == 0)
 						{
 							AutoAnswer(*call);
@@ -1906,6 +2149,7 @@ void TfrmMain::PollCallbackQueue(void)
 					entry.lastReplyLine = call->lastReplyLine;
 					entry.recordFile = call->recordFile;
 					entry.reason = call->sipReason;
+					entry.accountId = call->accountId;
 
 					if (!(appSettings.history.ignoreCallsCompletedElsewhere && completedElsewhere))
 					{
@@ -2061,51 +2305,14 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::REG_STATE:
 		{
-			AnsiString asRegText = Callback::GetRegStateTranslatedDescription(cb.reg_state);
-			switch(cb.reg_state)
-			{
-			case Callback::REG_STATE_REGISTERING:
-				break;
-			case Callback::REG_STATE_REGISTER_OK:
-				SetErrorIcon(false);
-				break;
-			case Callback::REG_STATE_REGISTER_FAIL:
-				SetErrorIcon(true);
-				break;
-			case Callback::REG_STATE_UNREGISTERING:
-				break;
-			case Callback::REG_STATE_UNREGISTER_OK:
-				break;
-			case Callback::REG_STATE_UNREGISTER_FAIL:
-				break;
-			default:
-				assert(!"Unhandled reg state");
-				break;
-			}
-			registration.state = cb.reg_state;
-
-			if (cb.reg_state != Callback::REG_STATE_UNREGISTERING &&
-				cb.reg_state != Callback::REG_STATE_UNREGISTER_OK &&
-				cb.reg_state != Callback::REG_STATE_UNREGISTER_FAIL)
-				// skipping acc info for these states (current acc info may be different)
-			{
-				if (appSettings.uaConf.accounts.size())
-				{
-					asRegText.cat_sprintf(" %s@%s",
-						appSettings.uaConf.accounts[0].user.c_str(),
-						appSettings.uaConf.accounts[0].reg_server.c_str());
-				}
-				if (cb.reg_state != Callback::REG_STATE_REGISTER_OK && cb.reg_state != Callback::REG_STATE_UNREGISTER_OK)
-				{
-					if (cb.prm.Length() > 0)
-					{
-						// failure reason for registration error
-						asRegText.cat_sprintf(" (%s)", cb.prm.c_str());
-					}
-				}
-			}
-
-			SetStatus(asRegText);		
+			int accountId = (cb.accountId >= 0) ? cb.accountId : 0;
+			LOG("Account #%d registration state: %s\n", accountId, Callback::GetRegStateTranslatedDescription(cb.reg_state).c_str());
+			Registration &reg = registrations[accountId];
+			reg.known = true;
+			reg.state = cb.reg_state;
+			reg.prm = cb.prm;
+			UpdateRegistrationStatus();	// current account text, hint and error icon for all accounts
+			UpdateAccountButtons();
 
 			if (cb.reg_state == Callback::REG_STATE_REGISTER_OK) {
 				HandleCommandLine();
@@ -2117,7 +2324,7 @@ void TfrmMain::PollCallbackQueue(void)
 				AnsiString asScriptFile;
 				bool handled = true;
 				asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onRegistrationState.c_str());
-				RunScriptFile(SCRIPT_SRC_ON_REGISTRATION_STATE, -1, asScriptFile.c_str(), handled);
+				RunScriptFile(SCRIPT_SRC_ON_REGISTRATION_STATE, accountId, asScriptFile.c_str(), handled);
 			}
 
 			break;
@@ -2187,19 +2394,19 @@ void TfrmMain::PollCallbackQueue(void)
 				appStartFailCount = 0;
 				if (appSettings.uaConf.accounts.size())
 				{
-					if (appSettings.uaConf.accounts[0].user.length())
+					const UaConf::Account &acc = appSettings.uaConf.accounts[appSettings.GetCurrentAccountId()];
+					if (acc.user.length())
 					{
 						text.cat_sprintf(": %s@%s",
-							appSettings.uaConf.accounts[0].user.c_str(),
-							appSettings.uaConf.accounts[0].reg_server.c_str());
+							acc.user.c_str(),
+							acc.reg_server.c_str());
 					}
-					else if (appSettings.uaConf.accounts[0].reg_server.length())
+					else if (acc.reg_server.length())
 					{
 						text.cat_sprintf(": %s",
-							appSettings.uaConf.accounts[0].user.c_str(),
-							appSettings.uaConf.accounts[0].reg_server.c_str());
+							acc.reg_server.c_str());
 					}
-					if (appSettings.uaConf.accounts[0].reg_expires == 0)
+					if (acc.reg_expires == 0)
 					{
 						SetStatus(text);
 						HandleCommandLine();
@@ -2336,9 +2543,10 @@ void TfrmMain::PollCallbackQueue(void)
 		}
 		case Callback::MWI_STATE:
 		{
+			int accountId = (cb.accountId >= 0) ? cb.accountId : 0;
 			SetNotificationIcon(cb.mwiNewMsg > 0);
-			buttons.UpdateMwiState(cb.mwiNewMsg, cb.mwiOldMsg);
-			PhoneInterface::UpdateMwi(0 /* account id */, cb.mwiNewMsg, cb.mwiOldMsg);
+			buttons.UpdateMwiState(accountId, cb.mwiNewMsg, cb.mwiOldMsg);
+			PhoneInterface::UpdateMwi(accountId, cb.mwiNewMsg, cb.mwiOldMsg);
 			break;
 		}
 		case Callback::PAGING_TX_STATE:
@@ -2437,7 +2645,7 @@ void TfrmMain::PollCallbackQueue(void)
 		{
 			if (appSettings.uaConf.messages.enabled)
 			{
-				SIMPLE_Messages::OnIncomingMessage(cb.caller, cb.contentType, cb.body);
+				SIMPLE_Messages::OnIncomingMessage(cb.caller, cb.contentType, cb.body, cb.accountId);
 			}
 			else
 			{
@@ -2612,7 +2820,7 @@ void TfrmMain::Redial(void)
 		if (entry.incoming == false)
 		{
 			unsigned int callId;
-			MakeCall(entry.uri.c_str(), callId);
+			MakeCallOnAccount(entry.uri.c_str(), callId, entry.accountId);
 			break;
 		}
 	}
@@ -2701,9 +2909,9 @@ void TfrmMain::OnPluginGetCalls(PhoneInterface::CallInfoV2List &calls)
 	}
 }
 
-int TfrmMain::OnPluginMakeCall(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid)
+int TfrmMain::OnPluginMakeCall(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid, int accountId)
 {
-	if (MakeCallEx(target, extraHeaderLines, callUid) != 0)
+	if (MakeCallEx(target, extraHeaderLines, callUid, accountId) != 0)
 		return TSIP_ERR_GENERIC;
 	return TSIP_OK;
 }
@@ -2821,13 +3029,15 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	case Button::MWI: {
 		unsigned int callUid;
-		MakeCall(cfg.number.c_str(), callUid);
+		MakeCallOnAccount(cfg.number.c_str(), callUid, cfg.GetAccountId());
 		break;
 	}
 	case Button::BLF:
 	case Button::PRESENCE:
 	case Button::SPEED_DIAL: {
 		std::string dial = cfg.number;
+		// BLF / presence: account used for subscription; speed dial: optional account (-1: phonebook / current account)
+		int btnAccountId = (cfg.type == Button::SPEED_DIAL) ? cfg.accountId : cfg.GetAccountId();
 		if (cfg.type == Button::BLF) {
 			// possible override of default number depending on state
 			// (allows definining pickup number like with Yealink phones and more)
@@ -2869,7 +3079,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 			case ButtonConf::BLF_IN_CALL_MAKE_ANOTHER_CALL:
 				{
 					unsigned int callUid;
-					if (MakeCall(dial.c_str(), callUid) == 0)
+					if (MakeCallOnAccount(dial.c_str(), callUid, btnAccountId) == 0)
 					{
 						Calls::SetCurrentCallUid(callUid);
 					}
@@ -2885,7 +3095,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 				{
 					// Ctrl pressed => making new call, possibly for attended transfer
 					unsigned int callUid;
-					if (MakeCall(dial.c_str(), callUid) == 0)
+					if (MakeCallOnAccount(dial.c_str(), callUid, btnAccountId) == 0)
 					{
 						Calls::SetCurrentCallUid(callUid);
 					}
@@ -2899,7 +3109,7 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		else
 		{
 			unsigned int callUid;
-			MakeCall(dial.c_str(), callUid);
+			MakeCallOnAccount(dial.c_str(), callUid, btnAccountId);
 		}
 		break;
 	}
@@ -2982,10 +3192,10 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		break;
 	}
 	case Button::REREGISTER:
-		UA->ReRegister(0);
+		UA->ReRegister(-1);
 		break;
 	case Button::UNREGISTER:
-		UA->UnRegister(0);
+		UA->UnRegister(-1);
 		break;
 	case Button::MUTE: {
 		Call *call = Calls::GetCurrentCall();
@@ -3140,6 +3350,9 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 	case Button::RESUBSCRIBE:
 		UA->Resubscribe();
 		break;
+	case Button::ACCOUNT:
+		SetCurrentAccount(cfg.GetAccountId());
+		break;
 	case Button::SEND_TEXT_MESSAGE: {
 		AnsiString target = cfg.number.c_str();
 		if (target == "")
@@ -3193,18 +3406,32 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		Ua::Instance().Restart();
 		break;
 	case Button::AUTO_ANSWER_DND:
-		if (down)
+		if (cfg.accountId >= 0 && cfg.accountId < (int)appSettings.uaConf.accounts.size())
+		{
+			// per-account auto answer / DND
+			UaConf::Account &acc = appSettings.uaConf.accounts[cfg.accountId];
+			if (down)
+			{
+				acc.autoAnswer = false;
+			}
+			else
+			{
+				acc.autoAnswer = true;
+				acc.autoAnswerCode = cfg.sipCode;
+				acc.autoAnswerReason = cfg.sipReason;
+			}
+		}
+		else if (down)
 		{
 			appSettings.uaConf.autoAnswer = false;
-			UpdateAutoAnswer();
 		}
 		else
 		{
 			appSettings.uaConf.autoAnswer = true;
 			appSettings.uaConf.autoAnswerCode = cfg.sipCode;
 			appSettings.uaConf.autoAnswerReason = cfg.sipReason;
-			UpdateAutoAnswer();
 		}
+		UpdateAutoAnswer();
 		if (appSettings.Write(Paths::GetConfig()) != 0)
 		{
 			LOG("Failed to write main configuration\n");
@@ -3553,7 +3780,7 @@ void TfrmMain::AutoAnswer(Call &call)
 		}
 	} else if (call.autoAnswerCode >= 400) {
 		LOG("Auto-answer (DND) with SIP code = %d\n", call.autoAnswerCode);
-		UA->Hangup(call.uid, call.autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
+		UA->Hangup(call.uid, call.autoAnswerCode, call.autoAnswerReason);
 		if (&call == Calls::GetCurrentCall())
 		{
 			lbl2ndParty->Caption = "";
@@ -3905,6 +4132,23 @@ void TfrmMain::ExecAction(const struct Action& action)
 				Answer(call->uid);
 			else
 				Hangup(call->uid);
+		}
+		break;
+	}
+	case Action::TYPE_ACCOUNT:
+		SetCurrentAccount(action.id);
+		break;
+	case Action::TYPE_NEXT_ACCOUNT: {
+		const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+		int current = appSettings.GetCurrentAccountId();
+		for (unsigned int i=1; i<accounts.size(); i++)
+		{
+			int id = (current + i) % accounts.size();
+			if (accounts[id].enabled)
+			{
+				SetCurrentAccount(id);
+				break;
+			}
 		}
 		break;
 	}
@@ -4404,9 +4648,39 @@ void TfrmMain::LoadTranslation(void)
 	}
 }
 
+/** Auto answer / DND for account: per-account setting if enabled, otherwise global */
+bool TfrmMain::IsAutoAnswerEnabled(int accountId)
+{
+	if (accountId >= 0 && accountId < (int)appSettings.uaConf.accounts.size() &&
+		appSettings.uaConf.accounts[accountId].autoAnswer)
+	{
+		return true;
+	}
+	return appSettings.uaConf.autoAnswer;
+}
+
+void TfrmMain::GetAutoAnswer(int accountId, int &code, AnsiString &reason)
+{
+	if (accountId >= 0 && accountId < (int)appSettings.uaConf.accounts.size() &&
+		appSettings.uaConf.accounts[accountId].autoAnswer)
+	{
+		const UaConf::Account &acc = appSettings.uaConf.accounts[accountId];
+		code = acc.autoAnswerCode;
+		reason = acc.autoAnswerReason.c_str();
+		return;
+	}
+	code = appSettings.uaConf.autoAnswerCode;
+	reason = appSettings.uaConf.autoAnswerReason.c_str();
+}
+
 void TfrmMain::UpdateAutoAnswer(void)
 {
-	buttons.UpdateAutoAnswer(appSettings.uaConf.autoAnswer, appSettings.uaConf.autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
+	buttons.UpdateAutoAnswer(-1, appSettings.uaConf.autoAnswer, appSettings.uaConf.autoAnswerCode, appSettings.uaConf.autoAnswerReason.c_str());
+	for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+	{
+		const UaConf::Account &acc = appSettings.uaConf.accounts[i];
+		buttons.UpdateAutoAnswer(i, acc.autoAnswer, acc.autoAnswerCode, acc.autoAnswerReason.c_str());
+	}
 }
 
 void __fastcall TfrmMain::btnResetMicVolumeMouseUp(TObject *Sender,
@@ -4461,7 +4735,7 @@ void TfrmMain::UpdateMainCallDisplay(void)
 		{
 			cbCallURI->Text = call->dialString;
 		}
-		lblCallState->Caption = call->getStateTranslatedDescription();
+		lblCallState->Caption = GetCallStateText(call);
 		lbl2ndParty->Caption = GetClip(call->getPeerUri(), appSettings.Display.bUserOnlyClip);
 		lastContactEntry = contacts.GetEntry(CleanUri(call->getPeerUri()));
 		if (lastContactEntry)

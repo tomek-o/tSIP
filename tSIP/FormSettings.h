@@ -41,9 +41,14 @@ __published:	// IDE-managed Components
 	TTabSheet *tsAccount;
 	TPanel *pnlAccountsBottom;
 	TButton *btnAddAccount;
+	TPanel *pnlAccountsTop;
+	TLabel *lblAccount;
+	TComboBox *cbAccount;
+	TButton *btnRemoveAccount;
+	TLabel *lblVideoCodecsAccount;
+	TComboBox *cbVideoCodecsAccount;
 	TScrollBox *scrbAccounts;
 	TCheckBox *chbLogMessages;
-	TTabSheet *tsCodecs;
 	TTabSheet *tsCalls;
 	TLabel *lblSipAutoAnswerCode;
 	TEdit *edAutoAnswerCode;
@@ -177,12 +182,6 @@ __published:	// IDE-managed Components
 	TCheckBox *chbNoBeepOnEnterKey;
 	TTabSheet *tsHistory;
 	TCheckBox *chbHistoryNoStoreToFile;
-	TListBox *lboxAudioCodecsAvailable;
-	TListBox *lboxAudioCodecsEnabled;
-	TLabel *lblAudioCodecsAvailable;
-	TLabel *lblAudioCodecsEnabled;
-	TButton *btnAudioCodecEnable;
-	TButton *btnAudioCodecDisable;
 	TTabSheet *tsTrayNotifier;
 	TCheckBox *chbTrayNotifierShowOnIncoming;
 	TCheckBox *chbSkipTrayNotifierIfMainWindowVisible;
@@ -381,8 +380,6 @@ __published:	// IDE-managed Components
 	TButton *btnSelectedScriptOnRecorderStateChange;
 	TBitBtn *btnSelectedScriptOnRecorderStateEdit;
 	TCheckBox *chbNoTaskbarButtonRestore;
-	TLabel *lblCodecsInfo;
-	TLabel *lblCodecsInfo2;
 	TCheckBox *chbNoTrayIcon;
 	TCheckBox *chbHideDialpad;
 	TCheckBox *chbLogMessagesOnlyFirstLines;
@@ -571,6 +568,10 @@ __published:	// IDE-managed Components
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
 	void __fastcall btnAddAccountClick(TObject *Sender);
+	void __fastcall btnRemoveAccountClick(TObject *Sender);
+	void __fastcall cbAccountChange(TObject *Sender);
+	void __fastcall cbAccountDropDown(TObject *Sender);
+	void __fastcall cbVideoCodecsAccountChange(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall cbSoundInputModChange(TObject *Sender);
 	void __fastcall cbSoundOutputModChange(TObject *Sender);
@@ -584,16 +585,6 @@ __published:	// IDE-managed Components
 	void __fastcall btnSelectWaveFileClick(TObject *Sender);
 	void __fastcall tvSelectorChange(TObject *Sender, TTreeNode *Node);
 	void __fastcall btnSelectImageClick(TObject *Sender);
-	void __fastcall btnAudioCodecEnableClick(TObject *Sender);
-	void __fastcall btnAudioCodecDisableClick(TObject *Sender);
-	void __fastcall lboxAudioCodecsAvailableDblClick(TObject *Sender);
-	void __fastcall lboxAudioCodecsEnabledDblClick(TObject *Sender);
-	void __fastcall lboxAudioCodecsEnabledStartDrag(TObject *Sender,
-          TDragObject *&DragObject);
-	void __fastcall lboxAudioCodecsEnabledDragOver(TObject *Sender,
-          TObject *Source, int X, int Y, TDragState State, bool &Accept);
-	void __fastcall lboxAudioCodecsEnabledDragDrop(TObject *Sender,
-          TObject *Source, int X, int Y);
 	void __fastcall chbAudioPreprocessingTxEnabledClick(TObject *Sender);
 	void __fastcall chbSipCompactHeadersRfc3261Click(TObject *Sender);
 	void __fastcall btnSelectedScriptClick(TObject *Sender);
@@ -617,6 +608,18 @@ __published:	// IDE-managed Components
           TObject *Source, int X, int Y, TDragState State, bool &Accept);
 private:	// User declarations
 	std::vector<TfrmAccount*> frmAccountVector;
+	void CreateAccountFrames(int selectedAccountId);
+	void DeleteAccountFrames(void);
+	void UpdateAccountLists(void);
+	void ShowAccountFrame(int accountId);
+	int codecsAccountId;	///< account which codecs are currently displayed
+	void LoadCodecLists(int accountId);
+	void StoreCodecLists(int accountId);
+	void SelectCodecsAccount(int accountId);
+	/** Account ids of programmable buttons (copy, index = button id), modified when account is
+		removed and written to buttons configuration on Apply */
+	std::vector<int> btnAccountIds;
+	bool btnAccountIdsChanged;
 	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, TLabel *label2, TTrackBar *trbar, int moduleIndex, AnsiString selected);
 	TfrmHotkeys *frmHotkeys;
 	TfrmPhones *frmPhones;
@@ -624,8 +627,6 @@ private:	// User declarations
 	TfrmDialpadConf *frmDialpadConf;
 	TfrmVideoConf *frmVideoConf;
 	TTabSheet *lastTab;
-	void AudioCodecEnableSelected(void);
-	void AudioCodecDisableSelected(void);
 	void AudioPreprocessingUpdate(void);
 	void VideoCodecEnableSelected(void);
 	void VideoCodecDisableSelected(void);

@@ -40,6 +40,8 @@ __published:	// IDE-managed Components
 	TBitBtn *btnFileOpen;
 	TLabel *lblRing;
 	TEdit *edRing;
+	TLabel *lblAccount;
+	TComboBox *cbAccount;
 	TButton *btnRingSelect;
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);

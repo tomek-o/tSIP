@@ -173,6 +173,9 @@ Call* GetCall(lua_State *L)
 
 }	// namespace
 
+ScriptExec::CallbackSetCurrentAccount ScriptExec::onSetCurrentAccount = NULL;
+ScriptExec::CallbackCallOnAccount ScriptExec::onCallOnAccount = NULL;
+
 int ScriptExec::SetVariable(const char* name, const char* value)
 {
 	ScopedLock<Mutex> lock(mutexVariables);
@@ -540,7 +543,16 @@ static int l_Call(lua_State* L)
 		return 0;
 	}
 	unsigned int callUid = 0;
-	int ret = GetContext(L)->onCall(str, callUid);
+	int ret;
+	if (lua_gettop(L) >= 2 && lua_isnumber(L, 2) && ScriptExec::onCallOnAccount)
+	{
+		// optional account id
+		ret = ScriptExec::onCallOnAccount(str, callUid, lua_tointeger(L, 2));
+	}
+	else
+	{
+		ret = GetContext(L)->onCall(str, callUid);
+	}
 	lua_pushnumber(L, ret);
 	lua_pushnumber(L, callUid);
 	return 2;
@@ -1487,7 +1499,10 @@ static int l_GetRegStateTranslatedDescription(lua_State* L)
 
 static int l_GetRegistrationState(lua_State* L)
 {
-	int state = GetContext(L)->onGetRegistrationState();
+	int accountId = -1;
+	if (lua_gettop(L) >= 1 && lua_isnumber(L, 1))
+		accountId = lua_tointeger(L, 1);
+	int state = GetContext(L)->onGetRegistrationState(accountId);
 	lua_pushinteger( L, state );
 	return 1;
 }
@@ -2027,12 +2042,52 @@ static int l_HideTrayNotifier(lua_State* L)
 	return 0;
 }
 
+static int l_GetAccountCount(lua_State* L)
+{
+	lua_pushinteger(L, appSettings.uaConf.accounts.size());
+	return 1;
+}
+
+static int l_GetCurrentAccount(lua_State* L)
+{
+	lua_pushinteger(L, appSettings.GetCurrentAccountId());
+	return 1;
+}
+
+static int l_SetCurrentAccount(lua_State* L)
+{
+	int id = lua_tointeger(L, 1);
+	if (ScriptExec::onSetCurrentAccount)
+		ScriptExec::onSetCurrentAccount(id);
+	return 0;
+}
+
+static int l_GetAccountUserName(lua_State* L)
+{
+	int id = lua_tointeger(L, 1);
+	if (id < 0 || id >= (int)appSettings.uaConf.accounts.size())
+		return 0;
+	lua_pushstring(L, appSettings.uaConf.accounts[id].user.c_str());
+	return 1;
+}
+
+static int l_GetCallAccountId(lua_State* L)
+{
+	Call* call = GetCall(L);
+	if (call)
+	{
+		lua_pushinteger(L, call->accountId);
+		return 1;
+	}
+	return 0;
+}
+
 static int l_GetUserName(lua_State* L)
 {
 	std::string user;
 	if (!appSettings.uaConf.accounts.empty())
 	{
-		user = appSettings.uaConf.accounts[0].user.c_str();
+		user = appSettings.uaConf.accounts[appSettings.GetCurrentAccountId()].user.c_str();
 	}
 	lua_pushstring(L, user.c_str());
 	return 1;
@@ -2346,8 +2401,13 @@ static int l_SendCustomRequest(lua_State* L)
 		extraHeaderLines = extraHeaderLinesStr;
 	}
 
+	int accountId = -1;
+	if (lua_gettop(L) >= 4 && lua_isnumber(L, 4))
+	{
+		accountId = lua_tointeger(L, 4);
+	}
 	int uid = -1;
-	int status = UaCustomRequests::Send(uid, uri, method, extraHeaderLines);
+	int status = UaCustomRequests::Send(uid, uri, method, extraHeaderLines, accountId);
 	if (status != 0)
 		uid = -1;
 	lua_pushinteger(L, uid);
@@ -2465,7 +2525,12 @@ static int l_SendTextMessage(lua_State* L)
 	const char* target = lua_tostring( L, 1 );
 	const char* text = lua_tostring( L, 2 );
 	int sendImmediately = lua_tointeger(L, 3);
-	SIMPLE_Messages::Send(target, text, sendImmediately);
+	int accountId = -1;
+	if (lua_gettop(L) >= 4 && lua_isnumber(L, 4))
+	{
+		accountId = lua_tointeger(L, 4);
+	}
+	SIMPLE_Messages::Send(target, text, sendImmediately, accountId);
 	return 0;
 }
 
@@ -2614,7 +2679,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_ForceDirectories, "ForceDirectories", "Make sure directory path exists, possibly creating folders recursively", "Equivalent of VCL function with same name.");
 	lua_register2(L, ScriptImp::l_FileExists, "FileExists", "Check if specified file exists", "Returning bool.\nExample: local exists = FileExists(filename)");
 	lua_register2(L, ScriptImp::l_FindWindowByCaptionAndExeName, "FindWindowByCaptionAndExeName", "Search for window by exact caption text and/or full exe path", "windowName: exact window title text to match, case-sensitive (nil to not filter by title); exeName: full path of the executable that created the window, case-insensitive (nil to not filter by exe). At least one of the two must be given.\nBoth checks require an exact match, not partial/substring matching.\nReturns window handle (as a number) if a matching window is found, 0 otherwise.\nExample: local hwnd = FindWindowByCaptionAndExeName(\"Calculator\", nil)");
-	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns status (0 on success) and allocated call ID. May fail if current call number reaches limit.");
+	lua_register2(L, ScriptImp::l_Call, "Call", "Call to specified number or URI", "Returns status (0 on success) and allocated call ID. May fail if current call number reaches limit.\nOptional second argument: account id (0-based), current account is used by default.");
 	lua_register2(L, ScriptImp::l_Hangup, "Hangup", "Disconnect or reject current incoming call", "Examples:\n    Hangup()\n    Hangup(sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_Hangup2, "Hangup2", "Disconnect or reject specific incoming call", "Examples:\n    Hangup2(callUid)\n    Hangup2(callUid, sipCode, reasonText)");
 	lua_register2(L, ScriptImp::l_HangupAll, "HangupAll", "Disconnect all calls", "Example: HangupAll()");
@@ -2700,7 +2765,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetPreviousCallReplyLine, "GetPreviousCallReplyLine", "Get SIP reply line from the call that ended", "");
 	lua_register2(L, ScriptImp::l_ShellExecute, "ShellExecute", "Run another application or open a file/URL (WinAPI ShellExecute wrapper)", "Direct wrapper for the WinAPI ShellExecute(NULL, verb, file, parameters, directory, showCmd) function - see its documentation for exact parameter/return value meaning.\nverb: operation, e.g. \"open\", \"explore\", \"print\" (nil/\"\" for default)\nfile: file, folder, URL or executable to run\nparameters: command-line parameters if file is an executable (nil if none)\ndirectory: working directory (nil for current)\nshowCmd: window show state, e.g. 0 = hidden, 1 = normal (SW_* constant)\nReturns instance handle (> 32) on success, or an error code (<= 32) on failure.\nExample: ShellExecute(\"open\", \"https://example.com\", nil, nil, 1)");
 	lua_register2(L, ScriptImp::l_SetTrayIcon, "SetTrayIcon", "Change tray icon bitmap", "");
-	lua_register2(L, ScriptImp::l_GetRegistrationState, "GetRegistrationState", "Check if softphone is registered", "");
+	lua_register2(L, ScriptImp::l_GetRegistrationState, "GetRegistrationState", "Check if softphone is registered", "Takes one, optional argument: account id (0-based, default: current account). Returns value as in Callback::reg_state_e.\nIn \"on registration state\" script GetExecSourceId() returns id of account which state changed.");
 	lua_register2(L, ScriptImp::l_Unregister, "Unregister", "Unregister SIP account", "");
 	lua_register2(L, ScriptImp::l_Reregister, "Reregister", "Re-register SIP account", "");
 	lua_register2(L, ScriptImp::l_Resubscribe, "Resubscribe", "Force an immediate re-SUBSCRIBE of presence and dialog-info (BLF) subscriptions", "Useful e.g. to recover after the SIP server loses subscription state without waiting for the normal retry/refresh interval.");
@@ -2732,7 +2797,12 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetRxDtmf, "GetRxDtmf", "Get DTMF from receiving queue, empty string if queue is empty", "");
 	lua_register2(L, ScriptImp::l_ShowTrayNotifier, "ShowTrayNotifier", "Show tray notifier window with specified description, URI, incoming state, call UID", "Example: ShowTrayNotifier(description, uri, dirIncoming, callUid)");
 	lua_register2(L, ScriptImp::l_HideTrayNotifier, "HideTrayNotifier", "Hide tray notifier window", "");
-	lua_register2(L, ScriptImp::l_GetUserName, "GetUserName", "Get user name from account settings", "");
+	lua_register2(L, ScriptImp::l_GetUserName, "GetUserName", "Get user name from current account settings", "");
+	lua_register2(L, ScriptImp::l_GetAccountCount, "GetAccountCount", "Get number of configured SIP accounts", "");
+	lua_register2(L, ScriptImp::l_GetCurrentAccount, "GetCurrentAccount", "Get current account id", "Returns id (0-based) of account used by default for outgoing calls and messages.");
+	lua_register2(L, ScriptImp::l_SetCurrentAccount, "SetCurrentAccount", "Set current account", "Takes one argument: account id (0-based). Account used by default for outgoing calls and messages; disabled / not existing account is ignored.");
+	lua_register2(L, ScriptImp::l_GetAccountUserName, "GetAccountUserName", "Get user name of specified account", "Takes one argument: account id (0-based).");
+	lua_register2(L, ScriptImp::l_GetCallAccountId, "GetCallAccountId", "Get id of account used by current or specified call", "Takes one, optional argument: call UID. Returns account id (0-based); for incoming call: account that received the call.");
 	lua_register2(L, ScriptImp::l_ProgrammableButtonClick, "ProgrammableButtonClick", "Programmatically press button", "");
 	lua_register2(L, ScriptImp::l_RefreshAudioDevicesList, "RefreshAudioDevicesList", "Rescan available audio devices", "");
 	lua_register2(L, ScriptImp::l_GetAudioDevice, "GetAudioDevice", "Get the name of selected audio input or output device", "name, valid = GetAudioDevice(moduleName, direction, id)\nEnumerating audio devices one by one; moduleName = \"winwave\", \"winwave2\", \"wasapi\" or \"portaudio\", direction = \"in\" (recording device) or \"out\" (playback device), id = index starting from 0; returning name (string) of the device and valid (int): 1 if name is valid / device exists, 0 otherwise.");
@@ -2752,7 +2822,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_ApplicationClose, "ApplicationClose", "Close this program", "");
 	lua_register2(L, ScriptImp::l_SetApplicationExitCode, "SetApplicationExitCode", "Set the process exit code returned to the OS on exit", "Does not close the application by itself - combine with ApplicationClose(). Note: Lua's own os.exit(code) is unreliable in this application (it may not propagate the requested code) - use this function instead.\nExample: SetExitCode(1); ApplicationClose()\nTo test from the Windows command line: launch with \"start /wait \"\" softphone.exe\" (running the exe directly does not work - it must be launched via start /wait), trigger the script that calls SetExitCode()+ApplicationClose(), then once the prompt returns run \"echo %errorlevel%\" to see the code. The empty \"\" after /wait is a required placeholder window title, needed so start does not mistake a quoted exe path for the title.");
 
-	lua_register2(L, ScriptImp::l_SendCustomRequest, "SendCustomRequest", "Send custom SIP request", "Example: requestUid = SendCustomRequest(uri, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional");
+	lua_register2(L, ScriptImp::l_SendCustomRequest, "SendCustomRequest", "Send custom SIP request", "Example: requestUid = SendCustomRequest(uri, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional\nOptional 4th argument: account id (0-based), current account is used by default.");
 	lua_register2(L, ScriptImp::l_SendCustomCallRequest, "SendCustomCallRequest", "Send custom SIP request within an existing call's dialog", "Unlike SendCustomRequest(), this reuses the call's own dialog (Call-ID, tags), so the peer recognizes it as belonging to the call - required by most peers for in-call signaling such as sending INFO, otherwise they may reply 481 Call/Transaction Does Not Exist.\nExample: requestUid = SendCustomCallRequest(callUid, method, extraHeaderLines)\nrequestUid is > 0 on success\nextraHeaderLines parameter is optional");
 	lua_register2(L, ScriptImp::l_ClearCustomRequests, "ClearCustomRequests", "Delete status info of custom SIP requests", "");
 	lua_register2(L, ScriptImp::l_DeleteCustomRequest, "DeleteCustomRequest", "Delete single custom request info", "");
@@ -2766,7 +2836,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_ReadXmlContacts, "ReadXmlContacts", "Read contacts from XML Yealink-like file", "");
 	lua_register2(L, ScriptImp::l_AppendContactNoteText, "AppendContactNoteText", "Add text to note from currently opened contact popup", "");
 
-	lua_register2(L, ScriptImp::l_SendTextMessage, "SendTextMessage", "Send SIP SIMPLE message", "Example: SendTextMessage(target, text, sendImmediately)\nOpens text messaging window and optionally sends immediately text.");
+	lua_register2(L, ScriptImp::l_SendTextMessage, "SendTextMessage", "Send SIP SIMPLE message", "Example: SendTextMessage(target, text, sendImmediately)\nOpens text messaging window and optionally sends immediately text.\nOptional 4th argument: account id (0-based), current account is used by default.");
 
 	lua_register2(L, ScriptImp::l_SetAppStatus, "SetAppStatus", "Set part of application status (status bar text + tray icon hint)", "SetAppStatus(id, priority, text).\nid: any string of your choosing that identifies this particular status entry, so a later call with the same id replaces it (or removes it, if text = \"\").\npriority: lower number = higher priority.\ntext: the status text itself.\nThe status bar shows only the highest-priority (lowest-numbered) active status, while the tray icon hint lists all active statuses combined.\nExample: SetAppStatus(\"myPlugin\", 10, \"Connected\")");
 

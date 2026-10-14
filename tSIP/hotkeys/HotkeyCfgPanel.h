@@ -17,6 +17,8 @@ private:
 	HotKeyConf &cfg;
 	void __fastcall UpdateCfg(TObject *Sender);
 	void UpdateActionTypeView(void);
+	bool idListAccounts;	///< cbId lists accounts (not buttons)
+	void FillIdList(bool accounts);
 	int programmableButtonsCnt;
 protected:
 	void __fastcall btnBrowseClick(TObject *Sender);

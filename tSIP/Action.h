@@ -17,6 +17,8 @@ struct Action
 		TYPE_SHOWHIDE_SIDECAR,	///< show/hide sidecar with programmable buttons
 		TYPE_ANSWER_HANGUP,	///< answer or hangup depending on current call state
 		TYPE_SCRIPT_FILE,
+		TYPE_ACCOUNT,		///< set current account (id = account id)
+		TYPE_NEXT_ACCOUNT,	///< switch current account to next enabled account
 
 		TYPE_LIMITER
 	} type;

@@ -20,9 +20,11 @@ namespace SIMPLE_Messages
 	void RegisterWindow(TfrmMessage *frmMessage);
 	void UnregisterWindow(TfrmMessage *frmMessage);
 	void CloseAllWindows(void);
-	void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body);
+	/** \param accountId account that received message (-1: unknown) */
+	void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body, int accountId);
 	void OnMessageStatus(int requestUid, int requestError, int sipCode, AnsiString reason);
-	void Send(AnsiString target, AnsiString text, bool sendImmediately);
+	/** \param accountId account used for sending, -1: current account */
+	void Send(AnsiString target, AnsiString text, bool sendImmediately, int accountId = -1);
 }
 
 #endif

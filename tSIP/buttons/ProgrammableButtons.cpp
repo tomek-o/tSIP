@@ -309,7 +309,7 @@ void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)
 				bool duplicate = false;
 				for (unsigned int i=0; i<contacts.size(); i++)
 				{
-					if (contacts[i].user == cfg.number && contacts[i].sub_dialog_info)
+					if (contacts[i].user == cfg.number && contacts[i].accountId == cfg.GetAccountId() && contacts[i].sub_dialog_info)
 					{
 						contacts[i].btnIds.push_back(btnId);
 						duplicate = true;
@@ -323,6 +323,7 @@ void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)
 
 				UaConf::Contact contact;
 				contact.user = cfg.number;
+				contact.accountId = cfg.GetAccountId();
 				contact.sub_dialog_info = true;
 				contact.sub_dialog_info_expires = cfg.expires;
 				contact.btnIds.push_back(btnId);
@@ -333,7 +334,7 @@ void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)
 				bool duplicate = false;
 				for (unsigned int i=0; i<contacts.size(); i++)
 				{
-					if (contacts[i].user == cfg.number && contacts[i].sub_presence)
+					if (contacts[i].user == cfg.number && contacts[i].accountId == cfg.GetAccountId() && contacts[i].sub_presence)
 					{
 						contacts[i].btnIds.push_back(btnId);
 						duplicate = true;
@@ -347,6 +348,7 @@ void ProgrammableButtons::UpdateContacts(std::vector<UaConf::Contact> &contacts)
 
 				UaConf::Contact contact;
 				contact.user = cfg.number;
+				contact.accountId = cfg.GetAccountId();
 				contact.sub_presence = true;
 				contact.sub_presence_expires = cfg.expires;				
 				contact.btnIds.push_back(btnId);
@@ -747,13 +749,15 @@ void __fastcall ProgrammableButtons::SpeedDialPanelClick(TObject *Sender)
 			panel = dynamic_cast<TProgrammableButton*>(component->Owner);
 		}
 		assert(panel);
-		if (panel->GetInactive() == true)
-		{
-			return;
-        }
 		int id = panel->Tag;
 
 		const ButtonConf &cfg = btnConf[id];
+		// ACCOUNT button is shown as inactive if its account is not registered,
+		// but it still can be used to select that account
+		if (panel->GetInactive() == true && cfg.type != Button::ACCOUNT)
+		{
+			return;
+		}
 		if (cfg.type == Button::HOLD || cfg.type == Button::MUTE || cfg.type == Button::MUTE_RING)
 		{
 			panel->SetDown(!panel->GetDown());
@@ -847,24 +851,37 @@ void ProgrammableButtons::UpdateBtnState(Button::Type type, bool state)
 	}
 }
 
-void ProgrammableButtons::UpdateMwiState(int newMsg, int oldMsg)
+void ProgrammableButtons::UpdateAccountState(int accountId, bool current, bool registered)
 {
 	for (unsigned int i=0; i<btns.size(); i++)
 	{
 		const ButtonConf &cfg = btnConf[i];
-		if (cfg.type == Button::MWI)
+		if (cfg.type == Button::ACCOUNT && cfg.GetAccountId() == accountId)
+		{
+			btns[i]->SetDown(current);
+			btns[i]->SetInactive(!registered);
+		}
+	}
+}
+
+void ProgrammableButtons::UpdateMwiState(int accountId, int newMsg, int oldMsg)
+{
+	for (unsigned int i=0; i<btns.size(); i++)
+	{
+		const ButtonConf &cfg = btnConf[i];
+		if (cfg.type == Button::MWI && cfg.GetAccountId() == accountId)
 		{
 			btns[i]->SetMwiState(newMsg, oldMsg);
 		}
 	}
 }
 
-void ProgrammableButtons::UpdateAutoAnswer(bool enabled, int sipCode, AnsiString sipReason)
+void ProgrammableButtons::UpdateAutoAnswer(int accountId, bool enabled, int sipCode, AnsiString sipReason)
 {
 	for (unsigned int i=0; i<btns.size(); i++)
 	{
 		const ButtonConf &cfg = btnConf[i];
-		if (cfg.type == Button::AUTO_ANSWER_DND)
+		if (cfg.type == Button::AUTO_ANSWER_DND && cfg.accountId == accountId)
 		{
 			if (cfg.sipCode == sipCode && cfg.sipReason == sipReason.c_str() && enabled)
 			{

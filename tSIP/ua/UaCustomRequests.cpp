@@ -3,6 +3,7 @@
 
 #pragma hdrstop
 
+#include "Settings.h"
 #include "UaCustomRequests.h"
 #include "UaMain.h"
 #include "ControlQueue.h"
@@ -58,7 +59,7 @@ struct UaCustomRequests::Request* UaCustomRequests::GetRequest(int uid)
 }
 
 
-int UaCustomRequests::Send(int &uid, AnsiString uri, AnsiString method, AnsiString extraHeaderLines)
+int UaCustomRequests::Send(int &uid, AnsiString uri, AnsiString method, AnsiString extraHeaderLines, int accountId)
 {
 	int status;
 
@@ -70,7 +71,9 @@ int UaCustomRequests::Send(int &uid, AnsiString uri, AnsiString method, AnsiStri
 	req.uri = uri;
 	req.extraHeaderLines = extraHeaderLines;
 
-	status = UA->SendCustomRequest(requestUid, method, uri, extraHeaderLines);
+	if (accountId < 0)
+		accountId = appSettings.GetCurrentAccountId();
+	status = UA->SendCustomRequest(requestUid, method, uri, extraHeaderLines, accountId);
 
 	if (status == 0)
 	{

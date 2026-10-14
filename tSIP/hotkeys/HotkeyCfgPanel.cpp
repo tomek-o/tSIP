@@ -23,7 +23,8 @@ static inline void ValidCtrCheck(THotkeyCfgPanel *)
 __fastcall THotkeyCfgPanel::THotkeyCfgPanel(TComponent* Owner, HotKeyConf &cfg, int programmableButtonsCnt)
 	: TPanel(Owner),
 	cfg(cfg),
-	programmableButtonsCnt(programmableButtonsCnt)
+	programmableButtonsCnt(programmableButtonsCnt),
+	idListAccounts(false)
 {
 	Width = 570;
 	Height = 32;
@@ -151,11 +152,41 @@ void __fastcall THotkeyCfgPanel::UpdateCfg(TObject *Sender)
 	cfg.action.scriptFile = edScriptFile->Text;
 }
 
+/** Fill id combobox with button ids or account names */
+void THotkeyCfgPanel::FillIdList(bool accounts)
+{
+	int index = cbId->ItemIndex;
+	cbId->Items->Clear();
+	if (accounts)
+	{
+		for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+		{
+			cbId->Items->Add(appSettings.GetAccountDescription(i));
+		}
+	}
+	else
+	{
+		for (int i=0; i<programmableButtonsCnt; i++)
+		{
+			cbId->Items->Add(i);
+		}
+	}
+	idListAccounts = accounts;
+	if (index >= cbId->Items->Count)
+		index = cbId->Items->Count - 1;
+	cbId->ItemIndex = index;
+}
+
 void THotkeyCfgPanel::UpdateActionTypeView(void)
 {
-	if (cbAction->ItemIndex == Action::TYPE_BUTTON)
+	if (cbAction->ItemIndex == Action::TYPE_BUTTON || cbAction->ItemIndex == Action::TYPE_ACCOUNT)
 	{
 		cbId->Visible = true;
+		bool accounts = (cbAction->ItemIndex == Action::TYPE_ACCOUNT);
+		if (accounts != idListAccounts)
+		{
+			FillIdList(accounts);
+		}
 	}
 	else
 	{
@@ -192,10 +223,7 @@ void THotkeyCfgPanel::Start(void)
 	{
     	cbAction->Items->Add(Action::getTypeDescription(static_cast<Action::Type>(i)));
 	}
-	for (int i=0; i<programmableButtonsCnt; i++)
-	{
-    	cbId->Items->Add(i);
-	}
+	FillIdList(false);
 
 	chbCtrl->Checked = cfg.modifiers & HotKeyConf::CTRL;
 	chbShift->Checked = cfg.modifiers & HotKeyConf::SHIFT;

@@ -63,14 +63,14 @@ bool IsTargetMatching(AnsiString remote, AnsiString target)
 	{
 		if (appSettings.uaConf.accounts.size() > 0)
 		{
-			target = (AnsiString)"sip:" + target + "@" + appSettings.uaConf.accounts[0].reg_server.c_str();
+			target = (AnsiString)"sip:" + target + "@" + appSettings.uaConf.accounts[appSettings.GetCurrentAccountId()].reg_server.c_str();
 		}
 	}
 	if (remote.Pos("sip:") != 1)
 	{
 		if (appSettings.uaConf.accounts.size() > 0)
 		{
-			remote = (AnsiString)"sip:" + remote + "@" + appSettings.uaConf.accounts[0].reg_server.c_str();
+			remote = (AnsiString)"sip:" + remote + "@" + appSettings.uaConf.accounts[appSettings.GetCurrentAccountId()].reg_server.c_str();
 		}
 	}
 
@@ -111,16 +111,16 @@ unsigned int CountIncomingForms(void)
 	return incomingCount;
 }
 
-void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body)
+void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString body, int accountId)
 {
-	LOG("Received message from %s: ContentType %s, body [%s]\n", caller.c_str(), contentType.c_str(), body.c_str());
+	LOG("Received message from %s (account #%d): ContentType %s, body [%s]\n", caller.c_str(), accountId + 1, contentType.c_str(), body.c_str());
 
 	if (appSettings.Scripts.onSimpleMessageRx != "" && callbackRunScriptFile)
 	{
 		AnsiString asScriptFile;
 		bool handled = false;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onSimpleMessageRx.c_str());
-		ScriptContext context(SCRIPT_SRC_ON_SIMPLE_MESSAGE_RX, -1);
+		ScriptContext context(SCRIPT_SRC_ON_SIMPLE_MESSAGE_RX, accountId);
 		context.simpleMessageFrom = caller;
 		context.simpleMessageBody = body;
 		context.simpleMessageContentType = contentType;
@@ -158,6 +158,11 @@ void OnIncomingMessage(AnsiString caller, AnsiString contentType, AnsiString bod
 		frm->SetIncoming();
 		frm->SetTarget(caller);
 	}
+	if (accountId >= 0)
+	{
+		// reply using account that received message
+		frm->SetAccountId(accountId);
+	}
 	frm->AddIncomingMessage(contentType, body);
 	frm->Show();
 }
@@ -176,7 +181,7 @@ void OnMessageStatus(int requestUid, int requestError, int sipCode, AnsiString r
 	}
 }
 
-void Send(AnsiString target, AnsiString text, bool sendImmediately)
+void Send(AnsiString target, AnsiString text, bool sendImmediately, int accountId)
 {
 	if (!appSettings.uaConf.messages.enabled)
 	{
@@ -193,6 +198,8 @@ void Send(AnsiString target, AnsiString text, bool sendImmediately)
 	{
 		frm->SetText(text);
 	}
+	if (accountId >= 0)
+		frm->SetAccountId(accountId);
 	frm->Show();
 	if (sendImmediately)
 	{

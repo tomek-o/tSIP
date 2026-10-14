@@ -53,7 +53,10 @@ public:
 
 		AnsiString reason;
 
+		int accountId;				///< account used by call, -1 if unknown (entries from older versions)
+
 		Entry(void):
+			accountId(-1),
 			incoming(false),
 			time(0),
 			lastScode(0)

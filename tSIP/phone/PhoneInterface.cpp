@@ -891,6 +891,7 @@ Json::Value CallInfoToJson(const PhoneInterface::CallInfoV2 &info)
 		jv["incoming"] = info.incoming;
 		jv["peer"] = info.peerUri.c_str();
 		jv["peerName"] = info.peerName.c_str();
+		jv["accountId"] = info.accountId;
 	}
 	return jv;
 }
@@ -1000,8 +1001,18 @@ int PhoneInterface::ExecuteInvoke(AnsiString method, AnsiString jsonParams, Ansi
 					return TSIP_ERR_INVALID_ARG;
 				}
 			}
+			int accountId = -1;
+			if (!params["accountId"].isNull())
+			{
+				accountId = params["accountId"].asInt();
+				if (!PluginV2Methods::IsAccountUsable(accountId))
+				{
+					result["error"] = "account does not exist or is disabled";
+					return TSIP_ERR_INVALID_ARG;
+				}
+			}
 			unsigned int callUid = 0;
-			status = callbackMakeCall(::Utf8ToAnsi(params["target"].asString().c_str()), headerLines, callUid);
+			status = callbackMakeCall(::Utf8ToAnsi(params["target"].asString().c_str()), headerLines, callUid, accountId);
 			if (status == TSIP_OK)
 				result["uid"] = callUid;
 		}
@@ -1023,18 +1034,29 @@ int PhoneInterface::ExecuteInvoke(AnsiString method, AnsiString jsonParams, Ansi
 		}
 		else if (method == "GetRegistration")
 		{
+			// all configured accounts, with registration state if known
 			Json::Value jaccounts(Json::arrayValue);
-			std::map<int, Callback::reg_state_e>::const_iterator it;
-			for (it = regStates.begin(); it != regStates.end(); ++it)
+			std::map<int, Json::Value> accounts;
+			PluginV2Methods::GetAccounts(accounts);
+			std::map<int, Json::Value>::iterator ita;
+			for (ita = accounts.begin(); ita != accounts.end(); ++ita)
 			{
-				Json::Value ja(Json::objectValue);
-				ja["accountId"] = it->first;
-				ja["state"] = static_cast<int>(it->second);
-				ja["stateName"] = Callback::GetRegStateName(it->second);
-				ja["registered"] = (it->second == Callback::REG_STATE_REGISTER_OK);
+				Json::Value &ja = ita->second;
+				std::map<int, Callback::reg_state_e>::const_iterator it = regStates.find(ita->first);
+				if (it != regStates.end())
+				{
+					ja["state"] = static_cast<int>(it->second);
+					ja["stateName"] = Callback::GetRegStateName(it->second);
+					ja["registered"] = (it->second == Callback::REG_STATE_REGISTER_OK);
+				}
+				else
+				{
+					ja["registered"] = false;
+				}
 				jaccounts.append(ja);
 			}
 			result["accounts"] = jaccounts;
+			result["currentAccountId"] = PluginV2Methods::GetCurrentAccountId();
 		}
 		else
 		{

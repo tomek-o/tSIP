@@ -229,6 +229,23 @@ object frmContactEditor: TfrmContactEditor
     TabOrder = 10
     OnClick = btnRingSelectClick
   end
+  object lblAccount: TLabel
+    Left = 284
+    Top = 8
+    Width = 39
+    Height = 13
+    Caption = 'Account'
+  end
+  object cbAccount: TComboBox
+    Left = 284
+    Top = 28
+    Width = 139
+    Height = 21
+    Style = csDropDownList
+    Anchors = [akLeft, akTop, akRight]
+    ItemHeight = 13
+    TabOrder = 12
+  end
   object openDialog: TOpenDialog
     Options = [ofHideReadOnly, ofNoChangeDir, ofEnableSizing]
     Left = 272

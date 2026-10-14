@@ -363,6 +363,8 @@ int  contact_add(struct contact **contactp, const struct pl *addr, int id, conta
 int  contacts_print(struct re_printf *pf, void *unused);
 void contact_set_presence(struct contact *c, enum presence_status status, const struct pl *note);
 struct sip_addr *contact_addr(const struct contact *c);
+void contact_set_ua(struct contact *c, struct ua *ua);
+struct ua       *contact_ua(const struct contact *c);
 struct list     *contact_list(void);
 const char      *contact_str(const struct contact *c);
 const char      *contact_presence_str(enum presence_status status);
@@ -389,7 +391,7 @@ struct media_ctx {
  * Message
  */
 
-typedef void (message_recv_h)(const struct pl *peer, const struct pl *ctype,
+typedef void (message_recv_h)(struct ua *ua, const struct pl *peer, const struct pl *ctype,
 			      struct mbuf *body, void *arg, int *reply_code, const char** reply_reason, int *do_not_reply);
 
 int  message_init(message_recv_h *recvh, sip_resp_h *resph, void *arg);
@@ -698,6 +700,7 @@ void uag_event_unregister(const ua_event_h *eh);
 int  ua_print_sip_status(struct re_printf *pf, void *unused);
 struct ua   *uag_find(const struct pl *cuser);
 struct ua   *uag_find_aor(const char *aor);
+struct ua   *call_get_ua(const struct call *call);
 struct sip  *uag_sip(void);
 const char  *uag_event_str(enum ua_event ev);
 struct list *uag_list(void);

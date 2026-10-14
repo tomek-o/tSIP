@@ -175,6 +175,8 @@ __published:	// IDE-managed Components
 	TComboBox *cbParentId;
 	TLabel *lblNumber;
 	TEdit *edNumber;
+	TLabel *lblAccount;
+	TComboBox *cbAccount;
 	TShape *shColorInactive;
 	TShape *shColorDown;
 	TShape *shColorIdle;

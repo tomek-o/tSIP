@@ -37,7 +37,7 @@ private:
 	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString number);	///< get name for number/uri
 	typedef int (__closure *CallbackGetStreamingState)(void);	///< get current streaming (paging) state, values as in Callback::paging_tx_state_e
 	typedef void (__closure *CallbackSetTrayIcon)(const char* file);
-	typedef int (__closure *CallbackGetRegistrationState)(void);///< as in Callback::reg_state_e
+	typedef int (__closure *CallbackGetRegistrationState)(int accountId);///< as in Callback::reg_state_e; accountId -1: current account
 	typedef int (__closure *CallbackPluginSendMessageText)(const char* dllName, const char* text);
 	typedef int (__closure *CallbackPluginEnable)(const char* dllName, bool state);
 	typedef int (__closure *CallbackRecordStart)(unsigned int callUid, const char* file, int channels, int side, int fileFormat, unsigned int bitrate);
@@ -170,6 +170,11 @@ public:
 	};
 
 	static const std::vector<Symbol>& GetSymbols(void);
+
+	typedef void (__closure *CallbackSetCurrentAccount)(int accountId);
+	static CallbackSetCurrentAccount onSetCurrentAccount;
+	typedef int (__closure *CallbackCallOnAccount)(AnsiString target, unsigned int &callUid, int accountId);
+	static CallbackCallOnAccount onCallOnAccount;
 private:
 	ScriptContext context;
 };

@@ -186,15 +186,34 @@ private:	// User declarations
 	void UpdateCallHistory(void);
 	void ShowTrayNotifier(unsigned int callUid, AnsiString description, AnsiString uri, bool incoming);
 	void HideTrayNotifier(void);
+	/** \param accountId account to use; -1 (or not available account): current account */
 	int MakeCall(AnsiString target, unsigned int &callUid);
-	int MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid);
+	int MakeCallOnAccount(AnsiString target, unsigned int &callUid, int accountId);
+	int MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid, int accountId = -1);
 	void CallNumberBackspace(void);
 	void Hangup(unsigned int callUid, int sipCode = 486, AnsiString reason = "Busy Here");
 	void Answer(unsigned int callUid);
 	std::string OnGetDial(void);
 	void OnSetDial(std::string number);
 	int OnGetStreamingState(void);
-	int OnGetRegistrationState(void);
+	int OnGetRegistrationState(int accountId);
+	void UpdateRegistrationStatus(void);
+	void UpdateAccountButtons(void);
+	AnsiString GetCallStateText(const Call *call);
+	bool IsAutoAnswerEnabled(int accountId);
+	void GetAutoAnswer(int accountId, int &code, AnsiString &reason);
+public:
+	void SetCurrentAccount(int accountId);
+private:
+	AnsiString GetAccountStateText(int accountId);
+	void UpdateAccountsHint(void);
+	void FillAccountMenu(TMenuItem *parent);
+	void __fastcall miAccountClick(TObject *Sender);
+	void __fastcall popupTrayPopup(TObject *Sender);
+	void __fastcall StatusBarMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+	TMenuItem *miTrayAccount;
+	TMenuItem *miTrayAccountSeparator;
+	TPopupMenu *popupAccount;
 	void OnSetTrayIcon(const char* file);
 	int OnPluginSendMessageText(const char* dllName, const char* text);
 	int OnPluginEnable(const char* dllName, bool state);
@@ -239,7 +258,7 @@ private:	// User declarations
 	int RunScript(int srcType, int srcId, AnsiString script, bool &breakRequest, bool &handled);
 	// plugin interface v2 Invoke() handlers (main thread)
 	void OnPluginGetCalls(PhoneInterface::CallInfoV2List &calls);
-	int OnPluginMakeCall(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid);
+	int OnPluginMakeCall(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid, int accountId);
 	int OnPluginAnswer(unsigned int callUid);
 	int OnPluginHangup(unsigned int callUid, int sipCode, AnsiString reason);
 	int RunScript2(const ScriptContext &context, AnsiString script, bool &breakRequest, bool &handled);

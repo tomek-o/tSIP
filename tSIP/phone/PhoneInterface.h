@@ -195,11 +195,13 @@ public:
 		bool incoming;
 		AnsiString peerUri;		///< UTF-8
 		AnsiString peerName;	///< UTF-8
+		int accountId;
 		CallInfoV2(void):
 			uid(0),
 			state(Callback::CALL_STATE_CLOSED),
 			hasDetails(false),
-			incoming(false)
+			incoming(false),
+			accountId(0)
 		{}
 	};
 
@@ -212,7 +214,8 @@ public:
 	typedef void (__closure *CallbackGetCalls)(CallInfoV2List &calls);
 	/** \param target number or URI, ANSI
 		\param extraHeaderLines validated "Name: value" lines separated with CRLF, may be empty */
-	typedef int (__closure *CallbackMakeCall)(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid);
+	/** \param accountId -1: current account */
+	typedef int (__closure *CallbackMakeCall)(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid, int accountId);
 	/** \param callUid 0 = current call */
 	typedef int (__closure *CallbackAnswer)(unsigned int callUid);
 	/** \param callUid 0 = current call

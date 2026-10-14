@@ -84,6 +84,16 @@ public:
 
 	std::string arg1;
 
+	/** Account (index in settings) used by button (ACCOUNT button: account to switch to);
+		-1 = default: first account for ACCOUNT / BLF / PRESENCE / MWI,
+		all accounts (global setting) for AUTO_ANSWER_DND
+	*/
+	int accountId;
+	/** Account id with default (-1) resolved to first account */
+	int GetAccountId(void) const {
+		return (accountId >= 0) ? accountId : 0;
+	}
+
 	int sipCode;
 	std::string sipReason;
 	int expires;	
@@ -224,6 +234,7 @@ public:
 			imgEarly == right.imgEarly &&
 			imgConfirmed == right.imgConfirmed &&
 			arg1 == right.arg1 &&
+			accountId == right.accountId &&
 			sipCode == right.sipCode &&
 			sipReason == right.sipReason &&
 			expires == right.expires &&

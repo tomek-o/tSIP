@@ -49,6 +49,7 @@ namespace Button
 		CALL_MAKE_OR_ANSWER,
 		CALL_ANSWER,
 		RESUBSCRIBE,	// force an immediate re-SUBSCRIBE of presence and dialog-info (BLF) subscriptions
+		ACCOUNT,		// switch current account (used for outgoing calls), show registration state of account
 
 		TYPE_LIMITER
 	};

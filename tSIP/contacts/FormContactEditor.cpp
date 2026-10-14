@@ -3,6 +3,7 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include "Settings.h"
 #include "FormContactEditor.h"
 #include "Paths.h"
 #include "Translate.h"
@@ -25,6 +26,7 @@ void TfrmContactEditor::TranslateForm(void* obj)
 	TRANSLATE_TMP("TfrmContactEditor.lblNote", frm->lblNote->Caption);
 	TRANSLATE_TMP("TfrmContactEditor.lblContactFile", frm->lblContactFile->Caption);
 	TRANSLATE_TMP("TfrmContactEditor.lblRing", frm->lblRing->Caption);
+	TRANSLATE_TMP("TfrmContactEditor.lblAccount", frm->lblAccount->Caption);
 
 	TRANSLATE_TMP("TfrmContactEditor.btnApply", frm->btnApply->Caption);
 	TRANSLATE_TMP("TfrmContactEditor.btnCancel", frm->btnCancel->Caption);
@@ -56,6 +58,8 @@ void __fastcall TfrmContactEditor::btnApplyClick(TObject *Sender)
 	entry->uri3 = edNumber3->Text;
 	entry->file = edFile->Text.Trim();
 	entry->ring = edRing->Text.Trim();
+	if (cbAccount->ItemIndex >= 0)
+		entry->accountId = cbAccount->ItemIndex - 1;
 
 	if (storeNoteInSeparateFile == false)
 	{
@@ -130,6 +134,21 @@ int __fastcall TfrmContactEditor::Start(Contacts::Entry *entry, bool storeNoteIn
 	noteChanged = false;
 	edFile->Text = entry->file;
 	edRing->Text = entry->ring;
+
+	// account selection only if there is more than one account (or account was already assigned)
+	cbAccount->Items->Clear();
+	cbAccount->Items->Add(Translate2("TfrmContactEditor.currentAccount", "(current account)"));
+	for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+	{
+		cbAccount->Items->Add(appSettings.GetAccountDescription(i));
+	}
+	while (cbAccount->Items->Count <= entry->accountId + 1)
+	{
+		cbAccount->Items->Add(appSettings.GetAccountDescription(cbAccount->Items->Count - 1));
+	}
+	cbAccount->ItemIndex = entry->accountId + 1;
+	lblAccount->Visible = (appSettings.uaConf.accounts.size() > 1 || entry->accountId >= 0);
+	cbAccount->Visible = lblAccount->Visible;
 
 	return ShowModal();
 }

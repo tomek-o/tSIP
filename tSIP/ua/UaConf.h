@@ -86,8 +86,21 @@ public:
 
 		std::string mediaenc;
 
+		bool enabled;			///< disabled account: no ua is allocated for it
+		std::string name;		///< optional name displayed in GUI (e.g. "Office")
+
+		/** Per-account auto answer / DND (AUTO_ANSWER_DND button with account assigned);
+			if enabled, overrides global UaConf::autoAnswer for this account.
+			Not compared in operator== (changing it does not require UA restart).
+		*/
+		bool autoAnswer;
+		int autoAnswerCode;
+		std::string autoAnswerReason;
+
 		bool operator==(const Account& right) const {
-			return (reg_server == right.reg_server &&
+			return (enabled == right.enabled &&
+				name == right.name &&
+				reg_server == right.reg_server &&
 				user == right.user &&
 				display_name == right.display_name &&
 				auth_user == right.auth_user &&
@@ -142,7 +155,11 @@ public:
 			outbound1Transport(TRANSPORT_UDP),
 			outbound2Transport(TRANSPORT_UDP),
 
-			mediaenc("")
+			mediaenc(""),
+			enabled(true),
+			autoAnswer(false),
+			autoAnswerCode(200),
+			autoAnswerReason("OK")
 		{
 			audio_codecs.push_back("PCMU/8000/1");
 			audio_codecs.push_back("PCMA/8000/1");
@@ -162,12 +179,14 @@ public:
 				hide_cuser;
 		}
 	};
+	enum { MAX_ACCOUNTS = 16 };
 	std::vector<Account> accounts;
 
 	enum { CONTACTS_CNT = 10 };
 	struct Contact {
 		std::string description;
 		std::string user;
+		int accountId;		///< account used for subscription
 		bool sub_dialog_info;
 		int sub_dialog_info_expires;
 		bool sub_presence;
@@ -184,6 +203,7 @@ public:
 			return (
 				description == right.description &&
 				user == right.user &&
+				accountId == right.accountId &&
 				sub_dialog_info == right.sub_dialog_info &&
 				sub_dialog_info_expires == right.sub_dialog_info_expires &&
 				sub_presence == right.sub_presence &&
@@ -194,6 +214,7 @@ public:
 			return !(*this == right);
 		}
 		Contact():
+			accountId(0),
 			sub_dialog_info(false),
 			sub_dialog_info_expires(600),
 			sub_presence(false),

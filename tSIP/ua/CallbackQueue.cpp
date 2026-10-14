@@ -39,7 +39,7 @@ int CallbackQueue::GetCallback(Callback& cb)
 	return 0;
 }
 
-void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name, AnsiString initial_rx_invite)
+void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name, AnsiString initial_rx_invite, int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -59,6 +59,7 @@ void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state
 	cb->paiPeerName = pai_peer_name;
 	cb->codecName = codec_name;
 	cb->initialRxInvite = initial_rx_invite;
+	cb->accountId = accountId;
 	fifo.push();
 }
 
@@ -166,7 +167,7 @@ void CallbackQueue::ChangePresenceState(int id, int state, const char* note)
 	fifo.push();
 }
 
-void CallbackQueue::ChangeMwiState(int newMsg, int oldMsg)
+void CallbackQueue::ChangeMwiState(int newMsg, int oldMsg, int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -175,6 +176,7 @@ void CallbackQueue::ChangeMwiState(int newMsg, int oldMsg)
 	cb->type = Callback::MWI_STATE;
 	cb->mwiNewMsg = newMsg;
 	cb->mwiOldMsg = oldMsg;
+	cb->accountId = accountId;
 	fifo.push();
 }
 
@@ -229,7 +231,7 @@ void CallbackQueue::NotifyCustomRequestStatus(int requestUid, int requestError, 
 	fifo.push();
 }
 
-void CallbackQueue::OnMessageReceived(AnsiString caller, AnsiString contentType, AnsiString body)
+void CallbackQueue::OnMessageReceived(AnsiString caller, AnsiString contentType, AnsiString body, int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Callback *cb = fifo.getWriteable();
@@ -240,6 +242,7 @@ void CallbackQueue::OnMessageReceived(AnsiString caller, AnsiString contentType,
 	cb->caller = caller;
 	cb->contentType = contentType;
 	cb->body = body;
+	cb->accountId = accountId;
 
 	fifo.push();
 }

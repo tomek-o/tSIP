@@ -94,10 +94,16 @@ struct TSIP_HOST_API
 			plugin thread while host executes plugin Stop() (call is cancelled
 			instead of waiting for main thread, so Stop() can join plugin threads)
 
+		Accounts: "accountId" is 0-based index of account in settings; methods with optional
+		"accountId" use current account (selected by user / ACCOUNT button) if it is not given;
+		not existing / disabled account -> TSIP_ERR_INVALID_ARG with {"error":"..."}
+
 		Methods:
 		- "GetAppInfo": {} -> {"exeName", "profileDir", "pluginInterface"}
-		- "GetCalls": {} -> {"calls":[{"uid","incoming","state","stateName","peer","peerName"}]}
-		- "Call": {"target":"...", "headers":{"Name":"value",...}} -> {"uid":N}; headers (optional):
+		- "GetCalls": {} -> {"calls":[{"uid","incoming","state","stateName","peer","peerName",
+			"accountId"}]}; accountId: account used by call (incoming: account that received it)
+		- "Call": {"target":"...", "headers":{"Name":"value",...}, "accountId":N} -> {"uid":N};
+			accountId (optional): account used for call; headers (optional):
 			extra header lines for INVITE, added after lines from settings; header names generated
 			by SIP stack (Via, From, To, Call-ID, CSeq, Contact, Route, Content-*, ...) are rejected
 		- "Answer": {"uid":N} (uid optional: current call)
@@ -108,10 +114,15 @@ struct TSIP_HOST_API
 			not shown as dialog, returned as TSIP_ERR_GENERIC with {"error":"..."};
 			synchronous result: {"return":"values returned by script (tab-separated)",
 			"output":"print() output"} (fields present if not empty; "output" also on error)
-		- "GetRegistration": {} -> {"accounts":[{"accountId","state","stateName","registered"}]}
+		- "GetRegistration": {} -> {"accounts":[{"accountId","name","user","server","enabled",
+			"current","registered", optional (if known): "state","stateName"}], "currentAccountId"}
+			- all configured accounts
+		- "SetCurrentAccount": {"accountId":N} -> {"currentAccountId"} - account used by default
+			for outgoing calls / messages
 		- "GetHistory": {"limit":20, "filter":"all|incoming|outgoing|missed", "search":"..."}
 			(all optional) -> {"entries":[{"timestamp","incoming","missed","duration",
-			"uri","peerName", optional: "contactName","paiUri","paiPeerName","lastSipCode","reason"}]},
+			"uri","peerName", optional: "contactName","paiUri","paiPeerName","lastSipCode","reason",
+			"accountId"}]},
 			newest first; limit up to 200
 		- "RestartPlugin": {} - host calls plugin Stop() and Start() later (asynchronously,
 			from main thread, after Invoke returns), e.g. to apply settings changed in
@@ -123,7 +134,7 @@ struct TSIP_HOST_API
 			"level":N}; transmitted audio mixed into local playback (not recorded), level in percent 0..200
 		- "StartRecording": {"uid":N} (uid optional) -> {"recording":bool, "file":"..."};
 			uses recording settings from configuration (TSIP_ERR_NOT_AVAILABLE if disabled)
-		- "SendMessage": {"target":"...", "text":"..."} - SIP MESSAGE, sent through message
+		- "SendMessage": {"target":"...", "text":"...", "accountId":N} - SIP MESSAGE, sent through message
 			window (shown to user); delivery status is not returned
 		- "GetMessages": {"peer":"...", "limit":20} -> {"messages":[{"timestamp","incoming",
 			"contentType","body"}]}, oldest first
@@ -142,7 +153,8 @@ struct TSIP_HOST_API
 			of initial received INVITE (raw SIP message), empty for outgoing call
 		- "SendCustomRequest": {"method":"OPTIONS", "uri":"sip:..."} (out-of-dialog) or
 			{"method":"INFO", "uid":N} (within call dialog, uid optional = current call), optional
-			"headers":{"Name":"value"} -> {"requestUid":N}; INVITE, ACK, CANCEL, BYE, PRACK, UPDATE
+			"headers":{"Name":"value"}, "accountId":N (out-of-dialog only; request within call uses
+			account of the call) -> {"requestUid":N}; INVITE, ACK, CANCEL, BYE, PRACK, UPDATE
 			are not allowed; requests are shared with Lua (GetCustomRequestReply etc.)
 		- "GetCustomRequest": {"requestUid":N, "delete":true} -> {"requestUid", "haveReply",
 			"transportError", "sipStatusCode", "reply"}; last 3 only if haveReply (transportError 0:

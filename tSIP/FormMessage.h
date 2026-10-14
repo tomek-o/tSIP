@@ -37,6 +37,8 @@ private:	// User declarations
 	AnsiString target;
 	bool targetSet;
 	bool incoming;
+	int accountId;	///< -1: current account
+	void UpdateCaption(void);
 	void UpdateTarget(AnsiString val);
 	AnsiString peerLabelCache;
 	bool peerLabelCacheValid;
@@ -67,6 +69,8 @@ public:		// User declarations
 	void AddIncomingMessage(AnsiString contentType, AnsiString body);
 	int HandleMessageStatus(int requestUid, int requestError, int sipCode, AnsiString reason);
 	void SetText(AnsiString text);
+	/** \param accountId account used for sending, -1: current account */
+	void SetAccountId(int accountId);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TfrmMessage *frmMessage;

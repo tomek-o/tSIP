@@ -28,6 +28,7 @@ __fastcall TfrmMessage::TfrmMessage(TComponent* Owner)
 	: TForm(Owner),
 	targetSet(false),
 	incoming(false),
+	accountId(-1),
 	peerLabelCacheValid(false),
 	loadedHistoryCount(0),
 	hasMoreHistory(false),
@@ -96,7 +97,7 @@ void TfrmMessage::_SendMsg()
 
 	requestIds.insert(requestId);
 	AnsiString utf8Msg = ::AnsiToUtf8(msg);
-	UA->SendMessage(requestId, 0, target, utf8Msg);
+	UA->SendMessage(requestId, (accountId >= 0) ? accountId : appSettings.GetCurrentAccountId(), target, utf8Msg);
 	MessageHistory::Append(target, false, "text/plain", utf8Msg);
 	loadedHistoryCount++;
 
@@ -350,10 +351,25 @@ void TfrmMessage::UpdateTarget(AnsiString val)
 	if (!targetSet)
 	{
 		target = val;
-		AnsiString caption;
-		caption.sprintf("Text: %s", target.c_str());
-		this->Caption = caption;
+		UpdateCaption();
 	}
+}
+
+void TfrmMessage::UpdateCaption(void)
+{
+	AnsiString caption;
+	caption.sprintf("Text: %s", target.c_str());
+	if (accountId >= 0 && appSettings.uaConf.accounts.size() > 1)
+	{
+		caption.cat_sprintf(" [%s]", appSettings.GetAccountDescription(accountId).c_str());
+	}
+	this->Caption = caption;
+}
+
+void TfrmMessage::SetAccountId(int accountId)
+{
+	this->accountId = accountId;
+	UpdateCaption();
 }
 
 int TfrmMessage::HandleMessageStatus(int requestUid, int requestError, int sipCode, AnsiString reason)

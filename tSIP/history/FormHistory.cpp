@@ -28,6 +28,7 @@ AnsiString unansweredText = "(unanswered)";
 AnsiString notCompletedText = "(not completed)";
 AnsiString callTimeText = "Call time:";
 AnsiString codecText = "Codec:";
+AnsiString accountText = "Account:";
 AnsiString replyCodeText = "Reply code:";
 AnsiString replyLineText = "Reply line:";
 AnsiString reasonText = "Reason";
@@ -58,6 +59,7 @@ void TfrmHistory::TranslateForm(void* obj)
 	Translate("TfrmHistory.notCompletedText", notCompletedText);
 	Translate("TfrmHistory.callTimeText", callTimeText);
 	Translate("TfrmHistory.codecText", codecText);
+	Translate("TfrmHistory.accountText", accountText);
 	Translate("TfrmHistory.replyCode", replyCodeText);
 	Translate("TfrmHistory.replyLine", replyLineText);
 	Translate("TfrmHistory.reason", reasonText);
@@ -279,7 +281,8 @@ void __fastcall TfrmHistory::lvHistoryDblClick(TObject *Sender)
 
 	AnsiString uri = getDefaultUri(entry);
 	unsigned int callUid;
-	callbackCall(uri.c_str(), callUid);
+	// call back / redial using the same account as original call
+	callbackCall(uri.c_str(), callUid, entry->accountId);
 }
 //---------------------------------------------------------------------------
 
@@ -413,6 +416,11 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 			hint.cat_sprintf("\n%s %d s", callTimeText.c_str(), entry.time);
 		}
 
+	}
+
+	if (entry.accountId >= 0 && appSettings.uaConf.accounts.size() > 1)
+	{
+		hint.cat_sprintf("\n%s %s", accountText.c_str(), appSettings.GetAccountDescription(entry.accountId).c_str());
 	}
 
 	if (conf.showCodecNameInHint && entry.codecName != "")

@@ -316,6 +316,15 @@ public:
 	std::list<PhoneConf> phoneConf;
 
 	UaConf uaConf;
+	/** Current (last used) account - used by default for outgoing calls,
+		saved on exit; use GetCurrentAccountId() to get valid value */
+	int currentAccountId;
+	int GetCurrentAccountId(void) const;
+	/** "#n: name" or "#n: user@server" */
+	AnsiString GetAccountDescription(int accountId) const;
+	/** Short account text for call display: name or user@server;
+		empty if there is only single enabled account (no need to show it) */
+	AnsiString GetAccountCallDisplayText(int accountId) const;
 
 	struct _Translation
 	{

@@ -24,6 +24,10 @@ const char* Action::getTypeDescription(enum Action::Type type)
 		return "answer/hangup";
 	case TYPE_SCRIPT_FILE:
 		return "script file";
+	case TYPE_ACCOUNT:
+		return "account #";
+	case TYPE_NEXT_ACCOUNT:
+		return "next account";
 	default:
 		return "";
 	}

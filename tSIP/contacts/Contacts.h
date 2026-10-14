@@ -26,6 +26,12 @@ public:
 			placed in the profile directory.
 		*/
 		AnsiString ring;
+		/** \brief Account used for calls to this contact (if call does not specify account), -1: current account */
+		int accountId;
+
+		Entry(void):
+			accountId(-1)
+		{}
 
 		bool operator==(const Entry& right) const {
 			return (description == right.description &&
@@ -35,7 +41,8 @@ public:
 					uri3 == right.uri3 &&
 					note == right.note &&
 					file == right.file &&
-					ring == right.ring
+					ring == right.ring &&
+					accountId == right.accountId
 					);
 		}
 

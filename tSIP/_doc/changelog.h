@@ -1347,6 +1347,17 @@ Version 0.3.15
 	- multiple minor fixes
 
 Version 0.3.16
+	- multiple SIP accounts registered and used at the same time
+		- settings: account selector with add / remove, "Account enabled" and optional account name; audio codecs configured per account on account page (with collapsible extra settings, ptime moved to basic settings); Opus settings as top-level page; video codecs page with account selector
+		- current account (used by default for outgoing calls and messages) saved on exit; status bar shows registration state of current account, status bar hint shows state of all accounts; tray error icon if any account failed to register
+		- current account can be changed with ACCOUNT button, tray menu ("Account" submenu), click on status bar, hotkey actions "account #" and "next account", Lua and plugins
+		- phonebook: optional account per contact (contact editor), used for calls to this contact if call does not specify account; SPEED_DIAL button: optional account
+		- incoming text messages: account that received the message is used for reply (shown in message window caption if multiple accounts are configured)
+		- new ACCOUNT button type: switching current account, showing registration state of the account
+		- incoming call: account that received the call shown in call state and tray notifier (if multiple accounts are enabled); stored in call history, redial / call back from history use the same account
+		- BLF, PRESENCE, MWI buttons: optional account assignment (subscriptions / calls using that account); AUTO_ANSWER_DND button: optional account (DND for single account), by default global as before; account selection is shown only if there is more than one account
+		- Lua: GetAccountCount, GetCurrentAccount, SetCurrentAccount, GetAccountUserName, GetCallAccountId; optional account id argument for Call, SendCustomRequest, SendTextMessage, GetRegistrationState; GetExecSourceId() returns account id in "on registration state" and "on SIMPLE message RX" scripts
+		- plugin interface v2: optional accountId for Call, SendMessage, SendCustomRequest; accountId in call info and history; GetRegistration lists all configured accounts; SetCurrentAccount method
 	- added options to use compact SIP header names in outgoing messages (Network settings): for RFC 3261 headers and, separately, for extension headers (Event, Allow-Events, Refer-To, Referred-By, Session-Expires)
 	- FIXED: incoming SIP message was dropped if optional Access-URL, Reason or P-Asserted-Identity header could not be decoded
 	- FIXED: possible heap overflow when parsing XML (presence, dialog-info) with malformed short special tags

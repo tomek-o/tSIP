@@ -7,6 +7,8 @@
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
+#include <ExtCtrls.hpp>
+#include <Buttons.hpp>
 //---------------------------------------------------------------------------
 
 #include "UaConf.h"
@@ -26,6 +28,7 @@ __published:	// IDE-managed Components
 	TEdit *edExpires;
 	TLabel *lblExpiresInfo;
 	TLabel *lblExtra;
+	TSpeedButton *btnExtra;
 	TLabel *lblAuthUser;
 	TEdit *edAuthUser;
 	TLabel *lblAuthUserInfo;
@@ -52,6 +55,21 @@ __published:	// IDE-managed Components
 	TLabel *lblMediaEncryption;
 	TComboBox *cbMediaEncryption;
 	TComboBox *cbOutbound1Transport;
+	TCheckBox *chbEnabled;
+	TLabel *lblName;
+	TEdit *edName;
+	TLabel *lblNameInfo;
+	TPanel *pnlBasic;
+	TPanel *pnlExtraToggle;
+	TPanel *pnlExtra;
+	TPanel *pnlCodecs;
+	TLabel *lblAudioCodecsAvailable;
+	TLabel *lblAudioCodecsEnabled;
+	TLabel *lblCodecsInfo;
+	TListBox *lboxAudioCodecsAvailable;
+	TButton *btnAudioCodecEnable;
+	TButton *btnAudioCodecDisable;
+	TListBox *lboxAudioCodecsEnabled;
 	void __fastcall edRegServerChange(TObject *Sender);
 	void __fastcall edUserChange(TObject *Sender);
 	void __fastcall edPasswordChange(TObject *Sender);
@@ -74,8 +92,28 @@ __published:	// IDE-managed Components
 	void __fastcall chbHideDisplayNameClick(TObject *Sender);
 	void __fastcall cbMediaEncryptionChange(TObject *Sender);
 	void __fastcall cbOutbound1TransportChange(TObject *Sender);
+	void __fastcall chbEnabledClick(TObject *Sender);
+	void __fastcall edNameChange(TObject *Sender);
+	void __fastcall btnExtraClick(TObject *Sender);
+	void __fastcall lboxAudioCodecsAvailableDblClick(TObject *Sender);
+	void __fastcall lboxAudioCodecsEnabledDblClick(TObject *Sender);
+	void __fastcall btnAudioCodecEnableClick(TObject *Sender);
+	void __fastcall btnAudioCodecDisableClick(TObject *Sender);
+	void __fastcall lboxAudioCodecsEnabledDragDrop(TObject *Sender,
+		  TObject *Source, int X, int Y);
+	void __fastcall lboxAudioCodecsEnabledDragOver(TObject *Sender,
+		  TObject *Source, int X, int Y, TDragState State, bool &Accept);
+	void __fastcall lboxAudioCodecsEnabledStartDrag(TObject *Sender,
+		  TDragObject *&DragObject);
 private:	// User declarations
 	UaConf::Account& acc;
+	int audioCodecsEnabledDraggedIndex;
+	void LoadAudioCodecs(void);
+	void StoreAudioCodecs(void);
+	void AudioCodecEnableSelected(void);
+	void AudioCodecDisableSelected(void);
+	void SetExtraVisible(bool state);
+	void UpdateHeight(void);
 public:		// User declarations
 	__fastcall TfrmAccount(TComponent* Owner, int id, UaConf::Account& acc);
 

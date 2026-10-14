@@ -4,7 +4,7 @@ object frmButtonEdit: TfrmButtonEdit
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Edit button'
-  ClientHeight = 437
+  ClientHeight = 461
   ClientWidth = 657
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -1323,7 +1323,7 @@ object frmButtonEdit: TfrmButtonEdit
     Left = 0
     Top = 0
     Width = 657
-    Height = 78
+    Height = 102
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 0
@@ -1393,6 +1393,23 @@ object frmButtonEdit: TfrmButtonEdit
       Width = 139
       Height = 21
       TabOrder = 3
+    end
+    object lblAccount: TLabel
+      Left = 6
+      Top = 80
+      Width = 39
+      Height = 13
+      Caption = 'Account'
+    end
+    object cbAccount: TComboBox
+      Left = 122
+      Top = 77
+      Width = 278
+      Height = 21
+      Style = csDropDownList
+      DropDownCount = 16
+      ItemHeight = 13
+      TabOrder = 5
     end
   end
   object openDialog: TOpenDialog

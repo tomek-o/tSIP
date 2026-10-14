@@ -204,8 +204,8 @@ static int subscribe(struct presence *pres)
 	char uri[256];
 	int err;
 
-	/* We use the first UA */
-	ua = uag_find_aor(NULL);
+	/* UA assigned to contact (account of the button), first UA by default */
+	ua = contact_ua(pres->contact);
 	if (!ua) {
 		DEBUG_WARNING("presence: no UA found\n");
 		return ENOENT;

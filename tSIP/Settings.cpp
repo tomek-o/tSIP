@@ -125,6 +125,7 @@ Settings::_Branding::_Branding(void):
 Settings::Settings(void)
 {
 	configWriteAllowed = true;
+	currentAccountId = 0;
 
 	Display.bUserOnlyClip = false;
 	Display.bDecodeUtfDisplayToAnsi = false;
@@ -155,6 +156,54 @@ Settings::Settings(void)
 	ScriptWindow.ClearMruItems();
 
 	buttonContainers.resize(BUTTON_CONTAINER__COUNT);
+}
+
+int Settings::GetCurrentAccountId(void) const
+{
+	const std::vector<UaConf::Account> &accounts = uaConf.accounts;
+	if (currentAccountId >= 0 && currentAccountId < (int)accounts.size() && accounts[currentAccountId].enabled)
+		return currentAccountId;
+	for (unsigned int i=0; i<accounts.size(); i++)
+	{
+		if (accounts[i].enabled)
+			return i;
+	}
+	return 0;
+}
+
+AnsiString Settings::GetAccountDescription(int accountId) const
+{
+	AnsiString text;
+	text.sprintf("#%d: ", accountId + 1);
+	if (accountId < 0 || accountId >= (int)uaConf.accounts.size())
+	{
+		text += "(not configured)";
+		return text;
+	}
+	const UaConf::Account &acc = uaConf.accounts[accountId];
+	if (acc.name != "")
+		text += acc.name.c_str();
+	else
+		text.cat_sprintf("%s@%s", acc.user.c_str(), acc.reg_server.c_str());
+	return text;
+}
+
+AnsiString Settings::GetAccountCallDisplayText(int accountId) const
+{
+	int enabledCount = 0;
+	for (unsigned int i=0; i<uaConf.accounts.size(); i++)
+	{
+		if (uaConf.accounts[i].enabled)
+			enabledCount++;
+	}
+	if (enabledCount <= 1 || accountId < 0 || accountId >= (int)uaConf.accounts.size())
+		return "";
+	const UaConf::Account &acc = uaConf.accounts[accountId];
+	if (acc.name != "")
+		return acc.name.c_str();
+	AnsiString text;
+	text.sprintf("%s@%s", acc.user.c_str(), acc.reg_server.c_str());
+	return text;
 }
 
 int Settings::UpdateFromText(AnsiString text)
@@ -216,15 +265,24 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 	info.appVersion.FromJson(root["info"]);
 
 	uaConf.fromJson(root["uaConf"], info.appVersion);
+	currentAccountId = root.get("currentAccountId", currentAccountId).asInt();
 
 	{
 		const Json::Value &accounts = root["Accounts"];
-		uaConf.accounts.resize(1);
-		for (int i=0; i<std::min(1u, accounts.size()); i++)
+		unsigned int count = 1;
+		if (accounts.type() == Json::arrayValue && accounts.size() > 1)
+			count = std::min((unsigned int)UaConf::MAX_ACCOUNTS, accounts.size());
+		uaConf.accounts.resize(count);
+		for (unsigned int i=0; i<std::min(count, accounts.size()); i++)
 		{
 			const Json::Value &acc = accounts[i];
 			struct UaConf::Account new_acc = uaConf.accounts[i];
 
+			new_acc.enabled = acc.get("enabled", new_acc.enabled).asBool();
+			new_acc.name = acc.get("name", new_acc.name).asString();
+			acc.getBool("autoAnswer", new_acc.autoAnswer);
+			acc.getInt("autoAnswerCode", new_acc.autoAnswerCode);
+			acc.getString("autoAnswerReason", new_acc.autoAnswerReason);
 			new_acc.reg_server = acc.get("reg_server", new_acc.reg_server).asString();
 			new_acc.user = acc.get("user", new_acc.user).asString();
 			new_acc.display_name = acc.get("display_name", new_acc.display_name).asString();
@@ -313,7 +371,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 				}
 			}
 
-			uaConf.accounts[0] = new_acc;
+			uaConf.accounts[i] = new_acc;
 		}
 	}
 
@@ -994,12 +1052,18 @@ int Settings::Write(AnsiString asFileName)
 	}
 
 	uaConf.toJson(root["uaConf"]);
+	root["currentAccountId"] = currentAccountId;
 
 	// write accounts
 	for (unsigned int i=0; i<uaConf.accounts.size(); i++)
 	{
 		UaConf::Account &acc = uaConf.accounts[i];
 		Json::Value &cfgAcc = root["Accounts"][i];
+		cfgAcc["enabled"] = acc.enabled;
+		cfgAcc["name"] = acc.name;
+		cfgAcc["autoAnswer"] = acc.autoAnswer;
+		cfgAcc["autoAnswerCode"] = acc.autoAnswerCode;
+		cfgAcc["autoAnswerReason"] = acc.autoAnswerReason;
 		if (!acc.hide_reg_server)
 			cfgAcc["reg_server"] = acc.reg_server;
 		if (!acc.hide_user)

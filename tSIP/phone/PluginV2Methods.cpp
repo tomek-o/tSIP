@@ -64,6 +64,21 @@ bool Matches(const AnsiString &text, const AnsiString &needleUpper)
 /** params: limit (default 20), filter: "all" (default) | "incoming" | "outgoing" | "missed",
 	search: optional text matched against number/URI and names
 */
+/** Optional "accountId" param: -1 if not present; false (with error) if invalid */
+bool GetOptionalAccountId(const Json::Value &params, Json::Value &result, int &accountId)
+{
+	accountId = -1;
+	if (params["accountId"].isNull())
+		return true;
+	accountId = params["accountId"].asInt();
+	if (!PluginV2Methods::IsAccountUsable(accountId))
+	{
+		result["error"] = "account does not exist or is disabled";
+		return false;
+	}
+	return true;
+}
+
 int GetHistory(const Json::Value &params, Json::Value &result)
 {
 	unsigned int limit = GetLimit(params);
@@ -97,6 +112,8 @@ int GetHistory(const Json::Value &params, Json::Value &result)
 		jv["incoming"] = entry.incoming;
 		jv["missed"] = missed;
 		jv["duration"] = entry.time;
+		if (entry.accountId >= 0)
+			jv["accountId"] = entry.accountId;
 		jv["uri"] = ToUtf8(entry.uri);
 		jv["peerName"] = PluginV2Methods::PeerNameToUtf8(entry.peerName).c_str();
 		if (entry.contactName != "")
@@ -282,8 +299,11 @@ int SendSimpleMessage(const Json::Value &params, Json::Value &result)
 		result["error"] = "messaging is disabled in tSIP settings";
 		return TSIP_ERR_NOT_AVAILABLE;
 	}
+	int accountId;
+	if (!GetOptionalAccountId(params, result, accountId))
+		return TSIP_ERR_INVALID_ARG;
 	SIMPLE_Messages::Send(::Utf8ToAnsi(params["target"].asString().c_str()),
-		::Utf8ToAnsi(params["text"].asString().c_str()), true);
+		::Utf8ToAnsi(params["text"].asString().c_str()), true, accountId);
 	return TSIP_OK;
 }
 
@@ -300,7 +320,7 @@ int GetMessages(const Json::Value &params, Json::Value &result)
 	if (entries.empty() && peer.Pos("sip:") != 1 && appSettings.uaConf.accounts.size() > 0)
 	{
 		// history file may be named after full URI (incoming messages)
-		AnsiString uri = (AnsiString)"sip:" + peer + "@" + appSettings.uaConf.accounts[0].reg_server.c_str();
+		AnsiString uri = (AnsiString)"sip:" + peer + "@" + appSettings.uaConf.accounts[appSettings.GetCurrentAccountId()].reg_server.c_str();
 		entries = MessageHistory::LoadLast(uri, limit);
 	}
 	Json::Value jmessages(Json::arrayValue);
@@ -571,7 +591,10 @@ int SendCustomRequest(const Json::Value &params, Json::Value &result)
 			result["error"] = "invalid uri";
 			return TSIP_ERR_INVALID_ARG;
 		}
-		status = UaCustomRequests::Send(requestUid, uri.c_str(), method.c_str(), headerLines);
+		int accountId;
+		if (!GetOptionalAccountId(params, result, accountId))
+			return TSIP_ERR_INVALID_ARG;
+		status = UaCustomRequests::Send(requestUid, uri.c_str(), method.c_str(), headerLines, accountId);
 	}
 	else
 	{
@@ -708,6 +731,66 @@ void PluginV2Methods::SetCallbackStartRecording(CallbackStartRecording cb)
 	callbackStartRecording = cb;
 }
 
+namespace {
+	PluginV2Methods::CallbackSetCurrentAccount callbackSetCurrentAccount = NULL;
+}
+
+void PluginV2Methods::SetCallbackSetCurrentAccount(CallbackSetCurrentAccount cb)
+{
+	callbackSetCurrentAccount = cb;
+}
+
+bool PluginV2Methods::IsAccountUsable(int accountId)
+{
+	return (accountId >= 0 && accountId < (int)appSettings.uaConf.accounts.size() &&
+		appSettings.uaConf.accounts[accountId].enabled);
+}
+
+int PluginV2Methods::GetCurrentAccountId(void)
+{
+	return appSettings.GetCurrentAccountId();
+}
+
+void PluginV2Methods::GetAccounts(std::map<int, Json::Value> &accounts)
+{
+	int current = appSettings.GetCurrentAccountId();
+	for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+	{
+		const UaConf::Account &acc = appSettings.uaConf.accounts[i];
+		Json::Value ja(Json::objectValue);
+		ja["accountId"] = i;
+		ja["name"] = ToUtf8(acc.name.c_str());
+		ja["user"] = ToUtf8(acc.user.c_str());
+		ja["server"] = ToUtf8(acc.reg_server.c_str());
+		ja["enabled"] = acc.enabled;
+		ja["current"] = ((int)i == current);
+		accounts[i] = ja;
+	}
+}
+
+namespace {
+
+/** params: accountId (required) - account used by default for outgoing calls / messages */
+int SetCurrentAccount(const Json::Value &params, Json::Value &result)
+{
+	if (!params["accountId"].isInt() && !params["accountId"].isUInt())
+		return TSIP_ERR_INVALID_ARG;
+	int accountId = params["accountId"].asInt();
+	if (!PluginV2Methods::IsAccountUsable(accountId))
+	{
+		result["error"] = "account does not exist or is disabled";
+		return TSIP_ERR_INVALID_ARG;
+	}
+	if (!callbackSetCurrentAccount)
+		return TSIP_ERR_NOT_AVAILABLE;
+	callbackSetCurrentAccount(accountId);
+	result["currentAccountId"] = appSettings.GetCurrentAccountId();
+	return TSIP_OK;
+}
+
+
+}	// namespace
+
 int PluginV2Methods::Execute(const AnsiString &method, const Json::Value &params, Json::Value &result)
 {
 	if (method == "GetHistory")
@@ -726,6 +809,8 @@ int PluginV2Methods::Execute(const AnsiString &method, const Json::Value &params
 		return StartRecording(params, result);
 	if (method == "SendMessage")
 		return SendSimpleMessage(params, result);
+	if (method == "SetCurrentAccount")
+		return SetCurrentAccount(params, result);
 	if (method == "GetMessages")
 		return GetMessages(params, result);
 	if (method == "ListAudioDevices")

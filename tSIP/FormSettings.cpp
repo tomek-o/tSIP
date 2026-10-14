@@ -14,6 +14,7 @@
 #include "AudioDevicesList.h"
 #include "AudioModules.h"
 #include "ProgrammableButtons.h"
+#include "Globals.h"
 #include "FormLuaScript.h"
 #include "UaMain.h"
 #include "NetInterfaces.h"
@@ -33,7 +34,6 @@ TfrmSettings *frmSettings = NULL;
 
 namespace
 {
-	int audioCodecsEnabledDraggedIndex = -1;
 	int videoCodecsEnabledDraggedIndex = -1;
 
     inline void strncpyz(char* dst, const char* src, int dstsize)
@@ -158,8 +158,7 @@ void TfrmSettings::CreatePages(void)
 	CreatePagesNode(NULL, tsAudioProcessing);
 	if (Branding::recording)
 		CreatePagesNode(NULL, tsRecording);
-	TTreeNode *nodeCodecs = CreatePagesNode(NULL, tsCodecs);
-	CreatePagesNode(nodeCodecs, tsUaConfOpus);
+	CreatePagesNode(NULL, tsUaConfOpus);
 #ifdef USE_VIDEO
 	CreatePagesNode(NULL, tsVideo);
 	TTreeNode *nodeCodecsVideo = CreatePagesNode(NULL, tsVideoCodecs);
@@ -260,16 +259,13 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbMessagesDoNotReply->Checked = tmpSettings.uaConf.messages.doNotReply;
 	chbMessagesHistoryEnabled->Checked = tmpSettings.uaConf.messages.historyEnabled;
 
-	for (int i=0; i<tmpSettings.uaConf.accounts.size(); i++)
+	CreateAccountFrames(tmpSettings.GetCurrentAccountId());
+	btnAccountIds.clear();
+	for (unsigned int i=0; i<buttons.btnConf.size(); i++)
 	{
-		frmAccount = new TfrmAccount(NULL, i, tmpSettings.uaConf.accounts[i]);
-		frmAccount->Parent = frmSettings->scrbAccounts;
-		frmAccount->Visible = true;
-		// force realign
-		frmAccount->Align = alBottom;
-		frmAccount->Align = alTop;
-		frmAccountVector.push_back(frmAccount);
+		btnAccountIds.push_back(buttons.btnConf[i].accountId);
 	}
+	btnAccountIdsChanged = false;
 
 	edGuiScaling->Text = tmpSettings.gui.scalingPct;
 
@@ -419,62 +415,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	cbSipAccessUrlMode->ItemIndex = tmpSettings.SipAccessUrl.accessMode;
 
-	{
-		lboxAudioCodecsAvailable->Clear();
-		std::vector<AnsiString> codecs;
-		if (Ua::Instance().GetAudioCodecList(codecs) == 0)
-		{
-			for (unsigned int i=0; i<codecs.size(); i++)
-			{
-				lboxAudioCodecsAvailable->Items->Add(codecs[i]);
-			}
-		}
-		lboxAudioCodecsEnabled->Clear();
-	}
-
-	{
-		lboxVideoCodecsAvailable->Clear();
-		std::vector<AnsiString> codecs;
-		if (Ua::Instance().GetVideoCodecList(codecs) == 0)
-		{
-			for (unsigned int i=0; i<codecs.size(); i++)
-			{
-				lboxVideoCodecsAvailable->Items->Add(codecs[i]);
-			}
-		}
-		lboxVideoCodecsEnabled->Clear();
-	}
-
-	if (tmpSettings.uaConf.accounts.size() > 0)
-	{
-        /** \todo multiple accounts */
-		for (unsigned int i=0; i<tmpSettings.uaConf.accounts[0].audio_codecs.size(); i++)
-		{
-			AnsiString name = tmpSettings.uaConf.accounts[0].audio_codecs[i].c_str();
-			for (int codec = 0; codec < lboxAudioCodecsAvailable->Items->Count; codec++)
-			{
-				if (lboxAudioCodecsAvailable->Items->Strings[codec] == name)
-				{
-					lboxAudioCodecsAvailable->Items->Delete(codec);
-					lboxAudioCodecsEnabled->Items->Add(name);
-					break;
-				}
-			}
-		}
-		for (unsigned int i=0; i<tmpSettings.uaConf.accounts[0].video_codecs.size(); i++)
-		{
-			AnsiString name = tmpSettings.uaConf.accounts[0].video_codecs[i].c_str();
-			for (int codec = 0; codec < lboxVideoCodecsAvailable->Items->Count; codec++)
-			{
-				if (lboxVideoCodecsAvailable->Items->Strings[codec] == name)
-				{
-					lboxVideoCodecsAvailable->Items->Delete(codec);
-					lboxVideoCodecsEnabled->Items->Add(name);
-					break;
-				}
-			}
-		}
-	}
+	codecsAccountId = -1;
+	SelectCodecsAccount(tmpSettings.GetCurrentAccountId());
 
 	chbRecordingEnabled->Checked = tmpSettings.uaConf.recording.enabled;
 	cbRecDirType->ItemIndex = tmpSettings.uaConf.recording.recDir;
@@ -924,23 +866,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.messages.doNotReply = chbMessagesDoNotReply->Checked;
 	tmpSettings.uaConf.messages.historyEnabled = chbMessagesHistoryEnabled->Checked;
 
-	if (lboxAudioCodecsAvailable->Items->Count > 0 || lboxAudioCodecsEnabled->Items->Count > 0)	// both lists may be empty if UA failed to initialize
-	{
-		tmpSettings.uaConf.accounts[0].audio_codecs.clear();
-		for (int i=0; i<lboxAudioCodecsEnabled->Items->Count; i++)
-		{
-			tmpSettings.uaConf.accounts[0].audio_codecs.push_back(lboxAudioCodecsEnabled->Items->Strings[i].c_str());
-		}
-	}
-
-	if (lboxVideoCodecsAvailable->Items->Count > 0 || lboxVideoCodecsEnabled->Items->Count > 0)	// both lists may be empty if UA failed to initialize
-	{
-		tmpSettings.uaConf.accounts[0].video_codecs.clear();
-		for (int i=0; i<lboxVideoCodecsEnabled->Items->Count; i++)
-		{
-			tmpSettings.uaConf.accounts[0].video_codecs.push_back(lboxVideoCodecsEnabled->Items->Strings[i].c_str());
-		}
-	}
+	StoreCodecLists(codecsAccountId);
 
 	tmpSettings.uaConf.recording.enabled = chbRecordingEnabled->Checked;
 	tmpSettings.uaConf.recording.recDir = static_cast<UaConf::RecordingCfg::RecDir>(cbRecDirType->ItemIndex);
@@ -1140,42 +1066,273 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	}
 
 	appSettings = tmpSettings;
+
+	if (btnAccountIdsChanged)
+	{
+		// account removed: account ids of buttons shifted
+		btnAccountIdsChanged = false;
+		bool changed = false;
+		for (unsigned int i=0; i<buttons.btnConf.size() && i<btnAccountIds.size(); i++)
+		{
+			ButtonConf &cfg = buttons.btnConf[i];
+			if (cfg.accountId != btnAccountIds[i])
+			{
+				cfg.accountId = btnAccountIds[i];
+				buttons.SetConfig(i, cfg);
+				changed = true;
+			}
+		}
+		if (changed)
+		{
+			buttons.Write();
+		}
+	}
 	this->Close();	
 }
 //---------------------------------------------------------------------------
 
 
 
+void TfrmSettings::DeleteAccountFrames(void)
+{
+	for (unsigned int i=0; i<frmAccountVector.size(); i++)
+	{
+		delete frmAccountVector[i];
+	}
+	frmAccountVector.clear();
+}
+
+/** \note Account frames keep references to tmpSettings.uaConf.accounts elements:
+	frames must be recreated after any change of accounts vector size
+*/
+void TfrmSettings::CreateAccountFrames(int selectedAccountId)
+{
+	DeleteAccountFrames();
+	std::vector<UaConf::Account> &accounts = tmpSettings.uaConf.accounts;
+	for (unsigned int i=0; i<accounts.size(); i++)
+	{
+		frmAccount = new TfrmAccount(NULL, i, accounts[i]);
+		frmAccount->Parent = scrbAccounts;
+		frmAccount->Visible = false;
+		frmAccountVector.push_back(frmAccount);
+	}
+	UpdateAccountLists();
+	ShowAccountFrame(selectedAccountId);
+}
+
+void TfrmSettings::UpdateAccountLists(void)
+{
+	TComboBox* combos[] = { cbAccount, cbVideoCodecsAccount };
+	for (unsigned int c=0; c<sizeof(combos)/sizeof(combos[0]); c++)
+	{
+		TComboBox *cb = combos[c];
+		int index = cb->ItemIndex;
+		cb->Items->BeginUpdate();
+		cb->Items->Clear();
+		for (unsigned int i=0; i<tmpSettings.uaConf.accounts.size(); i++)
+		{
+			const UaConf::Account &acc = tmpSettings.uaConf.accounts[i];
+			AnsiString text;
+			text.sprintf("#%d: ", i + 1);
+			if (acc.name != "")
+				text.cat_sprintf("%s (%s@%s)", acc.name.c_str(), acc.user.c_str(), acc.reg_server.c_str());
+			else
+				text.cat_sprintf("%s@%s", acc.user.c_str(), acc.reg_server.c_str());
+			if (!acc.enabled)
+				text += " [disabled]";
+			cb->Items->Add(text);
+		}
+		cb->Items->EndUpdate();
+		if (index >= cb->Items->Count)
+			index = cb->Items->Count - 1;
+		cb->ItemIndex = index;
+	}
+	btnRemoveAccount->Enabled = (tmpSettings.uaConf.accounts.size() > 1);
+	btnAddAccount->Enabled = (tmpSettings.uaConf.accounts.size() < UaConf::MAX_ACCOUNTS);
+}
+
+void TfrmSettings::ShowAccountFrame(int accountId)
+{
+	if (accountId < 0 || accountId >= (int)frmAccountVector.size())
+		accountId = 0;
+	for (unsigned int i=0; i<frmAccountVector.size(); i++)
+	{
+		frmAccountVector[i]->Visible = ((int)i == accountId);
+	}
+	cbAccount->ItemIndex = accountId;
+}
+
+void __fastcall TfrmSettings::cbAccountChange(TObject *Sender)
+{
+	ShowAccountFrame(cbAccount->ItemIndex);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::cbAccountDropDown(TObject *Sender)
+{
+	// refresh labels (user / server / name might be edited)
+	UpdateAccountLists();
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TfrmSettings::btnAddAccountClick(TObject *Sender)
 {
+	if (tmpSettings.uaConf.accounts.size() >= UaConf::MAX_ACCOUNTS)
+		return;
+	StoreCodecLists(codecsAccountId);
 	UaConf::Account acc;
+	// codecs for new account: copy from currently displayed account
+	int srcId = cbAccount->ItemIndex;
+	if (srcId >= 0 && srcId < (int)tmpSettings.uaConf.accounts.size())
+	{
+		const UaConf::Account &src = tmpSettings.uaConf.accounts[srcId];
+		acc.audio_codecs = src.audio_codecs;
+		acc.video_codecs = src.video_codecs;
+	}
 	tmpSettings.uaConf.accounts.push_back(acc);
-	int i = tmpSettings.uaConf.accounts.size() - 1;
+	int id = tmpSettings.uaConf.accounts.size() - 1;
+	CreateAccountFrames(id);
+	codecsAccountId = -1;
+	SelectCodecsAccount(id);
+}
+//---------------------------------------------------------------------------
 
-	//scrbAccounts->AutoScroll = false;
+void __fastcall TfrmSettings::btnRemoveAccountClick(TObject *Sender)
+{
+	int id = cbAccount->ItemIndex;
+	if (id < 0 || id >= (int)tmpSettings.uaConf.accounts.size() || tmpSettings.uaConf.accounts.size() <= 1)
+		return;
+	// buttons using removed account / accounts after it
+	int usingRemoved = 0, usingLater = 0;
+	for (unsigned int i=0; i<btnAccountIds.size(); i++)
+	{
+		if (btnAccountIds[i] == id)
+			usingRemoved++;
+		else if (btnAccountIds[i] > id)
+			usingLater++;
+	}
+	AnsiString msg;
+	msg.sprintf("Remove account %s?", cbAccount->Text.c_str());
+	bool shiftButtons = false;
+	if (usingRemoved == 0 && usingLater == 0)
+	{
+		if (MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION) != IDYES)
+			return;
+	}
+	else
+	{
+		msg += "\n\n";
+		if (usingRemoved)
+			msg.cat_sprintf("%d button(s) assigned to this account.\n", usingRemoved);
+		if (usingLater)
+			msg.cat_sprintf("%d button(s) assigned to accounts after it (numbers of these accounts will decrease).\n", usingLater);
+		msg += "\n"
+			"Yes: remove account and update buttons - buttons of following accounts keep their accounts, "
+			"buttons of removed account are set to default account.\n"
+			"No: remove account, do not change buttons (they would point to other accounts).\n"
+			"Cancel: do not remove account.";
+		int rc = MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_YESNOCANCEL | MB_DEFBUTTON3 | MB_ICONEXCLAMATION);
+		if (rc == IDCANCEL)
+			return;
+		shiftButtons = (rc == IDYES);
+	}
+	if (shiftButtons)
+	{
+		for (unsigned int i=0; i<btnAccountIds.size(); i++)
+		{
+			if (btnAccountIds[i] == id)
+				btnAccountIds[i] = -1;
+			else if (btnAccountIds[i] > id)
+				btnAccountIds[i]--;
+		}
+		btnAccountIdsChanged = true;
+	}
+	// current account follows its account
+	if (tmpSettings.currentAccountId == id)
+		tmpSettings.currentAccountId = 0;
+	else if (tmpSettings.currentAccountId > id)
+		tmpSettings.currentAccountId--;
+	StoreCodecLists(codecsAccountId);
+	tmpSettings.uaConf.accounts.erase(tmpSettings.uaConf.accounts.begin() + id);
+	if (id >= (int)tmpSettings.uaConf.accounts.size())
+		id = tmpSettings.uaConf.accounts.size() - 1;
+	CreateAccountFrames(id);
+	codecsAccountId = -1;
+	SelectCodecsAccount(id);
+}
+//---------------------------------------------------------------------------
 
-	frmAccount = new TfrmAccount(NULL, i, tmpSettings.uaConf.accounts[i]);
-	frmAccount->Parent = scrbAccounts;
-	frmAccount->Visible = true;
-	// force realign
-	frmAccount->Align = alBottom;
-	frmAccount->Align = alTop;
+/** \brief Video codecs (audio codecs are edited on account page) */
+void TfrmSettings::LoadCodecLists(int accountId)
+{
+	{
+		lboxVideoCodecsAvailable->Clear();
+		std::vector<AnsiString> codecs;
+		if (Ua::Instance().GetVideoCodecList(codecs) == 0)
+		{
+			for (unsigned int i=0; i<codecs.size(); i++)
+			{
+				lboxVideoCodecsAvailable->Items->Add(codecs[i]);
+			}
+		}
+		lboxVideoCodecsEnabled->Clear();
+	}
 
-	//scrbAccounts->AutoScroll = true;
+	if (accountId < 0 || accountId >= (int)tmpSettings.uaConf.accounts.size())
+		return;
+	const UaConf::Account &acc = tmpSettings.uaConf.accounts[accountId];
+	for (unsigned int i=0; i<acc.video_codecs.size(); i++)
+	{
+		AnsiString name = acc.video_codecs[i].c_str();
+		for (int codec = 0; codec < lboxVideoCodecsAvailable->Items->Count; codec++)
+		{
+			if (lboxVideoCodecsAvailable->Items->Strings[codec] == name)
+			{
+				lboxVideoCodecsAvailable->Items->Delete(codec);
+				lboxVideoCodecsEnabled->Items->Add(name);
+				break;
+			}
+		}
+	}
+}
 
-	// scroll to newly added account position (to the end)
-	//scrbAccounts->ScrollBy(0, scrbAccounts->Height);
-	frmAccount->SetFocus();	
+void TfrmSettings::StoreCodecLists(int accountId)
+{
+	if (accountId < 0 || accountId >= (int)tmpSettings.uaConf.accounts.size())
+		return;
+	UaConf::Account &acc = tmpSettings.uaConf.accounts[accountId];
+	if (lboxVideoCodecsAvailable->Items->Count > 0 || lboxVideoCodecsEnabled->Items->Count > 0)	// both lists may be empty if UA failed to initialize
+	{
+		acc.video_codecs.clear();
+		for (int i=0; i<lboxVideoCodecsEnabled->Items->Count; i++)
+		{
+			acc.video_codecs.push_back(lboxVideoCodecsEnabled->Items->Strings[i].c_str());
+		}
+	}
+}
+
+void TfrmSettings::SelectCodecsAccount(int accountId)
+{
+	if (accountId < 0 || accountId >= (int)tmpSettings.uaConf.accounts.size())
+		accountId = 0;
+	if (accountId != codecsAccountId)
+	{
+		StoreCodecLists(codecsAccountId);
+		LoadCodecLists(accountId);
+		codecsAccountId = accountId;
+	}
+	cbVideoCodecsAccount->ItemIndex = accountId;
+}
+
+void __fastcall TfrmSettings::cbVideoCodecsAccountChange(TObject *Sender)
+{
+	SelectCodecsAccount(cbVideoCodecsAccount->ItemIndex);
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TfrmSettings::FormClose(TObject *Sender, TCloseAction &Action)
 {
-	for (int i=0; i<frmAccountVector.size(); i++)
-	{
-		delete frmAccountVector[i];
-	}
-	frmAccountVector.clear();
+	DeleteAccountFrames();
 }
 //---------------------------------------------------------------------------
 
@@ -1555,30 +1712,6 @@ void __fastcall TfrmSettings::btnSelectImageClick(
 }
 //---------------------------------------------------------------------------
 
-void TfrmSettings::AudioCodecEnableSelected(void)
-{
-	for (int i=0; i<lboxAudioCodecsAvailable->Items->Count; i++)
-	{
-		if (lboxAudioCodecsAvailable->Selected[i])
-		{
-			lboxAudioCodecsEnabled->Items->Add(lboxAudioCodecsAvailable->Items->Strings[i]);
-		}
-	}
-	lboxAudioCodecsAvailable->DeleteSelected();
-}
-
-void TfrmSettings::AudioCodecDisableSelected(void)
-{
-	for (int i=0; i<lboxAudioCodecsEnabled->Items->Count; i++)
-	{
-		if (lboxAudioCodecsEnabled->Selected[i])
-		{
-			lboxAudioCodecsAvailable->Items->Add(lboxAudioCodecsEnabled->Items->Strings[i]);
-		}
-	}
-	lboxAudioCodecsEnabled->DeleteSelected();
-}
-
 void TfrmSettings::AudioPreprocessingUpdate(void)
 {
 	bool state = chbAudioPreprocessingTxEnabled->Checked;
@@ -1589,61 +1722,6 @@ void TfrmSettings::AudioPreprocessingUpdate(void)
 	edAudioPreprocessingTxAgcLevel->Enabled = state;
 	lblAudioPreprocessingTxAgcLevel->Enabled = state;
 }
-
-void __fastcall TfrmSettings::btnAudioCodecEnableClick(TObject *Sender)
-{
-	AudioCodecEnableSelected();
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmSettings::btnAudioCodecDisableClick(TObject *Sender)
-{
-	AudioCodecDisableSelected();
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmSettings::lboxAudioCodecsAvailableDblClick(TObject *Sender)
-{
-	AudioCodecEnableSelected();
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmSettings::lboxAudioCodecsEnabledDblClick(TObject *Sender)
-{
-	AudioCodecDisableSelected();
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmSettings::lboxAudioCodecsEnabledStartDrag(TObject *Sender,
-      TDragObject *&DragObject)
-{
-	audioCodecsEnabledDraggedIndex = lboxAudioCodecsEnabled->ItemIndex;	
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmSettings::lboxAudioCodecsEnabledDragOver(TObject *Sender,
-      TObject *Source, int X, int Y, TDragState State, bool &Accept)
-{
-	Accept = true;	
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmSettings::lboxAudioCodecsEnabledDragDrop(TObject *Sender,
-      TObject *Source, int X, int Y)
-{
-	TListBox *lbox = lboxAudioCodecsEnabled;
-	int dropIndex = lbox->ItemAtPos(Point(X,Y), false);
-	if (dropIndex >= lbox->Items->Count)
-	{
-    	dropIndex--;
-	}
-	if (dropIndex >= 0)
-	{
-		lbox->Items->Move(audioCodecsEnabledDraggedIndex, dropIndex);
-		lbox->ItemIndex = dropIndex;
-    }
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TfrmSettings::chbAudioPreprocessingTxEnabledClick(
       TObject *Sender)

@@ -42,6 +42,37 @@ namespace {
 
 	std::vector<Item> items;
 
+	/** Extra message for item added by check function (e.g. list of affected accounts) */
+	AnsiString checkExtraMsg;
+
+	/** Add account to list of affected accounts in checkExtraMsg */
+	void AddAffectedAccount(unsigned int accountId)
+	{
+		if (checkExtraMsg == "")
+			checkExtraMsg = "Account(s): ";
+		else
+			checkExtraMsg += ", ";
+		checkExtraMsg += appSettings.GetAccountDescription(accountId);
+	}
+
+	/** Run check for each enabled account, true if any account matches */
+	bool CheckAccounts(bool (*fn)(const UaConf::Account &acc))
+	{
+		bool result = false;
+		for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+		{
+			const UaConf::Account &acc = appSettings.uaConf.accounts[i];
+			if (!acc.enabled)
+				continue;
+			if (fn(acc))
+			{
+				result = true;
+				AddAffectedAccount(i);
+			}
+		}
+		return result;
+	}
+
 	struct ItemTypeData
 	{
 		enum Level level;
@@ -50,33 +81,21 @@ namespace {
 		bool (*fnCheck)(void);
 	};
 
+	bool AccNoRegistration(const UaConf::Account &acc)
+	{
+		return (acc.reg_expires <= 0);
+	}
+
 	bool CheckNoLocalPort(void)
 	{
-		if (appSettings.uaConf.accounts.size())
-		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
-			if (acc.reg_expires <= 0)
-			{
-				if (appSettings.uaConf.netLocal.find(":") == std::string::npos)
-				{
-					return true;
-				}
-			}
-		}
-		return false;
+		if (appSettings.uaConf.netLocal.find(":") != std::string::npos)
+			return false;
+		return CheckAccounts(AccNoRegistration);
 	}
 
 	bool CheckNoRegistration(void)
 	{
-		if (appSettings.uaConf.accounts.size())
-		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
-			if (acc.reg_expires <= 0)
-			{
-				return true;
-			}
-		}
-		return false;
+		return CheckAccounts(AccNoRegistration);
 	}
 
 	bool CheckSpeexPreprocessing(void)
@@ -219,71 +238,69 @@ namespace {
 		return false;
 	}
 
+	bool AccNoCommonCodecs(const UaConf::Account &acc)
+	{
+		for (unsigned int i=0; i<acc.audio_codecs.size(); i++)
+		{
+			const std::string &str = acc.audio_codecs[i];
+			if (str == "PCMU/8000/1" || str == "PCMA/8000/1")
+				return false;
+		}
+		return true;
+	}
+
 	bool CheckCommonCodecs(void)
 	{
-		if (appSettings.uaConf.accounts.size())
-		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
-			for (unsigned int i=0; i<acc.audio_codecs.size(); i++)
-			{
-				const std::string &str = acc.audio_codecs[i];
-				if (str == "PCMU/8000/1" || str == "PCMA/8000/1")
-					return false;
-			}
-			return true;
-		}
-		return false;
+		return CheckAccounts(AccNoCommonCodecs);
+	}
+
+	bool AccUncommonFrameLength(const UaConf::Account &acc)
+	{
+		return (acc.ptime != UaConf::Account::DEF_PTIME);
 	}
 
 	bool CheckUncommonFrameLength(void)
 	{
-		if (appSettings.uaConf.accounts.size())
-		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
-			if (acc.ptime != UaConf::Account::DEF_PTIME)
-				return true;
-		}
-		return false;
+		return CheckAccounts(AccUncommonFrameLength);
+	}
+
+	bool AccNoCodecsEnabled(const UaConf::Account &acc)
+	{
+		return acc.audio_codecs.empty();
 	}
 
 	bool CheckNoCodecsEnabled(void)
 	{
-		if (appSettings.uaConf.accounts.size())
-		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
-			if (acc.audio_codecs.empty())
-				return true;
-		}
-		return false;
+		return CheckAccounts(AccNoCodecsEnabled);
+	}
+
+	bool AccTooManyCodecs(const UaConf::Account &acc)
+	{
+		return (acc.audio_codecs.size() > 10);
 	}
 
 	bool CheckTooManyCodecs(void)
 	{
-		if (appSettings.uaConf.accounts.size())
+		return CheckAccounts(AccTooManyCodecs);
+	}
+
+	bool AccPcmuPcmaPtime(const UaConf::Account &acc)
+	{
+		for (unsigned int i=0; i<acc.audio_codecs.size(); i++)
 		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
-			if (acc.audio_codecs.size() > 10)
-				return true;
+			const std::string& codec = acc.audio_codecs[i];
+			if (codec == "PCMU/8000/1" || codec == "PCMA/8000/1")
+			{
+				if (acc.ptime != 20)
+					return true;
+			}
 		}
 		return false;
 	}
 
 	bool CheckPcmuPcmaPtime(void)
 	{
-		if (appSettings.uaConf.accounts.size())
-		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[0];
-			for (unsigned int i=0; i<acc.audio_codecs.size(); i++)
-			{
-				const std::string& codec = acc.audio_codecs[i];
-				if (codec == "PCMU/8000/1" || codec == "PCMA/8000/1")
-				{
-					if (acc.ptime != 20)
-						return true;
-				}
-			}
-		}
-		return false;
+		return CheckAccounts(AccPcmuPcmaPtime);
 	}
 
 #if 0
@@ -317,34 +334,27 @@ namespace {
 
 	/** TLS enabled but no media encryption is selected
 	*/
+	bool AccMediaEncryptionMissing(const UaConf::Account &acc)
+	{
+		return (acc.transport == UaConf::Account::TRANSPORT_TLS && acc.mediaenc == "");
+	}
+
 	bool CheckAccountMediaEncryptionMissing(void)
 	{
-		for (unsigned int accId = 0; accId < appSettings.uaConf.accounts.size(); accId++)
-		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[accId];
-			if (acc.transport == UaConf::Account::TRANSPORT_TLS &&
-				acc.mediaenc == "")
-			{
-            	return true;
-			}
-		}
-		return false;
+		return CheckAccounts(AccMediaEncryptionMissing);
 	}
 
 	/** SRTP enabled but transport/signalization is unencrypted
 	*/
+	bool AccTlsForSrtpMissing(const UaConf::Account &acc)
+	{
+		return (acc.transport != UaConf::Account::TRANSPORT_TLS &&
+			(acc.mediaenc == "srtp" || acc.mediaenc == "srtp-mand" || acc.mediaenc == "srtp-mandf"));
+	}
+
 	bool CheckAccountTlsForSrtpMissing(void)
 	{
-		for (unsigned int accId = 0; accId < appSettings.uaConf.accounts.size(); accId++)
-		{
-			const UaConf::Account &acc = appSettings.uaConf.accounts[accId];
-			if (acc.transport != UaConf::Account::TRANSPORT_TLS &&
-				(acc.mediaenc == "srtp" || acc.mediaenc == "srtp-mand" || acc.mediaenc == "srtp-mandf"))
-			{
-				return true;
-			}
-		}
-		return false;
+		return CheckAccounts(AccTlsForSrtpMissing);
 	}
 
 	bool CheckPresenceBitmaps(void)
@@ -426,6 +436,86 @@ namespace {
 		return false;
 	}
 
+	bool CheckNoEnabledAccount(void)
+	{
+		for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+		{
+			if (appSettings.uaConf.accounts[i].enabled)
+				return false;
+		}
+		return true;
+	}
+
+	/** Incoming requests are matched to account by user part of request URI (contact user) -
+		accounts with same contact user can not be distinguished
+	*/
+	bool CheckDuplicatedContactUser(void)
+	{
+		const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+		bool result = false;
+		for (unsigned int i=0; i<accounts.size(); i++)
+		{
+			if (!accounts[i].enabled)
+				continue;
+			std::string ci = accounts[i].cuser != "" ? accounts[i].cuser : accounts[i].user;
+			for (unsigned int j=i+1; j<accounts.size(); j++)
+			{
+				if (!accounts[j].enabled)
+					continue;
+				std::string cj = accounts[j].cuser != "" ? accounts[j].cuser : accounts[j].user;
+				if (AnsiString(ci.c_str()).LowerCase() == AnsiString(cj.c_str()).LowerCase())
+				{
+					AddAffectedAccount(i);
+					AddAffectedAccount(j);
+					result = true;
+				}
+			}
+		}
+		return result;
+	}
+
+	bool CheckMultipleAnswerAny(void)
+	{
+		int count = 0;
+		for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+		{
+			const UaConf::Account &acc = appSettings.uaConf.accounts[i];
+			if (acc.enabled && acc.answer_any)
+			{
+				AddAffectedAccount(i);
+				count++;
+			}
+		}
+		return (count > 1);
+	}
+
+	/** Buttons assigned to account that does not exist or is disabled */
+	bool CheckButtonAccount(void)
+	{
+		const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+		const std::vector<ButtonConf> &conf = buttons.btnConf;
+		bool result = false;
+		for (unsigned int i=0; i<conf.size(); i++)
+		{
+			const ButtonConf &c = conf[i];
+			if (c.type != Button::ACCOUNT && c.type != Button::BLF && c.type != Button::PRESENCE &&
+				c.type != Button::MWI && c.type != Button::AUTO_ANSWER_DND)
+				continue;
+			if (c.accountId < 0)
+				continue;
+			if (c.accountId >= (int)accounts.size() || !accounts[c.accountId].enabled)
+			{
+				if (checkExtraMsg == "")
+					checkExtraMsg = "Button(s): ";
+				else
+					checkExtraMsg += ", ";
+				checkExtraMsg.cat_sprintf("#%u (account #%d)", i, c.accountId + 1);
+				result = true;
+			}
+		}
+		return result;
+	}
+
 	struct ItemTypeData itemTypeData[] =
 	{
 		{ LevelError, "No specified network interface",
@@ -489,6 +579,19 @@ namespace {
 		{ LevelWarning, "Attended transfer requires min. 2 lines", "Define at least two line buttons to use attended transfer.", CheckAttendedTransferWithSingleLine },
 		{ LevelWarning, "Conference function requires min. 2 lines", "Define at least two line buttons to use conference function.", CheckConferenceWithSingleLine },
 		{ LevelWarning, "Making another call during call requires min. 2 lines", "Found SPEED_DIAL, BLF or PRESENCE button (see log for ID) with action during the call set to making another call, but this requires at least TWO LINE BUTTONS defined.", CheckButtonNewCallDuringCallWithSingleLine },
+		{ LevelError, "No enabled account", "All SIP accounts are disabled - calls can not be made or received. Enable at least one account in Settings / SIP account.", CheckNoEnabledAccount },
+		{ LevelWarning, "Accounts with the same contact user",
+			"Incoming calls and messages are assigned to account by user part of request URI (contact user, or user if contact user is empty). "
+			"With the same contact user on multiple enabled accounts incoming calls may be assigned to wrong account (e.g. wrong account shown, calls back / DND using wrong account). "
+			"Set different \"Contact\" user in extra settings of one of the accounts.",
+			CheckDuplicatedContactUser },
+		{ LevelHint, "Multiple accounts set to answer any call",
+			"\"Answer any call/message\" (local account) is enabled for more than one account - only first of them would be used for requests not matching any account.",
+			CheckMultipleAnswerAny },
+		{ LevelWarning, "Button assigned to not available account",
+			"ACCOUNT, BLF, PRESENCE, MWI or DND button is assigned to account that does not exist (e.g. removed) or is disabled. "
+			"BLF / PRESENCE / MWI would use first available account instead.",
+			CheckButtonAccount },
 	};
 
 	enum Level getItemLevel(int typeId)
@@ -563,10 +666,11 @@ void Troubleshooting::Update(void)
 		struct ItemTypeData &it = itemTypeData[i];
 		if (it.fnCheck)
 		{
+			checkExtraMsg = "";
 			bool result = it.fnCheck();
 			if (result)
 			{
-				AddItem(i, "");
+				AddItem(i, checkExtraMsg);
 			}
 		}
 	}

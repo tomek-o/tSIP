@@ -37,7 +37,8 @@ void Clear(void);
 	\param uid returned pseudo-unique id of created request
 	\return 0 on success
 */
-int Send(int &uid, AnsiString uri, AnsiString method, AnsiString extraHeaderLines);
+/** \param accountId account used for request, -1: current account */
+int Send(int &uid, AnsiString uri, AnsiString method, AnsiString extraHeaderLines, int accountId = -1);
 
 /** \brief Send a SIP request of an arbitrary method within an existing call's dialog
 	(unlike Send(), which always starts a new, separate SIP transaction/dialog to a

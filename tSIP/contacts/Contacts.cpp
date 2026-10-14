@@ -90,6 +90,11 @@ int Contacts::Read(void)
 		entry.note = contact.get("note", "").asString().c_str();
 		entry.file = contact.get("file", entry.file.c_str()).asString().c_str();
 		entry.ring = contact.get("ring", "").asString().c_str();
+		{
+			const Json::Value &jvAccount = contact["account"];
+			if (jvAccount.isInt())
+				entry.accountId = jvAccount.asInt();
+		}
 
 		entries.push_back(entry);
 	}
@@ -120,6 +125,10 @@ int Contacts::Write(void)
 		if (entry.ring != "")
 		{
 			jv["ring"] = entry.ring.c_str();
+		}
+		if (entry.accountId >= 0)
+		{
+			jv["account"] = entry.accountId;
 		}
 	}
 

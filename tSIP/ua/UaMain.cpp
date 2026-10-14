@@ -68,9 +68,12 @@ namespace {
 	struct App {
 		uint32_t n_uas;       /**< Number of User Agents           */
 		bool terminating;     /**< Application is terminating flag */
-		struct ua *ua;
 		struct paging_tx *paging_txp;
 	} app;
+
+	/** User agents, index = account id; NULL for disabled account
+		or account that could not be added */
+	std::vector<struct ua*> uas;
 
 	/** Escaping text to be added as display name
 		Rules:
@@ -121,8 +124,36 @@ public:
 #define DEBUG_LEVEL 6
 #include <re_dbg.h>
 
-struct ua* ua_cur(void) {
-	return app.ua;
+/** Get ua for account; falls back to first available ua if account
+	is not valid / disabled (e.g. old scripts / plugins using account 0)
+*/
+static struct ua* ua_for_account(int accountId) {
+	if (accountId >= 0 && accountId < (int)uas.size() && uas[accountId])
+		return uas[accountId];
+	for (unsigned int i=0; i<uas.size(); i++) {
+		if (uas[i])
+			return uas[i];
+	}
+	return NULL;
+}
+
+static struct ua* ua_cur(void) {
+	return ua_for_account(0);
+}
+
+/** Get account id for ua, -1 if not found */
+static int account_for_ua(const struct ua *ua) {
+	for (unsigned int i=0; i<uas.size(); i++) {
+		if (uas[i] == ua)
+			return i;
+	}
+	return -1;
+}
+
+/** Get ua that call belongs to */
+static struct ua* ua_for_call(const struct call *call) {
+	struct ua *ua = call ? call_get_ua(call) : NULL;
+	return ua ? ua : ua_cur();
 }
 
 static bool appRestart = false;
@@ -133,7 +164,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 {
 	Callback::ua_state_e state;
 	Callback::reg_state_e reg_state;
-	/** \todo acc_id */
+	const int accountId = account_for_ua(ua);
 
 	const char* peer_name = "";
 	int scode = 0;
@@ -154,7 +185,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			if (app.paging_txp)
 			{
 				LOG("Denying incoming call (paging TX active)\n");
-				ua_hangup(ua_cur(), call, 486, "Busy Here");
+				ua_hangup(ua, call, 486, "Busy Here");
 				break;
 			}
 			const char* initial_rx_invite = call_initial_rx_invite(call);
@@ -183,7 +214,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			if (pai_peer_name == NULL)
 				pai_peer_name = "";
 
-			UA_CB->ChangeCallState(appCall->uid, state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name, "", initial_rx_invite);
+			UA_CB->ChangeCallState(appCall->uid, state, prm, peer_name, scode, call_answer_after(call), alert_info, access_url, call_access_url_mode(call), pai_peer_uri, pai_peer_name, "", initial_rx_invite, accountId);
 			break;
 		}
 	case UA_EVENT_CALL_RINGING:
@@ -270,27 +301,27 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		break;
 	case UA_EVENT_REGISTERING:
 		reg_state = Callback::REG_STATE_REGISTERING;
-		UA_CB->ChangeRegState(0, reg_state, prm);
+		UA_CB->ChangeRegState(accountId, reg_state, prm);
 		break;
 	case UA_EVENT_REGISTER_OK:
 		reg_state = Callback::REG_STATE_REGISTER_OK;
-		UA_CB->ChangeRegState(0, reg_state, prm);
+		UA_CB->ChangeRegState(accountId, reg_state, prm);
 		break;
 	case UA_EVENT_REGISTER_FAIL:
 		reg_state = Callback::REG_STATE_REGISTER_FAIL;
-		UA_CB->ChangeRegState(0, reg_state, prm);
+		UA_CB->ChangeRegState(accountId, reg_state, prm);
 		break;
 	case UA_EVENT_UNREGISTERING:
 		reg_state = Callback::REG_STATE_UNREGISTERING;
-		UA_CB->ChangeRegState(0, reg_state, prm);
+		UA_CB->ChangeRegState(accountId, reg_state, prm);
 		break;
 	case UA_EVENT_UNREGISTER_OK:
 		reg_state = Callback::REG_STATE_UNREGISTER_OK;
-		UA_CB->ChangeRegState(0, reg_state, prm);
+		UA_CB->ChangeRegState(accountId, reg_state, prm);
 		break;
 	case UA_EVENT_UNREGISTER_FAIL:
 		reg_state = Callback::REG_STATE_UNREGISTER_FAIL;
-		UA_CB->ChangeRegState(0, reg_state, prm);
+		UA_CB->ChangeRegState(accountId, reg_state, prm);
 		break;
 	case UA_EVENT_AUDIO_ERROR:
 	{
@@ -342,7 +373,7 @@ static void custom_req_response_handler(int err, const struct sip_msg *msg, void
 	UA_CB->NotifyCustomRequestStatus(requestUid, err, msg?msg->scode:0, replyText);	
 }
 
-static int ua_add(const struct pl *addr, const char *pwd, const char *cuser)
+static int ua_add(struct ua **uap, const struct pl *addr, const char *pwd, const char *cuser)
 {
 	char buf[1024];
 	int err;
@@ -350,7 +381,7 @@ static int ua_add(const struct pl *addr, const char *pwd, const char *cuser)
 	pl_strcpy(addr, buf, sizeof(buf));
 	/** \note Do not pass stack variable as a ua argument, its value
 		would be overwritten on object destruction! */
-	err = ua_alloc(&app.ua, buf, pwd, cuser);
+	err = ua_alloc(uap, buf, pwd, cuser);
 	if (err)
 		return err;
 
@@ -402,7 +433,9 @@ extern "C" int unsolicited_mwi_handler(struct sipevent_sock *sock, const struct 
 					if (sscanf(colon, "%d/%d", &newmsg, &oldmsg) == 2)
 					{
 						LOG("Messages: %d new, %d old\n", newmsg, oldmsg);
-						UA_CB->ChangeMwiState(newmsg, oldmsg);
+						struct ua *ua = uag_find(&msg->uri.user);
+						int accountId = account_for_ua(ua);
+						UA_CB->ChangeMwiState(newmsg, oldmsg, accountId >= 0 ? accountId : 0);
 					}
 				}
 			}
@@ -453,7 +486,7 @@ static int print_handler_log(const char *p, size_t size, void *arg)
 	return 0;
 }
 
-static void simple_message_recv_handler(const struct pl *peer,
+static void simple_message_recv_handler(struct ua *ua, const struct pl *peer,
 	const struct pl *ctype, struct mbuf *body, void *arg,
     int *reply_code, const char** reply_reason, int *do_not_reply)
 {
@@ -475,7 +508,7 @@ static void simple_message_recv_handler(const struct pl *peer,
 	*reply_reason = cfg->messages.reply_reason;
 	*do_not_reply = cfg->messages.do_not_reply;
 
-	UA_CB->OnMessageReceived(caller, contentType, asBody);
+	UA_CB->OnMessageReceived(caller, contentType, asBody, account_for_ua(ua));
 }
 
 static void simple_message_response_handler(int err, const struct sip_msg *msg, void *resp_callback_arg)
@@ -799,10 +832,17 @@ static int app_start(void)
 	FindClose(hFind);
 
 	app.n_uas = 0;
+	uas.clear();
+	uas.resize(appSettings.uaConf.accounts.size(), NULL);
 	for (int i=0; i<appSettings.uaConf.accounts.size(); i++)
 	{
 		AnsiString addr;
 		UaConf::Account &acc = appSettings.uaConf.accounts[i];
+		if (!acc.enabled)
+		{
+			LOG("Account #%d is disabled\n", i);
+			continue;
+		}
 
 		if (acc.display_name != "")
 		{
@@ -884,7 +924,7 @@ static int app_start(void)
 			// (although this was valid this was problem for some operator)
 			cuser = acc.user;
 		}
-		if (ua_add(&pl_addr, acc.pwd.c_str(), cuser.c_str()) == 0)
+		if (ua_add(&uas[i], &pl_addr, acc.pwd.c_str(), cuser.c_str()) == 0)
 		{
 			app.n_uas++;
 		}
@@ -899,19 +939,26 @@ static int app_start(void)
 		return ENOENT;
 	}
 
-	if (appSettings.uaConf.accounts.size() != 1)
-	{
-		DEBUG_WARNING("Multiple accounts not handled!\n");
-	}
 	if (appSettings.uaConf.accounts.size() > 0)
 	{
-		const UaConf::Account &acc = appSettings.uaConf.accounts[0];
 		for (int i=0; i<appSettings.uaConf.contacts.size(); i++) {
 			UaConf::Contact contact = appSettings.uaConf.contacts[i];
 			if (contact.user == "")
 			{
 				continue;
 			}
+			// account assigned to button; not existing / disabled account: first available
+			struct ua *contactUa = ua_for_account(contact.accountId);
+			int accountId = account_for_ua(contactUa);
+			if (accountId != contact.accountId)
+			{
+				LOG("Contact %s: account #%d not available, using account #%d\n", contact.user.c_str(), contact.accountId + 1, accountId + 1);
+			}
+			if (accountId < 0)
+			{
+				accountId = 0;
+			}
+			const UaConf::Account &acc = appSettings.uaConf.accounts[accountId];
 			AnsiString addr;
 			if (contact.user.find("sip:") != std::string::npos)
 			{
@@ -935,7 +982,11 @@ static int app_start(void)
 			}
 			pl pl_addr;
 			pl_set_str(&pl_addr, addr.c_str());
-			contact_add(NULL, &pl_addr, i, dialog_info_handler, presence_handler);
+			struct contact *c = NULL;
+			if (contact_add(&c, &pl_addr, i, dialog_info_handler, presence_handler) == 0)
+			{
+				contact_set_ua(c, contactUa);
+			}
 		}
 	}
 
@@ -993,6 +1044,7 @@ static void app_close(void)
 {
     message_close();
 	ua_close();
+	uas.clear();
 	mod_close();
 	libre_close();
 
@@ -1069,7 +1121,7 @@ extern "C" void control_handler(void)
 	{
 	case Command::CALL: {
 		struct call *newCall = NULL;
-		err = ua_connect(ua_cur(), cmd.callUid, &newCall, NULL /*from*/,
+		err = ua_connect(ua_for_account(cmd.accountId), cmd.callUid, &newCall, NULL /*from*/,
 			cmd.target.c_str(), NULL,
 			cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle,
 			cmd.extraHeaderLines.c_str());
@@ -1087,7 +1139,7 @@ extern "C" void control_handler(void)
 	}
 	case Command::ANSWER:
         LOG("Answering...\n");
-		err = ua_answer(ua_cur(), cmdCall, cmd.audioMod.c_str(), cmd.audioDev.c_str(), cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle);
+		err = ua_answer(ua_for_call(cmdCall), cmdCall, cmd.audioMod.c_str(), cmd.audioDev.c_str(), cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle);
 		if (err)
 		{
         	DEBUG_WARNING("ua_answer failed: %m\n", err);
@@ -1162,7 +1214,7 @@ extern "C" void control_handler(void)
 	case Command::HANGUP:
 		if (cmdCall)
 		{
-			ua_hangup(ua_cur(), cmdCall, cmd.code, cmd.reason.c_str());
+			ua_hangup(ua_for_call(cmdCall), cmdCall, cmd.code, cmd.reason.c_str());
 			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "", "");
 			removeCall(cmd.callUid);
 		}
@@ -1180,14 +1232,18 @@ extern "C" void control_handler(void)
 	case Command::SET_AUBUF_LOGGING:
 		aubuf_debug_enable(cmd.bEnabled);
 		break;
-	case Command::REREGISTER: {
-		struct ua* ua = ua_cur();
-		err |= ua_reregister(ua);
-		break;
-	}
+	case Command::REREGISTER:
 	case Command::UNREGISTER: {
-		struct ua* ua = ua_cur();
-		ua_unregister(ua);
+		// accountId < 0: all accounts
+		for (unsigned int i=0; i<uas.size(); i++) {
+			struct ua* ua = uas[i];
+			if (ua == NULL || (cmd.accountId >= 0 && cmd.accountId != (int)i))
+				continue;
+			if (cmd.type == Command::REREGISTER)
+				err |= ua_reregister(ua);
+			else
+				ua_unregister(ua);
+		}
 		break;
 	}
 	case Command::RESUBSCRIBE: {
@@ -1368,7 +1424,7 @@ extern "C" void control_handler(void)
 	}
 	case Command::SEND_CUSTOM_REQUEST: {
 		DEBUG_WARNING("SEND_CUSTOM_REQUEST, uid = %d, method = %s\n", cmd.requestId, cmd.method.c_str());
-		err = sip_req_send(ua_cur(), cmd.method.c_str(), cmd.target.c_str(),
+		err = sip_req_send(ua_for_account(cmd.accountId), cmd.method.c_str(), cmd.target.c_str(),
 					custom_req_response_handler, reinterpret_cast<void*>(cmd.requestId),
 					"%s", cmd.extraHeaderLines.c_str());
 		if (err != 0) {
@@ -1391,7 +1447,7 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::SEND_MESSAGE: {
-		err = message_send(ua_cur(), cmd.target.c_str(), cmd.text.c_str(), (void*)cmd.requestId);
+		err = message_send(ua_for_account(cmd.accountId), cmd.target.c_str(), cmd.text.c_str(), (void*)cmd.requestId);
 		DEBUG_WARNING("Sending message to %s: status = %d\n", cmd.target.c_str(), err);
 		break;
 	}

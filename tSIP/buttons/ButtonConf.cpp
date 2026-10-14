@@ -99,6 +99,8 @@ void ButtonConf::Reset(void)
 
 	arg1 = "";
 
+	accountId = -1;
+
 	sipCode = 200;
 	sipReason = "OK";
 	expires = 600;
@@ -285,6 +287,9 @@ void ButtonConf::FromJson(const Json::Value &btnJson)
 
 		btnJson.getString("arg1", arg1);
 
+		btnJson.getInt("accountId", accountId);
+		if (accountId < -1)
+			accountId = -1;
 		btnJson.getInt("sipCode", sipCode);
 		btnJson.getString("sipReason", sipReason);
 		btnJson.getInt("expires", expires);
@@ -468,6 +473,10 @@ void ButtonConf::ToJson(Json::Value &jsonBtn, bool saveAllSettings) const
 	if (saveAllSettings || (arg1 != defaultBtn.arg1))
 	{
 		jsonBtn["arg1"] = arg1;
+	}
+	if (saveAllSettings || (accountId != defaultBtn.accountId))
+	{
+		jsonBtn["accountId"] = accountId;
 	}
 	if (saveAllSettings || (sipCode != defaultBtn.sipCode))
 	{

@@ -4,6 +4,8 @@
 #pragma hdrstop
 
 #include "FormAccount.h"
+#include "UaMain.h"
+#include <vector>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -11,11 +13,15 @@ TfrmAccount *frmAccount;
 //---------------------------------------------------------------------------
 __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& acc)
 	: TForm(Owner),
-	acc(acc)
+	acc(acc),
+	audioCodecsEnabledDraggedIndex(-1)
 {
 	AnsiString title;
 	title.sprintf("Account #%02d", id + 1);
 	grboxAccount->Caption = title;
+
+	chbEnabled->Checked = acc.enabled;
+	edName->Text = acc.name.c_str();
 
 	chbHideRegServer->Checked = acc.hide_reg_server;
 	chbHideUser->Checked = acc.hide_user;
@@ -62,6 +68,9 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 			break;
 		}
 	}
+
+	LoadAudioCodecs();
+	SetExtraVisible(false);
 }
 //---------------------------------------------------------------------------
 
@@ -220,3 +229,158 @@ void __fastcall TfrmAccount::cbOutbound1TransportChange(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TfrmAccount::chbEnabledClick(TObject *Sender)
+{
+	acc.enabled = chbEnabled->Checked;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::edNameChange(TObject *Sender)
+{
+	acc.name = edName->Text.c_str();
+}
+//---------------------------------------------------------------------------
+
+void TfrmAccount::SetExtraVisible(bool state)
+{
+	if (state)
+	{
+		// make sure panel is placed (alTop) below toggle panel
+		pnlExtra->Top = pnlExtraToggle->Top + pnlExtraToggle->Height;
+	}
+	pnlExtra->Visible = state;
+	btnExtra->Down = state;
+	UpdateHeight();
+}
+
+void TfrmAccount::UpdateHeight(void)
+{
+	int height = pnlBasic->Height + pnlExtraToggle->Height + pnlCodecs->Height;
+	if (pnlExtra->Visible)
+		height += pnlExtra->Height;
+	ClientHeight = height;
+}
+
+void __fastcall TfrmAccount::btnExtraClick(TObject *Sender)
+{
+	SetExtraVisible(btnExtra->Down);
+}
+//---------------------------------------------------------------------------
+
+void TfrmAccount::LoadAudioCodecs(void)
+{
+	lboxAudioCodecsAvailable->Clear();
+	lboxAudioCodecsEnabled->Clear();
+	std::vector<AnsiString> codecs;
+	if (Ua::Instance().GetAudioCodecList(codecs) == 0)
+	{
+		for (unsigned int i=0; i<codecs.size(); i++)
+		{
+			lboxAudioCodecsAvailable->Items->Add(codecs[i]);
+		}
+	}
+	for (unsigned int i=0; i<acc.audio_codecs.size(); i++)
+	{
+		AnsiString name = acc.audio_codecs[i].c_str();
+		for (int codec = 0; codec < lboxAudioCodecsAvailable->Items->Count; codec++)
+		{
+			if (lboxAudioCodecsAvailable->Items->Strings[codec] == name)
+			{
+				lboxAudioCodecsAvailable->Items->Delete(codec);
+				lboxAudioCodecsEnabled->Items->Add(name);
+				break;
+			}
+		}
+	}
+}
+
+void TfrmAccount::StoreAudioCodecs(void)
+{
+	// both lists may be empty if UA failed to initialize - keep configuration then
+	if (lboxAudioCodecsAvailable->Items->Count == 0 && lboxAudioCodecsEnabled->Items->Count == 0)
+		return;
+	acc.audio_codecs.clear();
+	for (int i=0; i<lboxAudioCodecsEnabled->Items->Count; i++)
+	{
+		acc.audio_codecs.push_back(lboxAudioCodecsEnabled->Items->Strings[i].c_str());
+	}
+}
+
+void TfrmAccount::AudioCodecEnableSelected(void)
+{
+	int index = lboxAudioCodecsAvailable->ItemIndex;
+	if (index < 0)
+		return;
+	lboxAudioCodecsEnabled->Items->Add(lboxAudioCodecsAvailable->Items->Strings[index]);
+	lboxAudioCodecsAvailable->Items->Delete(index);
+	if (index >= lboxAudioCodecsAvailable->Items->Count)
+		index = lboxAudioCodecsAvailable->Items->Count - 1;
+	lboxAudioCodecsAvailable->ItemIndex = index;
+	StoreAudioCodecs();
+}
+
+void TfrmAccount::AudioCodecDisableSelected(void)
+{
+	int index = lboxAudioCodecsEnabled->ItemIndex;
+	if (index < 0)
+		return;
+	lboxAudioCodecsAvailable->Items->Add(lboxAudioCodecsEnabled->Items->Strings[index]);
+	lboxAudioCodecsEnabled->Items->Delete(index);
+	if (index >= lboxAudioCodecsEnabled->Items->Count)
+		index = lboxAudioCodecsEnabled->Items->Count - 1;
+	lboxAudioCodecsEnabled->ItemIndex = index;
+	StoreAudioCodecs();
+}
+
+void __fastcall TfrmAccount::lboxAudioCodecsAvailableDblClick(TObject *Sender)
+{
+	AudioCodecEnableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::lboxAudioCodecsEnabledDblClick(TObject *Sender)
+{
+	AudioCodecDisableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::btnAudioCodecEnableClick(TObject *Sender)
+{
+	AudioCodecEnableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::btnAudioCodecDisableClick(TObject *Sender)
+{
+	AudioCodecDisableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::lboxAudioCodecsEnabledDragDrop(TObject *Sender,
+	  TObject *Source, int X, int Y)
+{
+	TListBox *lbox = lboxAudioCodecsEnabled;
+	int dropIndex = lbox->ItemAtPos(Point(X,Y), false);
+	if (dropIndex >= 0 && audioCodecsEnabledDraggedIndex >= 0 && dropIndex < lbox->Items->Count)
+	{
+		lbox->Items->Move(audioCodecsEnabledDraggedIndex, dropIndex);
+		lbox->ItemIndex = dropIndex;
+		StoreAudioCodecs();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::lboxAudioCodecsEnabledDragOver(TObject *Sender,
+	  TObject *Source, int X, int Y, TDragState State, bool &Accept)
+{
+	Accept = (Source == lboxAudioCodecsEnabled);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::lboxAudioCodecsEnabledStartDrag(TObject *Sender,
+	  TDragObject *&DragObject)
+{
+	audioCodecsEnabledDraggedIndex = lboxAudioCodecsEnabled->ItemIndex;
+}
+//---------------------------------------------------------------------------

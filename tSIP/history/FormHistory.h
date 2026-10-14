@@ -51,7 +51,8 @@ __published:	// IDE-managed Components
 	void __fastcall miOpenInExplorerClick(TObject *Sender);
 	void __fastcall popupHistoryPopup(TObject *Sender);
 public:
-	typedef int (__closure *CallbackCall)(AnsiString uri, unsigned int &callUid);
+	/** \param accountId account to use (-1 or not available account: current account) */
+	typedef int (__closure *CallbackCall)(AnsiString uri, unsigned int &callUid, int accountId);
 	typedef void (__closure *CallbackPhonebookEdit)(AnsiString uri);
 	typedef void (__closure *CallbackHttpQuery)(AnsiString uri, AnsiString sipName);
 private:	// User declarations

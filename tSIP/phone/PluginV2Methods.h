@@ -5,6 +5,7 @@
 #ifndef PluginV2MethodsH
 #define PluginV2MethodsH
 
+#include <map>
 #include <System.hpp>
 #include <string>
 
@@ -26,6 +27,15 @@ namespace PluginV2Methods
 		\return false if there is no such call
 	*/
 	bool ResolveCallUid(unsigned int &callUid);
+
+	/** \brief Account exists and is enabled */
+	bool IsAccountUsable(int accountId);
+	int GetCurrentAccountId(void);
+	/** \brief Configured accounts (key: account id): accountId, name, user, server, enabled, current */
+	void GetAccounts(std::map<int, Json::Value> &accounts);
+
+	typedef void (__closure *CallbackSetCurrentAccount)(int accountId);
+	void SetCallbackSetCurrentAccount(CallbackSetCurrentAccount cb);
 
 	/** \brief Start recording call using settings from configuration (implemented by application) */
 	typedef void (__closure *CallbackStartRecording)(Call &call);

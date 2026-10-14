@@ -413,12 +413,13 @@ AnsiString CompleteCustomRequestHeaders(AnsiString text)
 
 }	// namespace
 
-int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines)
+int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines, int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
 	if (!cmd)
 		return -1;
+	cmd->accountId = accountId;
 	cmd->type = Command::SEND_CUSTOM_REQUEST;
 	cmd->requestId = requestId;
 	cmd->method = method;

@@ -141,8 +141,11 @@ public:
 	void UpdateDlgInfoState(int id, int state, bool updateRemoteIdentity, int direction, AnsiString remoteIdentity, AnsiString remoteIdentityDisplay);
 	void UpdatePresenceState(int id, int state, AnsiString note);
 	void UpdateBtnState(Button::Type type, bool state);
-	void UpdateMwiState(int newMsg, int oldMsg);
-	void UpdateAutoAnswer(bool enabled, int sipCode, AnsiString sipReason);
+	void UpdateMwiState(int accountId, int newMsg, int oldMsg);
+	/** Update ACCOUNT buttons: down = current account, inactive = account not registered */
+	void UpdateAccountState(int accountId, bool current, bool registered);
+	/** \param accountId -1: global auto answer / DND, otherwise per-account */
+	void UpdateAutoAnswer(int accountId, bool enabled, int sipCode, AnsiString sipReason);
 
 	void SetConfig(int btnId, const ButtonConf &conf);
 	void CopyConfig(int sourceBtnId);

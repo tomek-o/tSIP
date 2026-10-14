@@ -89,6 +89,7 @@ int History::Read(CallbackGetContactName callbackGetContactName)
 		entry.codecName = call.get("codecName", "").asString().c_str();
 
 		call.getInt("lastScode", entry.lastScode);
+		call.getInt("accountId", entry.accountId);
 		call.getAString("lastReplyLine", entry.lastReplyLine);
 
 		const Json::Value &ts = call["timestamp"];
@@ -133,6 +134,7 @@ int History::Write(void)
 		jEntry["codecName"] = entry.codecName.c_str();
 
 		jEntry["lastScode"] = entry.lastScode;
+		jEntry["accountId"] = entry.accountId;
 		jEntry["lastReplyLine"] = entry.lastReplyLine;
 
 		jEntry["incoming"] = entry.incoming;

@@ -16,6 +16,7 @@
 #include "VideoModules.h"
 #include "VideoDevicesList.h"
 #include "UaConf.h"
+#include "Settings.h"
 #include "baresip_base_config.h"
 #include <stdio.h>
 #include <algorithm>
@@ -191,6 +192,19 @@ void TfrmButtonEdit::ApplyConf(void)
 	memoCaption1->Text = cfg->caption.c_str();
 	memoCaption2->Text = cfg->caption2.c_str();
 	edNumber->Text = cfg->number.c_str();
+	// item 0: default (accountId = -1), item n: account n-1
+	cbAccount->Items->Clear();
+	cbAccount->Items->Add("(default)");
+	for (unsigned int i=0; i<appSettings.uaConf.accounts.size(); i++)
+	{
+		cbAccount->Items->Add(appSettings.GetAccountDescription(i));
+	}
+	while (cbAccount->Items->Count <= cfg->accountId + 1)
+	{
+		// keep id of account that does not exist (anymore)
+		cbAccount->Items->Add(appSettings.GetAccountDescription(cbAccount->Items->Count - 1));
+	}
+	cbAccount->ItemIndex = cfg->accountId + 1;
 	chbVisible->Checked = cfg->visible;
 	chbDown->Checked = cfg->down;
 	chbInactive->Checked = cfg->inactive;
@@ -302,6 +316,8 @@ void __fastcall TfrmButtonEdit::btnApplyClick(TObject *Sender)
 	cfg->caption2 = memoCaption2->Text.c_str();
 
 	cfg->number = edNumber->Text.c_str();
+	if (cbAccount->ItemIndex >= 0)
+		cfg->accountId = cbAccount->ItemIndex - 1;
 	cfg->visible = chbVisible->Checked;
 	cfg->down = chbDown->Checked;
 	cfg->inactive = chbInactive->Checked;
@@ -429,6 +445,22 @@ void TfrmButtonEdit::SetType(Button::Type type)
 
 	edNumber->Visible = true;
 	lblNumber->Visible = true;
+	// account selection only if there is more than one account (or account was already assigned)
+	lblAccount->Visible = (type == Button::ACCOUNT || type == Button::BLF || type == Button::PRESENCE ||
+		type == Button::MWI || type == Button::AUTO_ANSWER_DND || type == Button::SPEED_DIAL) &&
+		(appSettings.uaConf.accounts.size() > 1 || cbAccount->ItemIndex > 1);
+	cbAccount->Visible = lblAccount->Visible;
+	if (cbAccount->Items->Count > 0)
+	{
+		int index = cbAccount->ItemIndex;
+		const char* text = "(default: first account)";
+		if (type == Button::AUTO_ANSWER_DND)
+			text = "(default: all accounts)";
+		else if (type == Button::SPEED_DIAL)
+			text = "(default: current account)";
+		cbAccount->Items->Strings[0] = text;
+		cbAccount->ItemIndex = index;
+	}
 
 	for (int i=0; i<pcBehavior->PageCount; i++)
 	{
@@ -460,6 +492,7 @@ void TfrmButtonEdit::SetType(Button::Type type)
 	case Button::CALL_MAKE_OR_ANSWER:
 	case Button::CALL_ANSWER:
 	case Button::RESUBSCRIBE:
+	case Button::ACCOUNT:
 		edNumber->Visible = false;
 		lblNumber->Visible = false;
 		break;

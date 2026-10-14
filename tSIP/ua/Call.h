@@ -20,6 +20,7 @@ struct Call
 	enum { INVALID_UID = 0 };
 
 	unsigned int uid;
+	int accountId;		///< account (index in settings) used by call
 	bool incoming;
 	bool progress;	// early media
 	bool connected;
@@ -68,6 +69,7 @@ public:
 		use Calls::GetCallsInfo() for snapshots of call list */
 	Extctrls::TTimer *tmrAutoAnswer;
 	int autoAnswerCode;
+	AnsiString autoAnswerReason;
 	bool autoAnswerIntercom;
 
 	Recorder recorder;
@@ -87,6 +89,7 @@ public:
 
 	Call(void):
 		uid(0),
+		accountId(0),
 		incoming(false),
 		progress(false),
 		connected(false),
