@@ -8,7 +8,6 @@ Bunch of things to do in future releases.
 No particular order.
 Outdated / not the only one TODO list.
 
-- multiple accounts, even if only single active at the time
 - UDP transport keepalive
 - context help
 - SIP message graphs
@@ -81,10 +80,7 @@ tSIP: help on button types (+ images)
 tSIP: directory import from vcard
 tSIP: verify wave file format when selecting for wave source audio device
 tSIP: RecordViewer: play multiple files one by one (multiple selection list)
-multiple accounts; disable / set as default for outgoing
 RecordViewer: keep sorting column/dir after restart
-
-plugin interface: showsettings
 
 tSIP plugin: logout from group on inactivity (mouse, keyboard)
 
