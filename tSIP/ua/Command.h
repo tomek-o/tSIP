@@ -42,6 +42,7 @@ public:
 		SEND_CUSTOM_CALL_REQUEST,	///< send a SIP request of an arbitrary method within an existing call's dialog
 		RESUBSCRIBE,		///< force an immediate re-SUBSCRIBE of presence and dialog-info (BLF) subscriptions
 		SIDETONE,			///< bEnabled, code = level [%]
+		VIDEO_RAW_DUMP_START,	///< target = file name (video of callUid)
 
 		TYPE__LIMITER
 	} type;

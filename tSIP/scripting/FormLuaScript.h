@@ -51,6 +51,8 @@ __published:	// IDE-managed Components
 	TSaveDialog *saveDialogExportHtml;
 	TMenuItem *miExportExamplesToHtml;
 	TSaveDialog *saveDialogExportExamplesHtml;
+	TMenuItem *miExportToMarkdown;
+	TSaveDialog *saveDialogExportMarkdown;
 	void __fastcall btnExecuteClick(TObject *Sender);
 	void __fastcall btnBreakClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
@@ -69,6 +71,7 @@ __published:	// IDE-managed Components
 	void __fastcall miFileNewClick(TObject *Sender);
 	void __fastcall miExportFunctionsToHtmlClick(TObject *Sender);
 	void __fastcall miExportExamplesToHtmlClick(TObject *Sender);
+	void __fastcall miExportToMarkdownClick(TObject *Sender);
 private:	// User declarations
 	bool breakRequest;
 	volatile bool running;

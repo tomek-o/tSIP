@@ -768,6 +768,12 @@ void video_stop(struct video *v)
  * @param v     Video stream
  * @param muted True to mute, false to un-mute
  */
+const void *video_dec_state(const struct video *v)
+{
+	return v ? v->vrx.dec : NULL;
+}
+
+
 void video_mute(struct video *v, bool muted)
 {
 	struct vtx *vtx;

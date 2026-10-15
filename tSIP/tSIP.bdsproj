@@ -91,7 +91,6 @@
         <property category="win32.Debug_Build.win32b.ilink32" name="option.d.arg.merge" value="1"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.d.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.ilink32" name="option.dynamicrtl.enabled" value="0"/>
-        <property category="win32.Debug_Build.win32b.ilink32" name="option.r.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.tasm32" name="option.z.enabled" value="1"/>
         <property category="win32.Debug_Build.win32b.tasm32" name="option.zd.enabled" value="0"/>
         <property category="win32.Debug_Build.win32b.tasm32" name="option.zi.enabled" value="1"/>
@@ -426,6 +425,7 @@
           <property category="win32.*.win32b.ilink32" name="option.j.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.m.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.map_segments.enabled" value="0"/>
+          <property category="win32.*.win32b.ilink32" name="option.r.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.s.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="option.w.enabled" value="0"/>
           <property category="win32.*.win32b.ilink32" name="param.libfiles.1" value="$(LIBRARIES)"/>
@@ -543,6 +543,9 @@
         <FILE FILENAME="SelfTests.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="SelfTests" FORMNAME="" DESIGNCLASS="" ADDITIONAL="SelfTests.h"/>
         <FILE FILENAME="scripting\ScriptContext.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="ScriptContext" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\ScriptContext.h"/>
         <FILE FILENAME="scripting\LuaExamplesHtmlExport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaExamplesHtmlExport" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaExamplesHtmlExport.h"/>
+        <FILE FILENAME="scripting\LuaMarkdownExport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaMarkdownExport" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaMarkdownExport.h"/>
+        <FILE FILENAME="VideoRawDump.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VideoRawDump" FORMNAME="" DESIGNCLASS="" ADDITIONAL="VideoRawDump.h"/>
+        <FILE FILENAME="RecordingFile.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="RecordingFile" FORMNAME="" DESIGNCLASS="" ADDITIONAL="RecordingFile.h"/>
         <FILE FILENAME="scripting\LuaFunctionsHtmlExport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaFunctionsHtmlExport" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaFunctionsHtmlExport.h"/>
         <FILE FILENAME="scripting\LuaHtmlExportCommon.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaHtmlExportCommon" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaHtmlExportCommon.h"/>
       </FILELIST>
@@ -553,7 +556,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">3</VersionInfo>
           <VersionInfo Name="Release">15</VersionInfo>
-          <VersionInfo Name="Build">1</VersionInfo>
+          <VersionInfo Name="Build">2</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -565,7 +568,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.3.15.1</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.3.15.2</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -619,10 +622,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

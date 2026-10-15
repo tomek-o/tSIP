@@ -13,6 +13,7 @@
 #include "Settings.h"
 #include "NetInterfaces.h"
 #include "Paths.h"
+#include "VideoRawDump.h"
 #include <re.h>
 #include <rem.h>
 #include "baresip.h"
@@ -264,6 +265,9 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		{
 			state = Callback::CALL_STATE_CLOSED;
 			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "", "");
+		#ifdef USE_VIDEO
+			VideoRawDump::StopForCall(callUid);
+		#endif
 			removeCall(callUid);
 		}
 		else
@@ -1201,6 +1205,17 @@ extern "C" void control_handler(void)
 				DEBUG_WARNING("SIDETONE: could not set sidetone for call (%m)\n", err);
 		}
 		break;
+	case Command::VIDEO_RAW_DUMP_START: {
+	#ifdef USE_VIDEO
+		int err = VideoRawDump::Start(cmd.target, video_dec_state(cmdCall ? call_video(cmdCall) : NULL), cmd.callUid,
+			static_cast<VideoRawDumpFormat>(cmd.code));
+		if (err)
+			DEBUG_WARNING("VIDEO_RAW_DUMP_START: could not start (%m)\n", err);
+	#else
+        DEBUG_WARNING("VIDEO_RAW_DUMP_START: video is not enabled in this build\n");
+	#endif
+		break;
+	}
 	case Command::MUTE:
 		if (cmdCall)
 		{

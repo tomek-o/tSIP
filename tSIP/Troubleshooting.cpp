@@ -452,6 +452,8 @@ namespace {
 	bool CheckDuplicatedContactUser(void)
 	{
 		const std::vector<UaConf::Account> &accounts = appSettings.uaConf.accounts;
+		// contact user as used at runtime: cuser, or user name if cuser is empty
+		std::vector<bool> affected(accounts.size(), false);
 		bool result = false;
 		for (unsigned int i=0; i<accounts.size(); i++)
 		{
@@ -465,11 +467,17 @@ namespace {
 				std::string cj = accounts[j].cuser != "" ? accounts[j].cuser : accounts[j].user;
 				if (AnsiString(ci.c_str()).LowerCase() == AnsiString(cj.c_str()).LowerCase())
 				{
-					AddAffectedAccount(i);
-					AddAffectedAccount(j);
+					affected[i] = true;
+					affected[j] = true;
 					result = true;
 				}
 			}
+		}
+		// each affected account listed once
+		for (unsigned int i=0; i<accounts.size(); i++)
+		{
+			if (affected[i])
+				AddAffectedAccount(i);
 		}
 		return result;
 	}

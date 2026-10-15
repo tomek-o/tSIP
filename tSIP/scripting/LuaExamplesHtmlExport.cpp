@@ -27,7 +27,7 @@ int LuaExamplesHtmlExport::Write(AnsiString fileName)
 			return 1;
 		}
 
-		AnsiString title = PrepareText(Branding::appName + " - built-in Lua examples");
+		AnsiString title = PrepareText(Branding::appName + " " + GetAppVersion() + " - built-in Lua examples");
 		AnsiString generatedBy = GetGeneratedByLine();
 		AnsiString note = PrepareText("These examples are built into the " + Branding::appName +
 			" executable - they are also available from the Script window's Help -> Examples menu.");

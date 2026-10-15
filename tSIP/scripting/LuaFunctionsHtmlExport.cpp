@@ -34,7 +34,7 @@ int LuaFunctionsHtmlExport::Write(AnsiString fileName)
 			return 1;
 		}
 
-		AnsiString title = PrepareText(Branding::appName + " - custom Lua functions");
+		AnsiString title = PrepareText(Branding::appName + " " + GetAppVersion() + " - custom Lua functions");
 		AnsiString generatedBy = GetGeneratedByLine();
 
 		ofs <<

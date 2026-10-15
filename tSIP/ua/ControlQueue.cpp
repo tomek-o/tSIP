@@ -228,6 +228,19 @@ void ControlQueue::Sidetone(unsigned int callUid, bool state, unsigned int level
 	fifo.push();
 }
 
+void ControlQueue::VideoRawDumpStart(unsigned int callUid, AnsiString fileName, int format)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::VIDEO_RAW_DUMP_START;
+	cmd->callUid = callUid;
+	cmd->target = fileName;
+	cmd->code = format;
+	fifo.push();
+}
+
 void ControlQueue::SetMsgLogging(bool enabled, bool onlyFirstLines)
 {
 	ScopedLock<Mutex> lock(mutex);

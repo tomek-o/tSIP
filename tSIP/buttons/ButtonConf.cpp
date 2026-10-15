@@ -149,14 +149,22 @@ bool ButtonConf::Contains(const ButtonConf& other) const
 
 bool ButtonConf::UaRestartNeeded(const ButtonConf& right) const
 {
-	if (type == Button::BLF || right.type == Button::BLF ||
-		type == Button::PRESENCE || right.type == Button::PRESENCE
-		)
+	// Only the subscriptions built from BLF / PRESENCE buttons need the UA restart
+	// (see ProgrammableButtons::UpdateContacts): type, number, account and expires.
+	// Caption, position, colors etc. don't change the subscription list.
+	const bool isSubscription = (type == Button::BLF || type == Button::PRESENCE);
+	const bool rightIsSubscription = (right.type == Button::BLF || right.type == Button::PRESENCE);
+	if (!isSubscription && !rightIsSubscription)
 	{
-		/** \todo Make UA restart condition for button config more precise (no need to restart if e.g. button height changed) */
+		return false;
+	}
+	if (type != right.type)
+	{
 		return true;
 	}
-	return false;
+	return (number != right.number ||
+		GetAccountId() != right.GetAccountId() ||
+		expires != right.expires);
 }
 
 void ButtonConf::FromJson(const Json::Value &btnJson)

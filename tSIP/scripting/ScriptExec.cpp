@@ -14,6 +14,10 @@
 #include "ButtonConf.h"
 #include "Call.h"
 #include "Recorder.h"
+#ifdef USE_VIDEO
+#	include "VideoRawDump.h"
+#endif
+#include "RecordingFile.h"
 #include "UaCustomRequests.h"
 #include "UaMain.h"
 #include "Calls.h"
@@ -675,6 +679,76 @@ static int l_SetMute(lua_State* L)
 	}
 	return 0;
 }
+
+static int l_GetLogLines(lua_State* L)
+{
+	int count = luaL_optinteger(L, 1, 50);
+	if (count < 1)
+		count = 1;
+	if (count > 1000)
+		count = 1000;
+	AnsiString text;
+	if (frmLog)
+	{
+		TStrings *lines = frmLog->redMain->Lines;
+		int first = lines->Count - count;
+		if (first < 0)
+			first = 0;
+		for (int i = first; i < lines->Count; i++)
+		{
+			text += lines->Strings[i] + "\n";
+		}
+	}
+	lua_pushstring(L, text.c_str());
+	return 1;
+}
+
+#ifdef USE_VIDEO
+static int l_StartVideoRawDump(lua_State* L)
+{
+	unsigned int callUid = luaL_checkinteger(L, 1);
+	Call *call = Calls::FindByUid(callUid);
+	if (call == NULL)
+	{
+		LOG("Lua error: call for StartVideoRawDump() not found\n");
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	// optional format: 0 = H.264 raw, 1 = MP4; default from settings
+	int format = (lua_gettop(L) >= 2) ? luaL_checkinteger(L, 2) : appSettings.uaConf.recording.videoFormat;
+	if (format < VRD_H264_RAW || format > VRD_MP4)
+	{
+		LOG("Lua error: StartVideoRawDump() format must be 0 (H.264 raw) or 1 (MP4)\n");
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	// same folder and base name as audio recordings of the call, extension by format
+	AnsiString file = RecordingFile::MakeBaseName(call->incoming, call->getPeerUri().c_str(), call->uri);
+	if (file == "")
+	{
+		LOG("Lua error: failed to create recordings folder\n");
+		lua_pushinteger(L, 0);
+		return 1;
+	}
+	file += (format == VRD_MP4) ? ".mp4" : ".h264";
+	// executed in UA thread (decoder state of the call); result is written to log
+	UA->VideoRawDumpStart(callUid, file, format);
+	lua_pushinteger(L, 1);
+	return 1;
+}
+
+static int l_StopVideoRawDump(lua_State* L)
+{
+	VideoRawDump::Stop();
+	return 0;
+}
+
+static int l_IsVideoRawDumpActive(lua_State* L)
+{
+	lua_pushinteger(L, VideoRawDump::IsActive() ? 1 : 0);
+	return 1;
+}
+#endif
 
 static int l_SetSidetone(lua_State* L)
 {
@@ -2691,6 +2765,14 @@ void ScriptExec::Run(const char* script)
 		"Useful when playing audio file or radio as call source - to hear what is transmitted. Sidetone is not recorded.\n"
 		"Works only for call with audio (connected / early media). Returns actual state (1/0).\nExample: SetSidetone(GetCurrentCallUid(), 1, 70)");
 	lua_register2(L, ScriptImp::l_GetSidetone, "GetSidetone", "Get sidetone state and level for current or specified call", "local state, level = GetSidetone(optionalCallUid)");
+	lua_register2(L, ScriptImp::l_GetLogLines, "GetLogLines", "Get last lines of the log window as text",
+		"Takes optional number of lines (default 50, max 1000). Returns one string, lines separated by newline.\nExample: print(GetLogLines(20))");
+#ifdef USE_VIDEO
+	lua_register2(L, ScriptImp::l_StartVideoRawDump, "StartVideoRawDump", "Start writing received H.264 video of a call to a raw file",
+		"Takes call UID and optional format (0 = H.264 raw, 1 = MP4; default from settings). Returns 1 if the request was queued (result is written to log).\nFile is saved in the recordings folder with the same base name as audio recordings of the call, extension .h264 or .mp4.\nWrites received video from the first keyframe while active. Start it after video is received. H.264 raw is an elementary stream without timing, e.g. play with ffplay; MP4 is fragmented and timed by arrival.\nExample: StartVideoRawDump(GetCurrentCallUid(), 1)");
+	lua_register2(L, ScriptImp::l_StopVideoRawDump, "StopVideoRawDump", "Stop writing received H.264 video", "Example: StopVideoRawDump()");
+	lua_register2(L, ScriptImp::l_IsVideoRawDumpActive, "IsVideoRawDumpActive", "Check if raw H.264 video dump is active", "Returns 1 or 0.");
+#endif	
 	lua_register2(L, ScriptImp::l_ToggleMute, "ToggleMute", "Toggle (reverse) mute state for current or specified call", "Takes callUid as optional argument.");
 	lua_register2(L, ScriptImp::l_GetMute, "GetMute", "Get mute state for current call or specified call", "Takes callUid as optional argument, returns 0/1.");
 	lua_register2(L, ScriptImp::l_SetHold, "SetHold", "Set hold state for specified call", "Example: SetHold(callUid, 1).");

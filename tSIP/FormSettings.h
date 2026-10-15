@@ -388,6 +388,9 @@ __published:	// IDE-managed Components
 	TLabel *lblTranslateInfo;
 	TCheckBox *chbTranslationLogMissingKeys;
 	TCheckBox *chbRecordingNoNumberB64Encoding;
+	TCheckBox *chbRecordingVideoRaw;
+	TLabel *lblRecordingVideoFormat;
+	TComboBox *cbRecordingVideoFormat;
 	TCheckBox *chbTrayNotifierDoNotChangePosition;
 	TCheckBox *chbAcceptCommandLineScript;
 	TCheckBox *chbSpeedDialUseGrid;
@@ -619,7 +622,10 @@ private:	// User declarations
 	/** Account ids of programmable buttons (copy, index = button id), modified when account is
 		removed and written to buttons configuration on Apply */
 	std::vector<int> btnAccountIds;
-	bool btnAccountIdsChanged;
+	/** Account ids of phonebook contacts (copy, index = contact index), handled like btnAccountIds */
+	std::vector<int> contactAccountIds;
+	/** Account removed with "Yes": ids in btnAccountIds / contactAccountIds were shifted, apply on Apply */
+	bool accountIdsChanged;
 	void ChangeSoundOutputMod(TComboBox *target, TLabel *label, TLabel *label2, TTrackBar *trbar, int moduleIndex, AnsiString selected);
 	TfrmHotkeys *frmHotkeys;
 	TfrmPhones *frmPhones;

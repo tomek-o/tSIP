@@ -35,6 +35,10 @@ namespace Calls
 	std::vector<CallInfo> GetCallsInfo(void);
 	unsigned int Count(void);
 	unsigned int CountIncoming(void);
+	/** \brief After a call ended: resume the held call if it is the only one left and
+		no call is active or ringing (more than one held call is left alone)
+	*/
+	void ResumeHeldCallIfNoActive(void);
 
 	/** \return 0 on success
 	*/

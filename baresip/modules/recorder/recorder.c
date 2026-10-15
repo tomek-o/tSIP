@@ -410,10 +410,12 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		if (sizerx > sizetx) {
 			aubuf_read(rec->abrx, (uint8_t*)bufrx, cnt + extra);
 			aubuf_read(rec->abtx, (uint8_t*)buftx, cnt);
-			memset(buftx + cnt, 0, extra);
+			if (extra)
+				memset(buftx + cnt, 0, extra);
 		} else {
 			aubuf_read(rec->abrx, (uint8_t*)bufrx, cnt);
-			memset(bufrx + cnt, 0, extra);
+			if (extra)
+				memset(bufrx + cnt, 0, extra);
 			aubuf_read(rec->abtx, (uint8_t*)buftx, cnt + extra);
 		}
 		cnt += extra;

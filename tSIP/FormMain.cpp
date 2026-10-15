@@ -8,6 +8,11 @@
 #include "FormMain.h"
 #include "CommandLine.h"
 #include "Paths.h"
+#include "RecordingFile.h"
+#ifdef USE_VIDEO
+#	include "VideoRawDump.h"
+#endif
+#include "baresip_base_config.h"
 #include "PluginV2Methods.h"
 #include "Bitmaps.h"
 #include "Branding.h"
@@ -954,6 +959,9 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackHangup = OnPluginHangup;
 	PhoneInterface::callbackRunScriptContext = RunScript2;
 	PluginV2Methods::SetCallbackStartRecording(StartRecording);
+#ifdef USE_VIDEO
+	VideoRawDump::Init();	// video decoder hook, before any video call
+#endif
 	ScriptExec::onSetCurrentAccount = SetCurrentAccount;
 	ScriptExec::onCallOnAccount = MakeCallOnAccount;
 	PluginV2Methods::SetCallbackSetCurrentAccount(SetCurrentAccount);
@@ -2267,6 +2275,7 @@ void TfrmMain::PollCallbackQueue(void)
 				if (call)
 					ClearLineButton(call->btnId);
 				Calls::RemoveByUid(cb.callUid);
+				Calls::ResumeHeldCallIfNoActive();
 			}
 
 			break;
@@ -2720,45 +2729,9 @@ void TfrmMain::StartRecording(Call &call)
 
 	try
 	{
-		AnsiString file;
-		AnsiString dir;
-		if (appSettings.uaConf.recording.recDir == UaConf::RecordingCfg::RecDirRelative)
+		AnsiString file = RecordingFile::MakeBaseName(call.incoming, call.getPeerUri().c_str(), call.uri);
+		if (file != "")
 		{
-			dir = Paths::GetProfileDir() + "\\recordings\\";
-		}
-		else
-		{
-			dir = appSettings.uaConf.recording.customRecDir.c_str();
-			if (dir[dir.Length()] != '\\')
-				dir += "\\";
-		}
-		if (ForceDirectories(dir))
-		{
-			file += dir;
-			file += FormatDateTime("yyyymmdd_hhnnss", Now());
-			file += call.incoming?"_1_":"_0_";
-			// let's limit URI/number length to some reasonable value
-			AnsiString uri;
-			if (call.incoming)
-			{
-				uri = ExtractNumberFromUri(call.getPeerUri().c_str()).c_str();
-			}
-			else
-			{
-				uri = call.uri;
-			}
-			uri = uri.SubString(1, 32);
-			if (appSettings.uaConf.recording.noNumberB64Encoding == false)
-			{
-				std::string b64uri = base64_encode((unsigned char*)uri.c_str(), uri.Length(), BASE64_ALPHABET_FSAFE);
-				file += b64uri.c_str();
-			}
-			else
-			{
-				/// \note There are more invalid characters (<>:"/\|?*) - file creation would fail for them
-				AnsiString escaped = StringReplace(uri, "*", "A", TReplaceFlags() << rfReplaceAll);
-				file += escaped;
-			}
 			if (appSettings.uaConf.recording.fileFormat == 0)
 			{
 				file += ".wav";
@@ -2775,6 +2748,15 @@ void TfrmMain::StartRecording(Call &call)
 				appSettings.uaConf.recording.fileFormat, appSettings.uaConf.recording.bitrate);
 			call.recordFile = file;
 			call.recording = true;
+#ifdef USE_VIDEO
+			if (appSettings.uaConf.recording.videoRawRemote)
+			{
+				// received video, same base name as the audio file (without .wav / .ogg)
+				int format = appSettings.uaConf.recording.videoFormat;
+				AnsiString videoFile = file.SubString(1, file.Length() - 4) + (format == VRD_MP4 ? ".mp4" : ".h264");
+				UA->VideoRawDumpStart(call.uid, videoFile, format);
+			}
+#endif
 		}
 		else
 		{

@@ -1395,5 +1395,20 @@ Version 0.3.16
 	- FIXED timer (jiffies) overflow after ~10.7 days of system uptime (performance counter value multiplied before division), possibly breaking timers and audio timing on long running systems
 	- calls: end of audio (WAV) file used as call audio source is distinguished from audio device error - separate setting "Disconnect call at end of audio file" (initialized from previous single setting); file played by plugin (PlayAudioFile) never disconnects call
 	- audio: added sidetone (transmitted audio mixed into local playback, e.g. to hear played WAV file or radio input), controlled per call: Lua SetSidetone/GetSidetone, plugin interface v2 Sidetone method; sidetone is not recorded and is processed before AEC
+	- scripting: Help menu item "Export custom Lua functions and examples to Markdown" (single .md file with functions and built-in examples)
+	- Lua HTML exports (custom functions, examples) and Markdown export: tSIP version in the page title
+	- Lua examples: radio station switching uses sidetone (50%), turned off when script is stopped; phonebook import check fixed (result 0 is success); call state example shows source ID
+	- multiple accounts:
+		- removing an account updates buttons and phonebook contacts assigned to it or to accounts after it (Yes / No / Cancel dialog, changes applied on Apply)
+		- troubleshooting: duplicated contact user check lists each affected account once; empty contact user is compared as user name (as at runtime)
+	- BLF and PRESENCE buttons: changing caption, position, colors or other appearance settings no longer restarts the UA; restart only when type, number, account or expires changes (adding or removing such buttons still restarts)
+	- video recording (experimental): received video of a call can be saved as raw H.264 (Annex-B elementary stream, .h264) from the first keyframe
+		- Settings / Recording: "Record received video of the call" (saved with the same base name as the audio recording, in the same folder); shown only in builds with video support
+		- Lua: StartVideoRawDump(callUid), StopVideoRawDump(), IsVideoRawDumpActive(); file name follows audio recording naming
+		- the video file stops when the call ends; only one video recording runs at a time
+		- baresip: avcodec_h264_set_au_dump() hook for complete received access units, video_dec_state() accessor
+	- video recording: MP4 output added as second format (experimental, not working with the bundled FFmpeg DLLs - the MP4 muxer is missing there; raw H.264 is the working format)
+	- Lua: GetLogLines([lines]) returns the last lines of the log window (default 50, max 1000)
+	- video recording: MP4 option is shown and used only if the FFmpeg libraries in use include the MP4 output format; otherwise only H.264 raw is offered
 */
 

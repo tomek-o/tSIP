@@ -2621,6 +2621,35 @@ object frmSettings: TfrmSettings
           'local party only (your microphone)'
           'remote party only')
       end
+      object chbRecordingVideoRaw: TCheckBox
+        Left = 2
+        Top = 258
+        Width = 534
+        Height = 17
+        Caption = 'Record received video of the call (raw H.264, saved next to audio recording)'
+        TabOrder = 11
+      end
+      object lblRecordingVideoFormat: TLabel
+        Left = 2
+        Top = 283
+        Width = 91
+        Height = 13
+        Caption = 'Video file format:'
+      end
+      object cbRecordingVideoFormat: TComboBox
+        Left = 167
+        Top = 280
+        Width = 274
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        ItemIndex = 0
+        TabOrder = 12
+        Text = 'H.264 raw (.h264)'
+        Items.Strings = (
+          'H.264 raw (.h264)'
+          'MP4 (.mp4)')
+      end
       object btnOpenRecordingFolder: TButton
         Left = 447
         Top = 34

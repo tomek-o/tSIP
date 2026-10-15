@@ -12,6 +12,7 @@
 #include "LuaExamples.h"
 #include "LuaFunctionsHtmlExport.h"
 #include "LuaExamplesHtmlExport.h"
+#include "LuaMarkdownExport.h"
 #include "Branding.h"
 #include "Settings.h"
 #include "ScriptSource.h"
@@ -797,6 +798,19 @@ void __fastcall TfrmLuaScript::miExportExamplesToHtmlClick(TObject *Sender)
 		if (LuaExamplesHtmlExport::Write(saveDialogExportExamplesHtml->FileName) != 0)
 		{
 			Application->MessageBox("Failed to write HTML file", "Export Lua examples", MB_ICONSTOP);
+		}
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmLuaScript::miExportToMarkdownClick(TObject *Sender)
+{
+	saveDialogExportMarkdown->FileName = SanitizeFileName(Branding::appName) + "_lua_reference.md";
+	if (saveDialogExportMarkdown->Execute())
+	{
+		if (LuaMarkdownExport::Write(saveDialogExportMarkdown->FileName) != 0)
+		{
+			Application->MessageBox("Failed to write Markdown file", "Export to Markdown", MB_ICONSTOP);
 		}
 	}
 }

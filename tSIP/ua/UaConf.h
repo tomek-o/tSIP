@@ -334,6 +334,8 @@ public:
 			RecStartLimiter
 		} recStart;
 		bool noNumberB64Encoding;		///< do not encode number/URI with filesystem-safe base64
+		bool videoRawRemote;			///< also record received video of call when audio recording starts
+		unsigned int videoFormat;		///< video file format, VideoRawDumpFormat: 0 = H.264 raw (.h264), 1 = MP4 (.mp4)
 		RecordingCfg(void):
 			enabled(false),
 			recDir(RecDirRelative),
@@ -342,7 +344,9 @@ public:
 			fileFormat(0),
 			bitrate(64000),
 			recStart(RecStartCallConfirmed),
-			noNumberB64Encoding(false)
+			noNumberB64Encoding(false),
+			videoRawRemote(false),
+			videoFormat(0)
 		{}
 		/*	fileFormat/bitrate deliberately not compared: this gates UA restart and
 			both are read when a recording starts (FormMain.cpp, UA->Record(...)).
@@ -354,7 +358,9 @@ public:
 				channels == right.channels &&
 				side == right.side &&
 				recStart == right.recStart &&
-				noNumberB64Encoding == right.noNumberB64Encoding
+				noNumberB64Encoding == right.noNumberB64Encoding &&
+				videoRawRemote == right.videoRawRemote &&
+				videoFormat == right.videoFormat
 				;
 		}
 		bool operator!=(const RecordingCfg& right) const {

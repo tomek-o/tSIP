@@ -164,6 +164,10 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 			recording.recStart = recStart;
 		}
 		uaConfRecordingJson.getBool("noNumberB64Encoding", recording.noNumberB64Encoding);
+		uaConfRecordingJson.getBool("videoRawRemote", recording.videoRawRemote);
+		uaConfRecordingJson.getUInt("videoFormat", recording.videoFormat);
+		if (recording.videoFormat > 1)
+			recording.videoFormat = 0;
 	}
 	else
 	{
@@ -383,6 +387,8 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		jv["bitrate"] = recording.bitrate;
 		jv["recStart"] = recording.recStart;
 		jv["noNumberB64Encoding"] = recording.noNumberB64Encoding;
+		jv["videoRawRemote"] = recording.videoRawRemote;
+		jv["videoFormat"] = recording.videoFormat;
 	}
 
 	{

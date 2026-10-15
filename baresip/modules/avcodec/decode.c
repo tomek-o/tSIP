@@ -229,6 +229,16 @@ static int ffdecode(struct viddec_state *st, struct vidframe *frame,
 	return err;
 }
 
+static h264_au_dump_h *h264_au_dumph = NULL;
+static void *h264_au_dump_arg = NULL;
+
+void avcodec_h264_set_au_dump(h264_au_dump_h *dumph, void *arg)
+{
+	h264_au_dump_arg = arg;
+	h264_au_dumph = dumph;
+}
+
+
 int avcodec_decode_h264(struct viddec_state *st, struct vidframe *frame,
 			bool *intra, bool marker, uint16_t seq,
 			struct mbuf *src)
@@ -389,6 +399,11 @@ int avcodec_decode_h264(struct viddec_state *st, struct vidframe *frame,
 	err = ffdecode(st, frame, intra);
 	if (err)
 		goto out;
+
+	/* raw dump: after successful decode, so the first dumped access unit
+	   is the keyframe (got_keyframe is set by ffdecode) */
+	if (h264_au_dumph && st->got_keyframe)
+		h264_au_dumph(st, st->mb->buf, st->mb->end, h264_au_dump_arg);
 
  out:
 	mbuf_rewind(st->mb);

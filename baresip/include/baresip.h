@@ -473,6 +473,24 @@ unsigned int softvol_get_rx_level(void);
 int sidetone_set(const struct audio *au, bool enabled, unsigned int level);
 int sidetone_get(const struct audio *au, bool *enabled, unsigned int *level);
 
+/* raw H.264 receive dump (modules/avcodec): called with each complete received
+   access unit (Annex-B, with start codes) before it is decoded; only after the
+   first keyframe. Install once at startup, before any video call. */
+typedef void (h264_au_dump_h)(const void *dec, const uint8_t *buf, size_t len, void *arg);
+void avcodec_h264_set_au_dump(h264_au_dump_h *dumph, void *arg);
+
+/* video decoder state of the video stream, identifies the stream in
+   avcodec_h264_set_au_dump() callbacks (compare pointers only) */
+const void *video_dec_state(const struct video *v);
+
+/* raw H.264 access units (Annex-B) to fragmented MP4 (modules/avformat);
+   h264_mp4_write() waits for the first keyframe with SPS and PPS */
+/* true if the FFmpeg libraries in use have the mp4 output format */
+bool h264_mp4_supported(void);
+int  h264_mp4_open(void **wp, const char *filename);
+int  h264_mp4_write(void *wp, const uint8_t *buf, size_t len);
+void h264_mp4_close(void *wp);
+
 /*
  * WASAPI device names - provided by wasapi module
  */

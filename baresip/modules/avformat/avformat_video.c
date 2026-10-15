@@ -225,3 +225,272 @@ void avformat_video_decode(struct shared *st, AVPacket *pkt)
 	if (frame)
 		av_frame_free(&frame);
 }
+
+
+/*
+ * Raw H.264 access units (Annex-B, from the decoder hook) to a fragmented MP4 file.
+ * Used by tSIP video recording. Timestamps are the arrival times of the access units.
+ */
+
+struct h264_mp4 {
+	AVFormatContext *fmt;
+	AVStream *st;
+	bool header;		/**< header written, samples can be written */
+	int64_t t0;		/**< arrival time of first sample [us] */
+	int64_t last_pts;	/**< last sample time [ms], pts is strictly increasing */
+};
+
+/* next NAL unit of Annex-B buffer, without start code and trailing zero bytes */
+static bool annexb_next(const uint8_t *buf, size_t len, size_t *pos,
+			const uint8_t **nal, size_t *nlen)
+{
+	size_t i = *pos, s, e;
+
+	while (i + 3 <= len && !(buf[i] == 0 && buf[i+1] == 0 && buf[i+2] == 1))
+		i++;
+	if (i + 3 > len)
+		return false;
+
+	s = i + 3;
+	e = s;
+	while (e + 3 <= len && !(buf[e] == 0 && buf[e+1] == 0 && buf[e+2] == 1))
+		e++;
+	if (e + 3 > len)
+		e = len;
+	while (e > s && buf[e-1] == 0)
+		e--;
+
+	*nal = buf + s;
+	*nlen = e - s;
+	*pos = e;
+	return true;
+}
+
+/* MP4 sample NAL type: keep slices and SEI, parameter sets are in avcC */
+static bool mp4_sample_nal(uint8_t type)
+{
+	return type != 7 && type != 8 && type != 9;
+}
+
+static bool h264_mp4_dims(const uint8_t *buf, size_t len, int *w, int *h)
+{
+	const AVCodec *codec = avcodec_find_decoder(AV_CODEC_ID_H264);
+	AVCodecParserContext *parser = av_parser_init(AV_CODEC_ID_H264);
+	AVCodecContext *ctx = codec ? avcodec_alloc_context3(codec) : NULL;
+	uint8_t *out = NULL;
+	int outlen = 0;
+	bool ok = false;
+
+	if (parser && ctx) {
+		(void)av_parser_parse2(parser, ctx, &out, &outlen, buf, (int)len,
+				       AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0);
+		if (parser->width > 0 && parser->height > 0) {
+			*w = parser->width;
+			*h = parser->height;
+			ok = true;
+		}
+	}
+
+	if (parser)
+		av_parser_close(parser);
+	if (ctx)
+		avcodec_free_context(&ctx);
+	return ok;
+}
+
+/* write MP4 header once SPS, PPS and dimensions are known (first keyframe) */
+static bool h264_mp4_start(struct h264_mp4 *w, const uint8_t *buf, size_t len)
+{
+	const uint8_t *nal, *sps = NULL, *pps = NULL;
+	size_t nlen, pos = 0, spslen = 0, ppslen = 0, extlen;
+	int width = 0, height = 0, ret;
+	uint8_t *p;
+	AVDictionary *opts = NULL;
+	AVCodecParameters *par = w->st->codecpar;
+
+	while (annexb_next(buf, len, &pos, &nal, &nlen)) {
+		if (nlen == 0)
+			continue;
+		if ((nal[0] & 0x1f) == 7 && !sps) {
+			sps = nal;
+			spslen = nlen;
+		}
+		else if ((nal[0] & 0x1f) == 8 && !pps) {
+			pps = nal;
+			ppslen = nlen;
+		}
+	}
+	if (!sps || !pps || spslen < 4)
+		return false;
+	if (!h264_mp4_dims(buf, len, &width, &height))
+		return false;
+
+	extlen = 11 + spslen + ppslen;
+	par->extradata = av_mallocz(extlen + AV_INPUT_BUFFER_PADDING_SIZE);
+	if (!par->extradata)
+		return false;
+	p = par->extradata;
+	*p++ = 1;		/* configurationVersion */
+	*p++ = sps[1];		/* profile_idc */
+	*p++ = sps[2];		/* profile_compatibility */
+	*p++ = sps[3];		/* level_idc */
+	*p++ = 0xff;		/* 4-byte NAL unit lengths */
+	*p++ = 0xe1;		/* one SPS */
+	*p++ = (uint8_t)(spslen >> 8);
+	*p++ = (uint8_t)spslen;
+	memcpy(p, sps, spslen);
+	p += spslen;
+	*p++ = 1;		/* one PPS */
+	*p++ = (uint8_t)(ppslen >> 8);
+	*p++ = (uint8_t)ppslen;
+	memcpy(p, pps, ppslen);
+	par->extradata_size = (int)extlen;
+
+	par->codec_type = AVMEDIA_TYPE_VIDEO;
+	par->codec_id = AV_CODEC_ID_H264;
+	par->width = width;
+	par->height = height;
+
+	/* fragmented MP4: playable even if recording is interrupted */
+	av_dict_set(&opts, "movflags", "frag_keyframe+empty_moov+default_base_moof", 0);
+	ret = avformat_write_header(w->fmt, &opts);
+	av_dict_free(&opts);
+	if (ret < 0)
+		return false;
+
+	w->t0 = (int64_t)tmr_jiffies_usec();
+	w->last_pts = -1;
+	w->header = true;
+	return true;
+}
+
+bool h264_mp4_supported(void)
+{
+	return av_guess_format("mp4", NULL, NULL) != NULL;
+}
+
+int h264_mp4_open(void **wp, const char *filename)
+{
+	struct h264_mp4 *w;
+	int ret;
+
+	if (!wp || !filename)
+		return EINVAL;
+
+	w = mem_zalloc(sizeof(*w), NULL);
+	if (!w)
+		return ENOMEM;
+
+	ret = avformat_alloc_output_context2(&w->fmt, NULL, "mp4", filename);
+	if (ret < 0 || !w->fmt)
+		goto err;
+
+	ret = avio_open(&w->fmt->pb, filename, AVIO_FLAG_WRITE);
+	if (ret < 0)
+		goto err;
+
+	w->st = avformat_new_stream(w->fmt, NULL);
+	if (!w->st)
+		goto err;
+	w->st->time_base.num = 1;
+	w->st->time_base.den = 1000;
+
+	*wp = w;
+	return 0;
+
+ err:
+	{
+		char errbuf[128];
+		av_strerror(ret, errbuf, sizeof(errbuf));
+		DEBUG_WARNING("mp4 open %s: %s (%d)\n", filename, errbuf, ret);
+	}
+	if (w->fmt) {
+		if (w->fmt->pb)
+			avio_closep(&w->fmt->pb);
+		avformat_free_context(w->fmt);
+	}
+	mem_deref(w);
+	return EIO;
+}
+
+int h264_mp4_write(void *wp, const uint8_t *buf, size_t len)
+{
+	struct h264_mp4 *w = wp;
+	const uint8_t *nal;
+	size_t nlen, pos = 0, total = 0, off = 0, n_nal = 0;
+	bool key = false;
+	AVPacket *pkt;
+	int64_t now, pts;
+	int ret;
+
+	if (!w || !buf || !len)
+		return EINVAL;
+
+	if (!w->header && !h264_mp4_start(w, buf, len))
+		return 0;	/* wait for keyframe with parameter sets */
+
+	/* convert to length-prefixed NAL units */
+	while (annexb_next(buf, len, &pos, &nal, &nlen)) {
+		if (nlen == 0 || !mp4_sample_nal(nal[0] & 0x1f))
+			continue;
+		if ((nal[0] & 0x1f) == 5)
+			key = true;
+		total += 4 + nlen;
+		++n_nal;
+	}
+	if (!n_nal)
+		return 0;
+
+	pkt = av_packet_alloc();
+	if (!pkt)
+		return ENOMEM;
+	if (av_new_packet(pkt, (int)total) < 0) {
+		av_packet_free(&pkt);
+		return ENOMEM;
+	}
+
+	pos = 0;
+	while (annexb_next(buf, len, &pos, &nal, &nlen)) {
+		if (nlen == 0 || !mp4_sample_nal(nal[0] & 0x1f))
+			continue;
+		pkt->data[off]   = (uint8_t)(nlen >> 24);
+		pkt->data[off+1] = (uint8_t)(nlen >> 16);
+		pkt->data[off+2] = (uint8_t)(nlen >> 8);
+		pkt->data[off+3] = (uint8_t)nlen;
+		memcpy(pkt->data + off + 4, nal, nlen);
+		off += 4 + nlen;
+	}
+
+	now = (int64_t)tmr_jiffies_usec();
+	pts = (now - w->t0) / 1000;
+	if (pts <= w->last_pts)
+		pts = w->last_pts + 1;
+	w->last_pts = pts;
+
+	pkt->stream_index = w->st->index;
+	pkt->pts = pts;
+	pkt->dts = pts;
+	if (key)
+		pkt->flags |= AV_PKT_FLAG_KEY;
+
+	ret = av_interleaved_write_frame(w->fmt, pkt);	/* takes ownership of data */
+	av_packet_free(&pkt);
+	return ret < 0 ? EIO : 0;
+}
+
+void h264_mp4_close(void *wp)
+{
+	struct h264_mp4 *w = wp;
+
+	if (!w)
+		return;
+
+	if (w->header)
+		(void)av_write_trailer(w->fmt);
+	if (w->fmt) {
+		if (w->fmt->pb)
+			avio_closep(&w->fmt->pb);
+		avformat_free_context(w->fmt);
+	}
+	mem_deref(w);
+}

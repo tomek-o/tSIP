@@ -187,6 +187,42 @@ unsigned int Calls::Count(void)
 	return entries.size();
 }
 
+void Calls::ResumeHeldCallIfNoActive(void)
+{
+	unsigned int heldUid = Call::INVALID_UID;
+	{
+		ScopedLock<Mutex> lock(mutex);
+		unsigned int heldCount = 0;
+		std::map<unsigned int, Call>::iterator iter;
+		for (iter = entries.begin(); iter != entries.end(); ++iter)
+		{
+			const Call &call = iter->second;
+			if (call.GetState() == Callback::CALL_STATE_INCOMING)
+				return;		// ringing: leave held call as it is
+			if (call.hold)
+			{
+				heldUid = call.uid;
+				heldCount++;
+			}
+			else if (call.GetState() != Callback::CALL_STATE_CLOSED)
+			{
+				return;		// active call exists
+			}
+		}
+		if (heldCount != 1)
+			return;
+	}
+
+	// outside of lock: setHold() sends a command to the UA thread
+	Call *held = FindByUid(heldUid);
+	if (held)
+	{
+		LOG("Call %u: resumed, other call ended\n", heldUid);
+		held->setHold(false);
+		buttons.UpdateBtnState(Button::HOLD, false);
+	}
+}
+
 unsigned int Calls::CountIncoming(void)
 {
 	ScopedLock<Mutex> lock(mutex);

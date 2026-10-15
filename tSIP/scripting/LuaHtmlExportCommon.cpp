@@ -34,9 +34,14 @@ AnsiString LuaHtmlExportCommon::PrepareText(AnsiString text)
 	return AnsiToUtf8(HtmlEscape(text));
 }
 
+AnsiString LuaHtmlExportCommon::GetAppVersion(void)
+{
+	return GetFileVer(Application->ExeName);
+}
+
 AnsiString LuaHtmlExportCommon::GetGeneratedByLine(void)
 {
-	AnsiString version = GetFileVer(Application->ExeName);
+	AnsiString version = GetAppVersion();
 	AnsiString buildTimestamp = (AnsiString)__DATE__ + ", " __TIME__;
 #ifdef USE_VIDEO
 	bool videoSupport = true;

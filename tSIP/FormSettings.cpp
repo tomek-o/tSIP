@@ -15,6 +15,7 @@
 #include "AudioModules.h"
 #include "ProgrammableButtons.h"
 #include "Globals.h"
+#include "contacts/Contacts.h"
 #include "FormLuaScript.h"
 #include "UaMain.h"
 #include "NetInterfaces.h"
@@ -23,6 +24,7 @@
 #include "Branding.h"
 #include "Translate.h"
 #include "baresip_base_config.h"
+#include "VideoRawDump.h"
 #include <FileCtrl.hpp>
 #include <assert.h>
 #include <stdio.h>
@@ -61,7 +63,7 @@ namespace
 
 //---------------------------------------------------------------------------
 __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
-	: TForm(Owner), lastTab(NULL)
+	: TForm(Owner), accountIdsChanged(false), lastTab(NULL)
 {
 	fraLogConf = new TfraLogConf(tsLogging, tmpSettings.logging);
 	fraLogConf->Parent = tsLogging;
@@ -158,6 +160,16 @@ void TfrmSettings::CreatePages(void)
 	CreatePagesNode(NULL, tsAudioProcessing);
 	if (Branding::recording)
 		CreatePagesNode(NULL, tsRecording);
+#ifndef USE_VIDEO
+	// video recording needs video support in this build
+	chbRecordingVideoRaw->Visible = false;
+	lblRecordingVideoFormat->Visible = false;
+	cbRecordingVideoFormat->Visible = false;
+#else
+	// MP4 only if the FFmpeg libraries in use include the mp4 output format
+	if (!VideoRawDump::IsMp4Supported())
+		cbRecordingVideoFormat->Items->Delete(1);
+#endif
 	CreatePagesNode(NULL, tsUaConfOpus);
 #ifdef USE_VIDEO
 	CreatePagesNode(NULL, tsVideo);
@@ -265,7 +277,13 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	{
 		btnAccountIds.push_back(buttons.btnConf[i].accountId);
 	}
-	btnAccountIdsChanged = false;
+	contactAccountIds.clear();
+	const std::vector<Contacts::Entry> &contactEntries = contacts.GetEntries();
+	for (unsigned int i=0; i<contactEntries.size(); i++)
+	{
+		contactAccountIds.push_back(contactEntries[i].accountId);
+	}
+	accountIdsChanged = false;
 
 	edGuiScaling->Text = tmpSettings.gui.scalingPct;
 
@@ -435,6 +453,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	edRecordingBitrate->Text = tmpSettings.uaConf.recording.bitrate;
 	cbRecordingStart->ItemIndex = tmpSettings.uaConf.recording.recStart;
 	chbRecordingNoNumberB64Encoding->Checked = tmpSettings.uaConf.recording.noNumberB64Encoding;
+	chbRecordingVideoRaw->Checked = tmpSettings.uaConf.recording.videoRawRemote;
+	cbRecordingVideoFormat->ItemIndex = (tmpSettings.uaConf.recording.videoFormat == 1 && cbRecordingVideoFormat->Items->Count > 1) ? 1 : 0;
 
 	chbAutoAnswer->Checked = tmpSettings.uaConf.autoAnswer;
 	edAutoAnswerCode->Text = tmpSettings.uaConf.autoAnswerCode;
@@ -883,6 +903,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	}
 	tmpSettings.uaConf.recording.recStart = static_cast<UaConf::RecordingCfg::RecStart>(cbRecordingStart->ItemIndex);
 	tmpSettings.uaConf.recording.noNumberB64Encoding = chbRecordingNoNumberB64Encoding->Checked;
+	tmpSettings.uaConf.recording.videoRawRemote = chbRecordingVideoRaw->Checked;
+	tmpSettings.uaConf.recording.videoFormat = cbRecordingVideoFormat->ItemIndex > 0 ? 1 : 0;
 
    	tmpSettings.uaConf.autoAnswer = chbAutoAnswer->Checked;
 	tmpSettings.uaConf.autoAnswerCode = StrToIntDef(edAutoAnswerCode->Text, 200);
@@ -1067,10 +1089,10 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	appSettings = tmpSettings;
 
-	if (btnAccountIdsChanged)
+	if (accountIdsChanged)
 	{
-		// account removed: account ids of buttons shifted
-		btnAccountIdsChanged = false;
+		// account removed: account ids of buttons and contacts shifted
+		accountIdsChanged = false;
 		bool changed = false;
 		for (unsigned int i=0; i<buttons.btnConf.size() && i<btnAccountIds.size(); i++)
 		{
@@ -1085,6 +1107,22 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 		if (changed)
 		{
 			buttons.Write();
+		}
+
+		bool contactsChanged = false;
+		std::vector<Contacts::Entry> &contactEntries = contacts.GetEntries();
+		for (unsigned int i=0; i<contactEntries.size() && i<contactAccountIds.size(); i++)
+		{
+			if (contactEntries[i].accountId != contactAccountIds[i])
+			{
+				contactEntries[i].accountId = contactAccountIds[i];
+				contactsChanged = true;
+			}
+		}
+		if (contactsChanged)
+		{
+			contacts.Write();
+			contacts.Update();
 		}
 	}
 	this->Close();	
@@ -1197,23 +1235,44 @@ void __fastcall TfrmSettings::btnAddAccountClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+/** Count assignments (ids of buttons or contacts) to removed account and to accounts after it */
+static void CountAccountUsage(const std::vector<int> &ids, int removedId, int &usingRemoved, int &usingLater)
+{
+	for (unsigned int i=0; i<ids.size(); i++)
+	{
+		if (ids[i] == removedId)
+			usingRemoved++;
+		else if (ids[i] > removedId)
+			usingLater++;
+	}
+}
+
+/** Update assignments after account removal: assignments to removed account become default (-1),
+	assignments to following accounts move down by one
+*/
+static void ShiftAccountIds(std::vector<int> &ids, int removedId)
+{
+	for (unsigned int i=0; i<ids.size(); i++)
+	{
+		if (ids[i] == removedId)
+			ids[i] = -1;
+		else if (ids[i] > removedId)
+			ids[i]--;
+	}
+}
+
 void __fastcall TfrmSettings::btnRemoveAccountClick(TObject *Sender)
 {
 	int id = cbAccount->ItemIndex;
 	if (id < 0 || id >= (int)tmpSettings.uaConf.accounts.size() || tmpSettings.uaConf.accounts.size() <= 1)
 		return;
-	// buttons using removed account / accounts after it
+	// buttons and contacts using removed account / accounts after it
 	int usingRemoved = 0, usingLater = 0;
-	for (unsigned int i=0; i<btnAccountIds.size(); i++)
-	{
-		if (btnAccountIds[i] == id)
-			usingRemoved++;
-		else if (btnAccountIds[i] > id)
-			usingLater++;
-	}
+	CountAccountUsage(btnAccountIds, id, usingRemoved, usingLater);
+	CountAccountUsage(contactAccountIds, id, usingRemoved, usingLater);
 	AnsiString msg;
 	msg.sprintf("Remove account %s?", cbAccount->Text.c_str());
-	bool shiftButtons = false;
+	bool shiftAssignments = false;
 	if (usingRemoved == 0 && usingLater == 0)
 	{
 		if (MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_YESNO | MB_DEFBUTTON2 | MB_ICONEXCLAMATION) != IDYES)
@@ -1223,29 +1282,24 @@ void __fastcall TfrmSettings::btnRemoveAccountClick(TObject *Sender)
 	{
 		msg += "\n\n";
 		if (usingRemoved)
-			msg.cat_sprintf("%d button(s) assigned to this account.\n", usingRemoved);
+			msg.cat_sprintf("%d button(s) / contact(s) assigned to this account.\n", usingRemoved);
 		if (usingLater)
-			msg.cat_sprintf("%d button(s) assigned to accounts after it (numbers of these accounts will decrease).\n", usingLater);
+			msg.cat_sprintf("%d button(s) / contact(s) assigned to accounts after it (numbers of these accounts will decrease).\n", usingLater);
 		msg += "\n"
-			"Yes: remove account and update buttons - buttons of following accounts keep their accounts, "
-			"buttons of removed account are set to default account.\n"
-			"No: remove account, do not change buttons (they would point to other accounts).\n"
+			"Yes: remove account and update buttons and contacts - following accounts keep their assignments, "
+			"assignments to removed account are set to default account (buttons) or current account (contacts).\n"
+			"No: remove account, do not change buttons and contacts (they would point to other accounts).\n"
 			"Cancel: do not remove account.";
 		int rc = MessageBox(this->Handle, msg.c_str(), this->Caption.c_str(), MB_YESNOCANCEL | MB_DEFBUTTON3 | MB_ICONEXCLAMATION);
 		if (rc == IDCANCEL)
 			return;
-		shiftButtons = (rc == IDYES);
+		shiftAssignments = (rc == IDYES);
 	}
-	if (shiftButtons)
+	if (shiftAssignments)
 	{
-		for (unsigned int i=0; i<btnAccountIds.size(); i++)
-		{
-			if (btnAccountIds[i] == id)
-				btnAccountIds[i] = -1;
-			else if (btnAccountIds[i] > id)
-				btnAccountIds[i]--;
-		}
-		btnAccountIdsChanged = true;
+		ShiftAccountIds(btnAccountIds, id);
+		ShiftAccountIds(contactAccountIds, id);
+		accountIdsChanged = true;
 	}
 	// current account follows its account
 	if (tmpSettings.currentAccountId == id)

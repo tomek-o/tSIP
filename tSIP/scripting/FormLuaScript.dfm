@@ -152,6 +152,10 @@ object frmLuaScript: TfrmLuaScript
         Caption = 'Export Lua examples to HTML'
         OnClick = miExportExamplesToHtmlClick
       end
+      object miExportToMarkdown: TMenuItem
+        Caption = 'Export custom Lua functions and examples to Markdown'
+        OnClick = miExportToMarkdownClick
+      end
     end
   end
   object OpenDialog: TOpenDialog
@@ -177,6 +181,14 @@ object frmLuaScript: TfrmLuaScript
     Options = [ofOverwritePrompt, ofNoChangeDir, ofEnableSizing]
     Title = 'Export custom Lua functions to HTML file'
     Left = 136
+    Top = 208
+  end
+  object saveDialogExportMarkdown: TSaveDialog
+    DefaultExt = 'md'
+    Filter = 'Markdown files (*.md)|*.md|All files (*.*)|*.*'
+    Options = [ofOverwritePrompt, ofNoChangeDir, ofEnableSizing]
+    Title = 'Export custom Lua functions and examples to Markdown'
+    Left = 200
     Top = 208
   end
   object saveDialogExportExamplesHtml: TSaveDialog

@@ -34,6 +34,10 @@ public:
 		\param level percent of transmitted audio level (0..200)
 	*/
 	void Sidetone(unsigned int callUid, bool state, unsigned int level);
+	/** \brief Start dump of received video of call (executed in UA thread)
+		\param format VideoRawDumpFormat as int
+	*/
+	void VideoRawDumpStart(unsigned int callUid, AnsiString fileName, int format);
 	void Hangup(unsigned int callUid, int code=0, AnsiString reason = "Busy Here");
 	void SetMsgLogging(bool enabled, bool onlyFirstLines);
 	void SetAubufLogging(bool enabled);	
