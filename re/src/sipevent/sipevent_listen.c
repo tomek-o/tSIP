@@ -179,17 +179,30 @@ static void notify_handler(struct sipevent_sock *sock,
 	uint32_t nrefs;
 	char m[256];
 	int err;
+	const struct sipevent_event *evt = NULL;
 
+	/* FreeSWITCH (mod_sofia 1.11.2) sends the final NOTIFY (Subscription-State:
+	 * terminated) for an Expires: 0 SUBSCRIBE without an Event header, which
+	 * RFC 6665 requires. Such NOTIFY is matched to the subscription by Call-ID
+	 * and dialog tags only. */
+	memset(&event, 0, sizeof(event));
 	hdr = sip_msg_hdr(msg, SIP_HDR_EVENT);
-	if (!hdr || sipevent_event_decode(&event, &hdr->val)) {
-		(void)sip_reply(sip, msg, 489, "Bad Event");
-		return;
+	if (hdr) {
+		if (sipevent_event_decode(&event, &hdr->val)) {
+			(void)sip_reply(sip, msg, 489, "Bad Event");
+			return;
+		}
+		evt = &event;
 	}
 
 	hdr = sip_msg_hdr(msg, SIP_HDR_SUBSCRIPTION_STATE);
 	if (!hdr) {
 		// FreePBX: unsolicited NOTIFY (MWI in particular) does not contain Subscription-State
 		// (might be not sufficient for other servers)
+		if (!evt) {
+			(void)sip_reply(sip, msg, 489, "Bad Event");
+			return;
+		}
 		if (unsolicited_notify_handler(sock, msg, &event) != 0) {
 			(void)sip_reply(sip, msg, 400, "No event handler for received unsolicited notify");
 		}
@@ -200,11 +213,11 @@ static void notify_handler(struct sipevent_sock *sock,
 		return;
 	}
 
-	sub = sipsub_find(sock, msg, &event, true);
+	sub = sipsub_find(sock, msg, evt, true);
 	if (!sub) {
-		sub = sipsub_find(sock, msg, &event, false);
+		sub = sipsub_find(sock, msg, evt, false);
 		if (!sub) {
-			if (unsolicited_notify_handler(sock, msg, &event) == 0) {
+			if (evt && unsolicited_notify_handler(sock, msg, &event) == 0) {
             	return;
 			}
 			(void)sip_reply(sip, msg, 481, "Subscription Does Not Exist");
