@@ -356,16 +356,16 @@ static void custom_req_response_handler(int err, const struct sip_msg *msg, void
 		DEBUG_WARNING("custom request uid %d reply error: %m\n", requestUid, err);
 	} else if (msg) {
 		if (msg->scode < 200) {
-			DEBUG_WARNING("Reply for custom request uid %d: scode = %d\n", requestUid, msg->scode);
+			DEBUG_INFO("Reply for custom request uid %d: scode = %d\n", requestUid, msg->scode);
 		} else 	if (msg->scode < 300) {
-		#if 0		
+		#if 0
 			mbuf_set_pos(msg->mb, 0);
-			DEBUG_WARNING("----- Reply for custom request uid %d to %r -----\n%b",
+			DEBUG_INFO("----- Reply for custom request uid %d to %r -----\n%b",
 				 requestUid,
 				 &(msg->to.auri), mbuf_buf(msg->mb),
 				 mbuf_get_left(msg->mb));
 		#else
-			DEBUG_WARNING("Reply for custom request uid %d: scode = %d\n", requestUid, msg->scode);
+			DEBUG_INFO("Reply for custom request uid %d: scode = %d\n", requestUid, msg->scode);
 		#endif
 		} else {
 			DEBUG_WARNING("%r: custom request %d failed: %u %r\n", &(msg->to.auri), requestUid,
@@ -554,7 +554,7 @@ static void simple_message_response_handler(int err, const struct sip_msg *msg, 
 		DEBUG_WARNING("MESSAGE %d response handler: error = %d\n", requestId, err);
 	} else {
 		if (msg->scode >= 300) {
-			DEBUG_WARNING("MESSAGE %d response: code %u, reason: %r\n", requestId, msg->scode, &msg->reason);
+			DEBUG_INFO("MESSAGE %d response: code %u, reason: %r\n", requestId, msg->scode, &msg->reason);
 		}
 	}
 #endif
@@ -1174,7 +1174,7 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::ANSWER:
-        LOG("Answering...\n");
+        DEBUG_INFO("Answering...\n");
 		err = ua_answer(ua_for_call(cmdCall), cmdCall, cmd.audioMod.c_str(), cmd.audioDev.c_str(), cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle);
 		if (err)
 		{
@@ -1182,7 +1182,7 @@ extern "C" void control_handler(void)
 		}
 		else
 		{
-        	DEBUG_WARNING("Answered\n");
+        	DEBUG_INFO("Answered\n");
 		}
 		break;
 	case Command::TRANSFER:
@@ -1476,7 +1476,7 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::SEND_CUSTOM_REQUEST: {
-		DEBUG_WARNING("SEND_CUSTOM_REQUEST, uid = %d, method = %s\n", cmd.requestId, cmd.method.c_str());
+		DEBUG_INFO("SEND_CUSTOM_REQUEST, uid = %d, method = %s\n", cmd.requestId, cmd.method.c_str());
 		err = sip_req_send(ua_for_account(cmd.accountId), cmd.method.c_str(), cmd.target.c_str(),
 					custom_req_response_handler, reinterpret_cast<void*>(cmd.requestId),
 					"%s", cmd.extraHeaderLines.c_str());
@@ -1501,7 +1501,7 @@ extern "C" void control_handler(void)
 	}
 	case Command::SEND_MESSAGE: {
 		err = message_send(ua_for_account(cmd.accountId), cmd.target.c_str(), cmd.text.c_str(), (void*)cmd.requestId);
-		DEBUG_WARNING("Sending message to %s: status = %d\n", cmd.target.c_str(), err);
+		DEBUG_INFO("Sending message to %s: status = %d\n", cmd.target.c_str(), err);
 		break;
 	}
 	case Command::GENERATE_TONES: {
