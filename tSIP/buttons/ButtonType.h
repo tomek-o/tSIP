@@ -55,6 +55,8 @@ namespace Button
 	};
 	const char* TypeName(enum Type type);
 	const char* TypeDescription(enum Type type);
+	/** \brief Default caption for a new button of this type ("" if none) */
+	const char* DefaultCaption(enum Type type);
 };
 
 #endif

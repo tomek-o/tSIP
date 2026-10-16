@@ -11,6 +11,63 @@
 
 using namespace Button;
 
+const char* Button::DefaultCaption(enum Type type)
+{
+	switch (type)
+	{
+	case LINE:
+		return "Line";
+	case ACCOUNT:
+		return "Account";
+	case MWI:
+		return "Voicemail";
+	case CALL_ANSWER:
+		return "Answer";
+	case HANGUP:
+		return "Hang up";
+	case HANGUP_ALL:
+		return "Hang up all";
+	case REDIAL:
+		return "Redial";
+	case ATTENDED_TRANSFER:
+		return "Transfer";
+	case CONFERENCE_START:
+		return "Conference";
+	case MUTE:
+		return "Mute";
+	case MUTE_RING:
+		return "Ring mute";
+	case HOLD:
+		return "Hold";
+	case RECORD:
+		return "Record";
+	case RECORD_PAUSE:
+		return "Pause rec";
+	case SEND_TEXT_MESSAGE:
+		return "Message";
+	case CONTACT_FILE:
+		return "Contacts";
+	case DTMF:
+		return "DTMF";
+	case AUTO_ANSWER_DND:
+		return "DND";
+	case REREGISTER:
+		return "Register";
+	case UA_RESTART:
+		return "Restart";
+	case SHOW_LOG:
+		return "Log";
+	case SHOW_SETTINGS:
+		return "Settings";
+	case MINIMIZE:
+		return "Minimize";
+	case EXIT:
+		return "Exit";
+	default:
+		return "";
+	}
+}
+
 const char* Button::TypeName(enum Type type)
 {
 	switch (type)

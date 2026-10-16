@@ -129,6 +129,21 @@ void CLog::SetLogRotateCnt(unsigned int cnt)
 void CLog::log(const char *lpData, ...)
 {
 	va_list ap;
+	va_start(ap, lpData);
+	emit(LogLevelInfo, "", lpData, ap);
+	va_end(ap);
+}
+
+void CLog::logL(int level, const char *module, const char *lpData, ...)
+{
+	va_list ap;
+	va_start(ap, lpData);
+	emit(level, module, lpData, ap);
+	va_end(ap);
+}
+
+void CLog::emit(int level, const char *module, const char *lpData, va_list ap)
+{
 	char buf[2048]; //determines max message length
 	CallbackLog callback = NULL;
 
@@ -158,9 +173,7 @@ void CLog::log(const char *lpData, ...)
 
 		if ((int)sizeof(buf)-size-2 > 0)
 		{
-			va_start(ap, lpData);
 			int res = vsnprintf(buf + size, sizeof(buf)-size-2, lpData, ap);
-			va_end(ap);
 			if (res < 0)
 				size = (int)sizeof(buf) - 2;
 			else
@@ -179,7 +192,7 @@ void CLog::log(const char *lpData, ...)
 	// called with the lock released: it may block on the log window mutex and
 	// would otherwise hold up every other thread that logs
 	if (callback)
-		callback(buf);
+		callback(level, module, buf);
 }
 
 void CLog::logRaw(const char *lpData, ...)
@@ -215,7 +228,7 @@ void CLog::logRaw(const char *lpData, ...)
 
 	// see log(): the callback must not run with the lock held
 	if (callback)
-		callback(buf);
+		callback(LogLevelInfo, "", buf);
 }
 
 void CLog::logRawLen(const char *text, size_t len)
@@ -238,7 +251,7 @@ void CLog::logRawLen(const char *text, size_t len)
 
 	// see log(): the callback must not run with the lock held
 	if (callback)
-		callback(buf);
+		callback(LogLevelInfo, "", buf);
 }
 
 void CLog::write(const char* buf, int size)

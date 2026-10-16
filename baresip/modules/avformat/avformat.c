@@ -189,10 +189,7 @@ static int read_thread(void *data)
 
 			if (pkt->stream_index == st->au.idx) {
 				if (pkt->pts == AV_NOPTS_VALUE) {
-					/* this happens with internet AAC radio */
-					if (++st->no_audio_pts_cnt < 10) {
-						DEBUG_WARNING("no audio pts, using decoded number of samples as reference\n");
-					}
+					/* internet AAC radio: no pts, decoded sample count is used as reference; */
 					auts = 1000.0 * st->audio_multichannel_samples_decoded / avformat_audio_get_srate(st);
 				} else {
 					double time_base = av_q2d_local(st->au.time_base);
@@ -205,7 +202,7 @@ static int read_thread(void *data)
 
 				if (pkt->pts == AV_NOPTS_VALUE) {
 					/* this happens with mp3 file with audio + video (MJPEG cover) streams */
-					DEBUG_WARNING("no video pts\n");
+					DEBUG_INFO("no video pts\n");
 					vidts_valid = false;
 				} else {
 					vidts_valid = true;

@@ -166,6 +166,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		uaConfRecordingJson.getBool("noNumberB64Encoding", recording.noNumberB64Encoding);
 		uaConfRecordingJson.getBool("videoRawRemote", recording.videoRawRemote);
 		uaConfRecordingJson.getUInt("videoFormat", recording.videoFormat);
+		uaConfRecordingJson.getBool("opusForceStereo", recording.opusForceStereo);
 		if (recording.videoFormat > 1)
 			recording.videoFormat = 0;
 	}
@@ -235,7 +236,6 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 
 	logMessages = uaConfJson.get("logMessages", logMessages).asBool();
 	uaConfJson.getBool("logMessagesOnlyFirstLine", logMessagesOnlyFirstLine);
-	uaConfJson.getBool("logAubuf", logAubuf);
 	uaConfJson.getString("localAddress", netLocal);
 	uaConfJson.getString("ifName", netIfName);
 	uaConfJson.getBool("noIpBind", noIpBind);
@@ -387,6 +387,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 		jv["bitrate"] = recording.bitrate;
 		jv["recStart"] = recording.recStart;
 		jv["noNumberB64Encoding"] = recording.noNumberB64Encoding;
+		jv["opusForceStereo"] = recording.opusForceStereo;
 		jv["videoRawRemote"] = recording.videoRawRemote;
 		jv["videoFormat"] = recording.videoFormat;
 	}
@@ -404,7 +405,6 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	uaConfJson["aec"] = aec;
 	uaConfJson["logMessages"] = logMessages;
 	uaConfJson["logMessagesOnlyFirstLine"] = logMessagesOnlyFirstLine;
-	uaConfJson["logAubuf"] = logAubuf;
 
 	uaConfJson["localAddress"] = netLocal;
 	uaConfJson["ifName"] = netIfName;

@@ -55,6 +55,10 @@ namespace {
 	}
 	void removeCall(unsigned int uid)
 	{
+#ifdef USE_VIDEO
+		// call is going away: close its raw dump file (also on local hangup)
+		VideoRawDump::StopForCall(uid);
+#endif
 		std::map<unsigned int, struct call*>::iterator iter = calls.find(uid);
 		if (iter != calls.end())
 		{
@@ -252,6 +256,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 			const char* codec_name = "";
 			const struct audio* au = call_audio(call);
 			if (au) {
+				softvol_meter_bind(au, callUid);
 				const char* name = audio_get_rx_aucodec_name(au);
 				if (name)
 					codec_name = name;
@@ -392,9 +397,27 @@ static int ua_add(struct ua **uap, const struct pl *addr, const char *pwd, const
 	return err;
 }
 
+/* re_printf() output: level 1 is the default, RE_PRINT_LEVEL_SIP marks SIP message traces */
 extern "C" void on_log(int level, const char *p)
 {
-	LOG("%s", p);
+	LOGL(level == RE_PRINT_LEVEL_SIP ? LogLevelSip : LogLevelInfo, "re", "%s", p);
+}
+
+/* re debug output (dbg_printf), re level mapped to tSIP level */
+extern "C" void on_dbg(int level, const char *p, size_t len, void *arg)
+{
+	int tsipLevel;
+
+	if (level <= DBG_ERR)
+		tsipLevel = LogLevelError;
+	else if (level == DBG_WARNING)
+		tsipLevel = LogLevelWarning;
+	else if (level <= DBG_INFO)
+		tsipLevel = LogLevelInfo;
+	else
+		tsipLevel = LogLevelDebug;
+
+	LOGL(tsipLevel, "re", "%s", p);
 }
 
 extern "C" int dialog_info_handler(int id, const struct dialog_data *ddata, unsigned int ddata_cnt)
@@ -484,9 +507,17 @@ extern "C" int paging_tx_handler(enum paging_tx_event ev)
 static int print_handler_log(const char *p, size_t size, void *arg)
 {
 	(void)arg;
+	// re_hprintf() calls this once per format piece, so one line can arrive in
+	// several calls: collect the text and log each complete line as one entry
+	static std::string pending;
 	// p is not NUL-terminated (e.g. single padding character or local buffer
 	// in re print.c) - copy exactly size bytes, no "%.*s" formatting
-	CLog::Instance()->logRawLen(p, size);
+	pending.append(p, size);
+	size_t nl;
+	while ((nl = pending.find('\n')) != std::string::npos) {
+		CLog::Instance()->logRawLen(pending.c_str(), nl + 1);
+		pending.erase(0, nl + 1);
+	}
 	return 0;
 }
 
@@ -538,7 +569,7 @@ static void simple_message_response_handler(int err, const struct sip_msg *msg, 
 }
 
 static void recorder_state_handler(struct recorder_st *recorder, enum recorder_state state) {
-	DEBUG_WARNING("recorder %p (call uid %u) state changed to %d\n", recorder, recorder_get_call_uid(recorder), static_cast<int>(state));
+	DEBUG_INFO("recorder %p (call uid %u) state changed to %d\n", recorder, recorder_get_call_uid(recorder), static_cast<int>(state));
 	STATIC_CHECK(RECORDER_STATE_IDLE == Callback::RECORDER_STATE_IDLE, EnumMismatch);
 	STATIC_CHECK(RECORDER_STATE_ACTIVE == Callback::RECORDER_STATE_ACTIVE, EnumMismatch);
 	STATIC_CHECK(RECORDER_STATE_PAUSED == Callback::RECORDER_STATE_PAUSED, EnumMismatch);
@@ -574,6 +605,7 @@ static int app_init(void)
 		return err;
 
 	dbg_init(DBG_INFO, DBG_NONE);
+	dbg_handler_set(on_dbg, NULL);
 
 	/* Initialise dynamic modules */
 	mod_init();
@@ -678,7 +710,7 @@ static int app_init(void)
 					driverName.Pos("Virtual Ethernet") > 0) {
 					continue;
 				}
-				DEBUG_WARNING("No adapter specified in config, network adapter [%s] seems to be valid to bind\n", driverName.c_str());
+				DEBUG_INFO("No adapter specified in config, network adapter [%s] seems to be valid to bind\n", driverName.c_str());
 				strncpyz(cfg->net.ifname, netIf.name.c_str(), sizeof(cfg->net.ifname));
 				break;
 			}
@@ -768,7 +800,7 @@ static int app_init(void)
 
 	ua_log_messages(appSettings.uaConf.logMessages, appSettings.uaConf.logMessagesOnlyFirstLine);
 
-	aubuf_debug_enable(appSettings.uaConf.logAubuf);
+	aubuf_debug_enable(appSettings.logging.logAubuf);
 
 	uag_event_register(ua_event_handler, NULL);
 
@@ -1207,12 +1239,18 @@ extern "C" void control_handler(void)
 		break;
 	case Command::VIDEO_RAW_DUMP_START: {
 	#ifdef USE_VIDEO
-		int err = VideoRawDump::Start(cmd.target, video_dec_state(cmdCall ? call_video(cmdCall) : NULL), cmd.callUid,
+		// audio-only call: nothing to dump, not an error
+		if (!cmdCall || !call_video(cmdCall))
+		{
+			LOG("Video raw dump: call has no video stream, not started\n");
+			break;
+		}
+		int err = VideoRawDump::Start(cmd.target, video_dec_state(call_video(cmdCall)), cmd.callUid,
 			static_cast<VideoRawDumpFormat>(cmd.code));
 		if (err)
 			DEBUG_WARNING("VIDEO_RAW_DUMP_START: could not start (%m)\n", err);
 	#else
-        DEBUG_WARNING("VIDEO_RAW_DUMP_START: video is not enabled in this build\n");
+		DEBUG_WARNING("VIDEO_RAW_DUMP_START: video is not enabled in this build\n");
 	#endif
 		break;
 	}
@@ -1223,7 +1261,7 @@ extern "C" void control_handler(void)
 			if (audio)
 				audio_mute(audio, cmd.bEnabled);
 			else
-				DEBUG_WARNING("MUTE: no audio stream for call\n");
+				DEBUG_INFO("MUTE: no audio stream for call\n");
 		}
 		break;
 	case Command::HANGUP:
@@ -1306,7 +1344,7 @@ extern "C" void control_handler(void)
 				recorder_start(rec, call_get_uid(cmdCall), cmd.target.c_str(), cmd.channels,
 					static_cast<enum recorder_side>(cmd.recSide),\
 					static_cast<enum recorder_file_format>(cmd.recFileFormat),
-					cmd.bitrate
+					cmd.bitrate, cmd.bParam
 				);
 			}
 		}
@@ -1397,7 +1435,7 @@ extern "C" void control_handler(void)
 		{
 			struct audio* a = call_audio(cmdCall);
 			if (!a) {
-				DEBUG_WARNING("SWITCH_AUDIO_PLAYER: no audio stream for call\n");
+				DEBUG_INFO("SWITCH_AUDIO_PLAYER: no audio stream for call\n");
 				break;
 			}
 			err = audio_set_player(a, cmd.audioMod.c_str(), cmd.audioDev.c_str());
@@ -1605,8 +1643,25 @@ int Ua::GetAudioCodecList(std::vector<AnsiString> &codecs)
 
 unsigned int Ua::GetAudioRxSignalLevel(void)
 {
-	int TODO__SOFTVOL_MULTIPLE_CALLS;
-	return softvol_get_rx_level();
+	int rxPeak = 0;
+	float rxRms = 0;
+	int txPeak = 0;
+	float txRms = 0;
+	if (!GetCallAudioLevels(Calls::GetCurrentCallUid(), rxPeak, rxRms, txPeak, txRms))
+		return 0;
+	return rxPeak;
+}
+
+bool Ua::GetCallAudioLevels(unsigned int callUid, int &rxPeak, float &rxRms, int &txPeak, float &txRms)
+{
+	struct softvol_levels lv;
+	if (!softvol_get_levels(callUid, &lv))
+		return false;
+	rxPeak = lv.rx_peak;
+	rxRms = lv.rx_rms;
+	txPeak = lv.tx_peak;
+	txRms = lv.tx_rms;
+	return true;
 }
 
 int Ua::GetVideoCodecList(std::vector<AnsiString> &codecs)

@@ -143,7 +143,8 @@ public:
 	void UpdateBtnState(Button::Type type, bool state);
 	void UpdateMwiState(int accountId, int newMsg, int oldMsg);
 	/** Update ACCOUNT buttons: down = current account, inactive = account not registered */
-	void UpdateAccountState(int accountId, bool current, bool registered);
+	/** \param stateText registration state shown as second caption of ACCOUNT button */
+	void UpdateAccountState(int accountId, bool current, bool registered, AnsiString stateText);
 	/** \param accountId -1: global auto answer / DND, otherwise per-account */
 	void UpdateAutoAnswer(int accountId, bool enabled, int sipCode, AnsiString sipReason);
 

@@ -851,7 +851,7 @@ void ProgrammableButtons::UpdateBtnState(Button::Type type, bool state)
 	}
 }
 
-void ProgrammableButtons::UpdateAccountState(int accountId, bool current, bool registered)
+void ProgrammableButtons::UpdateAccountState(int accountId, bool current, bool registered, AnsiString stateText)
 {
 	for (unsigned int i=0; i<btns.size(); i++)
 	{
@@ -860,6 +860,7 @@ void ProgrammableButtons::UpdateAccountState(int accountId, bool current, bool r
 		{
 			btns[i]->SetDown(current);
 			btns[i]->SetInactive(!registered);
+			btns[i]->SetCaption2(stateText);
 		}
 	}
 }

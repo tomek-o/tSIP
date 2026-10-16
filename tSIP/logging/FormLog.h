@@ -15,6 +15,7 @@
 //---------------------------------------------------------------------------
 
 #include "common/Mutex.h"
+#include "Log.h"
 #include <Classes.hpp>
 #include <ComCtrls.hpp>
 #include <Controls.hpp>
@@ -64,10 +65,39 @@ private:	// User declarations
 	struct LogEntry
 	{
 		TColor color;
+		int level;
 		AnsiString asText;
 	};
 	std::deque<LogEntry> queDisplay;
-	void AddTextToLog(bool bUseTimestamp, TColor color, AnsiString asText);
+	/// all entries kept for filtering (oldest dropped above iMaxUiLogLines)
+	std::deque<LogEntry> history;
+	enum { LevelCount = LogLevelDebug + 1 };
+	bool levelShown[LevelCount];
+	TCheckBox *chbLevel[LevelCount];
+	bool ShowLevel(int level) const;
+	bool ShowEntry(const LogEntry &entry) const;
+	TEdit *edSearch;
+	TCheckBox *chbMatchCase;
+	void __fastcall searchFilterChange(TObject *Sender);
+	void RenderAll(void);
+	void AppendEntry(const LogEntry &entry);
+	bool listMode;
+	std::deque<LogEntry> listEntries;
+	TListView *lvLog;
+	TCheckBox *chbListView;
+	AnsiString VisibleText(void);
+	void ScrollToEnd(void);
+	void __fastcall lvLogData(TObject *Sender, TListItem *Item);
+	void __fastcall lvLogCustomDrawSubItem(TCustomListView *Sender, TListItem *Item, int SubItem, TCustomDrawState State, bool &DefaultDraw);
+	void __fastcall chbListViewClick(TObject *Sender);
+	void __fastcall lvLogKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall lvLogResize(TObject *Sender);
+	TPopupMenu *pmenuList;
+	void __fastcall miListCopySelectedClick(TObject *Sender);
+	void __fastcall miListCopyAllClick(TObject *Sender);
+	void __fastcall miListSelectAllClick(TObject *Sender);
+	void __fastcall chbLevelClick(TObject *Sender);
+	void AddTextToLog(bool bUseTimestamp, int level, TColor color, AnsiString asText);
 
 	unsigned int iMaxUiLogLines;
 	bool updatingUi;
@@ -75,7 +105,9 @@ private:	// User declarations
 public:		// User declarations
 	__fastcall TfrmLog(TComponent* Owner);
 	__fastcall ~TfrmLog(void);
-	void OnLog(const char *buf);                         ///< add text to log window
+	void OnLog(int level, const char *module, const char *buf);                         ///< add text to log window
+	void __fastcall redMainKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+	AnsiString LastLines(int count);
 	void SetLogLinesLimit(int lines) {
     	iMaxUiLogLines = lines;
 	}

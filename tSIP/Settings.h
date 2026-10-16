@@ -38,6 +38,8 @@ private:
 public:
 	enum SettingsUtils::ReadStatus Read(AnsiString asFileName);
 	int Write(AnsiString asFileName);
+	/** all settings as JSON (same content as the file) */
+	Json::Value ToJson(void);
 	int UpdateFromText(AnsiString text);
 	void SetConfigWriteAllowed(bool state) {
 		configWriteAllowed = state;

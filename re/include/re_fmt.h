@@ -97,6 +97,11 @@ int re_vsdprintf(char **strp, const char *fmt, va_list ap);
 int re_hprintf(struct re_printf *pf, const char *fmt, ...);
 int re_fprintf(FILE *stream, const char *fmt, ...);
 int re_printf(const char *fmt, ...);
+/** Print with a caller-chosen level passed to the print handler (see print_handler_set)
+ *  RE_PRINT_LEVEL_SIP marks SIP message traces, default level of re_printf() is 1 */
+#define RE_PRINT_LEVEL_SIP 0
+int re_vprintf_level(int level, const char *fmt, va_list ap);
+int re_printf_level(int level, const char *fmt, ...);
 int re_snprintf(char *str, size_t size, const char *fmt, ...);
 int re_sdprintf(char **strp, const char *fmt, ...);
 

@@ -429,7 +429,7 @@ static int pt_handler(struct video *v, uint8_t pt_old, uint8_t pt_new)
 		return ENOENT;
 
 	if (pt_old != (uint8_t)-1) {
-		DEBUG_WARNING("Video decoder changed payload"
+		DEBUG_INFO("Video decoder changed payload"
 				 " %u -> %u\n",
 				 pt_old, pt_new);
 	}
@@ -872,7 +872,7 @@ int video_encoder_set(struct video *v, struct vidcodec *vc,
 		prm.fps     = get_fps(v);
 		prm.max_fs  = -1;
 
-		DEBUG_WARNING("Set video encoder: %s %s"
+		DEBUG_INFO("Set video encoder: %s %s"
 				 " (%u bit/s, %u fps)\n",
 				 vc->name, vc->variant,
 				 prm.bitrate, prm.fps);
@@ -908,7 +908,7 @@ int video_decoder_set(struct video *v, struct vidcodec *vc, int pt_rx,
 
 	if (vc != vrx->vc) {
 
-		DEBUG_WARNING("Set video decoder: %s %s\n",
+		DEBUG_INFO("Set video decoder: %s %s\n",
 				 vc->name, vc->variant);
 
 		vrx->dec = mem_deref(vrx->dec);

@@ -1346,7 +1346,27 @@ Version 0.3.15
 	- added WASAPI audio module (input and output; can use loopback/output device as audio source)
 	- multiple minor fixes
 
-Version 0.3.16
+Version 0.3.16 key changes:
+	- multiple SIP accounts registered and used at the same time: account per call, message, contact, button; ACCOUNT button to switch the current account
+	- plugin interface v2 (separate from v1, which is unchanged): JSON call events, thread-safe calls to tSIP, MCP server plugin for AI clients (tools, optional settings and button configuration behind allowConfigModification)
+	- video recording (experimental): received video saved as raw H.264 next to the audio recording; MP4 only if the FFmpeg build includes the mp4 muxer
+	- volume sliders with audio level meters (mic: TX, speaker: RX), colors configurable on Dialpad settings
+	- sidetone, per-call audio device switching and WAV file playback as call audio source
+	- settings: filter box, Opus stereo option for recordings, automatic start at Windows login
+	- security and stability: several buffer overflow and out-of-bounds read fixes in SIP / XML / SDP / G.722 parsing; timer overflow after ~10.7 days of uptime fixed
+
+Version 0.3.16 details:
+	- Dialpad settings: volume slider colors (meter low / mid / high, peak marker, track, thumb) configurable, with default colors
+	- volume sliders: peak marker hidden at silence; slider background follows the parent panel; direction: Min at the top, as before
+	- plugin interface v2: GetSettings / SetSettings host methods (tSIP.json, merged patch, secrets returned as ***, changed sections and restartRequired reported)
+	- plugin interface v2: GetButtonSettings / SetButtonSettings host methods (one button by number, saved to buttons file, same validation and refresh as the button editor; UA restart not done automatically)
+	- settings: JSON of all settings is built by Settings::ToJson(); Write() saves the same content as before
+	- FIXED: video recording: raw dump file stayed open when a call was hung up locally (HANGUP bypassed the stop on call end)
+	- FIXED: video recording: raw dump file was not closed when tSIP exits while recording
+	- video recording: audio-only call logs an info line instead of a start error when raw video recording is enabled
+	- avcodec: "decoder waiting for keyframe" logged once per wait instead of for every frame
+	- avformat: "no audio pts" warning removed (logged for every packet of streams without timestamps)
+	- volume sliders with audio level meters as background (mic: TX, speaker: RX), fast peak and slow RMS, logarithmic scale; show levels of the current call; colors configurable on Dialpad settings page
 	- multiple SIP accounts registered and used at the same time
 		- settings: account selector with add / remove, "Account enabled" and optional account name; audio codecs configured per account on account page (with collapsible extra settings, ptime moved to basic settings); Opus settings as top-level page; video codecs page with account selector
 		- current account (used by default for outgoing calls and messages) saved on exit; status bar shows registration state of current account, status bar hint shows state of all accounts; tray error icon if any account failed to register
@@ -1410,5 +1430,13 @@ Version 0.3.16
 	- video recording: MP4 output added as second format (experimental, not working with the bundled FFmpeg DLLs - the MP4 muxer is missing there; raw H.264 is the working format)
 	- Lua: GetLogLines([lines]) returns the last lines of the log window (default 50, max 1000)
 	- video recording: MP4 option is shown and used only if the FFmpeg libraries in use include the MP4 output format; otherwise only H.264 raw is offered
+	- video recording: received video of a call is saved next to the audio recording (same folder and base name, extension .h264); recordings folder and naming shared by audio and video (RecordingFile)
+	- video recording: MP4 is offered and used only when the FFmpeg libraries in use include the mp4 format; otherwise recording uses H.264 raw (also for a stale saved MP4 setting)
+	- calls: when the other call ends and only one call is on hold (no call active or ringing), the held call is resumed
+	- ACCOUNT buttons show the registration state as second caption
+	- button editor: a new button changed from Disabled gets a default caption for its type if the caption is empty (Button::DefaultCaption)
+	- recording: new option "Keep stereo in Opus recordings at low bitrates" (Opus encoder otherwise mixes stereo to mono below about 30 kbit/s); explained on the settings page
+	- FIXED: avformat read thread could use the audio source after it was closed (sample rate lookup without lock)
+	- FIXED: recorder reported a zero-length memset as memory underrun (CodeGuard); video recording code is compiled only in builds with video support (USE_VIDEO)
 */
 

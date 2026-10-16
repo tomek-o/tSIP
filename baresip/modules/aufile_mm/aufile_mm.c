@@ -263,7 +263,7 @@ static int alloc_handler(struct ausrc_st **stp, struct ausrc *as,
 	st->out_samples_per_frame = prm->frame_size; //prm->srate / (fprm.srate / prm->frame_size);
 
 	if (st->fprm.srate != prm->srate) {
-		DEBUG_WARNING(LOG_PROMPT"using speex resampler\n");
+		DEBUG_INFO(LOG_PROMPT"using speex resampler\n");
 		st->speex_state = speex_resampler_init(prm->ch, st->fprm.srate, prm->srate, SPEEX_RESAMP_QUALITY, &err);
 		if (st->speex_state == NULL || err != RESAMPLER_ERR_SUCCESS) {
 			err = ENOMEM;

@@ -14,8 +14,9 @@
 #include "ButtonConf.h"
 #include "Call.h"
 #include "Recorder.h"
+#include "baresip_base_config.h"
 #ifdef USE_VIDEO
-#	include "VideoRawDump.h"
+#include "VideoRawDump.h"
 #endif
 #include "RecordingFile.h"
 #include "UaCustomRequests.h"
@@ -689,16 +690,7 @@ static int l_GetLogLines(lua_State* L)
 		count = 1000;
 	AnsiString text;
 	if (frmLog)
-	{
-		TStrings *lines = frmLog->redMain->Lines;
-		int first = lines->Count - count;
-		if (first < 0)
-			first = 0;
-		for (int i = first; i < lines->Count; i++)
-		{
-			text += lines->Strings[i] + "\n";
-		}
-	}
+		text = frmLog->LastLines(count);
 	lua_pushstring(L, text.c_str());
 	return 1;
 }
@@ -715,7 +707,7 @@ static int l_StartVideoRawDump(lua_State* L)
 		return 1;
 	}
 	// optional format: 0 = H.264 raw, 1 = MP4; default from settings
-	int format = (lua_gettop(L) >= 2) ? luaL_checkinteger(L, 2) : appSettings.uaConf.recording.videoFormat;
+	int format = (lua_gettop(L) >= 2) ? luaL_checkinteger(L, 2) : VideoRawDump::EffectiveFormat(appSettings.uaConf.recording.videoFormat);
 	if (format < VRD_H264_RAW || format > VRD_MP4)
 	{
 		LOG("Lua error: StartVideoRawDump() format must be 0 (H.264 raw) or 1 (MP4)\n");
@@ -2772,7 +2764,7 @@ void ScriptExec::Run(const char* script)
 		"Takes call UID and optional format (0 = H.264 raw, 1 = MP4; default from settings). Returns 1 if the request was queued (result is written to log).\nFile is saved in the recordings folder with the same base name as audio recordings of the call, extension .h264 or .mp4.\nWrites received video from the first keyframe while active. Start it after video is received. H.264 raw is an elementary stream without timing, e.g. play with ffplay; MP4 is fragmented and timed by arrival.\nExample: StartVideoRawDump(GetCurrentCallUid(), 1)");
 	lua_register2(L, ScriptImp::l_StopVideoRawDump, "StopVideoRawDump", "Stop writing received H.264 video", "Example: StopVideoRawDump()");
 	lua_register2(L, ScriptImp::l_IsVideoRawDumpActive, "IsVideoRawDumpActive", "Check if raw H.264 video dump is active", "Returns 1 or 0.");
-#endif	
+#endif
 	lua_register2(L, ScriptImp::l_ToggleMute, "ToggleMute", "Toggle (reverse) mute state for current or specified call", "Takes callUid as optional argument.");
 	lua_register2(L, ScriptImp::l_GetMute, "GetMute", "Get mute state for current call or specified call", "Takes callUid as optional argument, returns 0/1.");
 	lua_register2(L, ScriptImp::l_SetHold, "SetHold", "Set hold state for specified call", "Example: SetHold(callUid, 1).");
@@ -2912,7 +2904,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetCustomRequestReply, "GetCustomRequestReply", "Get reply for custom SIP request", "Takes custom request UID (from SendCustomRequest()) as argument.\nReturns 3 values: haveReply (1 if a reply or timeout was already received, 0 if still waiting), error (0 = reply received normally, non-zero = transport/timeout error), sipStatusCode (valid only if error == 0).\nReturns no values if the given UID is unknown (e.g. already removed via DeleteCustomRequest()).\nExample: local haveReply, err, sipStatusCode = GetCustomRequestReply(requestUid)");
 	lua_register2(L, ScriptImp::l_GetCustomRequestReplyText, "GetCustomRequestReplyText", "Get full text of received reply for custom request", "");
 
-	lua_register2(L, ScriptImp::l_GetAudioRxSignalLevel, "GetAudioRxSignalLevel", "Get amplitude of received audio from the call", "Returns the peak absolute value of received (RX) 16-bit PCM audio samples over the last ~100 ms, so the range is 0-32767 (linear, not dB or a normalized 0-1 value).\nUseful for VAD/Lenny/IVR-like applications detecting speech vs. silence.");
+	lua_register2(L, ScriptImp::l_GetAudioRxSignalLevel, "GetAudioRxSignalLevel", "Get amplitude of received audio from the call", "Returns the peak absolute value of received (RX) 16-bit PCM audio samples over the last 20 ms (current call), so the range is 0-32767 (linear, not dB or a normalized 0-1 value).\nUseful for VAD/Lenny/IVR-like applications detecting speech vs. silence.");
 
 	lua_register2(L, ScriptImp::l_ReadContacts, "ReadContacts", "Read again contacts from default JSON file", "This function can be used to reload phonebook from file after provisioning, e.g. after fetching JSON file using curl using provisioning script.");
 	lua_register2(L, ScriptImp::l_ReadXmlContacts, "ReadXmlContacts", "Read contacts from XML Yealink-like file", "");

@@ -86,7 +86,7 @@ static int send_keepalive(struct rtpkeep *rk)
 			;
 		}
 		else {
-			DEBUG_WARNING("rtcp-mux is disabled\n");
+			DEBUG_INFO("rtcp-mux is disabled\n");
 		}
 	}
 	else {

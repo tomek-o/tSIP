@@ -13,8 +13,24 @@
 
 #define ARRAY_SIZE(a) ((sizeof(a))/(sizeof((a)[0])))
 
+namespace
+{
+	unsigned int Rgb(unsigned int r, unsigned int g, unsigned int b)
+	{
+		return r | (g << 8) | (b << 16);
+	}
+	const char *meterColorNames[] = { "low", "mid", "high", "peak", "track", "thumb" };
+}
+
 DialpadConf::DialpadConf(void)
 {
+	meterColors[MC_LOW] = Rgb(40, 180, 70);
+	meterColors[MC_MID] = Rgb(230, 190, 30);
+	meterColors[MC_HIGH] = Rgb(220, 40, 40);
+	meterColors[MC_PEAK] = Rgb(0, 0, 0);
+	meterColors[MC_TRACK] = Rgb(90, 90, 100);
+	meterColors[MC_THUMB] = Rgb(200, 200, 210);
+
 	{
 		ElementConf &ec = elements[EL_ED_TRANSFER];
 		ec.visible = true;
@@ -95,6 +111,12 @@ void DialpadConf::fromJson(const Json::Value &jv)
 {
 	if (jv.type() != Json::objectValue)
 		return;
+	const Json::Value &jc = jv["meterColors"];
+	if (jc.type() == Json::objectValue)
+	{
+		for (unsigned int i=0; i<MC_CNT; i++)
+			jc.getUInt(meterColorNames[i], meterColors[i]);
+	}
 	const Json::Value &je = jv["elements"];
 	if (je.type() == Json::arrayValue)
 	{
@@ -109,6 +131,10 @@ void DialpadConf::fromJson(const Json::Value &jv)
 void DialpadConf::toJson(Json::Value &jv) const
 {
 	jv = Json::Value(Json::objectValue);
+	Json::Value &jc = jv["meterColors"];
+	jc = Json::Value(Json::objectValue);
+	for (unsigned int i=0; i<MC_CNT; i++)
+		jc[meterColorNames[i]] = meterColors[i];
 	Json::Value &je = jv["elements"];
 	for (unsigned int i=0; i<ARRAY_SIZE(elements); i++)
 	{
@@ -121,6 +147,11 @@ bool DialpadConf::operator==(const DialpadConf &right) const
 	for (unsigned int i=0; i<ARRAY_SIZE(elements); i++)
 	{
 		if (elements[i] != right.elements[i])
+			return false;
+	}
+	for (unsigned int i=0; i<MC_CNT; i++)
+	{
+		if (meterColors[i] != right.meterColors[i])
 			return false;
 	}
 

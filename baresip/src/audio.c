@@ -1072,7 +1072,7 @@ static int start_extra_source(struct autx *tx, struct audio *a)
 int audio_start_extra_source(struct audio *a)
 {
 	int err;
-	DEBUG_WARNING("starting extra source (only)...\n");
+	DEBUG_INFO("starting extra source (only)...\n");
 	err  = start_extra_source(&a->tx, a);
 	if (err) {
 		DEBUG_WARNING("start_source failed: %m\n", err);

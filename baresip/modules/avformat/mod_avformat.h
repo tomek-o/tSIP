@@ -23,7 +23,6 @@ struct shared {
 		int idx;
 	} au, vid;
 
-	unsigned int no_audio_pts_cnt;
 	uint64_t audio_multichannel_samples_decoded;	/* counting all channels set (e.g. L+R) as single sample */
 };
 

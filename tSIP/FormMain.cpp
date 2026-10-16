@@ -9,9 +9,7 @@
 #include "CommandLine.h"
 #include "Paths.h"
 #include "RecordingFile.h"
-#ifdef USE_VIDEO
-#	include "VideoRawDump.h"
-#endif
+#include "VideoRawDump.h"
 #include "baresip_base_config.h"
 #include "PluginV2Methods.h"
 #include "Bitmaps.h"
@@ -332,6 +330,12 @@ __fastcall TfrmMain::~TfrmMain()
 //---------------------------------------------------------------------------
 void __fastcall TfrmMain::FormCreate(TObject *Sender)
 {
+	// volume sliders with VU meter; created in code, owned by this form
+	trbarSoftvolMic = new VolumeSlider(this);
+	trbarSoftvolMic->Parent = pnlDialpad;
+	trbarSoftvolSpeaker = new VolumeSlider(this);
+	trbarSoftvolSpeaker->Parent = pnlDialpad;
+
 	LoadTranslation();
 	UpdateAutostart();
 
@@ -408,6 +412,9 @@ void __fastcall TfrmMain::FormCreate(TObject *Sender)
 
 	trbarSoftvolMic->Position = trbarSoftvolMic->Max + trbarSoftvolMic->Min - appSettings.uaConf.audioSoftVol.tx;
 	trbarSoftvolSpeaker->Position = trbarSoftvolSpeaker->Max + trbarSoftvolSpeaker->Min - appSettings.uaConf.audioSoftVol.rx;
+	// handlers after initial positions: they store settings and update the UA volume
+	trbarSoftvolMic->OnChange = trbarSoftvolMicChange;
+	trbarSoftvolSpeaker->OnChange = trbarSoftvolSpeakerChange;
 
 	if (appSettings.frmMain.bKioskMode)
 	{
@@ -719,9 +726,9 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 	{
 		UA->SetMsgLogging(appSettings.uaConf.logMessages, appSettings.uaConf.logMessagesOnlyFirstLine);
 	}
-	if (appSettings.uaConf.logAubuf != prev.uaConf.logAubuf)
+	if (appSettings.logging.logAubuf != prev.logging.logAubuf)
 	{
-    	UA->SetAubufLogging(appSettings.uaConf.logAubuf);
+    	UA->SetAubufLogging(appSettings.logging.logAubuf);
 	}
 	if (appSettings.frmMain.bKioskMode != prev.frmMain.bKioskMode)
 	{
@@ -886,6 +893,10 @@ int TfrmMain::UpdateButtonFromJson(unsigned int btnId, AnsiString json)
 
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
+#ifdef USE_VIDEO
+	// before CLog is destroyed: Shutdown logs when it stops a running dump
+	VideoRawDump::Shutdown();	// closes a running raw dump file
+#endif
 	UA->Destroy();
 	UA_CB->Destroy();
 	buttons.Destroy();
@@ -1413,7 +1424,7 @@ void TfrmMain::UpdateAccountButtons(void)
 		// account without registration (reg_expires = 0) is shown as available
 		bool registered = acc.enabled &&
 			(acc.reg_expires == 0 || registrations[i].state == Callback::REG_STATE_REGISTER_OK);
-		buttons.UpdateAccountState(i, (int)i == current, registered);
+		buttons.UpdateAccountState(i, (int)i == current, registered, GetAccountStateText(i));
 	}
 }
 
@@ -1569,7 +1580,7 @@ int TfrmMain::OnRecordStart(unsigned int callUid, const char* file, int channels
 		LOG("OnRecordStart: call %u with no active media\n", callUid);
 		return -2;
 	}
-	UA->Record(callUid, file, channels, side, fileFormat, bitrate);
+	UA->Record(callUid, file, channels, side, fileFormat, bitrate, appSettings.uaConf.recording.opusForceStereo);
 	call->recordFile = file;
 	call->recording = true;
 	return 0;
@@ -1687,6 +1698,16 @@ void TfrmMain::UpdateSize(void)
 
 void TfrmMain::UpdateDialpad(void)
 {
+	const unsigned int *mc = appSettings.dialpad.meterColors;
+	const TColor low = static_cast<TColor>(mc[DialpadConf::MC_LOW]);
+	const TColor mid = static_cast<TColor>(mc[DialpadConf::MC_MID]);
+	const TColor high = static_cast<TColor>(mc[DialpadConf::MC_HIGH]);
+	const TColor peak = static_cast<TColor>(mc[DialpadConf::MC_PEAK]);
+	const TColor track = static_cast<TColor>(mc[DialpadConf::MC_TRACK]);
+	const TColor thumb = static_cast<TColor>(mc[DialpadConf::MC_THUMB]);
+	trbarSoftvolMic->SetColors(low, mid, high, peak, track, thumb);
+	trbarSoftvolSpeaker->SetColors(low, mid, high, peak, track, thumb);
+
 	static float scale;
 	static bool once = false;
 	if (!once)
@@ -1748,6 +1769,10 @@ void TfrmMain::FocusCbCallUri(void)
 
 void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 {
+	// level meters run only while there is a call (see tmrLevelTimer)
+	if (Calls::Count() > 0)
+		tmrLevel->Enabled = true;
+
 	{
 		// update call duration time
 		static int pollCnt = 0;
@@ -2745,14 +2770,15 @@ void TfrmMain::StartRecording(Call &call)
 				LOG("Record file: %s\n", file.c_str());
 			}
 			UA->Record(call.uid, file, appSettings.uaConf.recording.channels, appSettings.uaConf.recording.side,
-				appSettings.uaConf.recording.fileFormat, appSettings.uaConf.recording.bitrate);
+				appSettings.uaConf.recording.fileFormat, appSettings.uaConf.recording.bitrate,
+				appSettings.uaConf.recording.opusForceStereo);
 			call.recordFile = file;
 			call.recording = true;
 #ifdef USE_VIDEO
 			if (appSettings.uaConf.recording.videoRawRemote)
 			{
 				// received video, same base name as the audio file (without .wav / .ogg)
-				int format = appSettings.uaConf.recording.videoFormat;
+				int format = VideoRawDump::EffectiveFormat(appSettings.uaConf.recording.videoFormat);
 				AnsiString videoFile = file.SubString(1, file.Length() - 4) + (format == VRD_MP4 ? ".mp4" : ".h264");
 				UA->VideoRawDumpStart(call.uid, videoFile, format);
 			}
@@ -3672,10 +3698,32 @@ void TfrmMain::CallNumberBackspace(void)
 void __fastcall TfrmMain::tmrBackspaceTimer(TObject *Sender)
 {
 	CallNumberBackspace();
-#if 0
-	// debug
-	LOG("RX signal level = %u\n", Ua::Instance().GetAudioRxSignalLevel());
-#endif
+}
+
+//---------------------------------------------------------------------------
+
+// Levels of the current call drive both volume meters; no call means silence
+void __fastcall TfrmMain::tmrLevelTimer(TObject *Sender)
+{
+	int rxPeak = 0;
+	int txPeak = 0;
+	float rxRms = 0;
+	float txRms = 0;
+	if (!Ua::Instance().GetCallAudioLevels(Calls::GetCurrentCallUid(), rxPeak, rxRms, txPeak, txRms))
+	{
+		rxPeak = 0;
+		txPeak = 0;
+		rxRms = 0;
+		txRms = 0;
+	}
+	double dtSec = tmrLevel->Interval / 1000.0;
+	trbarSoftvolMic->SetLevels(txPeak, txRms, dtSec);
+	trbarSoftvolSpeaker->SetLevels(rxPeak, rxRms, dtSec);
+
+	// stop once no call is left and the meters have decayed to silence;
+	// tmrCallbackPollTimer restarts it on the next call
+	if (Calls::Count() == 0 && trbarSoftvolMic->IsSilent() && trbarSoftvolSpeaker->IsSilent())
+		tmrLevel->Enabled = false;
 }
 
 //---------------------------------------------------------------------------
@@ -4420,7 +4468,7 @@ void __fastcall TfrmMain::tmrScriptTimer(TObject *Sender)
 
 void __fastcall TfrmMain::trbarSoftvolMicChange(TObject *Sender)
 {
-	TTrackBar* tr = trbarSoftvolMic;
+	VolumeSlider* tr = trbarSoftvolMic;
 	AnsiString asHint;
 	appSettings.uaConf.audioSoftVol.tx = tr->Max - tr->Position + tr->Min;
 	asHint.sprintf("%d%%", appSettings.uaConf.audioSoftVol.tx*100/128);
@@ -4431,7 +4479,7 @@ void __fastcall TfrmMain::trbarSoftvolMicChange(TObject *Sender)
 
 void __fastcall TfrmMain::trbarSoftvolSpeakerChange(TObject *Sender)
 {
-	TTrackBar* tr = trbarSoftvolSpeaker;
+	VolumeSlider* tr = trbarSoftvolSpeaker;
 	AnsiString asHint;
 	appSettings.uaConf.audioSoftVol.rx = tr->Max - tr->Position + tr->Min;
 	asHint.sprintf("%d%%", appSettings.uaConf.audioSoftVol.rx*100/128);

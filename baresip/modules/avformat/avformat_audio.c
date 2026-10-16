@@ -200,5 +200,14 @@ void avformat_audio_decode(struct shared *st, AVPacket *pkt)
 
 uint32_t avformat_audio_get_srate(struct shared *st)
 {
-	return st->ausrc_st->prm.srate;
+	/* called from read thread: audio source may be closed meanwhile
+	   (audio_destructor() clears ausrc_st under sh->lock) */
+	uint32_t srate = 8000;
+
+	mtx_lock(&st->lock);
+	if (st->ausrc_st)
+		srate = st->ausrc_st->prm.srate;
+	mtx_unlock(&st->lock);
+
+	return srate;
 }

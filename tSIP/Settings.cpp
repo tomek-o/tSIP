@@ -848,15 +848,9 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 	}
 }
 
-int Settings::Write(AnsiString asFileName)
+Json::Value Settings::ToJson(void)
 {
-	if (!configWriteAllowed)
-	{
-		return 2;
-	}
-
 	Json::Value root;
-	Json::StyledWriter writer;
 
 	{
 		// update application version in settings
@@ -1186,7 +1180,18 @@ int Settings::Write(AnsiString asFileName)
 		}
 	}
 
-	std::string outputConfig = writer.write( root );
+	return root;
+}
+
+int Settings::Write(AnsiString asFileName)
+{
+	if (!configWriteAllowed)
+	{
+		return 2;
+	}
+
+	Json::StyledWriter writer;
+	std::string outputConfig = writer.write( ToJson() );
 	return SettingsUtils::AtomicUpdateWithBackup(asFileName, outputConfig);
 }
 

@@ -36,7 +36,7 @@ TfrmSettings *frmSettings = NULL;
 
 namespace
 {
-	int videoCodecsEnabledDraggedIndex = -1;
+	
 
     inline void strncpyz(char* dst, const char* src, int dstsize)
 	{
@@ -68,7 +68,6 @@ __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
 	fraLogConf = new TfraLogConf(tsLogging, tmpSettings.logging);
 	fraLogConf->Parent = tsLogging;
 	fraLogConf->Align = alTop;
-	fraLogConf->Height = 195;
 	fraLogConf->TabOrder = 0;
 	fraLogConf->Visible = true;
 
@@ -173,7 +172,6 @@ void TfrmSettings::CreatePages(void)
 	CreatePagesNode(NULL, tsUaConfOpus);
 #ifdef USE_VIDEO
 	CreatePagesNode(NULL, tsVideo);
-	TTreeNode *nodeCodecsVideo = CreatePagesNode(NULL, tsVideoCodecs);
 #endif
 	CreatePagesNode(NULL, tsIntegration);
 	CreatePagesNode(NULL, tsHotkeys);
@@ -401,7 +399,6 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	chbLogMessages->Checked = tmpSettings.uaConf.logMessages;
 	chbLogMessagesOnlyFirstLines->Checked = tmpSettings.uaConf.logMessagesOnlyFirstLine;
-	chbLogAubuf->Checked = tmpSettings.uaConf.logAubuf;
 	fraLogConf->Load();
 
 	chbUserOnlyClip->Checked = tmpSettings.Display.bUserOnlyClip;
@@ -433,8 +430,6 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 
 	cbSipAccessUrlMode->ItemIndex = tmpSettings.SipAccessUrl.accessMode;
 
-	codecsAccountId = -1;
-	SelectCodecsAccount(tmpSettings.GetCurrentAccountId());
 
 	chbRecordingEnabled->Checked = tmpSettings.uaConf.recording.enabled;
 	cbRecDirType->ItemIndex = tmpSettings.uaConf.recording.recDir;
@@ -454,6 +449,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	cbRecordingStart->ItemIndex = tmpSettings.uaConf.recording.recStart;
 	chbRecordingNoNumberB64Encoding->Checked = tmpSettings.uaConf.recording.noNumberB64Encoding;
 	chbRecordingVideoRaw->Checked = tmpSettings.uaConf.recording.videoRawRemote;
+	chbRecordingOpusForceStereo->Checked = tmpSettings.uaConf.recording.opusForceStereo;
 	cbRecordingVideoFormat->ItemIndex = (tmpSettings.uaConf.recording.videoFormat == 1 && cbRecordingVideoFormat->Items->Count > 1) ? 1 : 0;
 
 	chbAutoAnswer->Checked = tmpSettings.uaConf.autoAnswer;
@@ -777,7 +773,6 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 
 	tmpSettings.uaConf.logMessages = chbLogMessages->Checked;
 	tmpSettings.uaConf.logMessagesOnlyFirstLine = chbLogMessagesOnlyFirstLines->Checked;
-	tmpSettings.uaConf.logAubuf = chbLogAubuf->Checked;
 	fraLogConf->Apply();
 
 	tmpSettings.Display.bUserOnlyClip = chbUserOnlyClip->Checked;
@@ -886,7 +881,6 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.messages.doNotReply = chbMessagesDoNotReply->Checked;
 	tmpSettings.uaConf.messages.historyEnabled = chbMessagesHistoryEnabled->Checked;
 
-	StoreCodecLists(codecsAccountId);
 
 	tmpSettings.uaConf.recording.enabled = chbRecordingEnabled->Checked;
 	tmpSettings.uaConf.recording.recDir = static_cast<UaConf::RecordingCfg::RecDir>(cbRecDirType->ItemIndex);
@@ -904,6 +898,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.recording.recStart = static_cast<UaConf::RecordingCfg::RecStart>(cbRecordingStart->ItemIndex);
 	tmpSettings.uaConf.recording.noNumberB64Encoding = chbRecordingNoNumberB64Encoding->Checked;
 	tmpSettings.uaConf.recording.videoRawRemote = chbRecordingVideoRaw->Checked;
+	tmpSettings.uaConf.recording.opusForceStereo = chbRecordingOpusForceStereo->Checked;
 	tmpSettings.uaConf.recording.videoFormat = cbRecordingVideoFormat->ItemIndex > 0 ? 1 : 0;
 
    	tmpSettings.uaConf.autoAnswer = chbAutoAnswer->Checked;
@@ -1160,7 +1155,7 @@ void TfrmSettings::CreateAccountFrames(int selectedAccountId)
 
 void TfrmSettings::UpdateAccountLists(void)
 {
-	TComboBox* combos[] = { cbAccount, cbVideoCodecsAccount };
+	TComboBox* combos[] = { cbAccount };
 	for (unsigned int c=0; c<sizeof(combos)/sizeof(combos[0]); c++)
 	{
 		TComboBox *cb = combos[c];
@@ -1217,7 +1212,6 @@ void __fastcall TfrmSettings::btnAddAccountClick(TObject *Sender)
 {
 	if (tmpSettings.uaConf.accounts.size() >= UaConf::MAX_ACCOUNTS)
 		return;
-	StoreCodecLists(codecsAccountId);
 	UaConf::Account acc;
 	// codecs for new account: copy from currently displayed account
 	int srcId = cbAccount->ItemIndex;
@@ -1230,8 +1224,6 @@ void __fastcall TfrmSettings::btnAddAccountClick(TObject *Sender)
 	tmpSettings.uaConf.accounts.push_back(acc);
 	int id = tmpSettings.uaConf.accounts.size() - 1;
 	CreateAccountFrames(id);
-	codecsAccountId = -1;
-	SelectCodecsAccount(id);
 }
 //---------------------------------------------------------------------------
 
@@ -1306,81 +1298,10 @@ void __fastcall TfrmSettings::btnRemoveAccountClick(TObject *Sender)
 		tmpSettings.currentAccountId = 0;
 	else if (tmpSettings.currentAccountId > id)
 		tmpSettings.currentAccountId--;
-	StoreCodecLists(codecsAccountId);
 	tmpSettings.uaConf.accounts.erase(tmpSettings.uaConf.accounts.begin() + id);
 	if (id >= (int)tmpSettings.uaConf.accounts.size())
 		id = tmpSettings.uaConf.accounts.size() - 1;
 	CreateAccountFrames(id);
-	codecsAccountId = -1;
-	SelectCodecsAccount(id);
-}
-//---------------------------------------------------------------------------
-
-/** \brief Video codecs (audio codecs are edited on account page) */
-void TfrmSettings::LoadCodecLists(int accountId)
-{
-	{
-		lboxVideoCodecsAvailable->Clear();
-		std::vector<AnsiString> codecs;
-		if (Ua::Instance().GetVideoCodecList(codecs) == 0)
-		{
-			for (unsigned int i=0; i<codecs.size(); i++)
-			{
-				lboxVideoCodecsAvailable->Items->Add(codecs[i]);
-			}
-		}
-		lboxVideoCodecsEnabled->Clear();
-	}
-
-	if (accountId < 0 || accountId >= (int)tmpSettings.uaConf.accounts.size())
-		return;
-	const UaConf::Account &acc = tmpSettings.uaConf.accounts[accountId];
-	for (unsigned int i=0; i<acc.video_codecs.size(); i++)
-	{
-		AnsiString name = acc.video_codecs[i].c_str();
-		for (int codec = 0; codec < lboxVideoCodecsAvailable->Items->Count; codec++)
-		{
-			if (lboxVideoCodecsAvailable->Items->Strings[codec] == name)
-			{
-				lboxVideoCodecsAvailable->Items->Delete(codec);
-				lboxVideoCodecsEnabled->Items->Add(name);
-				break;
-			}
-		}
-	}
-}
-
-void TfrmSettings::StoreCodecLists(int accountId)
-{
-	if (accountId < 0 || accountId >= (int)tmpSettings.uaConf.accounts.size())
-		return;
-	UaConf::Account &acc = tmpSettings.uaConf.accounts[accountId];
-	if (lboxVideoCodecsAvailable->Items->Count > 0 || lboxVideoCodecsEnabled->Items->Count > 0)	// both lists may be empty if UA failed to initialize
-	{
-		acc.video_codecs.clear();
-		for (int i=0; i<lboxVideoCodecsEnabled->Items->Count; i++)
-		{
-			acc.video_codecs.push_back(lboxVideoCodecsEnabled->Items->Strings[i].c_str());
-		}
-	}
-}
-
-void TfrmSettings::SelectCodecsAccount(int accountId)
-{
-	if (accountId < 0 || accountId >= (int)tmpSettings.uaConf.accounts.size())
-		accountId = 0;
-	if (accountId != codecsAccountId)
-	{
-		StoreCodecLists(codecsAccountId);
-		LoadCodecLists(accountId);
-		codecsAccountId = accountId;
-	}
-	cbVideoCodecsAccount->ItemIndex = accountId;
-}
-
-void __fastcall TfrmSettings::cbVideoCodecsAccountChange(TObject *Sender)
-{
-	SelectCodecsAccount(cbVideoCodecsAccount->ItemIndex);
 }
 //---------------------------------------------------------------------------
 
@@ -2139,81 +2060,140 @@ void __fastcall TfrmSettings::btnSelectTlsClick(TObject *Sender)
 //---------------------------------------------------------------------------
 
 
-void __fastcall TfrmSettings::lboxVideoCodecsAvailableDblClick(TObject *Sender)
-{
-	VideoCodecEnableSelected();
-}
-//---------------------------------------------------------------------------
 
-void __fastcall TfrmSettings::lboxVideoCodecsEnabledDblClick(TObject *Sender)
-{
-	VideoCodecDisableSelected();
-}
 //---------------------------------------------------------------------------
+// settings filter: pages whose name/caption or a control caption contains the text
+// are painted yellow in the tree; matching labels and controls are highlighted on the page
 
-void __fastcall TfrmSettings::btnVideoCodecEnableClick(TObject *Sender)
-{
-	VideoCodecEnableSelected();	
-}
-//---------------------------------------------------------------------------
+#include <algorithm>
 
-void __fastcall TfrmSettings::btnVideoCodecDisableClick(TObject *Sender)
+namespace
 {
-	VideoCodecDisableSelected();
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmSettings::lboxVideoCodecsEnabledStartDrag(TObject *Sender,
-      TDragObject *&DragObject)
-{
-	videoCodecsEnabledDraggedIndex = lboxVideoCodecsEnabled->ItemIndex;	
-}
-//---------------------------------------------------------------------------
-
-void __fastcall TfrmSettings::lboxVideoCodecsEnabledDragDrop(TObject *Sender,
-      TObject *Source, int X, int Y)
-{
-	TListBox *lbox = lboxVideoCodecsEnabled;
-	int dropIndex = lbox->ItemAtPos(Point(X,Y), false);
-	if (dropIndex >= lbox->Items->Count)
+	/** TControl::Font is protected; this class only exposes it */
+	class TControlFontAccess : public TControl
 	{
-		dropIndex--;
+	public:
+		TFont* GetFont(void) { return Font; }
+		AnsiString GetCaption(void) { return Caption; }
+	};
+
+	TFont* ControlFont(TControl *ctrl)
+	{
+		return static_cast<TControlFontAccess*>(ctrl)->GetFont();
 	}
-	if (dropIndex >= 0)
+
+	AnsiString ControlCaption(TControl *ctrl)
 	{
-		lbox->Items->Move(videoCodecsEnabledDraggedIndex, dropIndex);
-		lbox->ItemIndex = dropIndex;
+		return static_cast<TControlFontAccess*>(ctrl)->GetCaption();
 	}
 }
-//---------------------------------------------------------------------------
 
-void __fastcall TfrmSettings::lboxVideoCodecsEnabledDragOver(TObject *Sender,
-      TObject *Source, int X, int Y, TDragState State, bool &Accept)
+void __fastcall TfrmSettings::edFilterChange(TObject *Sender)
 {
-	Accept = true;	
+	ApplySettingsFilter();
 }
-//---------------------------------------------------------------------------
 
-void TfrmSettings::VideoCodecEnableSelected(void)
+void __fastcall TfrmSettings::tvSelectorCustomDrawItem(TCustomTreeView *Sender, TTreeNode *Node,
+	TCustomDrawState State, bool &DefaultDraw)
 {
-	for (int i=0; i<lboxVideoCodecsAvailable->Items->Count; i++)
+	if (Node->Data == NULL)
+		return;
+	TTabSheet *tab = static_cast<TTabSheet*>(Node->Data);
+	for (unsigned int i=0; i<filterMatchedPages.size(); i++)
 	{
-		if (lboxVideoCodecsAvailable->Selected[i])
+		if (filterMatchedPages[i] == tab)
 		{
-			lboxVideoCodecsEnabled->Items->Add(lboxVideoCodecsAvailable->Items->Strings[i]);
+			Sender->Canvas->Brush->Color = clYellow;
+			Sender->Canvas->Font->Color = clBlack;
+			break;
 		}
 	}
-	lboxVideoCodecsAvailable->DeleteSelected();
 }
 
-void TfrmSettings::VideoCodecDisableSelected(void)
+void TfrmSettings::ClearFilterHighlights(void)
 {
-	for (int i=0; i<lboxVideoCodecsEnabled->Items->Count; i++)
+	for (unsigned int i=0; i<filterHighlights.size(); i++)
 	{
-		if (lboxVideoCodecsEnabled->Selected[i])
+		const FilterHighlight &h = filterHighlights[i];
+		if (TLabel *lbl = dynamic_cast<TLabel*>(h.ctrl))
 		{
-			lboxVideoCodecsAvailable->Items->Add(lboxVideoCodecsEnabled->Items->Strings[i]);
+			lbl->Transparent = h.transparent;
+			lbl->Color = h.color;
+		}
+		else
+		{
+			ControlFont(h.ctrl)->Style = h.style;
 		}
 	}
-	lboxVideoCodecsEnabled->DeleteSelected();
+	filterHighlights.clear();
+	filterMatchedPages.clear();
+}
+
+/** Controls with matching caption, searched recursively (also in frames) */
+void TfrmSettings::CollectMatchingControls(TWinControl *parent, const AnsiString &text, std::vector<TControl*> &out)
+{
+	for (int i=0; i<parent->ControlCount; i++)
+	{
+		TControl *ctrl = parent->Controls[i];
+		// edit values are not captions: skip them
+		bool hasCaption = (dynamic_cast<TCustomEdit*>(ctrl) == NULL) &&
+			(dynamic_cast<TCustomComboBox*>(ctrl) == NULL) &&
+			(dynamic_cast<TCustomMemo*>(ctrl) == NULL);
+		// containers (frames, panels) are searched but not highlighted: changing their font
+		// would also make all child controls bold (ParentFont)
+		TWinControl *container = dynamic_cast<TWinControl*>(ctrl);
+		bool isContainer = (container != NULL) && (container->ControlCount > 0);
+		if (hasCaption && !isContainer && ControlCaption(ctrl).LowerCase().Pos(text) > 0)
+			out.push_back(ctrl);
+		if (TWinControl *child = dynamic_cast<TWinControl*>(ctrl))
+			CollectMatchingControls(child, text, out);
+	}
+}
+
+void TfrmSettings::ApplySettingsFilter(void)
+{
+	ClearFilterHighlights();
+	AnsiString text = edFilter->Text.Trim().LowerCase();
+	if (text.Length() >= 2)
+	{
+		for (TTreeNode *node = tvSelector->Items->GetFirstNode(); node; node = node->GetNext())
+		{
+			if (node->Data == NULL)
+				continue;
+			TTabSheet *tab = static_cast<TTabSheet*>(node->Data);
+
+			bool pageMatch = (tab->Caption.LowerCase().Pos(text) > 0) ||
+				(tab->Name.LowerCase().Pos(text) > 0);
+
+			std::vector<TControl*> matches;
+			CollectMatchingControls(tab, text, matches);
+			for (unsigned int i=0; i<matches.size(); i++)
+			{
+				TControl *ctrl = matches[i];
+				FilterHighlight h;
+				h.ctrl = ctrl;
+				h.color = clWindow;
+				h.transparent = true;
+				h.style = TFontStyles();
+				if (TLabel *lbl = dynamic_cast<TLabel*>(ctrl))
+				{
+					h.color = lbl->Color;
+					h.transparent = lbl->Transparent;
+					lbl->Transparent = false;
+					lbl->Color = clYellow;
+				}
+				else
+				{
+					TFont *font = ControlFont(ctrl);
+					h.style = font->Style;
+					font->Style = font->Style << fsBold;
+				}
+				filterHighlights.push_back(h);
+			}
+
+			if (pageMatch || !matches.empty())
+				filterMatchedPages.push_back(tab);
+		}
+	}
+	tvSelector->Repaint();
 }

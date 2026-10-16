@@ -221,6 +221,8 @@ private:	// User declarations
 	ButtonConf *cfg;
 	int btnId;
 	void SetType(Button::Type type);
+	/** type shown in the editor (last SetType() call), used to detect change from DISABLED */
+	Button::Type shownType;
 	__fastcall int ShowModal(void) {
 		return TForm::ShowModal();
 	};

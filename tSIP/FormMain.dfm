@@ -54,6 +54,10 @@ object frmMain: TfrmMain
       OnChange = pcMainChange
       object tsDialpad: TTabSheet
         Caption = 'Dialpad'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object pnlDialpad: TPanel
           Left = 0
           Top = -1
@@ -78,43 +82,13 @@ object frmMain: TfrmMain
             OnEnter = edTransferEnter
             OnKeyPress = edTransferKeyPress
           end
-          object trbarSoftvolMic: TTrackBar
-            Left = 140
-            Top = 0
-            Width = 20
-            Height = 180
-            Max = 512
-            Min = 10
-            Orientation = trVertical
-            Frequency = 20
-            Position = 384
-            TabOrder = 1
-            TabStop = False
-            TickMarks = tmBoth
-            OnChange = trbarSoftvolMicChange
-          end
-          object trbarSoftvolSpeaker: TTrackBar
-            Left = 160
-            Top = 0
-            Width = 20
-            Height = 180
-            Max = 512
-            Min = 10
-            Orientation = trVertical
-            Frequency = 20
-            Position = 384
-            TabOrder = 2
-            TabStop = False
-            TickMarks = tmBoth
-            OnChange = trbarSoftvolSpeakerChange
-          end
           object btnResetMicVolume: TBitBtn
             Left = 143
             Top = 181
             Width = 18
             Height = 24
             Hint = 'Reset audio input volume'
-            TabOrder = 3
+            TabOrder = 1
             TabStop = False
             OnClick = btnResetMicVolumeClick
             OnMouseUp = btnResetMicVolumeMouseUp
@@ -142,7 +116,7 @@ object frmMain: TfrmMain
             Width = 18
             Height = 24
             Hint = 'Reset audio output volume'
-            TabOrder = 4
+            TabOrder = 2
             TabStop = False
             OnClick = btnResetSpeakerVolumeClick
             OnMouseUp = btnResetSpeakerVolumeMouseUp
@@ -320,7 +294,7 @@ object frmMain: TfrmMain
       Font.Height = -16
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
-      ItemHeight = 19
+      ItemHeight = 0
       ParentFont = False
       PopupMenu = popupCbCallUri
       TabOrder = 0
@@ -459,6 +433,13 @@ object frmMain: TfrmMain
     Interval = 10
     OnTimer = tmrCallbackPollTimer
     Left = 368
+    Top = 267
+  end
+  object tmrLevel: TTimer
+    Enabled = False
+    Interval = 30
+    OnTimer = tmrLevelTimer
+    Left = 420
     Top = 267
   end
   object tmrBackspace: TTimer

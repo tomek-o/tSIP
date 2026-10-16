@@ -45,6 +45,7 @@ struct viddec_state {
 	AVFrame *pict;
 	struct mbuf *mb;
 	bool got_keyframe;
+	bool keyframe_wait_logged;
 	size_t frag_start;
 	bool frag;
 	uint16_t frag_seq;
@@ -265,7 +266,11 @@ int avcodec_decode_h264(struct viddec_state *st, struct vidframe *frame,
 #endif
 
 	if (h264_hdr.type == H264_NALU_SLICE && !st->got_keyframe) {
-		DEBUG_WARNING("avcodec: decoder waiting for keyframe\n");
+		/* logged once per wait: it would repeat for every frame until a keyframe */
+		if (!st->keyframe_wait_logged) {
+			DEBUG_INFO("avcodec: decoder waiting for keyframe\n");
+			st->keyframe_wait_logged = true;
+		}
 		return EPROTO;
 	}
 

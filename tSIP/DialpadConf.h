@@ -44,6 +44,20 @@ struct DialpadConf
 		}
 	} elements[EL_CNT];
 
+	// Volume slider colors (COLORREF); meter zones, peak marker, track, thumb
+	enum MeterColorId
+	{
+		MC_LOW = 0,
+		MC_MID,
+		MC_HIGH,
+		MC_PEAK,
+		MC_TRACK,
+		MC_THUMB,
+
+		MC_CNT
+	};
+	unsigned int meterColors[MC_CNT];
+
 	DialpadConf(void);
 	void fromJson(const Json::Value &jv);
 	void toJson(Json::Value &jv) const;

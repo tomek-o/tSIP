@@ -241,7 +241,7 @@ static bool sub_handler(const struct sip_msg *msg, void *arg)
 
 	ua = uag_find(&msg->uri.user);
 	if (!ua) {
-		DEBUG_WARNING("presence: no UA found for %r\n", &msg->uri.user);
+		DEBUG_INFO("presence: no UA found for %r\n", &msg->uri.user);
 		(void)sip_treply(NULL, uag_sip(), msg, 404, "Not Found");
 		return true;
 	}

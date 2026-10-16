@@ -49,6 +49,7 @@ struct recorder_st {
 	enum recorder_side side;
 	enum recorder_file_format format;
 	unsigned int bitrate;
+	bool force_stereo;
 	bool pause_request;
 
 	unsigned frame_size;
@@ -57,7 +58,7 @@ struct recorder_st {
 	struct aubuf *abtx;
 };
 
-int recorder_start(struct recorder_st *st, unsigned int call_uid, const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate) {
+int recorder_start(struct recorder_st *st, unsigned int call_uid, const char* const file, unsigned int rec_channels, enum recorder_side rec_side, enum recorder_file_format rec_format, unsigned int rec_bitrate, bool rec_force_stereo) {
 	if (st->rec_lock == NULL)
 		return -1;
 	lock_write_get(st->rec_lock);
@@ -67,6 +68,7 @@ int recorder_start(struct recorder_st *st, unsigned int call_uid, const char* co
 		st->side = rec_side;
 		st->format = rec_format;
 		st->bitrate = rec_bitrate;
+		st->force_stereo = rec_force_stereo;
 		str_ncpy(st->filename, file, sizeof(st->filename));
 		st->filename_set = true;
 	}
@@ -182,6 +184,7 @@ static int recorder_alloc(struct recorder_st **stp, void **ctx, struct aufilt_pr
 	st->side = RECORDER_SIDE_BOTH;
 	st->format = RECORDER_FILE_FORMAT_OPUS_OGG;
 	st->bitrate = 64000;
+	st->force_stereo = false;
 	st->pause_request = false;
 
 	st->srate = prm->srate;
@@ -366,6 +369,8 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 						break;
 					}
 					ope_encoder_ctl(rec->enc, OPUS_SET_BITRATE_REQUEST, rec->bitrate);
+					if (rec->force_stereo && rec->channels == 2)
+						ope_encoder_ctl(rec->enc, OPUS_SET_FORCE_CHANNELS(2));
 				} else {
 					rec->pFile = wavfile_open(rec->filename, rec->channels, rec->srate);
 					if (!rec->pFile) {
@@ -410,10 +415,12 @@ DWORD WINAPI ThreadRecWrite(LPVOID data)
 		if (sizerx > sizetx) {
 			aubuf_read(rec->abrx, (uint8_t*)bufrx, cnt + extra);
 			aubuf_read(rec->abtx, (uint8_t*)buftx, cnt);
+			/* make CG happy: CodeGuard reports a zero-length memset at the buffer end as underrun */
 			if (extra)
 				memset(buftx + cnt, 0, extra);
 		} else {
 			aubuf_read(rec->abrx, (uint8_t*)bufrx, cnt);
+			/* make CG happy: CodeGuard reports a zero-length memset at the buffer end as underrun */
 			if (extra)
 				memset(bufrx + cnt, 0, extra);
 			aubuf_read(rec->abtx, (uint8_t*)buftx, cnt + extra);

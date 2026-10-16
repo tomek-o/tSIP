@@ -344,7 +344,7 @@ int tls_add_windows_ca(struct tls *tls)
         CertFreeCertificateContext(pContext);
 		CertCloseStore(hStore, 0);
 	}
-	DEBUG_WARNING("TLS: add %d certificate(s) from Windows store\n", count);
+	DEBUG_INFO("TLS: add %d certificate(s) from Windows store\n", count);
 	return 0;
 }
 #endif

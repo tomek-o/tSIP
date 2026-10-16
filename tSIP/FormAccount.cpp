@@ -6,6 +6,7 @@
 #include "FormAccount.h"
 #include "UaMain.h"
 #include <vector>
+#include "baresip_base_config.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -14,7 +15,8 @@ TfrmAccount *frmAccount;
 __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& acc)
 	: TForm(Owner),
 	acc(acc),
-	audioCodecsEnabledDraggedIndex(-1)
+	audioCodecsEnabledDraggedIndex(-1),
+	videoCodecsEnabledDraggedIndex(-1)
 {
 	AnsiString title;
 	title.sprintf("Account #%02d", id + 1);
@@ -70,6 +72,16 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 	}
 
 	LoadAudioCodecs();
+#ifdef USE_VIDEO
+	LoadVideoCodecs();
+#else
+	lblVideoCodecsAvailable->Visible = false;
+	lblVideoCodecsEnabled->Visible = false;
+	lboxVideoCodecsAvailable->Visible = false;
+	btnVideoCodecEnable->Visible = false;
+	btnVideoCodecDisable->Visible = false;
+	lboxVideoCodecsEnabled->Visible = false;
+#endif
 	SetExtraVisible(false);
 }
 //---------------------------------------------------------------------------
@@ -384,3 +396,124 @@ void __fastcall TfrmAccount::lboxAudioCodecsEnabledStartDrag(TObject *Sender,
 	audioCodecsEnabledDraggedIndex = lboxAudioCodecsEnabled->ItemIndex;
 }
 //---------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+// video codecs (per account, same behaviour as audio codecs)
+
+void TfrmAccount::LoadVideoCodecs(void)
+{
+	lboxVideoCodecsAvailable->Clear();
+	lboxVideoCodecsEnabled->Clear();
+	std::vector<AnsiString> codecs;
+	if (Ua::Instance().GetVideoCodecList(codecs) == 0)
+	{
+		for (unsigned int i=0; i<codecs.size(); i++)
+		{
+			lboxVideoCodecsAvailable->Items->Add(codecs[i]);
+		}
+	}
+	for (unsigned int i=0; i<acc.video_codecs.size(); i++)
+	{
+		AnsiString name = acc.video_codecs[i].c_str();
+		for (int codec = 0; codec < lboxVideoCodecsAvailable->Items->Count; codec++)
+		{
+			if (lboxVideoCodecsAvailable->Items->Strings[codec] == name)
+			{
+				lboxVideoCodecsAvailable->Items->Delete(codec);
+				lboxVideoCodecsEnabled->Items->Add(name);
+				break;
+			}
+		}
+	}
+}
+
+void TfrmAccount::StoreVideoCodecs(void)
+{
+	// both lists may be empty if UA failed to initialize - keep configuration then
+	if (lboxVideoCodecsAvailable->Items->Count == 0 && lboxVideoCodecsEnabled->Items->Count == 0)
+		return;
+	acc.video_codecs.clear();
+	for (int i=0; i<lboxVideoCodecsEnabled->Items->Count; i++)
+	{
+		acc.video_codecs.push_back(lboxVideoCodecsEnabled->Items->Strings[i].c_str());
+	}
+}
+
+void TfrmAccount::VideoCodecEnableSelected(void)
+{
+	int index = lboxVideoCodecsAvailable->ItemIndex;
+	if (index < 0)
+		return;
+	lboxVideoCodecsEnabled->Items->Add(lboxVideoCodecsAvailable->Items->Strings[index]);
+	lboxVideoCodecsAvailable->Items->Delete(index);
+	if (index >= lboxVideoCodecsAvailable->Items->Count)
+		index = lboxVideoCodecsAvailable->Items->Count - 1;
+	lboxVideoCodecsAvailable->ItemIndex = index;
+	StoreVideoCodecs();
+}
+
+void TfrmAccount::VideoCodecDisableSelected(void)
+{
+	int index = lboxVideoCodecsEnabled->ItemIndex;
+	if (index < 0)
+		return;
+	lboxVideoCodecsAvailable->Items->Add(lboxVideoCodecsEnabled->Items->Strings[index]);
+	lboxVideoCodecsEnabled->Items->Delete(index);
+	if (index >= lboxVideoCodecsEnabled->Items->Count)
+		index = lboxVideoCodecsEnabled->Items->Count - 1;
+	lboxVideoCodecsEnabled->ItemIndex = index;
+	StoreVideoCodecs();
+}
+
+void __fastcall TfrmAccount::lboxVideoCodecsAvailableDblClick(TObject *Sender)
+{
+	VideoCodecEnableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::lboxVideoCodecsEnabledDblClick(TObject *Sender)
+{
+	VideoCodecDisableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::btnVideoCodecEnableClick(TObject *Sender)
+{
+	VideoCodecEnableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::btnVideoCodecDisableClick(TObject *Sender)
+{
+	VideoCodecDisableSelected();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::lboxVideoCodecsEnabledDragDrop(TObject *Sender,
+	  TObject *Source, int X, int Y)
+{
+	TListBox *lbox = lboxVideoCodecsEnabled;
+	int dropIndex = lbox->ItemAtPos(Point(X,Y), false);
+	if (dropIndex >= 0 && videoCodecsEnabledDraggedIndex >= 0 && dropIndex < lbox->Items->Count)
+	{
+		lbox->Items->Move(videoCodecsEnabledDraggedIndex, dropIndex);
+		lbox->ItemIndex = dropIndex;
+		StoreVideoCodecs();
+	}
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::lboxVideoCodecsEnabledDragOver(TObject *Sender,
+	  TObject *Source, int X, int Y, TDragState State, bool &Accept)
+{
+	Accept = (Source == lboxVideoCodecsEnabled);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::lboxVideoCodecsEnabledStartDrag(TObject *Sender,
+	  TDragObject *&DragObject)
+{
+	videoCodecsEnabledDraggedIndex = lboxVideoCodecsEnabled->ItemIndex;
+}
+//---------------------------------------------------------------------------
+

@@ -20,6 +20,7 @@
 #include <StdActns.hpp>
 #include <Buttons.hpp>
 #include "ButtonType.h"
+#include "VolumeSlider.h"
 #include "common/Observer.h"
 #include "common/Mutex.h"
 #include <Dialogs.hpp>
@@ -97,8 +98,7 @@ __published:	// IDE-managed Components
 	TSpeedButton *btnMakeCall;
 	TPanel *pnlDialpad;
 	TEdit *edTransfer;
-	TTrackBar *trbarSoftvolMic;
-	TTrackBar *trbarSoftvolSpeaker;
+	TTimer *tmrLevel;
 	TBitBtn *btnResetMicVolume;
 	TBitBtn *btnResetSpeakerVolume;
 	TMenuItem *miScriptPluginVariables;
@@ -133,6 +133,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnBackspaceMouseUp(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y);
 	void __fastcall tmrBackspaceTimer(TObject *Sender);
+	void __fastcall tmrLevelTimer(TObject *Sender);
 	void __fastcall miMinimizeTrayClick(TObject *Sender);
 	void __fastcall actExitExecute(TObject *Sender);
 	void __fastcall tmrAutoAnswerTimer(TObject *Sender);
@@ -175,6 +176,8 @@ __published:	// IDE-managed Components
 	void __fastcall miTransferPasteClick(TObject *Sender);
 	void __fastcall miTransferPasteAndTransferClick(TObject *Sender);
 private:	// User declarations
+	VolumeSlider *trbarSoftvolMic;
+	VolumeSlider *trbarSoftvolSpeaker;
 	static void TranslateForm(void* obj);
 
 	double initialScaling;

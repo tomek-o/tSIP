@@ -464,10 +464,19 @@ int auplay_alloc(struct auplay_st **stp, const char *name,
 		 struct auplay_prm *prm, const char *device,
 		 auplay_write_h *wh, void *arg);
 
-/*
- * Received signal level - provided by softvol module; maximum from last 100 ms
- */
-unsigned int softvol_get_rx_level(void);
+/* Audio levels of one call - provided by softvol module, post gain (tSIP) */
+struct softvol_levels {
+	int rx_peak;		/**< RX peak of last 20 ms block, 0..32768 */
+	float rx_rms;		/**< RX RMS of last 20 ms block, 0..32768 */
+	int tx_peak;		/**< TX peak of last 20 ms block, 0..32768 */
+	float tx_rms;		/**< TX RMS of last 20 ms block, 0..32768 */
+};
+
+/* Bind level meter of an audio stream to id chosen by the caller (tSIP call uid) */
+void softvol_meter_bind(const struct audio *au, unsigned int id);
+
+/* Get levels of the stream bound to id; false if no such stream */
+bool softvol_get_levels(unsigned int id, struct softvol_levels *lv);
 
 /* sidetone (modules/sidetone): transmitted audio mixed into local playback, per call */
 int sidetone_set(const struct audio *au, bool enabled, unsigned int level);

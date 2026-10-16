@@ -642,7 +642,7 @@ static int update(struct mnat_sess *sess)
 		err = enable_turn_channels(sess);
 	}
 	else {
-		DEBUG_WARNING("ICE not supported by peer\n");
+		DEBUG_INFO("ICE not supported by peer\n");
 
 		LIST_FOREACH(&sess->medial, le) {
 			struct mnat_media *m = le->data;

@@ -7,6 +7,7 @@
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
 #include <Dialogs.hpp>
+#include <ExtCtrls.hpp>
 
 struct LogConf;
 
@@ -30,6 +31,17 @@ __published:	// IDE-managed Components
 	void __fastcall btnLoggingConsoleFontSelectClick(TObject *Sender);
 private:	// User declarations
 	LogConf &logging;
+	/// grid: rows are log levels (SIP, error, warning, info, debug),
+	/// columns are text in the rich edit, text in the list, list background
+	enum { LEVELS = 5, CELLS = 3 };
+	TPanel *pnlCell[LEVELS][CELLS];
+	TComboBox *cbColorTemplate;
+	TButton *btnColorTemplate;
+	TColorDialog *dlgColor;
+	TCheckBox *chbLogAubuf;
+	void CreateColorControls(void);
+	void __fastcall btnColorClick(TObject *Sender);
+	void __fastcall btnColorTemplateClick(TObject *Sender);
 public:		// User declarations
 	__fastcall TfraLogConf(TComponent* Owner, LogConf &logging);
 	void Load(void);

@@ -433,12 +433,18 @@ void __fastcall TfrmButtonEdit::btnCancelClick(TObject *Sender)
 
 void __fastcall TfrmButtonEdit::cbTypeChange(TObject *Sender)
 {
-	SetType(sortedTypes[cbType->ItemIndex]);	
+	Button::Type newType = sortedTypes[cbType->ItemIndex];
+	// new button from Disabled: fill in the default caption of the type if the caption is empty
+	AnsiString defaultCaption = Button::DefaultCaption(newType);
+	if (shownType == Button::DISABLED && defaultCaption != "" && memoCaption1->Text.Trim() == "")
+		memoCaption1->Text = defaultCaption;
+	SetType(newType);
 }
 //---------------------------------------------------------------------------
 
 void TfrmButtonEdit::SetType(Button::Type type)
 {
+	shownType = type;
 	AnsiString description;
 	description.sprintf("%s\r\nNumeric type value (for scripting or provisioning) = %d.", Button::TypeDescription(type), static_cast<int>(type));
 	memoHelp->Text = description;

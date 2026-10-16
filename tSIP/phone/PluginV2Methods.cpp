@@ -4,6 +4,8 @@
 #include "PluginV2Methods.h"
 #include "tSIP_plugin_v2.h"
 #include "Globals.h"
+#include "ProgrammableButtons.h"
+#include "ButtonConf.h"
 #include "History.h"
 #include "Contacts.h"
 #include "Settings.h"
@@ -15,6 +17,7 @@
 #include "AudioDevicesList.h"
 #include "AudioModules.h"
 #include "Paths.h"
+#include "Log.h"
 #include "UaMain.h"
 #include "UaCustomRequests.h"
 #include "common/Utilities.h"
@@ -422,6 +425,196 @@ int CheckDevice(const std::string &module, const std::string &deviceUtf8, bool o
 }
 
 /** params: uid (optional), module + device or configured:true; out: output (player) or input (source) */
+namespace
+{
+	/** values of these keys are never returned to the client */
+	bool IsSecretKey(const std::string &key)
+	{
+		return key == "pwd" || key == "password";
+	}
+
+	const char *RedactedValue = "***";
+
+	void RedactSecrets(Json::Value &jv)
+	{
+		if (jv.type() == Json::objectValue)
+		{
+			Json::Value::Members names = jv.getMemberNames();
+			for (unsigned int i=0; i<names.size(); i++)
+			{
+				Json::Value &child = jv[names[i]];
+				if (IsSecretKey(names[i]) && child.type() == Json::stringValue)
+					child = RedactedValue;
+				else
+					RedactSecrets(child);
+			}
+		}
+		else if (jv.type() == Json::arrayValue)
+		{
+			for (unsigned int i=0; i<jv.size(); i++)
+				RedactSecrets(jv[i]);
+		}
+	}
+
+	/** objects are merged recursively, other values replace; a redacted secret
+		(value returned by GetSettings) keeps the current value */
+	void MergeSettings(Json::Value &target, const Json::Value &patch)
+	{
+		Json::Value::Members names = patch.getMemberNames();
+		for (unsigned int i=0; i<names.size(); i++)
+		{
+			const Json::Value &value = patch[names[i]];
+			if (IsSecretKey(names[i]) && value.type() == Json::stringValue && value.asString() == RedactedValue)
+				continue;
+			if (value.type() == Json::objectValue && target[names[i]].type() == Json::objectValue)
+				MergeSettings(target[names[i]], value);
+			else
+				target[names[i]] = value;
+		}
+	}
+}
+
+/** params: section (optional, top-level key of the settings, e.g. "uaConf") -> {"settings": JSON}
+	secrets (account passwords) are returned as "***"
+*/
+int GetSettings(const Json::Value &params, Json::Value &result)
+{
+	std::string section = params.get("section", "").asString();
+	Json::Value all = appSettings.ToJson();
+	Json::Value out = section.empty() ? all : all[section];
+	if (!section.empty() && out.isNull())
+	{
+		result["error"] = "section: unknown settings section";
+		return TSIP_ERR_INVALID_ARG;
+	}
+	RedactSecrets(out);
+	result["settings"] = out;
+	return TSIP_OK;
+}
+
+/** params: settings (JSON object with the part of settings to change) -> saved to tSIP.json and applied in memory
+	result: changed (top-level sections that differ), restartRequired (true if any change;
+	running components read most settings only at startup)
+*/
+int SetSettings(const Json::Value &params, Json::Value &result)
+{
+	const Json::Value &patch = params["settings"];
+	if (patch.type() != Json::objectValue)
+	{
+		result["error"] = "settings: JSON object expected";
+		return TSIP_ERR_INVALID_ARG;
+	}
+
+	Json::Value before = appSettings.ToJson();
+	Json::Value merged = before;
+	MergeSettings(merged, patch);
+
+	Json::FastWriter writer;
+	if (appSettings.UpdateFromText(AnsiString(writer.write(merged).c_str())) != 0)
+	{
+		result["error"] = "settings: rejected (invalid value)";
+		return TSIP_ERR_INVALID_ARG;
+	}
+	// in memory first: tSIP writes the in-memory settings on exit
+	if (appSettings.Write(Paths::GetConfig()) != 0)
+	{
+		result["error"] = "settings: cannot write configuration file";
+		return TSIP_ERR_GENERIC;
+	}
+
+	Json::Value after = appSettings.ToJson();
+	Json::Value changed(Json::arrayValue);
+	Json::Value::Members names = after.getMemberNames();
+	for (unsigned int i=0; i<names.size(); i++)
+	{
+		if (before[names[i]] != after[names[i]])
+			changed.append(names[i]);
+	}
+	result["changed"] = changed;
+	result["restartRequired"] = !changed.empty();
+	LOG("MCP: settings changed: %u section(s)\n", changed.size());
+	return TSIP_OK;
+}
+
+/** params: id (optional, button index 0..count-1) -> {"buttons": [ {"id": n, ...settings...} ], "count": total}
+	with id: {"button": {"id": n, ...}}
+*/
+int GetButtonSettings(const Json::Value &params, Json::Value &result)
+{
+	result["count"] = static_cast<unsigned int>(buttons.btnConf.size());
+	if (params.isMember("id"))
+	{
+		unsigned int id = params["id"].asUInt();
+		if (id >= buttons.btnConf.size())
+		{
+			result["error"] = "id: no such button";
+			return TSIP_ERR_INVALID_ARG;
+		}
+		Json::Value jb;
+		buttons.btnConf[id].ToJson(jb, true);
+		jb["id"] = id;
+		result["button"] = jb;
+		return TSIP_OK;
+	}
+	Json::Value list(Json::arrayValue);
+	for (unsigned int i=0; i<buttons.btnConf.size(); i++)
+	{
+		Json::Value jb;
+		buttons.btnConf[i].ToJson(jb, true);
+		jb["id"] = i;
+		list.append(jb);
+	}
+	result["buttons"] = list;
+	return TSIP_OK;
+}
+
+/** params: id (required), settings (JSON object, merged into the current button settings)
+	-> saved to the buttons configuration file and applied in memory;
+	result: changed (bool), restartRequired (true if the UA must be restarted to apply, e.g. account or BLF
+	button; not done automatically because it would end active calls)
+*/
+int SetButtonSettings(const Json::Value &params, Json::Value &result)
+{
+	if (!params.isMember("id") || !params["id"].isIntegral())
+	{
+		result["error"] = "id: button number required";
+		return TSIP_ERR_INVALID_ARG;
+	}
+	unsigned int id = params["id"].asUInt();
+	const Json::Value &patch = params["settings"];
+	if (id >= buttons.btnConf.size() || patch.type() != Json::objectValue)
+	{
+		result["error"] = "id: no such button, or settings: JSON object expected";
+		return TSIP_ERR_INVALID_ARG;
+	}
+
+	const ButtonConf prev = buttons.btnConf[id];
+	Json::Value current;
+	prev.ToJson(current, true);
+	MergeSettings(current, patch);
+
+	ButtonConf conf;
+	conf.FromJson(current);
+	if (conf == prev)
+	{
+		result["changed"] = false;
+		result["restartRequired"] = false;
+		return TSIP_OK;
+	}
+
+	buttons.SetConfig(id, conf);
+	if (buttons.Write() != 0)
+	{
+		result["error"] = "buttons: cannot write configuration file";
+		return TSIP_ERR_GENERIC;
+	}
+	Calls::OnButtonConfigChange();
+	result["changed"] = true;
+	result["restartRequired"] = conf.UaRestartNeeded(prev);
+	LOG("MCP: button %u settings changed\n", id);
+	return TSIP_OK;
+}
+
 int SetAudio(const Json::Value &params, Json::Value &result, bool out)
 {
 	unsigned int callUid = params.get("uid", 0).asUInt();
@@ -821,6 +1014,14 @@ int PluginV2Methods::Execute(const AnsiString &method, const Json::Value &params
 		return SetAudioOutput(params, result);
 	if (method == "PlayAudioFile")
 		return PlayAudioFile(params, result);
+	if (method == "GetSettings")
+		return GetSettings(params, result);
+	if (method == "SetSettings")
+		return SetSettings(params, result);
+	if (method == "GetButtonSettings")
+		return GetButtonSettings(params, result);
+	if (method == "SetButtonSettings")
+		return SetButtonSettings(params, result);
 	if (method == "GetCallAudioState")
 		return GetCallAudioState(params, result);
 	if (method == "GetCallInvite")

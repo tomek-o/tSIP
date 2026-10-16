@@ -70,6 +70,12 @@ __published:	// IDE-managed Components
 	TButton *btnAudioCodecEnable;
 	TButton *btnAudioCodecDisable;
 	TListBox *lboxAudioCodecsEnabled;
+	TLabel *lblVideoCodecsAvailable;
+	TLabel *lblVideoCodecsEnabled;
+	TListBox *lboxVideoCodecsAvailable;
+	TButton *btnVideoCodecEnable;
+	TButton *btnVideoCodecDisable;
+	TListBox *lboxVideoCodecsEnabled;
 	void __fastcall edRegServerChange(TObject *Sender);
 	void __fastcall edUserChange(TObject *Sender);
 	void __fastcall edPasswordChange(TObject *Sender);
@@ -105,13 +111,28 @@ __published:	// IDE-managed Components
 		  TObject *Source, int X, int Y, TDragState State, bool &Accept);
 	void __fastcall lboxAudioCodecsEnabledStartDrag(TObject *Sender,
 		  TDragObject *&DragObject);
+	void __fastcall lboxVideoCodecsAvailableDblClick(TObject *Sender);
+	void __fastcall lboxVideoCodecsEnabledDblClick(TObject *Sender);
+	void __fastcall btnVideoCodecEnableClick(TObject *Sender);
+	void __fastcall btnVideoCodecDisableClick(TObject *Sender);
+	void __fastcall lboxVideoCodecsEnabledDragDrop(TObject *Sender,
+		  TObject *Source, int X, int Y);
+	void __fastcall lboxVideoCodecsEnabledDragOver(TObject *Sender,
+		  TObject *Source, int X, int Y, TDragState State, bool &Accept);
+	void __fastcall lboxVideoCodecsEnabledStartDrag(TObject *Sender,
+		  TDragObject *&DragObject);
 private:	// User declarations
 	UaConf::Account& acc;
 	int audioCodecsEnabledDraggedIndex;
+	int videoCodecsEnabledDraggedIndex;
 	void LoadAudioCodecs(void);
 	void StoreAudioCodecs(void);
 	void AudioCodecEnableSelected(void);
 	void AudioCodecDisableSelected(void);
+	void LoadVideoCodecs(void);
+	void StoreVideoCodecs(void);
+	void VideoCodecEnableSelected(void);
+	void VideoCodecDisableSelected(void);
 	void SetExtraVisible(bool state);
 	void UpdateHeight(void);
 public:		// User declarations

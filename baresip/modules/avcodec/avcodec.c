@@ -203,11 +203,11 @@ static int module_init(void)
 		vidcodec_register(&h264_1);
 	}
 	if (avcodec_h264enc) {
-		DEBUG_WARNING("avcodec: using H.264 encoder '%s' -- %s\n",
+		DEBUG_INFO("avcodec: using H.264 encoder '%s' -- %s\n",
 			 avcodec_h264enc->name, avcodec_h264enc->long_name);
 	}
 	if (avcodec_h264dec) {
-		DEBUG_WARNING("avcodec: using H.264 decoder '%s' -- %s\n",
+		DEBUG_INFO("avcodec: using H.264 decoder '%s' -- %s\n",
 		     avcodec_h264dec->name, avcodec_h264dec->long_name);
 	}
 

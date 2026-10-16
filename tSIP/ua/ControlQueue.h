@@ -47,7 +47,7 @@ public:
 	void StartRing(unsigned int callUid, AnsiString wavFile);
 	void PlayStop(unsigned int callUid);
 	void StartRing2(AnsiString wavFile);
-	void Record(unsigned int callUid, AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate);
+	void Record(unsigned int callUid, AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate, bool forceStereo);
 	void RecordPause(unsigned int callUid);
 	/** \brief Start transmitting RTP to specified targee
 		\param target address IP + port

@@ -45,8 +45,6 @@ __published:	// IDE-managed Components
 	TLabel *lblAccount;
 	TComboBox *cbAccount;
 	TButton *btnRemoveAccount;
-	TLabel *lblVideoCodecsAccount;
-	TComboBox *cbVideoCodecsAccount;
 	TScrollBox *scrbAccounts;
 	TCheckBox *chbLogMessages;
 	TTabSheet *tsCalls;
@@ -155,6 +153,9 @@ __published:	// IDE-managed Components
 	TEdit *edSoundInputWave;
 	TCheckBox *chbSingleInstance;
 	TCheckBox *chbAnswerOnEventTalk;
+	TPanel *pnlSelector;
+	TLabel *lblFilter;
+	TEdit *edFilter;
 	TTreeView *tvSelector;
 	TTabSheet *tsNetwork;
 	TLabel *lblLocalAddress;
@@ -335,7 +336,6 @@ __published:	// IDE-managed Components
 	TEdit *edFrmMainCustomApplicationTitle;
 	TEdit *edFrmMainCustomCaption;
 	TTabSheet *tsUaConfOpus;
-	TCheckBox *chbLogAubuf;
 	TLabel *lblContactOpenFile;
 	TCheckBox *chbContactOpenFileOnIncoming;
 	TCheckBox *chbContactOpenFileOnOutgoing;
@@ -391,6 +391,8 @@ __published:	// IDE-managed Components
 	TCheckBox *chbRecordingVideoRaw;
 	TLabel *lblRecordingVideoFormat;
 	TComboBox *cbRecordingVideoFormat;
+	TCheckBox *chbRecordingOpusForceStereo;
+	TLabel *lblRecordingOpusForceStereo;
 	TCheckBox *chbTrayNotifierDoNotChangePosition;
 	TCheckBox *chbAcceptCommandLineScript;
 	TCheckBox *chbSpeedDialUseGrid;
@@ -490,15 +492,6 @@ __published:	// IDE-managed Components
 	TEdit *edAudioTxGateAttackMs;
 	TEdit *edAudioTxGateHoldMs;
 	TEdit *edAudioTxGateCloseThreshold;
-	TTabSheet *tsVideoCodecs;
-	TLabel *lblVideoCodecsAvailable;
-	TLabel *lblVideoCodecsEnabled;
-	TListBox *lboxVideoCodecsAvailable;
-	TButton *btnVideoCodecEnable;
-	TButton *btnVideoCodecDisable;
-	TListBox *lboxVideoCodecsEnabled;
-	TLabel *lblVideoCodecsInfo;
-	TLabel *lblVideoCodecsInfo2;
 	TTabSheet *tsVideo;
 	TTrackBar *trbarSoundAlertVolume;
 	TLabel *lblSoundAlertVolume;
@@ -574,7 +567,6 @@ __published:	// IDE-managed Components
 	void __fastcall btnRemoveAccountClick(TObject *Sender);
 	void __fastcall cbAccountChange(TObject *Sender);
 	void __fastcall cbAccountDropDown(TObject *Sender);
-	void __fastcall cbVideoCodecsAccountChange(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 	void __fastcall cbSoundInputModChange(TObject *Sender);
 	void __fastcall cbSoundOutputModChange(TObject *Sender);
@@ -587,6 +579,9 @@ __published:	// IDE-managed Components
 	void __fastcall btnSelectCustomRecDirClick(TObject *Sender);
 	void __fastcall btnSelectWaveFileClick(TObject *Sender);
 	void __fastcall tvSelectorChange(TObject *Sender, TTreeNode *Node);
+	void __fastcall edFilterChange(TObject *Sender);
+	void __fastcall tvSelectorCustomDrawItem(TCustomTreeView *Sender, TTreeNode *Node,
+		TCustomDrawState State, bool &DefaultDraw);
 	void __fastcall btnSelectImageClick(TObject *Sender);
 	void __fastcall chbAudioPreprocessingTxEnabledClick(TObject *Sender);
 	void __fastcall chbSipCompactHeadersRfc3261Click(TObject *Sender);
@@ -599,26 +594,24 @@ __published:	// IDE-managed Components
 	void __fastcall btnSelectContactsFileClick(TObject *Sender);
 	void __fastcall btnMessagesSelectRingClick(TObject *Sender);
 	void __fastcall btnSelectTlsClick(TObject *Sender);
-	void __fastcall lboxVideoCodecsAvailableDblClick(TObject *Sender);
-	void __fastcall lboxVideoCodecsEnabledDblClick(TObject *Sender);
-	void __fastcall btnVideoCodecEnableClick(TObject *Sender);
-	void __fastcall btnVideoCodecDisableClick(TObject *Sender);
-	void __fastcall lboxVideoCodecsEnabledStartDrag(TObject *Sender,
-          TDragObject *&DragObject);
-	void __fastcall lboxVideoCodecsEnabledDragDrop(TObject *Sender,
-          TObject *Source, int X, int Y);
-	void __fastcall lboxVideoCodecsEnabledDragOver(TObject *Sender,
-          TObject *Source, int X, int Y, TDragState State, bool &Accept);
 private:	// User declarations
+	/** settings filter: pages with matching name or control caption are painted yellow in the tree */
+	void ApplySettingsFilter(void);
+	void CollectMatchingControls(TWinControl *parent, const AnsiString &text, std::vector<TControl*> &out);
+	void ClearFilterHighlights(void);
+	struct FilterHighlight {
+		TControl *ctrl;
+		TColor color;
+		bool transparent;
+		TFontStyles style;
+	};
+	std::vector<FilterHighlight> filterHighlights;
+	std::vector<TTabSheet*> filterMatchedPages;
 	std::vector<TfrmAccount*> frmAccountVector;
 	void CreateAccountFrames(int selectedAccountId);
 	void DeleteAccountFrames(void);
 	void UpdateAccountLists(void);
 	void ShowAccountFrame(int accountId);
-	int codecsAccountId;	///< account which codecs are currently displayed
-	void LoadCodecLists(int accountId);
-	void StoreCodecLists(int accountId);
-	void SelectCodecsAccount(int accountId);
 	/** Account ids of programmable buttons (copy, index = button id), modified when account is
 		removed and written to buttons configuration on Apply */
 	std::vector<int> btnAccountIds;
@@ -634,8 +627,6 @@ private:	// User declarations
 	TfrmVideoConf *frmVideoConf;
 	TTabSheet *lastTab;
 	void AudioPreprocessingUpdate(void);
-	void VideoCodecEnableSelected(void);
-	void VideoCodecDisableSelected(void);
 	void UpdateNetworkInterface(void);
 	TTreeNode* CreatePagesNode(TTreeNode *parent, TTabSheet *tab);
 	void CreatePages(void);

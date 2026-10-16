@@ -7,9 +7,11 @@
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
+#include <ExtCtrls.hpp>
+#include <Dialogs.hpp>
 //---------------------------------------------------------------------------
 
-struct DialpadConf;
+#include "DialpadConf.h"
 
 class TfrmDialpadConf : public TForm
 {
@@ -66,6 +68,15 @@ __published:	// IDE-managed Components
 	TEdit *edSpeakerVolumeResetBtnHeight;
 private:	// User declarations
 	DialpadConf *cfg;
+	// volume slider colors, created in code (no IDE components)
+	TLabel *lblMeterColors[DialpadConf::MC_CNT];
+	TPanel *pnlMeterColors[DialpadConf::MC_CNT];
+	TButton *btnMeterColors[DialpadConf::MC_CNT];
+	TButton *btnMeterColorsDefault;
+	TColorDialog *dlgColor;
+	void CreateMeterColorControls(void);
+	void __fastcall btnMeterColorClick(TObject *Sender);
+	void __fastcall btnMeterColorsDefaultClick(TObject *Sender);
 public:		// User declarations
 	__fastcall TfrmDialpadConf(TComponent* Owner);
 	void SetCfg(DialpadConf *cfg);

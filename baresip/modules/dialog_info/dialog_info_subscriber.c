@@ -391,7 +391,7 @@ static int subscribe(struct dialog_info *dlg_info)
 	/* UA assigned to contact (account of the button), first UA by default */
 	ua = contact_ua(dlg_info->contact);
 	if (!ua) {
-		DEBUG_WARNING("dialog-info: no UA found\n");
+		DEBUG_INFO("dialog-info: no UA found\n");
 		return ENOENT;
 	}
 

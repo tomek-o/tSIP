@@ -5,7 +5,7 @@ object frmSettings: TfrmSettings
   BorderStyle = bsSingle
   Caption = 'Settings'
   ClientHeight = 533
-  ClientWidth = 719
+  ClientWidth = 720
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -23,17 +23,16 @@ object frmSettings: TfrmSettings
   object pnlBottom: TPanel
     Left = 0
     Top = 496
-    Width = 719
+    Width = 720
     Height = 37
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 2
-    ExplicitWidth = 700
     DesignSize = (
-      719
+      720
       37)
     object btnCancel: TButton
-      Left = 637
+      Left = 638
       Top = 6
       Width = 75
       Height = 25
@@ -41,10 +40,9 @@ object frmSettings: TfrmSettings
       Caption = 'Cancel'
       TabOrder = 1
       OnClick = btnCancelClick
-      ExplicitLeft = 618
     end
     object btnApply: TButton
-      Left = 556
+      Left = 557
       Top = 6
       Width = 75
       Height = 25
@@ -52,24 +50,20 @@ object frmSettings: TfrmSettings
       Caption = 'Apply'
       TabOrder = 0
       OnClick = btnApplyClick
-      ExplicitLeft = 537
     end
   end
   object pcGeneral: TPageControl
     Left = 142
     Top = 0
-    Width = 577
+    Width = 578
     Height = 496
-    ActivePage = tsAccount
+    ActivePage = tsRecording
     Align = alClient
     TabHeight = 10
     TabOrder = 1
     TabStop = False
-    ExplicitLeft = 140
-    ExplicitWidth = 579
     object tsGeneral: TTabSheet
       Caption = 'General'
-      ExplicitWidth = 583
       object lblGuiScaling: TLabel
         Left = 3
         Top = 214
@@ -224,7 +218,6 @@ object frmSettings: TfrmSettings
     object tsNetwork: TTabSheet
       Caption = 'Network'
       ImageIndex = 14
-      ExplicitWidth = 564
       object lblLocalAddress: TLabel
         Left = 3
         Top = 3
@@ -406,16 +399,14 @@ object frmSettings: TfrmSettings
     object tsAccount: TTabSheet
       Caption = 'SIP account, codecs'
       ImageIndex = 2
-      ExplicitWidth = 583
       object pnlAccountsBottom: TPanel
         Left = 0
         Top = 445
-        Width = 569
+        Width = 570
         Height = 31
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitWidth = 583
         object chbShowSettingsIfAnyAccountSettingsIsHidden: TCheckBox
           Left = 5
           Top = 8
@@ -428,12 +419,11 @@ object frmSettings: TfrmSettings
       object pnlAccountsTop: TPanel
         Left = 0
         Top = 0
-        Width = 569
+        Width = 570
         Height = 33
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 2
-        ExplicitWidth = 583
         object lblAccount: TLabel
           Left = 9
           Top = 10
@@ -474,17 +464,15 @@ object frmSettings: TfrmSettings
       object scrbAccounts: TScrollBox
         Left = 0
         Top = 33
-        Width = 569
+        Width = 570
         Height = 412
         Align = alClient
         TabOrder = 0
-        ExplicitWidth = 583
       end
     end
     object tsTls: TTabSheet
       Caption = 'TLS'
       ImageIndex = 25
-      ExplicitWidth = 583
       object lblTlsClientCertificate: TLabel
         Left = 5
         Top = 3
@@ -551,7 +539,6 @@ object frmSettings: TfrmSettings
     object tsMainWindow: TTabSheet
       Caption = 'Main window'
       ImageIndex = 23
-      ExplicitWidth = 583
       object lblMainWindowCollapsedSize: TLabel
         Left = 3
         Top = 3
@@ -925,12 +912,10 @@ object frmSettings: TfrmSettings
       Margins.Bottom = 0
       Caption = 'Dialpad'
       ImageIndex = 24
-      ExplicitWidth = 583
     end
     object tsSpeedDial: TTabSheet
       Caption = 'Speed Dial'
       ImageIndex = 12
-      ExplicitWidth = 583
       object lblSpeedDialBlfSettings: TLabel
         Left = 2
         Top = 56
@@ -1049,7 +1034,6 @@ object frmSettings: TfrmSettings
     object tsCalls: TTabSheet
       Caption = 'Calls'
       ImageIndex = 4
-      ExplicitWidth = 583
       object lblSipAutoAnswerCode: TLabel
         Left = 22
         Top = 29
@@ -1223,7 +1207,6 @@ object frmSettings: TfrmSettings
     object tsMessages: TTabSheet
       Caption = 'Messages'
       ImageIndex = 22
-      ExplicitWidth = 583
       object lblMessagesRing: TLabel
         Left = 3
         Top = 35
@@ -1307,7 +1290,6 @@ object frmSettings: TfrmSettings
     object tsDisplay: TTabSheet
       Caption = 'Display'
       ImageIndex = 15
-      ExplicitWidth = 583
       object chbUserOnlyClip: TCheckBox
         Left = 3
         Top = 3
@@ -1336,7 +1318,6 @@ object frmSettings: TfrmSettings
     object tsLocking: TTabSheet
       Caption = 'Locking'
       ImageIndex = 19
-      ExplicitWidth = 583
       object chbHideSettings: TCheckBox
         Left = 3
         Top = 3
@@ -1431,7 +1412,6 @@ object frmSettings: TfrmSettings
     object tsLockingSettingsPages: TTabSheet
       Caption = 'Settings pages'
       ImageIndex = 26
-      ExplicitWidth = 583
       object lblSettingsPagesToHide: TLabel
         Left = 3
         Top = 3
@@ -1454,7 +1434,6 @@ object frmSettings: TfrmSettings
     object tsBranding: TTabSheet
       Caption = 'Branding, bitmaps'
       ImageIndex = 20
-      ExplicitWidth = 583
       object lblMainIconFile: TLabel
         Left = 3
         Top = 6
@@ -1693,7 +1672,6 @@ object frmSettings: TfrmSettings
     object tsRing: TTabSheet
       Caption = 'Ring'
       ImageIndex = 8
-      ExplicitWidth = 583
       object lblRingDefault: TLabel
         Left = 5
         Top = 3
@@ -1913,7 +1891,6 @@ object frmSettings: TfrmSettings
     object tsAudioIO: TTabSheet
       Caption = 'Audio I/O'
       ImageIndex = 5
-      ExplicitWidth = 583
       object lblSoundInputModule: TLabel
         Left = 30
         Top = 20
@@ -2235,7 +2212,6 @@ object frmSettings: TfrmSettings
     object tsAudioProcessing: TTabSheet
       Caption = 'Audio Processing'
       ImageIndex = 6
-      ExplicitWidth = 583
       object lblAec: TLabel
         Left = 3
         Top = 7
@@ -2486,7 +2462,6 @@ object frmSettings: TfrmSettings
     object tsRecording: TTabSheet
       Caption = 'Recording'
       ImageIndex = 11
-      ExplicitWidth = 583
       object lblRecDirType: TLabel
         Left = 3
         Top = 37
@@ -2503,38 +2478,58 @@ object frmSettings: TfrmSettings
       end
       object lblRecordingMode: TLabel
         Left = 3
-        Top = 92
+        Top = 117
         Width = 93
         Height = 13
         Caption = 'Recording channels'
       end
       object lblRecordingStartMode: TLabel
         Left = 3
-        Top = 173
+        Top = 90
         Width = 53
         Height = 13
         Caption = 'Start mode'
       end
       object lblRecordedSide: TLabel
         Left = 3
-        Top = 200
+        Top = 143
         Width = 68
         Height = 13
         Caption = 'Recorded side'
       end
       object lblRecordingFileFormat: TLabel
         Left = 3
-        Top = 120
+        Top = 171
         Width = 100
         Height = 13
         Caption = 'Recording file format'
       end
       object lblRecordingBitrate: TLabel
         Left = 3
-        Top = 147
+        Top = 198
         Width = 142
         Height = 13
         Caption = 'Recording bitrate (Opus only)'
+      end
+      object lblRecordingVideoFormat: TLabel
+        Left = 3
+        Top = 371
+        Width = 82
+        Height = 13
+        Caption = 'Video file format:'
+      end
+      object lblRecordingOpusForceStereo: TLabel
+        Left = 3
+        Top = 237
+        Width = 534
+        Height = 26
+        AutoSize = False
+        Caption = 
+          'Opus encoder switches stereo to mono below about 30 kbit/s to sa' +
+          've bandwidth. This keeps 2 channels (both parties) at the cost o' +
+          'f more bandwidth. Applies to Opus/OGG recordings with 2 channels' +
+          '.'
+        WordWrap = True
       end
       object chbRecordingEnabled: TCheckBox
         Left = 3
@@ -2577,13 +2572,13 @@ object frmSettings: TfrmSettings
       end
       object cbRecordingChannels: TComboBox
         Left = 167
-        Top = 89
+        Top = 114
         Width = 274
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 5
+        TabOrder = 6
         Text = 'mono (both sides mixed or one side only)'
         OnChange = cbRecordingChannelsChange
         Items.Strings = (
@@ -2592,13 +2587,13 @@ object frmSettings: TfrmSettings
       end
       object cbRecordingStart: TComboBox
         Left = 167
-        Top = 170
+        Top = 87
         Width = 274
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 1
-        TabOrder = 8
+        TabOrder = 5
         Text = 'automatic - call confirmed state'
         Items.Strings = (
           'manual (Lua script or button)'
@@ -2607,48 +2602,51 @@ object frmSettings: TfrmSettings
       end
       object cbRecordedSide: TComboBox
         Left = 167
-        Top = 197
+        Top = 140
         Width = 274
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 9
-        Text = 'both local and remote (mixed)'
+        TabOrder = 7
+        Text = 'both parties mixed into one channel'
         OnChange = cbRecDirTypeChange
         Items.Strings = (
-          'both local and remote (mixed)'
+          'both parties mixed into one channel'
           'local party only (your microphone)'
           'remote party only')
       end
       object chbRecordingVideoRaw: TCheckBox
-        Left = 2
-        Top = 258
+        Left = 3
+        Top = 346
         Width = 534
         Height = 17
-        Caption = 'Record received video of the call (raw H.264, saved next to audio recording)'
-        TabOrder = 11
-      end
-      object lblRecordingVideoFormat: TLabel
-        Left = 2
-        Top = 283
-        Width = 91
-        Height = 13
-        Caption = 'Video file format:'
+        Caption = 
+          'Record received video of the call (raw H.264, saved next to audi' +
+          'o recording)'
+        TabOrder = 12
       end
       object cbRecordingVideoFormat: TComboBox
-        Left = 167
-        Top = 280
+        Left = 168
+        Top = 368
         Width = 274
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 12
+        TabOrder = 13
         Text = 'H.264 raw (.h264)'
         Items.Strings = (
           'H.264 raw (.h264)'
           'MP4 (.mp4)')
+      end
+      object chbRecordingOpusForceStereo: TCheckBox
+        Left = 3
+        Top = 217
+        Width = 534
+        Height = 17
+        Caption = 'Keep stereo in Opus recordings at low bitrates'
+        TabOrder = 10
       end
       object btnOpenRecordingFolder: TButton
         Left = 447
@@ -2660,24 +2658,24 @@ object frmSettings: TfrmSettings
         OnClick = btnOpenRecordingFolderClick
       end
       object chbRecordingNoNumberB64Encoding: TCheckBox
-        Left = 2
-        Top = 232
+        Left = 3
+        Top = 296
         Width = 534
         Height = 17
         Caption = 
           'Do not encode number/URI with filesystem-safe base64; not compat' +
           'ible with RecordViewer.exe'
-        TabOrder = 10
+        TabOrder = 11
       end
       object cbRecordingFileFormat: TComboBox
         Left = 167
-        Top = 117
+        Top = 168
         Width = 274
         Height = 21
         Style = csDropDownList
         ItemHeight = 13
         ItemIndex = 0
-        TabOrder = 6
+        TabOrder = 8
         Text = 'WAVE'
         OnChange = cbRecordingChannelsChange
         Items.Strings = (
@@ -2685,117 +2683,20 @@ object frmSettings: TfrmSettings
           'Opus/OGG')
       end
       object edRecordingBitrate: TEdit
-        Left = 168
-        Top = 144
+        Left = 167
+        Top = 195
         Width = 121
         Height = 21
-        TabOrder = 7
+        TabOrder = 9
       end
     end
     object tsVideo: TTabSheet
       Caption = 'Video'
       ImageIndex = 28
-      ExplicitWidth = 583
-    end
-    object tsVideoCodecs: TTabSheet
-      Caption = 'Video codecs'
-      ImageIndex = 27
-      ExplicitWidth = 583
-      object lblVideoCodecsAccount: TLabel
-        Left = 15
-        Top = 11
-        Width = 39
-        Height = 13
-        Caption = 'Account'
-      end
-      object lblVideoCodecsAvailable: TLabel
-        Left = 15
-        Top = 37
-        Width = 108
-        Height = 13
-        Caption = 'Available video codecs'
-      end
-      object lblVideoCodecsEnabled: TLabel
-        Left = 207
-        Top = 37
-        Width = 151
-        Height = 13
-        Caption = 'Enabled, in order of preference'
-      end
-      object lblVideoCodecsInfo: TLabel
-        Left = 15
-        Top = 384
-        Width = 218
-        Height = 13
-        Caption = 'Double-click codec to move between the lists.'
-      end
-      object lblVideoCodecsInfo2: TLabel
-        Left = 15
-        Top = 403
-        Width = 307
-        Height = 13
-        Caption = 
-          'Drag-and-drop items on enabled codecs list to reorder priorities' +
-          '.'
-      end
-      object cbVideoCodecsAccount: TComboBox
-        Left = 72
-        Top = 8
-        Width = 300
-        Height = 21
-        Style = csDropDownList
-        ItemHeight = 13
-        TabOrder = 4
-        OnChange = cbVideoCodecsAccountChange
-        OnDropDown = cbAccountDropDown
-      end
-      object lboxVideoCodecsAvailable: TListBox
-        Left = 15
-        Top = 56
-        Width = 150
-        Height = 313
-        ItemHeight = 13
-        TabOrder = 0
-        OnDblClick = lboxVideoCodecsAvailableDblClick
-      end
-      object btnVideoCodecEnable: TButton
-        Left = 171
-        Top = 161
-        Width = 30
-        Height = 25
-        Hint = 'Enable selected codec'
-        Caption = '->'
-        TabOrder = 1
-        OnClick = btnVideoCodecEnableClick
-      end
-      object btnVideoCodecDisable: TButton
-        Left = 171
-        Top = 224
-        Width = 30
-        Height = 25
-        Hint = 'Disable selected codec'
-        Caption = '<-'
-        TabOrder = 2
-        OnClick = btnVideoCodecDisableClick
-      end
-      object lboxVideoCodecsEnabled: TListBox
-        Left = 207
-        Top = 56
-        Width = 150
-        Height = 313
-        DragMode = dmAutomatic
-        ItemHeight = 13
-        TabOrder = 3
-        OnDblClick = lboxVideoCodecsEnabledDblClick
-        OnDragDrop = lboxVideoCodecsEnabledDragDrop
-        OnDragOver = lboxVideoCodecsEnabledDragOver
-        OnStartDrag = lboxVideoCodecsEnabledStartDrag
-      end
     end
     object tsIntegration: TTabSheet
       Caption = 'Integration'
       ImageIndex = 7
-      ExplicitWidth = 583
       object lblProtocolName: TLabel
         Left = 26
         Top = 22
@@ -2922,12 +2823,10 @@ object frmSettings: TfrmSettings
     object tsHotkeys: TTabSheet
       Caption = 'Hotkeys'
       ImageIndex = 9
-      ExplicitWidth = 583
     end
     object tsContacts: TTabSheet
       Caption = 'Contacts'
       ImageIndex = 9
-      ExplicitWidth = 583
       object lblContactPopup: TLabel
         Left = 2
         Top = 87
@@ -3081,7 +2980,6 @@ object frmSettings: TfrmSettings
     object tsHistory: TTabSheet
       Caption = 'History'
       ImageIndex = 16
-      ExplicitWidth = 583
       object lblHistoryMaxEntries: TLabel
         Left = 3
         Top = 249
@@ -3201,12 +3099,10 @@ object frmSettings: TfrmSettings
     object tsPhones: TTabSheet
       Caption = 'Plugins / phones'
       ImageIndex = 13
-      ExplicitWidth = 583
     end
     object tsTrayNotifier: TTabSheet
       Caption = 'Tray Notifier'
       ImageIndex = 16
-      ExplicitWidth = 583
       object lblTrayNotifierGuiScaling: TLabel
         Left = 3
         Top = 71
@@ -3538,7 +3434,6 @@ object frmSettings: TfrmSettings
     object tsScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 18
-      ExplicitWidth = 583
       object lblScriptOnCallStateFile: TLabel
         Left = 5
         Top = 59
@@ -4578,7 +4473,6 @@ object frmSettings: TfrmSettings
     object tsLogging: TTabSheet
       Caption = 'Logging'
       ImageIndex = 1
-      ExplicitWidth = 583
       object chbLogMessages: TCheckBox
         Left = 5
         Top = 200
@@ -4586,14 +4480,6 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Log received and transmitted SIP messages'
         TabOrder = 0
-      end
-      object chbLogAubuf: TCheckBox
-        Left = 5
-        Top = 246
-        Width = 325
-        Height = 17
-        Caption = 'Logging for audio buffers'
-        TabOrder = 2
       end
       object chbLogMessagesOnlyFirstLines: TCheckBox
         Left = 21
@@ -4607,12 +4493,10 @@ object frmSettings: TfrmSettings
     object tsUaConfOpus: TTabSheet
       Caption = 'Opus'
       ImageIndex = 21
-      ExplicitWidth = 583
     end
     object tsMultipleCalls: TTabSheet
       Caption = 'Multi-call'
       ImageIndex = 29
-      ExplicitWidth = 583
       object lblMultipleCalls: TLabel
         Left = 3
         Top = 3
@@ -4681,24 +4565,61 @@ object frmSettings: TfrmSettings
       end
     end
   end
-  object tvSelector: TTreeView
+  object pnlSelector: TPanel
     Left = 0
     Top = 0
     Width = 142
     Height = 496
     Align = alLeft
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -12
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    HideSelection = False
-    Indent = 19
-    ParentFont = False
-    ReadOnly = True
-    RowSelect = True
+    BevelOuter = bvNone
     TabOrder = 0
-    OnChange = tvSelectorChange
+    object pnlFilterRow: TPanel
+      Left = 0
+      Top = 0
+      Width = 142
+      Height = 21
+      Align = alTop
+      BevelOuter = bvNone
+      TabOrder = 0
+      object lblFilter: TLabel
+        Left = 8
+        Top = 3
+        Width = 24
+        Height = 13
+        Align = alCustom
+        Caption = 'Filter'
+        Layout = tlCenter
+      end
+      object edFilter: TEdit
+        Left = 40
+        Top = 0
+        Width = 102
+        Height = 21
+        Align = alCustom
+        TabOrder = 0
+        OnChange = edFilterChange
+      end
+    end
+    object tvSelector: TTreeView
+      Left = 0
+      Top = 21
+      Width = 142
+      Height = 475
+      Align = alClient
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -12
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      HideSelection = False
+      Indent = 19
+      ParentFont = False
+      ReadOnly = True
+      RowSelect = True
+      TabOrder = 1
+      OnChange = tvSelectorChange
+      OnCustomDrawItem = tvSelectorCustomDrawItem
+    end
   end
   object dlgOpenDeviceFile: TOpenDialog
     Filter = 'WAVE files (*.wav)|*.wav|All files|*.*'

@@ -1,12 +1,12 @@
 //---------------------------------------------------------------------------
 
-#ifndef VideoRawDumpH
-#define VideoRawDumpH
-//---------------------------------------------------------------------------
-
 #include "baresip_base_config.h"
 
 #ifdef USE_VIDEO
+
+#ifndef VideoRawDumpH
+#define VideoRawDumpH
+//---------------------------------------------------------------------------
 
 #include <System.hpp>
 
@@ -28,6 +28,11 @@ namespace VideoRawDump
 	/** \brief True if the FFmpeg libraries in use have the MP4 output format */
 	bool IsMp4Supported(void);
 
+	/** \brief Format to use for a configured value: MP4 falls back to H.264 raw
+		when the FFmpeg libraries do not support it
+	*/
+	VideoRawDumpFormat EffectiveFormat(unsigned int configured);
+
 	/** \brief Start writing to file (replaces a previous file)
 		\param dec decoder state of the call's video stream (video_dec_state()), must not be NULL
 		\param callUid call of the video stream, for StopForCall()
@@ -43,9 +48,12 @@ namespace VideoRawDump
 	/** \brief Stop writing if the recorded stream belongs to call (call ended) */
 	void StopForCall(unsigned int callUid);
 
+	/** Detach decoder hook and close output; call on application exit */
+	void Shutdown(void);
+
 	bool IsActive(void);
 }
 
 #endif
 
-#endif
+#endif	// USE_VIDEO

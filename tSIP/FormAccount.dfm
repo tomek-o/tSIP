@@ -4,7 +4,7 @@ object frmAccount: TfrmAccount
   Align = alTop
   BorderStyle = bsNone
   Caption = 'Account, codecs'
-  ClientHeight = 581
+  ClientHeight = 637
   ClientWidth = 605
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -24,7 +24,6 @@ object frmAccount: TfrmAccount
     BevelOuter = bvNone
     ParentBackground = False
     TabOrder = 0
-    ExplicitWidth = 532
     object lblName: TLabel
       Left = 9
       Top = 30
@@ -247,7 +246,6 @@ object frmAccount: TfrmAccount
     BevelOuter = bvNone
     ParentBackground = False
     TabOrder = 1
-    ExplicitWidth = 532
     object btnExtra: TSpeedButton
       Left = 7
       Top = 3
@@ -261,7 +259,7 @@ object frmAccount: TfrmAccount
     object lblExtra: TLabel
       Left = 156
       Top = 9
-      Width = 311
+      Width = 241
       Height = 13
       Caption = '(typically can be left empty or with default values)'
     end
@@ -276,7 +274,6 @@ object frmAccount: TfrmAccount
     ParentBackground = False
     TabOrder = 2
     Visible = False
-    ExplicitWidth = 532
     object lblDisplayName: TLabel
       Left = 8
       Top = 5
@@ -497,47 +494,60 @@ object frmAccount: TfrmAccount
     Left = 0
     Top = 393
     Width = 605
-    Height = 196
+    Height = 236
     Align = alTop
     BevelOuter = bvNone
     ParentBackground = False
     TabOrder = 3
-    ExplicitWidth = 532
     object lblAudioCodecsAvailable: TLabel
       Left = 9
-      Top = 6
+      Top = 22
       Width = 108
       Height = 13
       Caption = 'Available audio codecs'
     end
     object lblAudioCodecsEnabled: TLabel
       Left = 200
-      Top = 6
+      Top = 22
       Width = 151
       Height = 13
       Caption = 'Enabled, in order of preference'
     end
     object lblCodecsInfo: TLabel
       Left = 9
-      Top = 178
-      Width = 419
+      Top = 3
+      Width = 460
       Height = 13
       Caption = 
-        'Double-click codec to move between the lists, drag-and-drop on e' +
-        'nabled list to reorder.'
+        'Codecs: double-click codec to move between the lists, drag-and-d' +
+        'rop on enabled list to reorder.'
+    end
+    object lblVideoCodecsAvailable: TLabel
+      Left = 9
+      Top = 126
+      Width = 108
+      Height = 13
+      Caption = 'Available video codecs'
+    end
+    object lblVideoCodecsEnabled: TLabel
+      Left = 200
+      Top = 126
+      Width = 138
+      Height = 13
+      Caption = 'Enabled, in order preference'
     end
     object lboxAudioCodecsAvailable: TListBox
       Left = 9
-      Top = 22
+      Top = 38
       Width = 150
-      Height = 150
+      Height = 80
       ItemHeight = 13
       TabOrder = 0
       OnDblClick = lboxAudioCodecsAvailableDblClick
     end
     object btnAudioCodecEnable: TButton
       Left = 164
-      Top = 66
+      Top = 52
       Width = 30
       Height = 25
       Hint = 'Enable selected codec'
@@ -549,7 +559,7 @@ object frmAccount: TfrmAccount
     end
     object btnAudioCodecDisable: TButton
       Left = 164
-      Top = 104
+      Top = 82
       Width = 30
       Height = 25
       Hint = 'Disable selected codec'
@@ -561,9 +571,9 @@ object frmAccount: TfrmAccount
     end
     object lboxAudioCodecsEnabled: TListBox
       Left = 200
-      Top = 22
+      Top = 38
       Width = 150
-      Height = 150
+      Height = 80
       DragMode = dmAutomatic
       ItemHeight = 13
       TabOrder = 3
@@ -571,6 +581,52 @@ object frmAccount: TfrmAccount
       OnDragDrop = lboxAudioCodecsEnabledDragDrop
       OnDragOver = lboxAudioCodecsEnabledDragOver
       OnStartDrag = lboxAudioCodecsEnabledStartDrag
+    end
+    object lboxVideoCodecsAvailable: TListBox
+      Left = 9
+      Top = 142
+      Width = 150
+      Height = 80
+      ItemHeight = 13
+      TabOrder = 4
+      OnDblClick = lboxVideoCodecsAvailableDblClick
+    end
+    object btnVideoCodecEnable: TButton
+      Left = 164
+      Top = 156
+      Width = 30
+      Height = 25
+      Hint = 'Enable selected codec'
+      Caption = '->'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+      OnClick = btnVideoCodecEnableClick
+    end
+    object btnVideoCodecDisable: TButton
+      Left = 164
+      Top = 186
+      Width = 30
+      Height = 25
+      Hint = 'Disable selected codec'
+      Caption = '<-'
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 6
+      OnClick = btnVideoCodecDisableClick
+    end
+    object lboxVideoCodecsEnabled: TListBox
+      Left = 200
+      Top = 142
+      Width = 150
+      Height = 80
+      DragMode = dmAutomatic
+      ItemHeight = 13
+      TabOrder = 7
+      OnDblClick = lboxVideoCodecsEnabledDblClick
+      OnDragDrop = lboxVideoCodecsEnabledDragDrop
+      OnDragOver = lboxVideoCodecsEnabledDragOver
+      OnStartDrag = lboxVideoCodecsEnabledStartDrag
     end
   end
 end

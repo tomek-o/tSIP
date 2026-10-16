@@ -605,6 +605,11 @@ int re_vfprintf(FILE *stream, const char *fmt, va_list ap)
  */
 int re_vprintf(const char *fmt, va_list ap)
 {
+	return re_vprintf_level(1, fmt, ap);
+}
+
+int re_vprintf_level(int level, const char *fmt, va_list ap)
+{
 	char buf[4096] = {0}; /* TODO: avoid static, use print_handler_dyn ? */
 	struct pl pl;
 	size_t n;
@@ -619,7 +624,7 @@ int re_vprintf(const char *fmt, va_list ap)
 
 	if (on_print_fn)
 	{
-		on_print_fn(1, buf);
+		on_print_fn(level, buf);
 	}
 	else
 	{
@@ -759,6 +764,18 @@ int re_printf(const char *fmt, ...)
 
 	va_start(ap, fmt);
 	n = re_vprintf(fmt, ap);
+	va_end(ap);
+
+	return n;
+}
+
+int re_printf_level(int level, const char *fmt, ...)
+{
+	va_list ap;
+	int n;
+
+	va_start(ap, fmt);
+	n = re_vprintf_level(level, fmt, ap);
 	va_end(ap);
 
 	return n;

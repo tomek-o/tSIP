@@ -207,7 +207,7 @@ static int subscribe(struct presence *pres)
 	/* UA assigned to contact (account of the button), first UA by default */
 	ua = contact_ua(pres->contact);
 	if (!ua) {
-		DEBUG_WARNING("presence: no UA found\n");
+		DEBUG_INFO("presence: no UA found\n");
 		return ENOENT;
 	}
 

@@ -1,3 +1,5 @@
+#include "baresip_base_config.h"
+
 #ifdef USE_VIDEO
 
 //---------------------------------------------------------------------------
@@ -97,6 +99,13 @@ bool VideoRawDump::IsMp4Supported(void)
 	return h264_mp4_supported();
 }
 
+VideoRawDumpFormat VideoRawDump::EffectiveFormat(unsigned int configured)
+{
+	if (configured == VRD_MP4 && IsMp4Supported())
+		return VRD_MP4;
+	return VRD_H264_RAW;
+}
+
 void VideoRawDump::Init(void)
 {
 	InitializeCriticalSection(&cs);
@@ -170,6 +179,14 @@ void VideoRawDump::StopForCall(unsigned int callUid)
 		LOG("Video raw dump: stopped (call ended)\n");
 	}
 	LeaveCriticalSection(&cs);
+}
+
+void VideoRawDump::Shutdown(void)
+{
+	// no new access units reach the dump after this; the critical section
+	// is kept (the decode thread may still be leaving OnAccessUnit)
+	avcodec_h264_set_au_dump(NULL, NULL);
+	Stop();
 }
 
 bool VideoRawDump::IsActive(void)

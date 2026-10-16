@@ -228,7 +228,6 @@ public:
 
 	bool logMessages;
 	bool logMessagesOnlyFirstLine;
-	bool logAubuf;
 
 	struct AudioCfg {
 		std::string mod;       	/**< Audio source module            */
@@ -336,6 +335,7 @@ public:
 		bool noNumberB64Encoding;		///< do not encode number/URI with filesystem-safe base64
 		bool videoRawRemote;			///< also record received video of call when audio recording starts
 		unsigned int videoFormat;		///< video file format, VideoRawDumpFormat: 0 = H.264 raw (.h264), 1 = MP4 (.mp4)
+		bool opusForceStereo;			///< Opus, stereo: keep 2 channels also at low bitrates (libopus otherwise mixes to mono below about 30 kbit/s)
 		RecordingCfg(void):
 			enabled(false),
 			recDir(RecDirRelative),
@@ -346,7 +346,8 @@ public:
 			recStart(RecStartCallConfirmed),
 			noNumberB64Encoding(false),
 			videoRawRemote(false),
-			videoFormat(0)
+			videoFormat(0),
+			opusForceStereo(false)
 		{}
 		/*	fileFormat/bitrate deliberately not compared: this gates UA restart and
 			both are read when a recording starts (FormMain.cpp, UA->Record(...)).
@@ -360,7 +361,8 @@ public:
 				recStart == right.recStart &&
 				noNumberB64Encoding == right.noNumberB64Encoding &&
 				videoRawRemote == right.videoRawRemote &&
-				videoFormat == right.videoFormat
+				videoFormat == right.videoFormat &&
+				opusForceStereo == right.opusForceStereo
 				;
 		}
 		bool operator!=(const RecordingCfg& right) const {
@@ -776,7 +778,6 @@ public:
 		disableUa(false),
 		logMessages(false),
 		logMessagesOnlyFirstLine(false),
-		logAubuf(false),
 		startAudioSourceAtCallStart(false),
 		loopRingWithoutSilence(false),
 		aec(AEC_NONE),
