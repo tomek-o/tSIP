@@ -103,6 +103,9 @@ __fastcall TfrmLog::TfrmLog(TComponent* Owner)
 	lvLog->OnResize = lvLogResize;
 	lvLogResize(lvLog);
 	lvLog->OnKeyDown = lvLogKeyDown;
+	lvLog->Font->Name = appSettings.logging.consoleFont.name;
+	lvLog->Font->Size = appSettings.logging.consoleFont.size;
+	lvLog->Font->Style = appSettings.logging.consoleFont.style;
 	chbListView->Checked = listMode;
 	lvLog->Visible = listMode;
 	redMain->Visible = !listMode;
@@ -530,6 +533,9 @@ void TfrmLog::UpdateUi(void)
 	redMain->Font->Name = appSettings.logging.consoleFont.name;
 	redMain->Font->Size = appSettings.logging.consoleFont.size;
 	redMain->Font->Style = appSettings.logging.consoleFont.style;
+	lvLog->Font->Name = appSettings.logging.consoleFont.name;
+	lvLog->Font->Size = appSettings.logging.consoleFont.size;
+	lvLog->Font->Style = appSettings.logging.consoleFont.style;
 	RenderAll();
 }
 
