@@ -93,15 +93,20 @@ static void exit_handler(void *arg)
 void ua_printf(const struct ua *ua, const char *fmt, ...)
 {
 	va_list ap;
+	char *msg = NULL;
+	char *line = NULL;
 
 	if (!ua)
 		return;
 
 	va_start(ap, fmt);
-	(void)re_printf("%r@%r: ",
-			 &ua->acc->luri.user, &ua->acc->luri.host);
-	(void)re_vprintf(fmt, ap);
+	(void)re_vsdprintf(&msg, fmt, ap);
 	va_end(ap);
+	/* one complete line in one call: the log stores each print call as one entry */
+	(void)re_sdprintf(&line, "%r@%r: %s", &ua->acc->luri.user, &ua->acc->luri.host, msg);
+	(void)re_printf("%s", line);
+	mem_deref(line);
+	mem_deref(msg);
 }
 
 

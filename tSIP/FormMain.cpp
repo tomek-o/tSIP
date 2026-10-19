@@ -33,6 +33,7 @@
 #include "Log.h"
 #include "UaMain.h"
 #include "UaGlobals.h"
+#include "FormPublish.h"
 #include "Calls.h"
 #include "UaCustomRequests.h"
 #include "ControlQueue.h"
@@ -193,6 +194,20 @@ namespace {
 	void SetStatus(AnsiString text)
 	{
 		SetAppStatus("FormMain", 0, text);
+	}
+
+	// the selfview window is put on a programmable button only when picture-in-picture is off
+	void* GetSelfviewParentHandle(void)
+	{
+		if (appSettings.video.enabled && appSettings.uaConf.video.selfview.enabled &&
+			!appSettings.uaConf.video.selfview.pip &&
+			appSettings.uaConf.video.selfview.displayParentType == 1)
+		{
+			TProgrammableButton *btn = buttons.GetBtn(appSettings.uaConf.video.selfview.displayParentId);
+			if (btn)
+				return btn->Handle;
+		}
+		return NULL;
 	}
 
 	void* GetDisplayParentHandle(void)
@@ -666,6 +681,12 @@ void TfrmMain::UpdateAutostart(void)
 
 void TfrmMain::UpdateSettings(const Settings &prev)
 {
+	// accounts that were disabled: their published presence is removed first
+	for (unsigned int i = 0; i < prev.uaConf.accounts.size() && i < appSettings.uaConf.accounts.size(); i++)
+	{
+		if (prev.uaConf.accounts[i].enabled && !appSettings.uaConf.accounts[i].enabled)
+			PublishWithdraw(i);
+	}
 	UpdateRegistrationStatus();
 	UpdateAccountButtons();
 	UpdateSize();
@@ -893,6 +914,9 @@ int TfrmMain::UpdateButtonFromJson(unsigned int btnId, AnsiString json)
 
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
+	// presence is unpublished before the user agent stops; the short wait lets the request go out
+	if (PublishWithdrawAll())
+		Sleep(500);
 #ifdef USE_VIDEO
 	// before CLog is destroyed: Shutdown logs when it stops a running dump
 	VideoRawDump::Shutdown();	// closes a running raw dump file
@@ -1205,6 +1229,7 @@ int TfrmMain::MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigne
 		}
 	}
 
+	UaSetSelfviewParentHandle(GetSelfviewParentHandle());
 	call.displayParentHandle = GetDisplayParentHandle();
 	AnsiString headers = appSettings.Calls.extraHeaderLines;
 	if (call.extraHeaderLines != "")
@@ -1255,6 +1280,7 @@ void TfrmMain::Answer(unsigned int callUid)
 		return;
 	if (call->incoming)
 	{
+		UaSetSelfviewParentHandle(GetSelfviewParentHandle());
 		call->displayParentHandle = GetDisplayParentHandle();
 		UA->Answer(callUid, "", "", appSettings.video.enabled, call->displayParentHandle);
 		if (appSettings.frmMain.bShowWhenAnsweringCall)
@@ -1769,6 +1795,7 @@ void TfrmMain::FocusCbCallUri(void)
 
 void __fastcall TfrmMain::tmrCallbackPollTimer(TObject *Sender)
 {
+	PublishRefreshDue();
 	// level meters run only while there is a call (see tmrLevelTimer)
 	if (Calls::Count() > 0)
 		tmrLevel->Enabled = true;
@@ -3585,7 +3612,6 @@ void TfrmMain::UpdateLogConfig(void)
 		log->SetFile("");
 	log->SetFlush(appSettings.logging.flush);
 	log->SetMaxFileSize(appSettings.logging.maxFileSize);
-	log->SetTimestamps(appSettings.logging.timestamps);
 	log->SetLogRotateCnt(appSettings.logging.logRotate);
 }
 
@@ -3799,6 +3825,7 @@ void TfrmMain::AutoAnswer(Call &call)
 	if (call.autoAnswerCode == 200) {
 		if (call.autoAnswerIntercom) {
 			LOG("Answering with module %s, device %s\n", appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str());
+			UaSetSelfviewParentHandle(GetSelfviewParentHandle());
 			UA->Answer(call.uid, appSettings.uaConf.audioCfgPlayIntercom.mod.c_str(), appSettings.uaConf.audioCfgPlayIntercom.dev.c_str(), appSettings.video.enabled, GetDisplayParentHandle());
 		} else {
 			LOG("Auto-answer\n", call.autoAnswerCode);
@@ -4554,6 +4581,11 @@ void __fastcall TfrmMain::tmrClearCallStateTimer(TObject *Sender)
 	lblCallState->Caption = "";
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TfrmMain::miPublishClick(TObject *Sender)
+{
+	ShowPublishDialog(this);
+}
 
 void __fastcall TfrmMain::miScriptingClick(TObject *Sender)
 {

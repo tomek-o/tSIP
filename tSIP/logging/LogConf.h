@@ -20,7 +20,6 @@ struct LogConf
 		DEF_MAX_FILE_SIZE = 10*1024*1024
 	};
 	int maxFileSize;
-	bool timestamps;
 	enum {
 		MAX_LOGROTATE = 5
 	};
@@ -39,8 +38,9 @@ struct LogConf
 
 	bool showWindowAtStartup;
 
-	/// log window shows the list view instead of the rich edit
-	bool listView;
+	/// log window view: rich edit text or list
+	enum LogViewMode { LOG_VIEW_TEXT = 0, LOG_VIEW_LIST };
+	LogViewMode viewMode;
 	/// log levels: 0 SIP, 1 error, 2 warning, 3 info, 4 debug
 	enum { LEVEL_COUNT = 5 };
 	/// text color per level in the rich edit view, TColor values
@@ -49,9 +49,13 @@ struct LogConf
 	unsigned int listTextColors[LEVEL_COUNT];
 	/// background color per level in the list view, TColor values
 	unsigned int listBackgrounds[LEVEL_COUNT];
+	/// background of the text view (rich edit), TColor value
+	unsigned int richBackground;
 	/// bit per level, set = shown in the log window
 	unsigned int levelFilter;
 
+	/// bottom panel of the log window: More... area expanded
+	bool moreShown;
 	/// log audio buffer (aubuf) activity
 	bool logAubuf;
 

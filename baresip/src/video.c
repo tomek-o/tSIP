@@ -709,6 +709,18 @@ static void tmr_handler(void *arg)
 }
 
 
+static void *selfview_parent_handle = NULL;
+
+void video_set_selfview_parent_handle(void *handle)
+{
+	selfview_parent_handle = handle;
+}
+
+void *video_get_selfview_parent_handle(void)
+{
+	return selfview_parent_handle;
+}
+
 int video_start(struct video *v, void* vidisp_parent_handle, const char *peer)
 {
 	struct vidsz size;

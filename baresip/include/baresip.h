@@ -846,6 +846,9 @@ int vidisp_register(struct vidisp **vp, const char *name,
 int vidisp_alloc(struct vidisp_st **stp, const char *name,
 		 struct vidisp_prm *prm, const char *dev,
 		 vidisp_resize_h *resizeh, void *arg);
+/** Parent handle (Windows: HWND) of the selfview window; set by the application before a call starts */
+void video_set_selfview_parent_handle(void *handle);
+void *video_get_selfview_parent_handle(void);
 int vidisp_display(struct vidisp_st *st, const char *title,
 		   const struct vidframe *frame, uint64_t timestamp);
 const struct vidisp *vidisp_find(const char *name);

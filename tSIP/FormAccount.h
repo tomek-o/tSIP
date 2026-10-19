@@ -37,6 +37,7 @@ __published:	// IDE-managed Components
 	TLabel *lblOutbound1;
 	TEdit *edOutbound1;
 	TCheckBox *chbAnswerAny;
+	TCheckBox *chbPublish;
 	TLabel *lblPtime;
 	TEdit *edPtime;
 	TLabel *lblContactUser;
@@ -85,6 +86,7 @@ __published:	// IDE-managed Components
 	void __fastcall edAuthUserChange(TObject *Sender);
 	void __fastcall edOutbound1Change(TObject *Sender);
 	void __fastcall chbAnswerAnyClick(TObject *Sender);
+	void __fastcall chbPublishClick(TObject *Sender);
 	void __fastcall chbAnswerAnyKeyPress(TObject *Sender, char &Key);
 	void __fastcall edPtimeChange(TObject *Sender);
 	void __fastcall edCuserChange(TObject *Sender);

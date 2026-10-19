@@ -4,7 +4,7 @@ object frmVideoConf: TfrmVideoConf
   Align = alClient
   BorderStyle = bsNone
   Caption = 'frmVideoConf'
-  ClientHeight = 386
+  ClientHeight = 431
   ClientWidth = 618
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -100,6 +100,20 @@ object frmVideoConf: TfrmVideoConf
     Height = 13
     Caption = 'Display module'
   end
+  object lblSelfviewParentType: TLabel
+    Left = 19
+    Top = 345
+    Width = 111
+    Height = 13
+    Caption = 'Selfview display parent'
+  end
+  object lblSelfviewParentId: TLabel
+    Left = 19
+    Top = 373
+    Width = 121
+    Height = 13
+    Caption = 'Selfview parent button id'
+  end
   object chbEnabled: TCheckBox
     Left = 3
     Top = 3
@@ -132,6 +146,25 @@ object frmVideoConf: TfrmVideoConf
     Caption = 'enable selfview (show video from local source)'
     TabOrder = 12
   end
+  object cbSelfviewParentType: TComboBox
+    Left = 152
+    Top = 342
+    Width = 200
+    Height = 21
+    Style = csDropDownList
+    ItemHeight = 13
+    TabOrder = 16
+    Items.Strings = (
+      'none (separate window)'
+      'programmable button')
+  end
+  object edSelfviewParentId: TEdit
+    Left = 152
+    Top = 370
+    Width = 60
+    Height = 21
+    TabOrder = 17
+  end
   object chbSelfviewPip: TCheckBox
     Left = 19
     Top = 319
@@ -139,6 +172,7 @@ object frmVideoConf: TfrmVideoConf
     Height = 17
     Caption = 'show selfview as picture-in-picture'
     TabOrder = 13
+    OnClick = chbSelfviewPipClick
   end
   object cbInputDev: TComboBox
     Left = 152
@@ -224,7 +258,7 @@ object frmVideoConf: TfrmVideoConf
   end
   object chbDshowSkipReadingBackMediaFormat: TCheckBox
     Left = 8
-    Top = 351
+    Top = 406
     Width = 521
     Height = 17
     Caption = 

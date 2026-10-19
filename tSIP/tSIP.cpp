@@ -33,6 +33,7 @@ USEFORM("FormVideoConf.cpp", frmVideoConf);
 USEFORM("scripting\FormScriptPluginVariables.cpp", frmScriptPluginVariables);
 USEFORM("buttons\FormButtonContainerConf.cpp", frmButtonContainerConf);
 USEFORM("buttons\FormButtonGridEdit.cpp", frmButtonGridEdit);
+USEFORM("ua\FormPublish.cpp", frmPublish); /* TForm: File Type */
 //---------------------------------------------------------------------------
 #include "baresip_base_config.h"
 

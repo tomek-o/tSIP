@@ -39,6 +39,10 @@ void TScEdit::setCppStyle(void)
 	//const char* szKeywords2=
 	//	"bool char float int long short void wchar_t";
 
+	// keyboard layout characters (e.g. Polish with AltGr) are in the system ANSI code page
+	SendEditor(SCI_SETCODEPAGE, GetACP());
+	// typed characters arrive as wide characters: convert them, do not take their low byte
+	SendEditor(SCI_SETKEYSUNICODE, 1);
 	SendEditor(SCI_STYLECLEARALL);
 
 	SendEditor(SCI_SETLEXER, SCLEX_CPP);
@@ -70,6 +74,10 @@ void TScEdit::setJsonStyle(void)
 	//const char* szKeywords2=
 	//	"bool char float int long short void wchar_t";
 
+	// keyboard layout characters (e.g. Polish with AltGr) are in the system ANSI code page
+	SendEditor(SCI_SETCODEPAGE, GetACP());
+	// typed characters arrive as wide characters: convert them, do not take their low byte
+	SendEditor(SCI_SETKEYSUNICODE, 1);
 	SendEditor(SCI_STYLECLEARALL);
 
 	SendEditor(SCI_SETLEXER, SCLEX_JSON);
@@ -124,6 +132,10 @@ void TScEdit::setLuaStyle(void)
 	SendEditor(SCI_SETKEYWORDS, 4, reinterpret_cast<LPARAM>(lua_custom.c_str()));
 
 
+	// keyboard layout characters (e.g. Polish with AltGr) are in the system ANSI code page
+	SendEditor(SCI_SETCODEPAGE, GetACP());
+	// typed characters arrive as wide characters: convert them, do not take their low byte
+	SendEditor(SCI_SETKEYSUNICODE, 1);
 	SendEditor(SCI_STYLECLEARALL);
 
 	SendEditor(SCI_STYLESETFORE, SCE_LUA_DEFAULT,			(int)RGB(0x00, 0x00, 0x00));
@@ -223,6 +235,22 @@ void TScEdit::setStyle(enum ScEditStyle style)
 	SetExtraStyle();
 }
 
+// font character set that belongs to a code page (e.g. EASTEUROPE_CHARSET for 1250)
+// Scintilla takes the code page of the input and display from the font character set
+static int CharsetForCodePage(UINT codePage)
+{
+	const int charsets[] = {ANSI_CHARSET, EASTEUROPE_CHARSET, RUSSIAN_CHARSET, GREEK_CHARSET,
+		TURKISH_CHARSET, HEBREW_CHARSET, ARABIC_CHARSET, BALTIC_CHARSET, THAI_CHARSET,
+		SHIFTJIS_CHARSET, HANGEUL_CHARSET, GB2312_CHARSET, CHINESEBIG5_CHARSET};
+	for (unsigned int i = 0; i < sizeof(charsets) / sizeof(charsets[0]); i++)
+	{
+		CHARSETINFO ci = { 0, 0, { { 0, 0, 0, 0 }, { 0, 0 } } };
+		if (::TranslateCharsetInfo((DWORD*)charsets[i], &ci, TCI_SRCCHARSET) && ci.ciACP == codePage)
+			return charsets[i];
+	}
+	return DEFAULT_CHARSET;
+}
+
 void TScEdit::setFont(AnsiString name, int size)
 {
 //		// Set up the global default style. These attributes are used wherever no explicit choices are made.
@@ -230,6 +258,7 @@ void TScEdit::setFont(AnsiString name, int size)
 //		SendEditor(SCI_STYLECLEARALL);	// Copies global style to all others
 	SendEditor(SCI_STYLESETFONT, STYLE_DEFAULT, (sptr_t)name.c_str());
 	SendEditor(SCI_STYLESETSIZE, STYLE_DEFAULT, size);
+	SendEditor(SCI_STYLESETCHARACTERSET, STYLE_DEFAULT, CharsetForCodePage(GetACP()));
 }
 
 void TScEdit::updateMarginWidth(bool force)

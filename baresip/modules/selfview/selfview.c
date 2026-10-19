@@ -131,7 +131,11 @@ static int encode_update(struct vidfilt_enc_st **stp, void **ctx,
 
 	if (0 == str_casecmp(vf->name, "selfview_window")) {
 
-		err = vidisp_alloc(&st->disp, NULL, NULL,
+		struct vidisp_prm prm;
+		prm.parent_handle = video_get_selfview_parent_handle();
+		prm.fullscreen = false;
+
+		err = vidisp_alloc(&st->disp, NULL, &prm,
 				   NULL, NULL, NULL);
 		if (err)
 			goto out;

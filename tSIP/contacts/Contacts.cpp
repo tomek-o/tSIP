@@ -6,6 +6,7 @@
 #include "ContactsXmlImport.h"
 #include "common/TelecomUtils.h"
 #include "common/Utilities.h"
+#include "Settings.h"
 #include <SysUtils.hpp>
 #include <assert.h>
 #include <algorithm>
@@ -201,6 +202,50 @@ void Contacts::Sort(void)
 	std::stable_sort(entries.begin(), entries.end());
 }
 
+namespace
+{
+
+/** Digits of a phone number and whether it has an international prefix (+CC).
+    Spaces, dashes and other separators are ignored. */
+bool PhoneDigits(const AnsiString &num, std::string &digits, bool &international)
+{
+	digits.clear();
+	international = false;
+	for (int i = 1; i <= num.Length(); i++)
+	{
+		const char c = num[i];
+		if (c >= '0' && c <= '9')
+			digits += c;
+		else if (c == '+' && digits.empty() && !international)
+			international = true;
+	}
+	return !digits.empty();
+}
+
+/** "+CC rest" (international) against "0 rest" (national): the country code has 1 to 3 digits,
+    so every split is tried. E.g. +49 6241 123456789 matches 06241-123456789. */
+bool InternationalMatchesNational(const std::string &intl, const std::string &national)
+{
+	if (national.size() < 2 || national[0] != '0')
+		return false;
+	const std::string rest = national.substr(1);
+	for (size_t cc = 1; cc <= 3 && cc < intl.size(); cc++)
+	{
+		if (intl.size() - cc == rest.size() && intl.compare(cc, std::string::npos, rest) == 0)
+			return true;
+	}
+	return false;
+}
+
+bool SameNumber(const std::string &a, bool aIntl, const std::string &b, bool bIntl)
+{
+	if (aIntl == bIntl)
+		return a == b;
+	return aIntl ? InternationalMatchesNational(a, b) : InternationalMatchesNational(b, a);
+}
+
+}	// namespace
+
 Contacts::Entry* Contacts::GetEntry(AnsiString uri)
 {
 	if (uri.Length() == 0)
@@ -214,6 +259,7 @@ Contacts::Entry* Contacts::GetEntry(AnsiString uri)
 			return &entry;
 		}
 	}
+	const AnsiString original = uri;
 	uri = ExtractNumberFromUri(uri);
 	if (uri != "")
 	{
@@ -223,6 +269,27 @@ Contacts::Entry* Contacts::GetEntry(AnsiString uri)
 			if (entry.uri1 == uri || entry.uri2 == uri || entry.uri3 == uri)
 			{
 				return &entry;
+			}
+		}
+	}
+	// phone numbers in different notation: +CC with spaces (incoming) against national 0 with dashes (contact)
+	std::string inDigits;
+	bool inIntl = false;
+	if (appSettings.Contacts.fuzzyNumberMatch && PhoneDigits(ExtractNumberFromUri(original), inDigits, inIntl))
+	{
+		for (unsigned int i=0; i<entries.size(); i++)
+		{
+			Entry &entry = entries[i];
+			const AnsiString *uris[] = { &entry.uri1, &entry.uri2, &entry.uri3 };
+			for (unsigned int u=0; u<3; u++)
+			{
+				std::string cDigits;
+				bool cIntl = false;
+				if (PhoneDigits(ExtractNumberFromUri(*uris[u]), cDigits, cIntl) &&
+					SameNumber(inDigits, inIntl, cDigits, cIntl))
+				{
+					return &entry;
+				}
 			}
 		}
 	}

@@ -23,6 +23,12 @@ __published:	// IDE-managed Components
 	TEdit *edDisplayParentId;
 	TCheckBox *chbSelfviewEnable;
 	TCheckBox *chbSelfviewPip;
+	TLabel *lblSelfviewParentType;
+	TComboBox *cbSelfviewParentType;
+	TLabel *lblSelfviewParentId;
+	TEdit *edSelfviewParentId;
+	void __fastcall chbSelfviewPipClick(TObject *Sender);
+	void UpdateSelfviewParentVisible(void);
 	TComboBox *cbInputDev;
 	TLabel *lblInputDevice;
 	TLabel *lblInputModule;

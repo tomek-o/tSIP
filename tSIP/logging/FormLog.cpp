@@ -8,6 +8,7 @@
 #pragma hdrstop
 
 #include <ClipBrd.hpp>
+#include <stdio.h>
 
 #include "FormLog.h"
 #include "Log.h"
@@ -34,96 +35,36 @@ __fastcall TfrmLog::TfrmLog(TComponent* Owner)
 	Width = appSettings.logging.windowWidth;
 	Height = appSettings.logging.windowHeight;
 	redMain->OnKeyDown = redMainKeyDown;
-	// level filter row, below the existing controls of the bottom panel
-	pnlBottom->Height = 100;
-	listMode = appSettings.logging.listView;
-	TLabel *lblLevels = new TLabel(this);
-	lblLevels->Parent = pnlBottom;
-	lblLevels->Caption = "Show levels:";
-	lblLevels->Left = 5;
-	lblLevels->Top = 52;
+	redMain->Color = (TColor)appSettings.logging.richBackground;
+	listMode = appSettings.logging.viewMode == LogConf::LOG_VIEW_LIST;
+	viewingFile = false;
+
+	// the controls are in the form file; the level checkboxes take their state from the settings
+	chbLevel[0] = chbLevelSip;
+	chbLevel[1] = chbLevelError;
+	chbLevel[2] = chbLevelWarning;
+	chbLevel[3] = chbLevelInfo;
+	chbLevel[4] = chbLevelDebug;
 	for (int i = 0; i < LevelCount; i++)
 	{
 		levelShown[i] = ((appSettings.logging.levelFilter >> i) & 1) != 0;
-		chbLevel[i] = new TCheckBox(this);
-		chbLevel[i]->Parent = pnlBottom;
-		chbLevel[i]->Left = 80 + i * 70;
-		chbLevel[i]->Top = 50;
-		chbLevel[i]->Width = 66;
-		chbLevel[i]->Caption = LevelName(i);
 		chbLevel[i]->Checked = levelShown[i];
-		chbLevel[i]->OnClick = chbLevelClick;
 	}
 
-	// text search row
-	TLabel *lblFind = new TLabel(this);
-	lblFind->Parent = pnlBottom;
-	lblFind->Caption = "Find:";
-	lblFind->Left = 5;
-	lblFind->Top = 80;
-	edSearch = new TEdit(this);
-	edSearch->Parent = pnlBottom;
-	edSearch->Left = 80;
-	edSearch->Top = 76;
-	edSearch->Width = 260;
-	edSearch->OnChange = searchFilterChange;
-	chbMatchCase = new TCheckBox(this);
-	chbMatchCase->Parent = pnlBottom;
-	chbMatchCase->Left = 350;
-	chbMatchCase->Top = 78;
-	chbMatchCase->Width = 90;
-	chbMatchCase->Caption = "Match case";
-	chbMatchCase->OnClick = searchFilterChange;
-
-	// list view: same entries, one row per line, shown instead of the rich edit
-	chbListView = new TCheckBox(this);
-	chbListView->Parent = pnlBottom;
-	chbListView->Left = 470;
-	chbListView->Top = 78;
-	chbListView->Width = 90;
-	chbListView->Caption = "List view";
-	chbListView->OnClick = chbListViewClick;
-
-	lvLog = new TListView(this);
-	lvLog->Parent = this;
-	lvLog->Align = alClient;
-	lvLog->ViewStyle = vsReport;
-	lvLog->ReadOnly = true;
-	lvLog->RowSelect = true;
-	lvLog->HideSelection = false;
-	lvLog->Visible = false;
-	lvLog->Columns->Add()->Caption = "Level";
-	lvLog->Columns->Add()->Caption = "Message";
-	lvLog->Columns->Items[0]->Width = 70;
-	lvLog->Columns->Items[1]->Width = 500;
-	lvLog->OwnerData = true;
-	lvLog->OnData = lvLogData;
-	lvLog->OnCustomDrawSubItem = lvLogCustomDrawSubItem;
-	lvLog->MultiSelect = true;
-	lvLog->OnResize = lvLogResize;
 	lvLogResize(lvLog);
-	lvLog->OnKeyDown = lvLogKeyDown;
+	// no flicker when lines are added: draw into an off-screen buffer first
+	lvLog->DoubleBuffered = true;
 	lvLog->Font->Name = appSettings.logging.consoleFont.name;
 	lvLog->Font->Size = appSettings.logging.consoleFont.size;
 	lvLog->Font->Style = appSettings.logging.consoleFont.style;
-	chbListView->Checked = listMode;
+	cbViewMode->ItemIndex = listMode ? 1 : 0;
+	moreShown = appSettings.logging.moreShown;
+	ApplyMore();
 	lvLog->Visible = listMode;
+	memoLog->Visible = listMode;
+	splLog->Visible = listMode;
+	memoLog->Font->Name = appSettings.logging.consoleFont.name;
 	redMain->Visible = !listMode;
-
-	// right-click menu of the list view
-	pmenuList = new TPopupMenu(this);
-	TMenuItem *miListCopySel = new TMenuItem(pmenuList);
-	miListCopySel->Caption = "Copy selected";
-	miListCopySel->OnClick = miListCopySelectedClick;
-	pmenuList->Items->Add(miListCopySel);
-	TMenuItem *miListCopy = new TMenuItem(pmenuList);
-	miListCopy->Caption = "Copy all";
-	miListCopy->OnClick = miListCopyAllClick;
-	pmenuList->Items->Add(miListCopy);
-	TMenuItem *miListSelect = new TMenuItem(pmenuList);
-	miListSelect->Caption = "Select all";
-	miListSelect->OnClick = miListSelectAllClick;
-	pmenuList->Items->Add(miListSelect);
 	lvLog->PopupMenu = pmenuList;
 }
 //---------------------------------------------------------------------------
@@ -218,7 +159,7 @@ void TfrmLog::RenderAll(void)
 	std::deque<LogEntry> all;
 	{
 		ScopedLock<Mutex> lock(mutex);
-		all = history;
+		all = viewingFile ? fileEntries : history;
 		// everything in the history is rendered below, so drop the pending copies
 		queDisplay.clear();
 	}
@@ -265,6 +206,97 @@ void __fastcall TfrmLog::chbLevelClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+/** Level and module of a log line header: "<level> <day> <HH:MM:SS.mmm> <module> ".
+ *  Returns false for a continuation line of a multi-line entry. */
+bool ParseLogHeader(const AnsiString &line, int &level)
+{
+	int lvl = -1, day = 0, hh = 0, mm = 0, ss = 0, ms = 0;
+	char module[256] = "";
+	int n = sscanf(line.c_str(), "%d %d %d:%d:%d.%d %255s", &lvl, &day, &hh, &mm, &ss, &ms, module);
+	if (n < 7 || lvl < 0 || lvl >= LogConf::LEVEL_COUNT)
+		return false;
+	level = lvl;
+	return true;
+}
+
+/** Loads a log file (same line format as the log file written by tSIP) and shows it;
+ *  the live refresh is stopped while the file is shown */
+void TfrmLog::OpenLogFile(const AnsiString &fileName)
+{
+	TStringList *lines = new TStringList();
+	try
+	{
+		lines->LoadFromFile(fileName);
+	}
+	catch (...)
+	{
+		delete lines;
+		lblSource->Caption = "Cannot open " + ExtractFileName(fileName);
+		return;
+	}
+	std::deque<LogEntry> loaded;
+	for (int i = 0; i < lines->Count; i++)
+	{
+		const AnsiString line = lines->Strings[i];
+		int level = LogLevelInfo;
+		if (ParseLogHeader(line, level) || loaded.empty())
+		{
+			LogEntry entry;
+			entry.level = level;
+			entry.color = LevelColor(level);
+			entry.asText = line + "\n";
+			loaded.push_back(entry);
+		}
+		else
+		{
+			// continuation line of the previous entry
+			loaded.back().asText += line + "\n";
+		}
+	}
+	delete lines;
+
+	fileEntries.swap(loaded);
+	viewingFile = true;
+	lblSource->Caption = "File: " + ExtractFileName(fileName);
+	btnLive->Enabled = true;
+	RenderAll();
+}
+
+void __fastcall TfrmLog::btnOpenLogClick(TObject *Sender)
+{
+	if (dlgOpenLog->Execute())
+		OpenLogFile(dlgOpenLog->FileName);
+}
+
+void __fastcall TfrmLog::btnLiveClick(TObject *Sender)
+{
+	viewingFile = false;
+	fileEntries.clear();
+	lblSource->Caption = "Live";
+	btnLive->Enabled = false;
+	RenderAll();
+}
+//---------------------------------------------------------------------------
+
+/** Shows or hides the filter, search, list and file controls; the bottom panel is sized to them */
+void TfrmLog::ApplyMore(void)
+{
+	TControl *more[] = {lblLevels, chbLevelSip, chbLevelError, chbLevelWarning, chbLevelInfo, chbLevelDebug,
+		lblFind, edSearch, chbMatchCase, cbViewMode, btnOpenLog, btnLive, lblSource};
+	for (unsigned int i = 0; i < sizeof(more) / sizeof(more[0]); i++)
+		more[i]->Visible = moreShown;
+	pnlBottom->Height = moreShown ? 126 : 46;
+	btnMore->Caption = moreShown ? "Less..." : "More...";
+}
+
+void __fastcall TfrmLog::btnMoreClick(TObject *Sender)
+{
+	moreShown = !moreShown;
+	appSettings.logging.moreShown = moreShown;
+	ApplyMore();
+}
+//---------------------------------------------------------------------------
+
 /** Search box or case option changed: rebuild the view */
 void __fastcall TfrmLog::searchFilterChange(TObject *Sender)
 {
@@ -296,14 +328,28 @@ void __fastcall TfrmLog::lvLogData(TObject *Sender, TListItem *Item)
 	if (Item->Index < 0 || Item->Index >= (int)listEntries.size())
 		return;
 	const LogEntry &entry = listEntries[Item->Index];
-	// one row per entry: line breaks inside a message become spaces
 	AnsiString text = entry.asText;
+	// the list shows the level as its own column; the "<level> <day> " prefix is not shown
+	if (text.Length() > 5 && text[2] == ' ' && text[5] == ' ')
+		text = text.SubString(6, text.Length() - 5);
+	// one row per entry: line breaks inside a message become spaces
 	for (int i = 1; i <= text.Length(); i++)
 		if (text[i] == '\r' || text[i] == '\n')
 			text[i] = ' ';
 	Item->Caption = LevelName(entry.level);
 	Item->SubItems->Clear();
 	Item->SubItems->Add(text);
+}
+
+void __fastcall TfrmLog::lvLogCustomDrawItem(TCustomListView *Sender, TListItem *Item, TCustomDrawState State, bool &DefaultDraw)
+{
+	if (Item->Index < 0 || Item->Index >= (int)listEntries.size())
+		return;
+	const int lvl = listEntries[Item->Index].level;
+	if (lvl < 0 || lvl >= LogConf::LEVEL_COUNT)
+		return;
+	Sender->Canvas->Font->Color = (TColor)appSettings.logging.listTextColors[lvl];
+	Sender->Canvas->Brush->Color = (TColor)appSettings.logging.listBackgrounds[lvl];
 }
 
 void __fastcall TfrmLog::lvLogCustomDrawSubItem(TCustomListView *Sender, TListItem *Item, int SubItem, TCustomDrawState State, bool &DefaultDraw)
@@ -321,8 +367,12 @@ void __fastcall TfrmLog::lvLogCustomDrawSubItem(TCustomListView *Sender, TListIt
 /** The message column takes the width left by the level column */
 void __fastcall TfrmLog::lvLogResize(TObject *Sender)
 {
-	const int rest = lvLog->ClientWidth - lvLog->Columns->Items[0]->Width;
-	lvLog->Columns->Items[1]->Width = (rest > 100) ? rest : 100;
+	const int last = lvLog->Columns->Count - 1;
+	int used = 0;
+	for (int i = 0; i < last; i++)
+		used += lvLog->Columns->Items[i]->Width;
+	const int rest = lvLog->ClientWidth - used;
+	lvLog->Columns->Items[last]->Width = (rest > 100) ? rest : 100;
 }
 //---------------------------------------------------------------------------
 
@@ -358,11 +408,23 @@ void __fastcall TfrmLog::lvLogKeyDown(TObject *Sender, WORD &Key, TShiftState Sh
 	Key = 0;
 }
 
-void __fastcall TfrmLog::chbListViewClick(TObject *Sender)
+/** Selected rows of the list, one after another, in the memo below the list */
+void __fastcall TfrmLog::lvLogSelectItem(TObject *Sender, TListItem *Item, bool Selected)
 {
-	listMode = chbListView->Checked;
-	appSettings.logging.listView = listMode;
+	AnsiString text;
+	for (int i = 0; i < lvLog->Items->Count && i < (int)listEntries.size(); i++)
+		if (lvLog->Items->Item[i]->Selected)
+			text += listEntries[i].asText;
+	memoLog->Text = text;
+}
+
+void __fastcall TfrmLog::cbViewModeChange(TObject *Sender)
+{
+	listMode = cbViewMode->ItemIndex == 1;
+	appSettings.logging.viewMode = listMode ? LogConf::LOG_VIEW_LIST : LogConf::LOG_VIEW_TEXT;
 	lvLog->Visible = listMode;
+	memoLog->Visible = listMode;
+	splLog->Visible = listMode;
 	redMain->Visible = !listMode;
 	RenderAll();
 }
@@ -385,7 +447,7 @@ void __fastcall TfrmLog::tmrUpdateTimer(TObject *Sender)
 {
 	// hidden window: nothing to draw, the history keeps the lines and
 	// UpdateUi() (called on show) renders them
-	if (!Visible)
+	if (!Visible || viewingFile)
 	{
 		ScopedLock<Mutex> lock(mutex);
 		queDisplay.clear();
@@ -533,6 +595,7 @@ void TfrmLog::UpdateUi(void)
 	redMain->Font->Name = appSettings.logging.consoleFont.name;
 	redMain->Font->Size = appSettings.logging.consoleFont.size;
 	redMain->Font->Style = appSettings.logging.consoleFont.style;
+	redMain->Color = (TColor)appSettings.logging.richBackground;
 	lvLog->Font->Name = appSettings.logging.consoleFont.name;
 	lvLog->Font->Size = appSettings.logging.consoleFont.size;
 	lvLog->Font->Style = appSettings.logging.consoleFont.style;

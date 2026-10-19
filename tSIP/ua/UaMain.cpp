@@ -18,6 +18,7 @@
 #include <rem.h>
 #include "baresip.h"
 #include "Log.h"
+#include "UaPublish.h"
 #include "common/Utilities.h"
 #include "common/StaticCheck.h"
 #include "Branding.h"
@@ -346,6 +347,22 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 
 }
 
+static void publish_response_handler(int err, const struct sip_msg *msg, void *arg)
+{
+	const int accountId = reinterpret_cast<int>(arg) - 1;
+	if (err || !msg) {
+		DEBUG_WARNING("PUBLISH: no reply (%m)\n", err);
+		UaPublish::Reply(accountId, 0, "", 0);
+		return;
+	}
+	const struct sip_hdr *etagHdr = sip_msg_hdr(msg, SIP_HDR_SIP_ETAG);
+	const struct sip_hdr *expiresHdr = sip_msg_hdr(msg, SIP_HDR_EXPIRES);
+	std::string etag = etagHdr ? std::string(etagHdr->val.p, etagHdr->val.l) : std::string();
+	unsigned int expires = expiresHdr ? pl_u32(&expiresHdr->val) : 0;
+	DEBUG_INFO("PUBLISH reply: %u %r\n", msg->scode, &msg->reason);
+	UaPublish::Reply(accountId, msg->scode, etag, expires);
+}
+
 static void custom_req_response_handler(int err, const struct sip_msg *msg, void *arg)
 {
 	int requestUid = reinterpret_cast<int>(arg);
@@ -515,7 +532,8 @@ static int print_handler_log(const char *p, size_t size, void *arg)
 	pending.append(p, size);
 	size_t nl;
 	while ((nl = pending.find('\n')) != std::string::npos) {
-		CLog::Instance()->logRawLen(pending.c_str(), nl + 1);
+		const std::string line(pending.c_str(), nl);
+		LOGL(LogLevelInfo, "re", "%s\n", line.c_str());
 		pending.erase(0, nl + 1);
 	}
 	return 0;
@@ -1499,6 +1517,21 @@ extern "C" void control_handler(void)
 		}
 		break;
 	}
+	case Command::PUBLISH_PRESENCE: {
+		// empty body = unpublish (Expires: 0); extra header lines carry SIP-If-Match
+		AnsiString lines = "Event: presence\r\n";
+		if (cmd.text.Length() > 0)
+			lines += "Content-Type: application/pidf+xml\r\n";
+		lines += "Expires: " + IntToStr(cmd.code) + "\r\n";
+		lines += cmd.extraHeaderLines;
+		lines += "Content-Length: " + IntToStr(cmd.text.Length()) + "\r\n\r\n";
+		lines += cmd.text;
+		err = sip_req_send(ua_for_account(cmd.accountId), "PUBLISH", cmd.target.c_str(),
+			publish_response_handler, reinterpret_cast<void*>(cmd.accountId + 1), "%s", lines.c_str());
+		if (err != 0)
+			DEBUG_WARNING("PUBLISH to %s failed (%m)\n", cmd.target.c_str(), err);
+		break;
+	}
 	case Command::SEND_MESSAGE: {
 		err = message_send(ua_for_account(cmd.accountId), cmd.target.c_str(), cmd.text.c_str(), (void*)cmd.requestId);
 		DEBUG_INFO("Sending message to %s: status = %d\n", cmd.target.c_str(), err);
@@ -1674,6 +1707,9 @@ int Ua::GetVideoCodecList(std::vector<AnsiString> &codecs)
 	return 0;
 }
 
-
-
-
+void UaSetSelfviewParentHandle(void *handle)
+{
+#ifdef USE_VIDEO
+	video_set_selfview_parent_handle(handle);
+#endif
+}

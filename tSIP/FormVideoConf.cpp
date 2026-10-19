@@ -70,6 +70,9 @@ void TfrmVideoConf::SetCfg(VideoConf *cfg, UaConf *uaCfg)
 
 	chbSelfviewEnable->Checked = uaCfg->video.selfview.enabled;
 	chbSelfviewPip->Checked = uaCfg->video.selfview.pip;
+	cbSelfviewParentType->ItemIndex = uaCfg->video.selfview.displayParentType;
+	edSelfviewParentId->Text = uaCfg->video.selfview.displayParentId;
+	UpdateSelfviewParentVisible();
 
 	chbDshowSkipReadingBackMediaFormat->Checked = uaCfg->video.dshow.skipReadingBackMediaFormat;
 }
@@ -112,6 +115,8 @@ void TfrmVideoConf::Apply(void)
 
 	uaCfg->video.selfview.enabled = chbSelfviewEnable->Checked;
 	uaCfg->video.selfview.pip = chbSelfviewPip->Checked;
+	uaCfg->video.selfview.displayParentType = cbSelfviewParentType->ItemIndex;
+	uaCfg->video.selfview.displayParentId = StrToIntDef(edSelfviewParentId->Text, uaCfg->video.selfview.displayParentId);
 
 	uaCfg->video.dshow.skipReadingBackMediaFormat = chbDshowSkipReadingBackMediaFormat->Checked;
 }
@@ -162,6 +167,21 @@ void __fastcall TfrmVideoConf::cbInputModChange(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
+// the selfview display parent is used only when the selfview is a separate window (no picture-in-picture)
+void TfrmVideoConf::UpdateSelfviewParentVisible(void)
+{
+	const bool visible = !chbSelfviewPip->Checked;
+	lblSelfviewParentType->Visible = visible;
+	cbSelfviewParentType->Visible = visible;
+	lblSelfviewParentId->Visible = visible;
+	edSelfviewParentId->Visible = visible;
+}
+
+void __fastcall TfrmVideoConf::chbSelfviewPipClick(TObject *Sender)
+{
+	UpdateSelfviewParentVisible();
+}
+
 void __fastcall TfrmVideoConf::cbOutputModChange(TObject *Sender)
 {
 	AnsiString mod = VideoModules::GetInputModuleFromCbIndex(cbOutputMod->ItemIndex);

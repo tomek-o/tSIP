@@ -305,6 +305,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 			}
 			new_acc.dtmf_tx_format = acc.get("dtmf_tx_format", new_acc.dtmf_tx_format).asInt();
 			new_acc.answer_any = acc.get("answer_any", new_acc.answer_any).asBool();
+			new_acc.publish = acc.get("publish", new_acc.publish).asBool();
 			int ptime = acc.get("ptime", new_acc.ptime).asInt();
 			if (ptime >= UaConf::Account::MIN_PTIME && ptime < UaConf::Account::MAX_PTIME)
 			{
@@ -720,6 +721,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		jv.getBool("CheckIfFileUpdated", Contacts.checkIfFileUpdated);
 		jv.getUInt("CheckIfFileUpdatedPeriod", Contacts.checkIfFileUpdatedPeriod);
 		Contacts.filterUsingNote = jv.get("FilterUsingNote", Contacts.filterUsingNote).asBool();
+		Contacts.fuzzyNumberMatch = jv.get("FuzzyNumberMatch", Contacts.fuzzyNumberMatch).asBool();
 		jv.getBool("OpenFileOnIncoming", Contacts.openFileOnIncoming);
 		jv.getBool("OpenFileOnOutgoing", Contacts.openFileOnOutgoing);
 		jv.getBool("StoreNoteInSeparateFile", Contacts.storeNoteInSeparateFile);
@@ -1010,6 +1012,7 @@ Json::Value Settings::ToJson(void)
 		jv["CheckIfFileUpdated"] = Contacts.checkIfFileUpdated;
 		jv["CheckIfFileUpdatedPeriod"] = Contacts.checkIfFileUpdatedPeriod;
 		jv["FilterUsingNote"] = Contacts.filterUsingNote;
+		jv["FuzzyNumberMatch"] = Contacts.fuzzyNumberMatch;
 		jv["OpenFileOnIncoming"] = Contacts.openFileOnIncoming;
 		jv["OpenFileOnOutgoing"] = Contacts.openFileOnOutgoing;
 		jv["StoreNoteInSeparateFile"] = Contacts.storeNoteInSeparateFile;
@@ -1074,6 +1077,7 @@ Json::Value Settings::ToJson(void)
 		cfgAcc["reg_expires"] = acc.reg_expires;
 		cfgAcc["dtmf_tx_format"] = acc.dtmf_tx_format;
 		cfgAcc["answer_any"] = acc.answer_any;
+		cfgAcc["publish"] = acc.publish;
 		cfgAcc["ptime"] = acc.ptime;
 
 		cfgAcc["hide_reg_server"] = acc.hide_reg_server;

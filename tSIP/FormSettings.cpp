@@ -541,6 +541,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbContactsCheckIfFileUpdated->Checked = tmpSettings.Contacts.checkIfFileUpdated;
 	edContactsCheckIfFileUpdated->Text = tmpSettings.Contacts.checkIfFileUpdatedPeriod;
 	chbContactFilterUsingNote->Checked = tmpSettings.Contacts.filterUsingNote;
+	chbContactFuzzyNumberMatch->Checked = tmpSettings.Contacts.fuzzyNumberMatch;
 
 	chbHistoryNoStoreToFile->Checked = tmpSettings.history.noStoreToFile;
 	chbHistoryIgnoreCallsCompletedElsewhere->Checked = tmpSettings.history.ignoreCallsCompletedElsewhere;
@@ -1003,6 +1004,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Contacts.checkIfFileUpdated = chbContactsCheckIfFileUpdated->Checked;
 	tmpSettings.Contacts.checkIfFileUpdatedPeriod = StrToIntDef(edContactsCheckIfFileUpdated->Text, tmpSettings.Contacts.checkIfFileUpdatedPeriod);
 	tmpSettings.Contacts.filterUsingNote = chbContactFilterUsingNote->Checked;
+	tmpSettings.Contacts.fuzzyNumberMatch = chbContactFuzzyNumberMatch->Checked;
 
 	tmpSettings.history.noStoreToFile = chbHistoryNoStoreToFile->Checked;
 	tmpSettings.history.ignoreCallsCompletedElsewhere = chbHistoryIgnoreCallsCompletedElsewhere->Checked;

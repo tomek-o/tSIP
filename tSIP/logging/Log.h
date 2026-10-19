@@ -49,7 +49,6 @@ public:
 	void SetLogToFile(bool);
 	void SetFlush(bool state);
 	void SetMaxFileSize(unsigned int size);
-	void SetTimestamps(bool enabled);
 	/** Set total maximum number of files used for "logrotate" scheme (apart from main file).
 		Equivalent of "rotate" parameter for logrotate - number of old files to keep.
 		Old files are named like main file but with with ".x" added after file extension 
@@ -80,7 +79,6 @@ private:
 	unsigned int maxFileSize;
 	/// tracked locally to avoid an ftell() syscall on every logged line
 	unsigned long curFileSize;
-	bool timestamps;
 	unsigned int maxLogrotateCnt;
 	void write(const char* buf, int size);
 	void emit(int level, const char *module, const char *lpData, va_list ap);

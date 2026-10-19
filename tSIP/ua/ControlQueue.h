@@ -65,6 +65,7 @@ public:
 	int SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines, int accountId = -1);
 	int SendCustomCallRequest(int requestId, unsigned int callUid, AnsiString method, AnsiString extraHeaderLines);
 	int SendMessage(int requestId, int accountId, AnsiString target, AnsiString text);
+	void PublishPresence(int accountId, AnsiString aor, AnsiString body, int expires, AnsiString ifMatch);
 	int ZrtpVerifySas(bool state);
 	int ConferenceStart(void);
 };

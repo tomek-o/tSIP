@@ -18,7 +18,6 @@ __published:	// IDE-managed Components
 	TCheckBox *chbLogFlush;
 	TLabel *lblLogMaxFileSize;
 	TLabel *lblLogRotate;
-	TCheckBox *chbLogTimestamps;
 	TLabel *lblUiCapacity;
 	TLabel *lblLoggingConsoleFont;
 	TCheckBox *chbLogShowWindowAtStartup;
@@ -37,11 +36,14 @@ private:	// User declarations
 	TPanel *pnlCell[LEVELS][CELLS];
 	TComboBox *cbColorTemplate;
 	TButton *btnColorTemplate;
+	TPanel *pnlRichBackground;
+	TButton *btnRichBackground;
 	TColorDialog *dlgColor;
 	TCheckBox *chbLogAubuf;
 	void CreateColorControls(void);
 	void __fastcall btnColorClick(TObject *Sender);
 	void __fastcall btnColorTemplateClick(TObject *Sender);
+	void __fastcall btnRichBackgroundClick(TObject *Sender);
 public:		// User declarations
 	__fastcall TfraLogConf(TComponent* Owner, LogConf &logging);
 	void Load(void);

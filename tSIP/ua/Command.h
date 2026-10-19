@@ -33,6 +33,7 @@ public:
 		UPDATE_VOLUME,
 		SEND_CUSTOM_REQUEST,
 		SEND_MESSAGE,
+		PUBLISH_PRESENCE,	///< PUBLISH presence: target = AOR, text = PIDF body, code = Expires
 		RECORD_PAUSE,
 		GENERATE_TONES,
 		ZRTP_VERIFY_SAS,

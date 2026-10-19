@@ -60,6 +60,7 @@ public:
 		std::string cuser;
 		int reg_expires;
 		bool answer_any;
+		bool publish;		///< tSIP only: PUBLISH presence for this account (not passed to baresip)
 		int dtmf_tx_format;
 		std::vector<std::string> audio_codecs;
 		std::vector<std::string> video_codecs;
@@ -141,6 +142,7 @@ public:
 			cuser(""),
 			reg_expires(0),	// no registration in default configuration
 			answer_any(false),
+			publish(false),
 			dtmf_tx_format(0),
 
 			hide_reg_server(false),
@@ -669,6 +671,8 @@ public:
 	} messages;
 
 	bool autoAnswer;
+	/// last presence note published with PUBLISH (restored on restart)
+	std::string publishNote;
 	int autoAnswerCode;
 	std::string autoAnswerReason;
 	unsigned int autoAnswerDelayMin;
@@ -716,14 +720,21 @@ public:
 		struct Selfview {
 			bool enabled;
 			bool pip;
+			/// display parent of the selfview window when pip is off: 0 = separate window, 1 = programmable button
+			int displayParentType;
+			int displayParentId;
 			Selfview(void):
 				enabled(true),
-				pip(true)
+				pip(true),
+				displayParentType(0),
+				displayParentId(0)
 			{}
 			bool operator==(const Selfview& right) const {
 				return (
 					enabled == right.enabled &&
-					pip == right.pip
+					pip == right.pip &&
+					displayParentType == right.displayParentType &&
+					displayParentId == right.displayParentId
 				);
 			}
 			bool operator!=(const Selfview& right) const {

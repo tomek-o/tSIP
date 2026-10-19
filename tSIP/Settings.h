@@ -270,6 +270,8 @@ public:
 		bool checkIfFileUpdated;
 		unsigned int checkIfFileUpdatedPeriod;
 		bool filterUsingNote;
+		/// match numbers in +CC notation with national numbers (+49 6241 ... and 06241-...)
+		bool fuzzyNumberMatch;
 		bool openFileOnIncoming;
 		bool openFileOnOutgoing;
 		bool storeNoteInSeparateFile;	// use file associated with contact to store note
@@ -277,6 +279,7 @@ public:
 			checkIfFileUpdated(false),
 			checkIfFileUpdatedPeriod(60),
 			filterUsingNote(false),
+			fuzzyNumberMatch(true),
 			openFileOnIncoming(false),
 			openFileOnOutgoing(false),
 			storeNoteInSeparateFile(false)

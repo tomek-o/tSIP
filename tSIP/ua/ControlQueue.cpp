@@ -490,6 +490,21 @@ int ControlQueue::SendCustomCallRequest(int requestId, unsigned int callUid, Ans
 	return 0;
 }
 
+void ControlQueue::PublishPresence(int accountId, AnsiString aor, AnsiString body, int expires, AnsiString ifMatch)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Command *cmd = fifo.getWriteable();
+	if (!cmd)
+		return;
+	cmd->type = Command::PUBLISH_PRESENCE;
+	cmd->accountId = accountId;
+	cmd->target = aor;
+	cmd->text = body;
+	cmd->code = expires;
+	cmd->extraHeaderLines = ifMatch.IsEmpty() ? AnsiString() : AnsiString("SIP-If-Match: ") + ifMatch + "\r\n";
+	fifo.push();
+}
+
 int ControlQueue::SendMessage(int requestId, int accountId, AnsiString target, AnsiString text)
 {
 	ScopedLock<Mutex> lock(mutex);

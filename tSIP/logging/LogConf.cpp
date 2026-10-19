@@ -37,14 +37,15 @@ LogConf::LogConf(void):
 	logToFile(false),
 	flush(false),
 	maxFileSize(DEF_MAX_FILE_SIZE),
-	timestamps(true),
 	logRotate(DEF_LOGROTATE),
 	maxUiLogLines(5000),
 	windowWidth(630), windowHeight(400),
 	showWindowAtStartup(false),
-	listView(false),
+	viewMode(LOG_VIEW_TEXT),
 	levelFilter(0x1F),
-	logAubuf(false)
+	richBackground(0xFFFFFF),
+	logAubuf(false),
+	moreShown(false)
 {
 	consoleFont.name = "Courier New";
 	// TColor values (BGR): SIP navy, error red, warning dark yellow, info black, debug gray
@@ -65,14 +66,17 @@ void LogConf::fromJson(const Json::Value &jv)
 	jv.getBool("Flush", flush);
 	jv.getIntInRange("MaxFileSize", maxFileSize, MIN_MAX_FILE_SIZE, MAX_MAX_FILE_SIZE);
 	jv.getUIntInRange("MaxUiLogLines", maxUiLogLines, MIN_MAX_UI_LOG_LINES, MAX_MAX_UI_LOG_LINES);
-	jv.getBool("Timestamps", timestamps);
 	jv.getUIntInRange("LogRotate", logRotate, 0, MAX_LOGROTATE);
 	jv.getUInt("WindowWidth", windowWidth);
 	jv.getUInt("WindowHeight", windowHeight);
 	jv.getBool("ShowWindowAtStartup", showWindowAtStartup);
-	jv.getBool("ListView", listView);
+	const Json::Value &jm = jv["LogViewMode"];
+	if (jm.type() == Json::stringValue)
+		viewMode = (jm.asString() == "List") ? LOG_VIEW_LIST : LOG_VIEW_TEXT;
 	jv.getUInt("LevelFilter", levelFilter);
+	jv.getUInt("RichBackground", richBackground);
 	jv.getBool("LogAubuf", logAubuf);
+	jv.getBool("MoreShown", moreShown);
 	colorsFromJson(jv, "RichColors", richColors);
 	colorsFromJson(jv, "ListTextColors", listTextColors);
 	colorsFromJson(jv, "ListBackgrounds", listBackgrounds);
@@ -86,14 +90,15 @@ void LogConf::toJson(Json::Value &jv) const
 	jv["Flush"] = flush;
 	jv["MaxFileSize"] = maxFileSize;
 	jv["MaxUiLogLines"] = maxUiLogLines;
-	jv["Timestamps"] = timestamps;
 	jv["LogRotate"] = logRotate;
 	jv["WindowWidth"] = windowWidth;
 	jv["WindowHeight"] = windowHeight;
 	jv["ShowWindowAtStartup"] = showWindowAtStartup;
-	jv["ListView"] = listView;
+	jv["LogViewMode"] = (viewMode == LOG_VIEW_LIST) ? "List" : "Text";
 	jv["LevelFilter"] = levelFilter;
+	jv["RichBackground"] = richBackground;
 	jv["LogAubuf"] = logAubuf;
+	jv["MoreShown"] = moreShown;
 	colorsToJson(jv, "RichColors", richColors);
 	colorsToJson(jv, "ListTextColors", listTextColors);
 	colorsToJson(jv, "ListBackgrounds", listBackgrounds);
@@ -110,14 +115,15 @@ bool LogConf::operator==(const LogConf &right) const
 		flush == right.flush &&
 		maxFileSize == right.maxFileSize &&
 		maxUiLogLines == right.maxUiLogLines &&
-		timestamps == right.timestamps &&
 		logRotate == right.logRotate &&
 		windowWidth == right.windowWidth &&
 		windowHeight == right.windowHeight &&
 		showWindowAtStartup == right.showWindowAtStartup &&
-		listView == right.listView &&
+		viewMode == right.viewMode &&
 		levelFilter == right.levelFilter &&
+		richBackground == right.richBackground &&
 		logAubuf == right.logAubuf &&
+		moreShown == right.moreShown &&
 		consoleFont == right.consoleFont
 	);
 }

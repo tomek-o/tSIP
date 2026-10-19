@@ -50,7 +50,6 @@ CLog::CLog()
 	callbackLog = NULL;
 	maxFileSize = 0;
 	curFileSize = 0;
-	timestamps = false;
 	maxLogrotateCnt = 1;
 };
 
@@ -114,12 +113,6 @@ void CLog::SetMaxFileSize(unsigned int size)
 	maxFileSize = size;
 }
 
-void CLog::SetTimestamps(bool enabled)
-{
-	ScopedLock<StaticMutex> lock(mutex);
-	timestamps = enabled;
-}
-
 void CLog::SetLogRotateCnt(unsigned int cnt)
 {
 	ScopedLock<StaticMutex> lock(mutex);
@@ -144,29 +137,31 @@ void CLog::logL(int level, const char *module, const char *lpData, ...)
 
 void CLog::emit(int level, const char *module, const char *lpData, va_list ap)
 {
+	(void)module;
 	char buf[2048]; //determines max message length
 	CallbackLog callback = NULL;
 
 	// formatting works on the local buffer only - no need to hold the lock
 	{
 		int size;
-		if (timestamps)
 		{
+			// line format: <level> <day> <HH:MM:SS.mmm> <text>, the module name is not written
 			struct timeb timebuffer;
 			ftime( &timebuffer );
-			struct tm *tm_info = localtime(&timebuffer.time);
-			size = tm_info ? strftime(buf, sizeof(buf), "%T", tm_info) : 0;
-			int res = snprintf(buf+size, sizeof(buf)-size, ".%03hu ", timebuffer.millitm);
+			const struct tm *tm_info = localtime(&timebuffer.time);
+			int res = snprintf(buf, sizeof(buf), "%d %02d %02d:%02d:%02d.%03hu ",
+				level,
+				tm_info ? tm_info->tm_mday : 0,
+				tm_info ? tm_info->tm_hour : 0,
+				tm_info ? tm_info->tm_min : 0,
+				tm_info ? tm_info->tm_sec : 0,
+				timebuffer.millitm);
 			buf[sizeof(buf)-1] = '\0';
 			// RTL returns a negative value on truncation
 			if (res < 0)
 				size = (int)sizeof(buf) - 2;
 			else
-				size += res;
-		}
-		else
-		{
-			size = 0;
+				size = res;
 		}
 		if (size > (int)sizeof(buf) - 2)
 			size = (int)sizeof(buf) - 2;
@@ -258,8 +253,29 @@ void CLog::write(const char* buf, int size)
 {
 	if (bLogToFile && fout)
 	{
+		// text mode stream: each LF is stored as CRLF, so a CR already in front of it is dropped
+		// (SIP messages contain CRLF already; without this they would be stored as CR CR LF).
+		// The buffer is copied only when such a pair exists.
+		std::string text;
+		const char *out = buf;
+		int outSize = size;
+		bool hasCrlf = false;
+		for (int i = 0; i + 1 < size && !hasCrlf; i++)
+			hasCrlf = (buf[i] == '\r' && buf[i + 1] == '\n');
+		if (hasCrlf)
+		{
+			text.reserve(size);
+			for (int i = 0; i < size; i++)
+			{
+				if (buf[i] == '\r' && i + 1 < size && buf[i + 1] == '\n')
+					continue;
+				text += buf[i];
+			}
+			out = text.data();
+			outSize = (int)text.size();
+		}
 		// fwrite() with size=0 always returns 0, even on success
-		if (size > 0 && fwrite(buf, size, 1, fout) != 1)
+		if (outSize > 0 && fwrite(out, outSize, 1, fout) != 1)
 		{
 			// bad stream (e.g. file removed while open) - recreate it
 			fclose(fout);
@@ -272,7 +288,7 @@ void CLog::write(const char* buf, int size)
 			return;
 		}
 		// text mode stream: each line terminator is stored as CRLF
-		curFileSize += size + countNewlines(buf, size);
+		curFileSize += outSize + countNewlines(out, outSize);
 		if (bFlush)
 		{
 			fflush(fout);

@@ -19,6 +19,7 @@ struct LogColorTemplate
 	unsigned int richColors[LogConf::LEVEL_COUNT];
 	unsigned int listTextColors[LogConf::LEVEL_COUNT];
 	unsigned int listBackgrounds[LogConf::LEVEL_COUNT];
+	unsigned int richBackground;
 };
 
 const LogColorTemplate logColorTemplates[] = {
@@ -26,19 +27,22 @@ const LogColorTemplate logColorTemplates[] = {
 		"Classic",
 		{0x800000, 0x0000C8, 0x0078A0, 0x000000, 0x808080},
 		{0x800000, 0x0000C8, 0x0078A0, 0x000000, 0x808080},
-		{0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF}
+		{0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF},
+		0xFFFFFF
 	},
 	{
 		"Dark",
 		{0xFFAA78, 0x6E6EFF, 0x50C8F0, 0xDCDCDC, 0x8C8C8C},
 		{0xFFAA78, 0x6E6EFF, 0x50C8F0, 0xDCDCDC, 0x8C8C8C},
-		{0x1E1E1E, 0x1E1E1E, 0x1E1E1E, 0x1E1E1E, 0x1E1E1E}
+		{0x1E1E1E, 0x1E1E1E, 0x1E1E1E, 0x1E1E1E, 0x1E1E1E},
+		0x1E1E1E
 	},
 	{
 		"High contrast",
 		{0x800000, 0x0000FF, 0xA000A0, 0x000000, 0x5A5A5A},
 		{0x800000, 0x0000FF, 0xA000A0, 0x000000, 0x5A5A5A},
-		{0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF}
+		{0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF, 0xFFFFFF},
+		0xFFFFFF
 	}
 };
 
@@ -127,6 +131,29 @@ void TfraLogConf::CreateColorControls(void)
 		top += 26;
 	}
 
+	// text view background: one color for the whole rich edit
+	TLabel *rbLbl = new TLabel(this);
+	rbLbl->Parent = this;
+	rbLbl->Caption = "Text view background";
+	rbLbl->Left = 8;
+	rbLbl->Top = top + (20 - rbLbl->Height) / 2;
+	pnlRichBackground = new TPanel(this);
+	pnlRichBackground->Parent = this;
+	pnlRichBackground->Left = 150;
+	pnlRichBackground->Top = top;
+	pnlRichBackground->Width = 40;
+	pnlRichBackground->Height = 20;
+	pnlRichBackground->BevelOuter = bvLowered;
+	pnlRichBackground->Caption = "";
+	btnRichBackground = new TButton(this);
+	btnRichBackground->Parent = this;
+	btnRichBackground->Caption = "...";
+	btnRichBackground->Left = 194;
+	btnRichBackground->Top = top;
+	btnRichBackground->Width = 30;
+	btnRichBackground->OnClick = btnRichBackgroundClick;
+	top += 26;
+
 	// preset row, a little lower than the grid
 	top += 12;
 	TLabel *tplLbl = new TLabel(this);
@@ -167,6 +194,13 @@ void __fastcall TfraLogConf::btnColorClick(TObject *Sender)
 		pnlCell[r][c]->Color = dlgColor->Color;
 }
 
+void __fastcall TfraLogConf::btnRichBackgroundClick(TObject *Sender)
+{
+	dlgColor->Color = pnlRichBackground->Color;
+	if (dlgColor->Execute())
+		pnlRichBackground->Color = dlgColor->Color;
+}
+
 void __fastcall TfraLogConf::btnColorTemplateClick(TObject *Sender)
 {
 	const int idx = cbColorTemplate->ItemIndex;
@@ -179,6 +213,7 @@ void __fastcall TfraLogConf::btnColorTemplateClick(TObject *Sender)
 		pnlCell[r][1]->Color = (TColor)tpl.listTextColors[r];
 		pnlCell[r][2]->Color = (TColor)tpl.listBackgrounds[r];
 	}
+	pnlRichBackground->Color = (TColor)tpl.richBackground;
 }
 //---------------------------------------------------------------------------
 
@@ -186,7 +221,6 @@ void TfraLogConf::Load(void)
 {
 	chbLogToFile->Checked = logging.logToFile;
 	chbLogFlush->Checked = logging.flush;
-	chbLogTimestamps->Checked = logging.timestamps;
 	cmbMaxUiLogLines->ItemIndex = -1;
 	for (int i=0; i<cmbMaxUiLogLines->Items->Count; i++)
 	{
@@ -212,6 +246,7 @@ void TfraLogConf::Load(void)
 		pnlCell[r][1]->Color = (TColor)logging.listTextColors[r];
 		pnlCell[r][2]->Color = (TColor)logging.listBackgrounds[r];
 	}
+	pnlRichBackground->Color = (TColor)logging.richBackground;
 }
 
 void TfraLogConf::Apply(void)
@@ -225,7 +260,6 @@ void TfraLogConf::Apply(void)
 	}
 	logging.logRotate = cbLogRotate->ItemIndex;
 	logging.maxUiLogLines = StrToIntDef(cmbMaxUiLogLines->Text, logging.maxUiLogLines);
-	logging.timestamps = chbLogTimestamps->Checked;
 	logging.showWindowAtStartup = chbLogShowWindowAtStartup->Checked;
 	logging.logAubuf = chbLogAubuf->Checked;
 	for (int r=0; r<LEVELS; r++)
@@ -234,6 +268,7 @@ void TfraLogConf::Apply(void)
 		logging.listTextColors[r] = (unsigned int)pnlCell[r][1]->Color;
 		logging.listBackgrounds[r] = (unsigned int)pnlCell[r][2]->Color;
 	}
+	logging.richBackground = (unsigned int)pnlRichBackground->Color;
 }
 
 void __fastcall TfraLogConf::btnLoggingConsoleFontSelectClick(TObject *Sender)

@@ -48,6 +48,7 @@ __fastcall TfrmAccount::TfrmAccount(TComponent* Owner, int id, UaConf::Account& 
 	edExpires->Text = acc.reg_expires;
 
 	chbAnswerAny->Checked = acc.answer_any;
+	chbPublish->Checked = acc.publish;
 	edPtime->Text = acc.ptime;
 	edStunServer->Text = acc.stun_server.c_str();
 	edOutbound1->Text = acc.outbound1.c_str();
@@ -141,6 +142,12 @@ void __fastcall TfrmAccount::edAuthUserChange(TObject *Sender)
 void __fastcall TfrmAccount::edOutbound1Change(TObject *Sender)
 {
 	acc.outbound1 = edOutbound1->Text.c_str();	
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmAccount::chbPublishClick(TObject *Sender)
+{
+	acc.publish = chbPublish->Checked;
 }
 //---------------------------------------------------------------------------
 

@@ -546,6 +546,8 @@
         <FILE FILENAME="scripting\LuaMarkdownExport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaMarkdownExport" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaMarkdownExport.h"/>
         <FILE FILENAME="VideoRawDump.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VideoRawDump" FORMNAME="" DESIGNCLASS="" ADDITIONAL="VideoRawDump.h"/>
         <FILE FILENAME="VolumeSlider.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="VolumeSlider" FORMNAME="" DESIGNCLASS="" ADDITIONAL="VolumeSlider.h"/>
+        <FILE FILENAME="ua\FormPublish.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="FormPublish" FORMNAME="frmPublish" DESIGNCLASS="TForm" ADDITIONAL="ua\FormPublish.h"/>
+        <FILE FILENAME="ua\UaPublish.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="UaPublish" FORMNAME="" DESIGNCLASS="" ADDITIONAL="ua\UaPublish.h"/>
         <FILE FILENAME="RecordingFile.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="RecordingFile" FORMNAME="" DESIGNCLASS="" ADDITIONAL="RecordingFile.h"/>
         <FILE FILENAME="scripting\LuaFunctionsHtmlExport.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaFunctionsHtmlExport" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaFunctionsHtmlExport.h"/>
         <FILE FILENAME="scripting\LuaHtmlExportCommon.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="LuaHtmlExportCommon" FORMNAME="" DESIGNCLASS="" ADDITIONAL="scripting\LuaHtmlExportCommon.h"/>
@@ -557,7 +559,7 @@
           <VersionInfo Name="MajorVer">0</VersionInfo>
           <VersionInfo Name="MinorVer">3</VersionInfo>
           <VersionInfo Name="Release">15</VersionInfo>
-          <VersionInfo Name="Build">2</VersionInfo>
+          <VersionInfo Name="Build">3</VersionInfo>
           <VersionInfo Name="Debug">False</VersionInfo>
           <VersionInfo Name="PreRelease">False</VersionInfo>
           <VersionInfo Name="Special">False</VersionInfo>
@@ -569,7 +571,7 @@
         <VersionInfoKeys>
           <VersionInfoKeys Name="CompanyName">Tomasz Ostrowski</VersionInfoKeys>
           <VersionInfoKeys Name="FileDescription">SIP softphone</VersionInfoKeys>
-          <VersionInfoKeys Name="FileVersion">0.3.15.2</VersionInfoKeys>
+          <VersionInfoKeys Name="FileVersion">0.3.15.3</VersionInfoKeys>
           <VersionInfoKeys Name="InternalName"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalCopyright"></VersionInfoKeys>
           <VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys>
@@ -623,10 +625,10 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<buildevents>
-			<buildevent file="tSIP.bdsproj">
-				<precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
+      <buildevent file="tSIP.bdsproj">
+        <precompile mode="0" cancancel="-1" capture="-1" showconsole="0">REM build-tools\touch.exe "$(PROJECTDIR)\FormAbout.cpp"
 </precompile>
-			</buildevent>
-		</buildevents>
+      </buildevent>
+    </buildevents>
 	</CPlusPlusBuilder.Personality>
 </BorlandProject>

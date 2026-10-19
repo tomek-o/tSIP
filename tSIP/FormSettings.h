@@ -177,6 +177,7 @@ __published:	// IDE-managed Components
 	TLabel *lblIfName;
 	TEdit *edIfName;
 	TCheckBox *chbContactFilterUsingNote;
+	TCheckBox *chbContactFuzzyNumberMatch;
 	TOpenDialog *openDialog;
 	TComboBox *cbHttpQueryOpenMode;
 	TLabel *lblHttpQueryStartMode;

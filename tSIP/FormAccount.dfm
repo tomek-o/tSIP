@@ -471,6 +471,15 @@ object frmAccount: TfrmAccount
       OnClick = chbAnswerAnyClick
       OnKeyPress = chbAnswerAnyKeyPress
     end
+    object chbPublish: TCheckBox
+      Left = 7
+      Top = 184
+      Width = 346
+      Height = 17
+      Caption = 'Publish presence (PUBLISH) for this account'
+      TabOrder = 9
+      OnClick = chbPublishClick
+    end
     object cbMediaEncryption: TComboBox
       Left = 126
       Top = 161

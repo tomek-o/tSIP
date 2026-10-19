@@ -1354,6 +1354,9 @@ Version 0.3.16 key changes:
 	- sidetone, per-call audio device switching and WAV file playback as call audio source
 	- settings: filter box, Opus stereo option for recordings, automatic start at Windows login
 	- security and stability: several buffer overflow and out-of-bounds read fixes in SIP / XML / SDP / G.722 parsing; timer overflow after ~10.7 days of uptime fixed
+	- log window: level filter, search, list and text views, open and filter old log files; log lines written in a VLViewer-compatible format
+	- Tools > Publish presence: SIP PUBLISH presence (open / closed with note) to the current account or all accounts with PUBLISH enabled
+	- video: selfview window can be shown on a programmable button instead of a separate window (when picture-in-picture is off)
 
 Version 0.3.16 details:
 	- Dialpad settings: volume slider colors (meter low / mid / high, peak marker, track, thumb) configurable, with default colors
@@ -1361,8 +1364,6 @@ Version 0.3.16 details:
 	- plugin interface v2: GetSettings / SetSettings host methods (tSIP.json, merged patch, secrets returned as ***, changed sections and restartRequired reported)
 	- plugin interface v2: GetButtonSettings / SetButtonSettings host methods (one button by number, saved to buttons file, same validation and refresh as the button editor; UA restart not done automatically)
 	- settings: JSON of all settings is built by Settings::ToJson(); Write() saves the same content as before
-	- FIXED: video recording: raw dump file stayed open when a call was hung up locally (HANGUP bypassed the stop on call end)
-	- FIXED: video recording: raw dump file was not closed when tSIP exits while recording
 	- video recording: audio-only call logs an info line instead of a start error when raw video recording is enabled
 	- avcodec: "decoder waiting for keyframe" logged once per wait instead of for every frame
 	- avformat: "no audio pts" warning removed (logged for every packet of streams without timestamps)
@@ -1398,6 +1399,18 @@ Version 0.3.16 details:
 		- uses per-user Run registry key (no administrator rights needed), entry is named after executable, so copies with different executable names have separate entries
 		- registration is updated at startup and on settings change, also if executable was moved
 	- FIXED video data loss in TX direction; increased socket buffers for both audio and video in both directions, matching baresip
+	- log window: level filter, text search (with match case), list view and text view (choice saved), colored lines, text view background color, More... area (state saved), memo with the full text of selected list rows
+	- log window: open an old log file to view and filter it (live refresh stops while a file is shown); Live button returns to the running log
+	- log file: lines are written as "<level> <day> <HH:MM:SS.mmm> <text>" (as read by VLViewer), without doubled CR; module name is not written
+	- log window: timer does not draw while the window is hidden; get_log (MCP) and GetLogLines (Lua) read the log history
+	- logging: timestamps always enabled (option removed); warnings about normal events (encoder / decoder selection, keyframe wait, missing pts, ICE not used by peer, no UA for presence subscriptions, certificate import summary) are info
+	- network debug lines at startup are logged one entry per line; SIP RX / TX traces have their own log level
+	- FIXED: lines of baresip UA output (user@host prefix and message) could be split by a line from another thread in the log
+	- FIXED: Lua editor did not accept non-ASCII characters typed with the keyboard layout (AltGr letters, e.g. Polish)
+	- Tools / Publish presence: SIP PUBLISH (presence open / closed with note) to the current account or to all accounts with PUBLISH enabled; PUBLISH flag per account (account page); last note is saved and pre-filled
+	- video: selfview window can be put on a programmable button (display parent of selfview, when picture-in-picture is off)
+	- button editor: caption follows the selected type while the caption is empty or still the default caption of the previous type
+	- Dialpad settings: default volume slider position and width match their reset buttons
 	- plugins:
 		- added plugin interface v2 (see _doc/plugin_interface_v2.md, tSIP_plugin_v2.h); existing (v1) plugin interface is kept unchanged - v1 plugins should keep working without rebuilding
 			- single export tSipPluginInit, function tables with size field (append-only, compatible in both directions)
@@ -1437,6 +1450,5 @@ Version 0.3.16 details:
 	- button editor: a new button changed from Disabled gets a default caption for its type if the caption is empty (Button::DefaultCaption)
 	- recording: new option "Keep stereo in Opus recordings at low bitrates" (Opus encoder otherwise mixes stereo to mono below about 30 kbit/s); explained on the settings page
 	- FIXED: avformat read thread could use the audio source after it was closed (sample rate lookup without lock)
-	- FIXED: recorder reported a zero-length memset as memory underrun (CodeGuard); video recording code is compiled only in builds with video support (USE_VIDEO)
 */
 

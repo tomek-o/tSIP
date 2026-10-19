@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 578
     Height = 496
-    ActivePage = tsRecording
+    ActivePage = tsContacts
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -2897,6 +2897,18 @@ object frmSettings: TfrmSettings
         TabOrder = 8
         Text = 'https://www.google.com/search?q=[number]'
       end
+      object chbContactFuzzyNumberMatch: TCheckBox
+        Left = 2
+        Top = 337
+        Width = 455
+        Height = 17
+        Caption = 
+          'Match numbers in +CC notation with national numbers (+49 6241 ..' +
+          '. and 06241-...)'
+        Checked = True
+        State = cbChecked
+        TabOrder = 12
+      end
       object chbContactFilterUsingNote: TCheckBox
         Left = 2
         Top = 314
@@ -2969,8 +2981,8 @@ object frmSettings: TfrmSettings
         Text = '60'
       end
       object chbContactStoreNoteInSeparateFile: TCheckBox
-        Left = 3
-        Top = 337
+        Left = 2
+        Top = 360
         Width = 502
         Height = 17
         Caption = 'Store contact note in file associated with contact entry'

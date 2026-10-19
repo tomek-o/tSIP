@@ -52,14 +52,6 @@ object fraLogConf: TfraLogConf
     Caption = 'Flush log file on each line added'
     TabOrder = 1
   end
-  object chbLogTimestamps: TCheckBox
-    Left = 5
-    Top = 91
-    Width = 325
-    Height = 17
-    Caption = 'Add timestamps'
-    TabOrder = 2
-  end
   object chbLogShowWindowAtStartup: TCheckBox
     Left = 5
     Top = 168

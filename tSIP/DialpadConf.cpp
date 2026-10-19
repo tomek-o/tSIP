@@ -42,9 +42,9 @@ DialpadConf::DialpadConf(void)
 	{
 		ElementConf &ec = elements[EL_TRBAR_MIC_VOLUME];
 		ec.visible = true;
-		ec.left = 140;
+		ec.left = 143;
 		ec.top = 0;
-		ec.width = 20;
+		ec.width = 18;
 		ec.height = 180;
 	}
 	{
@@ -58,9 +58,9 @@ DialpadConf::DialpadConf(void)
 	{
 		ElementConf &ec = elements[EL_TRBAR_SPEAKER_VOLUME];
 		ec.visible = true;
-		ec.left = 160;
+		ec.left = 165;
 		ec.top = 0;
-		ec.width = 20;
+		ec.width = 18;
 		ec.height = 180;
 	}
 	{

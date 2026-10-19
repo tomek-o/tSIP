@@ -34,4 +34,7 @@ public:
 	int GetVideoCodecList(std::vector<AnsiString> &codecs);
 };
 
+/** Parent handle of the selfview window, set before a call starts (see baresip video_set_selfview_parent_handle) */
+void UaSetSelfviewParentHandle(void *handle);
+
 #endif

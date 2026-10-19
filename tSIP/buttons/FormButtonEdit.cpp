@@ -434,10 +434,11 @@ void __fastcall TfrmButtonEdit::btnCancelClick(TObject *Sender)
 void __fastcall TfrmButtonEdit::cbTypeChange(TObject *Sender)
 {
 	Button::Type newType = sortedTypes[cbType->ItemIndex];
-	// new button from Disabled: fill in the default caption of the type if the caption is empty
-	AnsiString defaultCaption = Button::DefaultCaption(newType);
-	if (shownType == Button::DISABLED && defaultCaption != "" && memoCaption1->Text.Trim() == "")
-		memoCaption1->Text = defaultCaption;
+	// the caption follows the type while it is empty or still the default caption of the type shown before
+	// (text typed by the user is kept)
+	const AnsiString caption = memoCaption1->Text.Trim();
+	if (caption == "" || caption == AnsiString(Button::DefaultCaption(shownType)))
+		memoCaption1->Text = Button::DefaultCaption(newType);
 	SetType(newType);
 }
 //---------------------------------------------------------------------------

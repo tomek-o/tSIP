@@ -237,6 +237,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 	logMessages = uaConfJson.get("logMessages", logMessages).asBool();
 	uaConfJson.getBool("logMessagesOnlyFirstLine", logMessagesOnlyFirstLine);
 	uaConfJson.getString("localAddress", netLocal);
+	uaConfJson.getString("publishNote", publishNote);
 	uaConfJson.getString("ifName", netIfName);
 	uaConfJson.getBool("noIpBind", noIpBind);
 
@@ -321,6 +322,8 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 			Video::Selfview &selfview = video.selfview;
 			jsv.getBool("enabled", selfview.enabled);
 			jsv.getBool("pip", selfview.pip);
+			jsv.getInt("displayParentType", selfview.displayParentType);
+			jsv.getInt("displayParentId", selfview.displayParentId);
 		}
 		{
 			const Json::Value &j = jv["dshow"];
@@ -427,6 +430,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	}
 
 	uaConfJson["autoAnswer"] = autoAnswer;
+	uaConfJson["publishNote"] = publishNote;
 	uaConfJson["autoAnswerCode"] = autoAnswerCode;
 	uaConfJson["autoAnswerReason"] = autoAnswerReason;
 	uaConfJson["autoAnswerDelayMin"] = autoAnswerDelayMin;
@@ -505,6 +509,8 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 			const Video::Selfview &selfview = video.selfview;
 			jsv["enabled"] = selfview.enabled;
 			jsv["pip"] = selfview.pip;
+			jsv["displayParentType"] = selfview.displayParentType;
+			jsv["displayParentId"] = selfview.displayParentId;
 		}
 		{
 			Json::Value &j = jv["dshow"];
