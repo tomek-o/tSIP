@@ -1347,16 +1347,29 @@ Version 0.3.15
 	- multiple minor fixes
 
 Version 0.3.16 key changes:
-	- multiple SIP accounts registered and used at the same time: account per call, message, contact, button; ACCOUNT button to switch the current account
-	- plugin interface v2 (separate from v1, which is unchanged): JSON call events, thread-safe calls to tSIP, MCP server plugin for AI clients (tools, optional settings and button configuration behind allowConfigModification)
+	- multiple SIP accounts registered and used at the same time:
+		- account assigned to call, message, contact, button
+		- ACCOUNT button(s) to switch the current account
+	- plugin interface v2 (separate from v1, which is unchanged):
+		- JSON call events
+		- thread-safe calls to tSIP
+		- MCP server plugin for AI clients (tools, optional settings and button configuration behind allowConfigModification)
 	- video recording (experimental): received video saved as raw H.264 next to the audio recording; MP4 only if the FFmpeg build includes the mp4 muxer
 	- volume sliders with audio level meters (mic: TX, speaker: RX), colors configurable on Dialpad settings
 	- sidetone, per-call audio device switching and WAV file playback as call audio source
-	- settings: filter box, Opus stereo option for recordings, automatic start at Windows login
-	- security and stability: several buffer overflow and out-of-bounds read fixes in SIP / XML / SDP / G.722 parsing; timer overflow after ~10.7 days of uptime fixed
-	- log window: level filter, search, list and text views, open and filter old log files; log lines written in a VLViewer-compatible format
-	- Tools > Publish presence: SIP PUBLISH presence (open / closed with note) to the current account or all accounts with PUBLISH enabled
-	- video: selfview window can be shown on a programmable button instead of a separate window (when picture-in-picture is off)
+	- settings:
+		- filter box
+		- option to force stereo recording for Opus at low bitrates
+		- automatic start at Windows login
+	- log window:
+		- level filter
+		- text filter/search
+		- list and text views
+		- opening and filtering old log files
+		- coloring depending on level (configurable)
+	- Tools / Publish presence: SIP PUBLISH presence (open / closed with note) to the current account or all accounts with PUBLISH enabled
+	- video selfview: window can be shown on a programmable button instead of a separate window (when picture-in-picture is off)
+	- bunch of fixes
 
 Version 0.3.16 details:
 	- Dialpad settings: volume slider colors (meter low / mid / high, peak marker, track, thumb) configurable, with default colors
