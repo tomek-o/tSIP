@@ -2909,6 +2909,15 @@ object frmSettings: TfrmSettings
         State = cbChecked
         TabOrder = 12
       end
+      object chbContactFuzzyNumberMatch: TCheckBox
+        Left = 2
+        Top = 337
+        Width = 400
+        Height = 17
+        Caption = 'Match numbers in +CC notation with national numbers (+49 6241 ... and 06241-...)'
+        Checked = True
+        TabOrder = 12
+      end
       object chbContactFilterUsingNote: TCheckBox
         Left = 2
         Top = 314
