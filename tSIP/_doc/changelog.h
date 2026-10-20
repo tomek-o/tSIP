@@ -1346,7 +1346,7 @@ Version 0.3.15
 	- added WASAPI audio module (input and output; can use loopback/output device as audio source)
 	- multiple minor fixes
 
-Version 0.3.16 key changes:
+Version 0.4 highlights:
 	- multiple SIP accounts registered and used at the same time:
 		- account assigned to call, message, contact, button
 		- ACCOUNT button(s) to switch the current account
@@ -1371,7 +1371,7 @@ Version 0.3.16 key changes:
 	- video selfview: window can be shown on a programmable button instead of a separate window (when picture-in-picture is off)
 	- bunch of fixes
 
-Version 0.3.16 details:
+Version 0.4 detailed changelog:
 	- Dialpad settings: volume slider colors (meter low / mid / high, peak marker, track, thumb) configurable, with default colors
 	- volume sliders: peak marker hidden at silence; slider background follows the parent panel; direction: Min at the top, as before
 	- plugin interface v2: GetSettings / SetSettings host methods (tSIP.json, merged patch, secrets returned as ***, changed sections and restartRequired reported)
