@@ -67,7 +67,7 @@
 
 
 enum {
-	MAX_BLOCKING = 30,    /**< Maximum time spent in handler in [ms] */
+	MAX_BLOCKING = 100,    /**< Maximum time spent in handler in [ms] */
 #if defined(WIN32) || defined(__WIN32__) || defined (CYGWIN)
 	DEFAULT_MAXFDS = 8192
 #else
