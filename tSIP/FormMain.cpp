@@ -3022,6 +3022,7 @@ void TfrmMain::OnPhonebookEdit(AnsiString uri)
 		contacts.Sort();
 		contacts.Update();
 		contacts.Write();
+		history.RefreshContactNames();
 	}
 }
 
@@ -4418,6 +4419,7 @@ void __fastcall TfrmMain::actContactsCsvImportExecute(TObject *Sender)
 		{
 			contacts.Update();
 			contacts.Write();
+			history.RefreshContactNames();
 		}
 	}
 }

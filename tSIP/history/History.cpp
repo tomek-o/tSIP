@@ -37,6 +37,18 @@ void History::AddEntry(History::Entry& entry)
 	notifyObservers();	
 }
 
+void History::RefreshContactNames(void)
+{
+	if (!callbackGetContactName)
+		return;
+	for (std::deque<Entry>::iterator iter = entries.begin(); iter != entries.end(); ++iter)
+	{
+		iter->contactName = callbackGetContactName(iter->uri.c_str()).c_str();
+		iter->paiContactName = callbackGetContactName(iter->paiUri.c_str()).c_str();
+	}
+	notifyObservers();
+}
+
 void History::Clear(void)
 {
 	entries.clear();

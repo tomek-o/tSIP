@@ -78,6 +78,8 @@ public:
 	{
 	}
 	void AddEntry(Entry& entry);
+	/** \brief Resolve contact names again (after the phonebook was changed) */
+	void RefreshContactNames(void);
 	typedef AnsiString (__closure *CallbackGetContactName)(AnsiString uri);
 private:
 	std::deque<Entry> entries;
