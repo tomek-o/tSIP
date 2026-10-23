@@ -3034,6 +3034,7 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Show hint with additional information for history entries'
         TabOrder = 4
+        OnClick = chbHistoryShowHintClick
       end
       object chbHistoryFormatCallDurationAsHourMinSec: TCheckBox
         Left = 3

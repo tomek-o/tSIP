@@ -554,6 +554,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHistoryShowLastReplyLineInHint->Checked = tmpSettings.history.showLastReplyLineInHint;
 	chbHistoryShowReasonInHint->Checked = tmpSettings.history.showReasonInHint;
 	chbHistoryShowRecordFileInHint->Checked = tmpSettings.history.showRecordFileInHint;
+	chbHistoryShowHintClick(NULL);
 	cbHistoryMaxEntries->Text = tmpSettings.history.maxEntries;
 
     edScriptOnMakeCallFile->Text = tmpSettings.Scripts.onMakeCall;
@@ -628,6 +629,17 @@ void __fastcall TfrmSettings::btnCancelClick(TObject *Sender)
 	this->Close();
 }
 //---------------------------------------------------------------------------
+void __fastcall TfrmSettings::chbHistoryShowHintClick(TObject *Sender)
+{
+	const bool enabled = chbHistoryShowHint->Checked;
+	chbHistoryShowCodecNameInHint->Enabled = enabled;
+	chbHistoryShowLastReplyCodeInHint->Enabled = enabled;
+	chbHistoryShowLastReplyLineInHint->Enabled = enabled;
+	chbHistoryShowReasonInHint->Enabled = enabled;
+	chbHistoryShowRecordFileInHint->Enabled = enabled;
+}
+//---------------------------------------------------------------------------
+
 void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 {
 	tmpSettings.gui.scalingPct = StrToIntDef(edGuiScaling->Text, 100);

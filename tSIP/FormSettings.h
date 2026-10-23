@@ -564,6 +564,7 @@ __published:	// IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnCancelClick(TObject *Sender);
 	void __fastcall btnApplyClick(TObject *Sender);
+	void __fastcall chbHistoryShowHintClick(TObject *Sender);
 	void __fastcall btnAddAccountClick(TObject *Sender);
 	void __fastcall btnRemoveAccountClick(TObject *Sender);
 	void __fastcall cbAccountChange(TObject *Sender);
