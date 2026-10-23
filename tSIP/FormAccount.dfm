@@ -4,7 +4,7 @@ object frmAccount: TfrmAccount
   Align = alTop
   BorderStyle = bsNone
   Caption = 'Account, codecs'
-  ClientHeight = 637
+  ClientHeight = 640
   ClientWidth = 605
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -19,7 +19,7 @@ object frmAccount: TfrmAccount
     Left = 0
     Top = 0
     Width = 605
-    Height = 176
+    Height = 152
     Align = alTop
     BevelOuter = bvNone
     ParentBackground = False
@@ -85,13 +85,6 @@ object frmAccount: TfrmAccount
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
       ParentFont = False
-    end
-    object lblPtime: TLabel
-      Left = 9
-      Top = 152
-      Width = 26
-      Height = 13
-      Caption = 'ptime'
     end
     object chbEnabled: TCheckBox
       Left = 7
@@ -211,21 +204,6 @@ object frmAccount: TfrmAccount
       Text = '0'
       OnChange = edExpiresChange
     end
-    object edPtime: TEdit
-      Left = 126
-      Top = 149
-      Width = 50
-      Height = 22
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -11
-      Font.Name = 'Courier New'
-      Font.Style = []
-      ParentFont = False
-      TabOrder = 11
-      Text = '20'
-      OnChange = edPtimeChange
-    end
     object grboxAccount: TGroupBox
       Left = 440
       Top = 6
@@ -239,7 +217,7 @@ object frmAccount: TfrmAccount
   end
   object pnlExtraToggle: TPanel
     Left = 0
-    Top = 176
+    Top = 152
     Width = 605
     Height = 31
     Align = alTop
@@ -266,9 +244,9 @@ object frmAccount: TfrmAccount
   end
   object pnlExtra: TPanel
     Left = 0
-    Top = 207
+    Top = 183
     Width = 605
-    Height = 186
+    Height = 230
     Align = alTop
     BevelOuter = bvNone
     ParentBackground = False
@@ -330,6 +308,20 @@ object frmAccount: TfrmAccount
       Height = 13
       Caption = 'Media encryption'
     end
+    object lblPtime: TLabel
+      Left = 8
+      Top = 187
+      Width = 26
+      Height = 13
+      Caption = 'ptime'
+    end
+    object lblPtimeInfo: TLabel
+      Left = 182
+      Top = 187
+      Width = 240
+      Height = 13
+      Caption = 'ms; sent in SDP only when other than 20 (default)'
+    end
     object edDisplayName: TEdit
       Left = 126
       Top = 2
@@ -350,7 +342,7 @@ object frmAccount: TfrmAccount
       Width = 145
       Height = 17
       Caption = 'Hide/do not store in file'
-      TabOrder = 9
+      TabOrder = 12
       OnClick = chbHideDisplayNameClick
     end
     object edAuthUser: TEdit
@@ -364,7 +356,7 @@ object frmAccount: TfrmAccount
       Font.Name = 'Courier New'
       Font.Style = []
       ParentFont = False
-      TabOrder = 11
+      TabOrder = 13
       OnChange = edAuthUserChange
     end
     object chbHideAuthUser: TCheckBox
@@ -473,12 +465,27 @@ object frmAccount: TfrmAccount
     end
     object chbPublish: TCheckBox
       Left = 7
-      Top = 184
+      Top = 207
       Width = 346
       Height = 17
       Caption = 'Publish presence (PUBLISH) for this account'
       TabOrder = 9
       OnClick = chbPublishClick
+    end
+    object edPtime: TEdit
+      Left = 126
+      Top = 184
+      Width = 50
+      Height = 22
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Courier New'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 11
+      Text = '20'
+      OnChange = edPtimeChange
     end
     object cbMediaEncryption: TComboBox
       Left = 126
@@ -501,13 +508,14 @@ object frmAccount: TfrmAccount
   end
   object pnlCodecs: TPanel
     Left = 0
-    Top = 393
+    Top = 413
     Width = 605
     Height = 236
     Align = alTop
     BevelOuter = bvNone
     ParentBackground = False
     TabOrder = 3
+    ExplicitTop = 395
     object lblAudioCodecsAvailable: TLabel
       Left = 9
       Top = 22

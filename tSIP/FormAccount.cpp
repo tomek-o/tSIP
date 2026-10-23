@@ -6,6 +6,7 @@
 #include "FormAccount.h"
 #include "UaMain.h"
 #include <vector>
+#include <algorithm>
 #include "baresip_base_config.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -287,13 +288,37 @@ void __fastcall TfrmAccount::btnExtraClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+/** Put codec back on the "available" list at the position given by the original order,
+	not at the end of the list */
+void TfrmAccount::ReturnCodecToAvailable(TListBox *lbox, const std::vector<AnsiString> &order, const AnsiString &name)
+{
+	std::vector<AnsiString>::const_iterator pos = std::find(order.begin(), order.end(), name);
+	int index = lbox->Items->Count;
+	if (pos != order.end())
+	{
+		const int rank = pos - order.begin();
+		for (int i = 0; i < lbox->Items->Count; i++)
+		{
+			std::vector<AnsiString>::const_iterator other = std::find(order.begin(), order.end(), lbox->Items->Strings[i]);
+			if (other == order.end() || (other - order.begin()) > rank)
+			{
+				index = i;
+				break;
+			}
+		}
+	}
+	lbox->Items->Insert(index, name);
+}
+
 void TfrmAccount::LoadAudioCodecs(void)
 {
 	lboxAudioCodecsAvailable->Clear();
 	lboxAudioCodecsEnabled->Clear();
 	std::vector<AnsiString> codecs;
+	audioCodecsOrder.clear();
 	if (Ua::Instance().GetAudioCodecList(codecs) == 0)
 	{
+		audioCodecsOrder = codecs;
 		for (unsigned int i=0; i<codecs.size(); i++)
 		{
 			lboxAudioCodecsAvailable->Items->Add(codecs[i]);
@@ -344,7 +369,7 @@ void TfrmAccount::AudioCodecDisableSelected(void)
 	int index = lboxAudioCodecsEnabled->ItemIndex;
 	if (index < 0)
 		return;
-	lboxAudioCodecsAvailable->Items->Add(lboxAudioCodecsEnabled->Items->Strings[index]);
+	ReturnCodecToAvailable(lboxAudioCodecsAvailable, audioCodecsOrder, lboxAudioCodecsEnabled->Items->Strings[index]);
 	lboxAudioCodecsEnabled->Items->Delete(index);
 	if (index >= lboxAudioCodecsEnabled->Items->Count)
 		index = lboxAudioCodecsEnabled->Items->Count - 1;
@@ -412,8 +437,10 @@ void TfrmAccount::LoadVideoCodecs(void)
 	lboxVideoCodecsAvailable->Clear();
 	lboxVideoCodecsEnabled->Clear();
 	std::vector<AnsiString> codecs;
+	videoCodecsOrder.clear();
 	if (Ua::Instance().GetVideoCodecList(codecs) == 0)
 	{
+		videoCodecsOrder = codecs;
 		for (unsigned int i=0; i<codecs.size(); i++)
 		{
 			lboxVideoCodecsAvailable->Items->Add(codecs[i]);
@@ -464,7 +491,7 @@ void TfrmAccount::VideoCodecDisableSelected(void)
 	int index = lboxVideoCodecsEnabled->ItemIndex;
 	if (index < 0)
 		return;
-	lboxVideoCodecsAvailable->Items->Add(lboxVideoCodecsEnabled->Items->Strings[index]);
+	ReturnCodecToAvailable(lboxVideoCodecsAvailable, videoCodecsOrder, lboxVideoCodecsEnabled->Items->Strings[index]);
 	lboxVideoCodecsEnabled->Items->Delete(index);
 	if (index >= lboxVideoCodecsEnabled->Items->Count)
 		index = lboxVideoCodecsEnabled->Items->Count - 1;

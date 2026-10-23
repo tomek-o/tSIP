@@ -1463,5 +1463,12 @@ Version 0.4 detailed changelog:
 	- button editor: a new button changed from Disabled gets a default caption for its type if the caption is empty (Button::DefaultCaption)
 	- recording: new option "Keep stereo in Opus recordings at low bitrates" (Opus encoder otherwise mixes stereo to mono below about 30 kbit/s); explained on the settings page
 	- FIXED: avformat read thread could use the audio source after it was closed (sample rate lookup without lock)
+
+Version 4.0.1
+	- SDP: ptime attribute is sent only when the account ptime is other than 20 ms and no offered codec needs a shorter packet time (L16 with high sampling rate); fixes oversized RTP packets from peers that honor ptime (pjmedia, L16/44100)
+	- RTP transmit packet time: peer ptime or account ptime, limited per codec (L16); the limit no longer stays after the codec changes
+	- account settings: ptime moved to extra settings
+	- call history: refreshing descriptions after contact editing
+	- keep codec sort order when moving back from "enabled" to "available" list
 */
 

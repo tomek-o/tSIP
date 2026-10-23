@@ -39,6 +39,7 @@ __published:	// IDE-managed Components
 	TCheckBox *chbAnswerAny;
 	TCheckBox *chbPublish;
 	TLabel *lblPtime;
+	TLabel *lblPtimeInfo;
 	TEdit *edPtime;
 	TLabel *lblContactUser;
 	TEdit *edCuser;
@@ -126,6 +127,9 @@ __published:	// IDE-managed Components
 private:	// User declarations
 	UaConf::Account& acc;
 	int audioCodecsEnabledDraggedIndex;
+	std::vector<AnsiString> audioCodecsOrder;	///< order of codecs reported by the application
+	std::vector<AnsiString> videoCodecsOrder;
+	static void ReturnCodecToAvailable(TListBox *lbox, const std::vector<AnsiString> &order, const AnsiString &name);
 	int videoCodecsEnabledDraggedIndex;
 	void LoadAudioCodecs(void);
 	void StoreAudioCodecs(void);

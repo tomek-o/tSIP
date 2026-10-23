@@ -92,6 +92,8 @@ struct autx {
 	char device[128];
 	int16_t *sampv;               /**< Sample buffer                   */
 	uint32_t ptime;               /**< Packet time for sending         */
+	uint32_t ptime_cfg;           /**< Configured packet time          */
+	uint32_t ptime_peer;          /**< Packet time requested by peer   */
 	uint32_t ts;                  /**< Timestamp for outgoing RTP      */
 	uint32_t ts_tel;              /**< Timestamp for Telephony Events  */
 	size_t psize;                 /**< Packet size for sending         */
@@ -219,6 +221,31 @@ static inline uint32_t get_framesize(const struct aucodec *ac,
 		return 0;
 
 	return calc_nsamp(get_srate(ac), ac->ch, ptime);
+}
+
+
+/**
+ * Maximum packet time [ms] that keeps an L16 packet below the network MTU
+ * (20 ms for other codecs)
+ *
+ * Ugly hardcoded L16 ptime: baresip does that at codec registration but
+ * I'm still using old API for this that is unfortunately also part of DLL mod interface.
+ * I don't want to change binary interface with DLL modules or add their versioning at the moment.
+ */
+static unsigned int max_ptime(const struct aucodec *ac)
+{
+	enum { LIMIT = 1400 };
+	unsigned int bytes_per_20ms;
+
+	if (!ac || str_casecmp(ac->name, "L16"))
+		return 20;
+
+	bytes_per_20ms = ac->srate * ac->ch * 2 / 50;
+	if (bytes_per_20ms / 2 > LIMIT)
+		return 4;
+	if (bytes_per_20ms > LIMIT)
+		return 10;
+	return 20;
 }
 
 
@@ -635,10 +662,25 @@ int audio_alloc(struct audio **ap, const struct config *cfg,
 		stream_set_bw(a->strm, AUDIO_BANDWIDTH);
 	}
 
-	err = sdp_media_set_lattr(stream_sdpmedia(a->strm), true,
-				  "ptime", "%u", ptime);
-	if (err)
-		goto out;
+	/* ptime is only a hint for the peer's transmit side. 20 ms is the default
+	   packetization, so it is not sent: peers that honor the attribute
+	   (e.g. pjmedia) could otherwise send packets larger than the MTU with
+	   high sampling rate L16 (frame time 10 ms there). */
+	{
+		bool send_ptime = (ptime != 20);
+
+		for (le = list_head(aucodecl); le && send_ptime; le = le->next) {
+			if (max_ptime(le->data) < 20)
+				send_ptime = false;
+		}
+
+		if (send_ptime) {
+			err = sdp_media_set_lattr(stream_sdpmedia(a->strm),
+						  true, "ptime", "%u", ptime);
+			if (err)
+				goto out;
+		}
+	}
 
 	/* Audio codecs */
 	for (le = list_head(aucodecl); le; le = le->next) {
@@ -665,6 +707,7 @@ int audio_alloc(struct audio **ap, const struct config *cfg,
 
 	str_ncpy(tx->device, a->cfg.src_dev, sizeof(tx->device));
 	tx->ptime  = ptime;
+	tx->ptime_cfg = ptime;
 	tx->ts     = rand_u16();
 	tx->marker = true;
 
@@ -738,6 +781,7 @@ int audio_alloc2(struct audio **ap, const struct config *cfg,
 
 	str_ncpy(tx->device, a->cfg.src_dev, sizeof(tx->device));
 	tx->ptime  = ptime;
+	tx->ptime_cfg = ptime;
 	tx->ts     = rand_u16();
 	tx->marker = true;
 
@@ -1216,6 +1260,21 @@ int audio_encoder_set(struct audio *a, const struct aucodec *ac,
 		tx->ac = ac;
 	}
 
+	/* effective packet time: requested by peer or configured, limited per codec */
+	{
+		uint32_t ptime = tx->ptime_peer ? tx->ptime_peer : tx->ptime_cfg;
+		const unsigned int limit = max_ptime(ac);
+
+		if (limit < ptime) {
+			DEBUG_WARNING("audio: limiting %s ptime to %u ms\n", ac->name, limit);
+			ptime = limit;
+		}
+		if (ptime != tx->ptime) {
+			tx->ptime = ptime;
+			tx->psize = 2 * get_framesize(ac, ptime);
+		}
+	}
+
 	if (ac->encupdh) {
 		struct auenc_param prm;
 
@@ -1230,27 +1289,6 @@ int audio_encoder_set(struct audio *a, const struct aucodec *ac,
 
 	stream_set_srate(a->strm, get_srate(ac), get_srate(ac));
 	stream_update_encoder(a->strm, pt_tx);
-
-	/* use a codec-specific ptime */
-	/* 	Ugly hardcoded L16 ptime: baresip does that at codec registration but
-		I'm still using old API for this that is unfortunately also part of DLL mod interface.
-		I don't want to	change binary interface with DLL modules or add their versioning at the moment.
-	*/
-	if (strcmp(ac->name, "L16") == 0) {
-		unsigned int ptime = 20;
-		unsigned int bytes_per_20ms = ac->srate * ac->ch * 2 / 50;
-		enum { LIMIT = 1400 };
-		if (bytes_per_20ms / 2 > LIMIT)
-			ptime = 4;
-		else if (bytes_per_20ms > LIMIT)
-			ptime = 10;
-		if (ptime < tx->ptime)
-		{
-			DEBUG_WARNING("audio: limiting L16 ptime to %u ms\n", ptime);
-			tx->ptime = ptime;
-			tx->psize = 2 * calc_nsamp(ac->srate, ac->ch, ptime);
-		}
-	}
 
 	if (!tx->ausrc) {
 		err |= audio_start(a);
@@ -1416,23 +1454,16 @@ void audio_sdp_attr_decode(struct audio *a)
 
 	/* This is probably only meaningful for audio data, but
 	   may be used with other media types if it makes sense. */
+	a->tx.ptime_peer = 0;
 	attr = sdp_media_rattr(stream_sdpmedia(a->strm), "ptime");
 	if (attr) {
-		struct autx *tx = &a->tx;
 		uint32_t ptime_tx = atoi(attr);
 
 		if (ptime_tx && ptime_tx != a->tx.ptime) {
-
 			DEBUG_NOTICE("peer changed ptime_tx %u -> %u\n",
 				     a->tx.ptime, ptime_tx);
-
-			tx->ptime = ptime_tx;
-
-			if (tx->ac) {
-				tx->psize = 2 * get_framesize(tx->ac,
-							      ptime_tx);
-			}
 		}
+		a->tx.ptime_peer = ptime_tx;
 	}
 }
 
