@@ -129,6 +129,7 @@ private:
 	typedef void (__closure *CallbackClearDial)(void);
 	typedef void (__closure *CallbackRedial)(void);
 	typedef int (__closure *CallbackGetNumberDescription)(const char* number, char* description, int descriptionSize);
+	typedef void (__closure *CallbackSetKeepForeground)(bool allowed);
 
 	static std::list<PhoneConf> cfg;
 	static PhoneConf& FindCfg(AnsiString dllName);
@@ -260,6 +261,8 @@ public:
 	static CallbackClearDial callbackClearDial;
 	static CallbackRedial callbackRedial;
 	static CallbackGetNumberDescription callbackGetNumberDescription;
+	/** \brief Called (main thread) when set of plugins suspending keep-foreground changes; allowed = no plugin suspends it */
+	static CallbackSetKeepForeground callbackSetKeepForeground;
 	static TPopupMenu *trayPopupMenu;
 
 	// dll callbacks
@@ -279,6 +282,7 @@ public:
 	static void* __stdcall OnAddTrayMenuItem(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie);
 	static int __stdcall OnRunScriptAsync(void *cookie, const char* script);
 	static int __stdcall OnSetAppStatus(void *cookie, const char* id, int priority, const char* text);
+	static int __stdcall OnSetKeepForeground(void *cookie, int state);
 	
 	static void Poll(void);
 	/** \brief Process single queued plugin event

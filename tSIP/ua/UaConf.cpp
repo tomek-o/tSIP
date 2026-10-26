@@ -245,6 +245,7 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		const Json::Value &jv = uaConfJson["sip"];
 		jv.getBool("compactHeadersRfc3261", sip.compactHeadersRfc3261);
 		jv.getBool("compactHeadersExt", sip.compactHeadersExt);
+		jv.getBool("disableUserAgent", sip.disableUserAgent);
 	}
 
 	{
@@ -414,6 +415,7 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	uaConfJson["noIpBind"] = noIpBind;
 	uaConfJson["sip"]["compactHeadersRfc3261"] = sip.compactHeadersRfc3261;
 	uaConfJson["sip"]["compactHeadersExt"] = sip.compactHeadersExt;
+	uaConfJson["sip"]["disableUserAgent"] = sip.disableUserAgent;
 	uaConfJson["avt"]["portMin"] = avt.portMin;
 	uaConfJson["avt"]["portMax"] = avt.portMax;
 	uaConfJson["avt"]["jbufDelayMin"] = avt.jbufDelayMin;

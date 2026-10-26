@@ -237,6 +237,11 @@ typedef void* (__stdcall *CALLBACK_ADD_TRAY_MENU_ITEM)(void *cookie, void* paren
 	\return 0 on success
 */
 typedef int (__stdcall *CALLBACK_SET_APP_STATUS)(void *cookie, const char* id, int priority, const char* text);
+/** \brief Allow or suspend "keep main window in foreground" application setting, e.g. while plugin shows its own window
+	\param state 1 = allow (default), 0 = suspend; the setting is applied only if no plugin suspends it (unloading plugin allows it again)
+	\return 0 on success
+*/
+typedef int (__stdcall *CALLBACK_SET_KEEP_FOREGROUND)(void *cookie, int state);
 ///////////////////////////////////////////////////////////////////////////////
 // EXPORTED/IMPORTED FUNCTION SET
 ///////////////////////////////////////////////////////////////////////////////
@@ -325,6 +330,8 @@ DECLARE_FN(void, SetRunScriptAsyncCallback, CALLBACK_RUN_SCRIPT_ASYNC lpFn);
 DECLARE_FN(void, SetAddTrayMenuItemCallback, CALLBACK_ADD_TRAY_MENU_ITEM lpFn);
 
 DECLARE_FN(void, SetCallbackSetAppStatus, CALLBACK_SET_APP_STATUS lpFn);
+
+DECLARE_FN(void, SetCallbackSetKeepForeground, CALLBACK_SET_KEEP_FOREGROUND lpFn);
 
 /** \brief Called on audio device error (e.g. end of wave file)
 */

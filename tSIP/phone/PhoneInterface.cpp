@@ -37,6 +37,7 @@ PhoneInterface::CallbackPagingTx PhoneInterface::callbackPagingTx = NULL;
 PhoneInterface::CallbackClearDial PhoneInterface::callbackClearDial = NULL;
 PhoneInterface::CallbackRedial PhoneInterface::callbackRedial = NULL;
 PhoneInterface::CallbackGetNumberDescription PhoneInterface::callbackGetNumberDescription = NULL;
+PhoneInterface::CallbackSetKeepForeground PhoneInterface::callbackSetKeepForeground = NULL;
 PhoneInterface::CallbackGetCalls PhoneInterface::callbackGetCalls = NULL;
 PhoneInterface::CallbackMakeCall PhoneInterface::callbackMakeCall = NULL;
 PhoneInterface::CallbackAnswer PhoneInterface::callbackAnswer = NULL;
@@ -135,6 +136,7 @@ enum PhoneEventType
 	PHONE_EVENT__INVALID = 0,
 	PHONE_EVENT_SCRIPT,
 	PHONE_EVENT_APP_STATUS,
+	PHONE_EVENT_KEEP_FOREGROUND,
 	PHONE_EVENT_KEY,
 	PHONE_PAGING_TX,
 	PHONE_CLEAR_DIAL,
@@ -162,6 +164,8 @@ struct PhoneEvent
 		{}
 	} appStatus;
 
+	int keepForeground;		///< 1 = allow, 0 = suspend
+
 	int keyCode;
 	int keyState;
 
@@ -177,11 +181,15 @@ struct PhoneEvent
 	PhoneEvent(void):
 		cookie(NULL),
 		type(PHONE_EVENT__INVALID),
+		keepForeground(1),
 		keyCode(-1),
 		keyState(-1),
 		invoke(NULL)
 	{}
 };
+
+/** \brief Lowercase file names of plugins that suspended "keep main window in foreground"; main thread only */
+std::set<AnsiString> keepForegroundSuspenders;
 
 Mutex mutexEventQueue;
 std::deque<PhoneEvent> eventQueue;
@@ -815,6 +823,21 @@ int __stdcall PhoneInterface::OnSetAppStatus(void *cookie, const char* id, int p
 	return EnqueueEvent(event);
 }
 
+int __stdcall PhoneInterface::OnSetKeepForeground(void *cookie, int state)
+{
+	PhoneEvent event;
+	event.cookie = cookie;
+	{
+		ScopedLock<Mutex> lock(mutexValidInstances);
+		if (!IsValidInstance(cookie))
+			return -1;
+		event.deviceFilename = LowerCase(reinterpret_cast<PhoneInterface*>(cookie)->filename);
+	}
+	event.type = PHONE_EVENT_KEEP_FOREGROUND;
+	event.keepForeground = state ? 1 : 0;
+	return EnqueueEvent(event);
+}
+
 void PhoneInterface::SetCallbackRunScript(CallbackRunScript cb)
 {
 	assert(cb);
@@ -1434,6 +1457,10 @@ PhoneInterface::~PhoneInterface()
 	{
 		instances.erase(it);
 	}
+	if (keepForegroundSuspenders.erase(LowerCase(filename)) > 0 && keepForegroundSuspenders.empty() && callbackSetKeepForeground)
+	{
+		callbackSetKeepForeground(true);	// plugin unloaded while it was suspending keep-foreground
+	}
 	if (isV2 && TSIP_PLUGIN_HAS(&pluginApiV2, Shutdown) && pluginApiV2.Shutdown)
 	{
 		pluginApiV2.Shutdown();
@@ -1579,6 +1606,12 @@ int PhoneInterface::Load(void)
 	    dllSetCallbackSetAppStatus(&OnSetAppStatus);
 	}
 
+	pfSetCallbackSetKeepForeground dllSetCallbackSetKeepForeground = (pfSetCallbackSetKeepForeground)GetProcAddress(hInstance, "SetCallbackSetKeepForeground");
+	if (dllSetCallbackSetKeepForeground)
+	{
+		dllSetCallbackSetKeepForeground(&OnSetKeepForeground);
+	}
+
 	GetSettings(&settings);
 
 	return 0;
@@ -1667,6 +1700,16 @@ bool PhoneInterface::PollOne(void)
 
 	case PHONE_EVENT_APP_STATUS: {
 		SetAppStatus(event.appStatus.id, event.appStatus.priority, event.appStatus.text);
+		break;
+	}
+
+	case PHONE_EVENT_KEEP_FOREGROUND: {
+		if (event.keepForeground)
+			keepForegroundSuspenders.erase(event.deviceFilename);
+		else
+			keepForegroundSuspenders.insert(event.deviceFilename);
+		if (callbackSetKeepForeground)
+			callbackSetKeepForeground(keepForegroundSuspenders.empty());
 		break;
 	}
 

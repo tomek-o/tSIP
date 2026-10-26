@@ -44,6 +44,7 @@ Settings::_frmMain::_frmMain(void):
 	mainPanelHeight(363),
 	bWindowMaximized(false),
 	bAlwaysOnTop(false),
+	bKeepForeground(false),
 	bStartMinimizedToTray(false),
 	bAutostart(false),
 	bSpeedDialVisible(false),
@@ -479,6 +480,7 @@ void Settings::UpdateFromJsonValue(const Json::Value &root)
 		
 		frmMain.bWindowMaximized = frmMainJson.get("Maximized", frmMain.bWindowMaximized).asBool();
 		frmMain.bAlwaysOnTop = frmMainJson.get("AlwaysOnTop", frmMain.bAlwaysOnTop).asBool();
+		frmMainJson.getBool("KeepForeground", frmMain.bKeepForeground);
 		frmMainJson.getBool("HideCallPanel", frmMain.bHideCallPanel);
 		frmMainJson.getBool("HideMakeCallButton", frmMain.bHideMakeCallButton);
 		frmMainJson.getBool("HideHangupButton", frmMain.bHideHangupButton);
@@ -887,6 +889,7 @@ Json::Value Settings::ToJson(void)
 
 		jv["Maximized"] = frmMain.bWindowMaximized;
 		jv["AlwaysOnTop"] = frmMain.bAlwaysOnTop;
+		jv["KeepForeground"] = frmMain.bKeepForeground;
 		jv["SpeedDialVisible"] = frmMain.bSpeedDialVisible;
 		jv["UseClientAreaSizes"] = frmMain.bUseClientAreaSizes;
 		jv["HideCallPanel"] = frmMain.bHideCallPanel;

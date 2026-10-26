@@ -83,6 +83,7 @@ public:
 		
 		bool bWindowMaximized;			///< is main window maximized?
 		bool bAlwaysOnTop;
+		bool bKeepForeground;			///< periodically bring main window to front when other application is active (kiosk-like)
 		bool bStartMinimizedToTray;
 		bool bAutostart;				///< run at Windows login (HKCU Run registry key)
 		bool bSpeedDialVisible;

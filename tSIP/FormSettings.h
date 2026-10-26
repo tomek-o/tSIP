@@ -38,6 +38,8 @@ __published:	// IDE-managed Components
 	TTabSheet *tsGeneral;
 	TTabSheet *tsLogging;
 	TCheckBox *chbAlwaysOnTop;
+	TCheckBox *chbKeepForeground;
+	TCheckBox *chbDisableUa;
 	TTabSheet *tsAccount;
 	TPanel *pnlAccountsBottom;
 	TButton *btnAddAccount;
@@ -158,6 +160,7 @@ __published:	// IDE-managed Components
 	TEdit *edFilter;
 	TTreeView *tvSelector;
 	TTabSheet *tsNetwork;
+	TTabSheet *tsSip;
 	TLabel *lblLocalAddress;
 	TEdit *edLocalAddress;
 	TLabel *lblRtpPortRange;
@@ -500,6 +503,7 @@ __published:	// IDE-managed Components
 	TTrackBar *trbarSoundRingVolume;
 	TCheckBox *chbHistoryIgnoreCallsCompletedElsewhere;
 	TCheckBox *chbHistoryShowRecordFileInHint;
+	TCheckBox *chbHistoryShowRtpSummaryInHint;
 	TLabel *lblHistoryMaxEntries;
 	TComboBox *cbHistoryMaxEntries;
 	TTabSheet *tsMultipleCalls;
@@ -628,6 +632,9 @@ private:	// User declarations
 	TfrmDialpadConf *frmDialpadConf;
 	TfrmVideoConf *frmVideoConf;
 	TTabSheet *lastTab;
+	bool initialPageSelected;
+	/** \brief Show "SIP account" page (or first available page) when settings are shown for the first time */
+	void SelectInitialPage(void);
 	void AudioPreprocessingUpdate(void);
 	void UpdateNetworkInterface(void);
 	TTreeNode* CreatePagesNode(TTreeNode *parent, TTabSheet *tab);

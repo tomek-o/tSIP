@@ -26,8 +26,6 @@ struct SettingsAppVersion;
 class UaConf
 {
 public:
-	bool disableUa;
-
 	struct Account
 	{
 		enum TRANSPORT_TYPE
@@ -555,15 +553,18 @@ public:
 	/** \brief Global SIP protocol options */
 	struct Sip {
 		bool compactHeadersRfc3261;	///< use compact header names (RFC 3261 7.3.3) in outgoing messages
+		bool disableUserAgent;	///< do not start SIP user agent (no accounts, registration, calls); application works as button panel for scripts and plugins; restart required
 		bool compactHeadersExt;	///< use compact names also for extension headers (Event, Allow-Events, Refer-To, Referred-By, Session-Expires); only with compactHeadersRfc3261
 		Sip(void):
 			compactHeadersRfc3261(false),
-			compactHeadersExt(false)
+			compactHeadersExt(false),
+			disableUserAgent(false)
 		{}
 		bool operator==(const Sip& right) const {
 			return (
 				compactHeadersRfc3261 == right.compactHeadersRfc3261 &&
-				compactHeadersExt == right.compactHeadersExt
+				compactHeadersExt == right.compactHeadersExt &&
+				disableUserAgent == right.disableUserAgent
 			);
 		}
 		bool operator!=(const Sip& right) const {
@@ -786,7 +787,6 @@ public:
 	} video;
 
 	UaConf():
-		disableUa(false),
 		logMessages(false),
 		logMessagesOnlyFirstLine(false),
 		startAudioSourceAtCallStart(false),
@@ -809,8 +809,6 @@ public:
 	}
 
 	bool operator==(const UaConf& right) const {
-		if (disableUa != right.disableUa)
-			return false;
 		if (loopRingWithoutSilence != right.loopRingWithoutSilence)
 			return false;
 		if (accounts.size() != right.accounts.size())

@@ -227,6 +227,12 @@ private:
 	void OnSetBtnContainerBackground(int id, const char* file);
 	void OnDisableBringToFront(bool state);
 	void OnSetKeepForeground(bool state);
+	void OnPluginSetKeepForeground(bool allowed);
+	void UpdateKeepForegroundTimer(void);
+	void __fastcall tmrKeepForegroundTimer(TObject *Sender);
+	TTimer *tmrKeepForeground;
+	bool keepForegroundSuspendedByUi;		///< button container settings dialog, etc.
+	bool keepForegroundSuspendedByPlugin;
 	void MainMenuShow(bool state);
 	void ApplicationShow(bool focused);
 	void ApplicationHide(void);

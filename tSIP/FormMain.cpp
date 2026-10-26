@@ -267,6 +267,8 @@ void TfrmMain::TranslateForm(void* obj)
 }
 
 //---------------------------------------------------------------------------
+static bool uaDisabled = false;	///< SIP user agent was not started (disabled in settings)
+
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	: TForm(Owner),
 	initialScaling(1.0),
@@ -275,9 +277,16 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	notificationIconState(false),
 	errorIconState(false),
 	appState(Callback::APP_STATE_UNKNOWN),
-	appStartFailCount(0)
+	appStartFailCount(0),
+	tmrKeepForeground(NULL),
+	keepForegroundSuspendedByUi(false),
+	keepForegroundSuspendedByPlugin(false)
 {
 	srand(time(0));
+	tmrKeepForeground = new TTimer(this);
+	tmrKeepForeground->Enabled = false;
+	tmrKeepForeground->Interval = 500;
+	tmrKeepForeground->OnTimer = tmrKeepForegroundTimer;
 	RegisterTranslationCb(this, TranslateForm);
 	lbl2ndParty->Caption = "";
 	lbl2ndPartyDesc->Caption = "";
@@ -736,7 +745,11 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		}
 	}
 
-	if (appSettings.uaConf != prev.uaConf)
+	if (appSettings.uaConf.sip.disableUserAgent != uaDisabled)
+	{
+		SetStatus(uaDisabled ? "Restart application to enable SIP user agent" : "Restart application to disable SIP user agent");
+	}
+	else if (!uaDisabled && appSettings.uaConf != prev.uaConf)
 	{
 		SetStatus("Restarting UA...");
 		Ua::Instance().Restart();
@@ -787,6 +800,7 @@ void TfrmMain::UpdateSettings(const Settings &prev)
 		this->FormStyle = fsStayOnTop;
 	else
 		this->FormStyle = fsNormal;
+	UpdateKeepForegroundTimer();
 	SetMainWindowLayout(appSettings.frmMain.layout);
 	if (appSettings.frmMain.dialComboboxOrder != prev.frmMain.dialComboboxOrder)
 	{
@@ -974,8 +988,17 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 
     PortaudioLockInit();
 
-	Ua::Instance().Start();
-	SetStatus("Initializing...");
+	uaDisabled = appSettings.uaConf.sip.disableUserAgent;
+	if (uaDisabled)
+	{
+		LOG("SIP user agent is disabled in settings\n");
+		SetStatus("SIP user agent disabled");
+	}
+	else
+	{
+		Ua::Instance().Start();
+		SetStatus("Initializing...");
+	}
 
 	//LOG("Registering hotkeys...\n");
 	RegisterGlobalHotKeys();
@@ -993,6 +1016,8 @@ void __fastcall TfrmMain::tmrStartupTimer(TObject *Sender)
 	PhoneInterface::callbackAnswer = OnPluginAnswer;
 	PhoneInterface::callbackHangup = OnPluginHangup;
 	PhoneInterface::callbackRunScriptContext = RunScript2;
+	PhoneInterface::callbackSetKeepForeground = OnPluginSetKeepForeground;
+	UpdateKeepForegroundTimer();
 	PluginV2Methods::SetCallbackStartRecording(StartRecording);
 #ifdef USE_VIDEO
 	VideoRawDump::Init();	// video decoder hook, before any video call
@@ -1171,6 +1196,11 @@ int TfrmMain::MakeCallOnAccount(AnsiString target, unsigned int &callUid, int ac
 
 int TfrmMain::MakeCallEx(AnsiString target, AnsiString extraHeaderLines, unsigned int &callUid, int accountId)
 {
+	if (uaDisabled)
+	{
+		LOG("Cannot make call: SIP user agent is disabled\n");
+		return -1;
+	}
 	if (appState == Callback::APP_INIT_FAILED || appState == Callback::APP_START_FAILED)
 	{
         LOG("Cannot make call: app not started properly\n");
@@ -1525,18 +1555,33 @@ void TfrmMain::OnSetTrayIcon(const char* file)
 
 void TfrmMain::OnSetKeepForeground(bool state)
 {
-#if 0
-	if (state == false)
-	{
-		tmrHideOtherWindow->Enabled = false;
-		tmrBringToFront->Enabled = false;
-	}
-	else
-	{
-		tmrHideOtherWindow->Enabled = appSettings.frmMain.bHideOtherWindow;
-		tmrBringToFront->Enabled = true;
-	}
-#endif
+	keepForegroundSuspendedByUi = !state;
+	UpdateKeepForegroundTimer();
+}
+
+void TfrmMain::OnPluginSetKeepForeground(bool allowed)
+{
+	keepForegroundSuspendedByPlugin = !allowed;
+	UpdateKeepForegroundTimer();
+}
+
+void TfrmMain::UpdateKeepForegroundTimer(void)
+{
+	tmrKeepForeground->Enabled = appSettings.frmMain.bKeepForeground &&
+		!keepForegroundSuspendedByUi && !keepForegroundSuspendedByPlugin;
+}
+
+void __fastcall TfrmMain::tmrKeepForegroundTimer(TObject *Sender)
+{
+	// Screen->ActiveForm is NULL when other application is active; main window is disabled while modal dialog is shown
+	if (!appSettings.frmMain.bKeepForeground || Screen->ActiveForm != NULL ||
+		IsIconic(Application->Handle) || !Visible || !IsWindowEnabled(Handle))
+		return;
+	// empty input event allows SetForegroundWindow() to take focus from other application
+	INPUT input;
+	memset(&input, 0, sizeof(input));
+	SendInput(1, &input, sizeof(input));
+	SetForegroundWindow(Handle);
 }
 
 int TfrmMain::OnPluginSendMessageText(const char* dllName, const char* text)
@@ -2187,6 +2232,7 @@ void TfrmMain::PollCallbackQueue(void)
 					entry.paiPeerName = call->paiPeerName.c_str();
 					entry.incoming = call->incoming;
 					entry.codecName = call->codecName;
+					entry.rtp = call->rtpSummary;
 					if (call->connected)
 					{
 						entry.time = SecondsBetween(Now(), call->timeTalkStart) + 1;
@@ -2332,6 +2378,16 @@ void TfrmMain::PollCallbackQueue(void)
 
 			break;
 		}
+		case Callback::CALL_RTP_SUMMARY:
+		{
+			Call *call = Calls::FindByUid(cb.callUid);
+			if (call)
+			{
+				call->rtpSummary = cb.rtp;
+			}
+			LOG("Call [uid = %u] RTP summary: %s\n", cb.callUid, cb.rtp.ToLogLine().c_str());
+			break;
+		}
 		case Callback::CALL_REINVITE_RECEIVED:
 		{
 			Call *call = Calls::FindByUid(cb.callUid);
@@ -2423,7 +2479,6 @@ void TfrmMain::PollCallbackQueue(void)
 					AnsiString asScriptFile;
 					bool handled = true;
 					asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onEncryptionState.c_str());
-					int TODO__ZRTP_SESSION_ID_VS_CALL_ID;
 					RunScriptFile(SCRIPT_SRC_ON_ENCRYPTION_STATE, cb.zrtp.sessionId, asScriptFile.c_str(), handled);
 				}
 			}
@@ -3474,10 +3529,10 @@ void TfrmMain::OnProgrammableBtnClick(int id, TProgrammableButton* btn)
 		}
 		break;
 	case Button::ZRTP_VERIFY_SAS:
-		UA->ZrtpVerifySas(true);
+		UA->ZrtpVerifySas(Calls::GetCurrentCallUid(), true);
 		break;
 	case Button::ZRTP_UNVERIFY_SAS:
-		UA->ZrtpVerifySas(false);
+		UA->ZrtpVerifySas(Calls::GetCurrentCallUid(), false);
 		break;
 	case Button::LINE: {
 		tmrClearCallState->Enabled = false;
@@ -3511,7 +3566,7 @@ void TfrmMain::OnProgrammableBtnMouseUpDown(int id, TProgrammableButton* btn)
 
 void TfrmMain::OnRestartUa(void)
 {
-	if (!appSettings.uaConf.disableUa)
+	if (!appSettings.uaConf.sip.disableUserAgent)
 	{
 		buttons.UpdateContacts(appSettings.uaConf.contacts);
 		Ua::Instance().Restart();

@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 578
     Height = 496
-    ActivePage = tsContacts
+    ActivePage = tsHistory
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -188,6 +188,20 @@ object frmSettings: TfrmSettings
           'Do not restore taskbar button when restoring application from tr' +
           'ay'
         TabOrder = 13
+      end
+      object chbKeepForeground: TCheckBox
+        Left = 3
+        Top = 326
+        Width = 526
+        Height = 17
+        Hint = 
+          'Bring main window to front every 500 ms when another application' +
+          ' is active (kiosk-like use); not done when minimized or when a d' +
+          'ialog is open'
+        Caption = 'Keep main window in foreground (kiosk-like use)'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 14
       end
       object chbNoTrayIcon: TCheckBox
         Left = 3
@@ -376,24 +390,48 @@ object frmSettings: TfrmSettings
         Caption = 'Do not bind to IP'
         TabOrder = 3
       end
+    end
+    object tsSip: TTabSheet
+      Caption = 'SIP'
+      object chbDisableUa: TCheckBox
+        Left = 3
+        Top = 3
+        Width = 450
+        Height = 17
+        Hint = 
+          'No accounts, registration, calls or presence; application works ' +
+          'as button panel for scripts and plugins'
+        Caption = 'Disable SIP user agent (restart required)'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 0
+      end
       object chbSipCompactHeadersRfc3261: TCheckBox
         Left = 3
-        Top = 250
+        Top = 26
         Width = 450
         Height = 17
         Caption = 'Use compact SIP header names in outgoing messages (RFC 3261)'
-        TabOrder = 9
+        TabOrder = 1
         OnClick = chbSipCompactHeadersRfc3261Click
       end
       object chbSipCompactHeadersExt: TCheckBox
         Left = 19
-        Top = 273
+        Top = 49
         Width = 520
         Height = 17
         Caption = 
           'also for extension headers (Event, Allow-Events, Refer-To, Refer' +
           'red-By, Session-Expires)'
-        TabOrder = 10
+        TabOrder = 2
+      end
+      object chbHandleOodRefer: TCheckBox
+        Left = 3
+        Top = 72
+        Width = 446
+        Height = 17
+        Caption = 'Handle incoming out-of-dialog REFER requests'
+        TabOrder = 3
       end
     end
     object tsAccount: TTabSheet
@@ -1147,14 +1185,6 @@ object frmSettings: TfrmSettings
         Caption = 'Answer on receiving NOTIFY with Event: talk'
         TabOrder = 7
       end
-      object chbHandleOodRefer: TCheckBox
-        Left = 3
-        Top = 230
-        Width = 446
-        Height = 17
-        Caption = 'Handle incoming out-of-dialog REFER requests'
-        TabOrder = 8
-      end
       object memoCallsExtraHeaderLines: TMemo
         Left = 219
         Top = 262
@@ -1166,7 +1196,7 @@ object frmSettings: TfrmSettings
         Font.Name = 'Courier New'
         Font.Style = []
         ParentFont = False
-        TabOrder = 9
+        TabOrder = 8
       end
       object chbDisconnectCallOnAudioError: TCheckBox
         Left = 3
@@ -1186,7 +1216,7 @@ object frmSettings: TfrmSettings
         Caption = 
           'Disconnect call at end of audio file used as source (e.g. playin' +
           'g announcement)'
-        TabOrder = 12
+        TabOrder = 9
       end
       object edAutoAnswerReason: TEdit
         Left = 381
@@ -2994,7 +3024,7 @@ object frmSettings: TfrmSettings
       ImageIndex = 16
       object lblHistoryMaxEntries: TLabel
         Left = 3
-        Top = 249
+        Top = 276
         Width = 116
         Height = 13
         Caption = 'Maximum history entries'
@@ -3037,8 +3067,8 @@ object frmSettings: TfrmSettings
         OnClick = chbHistoryShowHintClick
       end
       object chbHistoryFormatCallDurationAsHourMinSec: TCheckBox
-        Left = 3
-        Top = 223
+        Left = 21
+        Top = 225
         Width = 446
         Height = 17
         Caption = 'Format call duration time as hours:minutes:seconds'
@@ -3094,13 +3124,21 @@ object frmSettings: TfrmSettings
         Caption = 'Show record file in hint'
         TabOrder = 9
       end
+      object chbHistoryShowRtpSummaryInHint: TCheckBox
+        Left = 21
+        Top = 247
+        Width = 446
+        Height = 17
+        Caption = 'Show RTP summary in hint (packets, loss, jitter, buffer events)'
+        TabOrder = 11
+      end
       object cbHistoryMaxEntries: TComboBox
         Left = 127
-        Top = 246
+        Top = 273
         Width = 65
         Height = 21
         ItemHeight = 13
-        TabOrder = 11
+        TabOrder = 12
         Items.Strings = (
           '100'
           '500'

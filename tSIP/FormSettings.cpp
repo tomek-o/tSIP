@@ -63,7 +63,7 @@ namespace
 
 //---------------------------------------------------------------------------
 __fastcall TfrmSettings::TfrmSettings(TComponent* Owner)
-	: TForm(Owner), accountIdsChanged(false), lastTab(NULL)
+	: TForm(Owner), accountIdsChanged(false), lastTab(NULL), initialPageSelected(false)
 {
 	fraLogConf = new TfraLogConf(tsLogging, tmpSettings.logging);
 	fraLogConf->Parent = tsLogging;
@@ -142,6 +142,7 @@ void TfrmSettings::CreatePages(void)
 
 	CreatePagesNode(NULL, tsGeneral);
 	CreatePagesNode(NULL, tsNetwork);
+	CreatePagesNode(NULL, tsSip);
 	TTreeNode *nodeAccount = CreatePagesNode(NULL, tsAccount);
 	CreatePagesNode(NULL, tsTls);
 	TTreeNode *nodeMainWindow = CreatePagesNode(NULL, tsMainWindow);
@@ -196,8 +197,34 @@ void TfrmSettings::CreatePages(void)
 	}
 }
 
+void TfrmSettings::SelectInitialPage(void)
+{
+	TTreeNode *selected = NULL;
+	for (TTreeNode *node = tvSelector->Items->GetFirstNode(); node; node = node->GetNext())
+	{
+		if (node->Data == tsAccount)
+		{
+			selected = node;
+			break;
+		}
+	}
+	if (!selected)
+		selected = tvSelector->Items->GetFirstNode();
+	if (selected)
+	{
+		selected->Selected = true;
+		// OnChange is not called if the node was already selected or the tree was not realized yet
+		tvSelectorChange(tvSelector, selected);
+	}
+}
+
 void __fastcall TfrmSettings::FormShow(TObject *Sender)
 {
+	if (!initialPageSelected)
+	{
+		initialPageSelected = true;
+		SelectInitialPage();
+	}
 	AudioDevicesList::Instance().Refresh();
 
 	tmpSettings = appSettings;
@@ -318,6 +345,8 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbTranslationLogMissingKeys->Checked = tmpSettings.Translation.logMissingKeys;	
 
 	chbAlwaysOnTop->Checked = tmpSettings.frmMain.bAlwaysOnTop;
+	chbKeepForeground->Checked = tmpSettings.frmMain.bKeepForeground;
+	chbDisableUa->Checked = tmpSettings.uaConf.sip.disableUserAgent;
 	chbStartMinimizedToTray->Checked = tmpSettings.frmMain.bStartMinimizedToTray;
 	chbAutostart->Checked = tmpSettings.frmMain.bAutostart;
 
@@ -554,6 +583,7 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbHistoryShowLastReplyLineInHint->Checked = tmpSettings.history.showLastReplyLineInHint;
 	chbHistoryShowReasonInHint->Checked = tmpSettings.history.showReasonInHint;
 	chbHistoryShowRecordFileInHint->Checked = tmpSettings.history.showRecordFileInHint;
+	chbHistoryShowRtpSummaryInHint->Checked = tmpSettings.history.showRtpSummaryInHint;
 	chbHistoryShowHintClick(NULL);
 	cbHistoryMaxEntries->Text = tmpSettings.history.maxEntries;
 
@@ -637,6 +667,8 @@ void __fastcall TfrmSettings::chbHistoryShowHintClick(TObject *Sender)
 	chbHistoryShowLastReplyLineInHint->Enabled = enabled;
 	chbHistoryShowReasonInHint->Enabled = enabled;
 	chbHistoryShowRecordFileInHint->Enabled = enabled;
+	chbHistoryShowRtpSummaryInHint->Enabled = enabled;
+	chbHistoryFormatCallDurationAsHourMinSec->Enabled = enabled;
 }
 //---------------------------------------------------------------------------
 
@@ -697,6 +729,8 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.Translation.logMissingKeys = chbTranslationLogMissingKeys->Checked;	
 
 	tmpSettings.frmMain.bAlwaysOnTop = chbAlwaysOnTop->Checked;
+	tmpSettings.frmMain.bKeepForeground = chbKeepForeground->Checked;
+	tmpSettings.uaConf.sip.disableUserAgent = chbDisableUa->Checked;
 	tmpSettings.frmMain.bStartMinimizedToTray = chbStartMinimizedToTray->Checked;
 	tmpSettings.frmMain.bAutostart = chbAutostart->Checked;
 	tmpSettings.trayNotifier.showOnIncoming = chbTrayNotifierShowOnIncoming->Checked;
@@ -1029,6 +1063,7 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.history.showLastReplyLineInHint = chbHistoryShowLastReplyLineInHint->Checked;
 	tmpSettings.history.showReasonInHint = chbHistoryShowReasonInHint->Checked;
 	tmpSettings.history.showRecordFileInHint = chbHistoryShowRecordFileInHint->Checked;
+	tmpSettings.history.showRtpSummaryInHint = chbHistoryShowRtpSummaryInHint->Checked;
 	{
 		unsigned int tmp = StrToIntDef(cbHistoryMaxEntries->Text, tmpSettings.history.maxEntries);
 		if (tmp >= HistoryConf::MAX_ENTRIES_MIN && tmp <= HistoryConf::MAX_ENTRIES_MAX)
@@ -1642,7 +1677,7 @@ void __fastcall TfrmSettings::tvSelectorChange(TObject *Sender, TTreeNode *Node)
 		TTabSheet *tab = reinterpret_cast<TTabSheet*>(Node->Data);
 		assert(tab);
 		tab->Visible = true;
-		if (lastTab)
+		if (lastTab && lastTab != tab)
 			lastTab->Visible = false;
 		lastTab = tab;
 	}
