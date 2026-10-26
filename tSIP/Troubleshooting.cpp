@@ -219,6 +219,75 @@ namespace {
 		return false;
 	}
 
+	/** \brief True if device selected in cfg is not on the list of devices of its module
+		(modules silently use the default device in such case) */
+	bool IsAudioDeviceMissing(const UaConf::AudioCfg &cfg, bool out)
+	{
+		if (cfg.dev.empty())
+			return false;
+
+		AudioDevicesList &adl = AudioDevicesList::Instance();
+		const std::vector<AnsiString> *devs = NULL;
+		if (cfg.mod == AudioModules::portaudio)
+			devs = out ? &adl.portaudioDevsOut : &adl.portaudioDevsIn;
+		else if (cfg.mod == AudioModules::winwave || cfg.mod == AudioModules::winwave2)
+			devs = out ? &adl.winwaveDevsOut : &adl.winwaveDevsIn;
+		else if (cfg.mod == AudioModules::wasapi)
+			devs = out ? &adl.wasapiDevsOut : &adl.wasapiDevsIn;
+
+		// no list (other module or enumeration failed): covered by CheckAudio...Device
+		if (!devs || devs->empty())
+			return false;
+
+		const AnsiString name = cfg.dev.c_str();
+		for (unsigned int i=0; i<devs->size(); i++)
+		{
+			if ((*devs)[i] == name)
+				return false;
+		}
+		return true;
+	}
+
+	void AddMissingAudioDevice(const char *use, const UaConf::AudioCfg &cfg)
+	{
+		if (checkExtraMsg != "")
+			checkExtraMsg += "; ";
+		checkExtraMsg.cat_sprintf("%s: %s", use, cfg.dev.c_str());
+	}
+
+	bool CheckSelectedAudioDevices(void)
+	{
+		const UaConf &conf = appSettings.uaConf;
+		bool result = false;
+		AudioDevicesList::Instance().Refresh();
+		if (IsAudioDeviceMissing(conf.audioCfgSrc, false))
+		{
+			AddMissingAudioDevice("input", conf.audioCfgSrc);
+			result = true;
+		}
+		if (IsAudioDeviceMissing(conf.audioCfgPlay, true))
+		{
+			AddMissingAudioDevice("output", conf.audioCfgPlay);
+			result = true;
+		}
+		if (IsAudioDeviceMissing(conf.audioCfgRing, true))
+		{
+			AddMissingAudioDevice("ring", conf.audioCfgRing);
+			result = true;
+		}
+		if (IsAudioDeviceMissing(conf.audioCfgAlert, true))
+		{
+			AddMissingAudioDevice("alert", conf.audioCfgAlert);
+			result = true;
+		}
+		if (IsAudioDeviceMissing(conf.audioCfgPlayIntercom, true))
+		{
+			AddMissingAudioDevice("intercom", conf.audioCfgPlayIntercom);
+			result = true;
+		}
+		return result;
+	}
+
 	bool CheckNetworkInterface(void)
 	{
 		if (appSettings.uaConf.netIfName != "")
@@ -533,6 +602,10 @@ namespace {
 		{ LevelWarning, "No audio input device", "", CheckAudioInputDevice },
 		{ LevelWarning, "No audio input source file found", "", CheckAudioInputFile },		
 		{ LevelWarning, "No audio output device", "", CheckAudioOutputDevice },
+		{ LevelWarning, "Selected audio device not found",
+			"Audio device selected in Settings (input, output, ring, alert or intercom) is not present, e.g. unplugged or renamed. "
+			"The default device of the audio module would be used instead. Select the device again in Settings.",
+			CheckSelectedAudioDevices },
 		{ LevelWarning, "Missing wave file for audio input", "Audio file specified as input device does not exist.", NULL },
 		{ LevelWarning, "Incorrect wav file format", "Invalid file format for input device.", NULL },
 		{ LevelWarning, "Binding to VirtualBox network adapter",
