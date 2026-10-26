@@ -1470,5 +1470,17 @@ Version 4.0.1
 	- account settings: ptime moved to extra settings
 	- call history: refreshing descriptions after contact editing
 	- keep codec sort order when moving back from "enabled" to "available" list
+	- default programmable buttons: rarely used FLASH button replaced with Mute (new installs and reset to defaults only)
+	- audio: filters (AEC, preprocessor, recorder, volume) are rebuilt after a mid-call codec change to another sample rate; before, RX filters were lost after a decoder change and TX filters kept the old sample rate after an encoder change (distorted audio after re-INVITE, e.g. PCMA -> G722 on attended transfer)
+	- audio: audio source, player, filters and buffers are restarted together on a sample rate change (AEC encoder and decoder state stay paired)
+	- troubleshooting: warning if a selected audio device (input, output, ring, alert, intercom) is not present; before, only the absence of any device was detected
+	- settings: option to keep the main window in foreground (brought to front every 500 ms when another application is active, not when minimized or when a dialog is open)
+	- settings: option to disable the SIP user agent (restart required); application works as button panel for scripts and plugins, no calls are made
+	- settings: new "SIP" page with the compact SIP header options, disabling of the SIP user agent and handling of out-of-dialog REFER (moved from the Network and Calls pages)
+	- settings: "SIP account, codecs" page is selected when the settings window is shown for the first time
+	- FIXED: ZRTP: encryption state was not assigned to the call (GetZrtpState returned nothing and the "on encryption state" script was not run); GetZrtpState() also returns call UID (in "on encryption state" script, called without argument, it uses the call of the ZRTP session passed as GetExecSourceId()); verifying / unverifying SAS applies to the current call instead of the first ZRTP session
+	- plugin interface v1: new optional export SetCallbackSetKeepForeground (plugin can suspend "keep in foreground" while it shows its own window)
+	- RTP summary of the call (packets, bytes, loss and jitter from RTCP, jitter buffer and audio buffer events, transmit pacing: packets sent too early / too late, longest gap) is logged at the end of the call, stored in call history and optionally shown in history hint (new option "Show RTP summary in hint")
+	- baresip: call_rtp_summary(), aubuf overrun/underrun counters are always counted (not only with debug output), transmit pacing statistics in stream_send()
 */
 
