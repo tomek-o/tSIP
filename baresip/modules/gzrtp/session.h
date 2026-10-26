@@ -10,12 +10,13 @@
 #include "gzrtp_stream.h"
 
 
+struct call;
 class Stream;
 class ZRTPConfig;
 
 class Session {
 public:
-	Session(const ZRTPConfig& config);
+	Session(const ZRTPConfig& config, struct call *call);
 
 	~Session();
 
@@ -31,13 +32,18 @@ public:
 	bool request_master(Stream *stream);
 	void on_secure(Stream *stream);
 
-	static int verify_sas(int session_id, bool verify);
+	/** uid of the call this session belongs to (0 if not known); last known uid is kept after the call is gone */
+	unsigned int call_uid();
+
+	static int verify_sas(unsigned int call_uid, bool verify);
 
 private:
 	static std::vector<Session *> s_sessl;
 
 	const bool m_start_parallel;
 	int m_id;
+	struct call *m_call;
+	unsigned int m_call_uid;
 	std::vector<Stream *> m_streams;
 	Stream *m_master;
 	unsigned int m_encrypted;

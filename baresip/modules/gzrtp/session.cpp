@@ -17,7 +17,7 @@
 
 static baresip_zrtp_state_h *baresip_state_handler = NULL;
 
-static void report_state(int session_id, Stream *stream) {
+static void report_state(int session_id, unsigned int call_uid, Stream *stream) {
 	if (baresip_state_handler) {
 		struct zrtp_st st;
 		memset(&st, 0, sizeof(st));
@@ -27,7 +27,7 @@ static void report_state(int session_id, Stream *stream) {
 			str_ncpy(st.cipher, stream->get_ciphers(), sizeof(st.cipher));
 			st.verified = stream->sas_verified();
 		}
-		baresip_state_handler(session_id, &st);		
+		baresip_state_handler(session_id, call_uid, &st);		
 	}
 }
 
@@ -35,8 +35,10 @@ static void report_state(int session_id, Stream *stream) {
 std::vector<Session *> Session::s_sessl;
 
 
-Session::Session(const ZRTPConfig& config)
+Session::Session(const ZRTPConfig& config, struct call *call)
 	: m_start_parallel(config.start_parallel)
+	, m_call(call)
+	, m_call_uid(0)
 	, m_master(NULL)
 	, m_encrypted(0)
 {
@@ -56,6 +58,15 @@ Session::Session(const ZRTPConfig& config)
 }
 
 
+unsigned int Session::call_uid()
+{
+	// call object owns this session; uid is assigned by the application after the call is created
+	if (m_call)
+		m_call_uid = call_get_uid(m_call);
+	return m_call_uid;
+}
+
+
 Session::~Session()
 {
 	for (std::vector<Session *>::iterator it = s_sessl.begin();
@@ -68,7 +79,7 @@ Session::~Session()
 	}
 
 	DEBUG_INFO("zrtp: Session <%d> is destroyed\n", id());
-	report_state(-1, NULL);
+	report_state(-1, m_call_uid, NULL);
 }
 
 
@@ -162,7 +173,7 @@ void Session::on_secure(Stream *stream)
 		     m_master->get_ciphers(),
 		     m_master->get_sas(),
 			 (m_master->sas_verified())? "verified" : "NOT VERIFIED");
-		report_state(this->id(), m_master);
+		report_state(this->id(), call_uid(), m_master);
 		return;
 	}
 
@@ -184,22 +195,26 @@ void Session::on_secure(Stream *stream)
 }
 
 /** \param verify true => verify, false => unverify */
-int Session::verify_sas(int session_id, bool verify)
+int Session::verify_sas(unsigned int call_uid, bool verify)
 {
 	Session *sess = NULL;
 
+	if (call_uid == 0) {
+		DEBUG_WARNING("zrtp: No call to verify SAS for\n");
+		return EINVAL;
+	}
 
 	for (std::vector<Session *>::iterator it = s_sessl.begin();
 	     it != s_sessl.end(); ++it) {
 
-		if ((*it)->id() == session_id) {
+		if ((*it)->call_uid() == call_uid) {
 			sess = *it;
 			break;
 		}
 	}
 
 	if (!sess) {
-		DEBUG_WARNING("zrtp: No session with id %d\n", session_id);
+		DEBUG_WARNING("zrtp: No session for call uid %u\n", call_uid);
 		return EINVAL;
 	}
 
@@ -215,14 +230,14 @@ int Session::verify_sas(int session_id, bool verify)
 	     sess->m_master->get_sas(),
 	     (sess->m_master->sas_verified())? "verified" : "NOT VERIFIED");
 
-	report_state(sess->id(), sess->m_master);
+	report_state(sess->id(), sess->call_uid(), sess->m_master);
 
 	return 0;
 }
 
-int baresip_zrtp_verify_sas(int session_id, bool verify)
+int baresip_zrtp_verify_sas(unsigned int call_uid, bool verify)
 {
-	return Session::verify_sas(session_id, verify);
+	return Session::verify_sas(call_uid, verify);
 }
 
 void baresip_zrtp_init(baresip_zrtp_state_h *state_h)

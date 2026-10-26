@@ -1360,7 +1360,23 @@ static int l_GetRecorderState(lua_State* L)
 
 static int l_GetZrtpState(lua_State* L)
 {
-	Call* call = GetCall(L);
+	Call* call = NULL;
+	const ScriptContext &context = GetContext(L)->context;
+	if (lua_gettop(L) == 0 && context.srcType == SCRIPT_SRC_ON_ENCRYPTION_STATE)
+	{
+		// "on encryption state" script: GetExecSourceId() is ZRTP session id, use call of this session
+		std::vector<unsigned int> uids = Calls::GetUids();
+		for (unsigned int i=0; i<uids.size() && call == NULL; i++)
+		{
+			Call *c = Calls::FindByUid(uids[i]);
+			if (c && c->zrtp.sessionId == context.srcId)
+				call = c;
+		}
+	}
+	else
+	{
+		call = GetCall(L);
+	}
 	if (call)
 	{
 		const Call::Zrtp &zrtp = call->zrtp;
@@ -1369,7 +1385,8 @@ static int l_GetZrtpState(lua_State* L)
 		lua_pushstring(L, zrtp.sas.c_str());
 		lua_pushstring(L, zrtp.cipher.c_str());
 		lua_pushinteger(L, zrtp.verified);
-		return 5;
+		lua_pushinteger(L, call->uid);
+		return 6;
 	}
 	return 0;
 }
@@ -2792,7 +2809,7 @@ void ScriptExec::Run(const char* script)
 	lua_register2(L, ScriptImp::l_GetCallState, "GetCallState", "Get state of current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallButtonId, "GetCallButtonId", "Get button ID assigned to current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetRecorderState, "GetRecorderState", "Check if recording is running for current or specified call", "Takes one, optional argument: call UID.");
-	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verification state. Takes one, optional argument: call UID.");
+	lua_register2(L, ScriptImp::l_GetZrtpState, "GetZrtpState", "Get current state of ZRTP encryption for current or specified call", "Returns session ID, active/inactive state, SAS code, cipher, verification state and UID of the call. Takes one, optional argument: call UID.\nIn \"on encryption state\" script (GetExecSourceId() = ZRTP session ID) without argument it returns state of the call that session belongs to.");
 	lua_register2(L, ScriptImp::l_IsCallIncoming, "IsCallIncoming", "Check if current or specified call is incoming", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallPeer, "GetCallPeer", "Get number/URI of caller/callee from current or specified call", "Takes one, optional argument: call UID.");
 	lua_register2(L, ScriptImp::l_GetCallPeerName, "GetCallPeerName", "Get name of caller/callee from current or specified call", "Takes one, optional argument: call UID.\nReturns 0 results if the call is not found, otherwise 1 result: display name or (depending on settings) PAI display name.");

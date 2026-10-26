@@ -84,7 +84,6 @@ static int session_alloc(struct menc_sess **sessp, struct sdp_session *sdp,
 	struct menc_sess *st;
 	(void)offerer;
 	(void)errorh;
-	(void)arg;
 	int err = 0;
 
 	if (!sessp || !sdp)
@@ -94,7 +93,7 @@ static int session_alloc(struct menc_sess **sessp, struct sdp_session *sdp,
 	if (!st)
 		return ENOMEM;
 
-	st->session = new Session(*s_zrtp_config);
+	st->session = new Session(*s_zrtp_config, (struct call *)arg);
 	if (!st->session)
 		err = ENOMEM;
 
