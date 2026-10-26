@@ -397,10 +397,8 @@ void ProgrammableButtons::SetInitialSettings(void)
 	cfg->top = top;
 
 	cfg = &btnConf[btnId++];
-	cfg->caption = "    FLASH";
-	cfg->labelLeft = 0;
-	cfg->type = Button::DTMF;
-	cfg->number = "R";
+	cfg->caption = "Mute";
+	cfg->type = Button::MUTE;
 	top += HEIGHT;
 	cfg->top = top;
 
