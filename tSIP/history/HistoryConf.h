@@ -27,6 +27,7 @@ struct HistoryConf
 	bool showLastReplyLineInHint;
 	bool showReasonInHint;
 	bool showRecordFileInHint;
+	bool showRtpSummaryInHint;
 	unsigned int maxEntries;
 	std::vector<int> listColumnWidths;
 

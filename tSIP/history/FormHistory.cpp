@@ -33,6 +33,10 @@ AnsiString replyCodeText = "Reply code:";
 AnsiString replyLineText = "Reply line:";
 AnsiString reasonText = "Reason";
 AnsiString recordFileText = "Record file";
+AnsiString rtpPacketsText = "RTP packets: sent %u, received %u";
+AnsiString rtpLossText = "RTP loss (tx/rx): %d/%d, jitter (tx/rx): %.1f/%.1f ms";
+AnsiString rtpPacingText = "RTP transmit pacing: %u too early, %u too late, longest gap %u ms";
+AnsiString rtpBuffersText = "RTP buffers: jitter buffer late %u, lost %u, out of sequence %u, duplicates %u, overflow %u, underflow %u; player underrun %u, overrun %u";
 
 }
 
@@ -64,6 +68,10 @@ void TfrmHistory::TranslateForm(void* obj)
 	Translate("TfrmHistory.replyLine", replyLineText);
 	Translate("TfrmHistory.reason", reasonText);
 	Translate("TfrmHistory.recordFile", recordFileText);
+	Translate("TfrmHistory.rtpPackets", rtpPacketsText);
+	Translate("TfrmHistory.rtpLoss", rtpLossText);
+	Translate("TfrmHistory.rtpPacing", rtpPacingText);
+	Translate("TfrmHistory.rtpBuffers", rtpBuffersText);
 }
 
 __fastcall TfrmHistory::TfrmHistory(TComponent* Owner, History *history,
@@ -446,6 +454,28 @@ AnsiString TfrmHistory::GetHint(TListItem *item)
 	if (conf.showRecordFileInHint && Branding::recording && entry.recordFile != "")
 	{
 		hint.cat_sprintf("\n%s: %s", recordFileText.c_str(), ExtractFileName(entry.recordFile).c_str());
+	}
+
+	if (conf.showRtpSummaryInHint && entry.rtp.valid)
+	{
+		const RtpSummary &r = entry.rtp;
+		hint += "\n";
+		hint.cat_sprintf(rtpPacketsText.c_str(), r.txPackets, r.rxPackets);
+		if (r.rtcpValid)
+		{
+			hint += "\n";
+			hint.cat_sprintf(rtpLossText.c_str(), r.rtcpTxLost, r.rtcpRxLost, r.rtcpTxJitterUs / 1000.0, r.rtcpRxJitterUs / 1000.0);
+		}
+		if (r.txBurst > 0 || r.txLate > 0)
+		{
+			hint += "\n";
+			hint.cat_sprintf(rtpPacingText.c_str(), r.txBurst, r.txLate, r.txMaxGapMs);
+		}
+		if (r.jbufLate + r.jbufLost + r.jbufOos + r.jbufDups + r.jbufOverflow + r.jbufUnderflow + r.rxBufUnderrun + r.rxBufOverrun > 0)
+		{
+			hint += "\n";
+			hint.cat_sprintf(rtpBuffersText.c_str(), r.jbufLate, r.jbufLost, r.jbufOos, r.jbufDups, r.jbufOverflow, r.jbufUnderflow, r.rxBufUnderrun, r.rxBufOverrun);
+		}
 	}
 
 	return hint;

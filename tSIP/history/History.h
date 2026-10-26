@@ -5,6 +5,7 @@
 //---------------------------------------------------------------------------
 
 #include "common/Observable.h"
+#include "RtpSummary.h"
 #include <string>
 #include <deque>
 #include <System.hpp>
@@ -46,6 +47,7 @@ public:
 		int time;	///< call time in seconds (starting from CONFIRMED state)
 
 		AnsiString codecName;
+		RtpSummary rtp;				///< RTP statistics (rtp.valid = false if not available)
 		int lastScode;				///< last SIP code from received reply (on disconnected)
 		AnsiString lastReplyLine;
 

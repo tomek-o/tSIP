@@ -898,12 +898,17 @@ static int aufilt_setup(struct audio *a)
 	struct autx *tx = &a->tx;
 	struct aurx *rx = &a->rx;
 	struct le *le;
+	bool update_enc, update_dec;
 
 	/* wait until we have both Encoder and Decoder */
 	if (!tx->ac || !rx->ac)
 		return 0;
 
-	if (!list_isempty(&tx->filtl) || !list_isempty(&rx->filtl))
+	/* only the direction with an empty filter list is (re)built, e.g. RX
+	   after a decoder change */
+	update_enc = list_isempty(&tx->filtl);
+	update_dec = list_isempty(&rx->filtl);
+	if (!update_enc && !update_dec)
 		return 0;
 
 	aufilt_param_set(&encprm, tx->ac, tx->ptime);
@@ -917,7 +922,7 @@ static int aufilt_setup(struct audio *a)
 		void *ctx = NULL;
 		int err = 0;		
 
-		if (af->encupdh) {
+		if (af->encupdh && update_enc) {
 			err |= af->encupdh(&encst, &ctx, af, &encprm, a);
 			if (err) {
 				continue;
@@ -927,7 +932,7 @@ static int aufilt_setup(struct audio *a)
 			list_append(&tx->filtl, &encst->le, encst);
 		}
 
-		if (af->decupdh) {
+		if (af->decupdh && update_dec) {
 			err |= af->decupdh(&decst, &ctx, af, &decprm, a);
 			if (err) {
 				continue;
@@ -1232,6 +1237,51 @@ void audio_stop(struct audio *a)
 }
 
 
+/**
+ * Stop the audio source and player and drop the filters and buffers set up
+ * for the previous codec parameters (sample rate, frame size).
+ * They are rebuilt by audio_start(). Both directions are rebuilt together,
+ * because filters like AEC pair their encoder and decoder state.
+ */
+static void audio_reset_pipeline(struct audio *a)
+{
+	struct autx *tx = &a->tx;
+	struct aurx *rx = &a->rx;
+
+	tx->ausrc = mem_deref(tx->ausrc);
+	rx->auplay = mem_deref(rx->auplay);
+
+#ifdef HAVE_PTHREAD
+	/* nothing may use the filters or the buffer while they are rebuilt */
+	if (tx->thr.run) {
+		tx->thr.run = false;
+		pthread_join(tx->thr.tid, NULL);
+	}
+#endif
+
+	list_flush(&tx->filtl);
+	list_flush(&rx->filtl);
+	tx->ab = mem_deref(tx->ab);
+	rx->ab = mem_deref(rx->ab);
+}
+
+
+void audio_buffer_stats(const struct audio *a, struct rtp_summary *sum)
+{
+	size_t o = 0, u = 0;
+
+	if (!a || !sum)
+		return;
+
+	aubuf_get_stats(a->rx.ab, &o, &u);
+	sum->rx_buf_overrun = (uint32_t)o;
+	sum->rx_buf_underrun = (uint32_t)u;
+	aubuf_get_stats(a->tx.ab, &o, &u);
+	sum->tx_buf_overrun = (uint32_t)o;
+	sum->tx_buf_underrun = (uint32_t)u;
+}
+
+
 int audio_encoder_set(struct audio *a, const struct aucodec *ac,
 		      int pt_tx, const char *params)
 {
@@ -1252,7 +1302,10 @@ int audio_encoder_set(struct audio *a, const struct aucodec *ac,
 
 		/* Audio source must be stopped first */
 		if (reset) {
-			tx->ausrc = mem_deref(tx->ausrc);
+			if (tx->ac)
+				audio_reset_pipeline(a);
+			else
+				tx->ausrc = mem_deref(tx->ausrc);
 		}
 
 		tx->is_g722 = (0 == str_casecmp(ac->name, "G722"));
@@ -1273,6 +1326,7 @@ int audio_encoder_set(struct audio *a, const struct aucodec *ac,
 			tx->ptime = ptime;
 			tx->psize = 2 * get_framesize(ac, ptime);
 		}
+		stream_set_tx_ptime(a->strm, ptime);
 	}
 
 	if (ac->encupdh) {
@@ -1303,6 +1357,7 @@ int audio_decoder_set(struct audio *a, const struct aucodec *ac,
 {
 	struct aurx *rx;
 	bool reset = false;
+	bool had_ac;
 	int err = 0;
 
 	if (!a || !ac)
@@ -1311,6 +1366,7 @@ int audio_decoder_set(struct audio *a, const struct aucodec *ac,
 	rx = &a->rx;
 
 	reset = !aucodec_equal(ac, rx->ac);
+	had_ac = rx->ac != NULL;
 
 	if (ac != rx->ac) {
 
@@ -1337,10 +1393,13 @@ int audio_decoder_set(struct audio *a, const struct aucodec *ac,
 
 	if (reset) {
 
-		rx->auplay = mem_deref(rx->auplay);
-
-		/* Reset audio filter chain */
-		list_flush(&rx->filtl);
+		if (had_ac) {
+			audio_reset_pipeline(a);
+		}
+		else {
+			rx->auplay = mem_deref(rx->auplay);
+			list_flush(&rx->filtl);
+		}
 
 		err |= audio_start(a);
 	}

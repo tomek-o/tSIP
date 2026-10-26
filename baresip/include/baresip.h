@@ -116,6 +116,37 @@ int           call_access_url_mode(const struct call *call);
 const char   *call_initial_rx_invite(const struct call *call);
 const char   *call_pai_peeruri(const struct call *call);
 const char   *call_pai_peername(const struct call *call);
+/** \brief RTP statistics of call (audio stream), see call_rtp_summary() */
+struct rtp_summary {
+	uint32_t tx_packets;
+	uint32_t rx_packets;
+	uint64_t tx_bytes;		/**< RTP payload bytes */
+	uint64_t rx_bytes;
+	bool rtcp_valid;		/**< RTCP based values below are valid (peer sent reports) */
+	int rtcp_rx_lost;		/**< packets lost on receive path (our measurement) */
+	int rtcp_tx_lost;		/**< packets lost on transmit path (as reported by peer) */
+	uint32_t rtcp_rx_jitter_us;
+	uint32_t rtcp_tx_jitter_us;
+	bool jbuf_valid;
+	uint32_t jbuf_late;
+	uint32_t jbuf_lost;
+	uint32_t jbuf_oos;		/**< out of sequence */
+	uint32_t jbuf_dups;
+	uint32_t jbuf_overflow;
+	uint32_t jbuf_underflow;
+	uint32_t jbuf_flush;
+	uint32_t rx_buf_underrun;	/**< player buffer */
+	uint32_t rx_buf_overrun;
+	uint32_t tx_buf_underrun;	/**< source buffer */
+	uint32_t tx_buf_overrun;
+	uint32_t tx_burst;		/**< RTP packets sent much sooner than ptime after previous one */
+	uint32_t tx_late;		/**< RTP packets sent much later than ptime after previous one */
+	uint32_t tx_max_gap_ms;		/**< longest interval between two sent RTP packets */
+};
+
+/** \brief Get RTP statistics of call audio stream; call before call is released
+	\return 0 if success, ENOENT if call has no audio stream */
+int call_rtp_summary(const struct call *call, struct rtp_summary *sum);
 struct audio *call_audio(const struct call *call);
 struct video *call_video(const struct call *call);
 struct list  *call_streaml(const struct call *call);

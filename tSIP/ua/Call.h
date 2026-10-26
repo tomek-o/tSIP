@@ -50,6 +50,7 @@ public:
 	AnsiString paiPeerUri;
 	AnsiString paiPeerName;
 	AnsiString codecName;
+	RtpSummary rtpSummary;	///< RTP statistics (received just before call is closed)
 	void* displayParentHandle;
 	unsigned int audioErrorCount;
 	/** \brief Extra header lines for outgoing INVITE of this call (added after header lines

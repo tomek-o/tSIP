@@ -25,6 +25,7 @@ HistoryConf::HistoryConf(void):
 			showLastReplyLineInHint(true),
 			showReasonInHint(true),
 			showRecordFileInHint(true),
+			showRtpSummaryInHint(false),
 			maxEntries(MAX_ENTRIES_DEF)
 {
 }
@@ -44,6 +45,7 @@ void HistoryConf::fromJson(const Json::Value &jv)
 	jv.getBool("ShowLastReplyLineInHint", showLastReplyLineInHint);
 	jv.getBool("ShowReasonInHint", showReasonInHint);
 	jv.getBool("ShowRecordFileInHint", showRecordFileInHint);
+	jv.getBool("ShowRtpSummaryInHint", showRtpSummaryInHint);
 	{
 		unsigned int tmp = jv.get("MaxEntries", maxEntries).asUInt();
 		if (tmp >= MAX_ENTRIES_MIN && tmp <= MAX_ENTRIES_MAX)
@@ -76,6 +78,7 @@ void HistoryConf::toJson(Json::Value &jv) const
 	jv["ShowLastReplyLineInHint"] = showLastReplyLineInHint;
 	jv["ShowReasonInHint"] = showReasonInHint;
 	jv["ShowRecordFileInHint"] = showRecordFileInHint;
+	jv["ShowRtpSummaryInHint"] = showRtpSummaryInHint;
 	jv["MaxEntries"] = maxEntries;
 
 	Json::Value &jlcw = jv["ListColumnWidths"];
@@ -100,6 +103,7 @@ bool HistoryConf::operator==(const HistoryConf &right) const
 		showLastReplyLineInHint == right.showLastReplyLineInHint &&
 		showReasonInHint == right.showReasonInHint &&
 		showRecordFileInHint == right.showRecordFileInHint &&
+		showRtpSummaryInHint == right.showRtpSummaryInHint &&
 		maxEntries == right.maxEntries &&
 		listColumnWidths == right.listColumnWidths
 	);

@@ -117,6 +117,37 @@ int History::Read(CallbackGetContactName callbackGetContactName)
 
 		call.getAString("reason", entry.reason);
 
+		const Json::Value &jr = call["rtp"];
+		if (jr.type() == Json::objectValue)
+		{
+			RtpSummary &r = entry.rtp;
+			r.valid = true;
+			r.txPackets = jr.get("txPackets", 0).asUInt();
+			r.rxPackets = jr.get("rxPackets", 0).asUInt();
+			r.txBytes = jr.get("txBytes", 0).asUInt();
+			r.rxBytes = jr.get("rxBytes", 0).asUInt();
+			r.rtcpValid = jr.get("rtcpValid", false).asBool();
+			r.rtcpRxLost = jr.get("rtcpRxLost", 0).asInt();
+			r.rtcpTxLost = jr.get("rtcpTxLost", 0).asInt();
+			r.rtcpRxJitterUs = jr.get("rtcpRxJitterUs", 0).asUInt();
+			r.rtcpTxJitterUs = jr.get("rtcpTxJitterUs", 0).asUInt();
+			r.jbufValid = jr.get("jbufValid", false).asBool();
+			r.jbufLate = jr.get("jbufLate", 0).asUInt();
+			r.jbufLost = jr.get("jbufLost", 0).asUInt();
+			r.jbufOos = jr.get("jbufOos", 0).asUInt();
+			r.jbufDups = jr.get("jbufDups", 0).asUInt();
+			r.jbufOverflow = jr.get("jbufOverflow", 0).asUInt();
+			r.jbufUnderflow = jr.get("jbufUnderflow", 0).asUInt();
+			r.jbufFlush = jr.get("jbufFlush", 0).asUInt();
+			r.rxBufUnderrun = jr.get("rxBufUnderrun", 0).asUInt();
+			r.rxBufOverrun = jr.get("rxBufOverrun", 0).asUInt();
+			r.txBufUnderrun = jr.get("txBufUnderrun", 0).asUInt();
+			r.txBufOverrun = jr.get("txBufOverrun", 0).asUInt();
+			r.txBurst = jr.get("txBurst", 0).asUInt();
+			r.txLate = jr.get("txLate", 0).asUInt();
+			r.txMaxGapMs = jr.get("txMaxGapMs", 0).asUInt();
+		}
+
 		entries.push_back(entry);
 	}
 
@@ -163,6 +194,41 @@ int History::Write(void)
 			jEntry["recordFile"] = entry.recordFile;
 		}
 		jEntry["reason"] = entry.reason;
+		if (entry.rtp.valid)
+		{
+			const RtpSummary &r = entry.rtp;
+			Json::Value &jr = jEntry["rtp"];
+			jr["txPackets"] = r.txPackets;
+			jr["rxPackets"] = r.rxPackets;
+			jr["txBytes"] = r.txBytes;
+			jr["rxBytes"] = r.rxBytes;
+			if (r.rtcpValid)
+			{
+				jr["rtcpValid"] = true;
+				jr["rtcpRxLost"] = r.rtcpRxLost;
+				jr["rtcpTxLost"] = r.rtcpTxLost;
+				jr["rtcpRxJitterUs"] = r.rtcpRxJitterUs;
+				jr["rtcpTxJitterUs"] = r.rtcpTxJitterUs;
+			}
+			if (r.jbufValid)
+			{
+				jr["jbufValid"] = true;
+				jr["jbufLate"] = r.jbufLate;
+				jr["jbufLost"] = r.jbufLost;
+				jr["jbufOos"] = r.jbufOos;
+				jr["jbufDups"] = r.jbufDups;
+				jr["jbufOverflow"] = r.jbufOverflow;
+				jr["jbufUnderflow"] = r.jbufUnderflow;
+				jr["jbufFlush"] = r.jbufFlush;
+			}
+			jr["rxBufUnderrun"] = r.rxBufUnderrun;
+			jr["rxBufOverrun"] = r.rxBufOverrun;
+			jr["txBufUnderrun"] = r.txBufUnderrun;
+			jr["txBufOverrun"] = r.txBufOverrun;
+			jr["txBurst"] = r.txBurst;
+			jr["txLate"] = r.txLate;
+			jr["txMaxGapMs"] = r.txMaxGapMs;
+		}
 	}
 
 	std::string outputConfig = writer.write( root );

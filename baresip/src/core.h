@@ -299,6 +299,12 @@ void stream_update_encoder(struct stream *s, int pt_enc);
 int  stream_jbuf_stat(struct re_printf *pf, const struct stream *s);
 void stream_hold(struct stream *s, bool hold);
 void stream_set_srate(struct stream *s, uint32_t srate_tx, uint32_t srate_rx);
+/** \brief Packet time of transmitted audio, used to evaluate TX packet pacing statistics */
+void stream_set_tx_ptime(struct stream *s, uint32_t ptime_ms);
+/** \brief Fill stream related fields of RTP summary */
+void stream_rtp_summary(const struct stream *s, struct rtp_summary *sum);
+/** \brief Fill audio buffer related fields of RTP summary */
+void audio_buffer_stats(const struct audio *a, struct rtp_summary *sum);
 void stream_send_fir(struct stream *s, bool pli);
 void stream_reset(struct stream *s);
 void stream_set_bw(struct stream *s, uint32_t bps);

@@ -1036,6 +1036,22 @@ int call_status(struct re_printf *pf, const struct call *call)
 }
 
 
+int call_rtp_summary(const struct call *call, struct rtp_summary *sum)
+{
+	if (!call || !sum)
+		return EINVAL;
+
+	memset(sum, 0, sizeof(*sum));
+	if (!call->audio)
+		return ENOENT;
+
+	stream_rtp_summary(audio_strm(call->audio), sum);
+	audio_buffer_stats(call->audio, sum);
+
+	return 0;
+}
+
+
 int call_jbuf_stat(struct re_printf *pf, const struct call *call)
 {
 	struct le *le;

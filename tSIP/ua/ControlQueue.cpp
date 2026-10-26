@@ -520,13 +520,14 @@ int ControlQueue::SendMessage(int requestId, int accountId, AnsiString target, A
 	return 0;
 }
 
-int ControlQueue::ZrtpVerifySas(bool state)
+int ControlQueue::ZrtpVerifySas(unsigned int callUid, bool state)
 {
 	ScopedLock<Mutex> lock(mutex);
 	Command *cmd = fifo.getWriteable();
 	if (!cmd)
 		return -1;
 	cmd->type = Command::ZRTP_VERIFY_SAS;
+	cmd->callUid = callUid;
 	cmd->bParam = state;
 	fifo.push();
 	return 0;

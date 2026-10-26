@@ -23,6 +23,8 @@ void aubuf_read(struct aubuf *ab, uint8_t *p, size_t sz);
 int  aubuf_get(struct aubuf *ab, uint32_t ptime, uint8_t *p, size_t sz);
 void aubuf_flush(struct aubuf *ab);
 int  aubuf_debug(struct re_printf *pf, const struct aubuf *ab);
+/** \brief Number of overruns and underruns since buffer allocation (counted always, also without debug) */
+void aubuf_get_stats(const struct aubuf *ab, size_t *overruns, size_t *underruns);
 size_t aubuf_cur_size(const struct aubuf *ab);
 /** \brief Notify aubuf that buffering should stop, resetting min_sz
 */

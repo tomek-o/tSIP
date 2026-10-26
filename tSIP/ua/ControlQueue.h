@@ -66,7 +66,8 @@ public:
 	int SendCustomCallRequest(int requestId, unsigned int callUid, AnsiString method, AnsiString extraHeaderLines);
 	int SendMessage(int requestId, int accountId, AnsiString target, AnsiString text);
 	void PublishPresence(int accountId, AnsiString aor, AnsiString body, int expires, AnsiString ifMatch);
-	int ZrtpVerifySas(bool state);
+	/** \param callUid call whose ZRTP SAS is verified / unverified */
+	int ZrtpVerifySas(unsigned int callUid, bool state);
 	int ConferenceStart(void);
 };
 

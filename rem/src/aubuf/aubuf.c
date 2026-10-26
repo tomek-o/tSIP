@@ -111,8 +111,8 @@ int aubuf_append(struct aubuf *ab, struct mbuf *mb)
 	ab->cur_sz += mbuf_get_left(mb);
 
 	if (ab->max_sz && ab->cur_sz > ab->max_sz) {
+		++ab->stats.or;
 		if (debug_enabled) {
-			++ab->stats.or;
 			(void)re_printf("aubuf: %p (%s) overrun #%zu (cur=%zu, max=%zu)\n",
 				ab, ab->name, ab->stats.or, ab->cur_sz, ab->max_sz);
 		}
@@ -176,9 +176,10 @@ void aubuf_read(struct aubuf *ab, uint8_t *p, size_t sz)
 
 
 	if (ab->cur_sz < (ab->filling ? ab->min_sz : sz)) {
+		if (!ab->filling)
+			++ab->stats.ur;
 		if (debug_enabled) {
 			if (!ab->filling) {
-				++ab->stats.ur;
 				(void)re_printf("aubuf: %p (%s) underrun #%zu (cur=%zu, requested=%zu)\n",
 						ab, ab->name, ab->stats.ur, ab->cur_sz, sz);
 			} else {
@@ -297,6 +298,15 @@ void aubuf_flush(struct aubuf *ab)
  *
  * @return 0 if success, otherwise errorcode
  */
+void aubuf_get_stats(const struct aubuf *ab, size_t *overruns, size_t *underruns)
+{
+	if (overruns)
+		*overruns = ab ? ab->stats.or : 0;
+	if (underruns)
+		*underruns = ab ? ab->stats.ur : 0;
+}
+
+
 int aubuf_debug(struct re_printf *pf, const struct aubuf *ab)
 {
 	int err;

@@ -67,6 +67,13 @@ struct stream {
 		size_t bitrate_tx;
 		size_t bitrate_rx;
 		uint64_t ts;
+		uint64_t tot_b_tx;		/**< totals for the summary (b_tx/b_rx are restarted by timer) */
+		uint64_t tot_b_rx;
+		uint32_t tx_ptime_ms;
+		uint64_t tx_last_us;		/**< time of previous audio RTP packet sent */
+		uint32_t tx_burst;
+		uint32_t tx_late;
+		uint32_t tx_max_gap_us;
 	} stats;
 };
 static void stream_close(struct stream *strm, int err)
@@ -186,6 +193,7 @@ static void rtp_recv(const struct sa *src, const struct rtp_header *hdr,
 
 	++s->stats.n_rx;
 	s->stats.b_rx += mbuf_get_left(mb);
+	s->stats.tot_b_rx += mbuf_get_left(mb);
 
 	if (hdr->ssrc != s->ssrc_rx) {
 		if (s->ssrc_rx) {
@@ -507,6 +515,87 @@ static void stream_start_keepalive(struct stream *s)
 }
 
 
+/** Current time in microseconds (monotonic) */
+static uint64_t now_us(void)
+{
+#ifdef WIN32
+	LARGE_INTEGER freq, cnt;
+	if (QueryPerformanceFrequency(&freq) && freq.QuadPart && QueryPerformanceCounter(&cnt))
+		return (uint64_t)(cnt.QuadPart * 1000000 / freq.QuadPart);
+#endif
+	return tmr_jiffies() * 1000;
+}
+
+
+/** Count transmitted audio packets sent much earlier or later than ptime after the previous one */
+static void tx_pacing_update(struct stream *s)
+{
+	const uint64_t now = now_us();
+	const uint64_t ptime_us = (uint64_t)s->stats.tx_ptime_ms * 1000;
+
+	if (s->stats.tx_last_us && ptime_us) {
+		const uint64_t gap = now - s->stats.tx_last_us;
+
+		if (gap < ptime_us / 4)
+			++s->stats.tx_burst;
+		else if (gap > ptime_us * 7 / 4)
+			++s->stats.tx_late;
+		if (gap > s->stats.tx_max_gap_us)
+			s->stats.tx_max_gap_us = (uint32_t)gap;
+	}
+	s->stats.tx_last_us = now;
+}
+
+
+void stream_set_tx_ptime(struct stream *s, uint32_t ptime_ms)
+{
+	if (!s)
+		return;
+
+	s->stats.tx_ptime_ms = ptime_ms;
+}
+
+
+void stream_rtp_summary(const struct stream *s, struct rtp_summary *sum)
+{
+	struct rtcp_stats rtcp;
+	struct jbuf_stat jst;
+
+	if (!s || !sum)
+		return;
+
+	sum->tx_packets = s->stats.n_tx;
+	sum->rx_packets = s->stats.n_rx;
+	sum->tx_bytes = s->stats.tot_b_tx;
+	sum->rx_bytes = s->stats.tot_b_rx;
+
+	sum->rtcp_valid = false;
+	if (s->rtp && s->ssrc_rx && 0 == rtcp_stats(s->rtp, s->ssrc_rx, &rtcp)) {
+		sum->rtcp_valid = true;
+		sum->rtcp_rx_lost = rtcp.rx.lost;
+		sum->rtcp_tx_lost = rtcp.tx.lost;
+		sum->rtcp_rx_jitter_us = rtcp.rx.jit;
+		sum->rtcp_tx_jitter_us = rtcp.tx.jit;
+	}
+
+	sum->jbuf_valid = false;
+	if (s->jbuf && 0 == jbuf_stats(s->jbuf, &jst)) {
+		sum->jbuf_valid = true;
+		sum->jbuf_late = jst.n_late;
+		sum->jbuf_lost = jst.n_lost;
+		sum->jbuf_oos = jst.n_oos;
+		sum->jbuf_dups = jst.n_dups;
+		sum->jbuf_overflow = jst.n_overflow;
+		sum->jbuf_underflow = jst.n_underflow;
+		sum->jbuf_flush = jst.n_flush;
+	}
+
+	sum->tx_burst = s->stats.tx_burst;
+	sum->tx_late = s->stats.tx_late;
+	sum->tx_max_gap_ms = s->stats.tx_max_gap_us / 1000;
+}
+
+
 int stream_send(struct stream *s, bool marker, int pt, uint32_t ts,
 		struct mbuf *mb)
 {
@@ -521,9 +610,12 @@ int stream_send(struct stream *s, bool marker, int pt, uint32_t ts,
 		return 0;
 
 	s->stats.b_tx += mbuf_get_left(mb);
+	s->stats.tot_b_tx += mbuf_get_left(mb);
 
-	if (pt < 0)
+	if (pt < 0) {
 		pt = s->pt_enc;
+		tx_pacing_update(s);
+	}
 
 	if (pt >= 0) {
 		err = rtp_send(s->rtp, sdp_media_raddr(s->sdp),

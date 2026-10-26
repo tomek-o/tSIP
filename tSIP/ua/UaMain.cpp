@@ -165,6 +165,41 @@ static struct ua* ua_for_call(const struct call *call) {
 static bool appRestart = false;
 static bool appQuit = false;
 
+/** Collect RTP statistics of call audio stream and pass them to the application; call before the call is released */
+static void reportRtpSummary(unsigned int callUid, const struct call *call)
+{
+	struct rtp_summary sum;
+	if (!call || callUid == 0 || call_rtp_summary(call, &sum) != 0)
+		return;
+	RtpSummary rtp;
+	rtp.valid = true;
+	rtp.txPackets = sum.tx_packets;
+	rtp.rxPackets = sum.rx_packets;
+	rtp.txBytes = static_cast<unsigned int>(sum.tx_bytes);
+	rtp.rxBytes = static_cast<unsigned int>(sum.rx_bytes);
+	rtp.rtcpValid = sum.rtcp_valid;
+	rtp.rtcpRxLost = sum.rtcp_rx_lost;
+	rtp.rtcpTxLost = sum.rtcp_tx_lost;
+	rtp.rtcpRxJitterUs = sum.rtcp_rx_jitter_us;
+	rtp.rtcpTxJitterUs = sum.rtcp_tx_jitter_us;
+	rtp.jbufValid = sum.jbuf_valid;
+	rtp.jbufLate = sum.jbuf_late;
+	rtp.jbufLost = sum.jbuf_lost;
+	rtp.jbufOos = sum.jbuf_oos;
+	rtp.jbufDups = sum.jbuf_dups;
+	rtp.jbufOverflow = sum.jbuf_overflow;
+	rtp.jbufUnderflow = sum.jbuf_underflow;
+	rtp.jbufFlush = sum.jbuf_flush;
+	rtp.rxBufUnderrun = sum.rx_buf_underrun;
+	rtp.rxBufOverrun = sum.rx_buf_overrun;
+	rtp.txBufUnderrun = sum.tx_buf_underrun;
+	rtp.txBufOverrun = sum.tx_buf_overrun;
+	rtp.txBurst = sum.tx_burst;
+	rtp.txLate = sum.tx_late;
+	rtp.txMaxGapMs = sum.tx_max_gap_ms;
+	UA_CB->CallRtpSummary(callUid, rtp);
+}
+
 static void ua_event_handler(struct ua *ua, enum ua_event ev,
 	struct call *call, const char *prm, void *arg)
 {
@@ -270,6 +305,7 @@ static void ua_event_handler(struct ua *ua, enum ua_event ev,
 		if (callUid > 0)
 		{
 			state = Callback::CALL_STATE_CLOSED;
+			reportRtpSummary(callUid, call);
 			UA_CB->ChangeCallState(callUid, state, prm, peer_name, scode,  -1, "", "", -1, "", "", "", "");
 		#ifdef USE_VIDEO
 			VideoRawDump::StopForCall(callUid);
@@ -594,17 +630,17 @@ static void recorder_state_handler(struct recorder_st *recorder, enum recorder_s
 	UA_CB->ChangeRecorderState(recorder_get_call_uid(recorder), static_cast<Callback::rec_state_e>(state));
 }
 
-static void zrtp_state_handler(int session_id, struct zrtp_st *st)
+static void zrtp_state_handler(int session_id, unsigned int call_uid, struct zrtp_st *st)
 {
 	//DEBUG_WARNING("ZRTP state changed: session_id %d, active = %d, sas [%s], cipher [%s], verified = %d\n",
 	//	session_id, static_cast<int>(st->active), st->sas, st->cipher, static_cast<int>(st->verified));
 	Callback::Zrtp zrtp;
 	zrtp.sessionId = session_id;
+	zrtp.callUid = call_uid;
 	zrtp.active = st->active;
 	zrtp.sas = st->sas;
 	zrtp.cipher = st->cipher;
 	zrtp.verified = st->verified;
-int TODO__ZRTP_CALL_ID_ON_MULTIPLE_CALLS;
 	UA_CB->ChangeEncryptionState(zrtp);
 }
 
@@ -1285,6 +1321,7 @@ extern "C" void control_handler(void)
 	case Command::HANGUP:
 		if (cmdCall)
 		{
+			reportRtpSummary(cmd.callUid, cmdCall);
 			ua_hangup(ua_for_call(cmdCall), cmdCall, cmd.code, cmd.reason.c_str());
 			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "", "");
 			removeCall(cmd.callUid);
@@ -1554,8 +1591,7 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::ZRTP_VERIFY_SAS: {
-		int TODO__ZRTP_ON_MULTIPLE_CALLS;
-		baresip_zrtp_verify_sas(1, cmd.bParam);
+		baresip_zrtp_verify_sas(cmd.callUid, cmd.bParam);
 		break;
 	}
 	case Command::CONFERENCE_START: {
@@ -1632,6 +1668,11 @@ int Ua::Start(void)
 
 void Ua::Restart(void)
 {
+	if (!thread)
+	{
+		// UA was not started (disabled in settings)
+		return;
+	}
 	/** \todo ugly forced hangup */
 	std::map<unsigned int, struct call*>::iterator iter;
 	for (iter = calls.begin(); iter != calls.end(); ++iter)
@@ -1648,6 +1689,11 @@ void Ua::Restart(void)
 
 void Ua::Quit(void)
 {
+	if (!thread)
+	{
+		// UA was not started (disabled in settings): nothing to wait for
+		return;
+	}
 	if (appQuit)
 	{
     	return;

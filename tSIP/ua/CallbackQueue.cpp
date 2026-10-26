@@ -63,6 +63,18 @@ void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state
 	fifo.push();
 }
 
+void CallbackQueue::CallRtpSummary(unsigned int uid, const RtpSummary &rtp)
+{
+	ScopedLock<Mutex> lock(mutex);
+	Callback *cb = fifo.getWriteable();
+	if (!cb)
+		return;
+	cb->type = Callback::CALL_RTP_SUMMARY;
+	cb->callUid = uid;
+	cb->rtp = rtp;
+	fifo.push();
+}
+
 void CallbackQueue::OnReinviteReceived(unsigned int uid, AnsiString caller, AnsiString caller_name, AnsiString pai_peer_uri, AnsiString pai_peer_name)
 {
 	ScopedLock<Mutex> lock(mutex);
@@ -110,6 +122,7 @@ void CallbackQueue::ChangeEncryptionState(const Callback::Zrtp &state)
 	if (!cb)
 		return;
 	cb->type = Callback::ENCRYPTION_STATE;
+	cb->callUid = state.callUid;
 	cb->zrtp = state;
 	fifo.push();
 }

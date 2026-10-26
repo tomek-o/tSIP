@@ -7,6 +7,7 @@
 #include <System.hpp>
 #include <vector>
 #include "baresip_dialog_info_status.h"
+#include "RtpSummary.h"
 
 class Callback
 {
@@ -30,6 +31,7 @@ public:
 		SIMPLE_MESSAGE_STATUS,		///< status for sent MESSAGE; using requestUid, requestError, scode
 		RECORDER_STATE,
 		ENCRYPTION_STATE,
+		CALL_RTP_SUMMARY,			///< RTP statistics of call, sent before CLOSED state
 
 		TYPE__LIMITER
 	} type;
@@ -119,6 +121,7 @@ public:
 	AnsiString paiPeerUri;
 	AnsiString paiPeerName;
 	AnsiString codecName;
+	RtpSummary rtp;				// CALL_RTP_SUMMARY
 
 	unsigned int ddata_cnt;
 	struct dialog_data ddata[MAX_DIALOG_DATA_CNT];
@@ -144,12 +147,14 @@ public:
 	// encryption
 	struct Zrtp {
 		int sessionId;
+		unsigned int callUid;	///< uid of the call, 0 if not known
 		bool active;
 		AnsiString sas;
 		AnsiString cipher;
 		bool verified;
 		Zrtp(void):
 			sessionId(-1),
+			callUid(0),
 			active(false),
 			verified(false)
 		{}
