@@ -1335,6 +1335,272 @@ static bool require_handler(const struct sip_hdr *hdr,
 }
 
 
+/*
+ * Servers of SIP event packages (peer-to-peer presence / dialog): incoming out-of-dialog SUBSCRIBE
+ * is dispatched by Event header to the handler registered by module, but only if the server
+ * is enabled in configuration (disabled by default) and the source address is allowed.
+ */
+
+struct sub_server {
+	struct le le;
+	char event[32];
+	sub_server_h *h;
+	void *arg;
+};
+
+static struct list subsrvl;
+
+
+/** Compare first "bits" bits of two byte arrays */
+static bool subsrv_bits_equal(const uint8_t *a, const uint8_t *b, unsigned int bits)
+{
+	unsigned int bytes = bits / 8;
+	unsigned int rest = bits % 8;
+
+	if (bytes && memcmp(a, b, bytes))
+		return false;
+	if (rest) {
+		uint8_t mask = (uint8_t)(0xff << (8 - rest));
+		if ((a[bytes] & mask) != (b[bytes] & mask))
+			return false;
+	}
+	return true;
+}
+
+
+/** Address as 16 bytes; IPv4 (also IPv4-mapped IPv6) address is converted to IPv4-mapped IPv6 */
+static void subsrv_addr16(const struct sa *sa, uint8_t addr[16], bool *is4)
+{
+	memset(addr, 0, 16);
+	if (sa_af(sa) == AF_INET) {
+		uint32_t a = sa_in(sa);
+		addr[10] = addr[11] = 0xff;
+		addr[12] = (uint8_t)(a >> 24);
+		addr[13] = (uint8_t)(a >> 16);
+		addr[14] = (uint8_t)(a >> 8);
+		addr[15] = (uint8_t)a;
+		*is4 = true;
+	}
+	else {
+		static const uint8_t mapped[12] = {0,0,0,0,0,0,0,0,0,0,0xff,0xff};
+		sa_in6(sa, addr);
+		*is4 = (0 == memcmp(addr, mapped, 12));
+	}
+}
+
+
+/** Private, loopback and link-local addresses */
+static bool subsrv_is_lan(const uint8_t a[16], bool is4)
+{
+	if (is4) {
+		const uint32_t v = ((uint32_t)a[12] << 24) | ((uint32_t)a[13] << 16) |
+				   ((uint32_t)a[14] << 8) | a[15];
+		return (v >> 24) == 10 ||		/* 10.0.0.0/8 */
+			(v >> 20) == 0xac1 ||		/* 172.16.0.0/12 */
+			(v >> 16) == 0xc0a8 ||		/* 192.168.0.0/16 */
+			(v >> 16) == 0xa9fe ||		/* 169.254.0.0/16 */
+			(v >> 24) == 127;		/* 127.0.0.0/8 */
+	}
+	else {
+		static const uint8_t loopback[16] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1};
+		return 0 == memcmp(a, loopback, 16) ||	/* ::1 */
+			(a[0] == 0xfe && (a[1] & 0xc0) == 0x80) ||	/* fe80::/10 */
+			(a[0] & 0xfe) == 0xfc;		/* fc00::/7 */
+	}
+}
+
+
+/** Address of the registrar / outbound proxy of any of our accounts (source of REGISTER replies) */
+static bool subsrv_is_registrar(const struct sa *src)
+{
+	struct le *le, *rle;
+
+	for (le = uag.ual.head; le; le = le->next) {
+		struct ua *ua = le->data;
+		for (rle = ua->regl.head; rle; rle = rle->next) {
+			struct sa srv;
+			if (reg_registrar_addr(rle->data, &srv) && sa_cmp(&srv, src, SA_ADDR))
+				return true;
+		}
+	}
+
+	return false;
+}
+
+
+/** One token of the address list: "any", "lan", "registrar", address or address/bits */
+static bool subsrv_token_match(const struct sa *src, const char *tok)
+{
+	uint8_t a[16], n[16];
+	bool a4, n4;
+	char buf[96];
+	char *slash;
+	struct sa net;
+	int bits = -1;
+
+	if (!str_casecmp(tok, "any") || !str_casecmp(tok, "*"))
+		return true;
+
+	subsrv_addr16(src, a, &a4);
+
+	if (!str_casecmp(tok, "lan"))
+		return subsrv_is_lan(a, a4);
+
+	if (!str_casecmp(tok, "registrar"))
+		return subsrv_is_registrar(src);
+
+	str_ncpy(buf, tok, sizeof(buf));
+	slash = strchr(buf, '/');
+	if (slash) {
+		*slash = '\0';
+		bits = atoi(slash + 1);
+	}
+
+	if (sa_set_str(&net, buf, 0))
+		return false;
+
+	subsrv_addr16(&net, n, &n4);
+	if (a4 != n4)
+		return false;
+
+	if (a4) {
+		/* compare IPv4 part only */
+		if (bits < 0 || bits > 32)
+			bits = 32;
+		return subsrv_bits_equal(a + 12, n + 12, (unsigned int)bits);
+	}
+
+	if (bits < 0 || bits > 128)
+		bits = 128;
+	return subsrv_bits_equal(a, n, (unsigned int)bits);
+}
+
+
+/** Is source address allowed by configuration (list of tokens separated by ; , or whitespace); empty list = "lan" */
+static bool subsrv_address_allowed(const struct sa *src)
+{
+	const char *spec = conf_config()->subsrv.allow_from;
+	char tok[96];
+	size_t n;
+	bool any = false;
+
+	for (;;) {
+		while (*spec == ';' || *spec == ',' || *spec == ' ' || *spec == '\t')
+			++spec;
+		if (!*spec)
+			break;
+		n = 0;
+		while (*spec && *spec != ';' && *spec != ',' && *spec != ' ' && *spec != '\t') {
+			if (n + 1 < sizeof(tok))
+				tok[n++] = *spec;
+			++spec;
+		}
+		tok[n] = '\0';
+		any = true;
+		if (subsrv_token_match(src, tok))
+			return true;
+	}
+
+	return any ? false : subsrv_token_match(src, "lan");
+}
+
+
+static bool subsrv_enabled(const struct pl *event)
+{
+	const struct config_subsrv *cfg = &conf_config()->subsrv;
+
+	if (!pl_strcasecmp(event, "presence"))
+		return cfg->presence;
+	if (!pl_strcasecmp(event, "dialog"))
+		return cfg->dialog;
+	return false;
+}
+
+
+static bool subsrv_request_handler(const struct sip_msg *msg, void *arg)
+{
+	const struct sip_hdr *hdr;
+	struct sipevent_event se;
+	struct sub_server *srv = NULL;
+	struct le *le;
+	struct ua *ua;
+
+	(void)arg;
+
+	hdr = sip_msg_hdr(msg, SIP_HDR_EVENT);
+	if (!hdr || sipevent_event_decode(&se, &hdr->val)) {
+		(void)sip_treply(NULL, uag_sip(), msg, 400, "Bad Event Header");
+		return true;
+	}
+
+	for (le = subsrvl.head; le; le = le->next) {
+		struct sub_server *s = le->data;
+		if (!pl_strcasecmp(&se.event, s->event)) {
+			srv = s;
+			break;
+		}
+	}
+
+	if (!srv || !subsrv_enabled(&se.event)) {
+		DEBUG_INFO("subsrv: SUBSCRIBE for event '%r' from %J not supported\n", &se.event, &msg->src);
+		(void)sip_treply(NULL, uag_sip(), msg, 489, "Bad Event");
+		return true;
+	}
+
+	if (!subsrv_address_allowed(&msg->src)) {
+		DEBUG_WARNING("subsrv: SUBSCRIBE for event '%r' from %J rejected (address not allowed)\n", &se.event, &msg->src);
+		(void)sip_treply(NULL, uag_sip(), msg, 403, "Forbidden");
+		return true;
+	}
+
+	ua = uag_find(&msg->uri.user);
+	if (!ua) {
+		DEBUG_INFO("subsrv: no UA found for %r\n", &msg->uri.user);
+		(void)sip_treply(NULL, uag_sip(), msg, 404, "Not Found");
+		return true;
+	}
+
+	(void)srv->h(msg, ua, srv->arg);
+
+	return true;
+}
+
+
+int sub_server_register(const char *event, sub_server_h *h, void *arg)
+{
+	struct sub_server *srv;
+
+	if (!event || !h || str_len(event) >= sizeof(srv->event))
+		return EINVAL;
+
+	srv = mem_zalloc(sizeof(*srv), NULL);
+	if (!srv)
+		return ENOMEM;
+
+	str_ncpy(srv->event, event, sizeof(srv->event));
+	srv->h = h;
+	srv->arg = arg;
+	list_append(&subsrvl, &srv->le, srv);
+
+	return 0;
+}
+
+
+void sub_server_unregister(sub_server_h *h)
+{
+	struct le *le;
+
+	for (le = subsrvl.head; le; ) {
+		struct sub_server *srv = le->data;
+		le = le->next;
+		if (srv->h == h) {
+			list_unlink(&srv->le);
+			mem_deref(srv);
+		}
+	}
+}
+
+
 /* Handle incoming calls */
 static void sipsess_conn_handler(const struct sip_msg *msg, void *arg)
 {
@@ -1491,7 +1757,7 @@ int ua_init(const char *software, bool udp, bool tcp, bool tls, bool no_ip_bind,
 	if (err)
 		goto out;
 
-	err = sipevent_listen(&uag.evsock, uag.sip, bsize, bsize, NULL, NULL);
+	err = sipevent_listen(&uag.evsock, uag.sip, bsize, bsize, subsrv_request_handler, NULL);
 	if (err)
 		goto out;
 
@@ -1524,6 +1790,7 @@ void ua_close(void)
 	play_close();
 
 	uag.evsock   = mem_deref(uag.evsock);
+	list_flush(&subsrvl);
 	uag.sock     = mem_deref(uag.sock);
 	uag.lsnr     = mem_deref(uag.lsnr);
 	uag.sip      = mem_deref(uag.sip);

@@ -283,6 +283,11 @@ void __fastcall TfrmSettings::FormShow(TObject *Sender)
 	chbSipCompactHeadersRfc3261->Checked = tmpSettings.uaConf.sip.compactHeadersRfc3261;
 	chbSipCompactHeadersExt->Checked = tmpSettings.uaConf.sip.compactHeadersExt;
 	chbSipCompactHeadersRfc3261Click(NULL);
+	chbPresenceServer->Checked = tmpSettings.uaConf.sip.presenceServer;
+	chbDialogServer->Checked = tmpSettings.uaConf.sip.dialogServer;
+	cbDialogIdentity->ItemIndex = tmpSettings.uaConf.sip.dialogIdentity;
+	edSubscribeAllowFrom->Text = tmpSettings.uaConf.sip.subscribeAllowFrom.c_str();
+	chbDialogServerClick(NULL);
 
 	edRtpPortMin->Text = tmpSettings.uaConf.avt.portMin;
 	edRtpPortMax->Text = tmpSettings.uaConf.avt.portMax;
@@ -901,6 +906,10 @@ void __fastcall TfrmSettings::btnApplyClick(TObject *Sender)
 	tmpSettings.uaConf.noIpBind = chbNoIpBind->Checked;
 	tmpSettings.uaConf.sip.compactHeadersRfc3261 = chbSipCompactHeadersRfc3261->Checked;
 	tmpSettings.uaConf.sip.compactHeadersExt = chbSipCompactHeadersExt->Checked;
+	tmpSettings.uaConf.sip.presenceServer = chbPresenceServer->Checked;
+	tmpSettings.uaConf.sip.dialogServer = chbDialogServer->Checked;
+	tmpSettings.uaConf.sip.dialogIdentity = cbDialogIdentity->ItemIndex >= 0 ? cbDialogIdentity->ItemIndex : 2;
+	tmpSettings.uaConf.sip.subscribeAllowFrom = edSubscribeAllowFrom->Text.Trim().c_str();
 	tmpSettings.uaConf.avt.portMin = StrToIntDef(edRtpPortMin->Text, 0);
 	tmpSettings.uaConf.avt.portMax = StrToIntDef(edRtpPortMax->Text, 0);
 	if (tmpSettings.uaConf.avt.ValidatePorts())
@@ -1759,6 +1768,13 @@ void __fastcall TfrmSettings::chbSipCompactHeadersRfc3261Click(
 {
 	// extension headers only together with RFC 3261 headers
 	chbSipCompactHeadersExt->Enabled = chbSipCompactHeadersRfc3261->Checked;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TfrmSettings::chbDialogServerClick(TObject *Sender)
+{
+	lblDialogIdentity->Enabled = chbDialogServer->Checked;
+	cbDialogIdentity->Enabled = chbDialogServer->Checked;
 }
 //---------------------------------------------------------------------------
 

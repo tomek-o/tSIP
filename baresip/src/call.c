@@ -74,6 +74,7 @@ struct call {
 	time_t time_start;        /**< Time when call started               */
 	time_t time_stop;         /**< Time when call stopped               */
 	bool got_offer;           /**< Got SDP Offer from Peer              */
+	bool incoming;            /**< Call was created by incoming INVITE  */
 	int answer_after;         /**< Call-info answer-after value; -1 if not present */
 	struct mnat_sess *mnats;  /**< Media NAT session                    */
 	bool mnat_wait;           /**< Waiting for MNAT to establish        */
@@ -520,6 +521,7 @@ int call_alloc(struct call **callp, const struct config *cfg, struct list *lst,
 	call->arg    = arg;
 	call->af     = prm ? prm->af : AF_INET;
 	call->answer_after = -1;
+	call->incoming = (msg != NULL);
 
 	err = str_dup(&call->local_uri, local_uri);
 	if (local_name)
@@ -1033,6 +1035,62 @@ int call_status(struct re_printf *pf, const struct call *call)
 #endif
 
 	return err;
+}
+
+
+/**
+ * Get information about the call for the dialog event package (RFC 4235)
+ *
+ * @param call  Call object
+ * @param info  Dialog information
+ *
+ * @return 0 if success, EINVAL otherwise
+ */
+int call_dialog_info(const struct call *call, struct call_dialog_info *info)
+{
+	const struct sip_dialog *dlg;
+
+	if (!call || !info)
+		return EINVAL;
+
+	memset(info, 0, sizeof(*info));
+
+	switch (call->state) {
+
+	case STATE_INCOMING:
+	case STATE_RINGING:
+	case STATE_EARLY:
+		info->state = CALL_DLG_EARLY;
+		break;
+
+	case STATE_OUTGOING:
+		info->state = CALL_DLG_TRYING;
+		break;
+
+	case STATE_ESTABLISHED:
+		info->state = CALL_DLG_CONFIRMED;
+		break;
+
+	default:
+		info->state = CALL_DLG_NONE;
+		break;
+	}
+
+	info->incoming = call->incoming;
+	info->local_uri = call->local_uri;
+	info->peer_uri = call->peer_uri;
+	info->peer_name = call->peer_name;
+	info->pai_uri = call->pai_peer_uri;
+	info->pai_name = call->pai_peer_name;
+
+	dlg = call->sess ? sipsess_dialog(call->sess) : NULL;
+	if (dlg) {
+		info->callid = sip_dialog_callid(dlg);
+		info->local_tag = sip_dialog_ltag(dlg);
+		info->remote_tag = sip_dialog_rtag(dlg);
+	}
+
+	return 0;
 }
 
 

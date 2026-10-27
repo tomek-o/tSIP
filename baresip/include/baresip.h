@@ -147,6 +147,29 @@ struct rtp_summary {
 /** \brief Get RTP statistics of call audio stream; call before call is released
 	\return 0 if success, ENOENT if call has no audio stream */
 int call_rtp_summary(const struct call *call, struct rtp_summary *sum);
+/** State of the call for dialog event package (RFC 4235) */
+enum call_dialog_state {
+	CALL_DLG_NONE = 0,	/**< call is not (or no longer) visible in dialog-info */
+	CALL_DLG_TRYING,
+	CALL_DLG_EARLY,
+	CALL_DLG_CONFIRMED
+};
+
+/** Dialog information of a call; strings are owned by the call object */
+struct call_dialog_info {
+	enum call_dialog_state state;
+	bool incoming;			/**< we are the recipient of the call */
+	const char *callid;		/**< may be NULL */
+	const char *local_tag;		/**< may be NULL */
+	const char *remote_tag;		/**< may be NULL (call not yet answered) */
+	const char *local_uri;
+	const char *peer_uri;
+	const char *peer_name;
+	const char *pai_uri;		/**< P-Asserted-Identity of the peer, may be NULL */
+	const char *pai_name;
+};
+
+int call_dialog_info(const struct call *call, struct call_dialog_info *info);
 struct audio *call_audio(const struct call *call);
 struct video *call_video(const struct call *call);
 struct list  *call_streaml(const struct call *call);
@@ -376,6 +399,14 @@ struct config {
 		char reply_reason[64];	/**< Text sent in reply for incoming MESSAGE */
 		int do_not_reply;
 	} messages;
+
+	/** Servers for SIP event packages (we accept SUBSCRIBE, e.g. peer-to-peer BLF without PBX) */
+	struct config_subsrv {
+		bool presence;			/**< accept subscriptions to presence (RFC 3856) */
+		bool dialog;			/**< accept subscriptions to dialog (RFC 4235) */
+		int dialog_identity;		/**< remote identity in dialog-info: 0 = none, 1 = SIP URI, 2 = SIP URI and display name, 3 = P-Asserted-Identity if available (else as 2) */
+		char allow_from[256];		/**< allowed source addresses of SUBSCRIBE: "lan" (private ranges), "registrar" (address of our SIP server), "any", addresses and a.b.c.d/n networks separated by ; , or space */
+	} subsrv;
 };
 
 struct config *conf_config(void);
@@ -403,10 +434,28 @@ void			contact_set_dialog_info(struct contact *c, const struct dialog_data *ddat
 const char		*contact_dialog_info_str(enum dialog_info_status status);
 
 void presence_resubscribe(void);
+
+/** Handler for incoming out-of-dialog SUBSCRIBE of a registered event package; the request
+	was already checked: server of this event is enabled and source address is allowed.
+	Reply to the request or accept it (sipevent_accept()); return value is ignored (request is always handled). */
+typedef bool (sub_server_h)(const struct sip_msg *msg, struct ua *ua, void *arg);
+/** Register handler for event package (e.g. "presence", "dialog") */
+int  sub_server_register(const char *event, sub_server_h *h, void *arg);
+void sub_server_unregister(sub_server_h *h);
+
+/** Application hook for presence server: fills presence of the local user; default is open without note */
+typedef void (presence_server_status_h)(const struct ua *ua, enum presence_status *status, char *note, size_t note_size);
+void presence_server_set_status_handler(presence_server_status_h *h);
+/** Send NOTIFY with current presence to subscribers of the UA (NULL = all) */
+void presence_server_notify_changed(const struct ua *ua);
 void presence_subscriber_close(void);
+/** Terminate subscriptions of other users to our presence (before the SIP stack is stopped) */
+void presence_notifier_close(void);
 
 void dialog_info_resubscribe(void);
 void dialog_info_subscriber_close(void);
+/** Terminate subscriptions of other users to our dialog state (before the SIP stack is stopped) */
+void dialog_info_notifier_close(void);
 
 /*
  * Media Context

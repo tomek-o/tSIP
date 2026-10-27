@@ -234,6 +234,8 @@ int  reg_register(struct reg *reg, const char *reg_uri,
 		    const char *params, uint32_t regint, const char *outbound);
 void reg_unregister(struct reg *reg);
 bool reg_isok(const struct reg *reg);
+/** Address of registrar (source of the last successful REGISTER reply); false if not known */
+bool reg_registrar_addr(const struct reg *reg, struct sa *sa);
 int  reg_debug(struct re_printf *pf, const struct reg *reg);
 int  reg_status(struct re_printf *pf, const struct reg *reg);
 

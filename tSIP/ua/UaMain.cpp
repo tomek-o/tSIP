@@ -644,6 +644,17 @@ static void zrtp_state_handler(int session_id, unsigned int call_uid, struct zrt
 	UA_CB->ChangeEncryptionState(zrtp);
 }
 
+/** Presence of the local user reported to subscribers (presence server): what was requested for PUBLISH of the account */
+static void presence_server_status_handler(const struct ua *ua, enum presence_status *status, char *note, size_t note_size)
+{
+	UaPublish::Presence presence;
+	if (UaPublish::Get(account_for_ua(ua), presence) && presence.active)
+	{
+		*status = presence.open ? PRESENCE_OPEN : PRESENCE_CLOSED;
+		strncpyz(note, presence.note.c_str(), note_size);
+	}
+}
+
 static int app_init(void)
 {
 	int err;
@@ -721,6 +732,14 @@ static int app_init(void)
 		const UaConf::Zrtp &zrtp = appSettings.uaConf.zrtp;
 		cfg->zrtp.start_parallel = zrtp.startParallel;
 		strncpyz(cfg->zrtp.zid_filename, (Paths::GetProfileDir() + "\\zrtp.zid").c_str(), sizeof(cfg->zrtp.zid_filename));
+	}
+
+	{
+		const UaConf::Sip &sip = appSettings.uaConf.sip;
+		cfg->subsrv.presence = sip.presenceServer;
+		cfg->subsrv.dialog = sip.dialogServer;
+		cfg->subsrv.dialog_identity = sip.dialogIdentity;
+		strncpyz(cfg->subsrv.allow_from, sip.subscribeAllowFrom.c_str(), sizeof(cfg->subsrv.allow_from));
 	}
 
 	{
@@ -880,6 +899,8 @@ static int app_init(void)
 	recorder_init(recorder_state_handler);
 
 	baresip_zrtp_init(zrtp_state_handler);
+
+	presence_server_set_status_handler(presence_server_status_handler);
 
 	return 0;
 }
@@ -1144,13 +1165,25 @@ static void app_close(void)
 	mem_debug();
 }
 
+/** Graceful stop waits for pending SIP transactions (e.g. final NOTIFY to unreachable subscribers
+	of presence / dialog servers, unsubscribe to unreachable servers), which may take minutes: stop is forced after this time */
+static const uint64_t GRACEFUL_STOP_TIMEOUT_MS = 5000;
+static uint64_t gracefulStopStart = 0;
+static bool forcedStopDone = false;
+
 static void quit(int sig)
 {
 	if (!app.terminating) {
+		gracefulStopStart = tmr_jiffies();
+		forcedStopDone = false;
 		/** \todo Closing dialog-info subscriber here shouldn't be necessary? */
 		dialog_info_subscriber_close();
 		/** \todo Closing presence subscriber here shouldn't be necessary? */
 		presence_subscriber_close();
+		/* Servers: subscriptions of other users have to be terminated now, otherwise they keep the SIP stack
+		   alive until they expire (up to an hour) and restart / exit hangs */
+		dialog_info_notifier_close();
+		presence_notifier_close();
 		ua_stop_all(false);
 		app.terminating = true;
 		return;
@@ -1183,6 +1216,12 @@ extern "C" void control_handler(void)
 {
 	if (app.terminating)
 	{
+		if (!forcedStopDone && tmr_jiffies() - gracefulStopStart > GRACEFUL_STOP_TIMEOUT_MS)
+		{
+			forcedStopDone = true;
+			LOG("Stopping user agent takes too long (pending SIP transactions), forcing\n");
+			ua_stop_all(true);
+		}
 		return;
 	}
 	else if (appQuit || appRestart)
@@ -1567,6 +1606,8 @@ extern "C" void control_handler(void)
 			publish_response_handler, reinterpret_cast<void*>(cmd.accountId + 1), "%s", lines.c_str());
 		if (err != 0)
 			DEBUG_WARNING("PUBLISH to %s failed (%m)\n", cmd.target.c_str(), err);
+		// subscribers of our presence server get the same status
+		presence_server_notify_changed(ua_for_account(cmd.accountId));
 		break;
 	}
 	case Command::SEND_MESSAGE: {

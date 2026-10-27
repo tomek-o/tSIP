@@ -246,6 +246,12 @@ void UaConf::fromJson(const Json::Value& uaConfJson, const struct SettingsAppVer
 		jv.getBool("compactHeadersRfc3261", sip.compactHeadersRfc3261);
 		jv.getBool("compactHeadersExt", sip.compactHeadersExt);
 		jv.getBool("disableUserAgent", sip.disableUserAgent);
+		jv.getBool("presenceServer", sip.presenceServer);
+		jv.getBool("dialogServer", sip.dialogServer);
+		jv.getInt("dialogIdentity", sip.dialogIdentity);
+		if (sip.dialogIdentity < 0 || sip.dialogIdentity > 3)
+			sip.dialogIdentity = 2;
+		jv.getString("subscribeAllowFrom", sip.subscribeAllowFrom);
 	}
 
 	{
@@ -416,6 +422,10 @@ void UaConf::toJson(Json::Value& uaConfJson) const
 	uaConfJson["sip"]["compactHeadersRfc3261"] = sip.compactHeadersRfc3261;
 	uaConfJson["sip"]["compactHeadersExt"] = sip.compactHeadersExt;
 	uaConfJson["sip"]["disableUserAgent"] = sip.disableUserAgent;
+	uaConfJson["sip"]["presenceServer"] = sip.presenceServer;
+	uaConfJson["sip"]["dialogServer"] = sip.dialogServer;
+	uaConfJson["sip"]["dialogIdentity"] = sip.dialogIdentity;
+	uaConfJson["sip"]["subscribeAllowFrom"] = sip.subscribeAllowFrom;
 	uaConfJson["avt"]["portMin"] = avt.portMin;
 	uaConfJson["avt"]["portMax"] = avt.portMax;
 	uaConfJson["avt"]["jbufDelayMin"] = avt.jbufDelayMin;

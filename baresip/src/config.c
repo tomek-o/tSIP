@@ -142,6 +142,14 @@ static struct config core_config = {
 		200, "OK",
 		0 /* do_not_reply */
 	},
+
+	/* subsrv (SUBSCRIBE servers: disabled by default) */
+	{
+		false,
+		false,
+		2,
+		"lan"
+	},
 };
 
 static int dns_server_handler(const struct pl *pl, void *arg)

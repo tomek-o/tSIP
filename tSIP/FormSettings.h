@@ -559,6 +559,14 @@ __published:	// IDE-managed Components
 	TCheckBox *chbNoIpBind;
 	TCheckBox *chbSipCompactHeadersRfc3261;
 	TCheckBox *chbSipCompactHeadersExt;
+	TLabel *lblSubscribeServers;
+	TCheckBox *chbPresenceServer;
+	TCheckBox *chbDialogServer;
+	TLabel *lblDialogIdentity;
+	TComboBox *cbDialogIdentity;
+	TLabel *lblSubscribeAllowFrom;
+	TEdit *edSubscribeAllowFrom;
+	TLabel *lblSubscribeAllowFromInfo;
 	TLabel *lblCallPanelHeight;
 	TEdit *edCallPanelHeight;
 	TLabel *lblMainPanelHeight;
@@ -591,6 +599,7 @@ __published:	// IDE-managed Components
 	void __fastcall btnSelectImageClick(TObject *Sender);
 	void __fastcall chbAudioPreprocessingTxEnabledClick(TObject *Sender);
 	void __fastcall chbSipCompactHeadersRfc3261Click(TObject *Sender);
+	void __fastcall chbDialogServerClick(TObject *Sender);
 	void __fastcall btnSelectedScriptClick(TObject *Sender);
 	void __fastcall cbSoundRingOutputModChange(TObject *Sender);
 	void __fastcall btnSelectedScriptEditClick(TObject *Sender);

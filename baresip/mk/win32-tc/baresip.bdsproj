@@ -462,6 +462,7 @@
         <FILE FILENAME="..\..\modules\presence\presence.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="presence" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\presence\presence.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\dialog_info\dialog_info_subscriber.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dialog_info_subscriber" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="..\..\modules\dialog_info\dialog_info_notifier.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dialog_info_notifier" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\dialog_info\dialog_info.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="dialog_info" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\dialog_info\dialog_info.h" CONTAINERID="" LOCALCOMMAND="" UNITNAME="" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="..\..\modules\webrtc_aec\webrtc_aec.c" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="webrtc_aec" FORMNAME="" DESIGNCLASS=""/>

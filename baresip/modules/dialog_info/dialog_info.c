@@ -14,12 +14,17 @@ static int module_init(void)
 	if (err)
 		return err;
 
+	err = dialog_info_notifier_init();
+	if (err)
+		return err;
+
 	return 0;
 }
 
 
 static int module_close(void)
 {
+	dialog_info_notifier_close();
 	dialog_info_subscriber_close();
 
 	return 0;

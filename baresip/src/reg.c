@@ -23,6 +23,7 @@ struct reg {
 	/* status: */
 	uint16_t scode;              /**< Registration status code           */
 	char *srv;                   /**< SIP Server id                      */
+	struct sa srv_addr;          /**< Source address of last successful REGISTER reply (registrar / outbound proxy) */
 	int af;                      /**< Cached address family for SIP conn */
 };
 
@@ -140,6 +141,7 @@ static void register_handler(int err, const struct sip_msg *msg, void *arg)
 		}
 
 		reg->scode = msg->scode;
+		reg->srv_addr = msg->src;
 
 		ua_event(reg->ua, UA_EVENT_REGISTER_OK, NULL, "%u %r",
 			 msg->scode, &msg->reason);
@@ -216,6 +218,16 @@ void reg_unregister(struct reg *reg)
 	reg->af    = 0;
 
 	reg->sipreg = mem_deref(reg->sipreg);
+}
+
+
+bool reg_registrar_addr(const struct reg *reg, struct sa *sa)
+{
+	if (!reg || !sa || !sa_isset(&reg->srv_addr, SA_ADDR))
+		return false;
+
+	*sa = reg->srv_addr;
+	return true;
 }
 
 

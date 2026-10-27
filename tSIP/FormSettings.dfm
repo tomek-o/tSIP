@@ -57,7 +57,7 @@ object frmSettings: TfrmSettings
     Top = 0
     Width = 578
     Height = 496
-    ActivePage = tsHistory
+    ActivePage = tsSip
     Align = alClient
     TabHeight = 10
     TabOrder = 1
@@ -393,6 +393,40 @@ object frmSettings: TfrmSettings
     end
     object tsSip: TTabSheet
       Caption = 'SIP'
+      object lblSubscribeServers: TLabel
+        Left = 3
+        Top = 110
+        Width = 319
+        Height = 13
+        Caption = 
+          'Servers for subscriptions (peer-to-peer BLF dialog-info / presen' +
+          'ce)'
+      end
+      object lblDialogIdentity: TLabel
+        Left = 19
+        Top = 181
+        Width = 144
+        Height = 13
+        Caption = 'Remote identity in dialog-info:'
+      end
+      object lblSubscribeAllowFrom: TLabel
+        Left = 19
+        Top = 213
+        Width = 145
+        Height = 13
+        Caption = 'Allowed subscriber addresses:'
+      end
+      object lblSubscribeAllowFromInfo: TLabel
+        Left = 200
+        Top = 234
+        Width = 340
+        Height = 39
+        AutoSize = False
+        Caption = 
+          'lan = private networks, registrar = my SIP server, any, address ' +
+          'or network (192.168.1.0/24); separated with ;'
+        WordWrap = True
+      end
       object chbDisableUa: TCheckBox
         Left = 3
         Top = 3
@@ -432,6 +466,49 @@ object frmSettings: TfrmSettings
         Height = 17
         Caption = 'Handle incoming out-of-dialog REFER requests'
         TabOrder = 3
+      end
+      object chbPresenceServer: TCheckBox
+        Left = 3
+        Top = 130
+        Width = 526
+        Height = 17
+        Caption = 
+          'Presence server: accept subscriptions to my presence (Event: pre' +
+          'sence)'
+        TabOrder = 4
+      end
+      object chbDialogServer: TCheckBox
+        Left = 3
+        Top = 153
+        Width = 526
+        Height = 17
+        Caption = 
+          'Dialog server (BLF): accept subscriptions to my call state (Even' +
+          't: dialog)'
+        TabOrder = 5
+        OnClick = chbDialogServerClick
+      end
+      object cbDialogIdentity: TComboBox
+        Left = 200
+        Top = 177
+        Width = 340
+        Height = 21
+        Style = csDropDownList
+        ItemHeight = 13
+        TabOrder = 6
+        Items.Strings = (
+          'none (do not send)'
+          'SIP URI'
+          'SIP URI and display name'
+          'P-Asserted-Identity if available, else SIP URI and name')
+      end
+      object edSubscribeAllowFrom: TEdit
+        Left = 200
+        Top = 209
+        Width = 340
+        Height = 21
+        TabOrder = 7
+        Text = 'lan'
       end
     end
     object tsAccount: TTabSheet

@@ -288,6 +288,21 @@ namespace {
 		return result;
 	}
 
+	bool CheckSubscribeServerOpen(void)
+	{
+		const UaConf::Sip &sip = appSettings.uaConf.sip;
+		if (!sip.presenceServer && !sip.dialogServer)
+			return false;
+		AnsiString list = sip.subscribeAllowFrom.c_str();
+		for (int i=1; i<=list.Length(); i++)
+		{
+			if (list[i] == ';' || list[i] == ',' || list[i] == '\t')
+				list[i] = ' ';
+		}
+		list = " " + list.LowerCase() + " ";
+		return list.Pos(" any ") > 0 || list.Pos(" * ") > 0 || list.Pos(" 0.0.0.0/0 ") > 0 || list.Pos(" ::/0 ") > 0;
+	}
+
 	bool CheckNetworkInterface(void)
 	{
 		if (appSettings.uaConf.netIfName != "")
@@ -606,6 +621,11 @@ namespace {
 			"Audio device selected in Settings (input, output, ring, alert or intercom) is not present, e.g. unplugged or renamed. "
 			"The default device of the audio module would be used instead. Select the device again in Settings.",
 			CheckSelectedAudioDevices },
+		{ LevelWarning, "Presence / dialog server accepts subscriptions from any address",
+			"Presence or dialog (BLF) server is enabled and \"Allowed subscriber addresses\" (Settings / SIP) contains \"any\": "
+			"anyone who can reach the application can read your presence and call state (including remote identity of the calls). "
+			"Prefer \"lan\" or a list of addresses / networks.",
+			CheckSubscribeServerOpen },
 		{ LevelWarning, "Missing wave file for audio input", "Audio file specified as input device does not exist.", NULL },
 		{ LevelWarning, "Incorrect wav file format", "Invalid file format for input device.", NULL },
 		{ LevelWarning, "Binding to VirtualBox network adapter",

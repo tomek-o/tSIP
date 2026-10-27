@@ -9,7 +9,6 @@ No particular order.
 Outdated / not the only one TODO list.
 
 - UDP transport keepalive
-- context help
 - SIP message graphs
 
 - some things from baresip
@@ -46,8 +45,7 @@ Outdated / not the only one TODO list.
 
 - contacts plugin: fetch number description from other data source
 
-libre version 0.4.17 contains an improvement for the SIP-stack
-when multiple SRV-records are present in the domain
+libre version 0.4.17 contains an improvement for the SIP-stack when multiple SRV-records are present in the domain
 
 
 > 3.  The voice quality is slightly fuzzy/muddy.  I've experienced this with other open source SIP phones as well - everything except Zoiper.  Voices are
@@ -57,8 +55,6 @@ and whether it can be addressed?
 
 - blinking tray icon while in call
 
-- "BLF" p2p: subscription server
-
 button: mouse down event
 
 Lua: get BLF button state => route incoming call to selected (idle) extension
@@ -66,7 +62,6 @@ Lua: get BLF button state => route incoming call to selected (idle) extension
 - audible DTMF keypad tones during the call and while dialing: as opt-in options, PlaySound, resources, ASYNC?
 
 ping plugin: add context menu to history
-
 
 - ua_init: add option to disable udp/tcp transport (now both UDP/TCP are always enabled)
 
@@ -97,7 +92,6 @@ CRM application communicating through TCPServer plugin
 - H.264 config: profile
 - video recording
 - direction selection (sendonly/recvonly/sendrecv)
-- VP8, VP9 - could ffmpeg be used?
 - RTSP as video source - unusable picture (very heavily distorted?) with my Vivotek IP8133W camera
 
 Bug (untested yet, but quite likely): bad audio quality after changing codec
@@ -113,6 +107,8 @@ switch automatically to line with new outgoing call if there is only one call
 support for multiple simultaneous RTP streaming - treat streaming as call
 
 FIX hang (maybe just long timeout) when using rtsp from non-existing address as video source 
+
+- VP8, VP9 - could ffmpeg be used? but encoders are currently not compiled into dlls
 
 */
 

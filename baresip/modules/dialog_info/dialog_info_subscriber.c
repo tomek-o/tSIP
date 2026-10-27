@@ -67,6 +67,7 @@ static uint32_t wait_fail(unsigned failc)
 }
 
 static const char* STR_EARLY = "early";
+static const char* STR_TRYING = "trying";
 static const char* STR_CONFIRMED = "confirmed";
 static const char* STR_TERMINATED = "terminated";
 
@@ -188,7 +189,8 @@ static int dialog_info_sxmlc_callback(XMLEvent evt, const XMLNode* node, SXML_CH
 				ddata->identity[sizeof(ddata->identity)-1] = '\0';
 			}
 			if (ctx->in_state) {
-				if (strcmp(text, STR_EARLY) == 0) {
+				if (strcmp(text, STR_EARLY) == 0 || strcmp(text, STR_TRYING) == 0) {
+					/* "trying" (INVITE sent, no response yet) is shown like "early" */
 					ddata->status = DIALOG_INFO_EARLY;
 				} else if (strcmp(text, STR_CONFIRMED) == 0) {
 					ddata->status = DIALOG_INFO_CONFIRMED;

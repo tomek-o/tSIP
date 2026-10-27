@@ -555,16 +555,32 @@ public:
 		bool compactHeadersRfc3261;	///< use compact header names (RFC 3261 7.3.3) in outgoing messages
 		bool disableUserAgent;	///< do not start SIP user agent (no accounts, registration, calls); application works as button panel for scripts and plugins; restart required
 		bool compactHeadersExt;	///< use compact names also for extension headers (Event, Allow-Events, Refer-To, Referred-By, Session-Expires); only with compactHeadersRfc3261
+		/** \name Servers for SIP event packages: other users (or phones) subscribe to our presence / call state;
+			useful in peer-to-peer mode and when PBX or provider does not provide these functions (or provides them partially, e.g. without remote identity) */
+		///@{
+		bool presenceServer;		///< accept SUBSCRIBE for presence (RFC 3856)
+		bool dialogServer;		///< accept SUBSCRIBE for dialog (RFC 4235, BLF)
+		int dialogIdentity;		///< remote identity in dialog-info: 0 = none, 1 = SIP URI, 2 = SIP URI and display name, 3 = P-Asserted-Identity if available (else as 2)
+		std::string subscribeAllowFrom;	///< allowed source addresses of SUBSCRIBE: "lan" (private networks), "registrar" (our SIP server), "any", addresses and a.b.c.d/n networks separated with ; , or space
+		///@}
 		Sip(void):
 			compactHeadersRfc3261(false),
 			compactHeadersExt(false),
-			disableUserAgent(false)
+			disableUserAgent(false),
+			presenceServer(false),
+			dialogServer(false),
+			dialogIdentity(2),
+			subscribeAllowFrom("lan")
 		{}
 		bool operator==(const Sip& right) const {
 			return (
 				compactHeadersRfc3261 == right.compactHeadersRfc3261 &&
 				compactHeadersExt == right.compactHeadersExt &&
-				disableUserAgent == right.disableUserAgent
+				disableUserAgent == right.disableUserAgent &&
+				presenceServer == right.presenceServer &&
+				dialogServer == right.dialogServer &&
+				dialogIdentity == right.dialogIdentity &&
+				subscribeAllowFrom == right.subscribeAllowFrom
 			);
 		}
 		bool operator!=(const Sip& right) const {
