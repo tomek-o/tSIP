@@ -32,6 +32,8 @@ public:
 	bool GetCallAudioLevels(unsigned int callUid, int &rxPeak, float &rxRms, int &txPeak, float &txRms);
 
 	int GetVideoCodecList(std::vector<AnsiString> &codecs);
+
+	bool GetAppQuit(void);
 };
 
 /** Parent handle of the selfview window, set before a call starts (see baresip video_set_selfview_parent_handle) */

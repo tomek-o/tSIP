@@ -1794,9 +1794,16 @@ int Ua::GetVideoCodecList(std::vector<AnsiString> &codecs)
 	return 0;
 }
 
+bool Ua::GetAppQuit(void)
+{
+	return appQuit;
+}
+
 void UaSetSelfviewParentHandle(void *handle)
 {
 #ifdef USE_VIDEO
 	video_set_selfview_parent_handle(handle);
 #endif
 }
+
+

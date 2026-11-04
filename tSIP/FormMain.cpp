@@ -3787,6 +3787,11 @@ void __fastcall TfrmMain::tmrBackspaceTimer(TObject *Sender)
 // Levels of the current call drive both volume meters; no call means silence
 void __fastcall TfrmMain::tmrLevelTimer(TObject *Sender)
 {
+	if (Ua::Instance().GetAppQuit())
+	{
+    	return;
+	}
+
 	int rxPeak = 0;
 	int txPeak = 0;
 	float rxRms = 0;
