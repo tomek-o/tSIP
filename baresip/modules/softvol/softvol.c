@@ -49,6 +49,7 @@ struct dec_st {
 /* Registered streams; accessed from audio threads and from the GUI thread */
 static mtx_t meter_mtx;
 static struct list meter_list;
+static bool meter_inited;	/* mutex and list are initialised once and never destroyed */
 
 static void enc_destructor(void *arg)
 {
@@ -97,6 +98,9 @@ static int softvol_alloc(struct softvol_st **stp, void **ctx, struct aufilt_prm 
 		return ENOMEM;
 
 	st->au = au;
+
+	/* filters are rebuilt on codec change: take over the id bound earlier */
+	st->meter_id = audio_get_meter_id(au);
 
 	/* block length in samples, all channels */
 	blk_len = prm->srate * prm->ch * SOFTVOL_METER_BLOCK_MS / 1000;
@@ -276,8 +280,15 @@ static struct aufilt softvol = {
 };
 
 static int module_init(void) {
-	mtx_init(&meter_mtx, mtx_plain);
-	list_init(&meter_list);
+	/* The mutex is intentionally never destroyed: softvol_get_levels() is
+	 * called from the application (GUI) thread and may run while the module
+	 * is closed on the UA thread (quit, restart). Re-init on restart would
+	 * also race with such a call. */
+	if (!meter_inited) {
+		mtx_init(&meter_mtx, mtx_plain);
+		list_init(&meter_list);
+		meter_inited = true;
+	}
 
 	aufilt_register(&softvol);
 	return 0;
@@ -285,7 +296,6 @@ static int module_init(void) {
 
 static int module_close(void) {
 	aufilt_unregister(&softvol);
-	mtx_destroy(&meter_mtx);
 	return 0;
 }
 
@@ -293,6 +303,12 @@ static int module_close(void) {
 void softvol_meter_bind(const struct audio *au, unsigned int id)
 {
 	struct le *le;
+
+	if (!meter_inited)
+		return;
+
+	/* remembered in the audio object, so that filters rebuilt later get it too */
+	audio_set_meter_id((struct audio *)au, id);
 
 	mtx_lock(&meter_mtx);
 	for (le = list_head(&meter_list); le; le = le->next) {
@@ -309,7 +325,7 @@ bool softvol_get_levels(unsigned int id, struct softvol_levels *lv)
 	struct le *le;
 	bool found = false;
 
-	if (!lv || id == 0)
+	if (!lv || id == 0 || !meter_inited)
 		return false;
 
 	memset(lv, 0, sizeof(*lv));

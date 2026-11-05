@@ -143,12 +143,21 @@ static struct ua* ua_for_account(int accountId) {
 	return NULL;
 }
 
+/** User agent of exactly this account, NULL if not available (no fallback to another account) */
+static struct ua* ua_for_account_strict(int accountId) {
+	if (accountId >= 0 && accountId < (int)uas.size())
+		return uas[accountId];
+	return NULL;
+}
+
 static struct ua* ua_cur(void) {
 	return ua_for_account(0);
 }
 
 /** Get account id for ua, -1 if not found */
 static int account_for_ua(const struct ua *ua) {
+	if (!ua)
+		return -1;	// would match a disabled account (NULL slot)
 	for (unsigned int i=0; i<uas.size(); i++) {
 		if (uas[i] == ua)
 			return i;
@@ -1212,6 +1221,23 @@ extern "C" int stderr_handler(const char *p, size_t size, void *arg)
 	return 0;
 }
 
+/** Calls are closed by force before the user agent is restarted; UA thread only (the calls map and the paging
+	transmitter belong to it; they must not be touched from the GUI thread) */
+static void restart_cleanup(void)
+{
+	/** \todo ugly forced hangup */
+	std::map<unsigned int, struct call*>::iterator iter;
+	for (iter = calls.begin(); iter != calls.end(); ++iter)
+	{
+		UA_CB->ChangeCallState(iter->first, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "", "");
+	}
+	calls.clear();
+	if (app.paging_txp)
+	{
+		paging_tx_hangup(app.paging_txp);
+	}
+}
+
 extern "C" void control_handler(void)
 {
 	if (app.terminating)
@@ -1230,6 +1256,15 @@ extern "C" void control_handler(void)
 		//{
 		//	app.terminating = true;
 		//}
+		// runs once: quit() sets app.terminating
+		if (appRestart)
+		{
+			restart_cleanup();
+		}
+		else if (app.paging_txp)
+		{
+			paging_tx_hangup(app.paging_txp);
+		}
 		quit(0);
 	}
 	
@@ -1267,6 +1302,12 @@ extern "C" void control_handler(void)
 		break;
 	}
 	case Command::ANSWER:
+		if (cmd.callUid > 0 && cmdCall == NULL)
+		{
+			// call is gone (e.g. cancelled by the caller): ua_answer() without a call would answer another one
+			DEBUG_WARNING("ANSWER: call %u not found, not answering\n", cmd.callUid);
+			break;
+		}
         DEBUG_INFO("Answering...\n");
 		err = ua_answer(ua_for_call(cmdCall), cmdCall, cmd.audioMod.c_str(), cmd.audioDev.c_str(), cmd.video?VIDMODE_ON:VIDMODE_OFF, cmd.vidispParentHandle);
 		if (err)
@@ -1365,7 +1406,8 @@ extern "C" void control_handler(void)
 			UA_CB->ChangeCallState(cmd.callUid, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "", "");
 			removeCall(cmd.callUid);
 		}
-		if (app.paging_txp)
+		// hangup without a call (uid 0) stops the paging transmission; hanging up a call does not
+		if (cmd.callUid == 0 && app.paging_txp)
 		{
 			paging_tx_hangup(app.paging_txp);
 			//mem_deref(app.paging_txp);
@@ -1602,17 +1644,31 @@ extern "C" void control_handler(void)
 		lines += cmd.extraHeaderLines;
 		lines += "Content-Length: " + IntToStr(cmd.text.Length()) + "\r\n\r\n";
 		lines += cmd.text;
-		err = sip_req_send(ua_for_account(cmd.accountId), "PUBLISH", cmd.target.c_str(),
+		// the AOR belongs to this account: never send it using another account's user agent and credentials
+		struct ua *publishUa = ua_for_account_strict(cmd.accountId);
+		if (!publishUa) {
+			DEBUG_WARNING("PUBLISH to %s: user agent of account #%d not available\n", cmd.target.c_str(), cmd.accountId + 1);
+			UaPublish::Reply(cmd.accountId, 0, "", 0);
+			break;
+		}
+		err = sip_req_send(publishUa, "PUBLISH", cmd.target.c_str(),
 			publish_response_handler, reinterpret_cast<void*>(cmd.accountId + 1), "%s", lines.c_str());
-		if (err != 0)
+		if (err != 0) {
 			DEBUG_WARNING("PUBLISH to %s failed (%m)\n", cmd.target.c_str(), err);
+			// no response handler call will follow
+			UaPublish::Reply(cmd.accountId, 0, "", 0);
+		}
 		// subscribers of our presence server get the same status
-		presence_server_notify_changed(ua_for_account(cmd.accountId));
+		presence_server_notify_changed(publishUa);
 		break;
 	}
 	case Command::SEND_MESSAGE: {
 		err = message_send(ua_for_account(cmd.accountId), cmd.target.c_str(), cmd.text.c_str(), (void*)cmd.requestId);
 		DEBUG_INFO("Sending message to %s: status = %d\n", cmd.target.c_str(), err);
+		if (err != 0) {
+			// no response handler call will follow: the sender would wait for the status forever
+			UA_CB->OnMessageStatus(cmd.requestId, err, 0, "");
+		}
 		break;
 	}
 	case Command::GENERATE_TONES: {
@@ -1694,6 +1750,11 @@ void __fastcall Worker::Execute()
 		{
 			Sleep(10);
 		}
+		if (appRestart)
+		{
+			// restart requested while the user agent was not running (start failed, or it has already stopped)
+			restart_cleanup();
+		}
 	} while (appRestart);
 	//return err;
 	app_terminated = true;
@@ -1714,17 +1775,7 @@ void Ua::Restart(void)
 		// UA was not started (disabled in settings)
 		return;
 	}
-	/** \todo ugly forced hangup */
-	std::map<unsigned int, struct call*>::iterator iter;
-	for (iter = calls.begin(); iter != calls.end(); ++iter)
-	{
-		UA_CB->ChangeCallState(iter->first, Callback::CALL_STATE_CLOSED, "", "", 0, -1, "", "", -1, "", "", "", "");
-	}
-	calls.clear();
-	if (app.paging_txp)
-	{
-		paging_tx_hangup(app.paging_txp);
-	}
+	// the user agent thread closes the calls and the paging transmitter (see restart_cleanup)
 	appRestart = true;
 }
 
@@ -1739,10 +1790,7 @@ void Ua::Quit(void)
 	{
     	return;
 	}
-	if (app.paging_txp)
-	{
-		paging_tx_hangup(app.paging_txp);
-	}
+	// the user agent thread hangs up the paging transmitter (see control_handler)
 	appQuit = true;
 	while (!app_terminated)
 	{
@@ -1774,6 +1822,11 @@ unsigned int Ua::GetAudioRxSignalLevel(void)
 
 bool Ua::GetCallAudioLevels(unsigned int callUid, int &rxPeak, float &rxRms, int &txPeak, float &txRms)
 {
+	if (appQuit)
+	{
+		// softvol module may already be torn down
+		return false;
+	}
 	struct softvol_levels lv;
 	if (!softvol_get_levels(callUid, &lv))
 		return false;
@@ -1792,11 +1845,6 @@ int Ua::GetVideoCodecList(std::vector<AnsiString> &codecs)
 	}
 	codecs = videoCodecs;
 	return 0;
-}
-
-bool Ua::GetAppQuit(void)
-{
-	return appQuit;
 }
 
 void UaSetSelfviewParentHandle(void *handle)

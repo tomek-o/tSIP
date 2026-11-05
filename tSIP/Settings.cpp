@@ -244,7 +244,11 @@ int Settings::UpdateFromText(AnsiString text)
 		appVersion.ToJson(root["info"]);
 	}
 
-	UpdateFromJsonValue(root);
+	if (!TryUpdateFromJsonValue(root))
+	{
+		// JSON values of unexpected types (jsoncpp throws): settings may be applied only partially
+		return 1;
+	}
 	return 0;
 }
 
@@ -253,9 +257,41 @@ enum SettingsUtils::ReadStatus Settings::Read(AnsiString asFileName)
 	Json::Value root;   // will contains the root value after parsing.
 
 	enum SettingsUtils::ReadStatus status = SettingsUtils::ReadFileOrBackup(asFileName, root);
-	if (status == SettingsUtils::READ_OK || status == SettingsUtils::READ_RECOVERED_FROM_BACKUP)
+	if (status != SettingsUtils::READ_OK && status != SettingsUtils::READ_RECOVERED_FROM_BACKUP)
+		return status;
+	if (TryUpdateFromJsonValue(root))
+		return status;
+
+	// e.g. a value of a wrong type in a file edited by hand (jsoncpp throws): the file is valid JSON, so
+	// ReadFileOrBackup did not try the backup - try it now, starting again from the defaults
+	if (status == SettingsUtils::READ_OK)
+	{
+		Json::Value backupRoot;
+		if (SettingsUtils::ReadBackupFile(asFileName, backupRoot) == SettingsUtils::READ_OK)
+		{
+			*this = Settings();
+			if (TryUpdateFromJsonValue(backupRoot))
+				return SettingsUtils::READ_RECOVERED_FROM_BACKUP;
+			// backup is not usable either: main file applied as far as it goes, as without a backup
+			*this = Settings();
+			TryUpdateFromJsonValue(root);
+		}
+	}
+	// handled like an invalid file by the caller - the application starts, but the file is not overwritten
+	return SettingsUtils::READ_PARSE_ERROR;
+}
+
+bool Settings::TryUpdateFromJsonValue(const Json::Value &root)
+{
+	try
+	{
 		UpdateFromJsonValue(root);
-	return status;
+	}
+	catch (...)
+	{
+		return false;
+	}
+	return true;
 }
 
 void Settings::UpdateFromJsonValue(const Json::Value &root)

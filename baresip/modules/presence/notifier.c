@@ -258,10 +258,15 @@ void presence_server_set_status_handler(presence_server_status_h *h)
 void presence_server_notify_changed(const struct ua *ua)
 {
 	struct le *le;
+	struct le *next;
 
-	for (le = notifierl.head; le; le = le->next) {
+	/* notify() may fail and close (free) the notifier, which unlinks it from
+	 * the list: remember the next element before */
+	for (le = notifierl.head; le; le = next) {
 
 		struct notifier *not = le->data;
+
+		next = le->next;
 
 		if (!ua || not->ua == ua)
 			(void)notify(not, NULL);
@@ -285,6 +290,7 @@ static void event_handler(struct ua *ua, enum ua_event ev,
 			  struct call *call, const char *prm, void *arg)
 {
 	struct le *le;
+	struct le *next;
 
 	(void)prm;
 	(void)arg;
@@ -301,9 +307,13 @@ static void event_handler(struct ua *ua, enum ua_event ev,
 		return;
 	}
 
-	for (le = notifierl.head; le; le = le->next) {
+	/* notify() may fail and close (free) the notifier, which unlinks it from
+	 * the list: remember the next element before */
+	for (le = notifierl.head; le; le = next) {
 
 		struct notifier *not = le->data;
+
+		next = le->next;
 
 		if (not->ua == ua)
 			(void)notify(not, ev == UA_EVENT_CALL_CLOSED ? call : NULL);

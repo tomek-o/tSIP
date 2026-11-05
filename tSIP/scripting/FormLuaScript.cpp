@@ -33,6 +33,23 @@ namespace
 
 TfrmLuaScript::CallbackRunScript callbackRunScript = NULL;
 
+/** Sets the flag for the lifetime of the object, also when an exception leaves the scope: the window
+	waits (FormCloseQuery) until the script is not running any more */
+class RunningFlag
+{
+	volatile bool &flag;
+public:
+	explicit RunningFlag(volatile bool &f):
+		flag(f)
+	{
+		flag = true;
+	}
+	~RunningFlag()
+	{
+		flag = false;
+	}
+};
+
 bool GetNextLine(AnsiString &Line, AnsiString &buf, char &lastchar)
 {
 	AnsiString res;
@@ -175,10 +192,11 @@ void __fastcall TfrmLuaScript::btnExecuteClick(TObject *Sender)
 	{
 		TimeCounter tc("frmLuaScript::btnExecuteClick", false);
 		breakRequest = false;
-		running = true;
-		bool handled = true;
-		callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, frmEditor->GetText().c_str(), breakRequest, handled);
-		running = false;
+		{
+			RunningFlag runningFlag(running);
+			bool handled = true;
+			callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, frmEditor->GetText().c_str(), breakRequest, handled);
+		}
 		timeMs = tc.getTimeMs();
 	}
 	AnsiString tmp;
@@ -586,10 +604,9 @@ void __fastcall TfrmLuaScript::btnLuacheckClick(TObject *Sender)
         // run once empty script to fill global function list
 		BtnController btnCtrl(dynamic_cast<TButton*>(Sender));
 		breakRequest = false;
-		running = true;
+		RunningFlag runningFlag(running);
 		bool handled = true;
 		callbackRunScript(SCRIPT_SRC_SCRIPT_WINDOW, -1, "", breakRequest, handled);
-		running = false;
 	}
 	if (!globalsSet.empty())
 	{

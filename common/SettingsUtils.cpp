@@ -121,4 +121,9 @@ enum SettingsUtils::ReadStatus SettingsUtils::ReadFileOrBackup(AnsiString fileNa
 	return status;
 }
 
+enum SettingsUtils::ReadStatus SettingsUtils::ReadBackupFile(AnsiString fileName, Json::Value &root)
+{
+	return ReadFile(GetBakFileName(fileName), root);
+}
+
 

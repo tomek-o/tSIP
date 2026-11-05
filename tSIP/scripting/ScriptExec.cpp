@@ -92,9 +92,14 @@ static BOOL CALLBACK EnumWindowsProc(HWND hWnd, LPARAM lParam)
 	if (findWindowData.windowName)
 	{
 		char String[512];
-		if (!SendMessage(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String))
+		String[0] = '\0';
+		// not SendMessage(): it never returns when the window belongs to a hung application (the whole
+		// application and plugin Invoke handling would be blocked)
+		DWORD titleLength = 0;	// as in CommandLine.cpp (32-bit build)
+		if (!SendMessageTimeout(hWnd, WM_GETTEXT, sizeof(String), (LPARAM)String,
+				SMTO_ABORTIFHUNG | SMTO_BLOCK, 200, &titleLength) || titleLength == 0)
 		{
-			return TRUE;		// No window title (length = 0)
+			return TRUE;		// No window title (length = 0), or the window does not answer
 		}
 		if (strcmp(String, findWindowData.windowName))
 		{
@@ -2953,7 +2958,25 @@ void ScriptExec::Run(const char* script)
 	globalsSetComplete = true;
 
 	int stackBase = lua_gettop(L);
-	int res = luaL_dostring(L, script);
+	int res;
+	try
+	{
+		res = luaL_dostring(L, script);
+	}
+	catch (Exception &e)
+	{
+		// VCL exception thrown by a function called by the script (e.g. clipboard used by other program):
+		// it must not leave Run() - the entry in contexts would point to this (destroyed) object
+		lua_settop(L, stackBase);
+		lua_pushstring(L, (AnsiString("exception: ") + e.Message).c_str());
+		res = LUA_ERRRUN;
+	}
+	catch (...)
+	{
+		lua_settop(L, stackBase);
+		lua_pushstring(L, "exception");
+		res = LUA_ERRRUN;
+	}
 	if (res == 0 && context.returnText)
 	{
 		// values returned by chunk (luaL_dostring: LUA_MULTRET)

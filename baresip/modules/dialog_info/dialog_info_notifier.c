@@ -284,6 +284,7 @@ static bool sub_handler(const struct sip_msg *msg, struct ua *ua, void *arg)
 static void event_handler(struct ua *ua, enum ua_event ev, struct call *call, const char *prm, void *arg)
 {
 	struct le *le;
+	struct le *next;
 
 	(void)prm;
 	(void)arg;
@@ -303,9 +304,13 @@ static void event_handler(struct ua *ua, enum ua_event ev, struct call *call, co
 		return;
 	}
 
-	for (le = notifierl.head; le; le = le->next) {
+	/* notify() may fail and close (free) the notifier, which unlinks it from
+	 * the list: remember the next element before */
+	for (le = notifierl.head; le; le = next) {
 
 		struct notifier *not = le->data;
+
+		next = le->next;
 
 		if (not->ua == ua)
 			(void)notify(not, ev == UA_EVENT_CALL_CLOSED ? call : NULL);

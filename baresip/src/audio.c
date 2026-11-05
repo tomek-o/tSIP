@@ -161,6 +161,10 @@ struct audio {
 	audio_event_h *eventh;        /**< Event handler                   */
 	audio_err_h *errh;            /**< Audio error handler             */
 	void *arg;                    /**< Handler argument                */
+	unsigned int meter_id;        /**< Level meter id (survives pipeline rebuild) */
+	bool sidetone_set;            /**< Sidetone was configured (survives pipeline rebuild) */
+	bool sidetone_enabled;        /**< Sidetone enabled */
+	unsigned int sidetone_level;  /**< Sidetone level in percent */
 };
 
 
@@ -1642,6 +1646,42 @@ int audio_set_player(struct audio *au, const char *mod, const char *device)
 
 	return 0;
 }
+
+void audio_set_meter_id(struct audio *a, unsigned int id)
+{
+	if (a)
+		a->meter_id = id;
+}
+
+
+unsigned int audio_get_meter_id(const struct audio *a)
+{
+	return a ? a->meter_id : 0;
+}
+
+
+void audio_set_sidetone_prm(struct audio *a, bool enabled, unsigned int level)
+{
+	if (!a)
+		return;
+	a->sidetone_set = true;
+	a->sidetone_enabled = enabled;
+	a->sidetone_level = level;
+}
+
+
+/** @return true if sidetone was configured for the audio stream */
+bool audio_get_sidetone_prm(const struct audio *a, bool *enabled, unsigned int *level)
+{
+	if (!a || !a->sidetone_set)
+		return false;
+	if (enabled)
+		*enabled = a->sidetone_enabled;
+	if (level)
+		*level = a->sidetone_level;
+	return true;
+}
+
 
 const char* audio_get_rx_aucodec_name(const struct audio *a)
 {

@@ -282,10 +282,18 @@ void __fastcall TfrmContacts::miEditClick(TObject *Sender)
 		return;
 	}
 	int id = filteredContacts[item->Index].id;
-	Contacts::Entry &entry = contacts->GetEntries()[id];
-	frmContactEditor->Start(&entry, storeNoteInSeparateFile);
+	// the editor works on a copy: the contacts file can be reloaded while it is open and that frees the
+	// entries of the list (the entry is found again after that)
+	const Contacts::Entry original = contacts->GetEntries()[id];
+	Contacts::Entry edited = original;
+	frmContactEditor->Start(&edited, storeNoteInSeparateFile);
 	if (frmContactEditor->isConfirmed())
 	{
+		Contacts::Entry *current = contacts->FindSame(original);
+		if (current)
+			*current = edited;
+		else
+			contacts->GetEntries().push_back(edited);	// removed meanwhile: not lost
 		contacts->Sort();
 		contacts->Update();
 		contacts->Write();

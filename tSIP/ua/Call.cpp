@@ -32,7 +32,7 @@ void Call::reset(void)
     *this = defaultCall;
 }
 
-void Call::setHold(bool state)
+void Call::setHold(bool state, bool automatic)
 {
 	if (connected == false && progress == false)
 	{
@@ -53,6 +53,7 @@ void Call::setHold(bool state)
 	}
 	LOG("Call %u: changing hold state to %d\n", uid, static_cast<int>(state));
 	hold = state;
+	holdAuto = state && automatic;
 	UA->Hold(uid, state);
 	if (uid == Calls::GetCurrentCallUid())
 	{

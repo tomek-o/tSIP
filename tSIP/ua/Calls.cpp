@@ -189,6 +189,10 @@ unsigned int Calls::Count(void)
 
 void Calls::ResumeHeldCallIfNoActive(void)
 {
+	// only undoes the hold made by switching calls; without auto hold the user decides
+	if (!appSettings.Calls.autoHoldWhenSwitchingCalls)
+		return;
+
 	unsigned int heldUid = Call::INVALID_UID;
 	{
 		ScopedLock<Mutex> lock(mutex);
@@ -201,6 +205,8 @@ void Calls::ResumeHeldCallIfNoActive(void)
 				return;		// ringing: leave held call as it is
 			if (call.hold)
 			{
+				if (!call.holdAuto)
+					return;		// call held on purpose: leave it, the user is managing the calls
 				heldUid = call.uid;
 				heldCount++;
 			}
@@ -238,6 +244,8 @@ unsigned int Calls::CountIncoming(void)
 
 int Calls::AssignLineButton(Call *call, bool outgoing, int &btnId)
 {
+	// entries are also changed by the user agent thread (incoming calls: Alloc); the mutex is recursive
+	ScopedLock<Mutex> lock(mutex);
 	if (lineButtonIds.empty())
 	{
 		// single-call configuration
@@ -338,7 +346,7 @@ void Calls::OnLineButtonClick(int id, TProgrammableButton* btn)
 				Call *call = FindCallFromLineButton(*iter);
 				if (call)
 				{
-					call->setHold(true);
+					call->setHold(true, true);
 				}
 			}
 		}

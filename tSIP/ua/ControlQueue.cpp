@@ -7,6 +7,7 @@
 #include "AudioModules.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
+#include "Log.h"
 #include "common/StaticCheck.h"
 
 //---------------------------------------------------------------------------
@@ -22,6 +23,25 @@ namespace
 {
 	Fifo<Command, 1024> fifo;
 	Mutex mutex;
+	unsigned int dropped = 0;	///< items not queued since the queue became full (mutex)
+
+	/** Free element, NULL if the queue is full: the item is lost - logged once, and the count when there is space again */
+	Command* GetWriteable(void)
+	{
+		Command *item = fifo.getWriteable();
+		if (item == NULL)
+		{
+			if (dropped == 0)
+				LOG("Command queue full (user agent thread not processing them): dropping commands\n");
+			dropped++;
+		}
+		else if (dropped != 0)
+		{
+			LOG("Command queue: %u commands dropped while it was full\n", dropped);
+			dropped = 0;
+		}
+		return item;
+	}
 }
 
 ControlQueue::ControlQueue()
@@ -45,7 +65,7 @@ int ControlQueue::GetCommand(Command& cmd)
 void ControlQueue::ReRegister(int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::REREGISTER;
@@ -56,7 +76,7 @@ void ControlQueue::ReRegister(int accountId)
 void ControlQueue::Resubscribe(void)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::RESUBSCRIBE;
@@ -66,7 +86,7 @@ void ControlQueue::Resubscribe(void)
 void ControlQueue::UnRegister(int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::UNREGISTER;
@@ -77,7 +97,7 @@ void ControlQueue::UnRegister(int accountId)
 void ControlQueue::Call(int accountId, unsigned int callUid, AnsiString target, AnsiString extraHeaderLines, bool video, void *vidispParentHandle)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::CALL;
@@ -108,7 +128,7 @@ void ControlQueue::Call(int accountId, unsigned int callUid, AnsiString target, 
 void ControlQueue::Answer(unsigned int callUid, AnsiString audioRxMod, AnsiString audioRxDev, bool video, void *vidispParentHandle)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::ANSWER;
@@ -123,7 +143,7 @@ void ControlQueue::Answer(unsigned int callUid, AnsiString audioRxMod, AnsiStrin
 void ControlQueue::Transfer(unsigned int callUid, AnsiString target)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::TRANSFER;
@@ -135,7 +155,7 @@ void ControlQueue::Transfer(unsigned int callUid, AnsiString target)
 void ControlQueue::TransferReplace(unsigned int callUid, unsigned int callReplaceUid)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::TRANSFER_REPLACE;
@@ -147,7 +167,7 @@ void ControlQueue::TransferReplace(unsigned int callUid, unsigned int callReplac
 void ControlQueue::CallStartAudioExtraSource(unsigned int callUid)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::CALL_START_AUDIO_EXTRA_SOURCE;
@@ -158,7 +178,7 @@ void ControlQueue::CallStartAudioExtraSource(unsigned int callUid)
 void ControlQueue::SendDigit(unsigned int callUid, char key)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::SEND_DIGIT;
@@ -174,7 +194,7 @@ void ControlQueue::GenerateTone(unsigned int callUid,
 	float amplitude4, float frequency4)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::GENERATE_TONES;
@@ -194,7 +214,7 @@ void ControlQueue::GenerateTone(unsigned int callUid,
 void ControlQueue::Hold(unsigned int callUid, bool state)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::HOLD;
@@ -206,7 +226,7 @@ void ControlQueue::Hold(unsigned int callUid, bool state)
 void ControlQueue::Mute(unsigned int callUid, bool state)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::MUTE;
@@ -218,7 +238,7 @@ void ControlQueue::Mute(unsigned int callUid, bool state)
 void ControlQueue::Sidetone(unsigned int callUid, bool state, unsigned int level)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::SIDETONE;
@@ -231,7 +251,7 @@ void ControlQueue::Sidetone(unsigned int callUid, bool state, unsigned int level
 void ControlQueue::VideoRawDumpStart(unsigned int callUid, AnsiString fileName, int format)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::VIDEO_RAW_DUMP_START;
@@ -244,7 +264,7 @@ void ControlQueue::VideoRawDumpStart(unsigned int callUid, AnsiString fileName, 
 void ControlQueue::SetMsgLogging(bool enabled, bool onlyFirstLines)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::SET_MSG_LOGGING;
@@ -256,7 +276,7 @@ void ControlQueue::SetMsgLogging(bool enabled, bool onlyFirstLines)
 void ControlQueue::SetAubufLogging(bool enabled)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::SET_AUBUF_LOGGING;
@@ -267,7 +287,7 @@ void ControlQueue::SetAubufLogging(bool enabled)
 void ControlQueue::Hangup(unsigned int callUid, int code, AnsiString reason)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::HANGUP;
@@ -280,7 +300,7 @@ void ControlQueue::Hangup(unsigned int callUid, int code, AnsiString reason)
 void ControlQueue::StartRing(unsigned int callUid, AnsiString wavFile)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::START_RING;
@@ -292,7 +312,7 @@ void ControlQueue::StartRing(unsigned int callUid, AnsiString wavFile)
 void ControlQueue::PlayStop(unsigned int callUid)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::PLAY_STOP;
@@ -303,7 +323,7 @@ void ControlQueue::PlayStop(unsigned int callUid)
 void ControlQueue::StartRing2(AnsiString wavFile)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::START_RING2;
@@ -314,7 +334,7 @@ void ControlQueue::StartRing2(AnsiString wavFile)
 void ControlQueue::Record(unsigned int callUid, AnsiString wavFile, unsigned int channels, unsigned int side, unsigned int fileFormat, unsigned int bitrate, bool forceStereo)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::RECORD;
@@ -331,7 +351,7 @@ void ControlQueue::Record(unsigned int callUid, AnsiString wavFile, unsigned int
 void ControlQueue::RecordPause(unsigned int callUid)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::RECORD_PAUSE;
@@ -342,7 +362,7 @@ void ControlQueue::RecordPause(unsigned int callUid)
 void ControlQueue::PagingTx(AnsiString target, AnsiString pagingTxWaveFile, AnsiString codec, unsigned int ptime)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::PAGING_TX;
@@ -356,7 +376,7 @@ void ControlQueue::PagingTx(AnsiString target, AnsiString pagingTxWaveFile, Ansi
 void ControlQueue::SwitchAudioSource(unsigned int callUid, AnsiString audioMod, AnsiString audioDev)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::SWITCH_AUDIO_SOURCE;
@@ -371,7 +391,7 @@ void ControlQueue::SwitchAudioSource(unsigned int callUid, AnsiString audioMod, 
 void ControlQueue::SwitchAudioPlayer(unsigned int callUid, AnsiString audioMod, AnsiString audioDev)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::SWITCH_AUDIO_PLAYER;
@@ -386,7 +406,7 @@ void ControlQueue::SwitchAudioPlayer(unsigned int callUid, AnsiString audioMod, 
 void ControlQueue::SwitchVideoSource(unsigned int callUid, AnsiString videoMod, AnsiString videoDev)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::SWITCH_VIDEO_SOURCE;
@@ -399,7 +419,7 @@ void ControlQueue::SwitchVideoSource(unsigned int callUid, AnsiString videoMod, 
 void ControlQueue::UpdateVolume(void)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::UPDATE_VOLUME;
@@ -430,7 +450,7 @@ AnsiString CompleteCustomRequestHeaders(AnsiString text)
 int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString target, AnsiString extraHeaderLines, int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return -1;
 	cmd->accountId = accountId;
@@ -462,7 +482,7 @@ int ControlQueue::SendCustomRequest(int requestId, AnsiString method, AnsiString
 int ControlQueue::SendCustomCallRequest(int requestId, unsigned int callUid, AnsiString method, AnsiString extraHeaderLines)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return -1;
 	cmd->type = Command::SEND_CUSTOM_CALL_REQUEST;
@@ -493,7 +513,7 @@ int ControlQueue::SendCustomCallRequest(int requestId, unsigned int callUid, Ans
 void ControlQueue::PublishPresence(int accountId, AnsiString aor, AnsiString body, int expires, AnsiString ifMatch)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return;
 	cmd->type = Command::PUBLISH_PRESENCE;
@@ -508,7 +528,7 @@ void ControlQueue::PublishPresence(int accountId, AnsiString aor, AnsiString bod
 int ControlQueue::SendMessage(int requestId, int accountId, AnsiString target, AnsiString text)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return -1;
 	cmd->type = Command::SEND_MESSAGE;
@@ -523,7 +543,7 @@ int ControlQueue::SendMessage(int requestId, int accountId, AnsiString target, A
 int ControlQueue::ZrtpVerifySas(unsigned int callUid, bool state)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return -1;
 	cmd->type = Command::ZRTP_VERIFY_SAS;
@@ -536,7 +556,7 @@ int ControlQueue::ZrtpVerifySas(unsigned int callUid, bool state)
 int ControlQueue::ConferenceStart(void)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Command *cmd = fifo.getWriteable();
+	Command *cmd = GetWriteable();
 	if (!cmd)
 		return -1;
 	cmd->type = Command::CONFERENCE_START;

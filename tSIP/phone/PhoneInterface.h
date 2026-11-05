@@ -110,8 +110,8 @@ private:
 
 	// plugin interface v2 (see tSIP_plugin_v2.h); v1 function pointers stay NULL for v2 plugin
 	bool isV2;
-	/** \brief Manual-reset event, signaled while plugin Stop() is executed:
-		Invoke() calls from plugin threads waiting for main thread are cancelled
+	/** \brief Manual-reset event, signaled while plugin Stop() (v2) or Disconnect() (v1) is executed:
+		Invoke() / GetNumberDescription calls from plugin threads waiting for main thread are cancelled
 		(main thread is busy in Stop(), plugin may be joining these threads)
 	*/
 	HANDLE stopEventV2;

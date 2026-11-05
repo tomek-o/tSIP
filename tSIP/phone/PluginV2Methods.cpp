@@ -187,8 +187,9 @@ int SendDtmf(const Json::Value &params, Json::Value &result)
 		return TSIP_ERR_INVALID_ARG;
 	for (unsigned int i=0; i<digits.size(); i++)
 	{
-		char c = toupper(digits[i]);
-		if (strchr("0123456789ABCD*#R", c) == NULL)
+		char c = static_cast<char>(toupper(static_cast<unsigned char>(digits[i])));
+		// strchr() finds the terminating NUL too: an embedded NUL character would pass
+		if (c == '\0' || strchr("0123456789ABCD*#R", c) == NULL)
 			return TSIP_ERR_INVALID_ARG;
 		digits[i] = c;
 	}
@@ -456,7 +457,30 @@ namespace
 		}
 	}
 
-	/** objects are merged recursively, other values replace; a redacted secret
+	void MergeSettings(Json::Value &target, const Json::Value &patch);
+
+	/** the result has the elements of the patch (an element can be added or removed); objects at the same
+		index are merged, so a redacted secret (e.g. account password in the Accounts array) keeps the current value */
+	Json::Value MergeArrays(const Json::Value &current, const Json::Value &patch)
+	{
+		Json::Value merged(Json::arrayValue);
+		for (unsigned int i=0; i<patch.size(); i++)
+		{
+			if (patch[i].type() == Json::objectValue && i < current.size() && current[i].type() == Json::objectValue)
+			{
+				Json::Value element = current[i];
+				MergeSettings(element, patch[i]);
+				merged.append(element);
+			}
+			else
+			{
+				merged.append(patch[i]);
+			}
+		}
+		return merged;
+	}
+
+	/** objects are merged recursively, arrays element by element, other values replace; a redacted secret
 		(value returned by GetSettings) keeps the current value */
 	void MergeSettings(Json::Value &target, const Json::Value &patch)
 	{
@@ -468,6 +492,8 @@ namespace
 				continue;
 			if (value.type() == Json::objectValue && target[names[i]].type() == Json::objectValue)
 				MergeSettings(target[names[i]], value);
+			else if (value.type() == Json::arrayValue && target[names[i]].type() == Json::arrayValue)
+				target[names[i]] = MergeArrays(target[names[i]], value);
 			else
 				target[names[i]] = value;
 		}
@@ -510,8 +536,11 @@ int SetSettings(const Json::Value &params, Json::Value &result)
 	MergeSettings(merged, patch);
 
 	Json::FastWriter writer;
+	// a value of a wrong type is found while the settings are applied: the ones before it would stay changed
+	const Settings previous = appSettings;
 	if (appSettings.UpdateFromText(AnsiString(writer.write(merged).c_str())) != 0)
 	{
+		appSettings = previous;
 		result["error"] = "settings: rejected (invalid value)";
 		return TSIP_ERR_INVALID_ARG;
 	}
@@ -880,7 +909,8 @@ bool PluginV2Methods::HeadersToLines(const Json::Value &headers, AnsiString &lin
 		{
 			unsigned char c = name[j];
 			// RFC 3261 token
-			if (!(isalnum(c) || strchr("-.!%*_+`'~", c)) || c > 127)
+			// c == 0: strchr() finds the terminating NUL too
+			if (c == 0 || !(isalnum(c) || strchr("-.!%*_+`'~", c)) || c > 127)
 			{
 				error = "headers: invalid header name \"" + name + "\"";
 				return false;

@@ -62,6 +62,7 @@ public:
 	bool keepCallAtAudioFileEnd;
 	int btnId;
 	bool hold;
+	bool holdAuto;					///< hold was set automatically when switching calls (not by user, script or plugin)
 	bool mute;
 	AnsiString dialString;
 	AnsiString sipReason;
@@ -104,6 +105,7 @@ public:
 		keepCallAtAudioFileEnd(false),
 		btnId(-1),
 		hold(false),
+		holdAuto(false),
 		mute(false),
 		sidetone(false),
 		sidetoneLevel(50),
@@ -114,7 +116,8 @@ public:
 	~Call(void);
 	void reset(void);
 
-	void setHold(bool state);
+	/** \param automatic hold caused by switching calls: such call may be resumed automatically when the other call ends */
+	void setHold(bool state, bool automatic = false);
 	void setMute(bool state);
 	bool sidetone;					///< transmitted audio mixed into local playback
 	unsigned int sidetoneLevel;		///< percent of transmitted audio level

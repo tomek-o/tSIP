@@ -19,6 +19,8 @@
 #ifndef SingletonH
 #define SingletonH
 
+#include <stdlib.h>	// NULL
+
 template <typename T>
 class CSingleton
 {

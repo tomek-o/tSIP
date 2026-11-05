@@ -375,6 +375,8 @@ public:
 
 private:
 	void UpdateFromJsonValue(const Json::Value &root);
+	/** \return false if jsoncpp threw (value of an unexpected type): settings may be applied only partially */
+	bool TryUpdateFromJsonValue(const Json::Value &root);
 };
 
 extern Settings appSettings;

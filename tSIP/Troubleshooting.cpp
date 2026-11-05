@@ -303,6 +303,49 @@ namespace {
 		return list.Pos(" any ") > 0 || list.Pos(" * ") > 0 || list.Pos(" 0.0.0.0/0 ") > 0 || list.Pos(" ::/0 ") > 0;
 	}
 
+	/** Host part of "host[:port]" or "[v6]:port"; true if it is an IP address literal */
+	bool IsIpLiteralServer(const std::string &server)
+	{
+		std::string host = server;
+		if (!host.empty() && host[0] == '[')
+		{
+			size_t end = host.find(']');
+			if (end == std::string::npos)
+				return false;
+			host = host.substr(1, end - 1);
+		}
+		else if (host.find(':') != host.rfind(':'))
+		{
+			// bare IPv6 address without brackets
+		}
+		else
+		{
+			size_t colon = host.find(':');
+			if (colon != std::string::npos)
+				host = host.substr(0, colon);
+		}
+		struct sa sa;
+		return host != "" && sa_set_str(&sa, host.c_str(), 0) == 0;
+	}
+
+	bool AccTlsToIpAddress(const UaConf::Account &acc)
+	{
+		if (acc.transport == UaConf::Account::TRANSPORT_TLS && IsIpLiteralServer(acc.reg_server))
+			return true;
+		if (acc.outbound1 != "" && acc.outbound1Transport == UaConf::Account::TRANSPORT_TLS && IsIpLiteralServer(acc.outbound1))
+			return true;
+		if (acc.outbound2 != "" && acc.outbound2Transport == UaConf::Account::TRANSPORT_TLS && IsIpLiteralServer(acc.outbound2))
+			return true;
+		return false;
+	}
+
+	bool CheckTlsServerIpAddress(void)
+	{
+		if (!appSettings.uaConf.tls.verifyServer)
+			return false;
+		return CheckAccounts(AccTlsToIpAddress);
+	}
+
 	bool CheckNetworkInterface(void)
 	{
 		if (appSettings.uaConf.netIfName != "")
@@ -626,6 +669,12 @@ namespace {
 			"anyone who can reach the application can read your presence and call state (including remote identity of the calls). "
 			"Prefer \"lan\" or a list of addresses / networks.",
 			CheckSubscribeServerOpen },
+		{ LevelWarning, "TLS server given as IP address",
+			"Account connects with TLS to a server specified as IP address and \"Verify server certificate\" is enabled (Settings / TLS). "
+			"The certificate must contain this IP address (subjectAltName iPAddress), otherwise the connection is refused "
+			"(log: \"IP address mismatch\"). Use the server host name in the account, get a certificate with IP address, "
+			"or disable verification.",
+			CheckTlsServerIpAddress },
 		{ LevelWarning, "Missing wave file for audio input", "Audio file specified as input device does not exist.", NULL },
 		{ LevelWarning, "Incorrect wav file format", "Invalid file format for input device.", NULL },
 		{ LevelWarning, "Binding to VirtualBox network adapter",

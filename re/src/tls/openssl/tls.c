@@ -146,6 +146,13 @@ static int verify_handler(int ok, X509_STORE_CTX *ctx)
 	
 	if (err) {
 		DEBUG_WARNING("%s: depth = %d, err = %d (%s)\n", __FUNC__, depth, err, X509_verify_cert_error_string(err));
+		if (err == X509_V_ERR_IP_ADDRESS_MISMATCH) {
+			DEBUG_WARNING("TLS: server is specified as IP address, but the certificate does not contain it (subjectAltName iPAddress): "
+				"use host name of the server, a certificate with IP address, or disable server certificate verification\n");
+		}
+		else if (err == X509_V_ERR_HOSTNAME_MISMATCH) {
+			DEBUG_WARNING("TLS: certificate does not match the server host name (subjectAltName dNSName)\n");
+		}
 	}
 
 #if 1 //(DEBUG_LEVEL >= 6)
@@ -1256,6 +1263,20 @@ int tls_set_verify_server(struct tls_conn *tc, const char *host)
 
 		if (!SSL_set_tlsext_host_name(tc->ssl, host)) {
 			DEBUG_WARNING("SSL_set_tlsext_host_name error\n");
+			ERR_clear_error();
+			return EPROTO;
+		}
+	}
+	else {
+		/* IP literal: certificate must match the IP address
+		 * (iPAddress subjectAltName), otherwise any CA-issued
+		 * certificate would be accepted. SNI is not sent for IPs. */
+		X509_VERIFY_PARAM *param = SSL_get0_param(tc->ssl);
+
+		DEBUG_INFO("TLS: verifying certificate against IP address %s\n", host);
+
+		if (!param || !X509_VERIFY_PARAM_set1_ip_asc(param, host)) {
+			DEBUG_WARNING("set1_ip_asc error\n");
 			ERR_clear_error();
 			return EPROTO;
 		}

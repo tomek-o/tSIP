@@ -18,8 +18,11 @@ namespace UaPublish
 		std::string etag;		///< SIP-ETag of the last successful PUBLISH, sent as SIP-If-Match
 		unsigned int expires;	///< expiry granted by the server (or the requested one)
 		unsigned long long lastSentMs;	///< 0 = not sent yet (or refresh due)
+		unsigned int retryMs;	///< after a failure: delay before the next attempt, 0 = normal refresh interval
+		unsigned int failures;	///< consecutive failed PUBLISH requests (backoff)
+		unsigned int inFlight;	///< PUBLISH requests sent without a reply yet: no refresh / retry is started meanwhile
 		Presence(void):
-			active(false), open(true), expires(3600), lastSentMs(0)
+			active(false), open(true), expires(3600), lastSentMs(0), retryMs(0), failures(0), inFlight(0)
 		{}
 	};
 

@@ -5,6 +5,7 @@
 
 #include "History.h"
 #include "Branding.h"
+#include "common/SettingsUtils.h"
 #include <assert.h>
 #include <algorithm>
 #include <fstream> 
@@ -59,25 +60,17 @@ int History::Read(CallbackGetContactName callbackGetContactName)
 {
 	assert(filename != "");
 	Json::Value root;   // will contains the root value after parsing.
-	Json::Reader reader;
 
 	assert(callbackGetContactName);
 	this->callbackGetContactName = callbackGetContactName;
 
-	try
+	// the backup is used when the file itself is not valid (see Write)
+	enum SettingsUtils::ReadStatus status = SettingsUtils::ReadFileOrBackup(filename, root);
+	if (status != SettingsUtils::READ_OK && status != SettingsUtils::READ_RECOVERED_FROM_BACKUP)
 	{
-		std::ifstream ifs(filename.c_str());
-		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-		ifs.close();
-		bool parsingSuccessful = reader.parse( strConfig, root );
-		if ( !parsingSuccessful )
-		{
-			return 2;
-		}
-	}
-	catch(...)
-	{
-		return 1;
+		if (status == SettingsUtils::READ_IO_ERROR || status == SettingsUtils::READ_FILE_NOT_FOUND)
+			return 1;
+		return 2;
 	}
 
 	const Json::Value &callHistory = root["CallHistory"];
@@ -233,17 +226,13 @@ int History::Write(void)
 
 	std::string outputConfig = writer.write( root );
 
-	try
+	// temporary file + replace (the previous file is kept as backup): a failed or interrupted write
+	// (disk full, application killed) does not destroy the history
+	if (SettingsUtils::AtomicUpdateWithBackup(filename, outputConfig) != 0)
 	{
-		std::ofstream ofs(filename.c_str());
-		ofs << outputConfig;
-		ofs.close();
+		return 1;
 	}
-	catch(...)
-	{
-    	return 1;
-	}
-		
+
 	return 0;
 }
 

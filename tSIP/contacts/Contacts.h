@@ -78,6 +78,11 @@ public:
 	}
 	void Sort(void);
 	Entry* GetEntry(AnsiString uri);
+	/** \brief Entry with the same description, company and numbers as e, NULL if there is none.
+		To find an entry again after the list was possibly reloaded (file changed while an editor
+		was open): pointers and indexes taken before are not valid then.
+	*/
+	Entry* FindSame(const Entry &e);
 	FILETIME getFiletime(void)
 	{
     	return ft;

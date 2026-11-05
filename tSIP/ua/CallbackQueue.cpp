@@ -7,6 +7,7 @@
 #include "Callback.h"
 #include "common/Mutex.h"
 #include "common/ScopedLock.h"
+#include "Log.h"
 
 //---------------------------------------------------------------------------
 
@@ -19,6 +20,25 @@ namespace
 {
 	Fifo<Callback, 1024> fifo;
 	Mutex mutex;
+	unsigned int dropped = 0;	///< items not queued since the queue became full (mutex)
+
+	/** Free element, NULL if the queue is full: the item is lost - logged once, and the count when there is space again */
+	Callback* GetWriteable(void)
+	{
+		Callback *item = fifo.getWriteable();
+		if (item == NULL)
+		{
+			if (dropped == 0)
+				LOG("Callback queue full (main thread not processing them): dropping callbacks\n");
+			dropped++;
+		}
+		else if (dropped != 0)
+		{
+			LOG("Callback queue: %u callbacks dropped while it was full\n", dropped);
+			dropped = 0;
+		}
+		return item;
+	}
 }
 
 CallbackQueue::CallbackQueue()
@@ -42,7 +62,7 @@ int CallbackQueue::GetCallback(Callback& cb)
 void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state, AnsiString caller, AnsiString caller_name, int scode, int answer_after, AnsiString alert_info, AnsiString access_url, int access_url_mode, AnsiString pai_peer_uri, AnsiString pai_peer_name, AnsiString codec_name, AnsiString initial_rx_invite, int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::CALL_STATE;
@@ -66,7 +86,7 @@ void CallbackQueue::ChangeCallState(unsigned int uid, Callback::ua_state_e state
 void CallbackQueue::CallRtpSummary(unsigned int uid, const RtpSummary &rtp)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::CALL_RTP_SUMMARY;
@@ -78,7 +98,7 @@ void CallbackQueue::CallRtpSummary(unsigned int uid, const RtpSummary &rtp)
 void CallbackQueue::OnReinviteReceived(unsigned int uid, AnsiString caller, AnsiString caller_name, AnsiString pai_peer_uri, AnsiString pai_peer_name)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::CALL_REINVITE_RECEIVED;
@@ -93,7 +113,7 @@ void CallbackQueue::OnReinviteReceived(unsigned int uid, AnsiString caller, Ansi
 void CallbackQueue::ChangeCallDtmfState(unsigned int uid, AnsiString dtmf, bool active)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->callUid = uid;
@@ -106,7 +126,7 @@ void CallbackQueue::ChangeCallDtmfState(unsigned int uid, AnsiString dtmf, bool 
 void CallbackQueue::ChangeRecorderState(unsigned int callUid, Callback::rec_state_e state)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::RECORDER_STATE;
@@ -118,7 +138,7 @@ void CallbackQueue::ChangeRecorderState(unsigned int callUid, Callback::rec_stat
 void CallbackQueue::ChangeEncryptionState(const Callback::Zrtp &state)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::ENCRYPTION_STATE;
@@ -131,7 +151,7 @@ void CallbackQueue::ChangeEncryptionState(const Callback::Zrtp &state)
 void CallbackQueue::ChangeRegState(int acc_id, Callback::reg_state_e state, const char *prm)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::REG_STATE;
@@ -144,7 +164,7 @@ void CallbackQueue::ChangeRegState(int acc_id, Callback::reg_state_e state, cons
 void CallbackQueue::ChangeAppState(Callback::app_state_e state)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::APP_STATE;
@@ -155,7 +175,7 @@ void CallbackQueue::ChangeAppState(Callback::app_state_e state)
 void CallbackQueue::ChangeDlgInfoState(int id, const struct dialog_data *ddata, unsigned int ddata_cnt)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::DLG_INFO_STATE;
@@ -170,7 +190,7 @@ void CallbackQueue::ChangeDlgInfoState(int id, const struct dialog_data *ddata, 
 void CallbackQueue::ChangePresenceState(int id, int state, const char* note)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::PRESENCE_STATE;
@@ -183,7 +203,7 @@ void CallbackQueue::ChangePresenceState(int id, int state, const char* note)
 void CallbackQueue::ChangeMwiState(int newMsg, int oldMsg, int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::MWI_STATE;
@@ -196,7 +216,7 @@ void CallbackQueue::ChangeMwiState(int newMsg, int oldMsg, int accountId)
 void CallbackQueue::ChangePagingTxState(Callback::paging_tx_state_e state)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::PAGING_TX_STATE;
@@ -207,7 +227,7 @@ void CallbackQueue::ChangePagingTxState(Callback::paging_tx_state_e state)
 void CallbackQueue::NotifyEventTalk(void)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::EVENT_TALK;
@@ -217,7 +237,7 @@ void CallbackQueue::NotifyEventTalk(void)
 void CallbackQueue::NotifyAudioError(int callUid, int errorCode, AnsiString text)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 	cb->type = Callback::AUDIO_ERROR;
@@ -231,7 +251,7 @@ void CallbackQueue::NotifyAudioError(int callUid, int errorCode, AnsiString text
 void CallbackQueue::NotifyCustomRequestStatus(int requestUid, int requestError, int sipStatusCode, AnsiString requestReplyText)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 
@@ -247,7 +267,7 @@ void CallbackQueue::NotifyCustomRequestStatus(int requestUid, int requestError, 
 void CallbackQueue::OnMessageReceived(AnsiString caller, AnsiString contentType, AnsiString body, int accountId)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 		
@@ -263,7 +283,7 @@ void CallbackQueue::OnMessageReceived(AnsiString caller, AnsiString contentType,
 void CallbackQueue::OnMessageStatus(int requestUid, int requestError, int sipStatusCode, AnsiString reason)
 {
 	ScopedLock<Mutex> lock(mutex);
-	Callback *cb = fifo.getWriteable();
+	Callback *cb = GetWriteable();
 	if (!cb)
 		return;
 

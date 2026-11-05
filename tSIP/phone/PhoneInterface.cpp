@@ -16,9 +16,11 @@
 #include <assert.h>
 #include <map>
 #include <deque>
+#include <vector>
 #include <set>
 #include <ctype.h>
 #include <string.h>
+#include <stdio.h>
 
 //---------------------------------------------------------------------------
 
@@ -103,7 +105,11 @@ enum { INVOKE_TIMEOUT_MS = 10000 };
 */
 struct InvokeRequest
 {
+	/** Who owns the request: the main thread executes it only if the waiting thread has not given up (timeout, plugin stop) before;
+		the waiting thread cancels it only if the main thread has not started executing it yet. */
+	enum { STATE_PENDING = 0, STATE_RUNNING = 1, STATE_CANCELLED = 2 };
 	LONG refs;
+	volatile LONG state;
 	AnsiString method;
 	AnsiString params;
 	AnsiString result;
@@ -111,6 +117,7 @@ struct InvokeRequest
 	HANDLE done;
 	InvokeRequest(void):
 		refs(2),
+		state(STATE_PENDING),
 		status(TSIP_ERR_TIMEOUT),
 		done(CreateEvent(NULL, TRUE, FALSE, NULL))
 	{}
@@ -129,6 +136,16 @@ struct InvokeRequest
 		this->status = status;
 		SetEvent(done);
 	}
+	/** Main thread: take the request for execution; false if the caller has given up already */
+	bool Claim(void)
+	{
+		return InterlockedCompareExchange(&state, STATE_RUNNING, STATE_PENDING) == STATE_PENDING;
+	}
+	/** Waiting thread: give up; false if the main thread is executing the request already (its result still comes) */
+	bool Cancel(void)
+	{
+		return InterlockedCompareExchange(&state, STATE_CANCELLED, STATE_PENDING) == STATE_PENDING;
+	}
 };
 
 enum PhoneEventType
@@ -143,6 +160,8 @@ enum PhoneEventType
 	PHONE_REDIAL,
 	PHONE_EVENT_INVOKE,		///< plugin v2 Invoke() from other than main thread
 	PHONE_EVENT_RESTART,	///< plugin v2 RestartPlugin: Stop() + Start()
+	PHONE_EVENT_CONNECT,	///< plugin v1 connection state change reported from other than main thread
+	PHONE_EVENT_NUMBER_DESCRIPTION,	///< plugin v1 GetNumberDescription from other than main thread (invoke: params = number, result = description)
 };
 
 struct PhoneEvent
@@ -169,6 +188,9 @@ struct PhoneEvent
 	int keyCode;
 	int keyState;
 
+	int connState;			///< PHONE_EVENT_CONNECT
+	AnsiString connMsg;
+
 	struct PagingTx
 	{
 		AnsiString target;
@@ -184,6 +206,7 @@ struct PhoneEvent
 		keepForeground(1),
 		keyCode(-1),
 		keyState(-1),
+		connState(0),
 		invoke(NULL)
 	{}
 };
@@ -598,7 +621,7 @@ enum PhoneInterface::E_LIB_STATUS PhoneInterface::VerifyDll(AnsiString filename,
 		LOG("Library %s has interface v.%d.%d instead of required %d.%d\n",
 			filename.c_str(),
 			interf_version.majorVersion, interf_version.minorVersion,
-			DLL_INTERFACE_MAJOR_VERSION);
+			DLL_INTERFACE_MAJOR_VERSION, DLL_INTERFACE_MINOR_VERSION);
 		FreeLibrary(hInstance);
 		return E_INCOMPATIBLE_VER;
 	}
@@ -634,6 +657,26 @@ void __stdcall PhoneInterface::OnLog(void *cookie, const char *szText)
 
 void __stdcall PhoneInterface::OnConnect(void *cookie, int state, const char *szMsgText)
 {
+	if (GetCurrentThreadId() != mainThreadId)
+	{
+		// Plugin thread: must not wait for mutexInstances, which main thread holds while it calls into
+		// the plugin (Stop, event notifications) - the plugin may wait for this thread there (deadlock).
+		// Handled by main thread in PollOne.
+		PhoneEvent event;
+		event.cookie = cookie;
+		{
+			ScopedLock<Mutex> lock(mutexValidInstances);
+			if (!IsValidInstance(cookie))
+				return;
+			event.deviceFilename = LowerCase(reinterpret_cast<PhoneInterface*>(cookie)->filename);
+		}
+		event.type = PHONE_EVENT_CONNECT;
+		event.connState = state;
+		event.connMsg = szMsgText ? szMsgText : "";
+		EnqueueEvent(event);
+		return;
+	}
+
 	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
@@ -725,14 +768,78 @@ void __stdcall PhoneInterface::OnRedial(void *cookie)
 
 int __stdcall PhoneInterface::OnGetNumberDescription(void *cookie, const char* number, char* description, int descriptionSize)
 {
-	ScopedLock<Mutex> lock(mutexValidInstances);
-	if (!IsValidInstance(cookie))
+	if (GetCurrentThreadId() == mainThreadId)
+	{
+		ScopedLock<Mutex> lock(mutexValidInstances);
+		if (!IsValidInstance(cookie))
+			return -1;
+		class PhoneInterface *dev = reinterpret_cast<class PhoneInterface*>(cookie);
+		//LOG("Phone: GetNumberDescription\n");
+		if (dev->callbackGetNumberDescription)
+			return dev->callbackGetNumberDescription(number, description, descriptionSize);
+		return -2;
+	}
+
+	// Plugin thread: the contacts list belongs to the main thread (reloaded when the file changes, edited),
+	// reading it here could use freed entries. The main thread looks the number up (as Invoke() of v2).
+	AnsiString deviceFilename;
+	HANDLE stopEvent = NULL;	// own copy: instance may be deleted while waiting
+	{
+		ScopedLock<Mutex> lock(mutexValidInstances);
+		if (!IsValidInstance(cookie))
+			return -1;
+		PhoneInterface *dev = reinterpret_cast<PhoneInterface*>(cookie);
+		if (dev->callbackGetNumberDescription == NULL)
+			return -2;
+		deviceFilename = LowerCase(dev->filename);
+		if (dev->stopEventV2)
+		{
+			if (WaitForSingleObject(dev->stopEventV2, 0) == WAIT_OBJECT_0)
+				return -1;	// plugin is being stopped: main thread is busy in Disconnect()
+			DuplicateHandle(GetCurrentProcess(), dev->stopEventV2, GetCurrentProcess(), &stopEvent,
+				0, FALSE, DUPLICATE_SAME_ACCESS);
+		}
+	}
+
+	InvokeRequest *req = new InvokeRequest();
+	req->params = number ? number : "";
+
+	PhoneEvent event;
+	event.cookie = cookie;
+	event.deviceFilename = deviceFilename;
+	event.type = PHONE_EVENT_NUMBER_DESCRIPTION;
+	event.invoke = req;
+	if (EnqueueEvent(event) != 0)
+	{
+		req->Release();	// not queued: release both references
+		req->Release();
+		if (stopEvent)
+			CloseHandle(stopEvent);
 		return -1;
-	class PhoneInterface *dev = reinterpret_cast<class PhoneInterface*>(cookie);
-	//LOG("Phone: GetNumberDescription\n");
-	if (dev->callbackGetNumberDescription)
-		return dev->callbackGetNumberDescription(number, description, descriptionSize);
-	return -2;
+	}
+	HANDLE handles[2] = { req->done, stopEvent };
+	DWORD waitStatus = WaitForMultipleObjects(stopEvent ? 2 : 1, handles, FALSE, INVOKE_TIMEOUT_MS);
+	int ret = -1;
+	if (waitStatus == WAIT_OBJECT_0)
+	{
+		ret = req->status;
+		if (ret == 0 && description && descriptionSize > 0)
+		{
+			snprintf(description, descriptionSize, "%s", req->result.c_str());
+			description[descriptionSize-1] = '\0';
+		}
+	}
+	else
+	{
+		// lookup only, nothing to undo: not waited for any longer even if the main thread has started it
+		req->Cancel();
+		LOG("Plugin %s: GetNumberDescription %s\n", deviceFilename.c_str(),
+			(waitStatus == WAIT_OBJECT_0 + 1) ? "cancelled - plugin is being stopped" : "timeout");
+	}
+	req->Release();
+	if (stopEvent)
+		CloseHandle(stopEvent);
+	return ret;
 }
 
 int __stdcall PhoneInterface::OnSetVariable(void *cookie, const char* name, const char* value)
@@ -925,16 +1032,31 @@ void PhoneInterface::NotifyEventV2(const char* type, const Json::Value &jv)
 {
 	AnsiString json = JsonToString(jv);
 
-	ScopedLock<Mutex> lock(mutexInstances);
-
-	std::map<AnsiString, class PhoneInterface*>::iterator itinst;
-	for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
+	// Plugin code is called without mutexInstances held: a plugin thread waiting for the main thread
+	// (Invoke) while the plugin's OnEvent waits for that thread's lock would block all plugin API
+	// calls that need the mutex. Instances are collected first, validity is checked before each call.
+	std::vector<PhoneInterface*> targets;
 	{
-		PhoneInterface *dev = itinst->second;
-		if (dev->isV2 && TSIP_PLUGIN_HAS(&dev->pluginApiV2, OnEvent) && dev->pluginApiV2.OnEvent)
+		ScopedLock<Mutex> lock(mutexInstances);
+		std::map<AnsiString, class PhoneInterface*>::iterator itinst;
+		for (itinst = instances.begin(); itinst != instances.end(); ++itinst)
 		{
-			dev->pluginApiV2.OnEvent(type, json.c_str());
+			PhoneInterface *dev = itinst->second;
+			if (dev->isV2 && TSIP_PLUGIN_HAS(&dev->pluginApiV2, OnEvent) && dev->pluginApiV2.OnEvent)
+				targets.push_back(dev);
 		}
+	}
+	for (unsigned int i = 0; i < targets.size(); i++)
+	{
+		PhoneInterface *dev = targets[i];
+		{
+			// an earlier plugin's OnEvent may have unloaded this one
+			ScopedLock<Mutex> lock(mutexValidInstances);
+			if (!IsValidInstance(dev))
+				continue;
+		}
+		if (dev->pluginApiV2.OnEvent)
+			dev->pluginApiV2.OnEvent(type, json.c_str());
 	}
 }
 
@@ -1021,6 +1143,7 @@ int PhoneInterface::ExecuteInvoke(AnsiString method, AnsiString jsonParams, Ansi
 				if (!PluginV2Methods::HeadersToLines(params["headers"], headerLines, error))
 				{
 					result["error"] = error;
+					jsonResult = JsonToString(result);	// the error text is passed to the plugin
 					return TSIP_ERR_INVALID_ARG;
 				}
 			}
@@ -1031,6 +1154,7 @@ int PhoneInterface::ExecuteInvoke(AnsiString method, AnsiString jsonParams, Ansi
 				if (!PluginV2Methods::IsAccountUsable(accountId))
 				{
 					result["error"] = "account does not exist or is disabled";
+					jsonResult = JsonToString(result);	// the error text is passed to the plugin
 					return TSIP_ERR_INVALID_ARG;
 				}
 			}
@@ -1204,6 +1328,13 @@ int __stdcall PhoneInterface::OnInvokeV2(void *cookie, const char *method, const
 		}
 		HANDLE handles[2] = { req->done, stopEvent };
 		DWORD waitStatus = WaitForMultipleObjects(stopEvent ? 2 : 1, handles, FALSE, INVOKE_TIMEOUT_MS);
+		if (waitStatus != WAIT_OBJECT_0 && !req->Cancel() && waitStatus == WAIT_TIMEOUT)
+		{
+			// the main thread has started executing the request: the caller must get its real outcome,
+			// reporting a failure for an action that is done (e.g. call placed) would make plugin repeat it.
+			// Not when the plugin is being stopped: Stop() waits for this thread.
+			waitStatus = WaitForSingleObject(req->done, INVOKE_TIMEOUT_MS);
+		}
 		if (waitStatus == WAIT_OBJECT_0)
 		{
 			status = req->status;
@@ -1211,11 +1342,13 @@ int __stdcall PhoneInterface::OnInvokeV2(void *cookie, const char *method, const
 		}
 		else if (waitStatus == WAIT_OBJECT_0 + 1)
 		{
+			// request is cancelled (not executed later)
 			LOG("Plugin %s: Invoke(%s) cancelled - plugin is being stopped\n", deviceFilename.c_str(), asMethod.c_str());
 			status = TSIP_ERR_NOT_AVAILABLE;
 		}
 		else
 		{
+			// request is cancelled (not executed later), unless it is stuck in main thread
 			LOG("Plugin %s: Invoke(%s) timeout\n", deviceFilename.c_str(), asMethod.c_str());
 			status = TSIP_ERR_TIMEOUT;
 		}
@@ -1315,16 +1448,17 @@ int __stdcall PhoneInterface::OnQueueClearV2(void *cookie, const char *name)
 
 void* __stdcall PhoneInterface::OnAddTrayMenuItem(void *cookie, void* parent, const char* caption, CALLBACK_MENU_ITEM_CLICK lpMenuItemClickFn, void *menuItemClickCookie)
 {
+	if (GetCurrentThreadId() != MainThreadID)
+	{
+		// checked before taking mutexInstances: plugin thread must not wait for it (see OnConnect)
+		LOG("Plugin AddTrayMenuItem error: must be called from GUI/main thread, e.g. inside of Connect()!\n");
+		return NULL;
+	}
 	ScopedLock<Mutex> lock(mutexInstances);
 	class PhoneInterface *dev;
 	dev = reinterpret_cast<class PhoneInterface*>(cookie);
 	if (instances.find(LowerCase(dev->filename)) == instances.end())
 	{
-		return NULL;
-	}
-	if (GetCurrentThreadId() != MainThreadID)
-	{
-		LOG("Plugin [%s] error: AddTrayMenuItem must be called from GUI/main thread, e.g. inside of Connect()!\n", dev->filename.c_str());
 		return NULL;
 	}
 
@@ -1418,11 +1552,15 @@ int PhoneInterface::Connect(void) {
 }
 
 int PhoneInterface::Disconnect(void) {
+	// items are freed (owned by the popup menu they would stay until it is destroyed, added again with
+	// every restart), the click callbacks pointing into the plugin are forgotten
 	std::list<TMenuItem*>::iterator iter;
 	for (iter = trayMenuItems.begin(); iter != trayMenuItems.end(); ++iter)
 	{
 		TMenuItem* item = *iter;
+		trayMenuItemsMap.erase(item);
 		trayPopupMenu->Items->Remove(item);
+		delete item;
 	}
 	trayMenuItems.clear();
 
@@ -1440,7 +1578,18 @@ int PhoneInterface::Disconnect(void) {
 		return status;
 	}
 	if (dllDisconnect)
-		return dllDisconnect();
+	{
+		// plugin may wait for its threads there; GetNumberDescription calls of these threads waiting
+		// for main thread are cancelled meanwhile (see stopEventV2)
+		if (stopEventV2 == NULL)
+			stopEventV2 = CreateEvent(NULL, TRUE, FALSE, NULL);
+		if (stopEventV2)
+			SetEvent(stopEventV2);
+		int status = dllDisconnect();
+		if (stopEventV2)
+			ResetEvent(stopEventV2);	// plugin may be connected again
+		return status;
+	}
 	return 0;
 }
 
@@ -1676,6 +1825,13 @@ bool PhoneInterface::PollOne(void)
 	case PHONE_EVENT_INVOKE: {
 		InvokeRequest *req = event.invoke;
 		assert(req);
+		if (!req->Claim())
+		{
+			// caller got timeout / was cancelled: the action must not happen now
+			LOG("Plugin %s: dropping Invoke(%s) - caller has given up\n", event.deviceFilename.c_str(), req->method.c_str());
+			req->Release();
+			break;
+		}
 		int status = ExecuteInvoke(req->method, req->params, req->result);
 		req->Complete(status);
 		req->Release();
@@ -1710,6 +1866,36 @@ bool PhoneInterface::PollOne(void)
 			keepForegroundSuspenders.insert(event.deviceFilename);
 		if (callbackSetKeepForeground)
 			callbackSetKeepForeground(keepForegroundSuspenders.empty());
+		break;
+	}
+
+	case PHONE_EVENT_NUMBER_DESCRIPTION: {
+		InvokeRequest *req = event.invoke;
+		assert(req);
+		if (!req->Claim())
+		{
+			req->Release();	// caller has given up
+			break;
+		}
+		int status = -2;
+		if (dev->callbackGetNumberDescription)
+		{
+			char description[1024];	// copied into the plugin's buffer (truncated) by the waiting thread
+			description[0] = '\0';
+			status = dev->callbackGetNumberDescription(req->params.c_str(), description, sizeof(description));
+			description[sizeof(description)-1] = '\0';
+			req->result = description;
+		}
+		req->Complete(status);
+		req->Release();
+		break;
+	}
+
+	case PHONE_EVENT_CONNECT: {
+		dev->connInfo.state = static_cast<enum E_CONNECTION_STATE>(event.connState);
+		dev->connInfo.msg = event.connMsg;
+		if (dev->callbackConnect)
+			dev->callbackConnect(event.connState, event.connMsg.c_str());
 		break;
 	}
 

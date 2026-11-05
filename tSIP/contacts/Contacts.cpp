@@ -6,6 +6,7 @@
 #include "ContactsXmlImport.h"
 #include "common/TelecomUtils.h"
 #include "common/Utilities.h"
+#include "common/SettingsUtils.h"
 #include "Settings.h"
 #include <SysUtils.hpp>
 #include <assert.h>
@@ -52,28 +53,18 @@ int Contacts::Read(void)
 {
 	assert(filename != "");
 	Json::Value root;   // will contains the root value after parsing.
-	Json::Reader reader;
-
-	entries.clear();
 
 	GetFileWriteTime(filename, &ft);
 
-	try
+	// entries are replaced only after the file was read: an unreadable (half written, edited with an error)
+	// file must not turn the phone book into an empty one that the next Write() would save over it;
+	// the backup file is used when the file itself is not valid
+	enum SettingsUtils::ReadStatus status = SettingsUtils::ReadFileOrBackup(filename, root);
+	if (status != SettingsUtils::READ_OK && status != SettingsUtils::READ_RECOVERED_FROM_BACKUP)
 	{
-		std::ifstream ifs(filename.c_str());
-		std::string strConfig((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-		ifs.close();
-		bool parsingSuccessful = reader.parse( strConfig, root );
-		if ( !parsingSuccessful )
-		{
-			notifyObservers();		
-			return 2;
-		}
-	}
-	catch(...)
-	{
-		notifyObservers();
-		return 1;
+		if (status == SettingsUtils::READ_IO_ERROR || status == SettingsUtils::READ_FILE_NOT_FOUND)
+			return 1;
+		return 2;
 	}
 
 	const Json::Value &contacts = root["Contacts"];
@@ -135,21 +126,14 @@ int Contacts::Write(void)
 
 	std::string outputConfig = writer.write( root );
 
-	try
+	// temporary file + replace (the previous file is kept as backup): a failed or interrupted write
+	// does not destroy the phone book
+	if (SettingsUtils::AtomicUpdateWithBackup(filename, outputConfig) != 0)
 	{
-		std::ofstream ofs(filename.c_str());
-		if (!ofs.is_open())
-		{
-			return 1;
-		}
-		ofs << outputConfig;
-		ofs.close();
-		GetFileWriteTime(filename, &ft);
+		return 1;
 	}
-	catch(...)
-	{
-    	return 1;
-	}
+	// own write is not a change made by someone else (the file time poller would reload the file)
+	GetFileWriteTime(filename, &ft);
 		
 	return 0;
 }
@@ -245,6 +229,23 @@ bool SameNumber(const std::string &a, bool aIntl, const std::string &b, bool bIn
 }
 
 }	// namespace
+
+Contacts::Entry* Contacts::FindSame(const Entry &e)
+{
+	for (unsigned int i=0; i<entries.size(); i++)
+	{
+		Entry &entry = entries[i];
+		if (entry.description == e.description &&
+			entry.company == e.company &&
+			entry.uri1 == e.uri1 &&
+			entry.uri2 == e.uri2 &&
+			entry.uri3 == e.uri3)
+		{
+			return &entry;
+		}
+	}
+	return NULL;
+}
 
 Contacts::Entry* Contacts::GetEntry(AnsiString uri)
 {

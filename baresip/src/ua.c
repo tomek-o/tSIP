@@ -690,18 +690,21 @@ int ua_alloc(struct ua **uap, const char *aor, const char *pwd, const char *cuse
 
 	list_append(&uag.ual, &ua->le, ua);
 
+	/* before ua_register(): its events (UA_EVENT_REGISTERING, a failure) are
+	   delivered synchronously and the application finds the user agent by *uap */
+	if (uap) {
+		*uap = ua;
+
+		ua->uap = uap;
+	}
+
 	if (ua->acc->regint) {
 		err = ua_register(ua);
 	}
 
  out:
 	if (err)
-		mem_deref(ua);
-	else if (uap) {
-		*uap = ua;
-
-		ua->uap = uap;
-	}
+		mem_deref(ua);	/* destructor clears *uap */
 
 	return err;
 }

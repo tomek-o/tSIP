@@ -36,6 +36,11 @@ namespace SettingsUtils
 	};
 
 	enum ReadStatus ReadFileOrBackup(AnsiString fileName, Json::Value &root);
+
+	/** \brief Read only the backup file of fileName (e.g. the file itself is valid JSON, but its content is not usable)
+		\return READ_OK if the backup was read and parsed
+	*/
+	enum ReadStatus ReadBackupFile(AnsiString fileName, Json::Value &root);
 }
 
 #endif

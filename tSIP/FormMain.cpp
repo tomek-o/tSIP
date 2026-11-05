@@ -568,17 +568,86 @@ void TfrmMain::InitButtons(void)
 	Calls::OnButtonConfigChange();
 }
 
+/** set when the application is closing (Finalize); the user agent is stopped after that, which processes messages */
+static bool appFinalized = false;
+
+namespace {
+
+/** History entry of a call that ends now */
+History::Entry MakeHistoryEntry(const Call &call)
+{
+	History::Entry entry;
+	DecodeDateTime(call.timestamp,
+		entry.timestamp.year, entry.timestamp.month, entry.timestamp.day,
+		entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec,
+		entry.timestamp.msec);
+	entry.uri = call.uri.c_str();
+	entry.peerName = call.peerName.c_str();
+	entry.paiUri = call.paiPeerUri.c_str();
+	entry.paiPeerName = call.paiPeerName.c_str();
+	entry.incoming = call.incoming;
+	entry.codecName = call.codecName;
+	entry.rtp = call.rtpSummary;
+	if (call.connected)
+	{
+		entry.time = SecondsBetween(Now(), call.timeTalkStart) + 1;
+	}
+	else
+	{
+		entry.time = 0;
+	}
+	if (entry.incoming)
+	{
+		entry.uri = ExtractNumberFromUri(entry.uri.c_str()).c_str();
+	}
+	// trying to extract number from PAI URI for any call
+	entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
+	entry.lastScode = call.lastScode;
+	entry.lastReplyLine = call.lastReplyLine;
+	entry.recordFile = call.recordFile;
+	entry.reason = call.sipReason;
+	entry.accountId = call.accountId;
+	return entry;
+}
+
+}	// namespace
+
 void TfrmMain::Finalize(void)
 {
-	static bool finalized = false;
-	if (finalized)
+	if (appFinalized)
 		return;
-	finalized = true;
+	appFinalized = true;
 
 	LOG("Finalizing...\n");
 
 	tmrScript->Enabled = false;
 	tmrScript2->Enabled = false;
+	// Ua::Quit() processes messages while it waits for the user agent: no callbacks (history, call scripts,
+	// commands to the stopping user agent), level meters or focus stealing at that time
+	tmrCallbackPoll->Enabled = false;
+	tmrLevel->Enabled = false;
+	tmrKeepForeground->Enabled = false;
+
+	// calls still active are closed by the user agent, but their "closed" callbacks are not processed any more:
+	// history entries are made here (history is written below)
+	{
+		std::vector<unsigned int> uids = Calls::GetUids();
+		for (unsigned int i=0; i<uids.size(); i++)
+		{
+			const Call *call = Calls::FindByUid(uids[i]);
+			if (call == NULL)
+				continue;
+			History::Entry entry = MakeHistoryEntry(*call);
+			if (entry.reason == "")
+				entry.reason = "Application closed";
+			history.AddEntry(entry);
+		}
+	}
+
+	// presence is unpublished before the user agent stops (Ua::Quit follows Finalize), after scripts
+	// are stopped (they could publish again); the short wait lets the request go out
+	if (PublishWithdrawAll())
+		Sleep(500);
 
 	hotKeys.Unregister(Handle);
 
@@ -928,9 +997,6 @@ int TfrmMain::UpdateButtonFromJson(unsigned int btnId, AnsiString json)
 
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
-	// presence is unpublished before the user agent stops; the short wait lets the request go out
-	if (PublishWithdrawAll())
-		Sleep(500);
 #ifdef USE_VIDEO
 	// before CLog is destroyed: Shutdown logs when it stops a running dump
 	VideoRawDump::Shutdown();	// closes a running raw dump file
@@ -1938,6 +2004,18 @@ void TfrmMain::PollCallbackQueue(void)
 				if (cb.accountId >= 0)
 					call->accountId = cb.accountId;
 
+				// before anything can reject the call: history entry is made from these fields when it is closed
+				call->incoming = true;
+				call->timestamp = Now();
+				call->uri = cb.caller;
+				call->peerName = GetPeerName(cb.callerName);
+				call->recordFile = "";
+				call->dtmfRxQueue.clear();
+				call->paiPeerUri = cb.paiPeerUri;
+				call->paiPeerName = GetPeerName(cb.paiPeerName);
+				call->autoAnswerIntercom = false;
+				call->initialRxInvite = cb.initialRxInvite;
+
                 if (Calls::Count() > 1)
 				{
 					const Settings::_Calls::AutoAnswerSecondCall &aa = appSettings.Calls.autoAnswerSecondCall;
@@ -1959,23 +2037,14 @@ void TfrmMain::PollCallbackQueue(void)
 					UA->Hangup(cb.callUid);
 					return;
 				}
-				call->incoming = true;
-				call->timestamp = Now();
-				call->uri = cb.caller;
-				call->peerName = GetPeerName(cb.callerName);
-				call->recordFile = "";
-				call->dtmfRxQueue.clear();
-				call->paiPeerUri = cb.paiPeerUri;
-				call->paiPeerName = GetPeerName(cb.paiPeerName);
-				call->autoAnswerIntercom = false;
-				call->initialRxInvite = cb.initialRxInvite;
 
 				if (appSettings.uaConf.startAudioSourceAtCallStart)
 				{
 					UA->CallStartAudioExtraSource(call->uid);
 				}
 
-				if (Calls::Count() == 1 || appSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive)
+				// not for a call that is being rejected (second call auto-denied above)
+				if (!call->disconnecting && (Calls::Count() == 1 || appSettings.Calls.enableAutoAnswerEvenIfAnotherCallIsActive))
 				{
 					if (appSettings.uaConf.autoAnswerCallInfo && cb.callAnswerAfter >= 0)
 					{
@@ -2221,41 +2290,11 @@ void TfrmMain::PollCallbackQueue(void)
 					}
 					bool completedElsewhere = (call->sipReason.UpperCase() == CALL_COMPLETED_ELSEWHERE);
 
-					History::Entry entry;
-					DecodeDateTime(call->timestamp,
-						entry.timestamp.year, entry.timestamp.month, entry.timestamp.day,
-						entry.timestamp.hour, entry.timestamp.min, entry.timestamp.sec,
-						entry.timestamp.msec);
-					entry.uri = call->uri.c_str();
-					entry.peerName = call->peerName.c_str();
-					entry.paiUri = call->paiPeerUri.c_str();
-					entry.paiPeerName = call->paiPeerName.c_str();
-					entry.incoming = call->incoming;
-					entry.codecName = call->codecName;
-					entry.rtp = call->rtpSummary;
-					if (call->connected)
+					History::Entry entry = MakeHistoryEntry(*call);
+					if (!call->connected && entry.incoming && !call->disconnecting && !completedElsewhere)
 					{
-						entry.time = SecondsBetween(Now(), call->timeTalkStart) + 1;
+						SetNotificationIcon(true);
 					}
-					else
-					{
-						entry.time = 0;
-						if (entry.incoming && !call->disconnecting && !completedElsewhere)
-						{
-							SetNotificationIcon(true);
-						}
-					}
-					if (entry.incoming)
-					{
-						entry.uri = ExtractNumberFromUri(entry.uri.c_str()).c_str();
-					}
-					// trying to extract number from PAI URI for any call
-					entry.paiUri = ExtractNumberFromUri(entry.paiUri.c_str()).c_str();
-					entry.lastScode = call->lastScode;
-					entry.lastReplyLine = call->lastReplyLine;
-					entry.recordFile = call->recordFile;
-					entry.reason = call->sipReason;
-					entry.accountId = call->accountId;
 
 					if (!(appSettings.history.ignoreCallsCompletedElsewhere && completedElsewhere))
 					{
@@ -3059,20 +3098,35 @@ void TfrmMain::ExecuteApp(AnsiString cmd, AnsiString params)
 void TfrmMain::OnPhonebookEdit(AnsiString uri)
 {
 	bool adding = false;
-	Contacts::Entry newEntry;
-	Contacts::Entry *entry = contacts.GetEntry(uri);
-	if (entry == NULL)
+	// the editor works on a copy: the contacts file can be reloaded while it is open (file changed,
+	// polled by a timer) and that frees the entries of the list
+	Contacts::Entry original;
+	Contacts::Entry edited;
+	const Contacts::Entry *found = contacts.GetEntry(uri);
+	if (found == NULL)
 	{
 		adding = true;
-		entry = &newEntry;
-		entry->uri1 = uri;
+		edited.uri1 = uri;
 	}
-	frmContactEditor->Start(entry, appSettings.Contacts.storeNoteInSeparateFile);
+	else
+	{
+		original = *found;
+		edited = *found;
+	}
+	frmContactEditor->Start(&edited, appSettings.Contacts.storeNoteInSeparateFile);
 	if (frmContactEditor->isConfirmed())
 	{
+		if (!adding)
+		{
+			Contacts::Entry *current = contacts.FindSame(original);
+			if (current)
+				*current = edited;
+			else
+				adding = true;		// removed meanwhile: not lost
+		}
 		if (adding)
 		{
-			contacts.GetEntries().push_back(*entry);
+			contacts.GetEntries().push_back(edited);
 		}
 		contacts.Sort();
 		contacts.Update();
@@ -3787,11 +3841,6 @@ void __fastcall TfrmMain::tmrBackspaceTimer(TObject *Sender)
 // Levels of the current call drive both volume meters; no call means silence
 void __fastcall TfrmMain::tmrLevelTimer(TObject *Sender)
 {
-	if (Ua::Instance().GetAppQuit())
-	{
-    	return;
-	}
-
 	int rxPeak = 0;
 	int txPeak = 0;
 	float rxRms = 0;
@@ -3905,7 +3954,8 @@ void TfrmMain::AutoAnswer(Call &call)
 			lbl2ndPartyDesc->Caption = "";
 			lblCallState->Caption = "";
 		}
-		call.incoming = false;
+		// the call stays an incoming one (history entry, number); disconnecting: it is not a missed call
+		call.disconnecting = true;
 		call.progress = false;
 		call.connected = false;
 		if (appSettings.trayNotifier.hideWhenAnsweringCallAutomatically)
@@ -4549,7 +4599,7 @@ void __fastcall TfrmMain::tmrScriptTimer(TObject *Sender)
 		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onTimer.c_str());
 		RunScriptFile(SCRIPT_SRC_ON_TIMER, -1, asScriptFile.c_str(), handled, false);
-		tmrScript->Enabled = true;
+		tmrScript->Enabled = !appFinalized;
 	}
 	// timer disables itself if onTimer script is not configured
 }
@@ -4682,7 +4732,7 @@ void __fastcall TfrmMain::tmrScript2Timer(TObject *Sender)
 		bool handled = true;
 		asScriptFile.sprintf("%s\\scripts\\%s", Paths::GetProfileDir().c_str(), appSettings.Scripts.onTimer2.c_str());
 		RunScriptFile(SCRIPT_SRC_ON_TIMER, -1, asScriptFile.c_str(), handled, false);
-		tmrScript2->Enabled = true;
+		tmrScript2->Enabled = !appFinalized;
 	}
 	// timer2 disables itself if onTimer script is not configured
 }

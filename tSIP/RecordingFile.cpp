@@ -6,6 +6,7 @@
 #include "RecordingFile.h"
 #include "Settings.h"
 #include "Paths.h"
+#include "Log.h"
 #include "common/TelecomUtils.h"
 #include "common/base64.h"
 #include <string>
@@ -24,6 +25,11 @@ AnsiString RecordingFile::GetDir(void)
 	else
 	{
 		dir = appSettings.uaConf.recording.customRecDir.c_str();
+		if (dir.Length() == 0)
+		{
+			LOG("Recording: custom directory is not set, call is not recorded\n");
+			return "";
+		}
 		if (dir[dir.Length()] != '\\')
 			dir += "\\";
 	}

@@ -1105,6 +1105,12 @@ int  audio_set_player(struct audio *au, const char *mod, const char *device);
 int  audio_debug(struct re_printf *pf, const struct audio *a);
 /* Get name of the codec used in RX direction */
 const char* audio_get_rx_aucodec_name(const struct audio *a);
+/* Level meter id of the audio stream, kept when filters are rebuilt (see softvol) */
+void audio_set_meter_id(struct audio *a, unsigned int id);
+unsigned int audio_get_meter_id(const struct audio *a);
+/* Sidetone settings of the audio stream, kept when filters are rebuilt (see sidetone) */
+void audio_set_sidetone_prm(struct audio *a, bool enabled, unsigned int level);
+bool audio_get_sidetone_prm(const struct audio *a, bool *enabled, unsigned int *level);
 struct recorder_st* audio_get_recorder(const struct audio *a);
 int  audio_set_conference(struct audio *au, bool conference);
 bool audio_is_conference(const struct audio *au);

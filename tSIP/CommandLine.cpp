@@ -16,18 +16,33 @@
 
 namespace {
 
+	/** value of a hexadecimal digit, -1 if the character is not one */
+	int HexDigit(char c) {
+		if (c >= '0' && c <= '9')
+			return c - '0';
+		if (c >= 'a' && c <= 'f')
+			return c - 'a' + 10;
+		if (c >= 'A' && c <= 'F')
+			return c - 'A' + 10;
+		return -1;
+	}
+
+	/** "%XX" is decoded; a '%' that is not followed by two hexadecimal digits stays as it is
+		(the command line comes from outside: links, other programs); "%00" is dropped, it would end the string */
 	std::string UrlDecode(const std::string &SRC) {
 		std::string ret;
-		unsigned int i, ii;
-		for (i=0; i<SRC.length(); i++) {
-			if (int(SRC[i]) == '%') {
-				sscanf(SRC.substr(i+1,2).c_str(), "%x", &ii);
-				char ch = static_cast<char>(ii);
-				ret += ch;
-				i = i+2;
-			} else {
-				ret += SRC[i];
+		for (size_t i=0; i<SRC.length(); i++) {
+			if (SRC[i] == '%' && i + 2 < SRC.length()) {
+				int hi = HexDigit(SRC[i+1]);
+				int lo = HexDigit(SRC[i+2]);
+				if (hi >= 0 && lo >= 0) {
+					if (hi != 0 || lo != 0)
+						ret += static_cast<char>(hi * 16 + lo);
+					i += 2;
+					continue;
+				}
 			}
+			ret += SRC[i];
 		}
 		return ret;
 	}

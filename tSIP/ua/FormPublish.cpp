@@ -9,6 +9,7 @@
 #include "UaGlobals.h"
 #include "ControlQueue.h"
 #include "UaPublish.h"
+#include "Log.h"
 #include <vector>
 
 //---------------------------------------------------------------------------
@@ -62,13 +63,23 @@ void PublishSend(int accountId)
 	UaPublish::Presence p;
 	if (!UaPublish::Get(accountId, p))
 		return;
+	if (accountId < 0 || accountId >= (int)appSettings.uaConf.accounts.size() ||
+		!appSettings.uaConf.accounts[accountId].enabled)
+	{
+		// account removed or disabled (e.g. settings reloaded): nothing to publish with any more;
+		// without this the refresh would try again on every poll
+		LOG("Presence: account #%d not available, publication dropped\n", accountId + 1);
+		UaPublish::Withdraw(accountId);
+		return;
+	}
 	const UaConf::Account &acc = appSettings.uaConf.accounts[accountId];
 	AnsiString aor = AnsiString("sip:") + acc.user.c_str() + "@" + acc.reg_server.c_str();
 	// withdrawn publication: empty body and Expires 0 remove the presence from the server
 	AnsiString body = p.active ? PresenceDocument(aor, p.open, AnsiString(p.note.c_str())) : AnsiString();
 	int expires = p.active ? PUBLISH_EXPIRES : 0;
-	UA->PublishPresence(accountId, aor, body, expires, AnsiString(p.etag.c_str()));
+	// before queuing: the reply (or an immediate failure) can be handled by the UA thread before this thread continues
 	UaPublish::SentAt(accountId, GetTickCount());
+	UA->PublishPresence(accountId, aor, body, expires, AnsiString(p.etag.c_str()));
 }
 
 void PublishNow(bool open, bool currentOnly, const AnsiString &note)

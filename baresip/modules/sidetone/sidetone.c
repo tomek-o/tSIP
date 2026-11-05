@@ -102,6 +102,8 @@ static int state_get(struct sidetone_st **stp, const struct audio *au)
 	}
 	st->au = au;
 	st->level = LEVEL_DEFAULT;
+	/* filters are rebuilt on codec change: take over settings made before */
+	(void)audio_get_sidetone_prm(au, &st->enabled, &st->level);
 	list_append(&states, &st->le, st);
 	*stp = st;
 	lock_rel(lock);
@@ -277,6 +279,10 @@ int sidetone_set(const struct audio *au, bool enabled, unsigned int level)
 		return ENOENT;
 	if (level > LEVEL_MAX)
 		level = LEVEL_MAX;
+
+	/* remembered in the audio object first, so that filters created (or rebuilt on codec
+	 * change) later get it too, also when they do not exist yet */
+	audio_set_sidetone_prm((struct audio *)au, enabled, level);
 
 	lock_write_get(lock);
 	st = state_find(au);
