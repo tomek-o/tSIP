@@ -43,7 +43,7 @@ struct selfview_enc {
 struct selfview_dec {
 	struct vidfilt_dec_st vf;   /**< Inheritance           */
 	struct selfview *selfview;  /**< Ref. to shared state  */
-	struct vidframe *canvas;    /**< Copy of RX frame with selfview drawn */
+	struct vidframe *canvas;    /**< Copy of RX frame with selfview drawn (fixing "echo" issue - Windows-only?) */
 };
 
 
@@ -252,7 +252,10 @@ static int decode_pip(struct vidfilt_dec_st *st, struct vidframe *frame)
 		   as reference picture for following frames) - drawing on it
 		   directly would leave "echo" of the selfview in next frames.
 		   Selfview is drawn on a private copy that is passed to display
-		   instead. */
+		   instead.
+		   Strangely this issue was observed only under Windows (7, 10),
+		   not with baresip running under Linux (Ubuntu 22).
+		*/
 		if (dec->canvas && (!vidsz_cmp(&dec->canvas->size, &frame->size) ||
 				    dec->canvas->fmt != frame->fmt)) {
 			dec->canvas = mem_deref(dec->canvas);
